@@ -7098,6 +7098,33 @@
         }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        // 防複製保護
+        (function () {
+            // 禁止右鍵選單
+            document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+            // 禁止文字選取
+            document.addEventListener('selectstart', function (e) { e.preventDefault(); });
+            // 禁止拖曳
+            document.addEventListener('dragstart', function (e) { e.preventDefault(); });
+            // 禁止 Ctrl/Cmd+C / U / S / A / P，以及 F12
+            document.addEventListener('keydown', function (e) {
+                var key = e.key ? e.key.toLowerCase() : '';
+                var ctrl = e.ctrlKey || e.metaKey;
+                if (
+                    (ctrl && ['c', 'u', 's', 'a', 'p'].includes(key)) ||
+                    e.key === 'F12'
+                ) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+            // CSS 層面禁止選取
+            var style = document.createElement('style');
+            style.textContent = '* { -webkit-user-select: none !important; user-select: none !important; }';
+            document.head.appendChild(style);
+        })();
+    </script>
 </head>
 
 <body>
