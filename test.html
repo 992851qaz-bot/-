@@ -1845,6 +1845,18 @@
             cursor: default
         }
 
+        .weights-watermark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 50;
+            background-repeat: repeat;
+            background-size: 220px 110px;
+        }
+
         #role-correction-modal .modal-full {
             max-width: 800px;
             height: 80vh
@@ -8039,8 +8051,7 @@
             <div class="modal-header">
                 <div style="display:flex;gap:10px;align-items:center;">
                     <h3 style="margin:0;color:var(--accent);">角色加權值參考表</h3>
-                    <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()">顯示模式:
-                        權重</button>
+                    <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()">顯示模式: 最大分 (權重x最大值)</button>
                     <button class="btn-toggle-view" onclick="openCustomWeightEditor()"
                         style="border-color:var(--accent);color:var(--accent)">✏️ 自訂權重</button>
                 </div><button onclick="closeWeightsModal()">關閉面板</button>
@@ -9660,7 +9671,7 @@
         const imgEl = document.getElementById('preview-img'), zoomCanvas = document.getElementById('zoom-canvas'), imgContainer = document.getElementById('img-container'), imgPlaceholder = document.getElementById('img-placeholder'), statusText = document.getElementById('status-text'), dimText = document.getElementById('dim-text'), loader = document.getElementById('loader'), tableBody = document.getElementById('table-body'), debugBtn = document.getElementById('debug-btn'), editModeBtn = document.getElementById('edit-mode-btn'), historyListEl = document.getElementById('history-list'), urlInput = document.getElementById('url-input'), analyzeBtn = document.getElementById('btn-analyze'), loginInput = document.getElementById('login-uid'), loginBtn = document.getElementById('btn-login'), weightStatus = document.getElementById('weight-status'), uidDisplay = document.getElementById('uid-display'), roleGrid = document.getElementById('role-grid'), roleCanvas = document.getElementById('role-correction-canvas'), ocrResultText = document.getElementById('ocr-result-text'), cvOverlay = document.getElementById('cv-overlay'), btnLoadAll = document.getElementById('btn-load-all');
         const subEditName = document.getElementById('sub-edit-name'), subEditVal = document.getElementById('sub-edit-val'), subEditValSelect = document.getElementById('sub-edit-val-select'), subEditCanvas = document.getElementById('sub-edit-canvas');
         const mobileContainer = document.getElementById('mobile-results'); // NEW
-        let g_globalData = {}, g_chains = [], g_echoesData = [], g_customEchoes = [], g_currentEntryId = null, g_debugMode = false, g_sourceImage = null, g_weightNames = [], g_currentWeights = {}, g_weightsLoaded = false, g_currentUserUid = "", g_lastRefreshTime = 0, g_roleResolve = null, g_lockedTarget = null, g_weightsRawData = null, g_showPotentialMode = false, g_selectedBuildIdx = 0, g_installPrompt = null, g_editingSub = { eIdx: -1, sIdx: -1 }, g_lastRankInfo = null, g_isLocalFile = false, g_canUploadLocal = false, g_suitTemplates = {}, g_echoLibViewMode = false, g_weightsPromise = null, g_historyScrollTop = 0;
+        let g_globalData = {}, g_chains = [], g_echoesData = [], g_customEchoes = [], g_currentEntryId = null, g_debugMode = false, g_sourceImage = null, g_weightNames = [], g_currentWeights = {}, g_weightsLoaded = false, g_currentUserUid = "", g_lastRefreshTime = 0, g_roleResolve = null, g_lockedTarget = null, g_weightsRawData = null, g_showPotentialMode = true, g_selectedBuildIdx = 0, g_installPrompt = null, g_editingSub = { eIdx: -1, sIdx: -1 }, g_lastRankInfo = null, g_isLocalFile = false, g_canUploadLocal = false, g_suitTemplates = {}, g_echoLibViewMode = false, g_weightsPromise = null, g_historyScrollTop = 0;
         let g_lastUsedProxy = "None";
         let g_sessionPoints = 0; // 限时积分系统
         let g_devSavedPoints = 0; // 管理员节省积分统计
@@ -10236,8 +10247,8 @@
             }
         }
         function processWeightsData(json) { g_weightNames = []; g_currentWeights = {}; const headers = json.headers; json.data.forEach(row => { let charName = row[1]; if (charName && charName !== '(N/A)') { if (!g_weightNames.includes(charName)) g_weightNames.push(charName); if (!g_currentWeights[charName]) g_currentWeights[charName] = []; let charWeights = {}; headers.forEach((h, idx) => { let mappedKey = WEIGHT_KEYS_MAPPING[h]; if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0 } }); let colA = row[0] ? String(row[0]).trim() : "通用"; let match = colA.match(/\d/); let req = match ? parseInt(match[0]) : 0; g_currentWeights[charName].push({ name: colA, minChain: req, weights: charWeights, desc: row[row.length - 1] }) } }) }
-        function toggleWeightMode() { g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? "顯示模式: 最大分 (權重x最大值)" : "顯示模式: 權重"; renderWeightsTable() }
-        function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => html += `<th>${h}</th>`); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; document.getElementById('weights-body').innerHTML = html }
+        function toggleWeightMode() { if (g_showPotentialMode && !g_isDeveloper) { showMsg('顯示原始權重需要開發者模式，請先輸入啟用代碼。'); return; } g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? "顯示模式: 最大分 (權重x最大值)" : "顯示模式: 權重 (開發者)"; renderWeightsTable() }
+        function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => html += `<th>${h}</th>`); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; const body = document.getElementById('weights-body'); body.innerHTML = html; const uid = g_currentUserUid || '未登入'; const svgStr = `<svg xmlns='http://www.w3.org/2000/svg' width='220' height='110'><text x='10' y='70' font-size='15' fill='rgba(255,255,255,0.10)' transform='rotate(-25,10,70)' font-family='monospace' font-weight='bold'>${uid}</text></svg>`; const wm = document.createElement('div'); wm.className = 'weights-watermark'; wm.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(svgStr)}")`; body.appendChild(wm) }
         function initRoleGrid() { filterRoleGrid("") }
         function filterRoleGrid(filter) { roleGrid.innerHTML = ''; const ocrChars = ocrResultText.innerText.replace(/[^\u4e00-\u9fa5]/g, '').split(''); g_weightNames.sort((a, b) => a.localeCompare(b)).forEach(name => { if (filter && !name.includes(filter)) return; const btn = document.createElement('div'); btn.className = 'role-btn'; let isMatch = ocrChars.some(c => name.includes(c)); if (isMatch) btn.classList.add('highlight-match'); btn.innerText = name; btn.onclick = () => resolveRoleCorrection(name); roleGrid.appendChild(btn) }) }
         function showRefreshModal() { if (!g_currentUserUid || g_currentUserUid.length !== 9) { showMsg("未登入 UID，無法刷新雲端列表。"); return } document.getElementById('refresh-modal').style.display = 'flex' }
