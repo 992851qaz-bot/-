@@ -9,9 +9,13 @@
     <meta name="apple-mobile-web-app-title" content="聲骸分析">
     <link rel="manifest" id="manifest-link">
     <title>鳴潮聲骸分析儀 v49.7 (Upload Support)</title>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://script.google.com">
+    <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
@@ -9582,7 +9586,9 @@
 
     <script>
         const ERROR_WEBHOOK = "https://discord.com/api/webhooks/1473151212055564373/n7GKMRKm2Z5b0u8hYUwNhfd-uroQNQMOtFoJm_HomJ_gjqC5SLR9ZD-FxlTI4sMfF-CO";
+        let _errorReportCount = 0;
         async function logErrorToDiscord(msg, type = "Error", stack = "") {
+            if (++_errorReportCount > 10) return; // 每次頁面載入最多回報 10 次，防止 webhook 被洗版
             try {
                 const payload = {
                     embeds: [{
@@ -9609,6 +9615,9 @@
         function safeFixed(val, digits = 1) {
             const n = parseFloat(val);
             return isNaN(n) ? "0.0" : n.toFixed(digits);
+        }
+        function escHtml(s) {
+            return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
         function levenshtein(a, b) {
             const tmp = [];
@@ -10113,7 +10122,7 @@
         }
         function setupPWA() { const icon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iYmFja2dyb3VuZDojMWUxZTI0Ij48cGF0aCBkPSJNMjU2IDMyYy04LjggMC0xNiA3LjItMTYgMTZ2NDE2YzAgOC44IDcuMiAxNiAxNiAxNnMxNi03LjIgMTYtMTZWNDhjMC04LjgtNy4yLTE2LTE2LTE2em0wIDExMmMtOC44IDAtMTYgNy4yLTE2IDE2djE5MmMwIDguOCA3LjIgMTYgMTYgMTZzMTYtNy4yIDE2LTE2VjE2MGMwLTguOC03LjItMTYtMTYtMTZ6IiBmaWxsPSIjZTVjMDdiIi8+PC9zdmc+"; const manifest = { name: "鳴潮分析儀", short_name: "聲骸分析", start_url: ".", display: "standalone", background_color: "#121214", theme_color: "#1e1e24", icons: [{ src: icon, sizes: "512x512", type: "image/svg+xml" }] }; const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' }); document.getElementById('manifest-link').href = URL.createObjectURL(blob); window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); g_installPrompt = e; document.getElementById('pwa-ios-guide').style.display = 'none'; document.getElementById('btn-pwa-install').style.display = 'block' }) }
         async function triggerInstall() { if (g_installPrompt) { g_installPrompt.prompt(); const { outcome } = await g_installPrompt.userChoice; if (outcome === 'accepted') g_installPrompt = null } }
-        function saveConfig() { const url = document.getElementById('gas-url-input').value.trim(); if (url) { localStorage.setItem('ww_gas_url', url); document.getElementById('config-modal').style.display = 'none'; document.getElementById('startup-modal').style.display = 'flex'; g_weightsPromise = loadWeightsBackground(url) } }
+        function saveConfig() { const url = document.getElementById('gas-url-input').value.trim(); if (url) { if (!url.startsWith('https://script.google.com/')) { showMsg("網址格式錯誤，請輸入以 https://script.google.com/ 開頭的網址。"); return; } localStorage.setItem('ww_gas_url', url); document.getElementById('config-modal').style.display = 'none'; document.getElementById('startup-modal').style.display = 'flex'; g_weightsPromise = loadWeightsBackground(url) } }
         function validateUid() { const val = loginInput.value.trim(); if (val.length === 0) { loginBtn.disabled = false; loginBtn.innerText = "不載入歷史資料 - 繼續使用"; loginBtn.classList.remove('active-green') } else if (val.length < 9) { loginBtn.disabled = true; loginBtn.innerText = "UID 需為 9 碼"; loginBtn.classList.remove('active-green') } else { loginBtn.disabled = false; loginBtn.innerText = "登入並載入歷史"; loginBtn.classList.add('active-green') } }
         function handleLogin() {
             if (document.getElementById('startup-modal').style.display === 'none') return;
@@ -10205,7 +10214,8 @@
         }
         async function loadWeightsBackground(url) {
             try {
-                const res = await fetch(url + "?action=getWeights");
+                const _ac1 = new AbortController(); const _t1 = setTimeout(() => _ac1.abort(), 15000);
+                const res = await fetch(url + "?action=getWeights", { signal: _ac1.signal }); clearTimeout(_t1);
                 const json = await res.json();
                 if (json.result === 'success') {
                     g_weightsRawData = json;
@@ -10251,7 +10261,8 @@
             historyListEl.innerHTML = '<div style="padding:10px;text-align:center;color:#888;">正在從雲端載入歷史紀錄...</div>';
             const url = localStorage.getItem('ww_gas_url');
             try {
-                const res = await fetch(`${url}?action=getHistory&uid=${uid}&mode=${mode}`);
+                const _ac2 = new AbortController(); const _t2 = setTimeout(() => _ac2.abort(), 15000);
+                const res = await fetch(`${url}?action=getHistory&uid=${uid}&mode=${mode}`, { signal: _ac2.signal }); clearTimeout(_t2);
                 const json = await res.json();
                 if (json.result === 'success') {
                     if (!json.data || json.data.length === 0) {
@@ -10306,7 +10317,7 @@
                     statusText.innerText = "歷史紀錄同步完成"
                 } else { throw new Error('API Error') }
             } catch (e) {
-                historyListEl.innerHTML = `<div style="padding:10px;text-align:center;color:var(--error);">載入失敗: ${e.message}</div>`;
+                historyListEl.innerHTML = `<div style="padding:10px;text-align:center;color:var(--error);">載入失敗: ${escHtml(e.message)}</div>`;
                 statusText.innerText = "同步失敗"; btnLoadAll.disabled = false; btnLoadAll.innerText = '⬇️'
             }
         }
@@ -11173,7 +11184,7 @@
 
             const u = urlInput.value.trim();
             if (!u && !g_isLocalFile) return;
-            let isDemo = !u; g_isLocalFile = false; if (!isDemo && u.indexOf(ALLOWED_DOMAIN) !== 0) { showMsg("不支援此連結"); return } let url = isDemo ? TEST_URL : u; setLoading(true); g_currentEntryId = null; g_selectedBuildIdx = 0; unlockPreview(); statusText.innerText = isDemo ? "正在執行演示分析..." : "下載圖片中..."; imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:#aaa;word-break:break-all;">下載圖片中...<br><a href="${url}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${url}</a></div>`; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;">分析中... <div class="loader" style="display:inline-block;vertical-align:middle;"></div></td></tr>`; try { const img = await loadImage(url); g_sourceImage = img; imgEl.src = img.src; setPreviewLink(url); imgEl.classList.add('visible'); imgPlaceholder.style.display = 'none'; await processImage(img); finishAnalysis(url, isDemo) } catch (e) { console.error(e); statusText.innerText = "錯誤: 開啟手動上傳"; g_canUploadLocal = true; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--error)">分析失敗: ${e.message}<br><button class="btn-analyze" onclick="triggerFileUpload()">📂 嘗試手動上傳圖片</button></td></tr>` } finally { setLoading(false); urlInput.value = ""; urlInput.dispatchEvent(new Event('input')); }
+            let isDemo = !u; g_isLocalFile = false; if (!isDemo && u.indexOf(ALLOWED_DOMAIN) !== 0) { showMsg("不支援此連結"); return } let url = isDemo ? TEST_URL : u; setLoading(true); g_currentEntryId = null; g_selectedBuildIdx = 0; unlockPreview(); statusText.innerText = isDemo ? "正在執行演示分析..." : "下載圖片中..."; imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:#aaa;word-break:break-all;">下載圖片中...<br><a href="${url}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${url}</a></div>`; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;">分析中... <div class="loader" style="display:inline-block;vertical-align:middle;"></div></td></tr>`; try { const img = await loadImage(url); g_sourceImage = img; imgEl.src = img.src; setPreviewLink(url); imgEl.classList.add('visible'); imgPlaceholder.style.display = 'none'; await processImage(img); finishAnalysis(url, isDemo) } catch (e) { console.error(e); statusText.innerText = "錯誤: 開啟手動上傳"; g_canUploadLocal = true; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--error)">分析失敗: ${escHtml(e.message)}<br><button class="btn-analyze" onclick="triggerFileUpload()">📂 嘗試手動上傳圖片</button></td></tr>` } finally { setLoading(false); urlInput.value = ""; urlInput.dispatchEvent(new Event('input')); }
         }
         async function finishAnalysis(url, isDemo) {
             g_globalData._imageUrl = url || '';
@@ -12370,7 +12381,7 @@
             } catch (chartErr) {
                 console.error('renderCharts 錯誤:', chartErr);
                 const chartArea = document.getElementById('total-stats-table');
-                if (chartArea) chartArea.innerHTML = `<div style="padding:20px;text-align:center;color:var(--error);border:1px solid var(--error);border-radius:8px;background:rgba(224,108,117,0.08);"><div style="font-size:1.5rem;margin-bottom:8px;">⚠️</div><div>圖表分析載入異常</div><div style="font-size:0.8rem;color:#888;margin-top:6px;">${chartErr.message || '未知錯誤'}<br>請重新上傳圖片或切換角色重試</div></div>`;
+                if (chartArea) chartArea.innerHTML = `<div style="padding:20px;text-align:center;color:var(--error);border:1px solid var(--error);border-radius:8px;background:rgba(224,108,117,0.08);"><div style="font-size:1.5rem;margin-bottom:8px;">⚠️</div><div>圖表分析載入異常</div><div style="font-size:0.8rem;color:#888;margin-top:6px;">${escHtml(chartErr.message || '未知錯誤')}<br>請重新上傳圖片或切換角色重試</div></div>`;
             }
         }
 
@@ -14257,7 +14268,7 @@
                 console.error(`Failed to render ${type}:`, e);
                 const isSplitError = e.message && e.message.includes('split is not a function');
                 const hintMsg = isSplitError ? '<div style="margin-top:8px;color:#ffca28;font-size:0.8rem;">⚠️ 雲端資料無套裝名稱，請重新上傳圖片進行分析</div>' : '';
-                previewContainer.innerHTML = `<div style="color:#f44;padding:30px;font-size:0.9rem;background:rgba(255,0,0,0.05);border-radius:12px;border:1px solid rgba(255,0,0,0.1);">生成失敗<br><div style="margin-top:10px;color:rgba(255,255,255,0.4);font-size:0.75rem;font-family:monospace;word-break:break-all;">原因: ${e.message || '未知渲染錯誤'}</div>${hintMsg}<button class="btn-primary-action" style="margin-top:15px;font-size:0.7rem;" onclick="renderShareLayout('${type}')">🔄 重試</button></div>`;
+                previewContainer.innerHTML = `<div style="color:#f44;padding:30px;font-size:0.9rem;background:rgba(255,0,0,0.05);border-radius:12px;border:1px solid rgba(255,0,0,0.1);">生成失敗<br><div style="margin-top:10px;color:rgba(255,255,255,0.4);font-size:0.75rem;font-family:monospace;word-break:break-all;">原因: ${escHtml(e.message || '未知渲染錯誤')}</div>${hintMsg}<button class="btn-primary-action" style="margin-top:15px;font-size:0.7rem;" onclick="renderShareLayout('${type}')">🔄 重試</button></div>`;
             } finally {
                 captureArea.innerHTML = '';
             }
@@ -14974,7 +14985,7 @@
             } catch (e) {
                 console.error("DPS Init Error:", e);
                 const loader = document.getElementById('dps-loading');
-                if (loader) loader.innerHTML = `<div style="text-align:center;color:#f44">DPS 資料庫載入失敗<br>${e.message}<br>請檢查網絡後重新整理</div>`;
+                if (loader) loader.innerHTML = `<div style="text-align:center;color:#f44">DPS 資料庫載入失敗<br>${escHtml(e.message)}<br>請檢查網絡後重新整理</div>`;
             }
         }
 
@@ -17926,7 +17937,7 @@
                 container.innerHTML = html;
             } catch (err) {
                 console.error("Comparison Error:", err);
-                if (container) container.innerHTML = `<div style="padding:20px; color:var(--error); text-align:center;">渲染中斷: ${err.message}</div>`;
+                if (container) container.innerHTML = `<div style="padding:20px; color:var(--error); text-align:center;">渲染中斷: ${escHtml(err.message)}</div>`;
                 showMsg("單一比對渲染失敗 (" + err.message + ")");
             }
         }
@@ -18081,7 +18092,7 @@
                                 localStorage.setItem('ww_history', JSON.stringify(merged)); g_historyDirty = true; g_historyCache = null;
                             }
                             if (data.weights) localStorage.setItem('ww_custom_weights', JSON.stringify(data.weights));
-                            if (data.gas_url) localStorage.setItem('ww_gas_url', data.gas_url);
+                            if (data.gas_url && data.gas_url.startsWith('https://script.google.com/')) localStorage.setItem('ww_gas_url', data.gas_url);
                             showMsg("資料匯入完成，請手動刷新頁面以套用變更。");
                         });
                     } catch (err) {
