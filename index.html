@@ -7167,6 +7167,96 @@
         }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
+    <!-- Anti-copy / Anti-theft protections -->
+    <style>
+        body {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+        }
+    </style>
+    <script>
+    (function(){
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e){ e.preventDefault(); }, false);
+
+        // Disable text selection via mouse
+        document.addEventListener('selectstart', function(e){ e.preventDefault(); }, false);
+
+        // Disable drag
+        document.addEventListener('dragstart', function(e){ e.preventDefault(); }, false);
+
+        // Disable copy, cut, paste
+        document.addEventListener('copy', function(e){ e.preventDefault(); }, false);
+        document.addEventListener('cut', function(e){ e.preventDefault(); }, false);
+        document.addEventListener('paste', function(e){ e.preventDefault(); }, false);
+
+        // Disable keyboard shortcuts for viewing source, saving, printing, dev tools
+        document.addEventListener('keydown', function(e){
+            // F12 - Dev Tools
+            if(e.key === 'F12'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+U - View Source
+            if(e.ctrlKey && e.key === 'u'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+S - Save
+            if(e.ctrlKey && e.key === 's'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+P - Print
+            if(e.ctrlKey && e.key === 'p'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+I - Dev Tools
+            if(e.ctrlKey && e.shiftKey && e.key === 'I'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+J - Console
+            if(e.ctrlKey && e.shiftKey && e.key === 'J'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+C - Inspect Element
+            if(e.ctrlKey && e.shiftKey && e.key === 'C'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+A - Select All
+            if(e.ctrlKey && e.key === 'a'){
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+C - Copy
+            if(e.ctrlKey && e.key === 'c'){
+                e.preventDefault();
+                return false;
+            }
+        }, false);
+
+        // Detect and warn if DevTools is open (basic detection)
+        var devtools = { open: false };
+        var threshold = 160;
+        setInterval(function(){
+            if(window.outerWidth - window.innerWidth > threshold ||
+               window.outerHeight - window.innerHeight > threshold){
+                if(!devtools.open){
+                    devtools.open = true;
+                }
+            } else {
+                devtools.open = false;
+            }
+        }, 500);
+    })();
+    </script>
 </head>
 
 <body>
