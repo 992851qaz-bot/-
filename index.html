@@ -9803,7 +9803,7 @@
             "漂泊者風": "https://guide-res.aki-game.net/introduction/material/1b41e5f51811f4be861c6c93c660b7b8/e2d9a74d8323aed853d6a1e999a9a56b.png",
             "漂泊者光": "https://guide-res.aki-game.net/introduction/material/1b41e5f51811f4be861c6c93c660b7b8/ebc1ec3a5f3ce13058390564e0513cd3.png",
             "漂泊者暗": "https://guide-res.aki-game.net/introduction/material/1b41e5f51811f4be861c6c93c660b7b8/ebc1ec3a5f3ce13058390564e0513cd3.png",
-            "漂泊者火": "https://guide-res.aki-game.net/introduction/material/1b41e5f51811f4be861c6c93c660b7b8/ebc1ec3a5f3ce13058390564e0513cd3.png",
+            "漂泊者熱熔": "https://guide-res.aki-game.net/introduction/material/1b41e5f51811f4be861c6c93c660b7b8/ebc1ec3a5f3ce13058390564e0513cd3.png",
             "忌炎": "https://guide-res.aki-game.net/introduction/material/1b41e5f51811f4be861c6c93c660b7b8/dfed76d9925a4a98924242b231e236cc.png",
             "奧古斯塔": "https://guide-res.aki-game.net/introduction/material/01a20883f3d14c9bfb6ddc75a106c606/359c1bbf33fa9be011924f70565f913c.png",
             "尤諾": "https://guide-res.aki-game.net/introduction/material/01a20883f3d14c9bfb6ddc75a106c606/0b8b32ec96d68a517072c0d83846be60.png",
@@ -10137,7 +10137,7 @@
                     await g_weightsPromise;
                 } else {
                     // Fail-safe
-                    let url = localStorage.getItem('ww_gas_url') || DEFAULT_GAS_URL;
+                    let url = getMainApiUrl();
                     g_weightsPromise = loadWeightsBackground(url);
                     await g_weightsPromise;
                 }
@@ -10155,6 +10155,7 @@
 
         function initApp() {
             ensureOfflineApiConfigured();
+            ensureMainApiConfigured();
             renderOfflineSyncStatus();
             updateUidDisplay();
             // Show input button immediately
@@ -10176,7 +10177,7 @@
             // Show panels
             welcomePanels.classList.add('active');
 
-            let url = localStorage.getItem('ww_gas_url') || DEFAULT_GAS_URL;
+            let url = getMainApiUrl();
             if (url) {
                 localStorage.setItem('ww_gas_url', url);
                 // Start background load
@@ -10397,7 +10398,7 @@
             }
 
             historyListEl.innerHTML = '<div style="padding:10px;text-align:center;color:#888;">正在從雲端載入歷史紀錄...</div>';
-            const url = localStorage.getItem('ww_gas_url');
+            const url = getMainApiUrl();
             try {
                 const res = await fetch(`${url}?action=getHistory&uid=${uid}&mode=${mode}`);
                 const json = await res.json();
@@ -10612,6 +10613,25 @@
         function getOfflineApiUrl() {
             const raw = (localStorage.getItem('ww_offline_gas_url') || DEFAULT_OFFLINE_API_URL || '').trim();
             return raw;
+        }
+        function getMainApiUrl() {
+            const raw = (localStorage.getItem('ww_gas_url') || DEFAULT_GAS_URL || '').trim();
+            if (!raw) return DEFAULT_GAS_URL;
+            const offlineUrl = getOfflineApiUrl();
+            if (raw === offlineUrl || raw === DEFAULT_OFFLINE_API_URL) return DEFAULT_GAS_URL;
+            return raw;
+        }
+        function ensureMainApiConfigured() {
+            const mainUrl = (localStorage.getItem('ww_gas_url') || '').trim();
+            const offlineUrl = getOfflineApiUrl();
+            if (!mainUrl) {
+                localStorage.setItem('ww_gas_url', DEFAULT_GAS_URL);
+                return;
+            }
+            if (mainUrl === offlineUrl || mainUrl === DEFAULT_OFFLINE_API_URL) {
+                localStorage.setItem('ww_gas_url', DEFAULT_GAS_URL);
+                console.warn('已自動將主 API URL 從離線端點修正為 DEFAULT_GAS_URL。');
+            }
         }
         function isOfflineApiUrlUsable(url) {
             return /^https?:\/\//i.test(String(url || '').trim());
@@ -12405,7 +12425,7 @@
             const currentBuild = roleBuilds[safeIdx] || roleBuilds[0];
             const buildName = currentBuild && currentBuild.name ? currentBuild.name : "通用";
 
-            const url = localStorage.getItem('ww_gas_url');
+            const url = getMainApiUrl();
             try {
                 const res = await fetch(`${url}?action=getRank&uid=${g_currentUserUid}&role=${encodeURIComponent(role)}&buildName=${encodeURIComponent(buildName)}`);
                 const json = await res.json();
@@ -14781,7 +14801,7 @@
             const role = g_globalData.role;
             const currentBuild = g_currentWeights[role][g_selectedBuildIdx];
             const buildName = currentBuild ? currentBuild.name : "通用";
-            const url = localStorage.getItem('ww_gas_url');
+            const url = getMainApiUrl();
             document.getElementById('rank-text-simple').innerText = "查詢中...";
             try {
                 const res = await fetch(`${url}?action=getRank&uid=${g_currentUserUid}&role=${encodeURIComponent(role)}&buildName=${encodeURIComponent(buildName)}`);
