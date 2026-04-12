@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>鳴潮聲骸分析儀 — 首頁</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #121214;
+            --panel: #1e1e24;
+            --accent: #e5c07b;
+            --accent-dim: #e5c07b33;
+            --text: #e0e0e0;
+            --border: #333;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 36px;
+            line-height: 1.6;
+        }
+
+        .btn-enter {
+            display: inline-block;
+            background: var(--accent);
+            color: #121214;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 14px 40px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: filter 0.2s, transform 0.15s;
+            letter-spacing: 0.04em;
+        }
+
+        .btn-enter:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-enter:active {
+            transform: translateY(0);
+            filter: brightness(0.95);
+        }
+
+        footer {
+            margin-top: 32px;
+            font-size: 0.78rem;
+            color: #555;
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 36px 24px; }
+            h1 { font-size: 1.35rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">🌊</div>
+        <h1>鳴潮聲骸分析儀</h1>
+        <p class="subtitle">上傳截圖或輸入 UID，<br>即時分析聲骸配裝與評分。</p>
+        <a class="btn-enter" href="index.html">進入分析儀 →</a>
+    </div>
+    <footer>鳴潮聲骸分析儀 v49.7 &nbsp;·&nbsp; GAME ZH</footer>
+</body>
+</html>

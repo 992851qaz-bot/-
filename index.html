@@ -120,6 +120,29 @@
             flex-wrap: wrap
         }
 
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.82rem;
+            font-family: inherit;
+            color: #aaa;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px 10px;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: color 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-home:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
         .header-title-group {
             display: flex;
             align-items: center;
@@ -7196,6 +7219,7 @@
             </div>
         </div>
         <div class="loader" id="loader"></div>
+        <a href="in.html" class="btn-home" title="返回首頁">🏠 首頁</a>
     </header>
     <div id="startup-modal" class="modal-overlay" style="display:flex;">
         <div class="startup-box">
