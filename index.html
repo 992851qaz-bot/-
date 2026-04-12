@@ -3988,6 +3988,36 @@
             flex-wrap: wrap;
         }
 
+        .echo-lib-quick-tabs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .echo-quick-tab {
+            background: #2a2a30;
+            border: 1px solid #444;
+            color: #cfcfd6;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .echo-quick-tab:hover {
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .echo-quick-tab.active {
+            background: rgba(229, 192, 123, 0.14);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: bold;
+        }
+
         .echo-lib-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -7245,9 +7275,7 @@
                 <div class="db-title-group">
                     <div style="font-size:0.9rem; color:var(--accent); font-weight:bold; margin-bottom:5px;">USER
                         STATISTICS</div>
-                    <h2>成就與數據總覽 <button id="db-load-all-btn" class="btn-weights-mini" onclick="dashboard_loadAll()"
-                            style="display: none; background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; font-size: 0.75rem; padding: 4px 12px; margin-left: 10px; box-shadow: 0 0 10px rgba(229,192,123,0.3);">📥
-                            載入全部歷史</button></h2>
+                        <h2>成就與數據總覽</h2>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <button class="btn-weights-mini btn-points-trigger notification-dot" onclick="openPointsModal()"
@@ -7562,11 +7590,11 @@
         <div class="db-container" style="max-width:960px;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⊡ 功能導航列表 <button
-                            class="btn-weights-mini btn-points-trigger notification-dot"
-                            onclick="event.stopPropagation();openPointsModal()"
-                            style="font-size:0.7rem;padding:3px 10px;border-color:#e5c07b;color:#e5c07b;margin-left:10px;background:rgba(229,192,123,0.1);">⭐
-                            任務與積分獎勵</button></h2>
+                    <h2 style="font-size:1.5rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">⊡ 功能導航列表
+                        <button class="quick-btn" onclick="openTutorialPanel()"
+                            style="background:rgba(255,255,255,0.1); color:#ccc; border:1px solid rgba(255,255,255,0.2); font-size:0.75rem; padding:3px 10px; width:auto; height:auto;">📋
+                            操作教學</button>
+                    </h2>
                     <div style="color:#888;font-size:0.85rem;">快速前往系統各項功能模組。</div>
                 </div>
                 <button class="db-close-btn"
@@ -7655,13 +7683,7 @@
                         <div class="feature-card-action"><button class="quick-btn">刷新</button></div>
                     </div>
 
-                    <div class="feature-section"
-                        style="display:flex; justify-content:space-between; align-items:center;">
-                        <span>🖼️ 分享與輸出</span>
-                        <button class="quick-btn" onclick="openTutorialPanel()"
-                            style="background:rgba(255,255,255,0.1); color:#ccc; border:1px solid rgba(255,255,255,0.2); font-size:0.75rem; padding:2px 8px; width:auto; height:auto;">📋
-                            操作教學</button>
-                    </div>
+                    <div class="feature-section">🖼️ 分享與輸出</div>
                     <div class="feature-card" onclick="closeAllModals();generateShareImage()">
                         <div class="feature-card-icon-box" style="background:rgba(152,195,121,0.12);">📸</div>
                         <div class="feature-card-main">
@@ -7671,8 +7693,6 @@
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:#98c379;color:#000;">生成</button></div>
                     </div>
-
-                    <div class="feature-section">🛠️ 系統功能</div>
                     <div class="feature-card" onclick="closeAllModals();openDataManagementModal()">
                         <div class="feature-card-icon-box">▦</div>
                         <div class="feature-card-main">
@@ -7681,6 +7701,8 @@
                         </div>
                         <div class="feature-card-action"><button class="quick-btn">前往</button></div>
                     </div>
+
+                    <div class="feature-section">🛠️ 系統功能</div>
                     <div class="feature-card" onclick="closeAllModals();openCustomWeightEditor()">
                         <div class="feature-card-icon-box">⧉</div>
                         <div class="feature-card-main">
@@ -7704,15 +7726,6 @@
                             <div class="feature-card-desc">全球/好友排行與評分梯隊</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn">前往</button></div>
-                    </div>
-                    <div class="feature-card"
-                        onclick="closeAllModals();document.getElementById('sub-stat-modal').style.display='flex'">
-                        <div class="feature-card-icon-box">✍️</div>
-                        <div class="feature-card-main">
-                            <div class="feature-card-title">副詞條手動修正</div>
-                            <div class="feature-card-desc">直接調整副詞條內容，修復 OCR 誤判資料</div>
-                        </div>
-                        <div class="feature-card-action"><button class="quick-btn">修正</button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();openTutorialPanel()">
                         <div class="feature-card-icon-box">📘</div>
@@ -8685,6 +8698,16 @@
                     </div>
                     <div class="echo-lib-filters">
                         <span style="color:#888;font-size:0.9rem">篩選：</span>
+                        <div class="echo-lib-quick-tabs" id="echo-lib-quick-tabs">
+                            <button type="button" class="echo-quick-tab" data-mode="role_only"
+                                onclick="setEchoLibraryQuickMode('role_only')">該角色</button>
+                            <button type="button" class="echo-quick-tab" data-mode="custom_only"
+                                onclick="setEchoLibraryQuickMode('custom_only')">純自訂</button>
+                            <button type="button" class="echo-quick-tab active" data-mode="custom_role"
+                                onclick="setEchoLibraryQuickMode('custom_role')">自訂+該角色</button>
+                            <button type="button" class="echo-quick-tab" data-mode="cross_custom"
+                                onclick="setEchoLibraryQuickMode('cross_custom')">跨角色+自訂</button>
+                        </div>
                         <select id="filter-echo-cost" class="echo-lib-select" onchange="renderEchoLibraryDebounced()">
                             <option value="">所有 COST</option>
                             <option value="4">4 COST</option>
@@ -9706,6 +9729,7 @@
         const mobileContainer = document.getElementById('mobile-results'); // NEW
         let g_globalData = {}, g_chains = [], g_echoesData = [], g_customEchoes = [], g_currentEntryId = null, g_debugMode = false, g_sourceImage = null, g_weightNames = [], g_currentWeights = {}, g_weightsLoaded = false, g_currentUserUid = "", g_lastRefreshTime = 0, g_roleResolve = null, g_rolePickerMode = 'ocr', g_lockedTarget = null, g_weightsRawData = null, g_showPotentialMode = false, g_selectedBuildIdx = 0, g_installPrompt = null, g_editingSub = { eIdx: -1, sIdx: -1 }, g_lastRankInfo = null, g_isLocalFile = false, g_canUploadLocal = false, g_suitTemplates = {}, g_echoLibViewMode = false, g_weightsPromise = null, g_historyScrollTop = 0;
         let g_offlineSyncTimers = {};
+        let g_customEchoSyncTimers = {};
         let g_offlineApiWarned = false;
         let g_offlineUidWarnAt = 0;
         let g_offlineSyncState = {
@@ -9936,14 +9960,187 @@
             return canvas.toDataURL('image/jpeg', 0.92);
         }
 
+        function normalizeCustomEchoItem(item) {
+            if (!item || typeof item !== 'object') return null;
+            const next = { ...item };
+            next.id = String(next.id || ('custom_' + Date.now()));
+            next.isCustom = true;
+            next.ts = Number(next.ts || Date.now());
+            next.cost = next.cost || '';
+            next.main1 = next.main1 || '';
+            next.main2 = next.main2 || '--';
+            next.subs = Array.isArray(next.subs) ? next.subs : [];
+            next.img = next.img || '';
+            next.ownerUid = String(next.ownerUid || '').trim();
+            next.uploadStatus = next.uploadStatus || 'pending';
+            next._offlineLocalUpdatedAt = Number(next._offlineLocalUpdatedAt || 0);
+            next._offlineServerUpdatedAt = Number(next._offlineServerUpdatedAt || 0);
+            return next;
+        }
+
         function loadCustomEchoes() {
             const saved = localStorage.getItem('g_customEchoes');
             if (saved) {
-                try { g_customEchoes = JSON.parse(saved); } catch (e) { g_customEchoes = []; }
+                try {
+                    const parsed = JSON.parse(saved);
+                    g_customEchoes = Array.isArray(parsed)
+                        ? parsed.map(normalizeCustomEchoItem).filter(Boolean)
+                        : [];
+                } catch (e) { g_customEchoes = []; }
             }
         }
         function saveCustomEchoes() {
             localStorage.setItem('g_customEchoes', JSON.stringify(g_customEchoes));
+        }
+
+        function getCustomEchoStatusMeta(status) {
+            if (status === 'uploading') return { text: '上傳中...', color: '#e5c07b' };
+            if (status === 'success') return { text: '已上傳', color: '#98c379' };
+            if (status === 'error') return { text: '上傳失敗', color: '#ff6b6b' };
+            return { text: '待上傳', color: '#aaa' };
+        }
+
+        function queueCustomEchoSync(echoId, mode = 'update') {
+            const key = String(echoId || '');
+            if (!key) return;
+            if (g_customEchoSyncTimers[key]) {
+                clearTimeout(g_customEchoSyncTimers[key]);
+            }
+            g_customEchoSyncTimers[key] = setTimeout(() => {
+                syncCustomEchoToCloud(key, mode);
+                delete g_customEchoSyncTimers[key];
+            }, 500);
+        }
+
+        async function syncCustomEchoToCloud(echoId, mode = 'update') {
+            const uid = String(g_currentUserUid || '').trim();
+            if (!ensureOfflineSyncAllowed(uid, true)) return;
+
+            const idx = g_customEchoes.findIndex(e => String(e.id) === String(echoId));
+            if (idx === -1) return;
+
+            const echo = g_customEchoes[idx];
+            echo.ownerUid = uid;
+            echo.uploadStatus = 'uploading';
+            echo._offlineLocalUpdatedAt = Date.now();
+            saveCustomEchoes();
+            if (document.getElementById('tab-echo-library')?.classList.contains('active')) renderEchoLibrary();
+
+            const payload = {
+                id: `ce_${echo.id}`,
+                uid,
+                role: (g_globalData && g_globalData.role) ? String(g_globalData.role) : 'CUSTOM_ECHO',
+                source: 'custom_echo_library',
+                payload: {
+                    kind: 'custom_echo_library',
+                    customEcho: {
+                        id: String(echo.id),
+                        ownerUid: uid,
+                        ts: Number(echo.ts || Date.now()),
+                        cost: echo.cost || '',
+                        main1: echo.main1 || '',
+                        main2: echo.main2 || '--',
+                        subs: Array.isArray(echo.subs) ? echo.subs : [],
+                        img: echo.img || ''
+                    },
+                    _offlineLocalUpdatedAt: Number(echo._offlineLocalUpdatedAt || Date.now())
+                },
+                meta: { from: 'K.html', version: CURRENT_VERSION }
+            };
+
+            let synced = null;
+            if (mode === 'create') {
+                synced = await callOfflineApi('offlineCreate', payload, null, { maxRetries: 2, track: true });
+            } else {
+                synced = await callOfflineApi('offlineUpdate', payload, null, { maxRetries: 2, track: true });
+                if (!synced) {
+                    synced = await callOfflineApi('offlineCreate', payload, null, { maxRetries: 2, track: true });
+                }
+            }
+
+            const currentIdx = g_customEchoes.findIndex(e => String(e.id) === String(echoId));
+            if (currentIdx === -1) return;
+
+            g_customEchoes[currentIdx].uploadStatus = synced ? 'success' : 'error';
+            if (synced) {
+                g_customEchoes[currentIdx]._offlineServerUpdatedAt = Date.now();
+            }
+            saveCustomEchoes();
+            if (document.getElementById('tab-echo-library')?.classList.contains('active')) renderEchoLibrary();
+        }
+
+        async function pullCustomEchoesByUid(uid) {
+            const targetUid = String(uid || '').trim();
+            if (!ensureOfflineSyncAllowed(targetUid, false)) return;
+
+            const json = await callOfflineApi('offlineList', null, {
+                uid: targetUid,
+                includeDeleted: 'true',
+                limit: 500
+            }, { maxRetries: 1, track: false });
+            if (!json || json.result !== 'success' || !Array.isArray(json.data)) return;
+
+            let changed = false;
+            const byId = new Map(g_customEchoes.map(e => [String(e.id), e]));
+
+            for (const remoteItem of json.data) {
+                const remoteId = String((remoteItem && remoteItem.id) || '').trim();
+                if (remoteItem && remoteItem.deleted && remoteId.startsWith('ce_')) {
+                    const localId = remoteId.replace(/^ce_/, '');
+                    const beforeLen = g_customEchoes.length;
+                    g_customEchoes = g_customEchoes.filter(e => String(e.id) !== String(localId));
+                    if (g_customEchoes.length !== beforeLen) changed = true;
+                    byId.delete(String(localId));
+                    continue;
+                }
+
+                const payload = (remoteItem && typeof remoteItem.payload === 'object') ? remoteItem.payload : null;
+                if (!payload || payload.kind !== 'custom_echo_library' || !payload.customEcho) continue;
+
+                const remoteEchoRaw = payload.customEcho;
+                const remoteEcho = normalizeCustomEchoItem({
+                    ...remoteEchoRaw,
+                    ownerUid: remoteEchoRaw.ownerUid || targetUid,
+                    uploadStatus: 'success',
+                    _offlineServerUpdatedAt: Date.parse(remoteItem.updatedAt || '') || Date.now(),
+                    _offlineLocalUpdatedAt: Number(payload._offlineLocalUpdatedAt || 0)
+                });
+                if (!remoteEcho) continue;
+
+                const local = byId.get(String(remoteEcho.id));
+                if (remoteItem.deleted) {
+                    if (local) {
+                        g_customEchoes = g_customEchoes.filter(e => String(e.id) !== String(remoteEcho.id));
+                        byId.delete(String(remoteEcho.id));
+                        changed = true;
+                    }
+                    continue;
+                }
+
+                if (!local) {
+                    g_customEchoes.push(remoteEcho);
+                    byId.set(String(remoteEcho.id), remoteEcho);
+                    changed = true;
+                    continue;
+                }
+
+                const localLocalAt = Number(local._offlineLocalUpdatedAt || 0);
+                const localServerAt = Number(local._offlineServerUpdatedAt || 0);
+                const remoteAt = Number(remoteEcho._offlineServerUpdatedAt || 0);
+
+                if (remoteAt >= localLocalAt && remoteAt >= localServerAt) {
+                    Object.assign(local, remoteEcho);
+                    local.uploadStatus = 'success';
+                    changed = true;
+                } else {
+                    queueCustomEchoSync(local.id, 'update');
+                }
+            }
+
+            if (changed) {
+                saveCustomEchoes();
+                if (document.getElementById('tab-echo-library')?.classList.contains('active')) renderEchoLibrary();
+            }
         }
         loadCustomEchoes();
 
@@ -10264,6 +10461,7 @@
 
                 await fetchCloudHistory(nextUid, 'latest');
                 await pullOfflineEntriesByUid(nextUid, { skipRender: true });
+                await pullCustomEchoesByUid(nextUid);
 
                 if (btnLoadAll) {
                     btnLoadAll.style.display = 'inline-block';
@@ -10731,15 +10929,32 @@
             const chains = Array.isArray(payload.chains) ? payload.chains.slice(0, 6).map(v => !!v) : [false, false, false, false, false, false];
             while (chains.length < 6) chains.push(false);
 
+            const remoteSource = String(remoteItem && remoteItem.source ? remoteItem.source : payload.source || '').trim();
             let echoes = Array.isArray(payload.echoes) ? payload.echoes : [];
-            echoes = echoes.slice(0, 5).map(e => ({
-                cost: (e && e.cost) || '',
-                main1: (e && e.main1) || '',
-                main2: (e && e.main2) || '',
-                subs: Array.isArray(e && e.subs) ? e.subs : [],
-                note: (e && e.note) || ''
-            }));
-            while (echoes.length < 5) echoes.push(buildEmptyCustomRoleEcho());
+            if (remoteSource === 'upload-end' && (!echoes || echoes.length === 0)) {
+                const parsedData = Array.isArray(payload.parsedData) ? payload.parsedData : [];
+                const mainRows = parsedData.filter(r => r && r._role === 'main');
+                const subRows = parsedData.filter(r => r && r._role === 'sub');
+                echoes = [{
+                    cost: (payload.cost || '') + '',
+                    main1: (mainRows[0] && mainRows[0].name) || '',
+                    main2: (mainRows[1] && mainRows[1].name) || '',
+                    subs: subRows.slice(0, 5).map(r => ({
+                        name: (r && r.name) || '',
+                        val: (r && r.value) || ''
+                    })),
+                    note: payload.rawText || ''
+                }];
+            } else {
+                echoes = echoes.slice(0, 5).map(e => ({
+                    cost: (e && e.cost) || '',
+                    main1: (e && e.main1) || '',
+                    main2: (e && e.main2) || '',
+                    subs: Array.isArray(e && e.subs) ? e.subs : [],
+                    note: (e && e.note) || ''
+                }));
+                while (echoes.length < 5) echoes.push(buildEmptyCustomRoleEcho());
+            }
 
             const updatedAtMs = Date.parse(remoteItem.updatedAt || '') || Date.now();
             const roleName = payload.role || remoteItem.role || global.role || '';
@@ -10750,6 +10965,7 @@
                 dbId: null,
                 ts: payload.ts || new Date(updatedAtMs).toLocaleString(),
                 url: payload.url || '',
+                source: remoteSource,
                 global: {
                     ...global,
                     uid: uid,
@@ -10783,6 +10999,11 @@
             for (const remoteItem of json.data) {
                 const rid = String((remoteItem && remoteItem.id) || '').trim();
                 if (!rid) continue;
+
+                const remotePayload = (remoteItem && typeof remoteItem.payload === 'object') ? remoteItem.payload : null;
+                if (remotePayload && remotePayload.kind === 'custom_echo_library') {
+                    continue;
+                }
 
                 const localIdx = history.findIndex(h => String(h.id) === rid);
 
@@ -13186,8 +13407,9 @@
 
         // Helper to find stats and suits used by the CURRENT character
         function getCharacterUsedStats() {
-            const role = g_globalData ? g_globalData.role : null;
-            const uid = g_currentUserUid;
+            const uid = String(g_currentUserUid || '').trim();
+            const fallbackRole = ((getCleanHistory().find(h => h.global && String(h.global.uid) === uid) || {}).global || {}).role || null;
+            const role = (g_globalData && g_globalData.role) ? g_globalData.role : fallbackRole;
             if (!role || !uid) return { suits: new Set(), mainStats: new Set() };
 
             const history = getCleanHistory();
@@ -13376,6 +13598,7 @@
 
             const previewImg = document.getElementById('custom-echo-ocr-preview');
             const savedImg = (previewImg && previewImg.style.display !== 'none') ? getDownscaledImage(previewImg) : "";
+            const ownerUid = String(g_currentUserUid || '').trim();
 
             if (editingId) {
                 const idx = g_customEchoes.findIndex(e => e.id === editingId);
@@ -13384,33 +13607,51 @@
                     g_customEchoes[idx].main1 = main1;
                     g_customEchoes[idx].main2 = main2;
                     g_customEchoes[idx].subs = subs;
+                    g_customEchoes[idx].ownerUid = ownerUid;
+                    g_customEchoes[idx].uploadStatus = 'pending';
+                    g_customEchoes[idx]._offlineLocalUpdatedAt = Date.now();
                     if (savedImg) g_customEchoes[idx].img = savedImg;
                 }
             } else {
-                const newEcho = {
+                const newEcho = normalizeCustomEchoItem({
                     id: "custom_" + Date.now(),
                     isCustom: true,
                     ts: Date.now(),
+                    ownerUid,
                     cost: cost + "-" + g_selectedCustomSuit,
                     main1: main1,
                     main2: main2,
                     subs: subs,
-                    img: savedImg
-                };
+                    img: savedImg,
+                    uploadStatus: 'pending',
+                    _offlineLocalUpdatedAt: Date.now(),
+                    _offlineServerUpdatedAt: 0
+                });
                 g_customEchoes.push(newEcho);
             }
 
             saveCustomEchoes();
             closeCustomEchoModal();
             renderEchoLibrary();
+
+            const targetId = editingId || (g_customEchoes[g_customEchoes.length - 1] && g_customEchoes[g_customEchoes.length - 1].id);
+            if (targetId && ensureOfflineSyncAllowed(ownerUid, false)) {
+                queueCustomEchoSync(targetId, editingId ? 'update' : 'create');
+            }
         }
 
         function deleteCustomEcho(id, event) {
             if (event) event.stopPropagation();
-            showConfirm("確定要刪除此自定義聲骸嗎？", () => {
-                g_customEchoes = g_customEchoes.filter(e => e.id !== id);
+            showConfirm("確定要刪除此自定義聲骸嗎？", async () => {
+                const target = g_customEchoes.find(e => String(e.id) === String(id));
+                g_customEchoes = g_customEchoes.filter(e => String(e.id) !== String(id));
                 saveCustomEchoes();
                 renderEchoLibrary();
+
+                const targetUid = String((target && target.ownerUid) || g_currentUserUid || '').trim();
+                if (ensureOfflineSyncAllowed(targetUid, false)) {
+                    await callOfflineApi('offlineDelete', { id: `ce_${id}`, hard: false }, null, { maxRetries: 2, track: true });
+                }
             });
         }
 
@@ -13429,21 +13670,25 @@
             const container = document.getElementById('echo-lib-container');
             const hint = document.getElementById('echo-lib-load-hint');
             const countEl = document.getElementById('echo-lib-count');
-            const role = g_globalData ? g_globalData.role : null;
-            const uid = g_currentUserUid;
+            const uid = String(g_currentUserUid || '').trim();
             const btnLoadAll = document.getElementById('btn-load-all');
 
-            if (!uid || !role) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">請先登入 UID 並分析一位角色...</div>';
+            if (!uid) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">請先登入 UID...</div>';
                 if (countEl) countEl.innerText = '0';
                 return;
             }
+
+            const historyForUid = getCleanHistory().filter(h => h.global && String(h.global.uid) === String(uid));
+            const fallbackRole = historyForUid.length > 0 ? (historyForUid[0].global.role || '') : '';
+            const role = (g_globalData && g_globalData.role) ? g_globalData.role : fallbackRole;
 
             // Sync Load All Button state (Ensure it shows if not fully loaded)
             // Sync Load All Button state (Ensure it shows if not fully loaded)
             const history = getCleanHistory();
             const isFullyLoaded = (btnLoadAll && btnLoadAll.style.display === 'none');
             const showAllMode = document.getElementById('toggle-echo-show-all') ? document.getElementById('toggle-echo-show-all').checked : false;
+            const quickMode = g_echoLibQuickMode || 'custom_role';
 
             if (hint) {
                 hint.style.display = isFullyLoaded ? 'none' : 'block';
@@ -13453,7 +13698,13 @@
 
             const filteredHistory = history.filter(h => {
                 if (!h.global || String(h.global.uid) !== String(uid)) return false;
-                if (!showAllMode && h.global.role !== role) return false;
+                const isManagedSource = h.source === 'upload-end' || h.source === 'custom_echo_library' || h.source === 'custom_echo' || (!h.source && h.imageSrc);
+                if (quickMode === 'custom_only' && !isManagedSource) return false;
+
+                const isCrossCustom = quickMode === 'cross_custom';
+                const useRoleScoped = quickMode === 'role_only' || quickMode === 'custom_role';
+                if (!isCrossCustom && useRoleScoped && role && h.global.role !== role) return false;
+
                 // Apply character checkbox filter (only if showAllMode or g_echoLibRoleFilter is set)
                 if (typeof g_echoLibRoleFilter !== 'undefined' && g_echoLibRoleFilter.size > 0) {
                     if (!g_echoLibRoleFilter.has(h.global.role)) return false;
@@ -13461,7 +13712,13 @@
                 return true;
             });
 
-            let allEchoes = [...g_customEchoes.map(e => ({ ...e, _meta: { ts: Date.now(), id: e.id, isCustom: true, url: e.img || "" } }))];
+            const customEchoesForUid = g_customEchoes.filter(e => {
+                if (quickMode === 'role_only') return false;
+                if (!e) return false;
+                if (!e.ownerUid) return true;
+                return String(e.ownerUid) === String(uid);
+            });
+            let allEchoes = [...customEchoesForUid.map(e => ({ ...e, _meta: { ts: e.ts || Date.now(), id: e.id, isCustom: true, url: e.img || "" } }))];
             filteredHistory.forEach(h => {
                 if (h.echoes) {
                     h.echoes.forEach((e, idx) => {
@@ -13530,14 +13787,34 @@
 
             if (countEl) countEl.innerText = uniqueEchoes.length;
 
-            if (uniqueEchoes.length === 0 && g_customEchoes.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">找不到符合條件的聲骸...</div>';
+            // Calculate custom echo sync status summary
+            const syncCounts = {
+                pending: customEchoesForUid.filter(e => !e.uploadStatus || e.uploadStatus === 'pending').length,
+                uploading: customEchoesForUid.filter(e => e.uploadStatus === 'uploading').length,
+                error: customEchoesForUid.filter(e => e.uploadStatus === 'error').length,
+                success: customEchoesForUid.filter(e => e.uploadStatus === 'success').length
+            };
+            const hasCustomEchoes = customEchoesForUid.length > 0;
+            const syncStatusHtml = hasCustomEchoes ? `
+                <div style="grid-column: 1/-1; background:rgba(100,150,200,0.1); border-left:3px solid #64a8d8; padding:8px 12px; margin-bottom:12px; font-size:0.9rem; border-radius:2px;">
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <span style="font-weight:bold; color:#64a8d8;">雲端同步：</span>
+                        ${syncCounts.pending > 0 ? `<span style="color:#999;">待上傳 ${syncCounts.pending}</span>` : ''}
+                        ${syncCounts.uploading > 0 ? `<span style="color:#ffb74d;">上傳中... ${syncCounts.uploading}</span>` : ''}
+                        ${syncCounts.success > 0 ? `<span style="color:#98c379;">已上傳 ${syncCounts.success}</span>` : ''}
+                        ${syncCounts.error > 0 ? `<span style="color:#f44336;">失敗 ${syncCounts.error}</span>` : ''}
+                    </div>
+                </div>
+            ` : '';
+
+            if (uniqueEchoes.length === 0 && customEchoesForUid.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">目前條件下沒有聲骸，請放寬篩選或同步歷史資料。</div>';
                 return;
             }
 
-            let html = '';
+            let html = syncStatusHtml;
             uniqueEchoes.forEach((e, idx) => {
-                const activeBuildWeights = (typeof rank_weights !== 'undefined' && g_globalData.role && rank_weights[g_globalData.role]) ? (rank_weights[g_globalData.role][rank_currBuild] || rank_weights[g_globalData.role][0]).weights : null;
+                const activeBuildWeights = (typeof rank_weights !== 'undefined' && role && rank_weights[role]) ? (rank_weights[role][rank_currBuild] || rank_weights[role][0]).weights : null;
                 html += createEchoCardHTML(e, idx, activeBuildWeights, g_echoLibViewMode);
             });
             container.innerHTML = html + `
@@ -13599,6 +13876,14 @@
                 isActive = libToggle.checked;
                 if (smartToggle) smartToggle.checked = isActive;
                 if (roleFilterBar) roleFilterBar.style.display = isActive ? 'flex' : 'none';
+                if (isActive) {
+                    g_echoLibQuickMode = 'cross_custom';
+                } else if (g_echoLibQuickMode === 'cross_custom') {
+                    g_echoLibQuickMode = 'custom_role';
+                }
+                document.querySelectorAll('#echo-lib-quick-tabs .echo-quick-tab').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.mode === g_echoLibQuickMode);
+                });
                 renderEchoLibrary();
             } else {
                 isActive = smartToggle.checked;
@@ -13704,7 +13989,7 @@
  ${e.isCustom ? `
  <div style="flex:1; display:flex; align-items:center; gap:4px; margin-left:8px;">
  <span class="echo-lib-suit-tag" style="white-space:nowrap; margin-right:auto;">${suit}</span>
- <div style="display:flex; gap:4px; align-items:center;">
+ <div style="display:flex; gap:6px; align-items:center;">
  <button onclick="editCustomEcho('${e.id}', event)" style="background:none; border:none; color:var(--accent); font-size:1rem; cursor:pointer; padding:0;" title="編輯">✏️</button>
  <button onclick="deleteCustomEcho('${e.id}', event)" style="background:none; border:none; color:#f44336; font-size:1rem; cursor:pointer; padding:0;" title="刪除">🗑️</button>
  </div>
@@ -13725,7 +14010,7 @@
  <div class="echo-lib-body">
  <div class="echo-lib-main-stat-row">
  <div class="echo-lib-main-1" style="flex:1;text-align:center">${e.main1}</div>
- ${e.isCustom ? `<div class="echo-lib-main-2" style="flex:1;text-align:center;color:#aaa;font-style:italic;font-size:0.85rem;cursor:help;text-decoration:underline dashed" onclick="event.stopPropagation();toggleLibMeta(${idx})">自訂聲骸</div>` : (e.main2 && e.main2 !== '--' ? `<div class="echo-lib-main-2" style="flex:1;text-align:center">${e.main2}</div>` : '')}
+ ${e.isCustom ? (() => { const st = getCustomEchoStatusMeta(e.uploadStatus); return `<div class="echo-lib-main-2" style="flex:1;text-align:center;color:${st.color};font-size:0.85rem;font-weight:bold;">${st.text}</div>`; })() : (e.main2 && e.main2 !== '--' ? `<div class="echo-lib-main-2" style="flex:1;text-align:center">${e.main2}</div>` : '')}
  </div>
  <div class="echo-lib-sub-stats">
  ${subsHtml}
@@ -13760,8 +14045,8 @@
             const smartView = document.getElementById('echo-lib-smart-view');
 
             if (show) {
-                if (!g_globalData.role || !g_currentUserUid) {
-                    showMsg("請先登入並分析一位角色");
+                if (!g_currentUserUid) {
+                    showMsg("請先登入 UID");
                     return;
                 }
                 mainView.style.display = 'none';
@@ -13850,8 +14135,11 @@
         }
 
         function runSmartMatching() {
-            const role = g_globalData.role;
-            const activeBuildWeights = (g_currentWeights[role] && g_currentWeights[role][g_selectedBuildIdx]) ? g_currentWeights[role][g_selectedBuildIdx].weights : null;
+            const uid = String(g_currentUserUid || '').trim();
+            const role = (g_globalData && g_globalData.role)
+                ? g_globalData.role
+                : ((getCleanHistory().find(h => h.global && String(h.global.uid) === uid) || {}).global || {}).role;
+            const activeBuildWeights = (role && g_currentWeights[role] && g_currentWeights[role][g_selectedBuildIdx]) ? g_currentWeights[role][g_selectedBuildIdx].weights : null;
             const allowCrossRole = document.getElementById('smart-toggle-cross-role').checked;
 
             let history = getCleanHistory();
@@ -13859,6 +14147,7 @@
 
             // Add custom echoes first
             g_customEchoes.forEach(e => {
+                if (uid && e.ownerUid && String(e.ownerUid) !== uid) return;
                 const res = activeBuildWeights ? calculateEchoScoreSimple(e, activeBuildWeights) : { score: 0, percentage: 0 };
                 const cv = getCVInfo(e);
                 const bs = res.score * 1.25;
@@ -19998,6 +20287,27 @@
         // 功能 2：聲骸庫角色篩選勾選框
         // =====================================================================
         let g_echoLibRoleFilter = new Set(); // 空表示全部顯示
+        let g_echoLibQuickMode = 'custom_role';
+
+        function setEchoLibraryQuickMode(mode) {
+            const allowed = new Set(['role_only', 'custom_only', 'custom_role', 'cross_custom']);
+            g_echoLibQuickMode = allowed.has(mode) ? mode : 'custom_role';
+
+            const isCross = g_echoLibQuickMode === 'cross_custom';
+            const libToggle = document.getElementById('toggle-echo-show-all');
+            const smartToggle = document.getElementById('smart-toggle-cross-role');
+            const roleFilterBar = document.getElementById('echo-lib-role-filter-bar');
+
+            if (libToggle) libToggle.checked = isCross;
+            if (smartToggle) smartToggle.checked = isCross;
+            if (roleFilterBar) roleFilterBar.style.display = isCross ? 'flex' : 'none';
+
+            document.querySelectorAll('#echo-lib-quick-tabs .echo-quick-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === g_echoLibQuickMode);
+            });
+
+            renderEchoLibraryDebounced();
+        }
 
         function echoLibBuildRoleCheckboxes() {
             const history = getCleanHistory();
