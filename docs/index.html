@@ -7261,6 +7261,8 @@
     cursor: pointer;
     white-space: nowrap;
     letter-spacing: 0.02em;
+    outline: none;
+    font-family: inherit;
 }
 #page-switch-fab:hover {
     background: rgba(255,184,77,0.22);
@@ -7272,10 +7274,49 @@
 #page-switch-fab:active { transform: scale(0.97); }
 #page-switch-fab svg { flex-shrink: 0; }
 </style>
-<a id="page-switch-fab" href="in2.html" title="切換至聲骸辨識頁">
+<button id="page-switch-fab" onclick="toggleOcrPanel()" title="切換至聲骸辨識頁">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
     切換頁面
-</a>
+</button>
+<!-- 聲骸辨識頁面嵌入面板 -->
+<div id="ocr-panel-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:99998;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);">
+    <div style="position:relative;width:100%;height:100%;display:flex;flex-direction:column;">
+        <iframe id="ocr-panel-iframe" src="" style="flex:1;width:100%;border:none;" allowfullscreen></iframe>
+    </div>
+</div>
+<script>
+(function(){
+    function toggleOcrPanel(){
+        var overlay=document.getElementById('ocr-panel-overlay');
+        var iframe=document.getElementById('ocr-panel-iframe');
+        var fab=document.getElementById('page-switch-fab');
+        if(overlay.style.display==='none'||overlay.style.display===''){
+            if(!iframe.getAttribute('data-loaded')){
+                iframe.src='in2.html';
+                iframe.setAttribute('data-loaded','1');
+            }
+            overlay.style.display='flex';
+            fab.style.background='rgba(255,184,77,0.35)';
+            fab.style.borderColor='rgba(255,184,77,0.7)';
+            fab.style.color='#ffe9bf';
+        } else {
+            overlay.style.display='none';
+            fab.style.background='';
+            fab.style.borderColor='';
+            fab.style.color='';
+        }
+    }
+    window.toggleOcrPanel=toggleOcrPanel;
+    window.addEventListener('message',function(e){
+        if(e.data==='close-ocr-panel'){
+            var overlay=document.getElementById('ocr-panel-overlay');
+            var fab=document.getElementById('page-switch-fab');
+            if(overlay){overlay.style.display='none';}
+            if(fab){fab.style.background='';fab.style.borderColor='';fab.style.color='';}
+        }
+    });
+})();
+</script>
     <header>
         <div class="header-title-group" onclick="dashboard_open()">
             <h1>GAME ZH</h1>

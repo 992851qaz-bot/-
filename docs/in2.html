@@ -299,6 +299,8 @@ header { padding: 8px 12px; gap: 6px; }
     cursor: pointer;
     white-space: nowrap;
     letter-spacing: 0.02em;
+    outline: none;
+    font-family: inherit;
 }
 #page-switch-fab:hover {
     background: rgba(255,184,77,0.22);
@@ -310,10 +312,19 @@ header { padding: 8px 12px; gap: 6px; }
 #page-switch-fab:active { transform: scale(0.97); }
 #page-switch-fab svg { flex-shrink: 0; }
 </style>
-<a id="page-switch-fab" href="index.html" title="切換至聲骸分析儀">
+<button id="page-switch-fab" onclick="handlePageSwitch()" title="切換至聲骸分析儀">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
     切換頁面
-</a>
+</button>
+<script>
+function handlePageSwitch(){
+    if(window.parent!==window){
+        window.parent.postMessage('close-ocr-panel','*');
+    } else {
+        window.location.href='index.html';
+    }
+}
+</script>
 <div id="welcome-overlay" class="fullscreen-overlay hidden">
 <div id="welcome-modal" class="modal-box">
 <h2>歡迎！請先完成設定</h2>
