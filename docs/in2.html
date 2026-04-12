@@ -275,6 +275,45 @@ header { padding: 8px 12px; gap: 6px; }
 </script>
 </head>
 <body>
+<!-- 左上角懸浮切換按鈕 -->
+<style>
+#page-switch-fab {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(30,30,34,0.82);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+    transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+#page-switch-fab:hover {
+    background: rgba(255,184,77,0.22);
+    border-color: rgba(255,184,77,0.55);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 28px rgba(255,184,77,0.2);
+    color: #ffe9bf;
+}
+#page-switch-fab:active { transform: scale(0.97); }
+#page-switch-fab svg { flex-shrink: 0; }
+</style>
+<a id="page-switch-fab" href="index.html" title="切換至聲骸分析儀">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+    切換頁面
+</a>
 <div id="welcome-overlay" class="fullscreen-overlay hidden">
 <div id="welcome-modal" class="modal-box">
 <h2>歡迎！請先完成設定</h2>
@@ -328,7 +367,6 @@ https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC/1
 <div class="header-title">✨ 聲骸辨識 v48.1 (Fixed)</div>
 <input id="uid-input" type="text" placeholder="訪客模式" maxlength="9">
 <button id="toggle-analyzer-btn" class="action-btn">📈 評分模式</button>
-<a href="index.html" class="action-btn" title="切換至聲骸分析儀" style="background-color:rgba(255,184,77,0.15);border-color:rgba(255,184,77,0.4);">🔄 切換頁面</a>
 <a href="https://sites.google.com/view/gamedada-ocr/Wuthering-Waves?authuser=0" target="_blank" class="action-btn icon-only" title="版本選擇">
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/></svg>
 </a>
