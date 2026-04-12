@@ -7197,6 +7197,43 @@
         }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
+    <!-- 防偷取保護 -->
+    <script>
+    (function() {
+        'use strict';
+        // 允許的網域清單
+        var ALLOWED_HOSTS = ['992851qaz-bot.github.io', 'localhost', '127.0.0.1'];
+        var host = window.location.hostname;
+        var isAllowed = ALLOWED_HOSTS.some(function(h) { return host === h || host.endsWith('.' + h); });
+        if (!isAllowed && host !== '') {
+            document.documentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#111;color:#e74c3c;font-size:1.4rem;font-family:sans-serif;text-align:center;padding:20px;">⛔ 此頁面禁止在未授權網域使用<br><small style="color:#888;font-size:0.9rem;margin-top:12px;display:block;">Unauthorized domain detected.</small></div>';
+            return;
+        }
+        // 禁止常見快捷鍵：Ctrl+U, Ctrl+S, Ctrl+A, Ctrl+C, F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+        document.addEventListener('keydown', function(e) {
+            var key = e.key || e.keyCode;
+            if (e.ctrlKey && (key === 'u' || key === 'U' || key === 85)) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (key === 's' || key === 'S' || key === 83)) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'i' || key === 73)) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (key === 'J' || key === 'j' || key === 74)) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (key === 'C' || key === 'c' || key === 67)) { e.preventDefault(); return false; }
+            if (key === 'F12' || key === 123) { e.preventDefault(); return false; }
+        }, true);
+        // DevTools 偵測（大小差異法）
+        var devtoolsOpen = false;
+        setInterval(function() {
+            var w = window.outerWidth - window.innerWidth > 160;
+            var h = window.outerHeight - window.innerHeight > 160;
+            if ((w || h) && !devtoolsOpen) {
+                devtoolsOpen = true;
+                console.clear();
+                console.warn('%c⛔ 警告：偵測到開發者工具！未經授權存取程式碼屬違規行為。', 'color:red;font-size:18px;font-weight:bold;');
+            } else if (!w && !h) {
+                devtoolsOpen = false;
+            }
+        }, 1000);
+    })();
+    </script>
 </head>
 
 <body>
@@ -7226,6 +7263,7 @@
             </div>
         </div>
         <div class="loader" id="loader"></div>
+        <a href="in2.html" class="metallic-btn" style="margin-left:8px;text-decoration:none;font-size:0.85rem;padding:6px 14px;" title="切換至聲骸辨識頁">🔄 切換頁面</a>
     </header>
     <div id="startup-modal" class="modal-overlay" style="display:flex;">
         <div class="startup-box">
