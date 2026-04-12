@@ -7985,6 +7985,15 @@
                                 <input type="checkbox" id="custom-echo-auto-suit" checked
                                     style="width:16px; height:16px;">
                                 分析時優先選擇對應黃點 (常用套裝) </label>
+                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <label for="custom-echo-ocr-model" style="font-size:0.85rem; color:#bbb;">辨識模型</label>
+                                <select id="custom-echo-ocr-model" class="dps-select" onchange="setCustomEchoOcrModel(this.value)"
+                                    style="max-width:260px;">
+                                    <option value="A">A 模型 (原本邏輯)</option>
+                                    <option value="B">B 模型 (上傳端邏輯 + 後修)</option>
+                                </select>
+                                <span style="font-size:0.78rem; color:#888;">可依截圖品質即時切換</span>
+                            </div>
                 </div>
             </div>
 
@@ -12299,6 +12308,99 @@
             return results;
         }
 
+        function getCustomSubCandidatesByName(name) {
+            const rawName = String(name || '').trim();
+            const baseName = rawName.replace('百分比', '');
+            const idxList = STAT_MAP[rawName] || STAT_MAP[baseName] || [];
+            const wantPercent = rawName.includes('百分比');
+            const candidates = [];
+            idxList.forEach(idx => {
+                LOOKUP_ROWS.forEach(row => {
+                    const v = row[idx];
+                    if (!v || v === '—') return;
+                    const sv = String(v);
+                    if (wantPercent && !sv.includes('%')) return;
+                    if (!wantPercent && sv.includes('%')) return;
+                    candidates.push(sv);
+                });
+            });
+            return Array.from(new Set(candidates));
+        }
+
+        function normalizeCustomModelBText(text) {
+            return String(text || '')
+                .replace(/[Oo]/g, '0')
+                .replace(/[Il|]/g, '1')
+                .replace(/[Ss]/g, '5')
+                .replace(/B/g, '8')
+                .replace(/，/g, '.')
+                .replace(/：/g, ':')
+                .replace(/％/g, '%')
+                .replace(/·/g, '.')
+                .replace(/暴|掰/g, '爆')
+                .replace(/防御/g, '防禦');
+        }
+
+        function parseSubStatsCustomModelB(text) {
+            const source = normalizeCustomModelBText(text);
+            const patterns = [
+                { re: '爆擊傷害|暴擊傷害|爆傷', name: '暴擊傷害', percent: true },
+                { re: '爆擊率|暴擊率|爆擊', name: '暴擊', percent: true },
+                { re: '攻擊百分比|攻擊%|攻擊力%', name: '攻擊百分比', percent: true },
+                { re: '生命百分比|生命%', name: '生命百分比', percent: true },
+                { re: '防禦百分比|防御百分比|防禦%|防御%', name: '防禦百分比', percent: true },
+                { re: '共鳴效率|效率', name: '共鳴效率', percent: true },
+                { re: '普攻傷害加成|普攻', name: '普攻傷害加成', percent: true },
+                { re: '重擊傷害加成|重擊', name: '重擊傷害加成', percent: true },
+                { re: '共鳴技能傷害加成|共鳴技能|技能', name: '共鳴技能傷害加成', percent: true },
+                { re: '共鳴解放傷害加成|共鳴解放|解放傷害|共鳴解除傷害加成', name: '共鳴解放傷害加成', percent: true },
+                { re: '攻擊', name: '攻擊', percent: false },
+                { re: '生命', name: '生命', percent: false },
+                { re: '防禦|防御', name: '防禦', percent: false }
+            ];
+
+            const found = [];
+            patterns.forEach(rule => {
+                const regex = new RegExp(`(${rule.re})[^\\d\\.]*([\\d\\.]+)\\s*%?`, 'gi');
+                let match;
+                while ((match = regex.exec(source)) !== null) {
+                    let rawVal = String(match[2] || '').trim();
+                    if (!rawVal) continue;
+                    if (rawVal.startsWith('.')) rawVal = '0' + rawVal;
+                    const num = parseFloat(rawVal);
+                    if (isNaN(num)) continue;
+
+                    let name = rule.name;
+                    const hasPercent = match[0].includes('%') || rule.percent;
+                    if (hasPercent && ['攻擊', '生命', '防禦'].includes(name)) {
+                        name = name + '百分比';
+                    }
+
+                    const normalizedRaw = (Math.round(num * 10) / 10) + (hasPercent ? '%' : '');
+                    const candidates = getCustomSubCandidatesByName(name);
+                    const snapped = matchValueFromTableCustom(normalizedRaw, candidates) || normalizedRaw;
+
+                    found.push({
+                        _idx: match.index,
+                        name,
+                        val: snapped,
+                        valid: true
+                    });
+                }
+            });
+
+            found.sort((a, b) => a._idx - b._idx);
+            const dedup = [];
+            const seen = new Set();
+            found.forEach(item => {
+                if (!item || !item.name || !item.val) return;
+                if (seen.has(item.name)) return;
+                seen.add(item.name);
+                dedup.push({ name: item.name, val: item.val, valid: true });
+            });
+            return dedup.slice(0, 5);
+        }
+
         function matchValueFromTableCustom(ocrRaw, candidates) {
             let rawStr = ocrRaw.replace(/[^\d.]/g, '');
             if (rawStr.includes('.')) {
@@ -13404,6 +13506,20 @@
 
         // --- Custom Echo Modal JS ---
         let g_selectedCustomSuit = "";
+        let g_customEchoOcrModel = (localStorage.getItem('ww_custom_echo_ocr_model') || 'A').toUpperCase() === 'B' ? 'B' : 'A';
+
+        function setCustomEchoOcrModel(mode) {
+            g_customEchoOcrModel = String(mode || 'A').toUpperCase() === 'B' ? 'B' : 'A';
+            localStorage.setItem('ww_custom_echo_ocr_model', g_customEchoOcrModel);
+            const modelSelect = document.getElementById('custom-echo-ocr-model');
+            if (modelSelect) modelSelect.value = g_customEchoOcrModel;
+        }
+
+        function initCustomEchoOcrModelControl() {
+            const modelSelect = document.getElementById('custom-echo-ocr-model');
+            if (!modelSelect) return;
+            modelSelect.value = g_customEchoOcrModel;
+        }
 
         // Helper to find stats and suits used by the CURRENT character
         function getCharacterUsedStats() {
@@ -13434,6 +13550,7 @@
             initCustomEchoModal();
             document.getElementById('custom-echo-modal').style.display = 'flex';
             resetCustomEchoOcr();
+            initCustomEchoOcrModelControl();
             setupCustomEchoOcrListeners();
         }
 
@@ -19287,6 +19404,7 @@
             try {
                 await buildTemplates();
                 const worker = await getTesseractWorker();
+                const ocrModel = (g_customEchoOcrModel === 'B') ? 'B' : 'A';
 
                 const srcW = img.naturalWidth || img.width;
                 const srcH = img.naturalHeight || img.height;
@@ -19298,11 +19416,12 @@
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0);
 
-                const { data: { text } } = await worker.recognize(canvas, { tessedit_pageseg_mode: '4' });
+                const firstPassPsm = ocrModel === 'B' ? '6' : '4';
+                const { data: { text } } = await worker.recognize(canvas, { tessedit_pageseg_mode: firstPassPsm });
                 g_lastCustomOcrDebugInfo.raw = text;
                 document.getElementById('btn-debug-custom-echo').style.display = 'block';
 
-                let parsedSubs = parseSubStatsCustom(text);
+                let parsedSubs = ocrModel === 'B' ? parseSubStatsCustomModelB(text) : parseSubStatsCustom(text);
                 g_lastCustomOcrDebugInfo.parsed = parsedSubs;
 
                 // Deep Scan if enabled and < 5 stats
@@ -19312,8 +19431,8 @@
                     const s = document.createElement('canvas');
                     s.width = canvas.width * 1.5; s.height = canvas.height * 1.5;
                     s.getContext('2d').drawImage(canvas, 0, 0, s.width, s.height);
-                    const { data: d2 } = await worker.recognize(s, { tessedit_pageseg_mode: '4' });
-                    const p2 = parseSubStatsCustom(d2.text);
+                    const { data: d2 } = await worker.recognize(s, { tessedit_pageseg_mode: firstPassPsm });
+                    const p2 = ocrModel === 'B' ? parseSubStatsCustomModelB(d2.text) : parseSubStatsCustom(d2.text);
                     if (p2.length > parsedSubs.length) {
                         parsedSubs = p2;
                         g_lastCustomOcrDebugInfo.raw += "\n\n--- Deep Scan Raw ---\n" + d2.text;
@@ -19402,7 +19521,7 @@
                     }
                 }
 
-                showMsg("分析完成！\n💡 BETA 先行版提示：此為 BETA 先行版，若分析未達預期我們正在搶修中。");
+                showMsg(`分析完成！\n已使用 ${ocrModel} 模型${ocrModel === 'B' ? '（上傳端邏輯 + 後修）' : '（原本邏輯）'}。`);
             } catch (err) {
                 console.error("Custom OCR Error:", err);
                 showMsg("分析失敗: " + err.message);
