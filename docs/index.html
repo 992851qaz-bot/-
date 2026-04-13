@@ -7346,7 +7346,12 @@
     </header>
     <div id="startup-modal" class="modal-overlay" style="display:flex;">
         <div class="startup-box">
-            <h2 style="color:var(--accent);margin-bottom:15px;">角色資訊卡評分</h2><input type="text" id="login-uid"
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <h2 style="color:var(--accent);margin:0;" data-lang-zh="角色資訊卡評分" data-lang-en="Echo Score Analyzer">角色資訊卡評分</h2>
+                <button class="lang-toggle-btn" onclick="toggleLanguage()" style="background:rgba(229,192,123,0.12);border:1px solid rgba(229,192,123,0.35);color:var(--accent);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-weight:600;white-space:nowrap;">🌐 English</button>
+            </div>
+            <p style="font-size:0.75rem;color:#888;margin:-8px 0 12px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖" data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
+            <input type="text" id="login-uid"
                 maxlength="9" placeholder="輸入 UID (9碼純數字)"
                 oninput="this.value=this.value.replace(/\D/g,'');validateUid()"
                 onkeydown="if(event.key==='Enter') handleLogin()">
@@ -7871,6 +7876,16 @@
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:#f44336;color:#fff;">重置</button></div>
+                    </div>
+
+                    <div class="feature-section">🌐 語言 / Language</div>
+                    <div class="feature-card" onclick="event.stopPropagation();toggleLanguage()">
+                        <div class="feature-card-icon-box" style="background:rgba(97,175,239,0.12);">🌐</div>
+                        <div class="feature-card-main">
+                            <div class="feature-card-title" data-lang-zh="語言切換" data-lang-en="Language Switch">語言切換</div>
+                            <div class="feature-card-desc" data-lang-zh="切換介面語言。⚠️ 僅支援辨識繁體中文截圖" data-lang-en="Toggle display language. ⚠️ OCR supports Traditional Chinese (繁體中文) only">切換介面語言。⚠️ 僅支援辨識繁體中文截圖</div>
+                        </div>
+                        <div class="feature-card-action"><button class="quick-btn lang-toggle-btn" onclick="event.stopPropagation();toggleLanguage()" style="background:rgba(97,175,239,0.2);color:#61afef;border-color:rgba(97,175,239,0.4);">🌐 English</button></div>
                     </div>
                 </div>
             </div>
@@ -9875,6 +9890,44 @@
         let g_keepHistoryOnUidSwitch = false; // 切換UID不刪除紀錄
         let g_analyzeFixMode = false; // 分析後先修正再手動上傳
         let g_editMode = false; // 可編輯分析表格模式
+        let g_lang = localStorage.getItem('ww_lang') || 'zh'; // 'zh' | 'en'
+        // Stat name translation (ZH → EN) for display layer only
+        const STAT_ZH_TO_EN = {
+            // Main stats
+            '生命百分比': 'HP%', '攻擊百分比': 'ATK%', '防禦百分比': 'DEF%',
+            '共鳴效率': 'Energy Regen',
+            '氣動傷害加成': 'Aero DMG', '導電傷害加成': 'Electro DMG',
+            '熱熔傷害加成': 'Fusion DMG', '冷凝傷害加成': 'Glacio DMG',
+            '湮滅傷害加成': 'Havoc DMG', '衍射傷害加成': 'Spectro DMG',
+            '共鳴解放傷害加成': 'Res. Liberation DMG',
+            // Sub stats (flat)
+            '生命': 'HP', '攻擊': 'ATK', '防禦': 'DEF',
+            '暴擊': 'Crit. Rate', '暴擊傷害': 'Crit. DMG',
+            '共鳴技能傷害加成': 'Res. Skill DMG',
+            '普攻傷害加成': 'Basic Attack DMG',
+            '重擊傷害加成': 'Heavy Attack DMG',
+            '治療效果加成': 'Healing Bonus',
+        };
+        function statLabel(zhName) {
+            if (g_lang !== 'en' || !zhName) return zhName;
+            return STAT_ZH_TO_EN[zhName] || zhName;
+        }
+        function toggleLanguage() {
+            g_lang = (g_lang === 'zh') ? 'en' : 'zh';
+            localStorage.setItem('ww_lang', g_lang);
+            // Refresh UI elements that depend on language
+            document.querySelectorAll('[data-lang-zh]').forEach(el => {
+                el.textContent = g_lang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
+            });
+            _updateLangBtnLabels();
+            if (g_echoesData.length > 0) renderTable(g_globalData, g_chains, g_echoesData);
+        }
+        function _updateLangBtnLabels() {
+            document.querySelectorAll('.lang-toggle-btn').forEach(btn => {
+                btn.textContent = g_lang === 'zh' ? '🌐 English' : '🌐 中文';
+                btn.title = g_lang === 'zh' ? 'Switch to English' : '切換為中文';
+            });
+        }
         let g_shouldRefreshRank = false; // 標記是否需要刷新排行榜
         let g_userRankPosition = -1; // 用戶在排行榜中的位置索引
         let g_codeErrorCount = 0; // 兌換碼錯誤次數
@@ -10314,6 +10367,13 @@
             initApp();
             setupPWA();
             populateSubEditSelect();
+            _updateLangBtnLabels();
+            // Apply saved language to data-lang-* elements
+            if (g_lang === 'en') {
+                document.querySelectorAll('[data-lang-en]').forEach(el => {
+                    el.textContent = el.getAttribute('data-lang-en');
+                });
+            }
             window.addEventListener('resize', () => {
                 refreshMobileNavigation();
                 updateMobilePillAnchor();
@@ -12661,7 +12721,7 @@
                 html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || '未辨識角色'}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:40px;"><button class="rank-btn" style="position:absolute;top:10px;right:15px;margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">📋 角色完整攻略</button>${formatDescText(roleDesc)}</div></div></td></tr>`;
             }
             html += `<tr class="custom-header-row"><td>項目</td>${echoes.map((e, idx) => `<td>聲骸 ${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
-            html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${e.main1}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${s.name}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
+            html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
         }
         function renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml) {
             let html = '';
@@ -12723,7 +12783,7 @@
                     html += `<div style="color:#888;margin-bottom:2px;font-size:0.7rem;">Subs Raw:</div><div style="color:#ddd;word-break:break-all;font-family:JetBrains Mono;">${escapeHtml(e.rawSubs || '')}</div>`;
                     html += `</div>`;
                 } else {
-                    html += `<div class="mobile-echo-main"><div class="main-stat-name">${e.main1}</div><div class="main-stat-val">${e.main2}</div></div>`;
+                    html += `<div class="mobile-echo-main"><div class="main-stat-name">${statLabel(e.main1)}</div><div class="main-stat-val">${e.main2}</div></div>`;
                     html += `<div class="mobile-echo-subs">`;
                     if (!e.subs || e.subs.length === 0) html += `<div style="text-align:center;color:#555;padding:10px;">- 空 -</div>`;
                     else {
@@ -12737,7 +12797,7 @@
                                 let heatColor = getHeatmapColor(potential, roleWeights);
                                 if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"`;
                             }
-                            html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${s.name}</span><span class="sub-stat-val">${s.val}</span></div></div>`;
+                            html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val">${s.val}</span></div></div>`;
                         });
                     }
                     html += `</div>${scoreHtml}`;
