@@ -13149,10 +13149,12 @@
             if (tabId === 'tab-charts') {
                 setTimeout(renderCharts, 200);
             } else if (tabId === 'tab-rank') {
+                const rankTabContent = document.getElementById('rank-tab-content');
+                if (rankTabContent) rankTabContent.innerHTML = '';
                 if (rank_data.length === 0) {
                     rank_initDataLoad();
                 } else {
-                    updateRankTab();
+                    rank_calcData();
                 }
             } else if (tabId === 'tab-echo-library') {
                 renderEchoLibrary();
@@ -14048,7 +14050,11 @@
             ` : '';
 
             if (uniqueEchoes.length === 0 && customEchoesForUid.length === 0) {
-                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">${g_lang === 'en' ? 'No echoes found under current filters. Try expanding filters or syncing history data.' : '目前條件下沒有聲骸，請放寬篩選或同步歷史資料。'}</div>`;
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">${g_lang === 'en' ? 'No echoes found under current filters. Try expanding filters or syncing history data.' : '目前條件下沒有聲骸，請放寬篩選或同步歷史資料。'}</div>
+<div class="add-echo-card" onclick="openCustomEchoModal()">
+<div class="plus-icon">+</div>
+<div class="label">${g_lang === 'en' ? 'Add Custom Echo' : '新增自訂聲骸'}</div>
+</div>`;
                 return;
             }
 
