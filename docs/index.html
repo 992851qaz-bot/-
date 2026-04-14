@@ -8699,18 +8699,18 @@
                         </div>
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>⚖️ 當前權重配置詳情</span>
+                                <span data-lang-zh="⚖️ 當前權重配置詳情" data-lang-en="⚖️ Current Weight Config">⚖️ 當前權重配置詳情</span>
                                 <span id="w-max-score" style="font-size:0.9rem;color:#888"></span>
                             </div>
                             <div style="overflow:auto;max-height:250px">
                                 <table class="db-calc-table" style="font-size:0.85rem">
                                     <thead>
                                         <tr>
-                                            <th>屬性</th>
-                                            <th>權重</th>
-                                            <th>極值</th>
-                                            <th>理論分</th>
-                                            <th>佔比</th>
+                                            <th data-lang-zh="屬性" data-lang-en="Stat">屬性</th>
+                                            <th data-lang-zh="權重" data-lang-en="Weight">權重</th>
+                                            <th data-lang-zh="極值" data-lang-en="Max">極值</th>
+                                            <th data-lang-zh="理論分" data-lang-en="Theo.">理論分</th>
+                                            <th data-lang-zh="佔比" data-lang-en="Share">佔比</th>
                                         </tr>
                                     </thead>
                                     <tbody id="w-tbody"></tbody>
@@ -15310,8 +15310,10 @@
             if (d.url) { imgEl.src = d.url; imgEl.style.display = 'block'; noImg.style.display = 'none'; }
             else { imgEl.style.display = 'none'; noImg.style.display = 'block'; }
 
-            document.getElementById('d-title').innerText = `${d.role} 配置詳情`;
-            document.getElementById('d-meta').innerText = `玩家: ${d.player} | UID: ${d.uid} | 武器: ${d.weapon}`;
+            document.getElementById('d-title').innerText = `${d.role} ${g_lang === 'en' ? 'Build Details' : '配置詳情'}`;
+            document.getElementById('d-meta').innerText = g_lang === 'en'
+                ? `Player: ${d.player} | UID: ${d.uid} | Weapon: ${d.weapon}`
+                : `玩家: ${d.player} | UID: ${d.uid} | 武器: ${d.weapon}`;
             document.getElementById('d-badge-container').innerHTML = `
  <div class="total-score-badge">
  <span class="db-ts-grade ${d.grad.c}" style="font-size:1.1rem">${d.grad.l}</span>
@@ -15321,11 +15323,11 @@
  </div>
  </div>`;
 
-            let html = `<table class="db-calc-table"><thead><tr><th style="width:40px">C</th><th style="width:80px">評分</th><th style="width:120px">主詞條</th><th>副詞條 (點擊檢視)</th></tr></thead><tbody>`;
+            let html = `<table class="db-calc-table"><thead><tr><th style="width:40px">C</th><th style="width:80px">${g_lang === 'en' ? 'Score' : '評分'}</th><th style="width:120px">${g_lang === 'en' ? 'Main Stat' : '主詞條'}</th><th>${g_lang === 'en' ? 'Sub Stats (click to view)' : '副詞條 (點擊檢視)'}</th></tr></thead><tbody>`;
             d.detailEchoes.forEach((e, i) => {
                 let eGrad = rank_getGrading(e.pct);
                 let subHtml = '';
-                if (e.subs.length === 0) subHtml = '<div style="color:#555;font-size:0.8rem">- 空 -</div>';
+                if (e.subs.length === 0) subHtml = `<div style="color:#555;font-size:0.8rem">${g_lang === 'en' ? '- Empty -' : '- 空 -'}</div>`;
                 else {
                     e.subs.forEach(s => {
                         let tierInfo = rank_getTierInfo(s.name, s.val);
