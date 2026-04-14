@@ -7325,18 +7325,18 @@
                     <div class="stat-slide">聲骸分析專家 - 正在載入統計資料...</div>
                 </div>
             </div>
-            <button class="btn-weights-mini" onclick="event.stopPropagation(); showWeightsModal()">加權值表</button>
+            <button class="btn-weights-mini" onclick="event.stopPropagation(); showWeightsModal()" data-lang-zh="加權值表" data-lang-en="Weights">加權值表</button>
         </div>
         <div class="input-group"><button class="btn-analyze" style="background:#444;color:#fff;border-color:#666;"
-                onclick="triggerFileUpload()">📂 選擇圖片</button><input type="file" id="file-upload" accept="image/*"
+                onclick="triggerFileUpload()" data-lang-zh="📂 選擇圖片" data-lang-en="📂 Upload Image">📂 選擇圖片</button><input type="file" id="file-upload" accept="image/*"
                 style="display:none" onchange="handleFileUpload(this)" multiple><input type="text" id="url-input"
-                placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..."><button id="btn-analyze" class="btn-analyze"
-            >離線新增角色</button></div>
+                placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-zh="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-en="Enter UID or paste official screenshot URL..."><button id="btn-analyze" class="btn-analyze"
+             data-lang-zh="離線新增角色" data-lang-en="Add Role Offline">離線新增角色</button></div>
         <!-- New Header Loader -->
         <div id="inline-loader" class="header-loader">
             <div class="loader-content">
                 <div class="loader-icon">⚙️</div>
-                <div class="loader-text-anim">系統初始化中... 完成後即可輸入 UID 或網址</div>
+                <div class="loader-text-anim" data-lang-zh="系統初始化中... 完成後即可輸入 UID 或網址" data-lang-en="Initializing... You can enter UID or URL once ready">系統初始化中... 完成後即可輸入 UID 或網址</div>
             </div>
             <div class="loader-progress-track">
                 <div class="loader-progress-bar"></div>
@@ -7352,22 +7352,22 @@
             </div>
             <p style="font-size:0.75rem;color:#888;margin:-8px 0 12px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖" data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
             <input type="text" id="login-uid"
-                maxlength="9" placeholder="輸入 UID (9碼純數字)"
+                maxlength="9" placeholder="輸入 UID (9碼純數字)" data-placeholder-zh="輸入 UID (9碼純數字)" data-placeholder-en="Enter UID (9 digits)"
                 oninput="this.value=this.value.replace(/\D/g,'');validateUid()"
                 onkeydown="if(event.key==='Enter') handleLogin()">
-            <p id="login-warning">輸入即視同同意本網站使用規範</p><button id="btn-login" onclick="handleLogin()">不載入歷史資料 -
+            <p id="login-warning" data-lang-zh="輸入即視同同意本網站使用規範" data-lang-en="By entering, you agree to the site's Terms of Use">輸入即視同同意本網站使用規範</p><button id="btn-login" onclick="handleLogin()" data-lang-zh="不載入歷史資料 - 繼續使用" data-lang-en="Continue Without Loading History">不載入歷史資料 -
                 繼續使用</button>
-            <div id="weight-status" style="margin-top:10px;font-size:0.8rem;color:#666;">權重表載入中...</div>
+            <div id="weight-status" style="margin-top:10px;font-size:0.8rem;color:#666;" data-lang-zh="權重表載入中..." data-lang-en="Loading weight table...">權重表載入中...</div>
             <div id="pwa-install-area">
                 <div class="pwa-guide-text" id="pwa-ios-guide">📲 <b>安裝為 APP (體驗更佳)</b><br>iOS / Safari: 點擊分享 <span
                         style="font-size:1.2em;">⎋</span> → 加入主畫面<br>Android: 點擊瀏覽器選單 → 安裝應用程式</div><button
-                    id="btn-pwa-install" class="pwa-btn" onclick="triggerInstall()">📲 點擊安裝 App</button>
+                    id="btn-pwa-install" class="pwa-btn" onclick="triggerInstall()" data-lang-zh="📲 點擊安裝 App" data-lang-en="📲 Install App">📲 點擊安裝 App</button>
             </div>
         </div>
     </div>
     <div id="uid-warning-modal" class="modal-overlay">
         <div class="warning-box">
-            <h2 style="color:var(--error);margin-bottom:15px;">⚠️ UID 異常警告</h2>
+            <h2 style="color:var(--error);margin-bottom:15px;" data-lang-zh="⚠️ UID 異常警告" data-lang-en="⚠️ UID Warning">⚠️ UID 異常警告</h2>
             <div style="font-size:3rem;margin:10px 0;">🚫</div>
             <p style="color:#ddd;font-size:1rem;line-height:1.6;margin-bottom:20px;">檢測到 UID 未滿 9 碼。<br>請切換 WWBot 語言為
                 <b>繁體中文</b> 後，再次生成圖片。<br><span style="font-size:0.85rem;color:#aaa;">Please switch the WWBot language to
@@ -7376,7 +7376,7 @@
             <div
                 style="background:#333;padding:10px;border-radius:6px;color:var(--accent);font-size:0.9rem;margin-bottom:20px;">
                 本次分析結果 <b>不會</b> 上傳至資料庫，也 <b>不會</b> 紀錄到歷史列表。</div><button class="btn-confirm-yes"
-                onclick="closeUidWarningModal()">我了解了 (關閉預覽)</button>
+                onclick="closeUidWarningModal()" data-lang-zh="我了解了 (關閉預覽)" data-lang-en="Understood (Close Preview)">我了解了 (關閉預覽)</button>
         </div>
     </div>
     <!-- Animated Loading Borders -->
@@ -7731,8 +7731,8 @@
                         style="grid-column:1/-1;background:linear-gradient(135deg,rgba(229,192,123,0.1),rgba(20,20,25,0.8));border-color:rgba(229,192,123,0.25);">
                         <div class="feature-card-icon-box" style="background:rgba(229,192,123,0.15);">🎟️</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">分析抽小月卡</div>
-                            <div class="feature-card-desc">累積積分並在聲骸模擬挑戰中達成 90% 以上評分，獲得抽獎資格。</div>
+                            <div class="feature-card-title" data-lang-zh="分析抽小月卡" data-lang-en="Draw Mini Pass">分析抽小月卡</div>
+                            <div class="feature-card-desc" data-lang-zh="累積積分並在聲骸模擬挑戰中達成 90% 以上評分，獲得抽獎資格。" data-lang-en="Earn points and score 90%+ in echo challenge to qualify for lottery">累積積分並在聲骸模擬挑戰中達成 90% 以上評分，獲得抽獎資格。</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:var(--accent); color:#000; box-shadow: 0 0 10px rgba(229,192,123,0.4);">參加</button>
@@ -8339,11 +8339,11 @@
 
     <!-- Welcome Panels -->
     <div id="welcome-panels" class="welcome-panels">
-        <button id="btn-close-welcome" class="btn-close-welcome" onclick="closeWelcomePanel()" style="display:none;">✕
+        <button id="btn-close-welcome" class="btn-close-welcome" onclick="closeWelcomePanel()" style="display:none;" data-lang-zh="✕ 關閉教學" data-lang-en="✕ Close Tutorial">✕
             關閉教學</button>
         <div class="welcome-panel" style="flex:1;">
-            <h3>🎯 功能介紹</h3>
-            <p>GAME-ZH 聲骸分析儀提供專業的聲骸評分與數據分析服務</p>
+            <h3 data-lang-zh="🎯 功能介紹" data-lang-en="🎯 Features">🎯 功能介紹</h3>
+            <p data-lang-zh="GAME-ZH 聲骸分析儀提供專業的聲骸評分與數據分析服務" data-lang-en="GAME-ZH Echo Analyzer provides professional echo scoring and data analysis">GAME-ZH 聲骸分析儀提供專業的聲骸評分與數據分析服務</p>
             <div class="feature-grid"
                 style="grid-template-columns: 1fr; gap: 8px; margin-top: 15px; background: transparent; padding: 0;">
                 <!-- 功能介紹 -->
@@ -8355,8 +8355,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🎯</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">功能介紹</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">專業聲骸評分與數據分析服務 (00:00)
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="功能介紹" data-lang-en="Features">功能介紹</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="專業聲骸評分與數據分析服務 (00:00)" data-lang-en="Professional echo scoring and data analysis (00:00)">專業聲骸評分與數據分析服務 (00:00)
                         </div>
                     </div>
                 </div>
@@ -8369,8 +8369,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📋</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">如何獲取網址</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">DC 教學介紹如何獲取連結 (00:24)
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="如何獲取網址" data-lang-en="Get Image URL">如何獲取網址</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="DC 教學介紹如何獲取連結 (00:24)" data-lang-en="Tutorial on how to get the link (00:24)">DC 教學介紹如何獲取連結 (00:24)
                         </div>
                     </div>
                 </div>
@@ -8383,8 +8383,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🔍</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">智能 OCR 辨識</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">辨識聲骸屬性與數值 (01:00)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="智能 OCR 辨識" data-lang-en="Smart OCR">智能 OCR 辨識</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="辨識聲骸屬性與數值 (01:00)" data-lang-en="Recognize echo stats and values (01:00)">辨識聲骸屬性與數值 (01:00)</div>
                     </div>
                 </div>
                 <!-- 雲端同步存檔 -->
@@ -8396,8 +8396,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         ☁️</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">雲端同步存檔</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">歷史紀錄自動保存與同步 (01:01)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="雲端同步存檔" data-lang-en="Cloud Sync">雲端同步存檔</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="歷史紀錄自動保存與同步 (01:01)" data-lang-en="History auto-saved and synced (01:01)">歷史紀錄自動保存與同步 (01:01)</div>
                     </div>
                 </div>
                 <!-- 多角色權重評分 -->
@@ -8409,8 +8409,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         ⚖️</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">多角色權重評分</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">支援不同角色的權重配置 (01:12)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="多角色權重評分" data-lang-en="Multi-Role Weights">多角色權重評分</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="支援不同角色的權重配置 (01:12)" data-lang-en="Supports weight configs per character (01:12)">支援不同角色的權重配置 (01:12)</div>
                     </div>
                 </div>
                 <!-- 排行榜與對比 -->
@@ -8422,8 +8422,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🏆</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">排行榜與對比</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">查看排名與數據對比 (01:24)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="排行榜與對比" data-lang-en="Rankings &amp; Compare">排行榜與對比</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="查看排名與數據對比 (01:24)" data-lang-en="View rankings and stat comparison (01:24)">查看排名與數據對比 (01:24)</div>
                     </div>
                 </div>
                 <!-- 聲骸庫存管理 -->
@@ -8435,8 +8435,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📦</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">聲骸庫存管理</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">高效管理聲骸收藏庫 (01:38)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="聲骸庫存管理" data-lang-en="Echo Inventory">聲骸庫存管理</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="高效管理聲骸收藏庫 (01:38)" data-lang-en="Efficiently manage echo collection (01:38)">高效管理聲骸收藏庫 (01:38)</div>
                     </div>
                 </div>
                 <!-- 生成圖片 -->
@@ -8448,13 +8448,13 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📷</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">生成圖片</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">快速分享聲骸分析結果 (01:48)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;" data-lang-zh="生成圖片" data-lang-en="Generate Image">生成圖片</div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;" data-lang-zh="快速分享聲骸分析結果 (01:48)" data-lang-en="Quickly share echo analysis results (01:48)">快速分享聲骸分析結果 (01:48)</div>
                     </div>
                 </div>
             </div>
             <a href="https://discord.gg/9RrbRbQXdD" target="_blank" class="btn-discord-join">
-                <span style="font-size:1.2rem">👾</span> 加入 Discord (GAME ZH)
+                <span style="font-size:1.2rem">👾</span> <span data-lang-zh="加入 Discord (GAME ZH)" data-lang-en="Join Discord (GAME ZH)">加入 Discord (GAME ZH)</span>
             </a>
         </div>
         <div class="welcome-panel" style="flex:2;">
@@ -8470,33 +8470,33 @@
                 </button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <h3 style="margin:0;">📡 如何獲取圖片網址</h3>
+                <h3 style="margin:0;" data-lang-zh="📡 如何獲取圖片網址" data-lang-en="📡 How to Get Image URL">📡 如何獲取圖片網址</h3>
                 <div class="tutorial-toggle-box"
                     style="display:flex; background:rgba(255,255,255,0.05); padding:3px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
                     <button id="btn-text-tutorial" onclick="switchTutorial('text')"
-                        style="background:var(--accent); color:#111; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">文字教學</button>
+                        style="background:var(--accent); color:#111; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;" data-lang-zh="文字教學" data-lang-en="Text Guide">文字教學</button>
                     <button id="btn-video-tutorial" onclick="switchTutorial('video')"
-                        style="background:transparent; color:#888; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">影片教學</button>
+                        style="background:transparent; color:#888; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;" data-lang-zh="影片教學" data-lang-en="Video Guide">影片教學</button>
                 </div>
             </div>
 
             <div id="text-tutorial-content">
                 <p>⚠️ 請務必使用 <b>WuWaBot</b> 機器人，並使用半形斜線 <span class="highlight-code">/</span> 指令。</p>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">1</span>加入 Discord 群組</div>
-                    <div class="step-desc">加入「GAME ZH」或官方 Discord 群組，找到機器人頻道。</div>
+                    <div class="step-title"><span class="step-num">1</span><span data-lang-zh="加入 Discord 群組" data-lang-en="Join Discord Server">加入 Discord 群組</span></div>
+                    <div class="step-desc" data-lang-zh="加入「GAME ZH」或官方 Discord 群組，找到機器人頻道。" data-lang-en="Join the 'GAME ZH' or official Discord server and find the bot channel.">加入「GAME ZH」或官方 Discord 群組，找到機器人頻道。</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">2</span>語言設定 (重要)</div>
-                    <div class="step-desc">輸入 <span class="highlight-code">/語言</span> 並選擇「繁體中文」。</div>
+                    <div class="step-title"><span class="step-num">2</span><span data-lang-zh="語言設定 (重要)" data-lang-en="Language Setting (Important)">語言設定 (重要)</span></div>
+                    <div class="step-desc" data-lang-zh="輸入 /語言 並選擇「繁體中文」。" data-lang-en="Enter /language and select Traditional Chinese (繁體中文).">輸入 <span class="highlight-code">/語言</span> 並選擇「繁體中文」。</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">3</span>綁定 UID</div>
-                    <div class="step-desc">輸入 <span class="highlight-code">/綁定</span> 並輸入您的 9 碼 UID。</div>
+                    <div class="step-title"><span class="step-num">3</span><span data-lang-zh="綁定 UID" data-lang-en="Bind UID">綁定 UID</span></div>
+                    <div class="step-desc" data-lang-zh="輸入 /綁定 並輸入您的 9 碼 UID。" data-lang-en="Enter /bind and input your 9-digit UID.">輸入 <span class="highlight-code">/綁定</span> 並輸入您的 9 碼 UID。</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">4</span>生成圖片</div>
-                    <div class="step-desc">輸入 <span class="highlight-code">/生成</span> 產出聲骸圖片。</div>
+                    <div class="step-title"><span class="step-num">4</span><span data-lang-zh="生成圖片" data-lang-en="Generate Image">生成圖片</span></div>
+                    <div class="step-desc" data-lang-zh="輸入 /生成 產出聲骸圖片。" data-lang-en="Enter /generate to produce the echo image.">輸入 <span class="highlight-code">/生成</span> 產出聲骸圖片。</div>
                 </div>
                 <div class="step-card">
                     <div class="step-title"><span class="step-num">✅</span>複製連結 (關鍵步驟)</div>
@@ -8508,10 +8508,10 @@
                 <div class="step-card" style="background: rgba(229,192,123,0.05); border-color: var(--accent);">
                     <div class="step-title"><span class="step-num">🚀</span>直接輸入網址開始使用</div>
                     <div class="step-desc">
-                        <input type="text" id="welcome-url-input" placeholder="貼上圖片網址並按 Enter 開始分析"
+                        <input type="text" id="welcome-url-input" placeholder="貼上圖片網址並按 Enter 開始分析" data-placeholder-zh="貼上圖片網址並按 Enter 開始分析" data-placeholder-en="Paste image URL and press Enter to start"
                             style="width:100%; padding:12px 15px; margin-top:10px; background:#1a1a1a; border:2px solid var(--accent); color:var(--accent); border-radius:6px; font-size:1rem; font-family:'JetBrains Mono', monospace;"
                             onkeydown="if(event.key==='Enter'){document.getElementById('url-input').value=this.value; document.getElementById('startup-modal').style.display='none'; startProcess();}">
-                        <div style="font-size:0.75rem; color:#888; margin-top:8px;">💡 貼上連結後按 Enter 即可立即開始分析</div>
+                        <div style="font-size:0.75rem; color:#888; margin-top:8px;" data-lang-zh="💡 貼上連結後按 Enter 即可立即開始分析" data-lang-en="💡 Paste URL and press Enter to start">💡 貼上連結後按 Enter 即可立即開始分析</div>
                     </div>
                 </div>
             </div>
@@ -8523,7 +8523,7 @@
                     </div>
                 </div>
                 <div style="margin-top:12px; color:#888; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
-                    <span style="color:var(--accent);">📺</span> 點擊左側「功能介紹」可快速跳轉至對應教學時段
+                    <span style="color:var(--accent);">📺</span> <span data-lang-zh="點擊左側「功能介紹」可快速跳轉至對應教學時段" data-lang-en="Click the feature cards on the left to jump to the corresponding tutorial section">點擊左側「功能介紹」可快速跳轉至對應教學時段</span>
                 </div>
             </div>
         </div>
@@ -8546,31 +8546,31 @@
                             style="color:var(--accent)">選擇本地圖片</a></div>
                 </div>
             </div>
-            <div class="status-bar"><span id="status-text">就緒</span><span id="dim-text"></span></div>
+            <div class="status-bar"><span id="status-text" data-lang-zh="就緒" data-lang-en="Ready">就緒</span><span id="dim-text"></span></div>
             <div class="history-panel">
                 <div class="history-header">
                     <div style="display:flex;gap:10px;align-items:center">
                         <button onclick="openGraduationPanel()"
                             style="background:transparent; border:none; color:inherit; font-size:1rem; font-family:inherit; padding:0; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:5px; transition:color 0.2s;"
                             onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='inherit'"
-                            title="點擊查看畢業面板">📋 歷史紀錄</button>
+                            title="點擊查看畢業面板"><span data-lang-zh="📋 歷史紀錄" data-lang-en="📋 History">📋 歷史紀錄</span></button>
                         <span id="history-count" style="font-size:0.75rem;color:#888;font-weight:normal;"></span>
                     </div>
                     <div class="toolbar-group">
-                        <button class="btn-primary-action" onclick="generateShareImage()" title="分享">📷</button>
+                        <button class="btn-primary-action" onclick="generateShareImage()" title="分享" data-title-zh="分享" data-title-en="Share">📷</button>
 
                         <input type="file" id="import-json" style="display:none" accept=".json"
                             onchange="importData(this)">
                         <button class="btn-primary-action" onclick="showRefreshModal()"
-                            style="background:#444;color:#ddd;" title="刷新">🔄</button>
+                            style="background:#444;color:#ddd;" title="刷新" data-title-zh="刷新" data-title-en="Refresh">🔄</button>
                         <button id="btn-load-all" class="btn-icon-only" onclick="loadAllHistory()" style="display:none;"
-                            title="載入全部">⬇️</button>
-                        <button class="btn-icon-only" onclick="cleanupHistory()" title="整理重複項目">🧹</button>
-                        <button id="debug-btn" class="btn-icon-only" onclick="toggleDebug()" title="排錯模式">🐞</button>
+                            title="載入全部" data-title-zh="載入全部" data-title-en="Load All">⬇️</button>
+                        <button class="btn-icon-only" onclick="cleanupHistory()" title="整理重複項目" data-title-zh="整理重複項目" data-title-en="Clean Up Duplicates">🧹</button>
+                        <button id="debug-btn" class="btn-icon-only" onclick="toggleDebug()" title="排錯模式" data-title-zh="排錯模式" data-title-en="Debug Mode">🐞</button>
                         <button id="offline-edit-btn" class="btn-icon-only" onclick="toggleOfflineEdit()"
-                            title="離線編輯模式">🖊️</button>
+                            title="離線編輯模式" data-title-zh="離線編輯模式" data-title-en="Offline Edit Mode">🖊️</button>
                         <button id="btn-add-custom-role" class="btn-add-custom-role" onclick="openRolePickerForCustomRole()"
-                            title="新增自訂角色">＋</button>
+                            title="新增自訂角色" data-title-zh="新增自訂角色" data-title-en="Add Custom Role">＋</button>
                         <div id="edit-mode-container"
                             style="display:none; align-items:center; gap:6px; cursor:pointer; padding:0 8px; border-radius:4px; background:rgba(255,255,255,0.05);"
                             onclick="toggleEditMode()">
@@ -8578,7 +8578,7 @@
                                 <input type="checkbox" id="edit-mode-toggle" onchange="toggleEditMode()">
                                 <span class="slider"></span>
                             </label>
-                            <span style="font-size:0.85rem; color:#ccc; user-select:none;">修改模式</span>
+                            <span style="font-size:0.85rem; color:#ccc; user-select:none;" data-lang-zh="修改模式" data-lang-en="Edit Mode">修改模式</span>
                         </div>
                     </div>
                 </div>
@@ -8588,20 +8588,20 @@
         <div class="result-box" onmouseleave="unlockPreview()">
 
             <div class="mobile-result-toolbar">
-                <button id="mobile-btn-share" class="mobile-tool-btn" onclick="generateShareImage()">📷 分享圖片</button>
-                <button id="mobile-btn-offline" class="mobile-tool-btn" onclick="toggleOfflineEdit()">🖊️ 離線編輯</button>
-                <button id="mobile-btn-add-role" class="mobile-tool-btn" onclick="openRolePickerForCustomRole()">➕ 新增角色</button>
-                <button id="mobile-btn-edit-mode" class="mobile-tool-btn" onclick="toggleEditMode()">✏️ 修改模式</button>
+                <button id="mobile-btn-share" class="mobile-tool-btn" onclick="generateShareImage()" data-lang-zh="📷 分享圖片" data-lang-en="📷 Share">📷 分享圖片</button>
+                <button id="mobile-btn-offline" class="mobile-tool-btn" onclick="toggleOfflineEdit()" data-lang-zh="🖊️ 離線編輯" data-lang-en="🖊️ Offline Edit">🖊️ 離線編輯</button>
+                <button id="mobile-btn-add-role" class="mobile-tool-btn" onclick="openRolePickerForCustomRole()" data-lang-zh="➕ 新增角色" data-lang-en="➕ Add Role">➕ 新增角色</button>
+                <button id="mobile-btn-edit-mode" class="mobile-tool-btn" onclick="toggleEditMode()" data-lang-zh="✏️ 修改模式" data-lang-en="✏️ Edit Mode">✏️ 修改模式</button>
                 <button id="mobile-btn-debug" class="mobile-tool-btn" onclick="toggleDebug()">🐞 BUG</button>
             </div>
 
             <div class="tab-container">
                 <div style="display:flex;gap:5px;align-items:center;flex:1;">
-                    <button class="tab-btn active" onclick="switchTab('tab-analysis')">分析結果</button>
-                    <button class="tab-btn" onclick="switchTab('tab-charts')">圖表分析</button>
-                    <button class="tab-btn" onclick="switchTab('tab-echo-library')">聲骸庫</button>
-                    <button class="tab-btn" onclick="switchTab('tab-rank')">排行資料</button>
-                    <button class="tab-btn" onclick="switchTab('tab-dps')">DPS計算</button>
+                    <button class="tab-btn active" onclick="switchTab('tab-analysis')" data-lang-zh="分析結果" data-lang-en="Analysis">分析結果</button>
+                    <button class="tab-btn" onclick="switchTab('tab-charts')" data-lang-zh="圖表分析" data-lang-en="Charts">圖表分析</button>
+                    <button class="tab-btn" onclick="switchTab('tab-echo-library')" data-lang-zh="聲骸庫" data-lang-en="Echo Library">聲骸庫</button>
+                    <button class="tab-btn" onclick="switchTab('tab-rank')" data-lang-zh="排行資料" data-lang-en="Rankings">排行資料</button>
+                    <button class="tab-btn" onclick="switchTab('tab-dps')" data-lang-zh="DPS計算" data-lang-en="DPS Calc">DPS計算</button>
 
                     <!-- Dynamic Rank Display (Back to original position) -->
                     <div id="tab-rank-display"
@@ -9179,23 +9179,23 @@
     <div id="mobile-bottom-nav" class="mobile-bottom-nav" aria-label="手機導覽列">
         <button class="mobile-nav-btn" data-section="history" onclick="setMobileNavSection('history')">
             <span class="mobile-nav-icon">📋</span>
-            <span class="mobile-nav-label">歷史</span>
+            <span class="mobile-nav-label" data-lang-zh="歷史" data-lang-en="History">歷史</span>
         </button>
         <button class="mobile-nav-btn active" data-section="results" onclick="setMobileNavSection('results')">
             <span class="mobile-nav-icon">📊</span>
-            <span class="mobile-nav-label">結果</span>
+            <span class="mobile-nav-label" data-lang-zh="結果" data-lang-en="Results">結果</span>
         </button>
         <button class="mobile-nav-btn" data-section="rank" onclick="setMobileNavSection('rank')">
             <span class="mobile-nav-icon">🏆</span>
-            <span class="mobile-nav-label">排行</span>
+            <span class="mobile-nav-label" data-lang-zh="排行" data-lang-en="Rank">排行</span>
         </button>
         <button class="mobile-nav-btn" data-section="library" onclick="setMobileNavSection('library')">
             <span class="mobile-nav-icon">📚</span>
-            <span class="mobile-nav-label">聲骸庫</span>
+            <span class="mobile-nav-label" data-lang-zh="聲骸庫" data-lang-en="Library">聲骸庫</span>
         </button>
         <button class="mobile-nav-btn" data-section="menu" onclick="openFeatureList()">
             <span class="mobile-nav-icon">☰</span>
-            <span class="mobile-nav-label">選單</span>
+            <span class="mobile-nav-label" data-lang-zh="選單" data-lang-en="Menu">選單</span>
         </button>
     </div>
     <style>
@@ -9930,6 +9930,28 @@
             document.querySelectorAll('[data-lang-zh]').forEach(el => {
                 el.textContent = g_lang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
             });
+            document.querySelectorAll('[data-placeholder-zh]').forEach(el => {
+                el.placeholder = g_lang === 'en' ? el.getAttribute('data-placeholder-en') : el.getAttribute('data-placeholder-zh');
+            });
+            document.querySelectorAll('[data-title-zh]').forEach(el => {
+                el.title = g_lang === 'en' ? el.getAttribute('data-title-en') : el.getAttribute('data-title-zh');
+            });
+            // Update status-text if it shows a known localizable string
+            const stEl = document.getElementById('status-text');
+            if (stEl) {
+                const cur = stEl.textContent.trim();
+                if (cur === '就緒' || cur === 'Ready') {
+                    stEl.textContent = g_lang === 'en' ? 'Ready' : '就緒';
+                }
+            }
+            // Update btn-analyze if it shows the offline-add-role text
+            const baEl = document.getElementById('btn-analyze');
+            if (baEl) {
+                const cur = baEl.textContent.trim();
+                if (cur === '離線新增角色' || cur === 'Add Role Offline') {
+                    baEl.textContent = g_lang === 'en' ? 'Add Role Offline' : '離線新增角色';
+                }
+            }
             _updateLangBtnLabels();
             if (g_echoesData.length > 0) renderTable(g_globalData, g_chains, g_echoesData);
         }
