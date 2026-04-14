@@ -7883,7 +7883,7 @@
     <!-- Custom Alert/Message Modal -->
     <div id="msg-modal" class="modal-overlay" style="z-index: 20000;">
         <div class="confirm-box" style="border-color: var(--ok); max-width: 90%; width: 400px;">
-            <h3 style="color:var(--ok);margin-top:0;">💡 系統提示</h3>
+            <h3 style="color:var(--ok);margin-top:0;" data-lang-zh="💡 系統提示" data-lang-en="💡 System Notice">💡 系統提示</h3>
             <p id="msg-modal-text" style="color:#ddd;margin-bottom:20px;line-height:1.6;"></p>
             <button class="btn-confirm-yes" style="width:100%;"
                 onclick="document.getElementById('msg-modal').style.display='none'">確定</button>
@@ -7893,10 +7893,10 @@
     <!-- Custom Confirm Modal -->
     <div id="confirm-prompt-modal" class="modal-overlay" style="z-index: 20000;">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 400px;">
-            <h3 style="color:var(--accent);margin-top:0;">❓ 操作確認</h3>
+            <h3 style="color:var(--accent);margin-top:0;" data-lang-zh="❓ 操作確認" data-lang-en="❓ Confirm Action">❓ 操作確認</h3>
             <p id="confirm-prompt-text" style="color:#ddd;margin-bottom:20px;line-height:1.6;"></p>
             <div style="display:flex;gap:10px;">
-                <button id="confirm-prompt-yes" class="btn-confirm-yes" style="flex:1;">執行</button>
+                <button id="confirm-prompt-yes" class="btn-confirm-yes" style="flex:1;" data-lang-zh="執行" data-lang-en="Confirm">執行</button>
                 <button class="btn-confirm-no" style="flex:1;"
                     onclick="document.getElementById('confirm-prompt-modal').style.display='none'">取消</button>
             </div>
@@ -8000,23 +8000,23 @@
                                     style="width:16px; height:16px;">
                                 分析時優先選擇對應黃點 (常用套裝) </label>
                             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                                <label for="custom-echo-ocr-model" style="font-size:0.85rem; color:#bbb;">辨識模型</label>
+                                <label for="custom-echo-ocr-model" style="font-size:0.85rem; color:#bbb;" data-lang-zh="辨識模型" data-lang-en="OCR Model">辨識模型</label>
                                 <select id="custom-echo-ocr-model" class="dps-select" onchange="setCustomEchoOcrModel(this.value)"
                                     style="max-width:260px;">
-                                    <option value="A">A 模型 (原本邏輯)</option>
-                                    <option value="B">B 模型 (上傳端邏輯 + 後修)</option>
+                                    <option value="A" data-lang-zh="A 模型 (原本邏輯)" data-lang-en="Model A (Original)">A 模型 (原本邏輯)</option>
+                                    <option value="B" data-lang-zh="B 模型 (上傳端邏輯 + 後修)" data-lang-en="Model B (Upload Logic + Post-edit)">B 模型 (上傳端邏輯 + 後修)</option>
                                 </select>
                                 <span style="font-size:0.78rem; color:#888;">可依截圖品質即時切換</span>
                             </div>
                 </div>
             </div>
 
-            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;">套裝選擇 (Sonata Set)</label>
+            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;" data-lang-zh="套裝選擇 (Sonata Set)" data-lang-en="Sonata Set Selection">套裝選擇 (Sonata Set)</label>
             <div id="custom-echo-suit-grid" class="custom-echo-grid">
                 <!-- Suits injected here -->
             </div>
 
-            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;">副詞條配置 (Sub-stats)</label>
+            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;" data-lang-zh="副詞條配置 (Sub-stats)" data-lang-en="Sub-stat Configuration">副詞條配置 (Sub-stats)</label>
             <div id="custom-echo-subs" style="display:flex; flex-direction:column; gap:10px;">
                 <!-- 5 Sub-stat rows -->
                 <div class="custom-sub-row" style="display:flex; gap:10px;">
@@ -8517,7 +8517,7 @@
                     </div>
                     <div class="chart-visuals-col">
                         <div class="chart-box">
-                            <h3 style="margin-top:0;color:var(--accent);font-size:1rem;">能力雷達圖</h3>
+                            <h3 style="margin-top:0;color:var(--accent);font-size:1rem;" data-lang-zh="能力雷達圖" data-lang-en="Ability Radar">能力雷達圖</h3>
                             <div class="chart-wrapper">
                                 <canvas id="radarChart"></canvas>
                             </div>
@@ -8525,14 +8525,14 @@
                         <div class="chart-box">
                             <div
                                 style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                                <h3 style="margin:0;color:var(--accent);font-size:1rem;">聲骸評分分佈</h3>
+                                <h3 style="margin:0;color:var(--accent);font-size:1rem;" data-lang-zh="聲骸評分分佈" data-lang-en="Echo Score Distribution">聲骸評分分佈</h3>
                                 <button class="toggle-btn" id="sort-toggle-btn"
-                                    onclick="toggleChartSort()">切換排序</button>
+                                    onclick="toggleChartSort()" data-lang-zh="切換排序" data-lang-en="Toggle Sort">切換排序</button>
                             </div>
                             <div class="chart-wrapper">
                                 <canvas id="barChart"></canvas>
                             </div>
-                            <div style="text-align:right;font-size:0.8rem;color:#888;margin-top:5px;">* 預設: COST大到小 >
+                            <div style="text-align:right;font-size:0.8rem;color:#888;margin-top:5px;" data-lang-zh="* 預設: COST大到小 > 分數高到低" data-lang-en="* Default: COST desc > Score desc">* 預設: COST大到小 >
                                 分數高到低</div>
                         </div>
                     </div>
@@ -8555,7 +8555,7 @@
                 <div id="db-analysis-drawer" class="db-analysis-drawer"
                     onclick="if(event.target.id==='db-analysis-drawer')rank_toggleAnalysis(false)">
                     <div class="db-analysis-header">
-                        <h2 style="margin:0;color:var(--accent);font-size:1.2rem">📊 深度戰略分析儀表板</h2>
+                        <h2 style="margin:0;color:var(--accent);font-size:1.2rem" data-lang-zh="📊 深度戰略分析儀表板" data-lang-en="📊 Deep Strategy Dashboard">📊 深度戰略分析儀表板</h2>
                         <button onclick="rank_toggleAnalysis(false)"
                             style="background:transparent;border:none;color:#fff;font-size:1.5rem;cursor:pointer">×</button>
                     </div>
@@ -8676,7 +8676,7 @@
                                     style="background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;"
                                     class="menu-toggle">☰</button>
                                 <div>
-                                    <div style="font-size:0.75rem;color:#888;margin-bottom:2px" id="db-top-label">目前檢視
+                                    <div style="font-size:0.75rem;color:#888;margin-bottom:2px" id="db-top-label" data-lang-zh="目前檢視" data-lang-en="Viewing">目前檢視
                                     </div>
                                     <h2 id="db-top-title" style="margin:0;font-size:1.1rem;color:#fff">請選擇</h2>
                                 </div>
@@ -8687,7 +8687,8 @@
                                     style="display:none; background:rgba(229,192,123,0.1); border:1px solid var(--accent); padding:6px 12px; border-radius:6px; font-size:0.85rem; color:var(--accent); cursor:pointer; transition:0.3s;"
                                     onclick="rank_triggerRefresh()"
                                     onmouseover="this.style.background='rgba(229,192,123,0.2)'"
-                                    onmouseout="this.style.background='rgba(229,192,123,0.1)'">
+                                    onmouseout="this.style.background='rgba(229,192,123,0.1)'"
+                                    data-lang-zh="✨ 有新資料，點擊刷新" data-lang-en="✨ New data available, click to refresh">
                                     ✨ 有新資料，點擊刷新
                                 </div>
                                 <button class="db-btn-primary" onclick="rank_openStrategySummary()" title="查看前60名大數據總結"
@@ -8702,6 +8703,7 @@
                                     🔄
                                 </button>
                                 <input type="text" id="db-search-input" placeholder="過濾..."
+                                    data-placeholder-zh="過濾..." data-placeholder-en="Filter..."
                                     onkeyup="rank_renderTableDebounced()"
                                     style="background:#111;border:1px solid #444;color:#fff;padding:6px 12px;border-radius:6px;width:100px;font-size:0.9rem;">
                             </div>
@@ -8738,12 +8740,12 @@
                             <button type="button" class="echo-quick-tab" data-mode="custom_only"
                                 onclick="setEchoLibraryQuickMode('custom_only')">純自訂</button>
                             <button type="button" class="echo-quick-tab active" data-mode="custom_role"
-                                onclick="setEchoLibraryQuickMode('custom_role')">自訂+該角色</button>
+                                onclick="setEchoLibraryQuickMode('custom_role')" data-lang-zh="自訂+該角色" data-lang-en="Custom + This Role">自訂+該角色</button>
                             <button type="button" class="echo-quick-tab" data-mode="cross_custom"
-                                onclick="setEchoLibraryQuickMode('cross_custom')">跨角色+自訂</button>
+                                onclick="setEchoLibraryQuickMode('cross_custom')" data-lang-zh="跨角色+自訂" data-lang-en="Cross-Role + Custom">跨角色+自訂</button>
                         </div>
                         <select id="filter-echo-cost" class="echo-lib-select" onchange="renderEchoLibraryDebounced()">
-                            <option value="">所有 COST</option>
+                            <option value="" data-lang-zh="所有 COST" data-lang-en="All COST">所有 COST</option>
                             <option value="4">4 COST</option>
                             <option value="3">3 COST</option>
                             <option value="1">1 COST</option>
@@ -8751,21 +8753,21 @@
                         <select id="filter-echo-suit" class="echo-lib-select" onchange="renderEchoLibraryDebounced()">
                             <option value="">所有套裝</option>
                         </select>
-                        <span style="color:#888;font-size:0.9rem;margin-left:10px">排序：</span>
+                        <span style="color:#888;font-size:0.9rem;margin-left:10px" data-lang-zh="排序：" data-lang-en="Sort:">排序：</span>
                         <select id="sort-echo-lib" class="echo-lib-select" onchange="renderEchoLibraryDebounced()">
-                            <option value="time">分析時間 (由新到舊)</option>
-                            <option value="score">評分 (由高到低)</option>
-                            <option value="cv">品質 CV (由高到低)</option>
-                            <option value="cost">COST (由大到小)</option>
+                            <option value="time" data-lang-zh="分析時間 (由新到舊)" data-lang-en="Time (Newest First)">分析時間 (由新到舊)</option>
+                            <option value="score" data-lang-zh="評分 (由高到低)" data-lang-en="Score (High-Low)">評分 (由高到低)</option>
+                            <option value="cv" data-lang-zh="品質 CV (由高到低)" data-lang-en="Quality CV (High-Low)">品質 CV (由高到低)</option>
+                            <option value="cost" data-lang-zh="COST (由大到小)" data-lang-en="COST (Large-Small)">COST (由大到小)</option>
                         </select>
                         <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
                             <button onclick="openCustomEchoModal()" class="btn-primary-action"
-                                style="background:#5c7cfa; color:white; font-weight:bold; width:auto; padding:0 12px; font-size:0.9rem;">+
+                                style="background:#5c7cfa; color:white; font-weight:bold; width:auto; padding:0 12px; font-size:0.9rem;" data-lang-zh="+ 新增自訂聲骸" data-lang-en="+ Add Custom Echo">+
                                 新增自訂聲骸</button>
                             <button class="btn-primary-action" onclick="toggleSmartView(true)"
-                                style="background:var(--accent);color:#000;font-weight:bold;">✨ 智能配對</button>
+                                style="background:var(--accent);color:#000;font-weight:bold;" data-lang-zh="✨ 智能配對" data-lang-en="✨ Smart Pairing">✨ 智能配對</button>
                             <button onclick="toggleEchoLibViewAll()" class="btn-toggle-view-card"
-                                id="btn-toggle-all-view" title="切換所有顯示模式 (表格/圖片)">🖼️ 圖表切換</button>
+                                id="btn-toggle-all-view" title="切換所有顯示模式 (表格/圖片)" data-lang-zh="🖼️ 圖表切換" data-lang-en="🖼️ Toggle View" data-title-zh="切換所有顯示模式 (表格/圖片)" data-title-en="Toggle all display modes (table/image)">🖼️ 圖表切換</button>
                             <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="重置所有勾選狀態"
                                 style="width:auto; padding:0 8px; font-size:0.9rem;" data-lang-zh="☑️ 重置" data-lang-en="☑️ Reset">☑️ 重置</button>
                             <div style="display:flex;align-items:center;gap:6px;cursor:pointer;"
@@ -8875,7 +8877,7 @@
                                 <select id="dps_roleSelect" class="dps-select dps-select-role"></select>
                             </div>
                             <div class="dps-control-group">
-                                <label>武器</label>
+                                <label data-lang-zh="武器" data-lang-en="Weapon">武器</label>
                                 <select id="dps_weaponSelect" class="dps-select dps-select-weapon"></select>
                             </div>
                             <div class="dps-control-group">
@@ -8883,28 +8885,28 @@
                                 <select id="dps_activeEchoSelect" class="dps-select"></select>
                             </div>
                             <div class="dps-control-group">
-                                <label>套裝模式</label>
+                                <label data-lang-zh="套裝模式" data-lang-en="Sonata Mode">套裝模式</label>
                                 <select id="dps_sonataMode" class="dps-select">
-                                    <option value="none">無</option>
-                                    <option value="set5">5件套</option>
-                                    <option value="set22">2+2 混搭</option>
+                                    <option value="none" data-lang-zh="無" data-lang-en="None">無</option>
+                                    <option value="set5" data-lang-zh="5件套" data-lang-en="5-Piece">5件套</option>
+                                    <option value="set22" data-lang-zh="2+2 混搭" data-lang-en="2+2 Mix">2+2 混搭</option>
                                 </select>
                             </div>
                         </div>
 
                         <div id="dps_sonataOptions" class="dps-main-config-grid" style="margin-top:10px;">
                             <div class="dps-control-group" id="dps_divSet5" style="display:none; grid-column: span 2;">
-                                <label>5件套</label><select id="dps_set5Select" class="dps-select"></select>
+                                <label data-lang-zh="5件套" data-lang-en="5-Piece Set">5件套</label><select id="dps_set5Select" class="dps-select"></select>
                             </div>
                             <div class="dps-control-group" id="dps_divSet2A" style="display:none;">
-                                <label>套裝 A</label><select id="dps_set2ASelect" class="dps-select"></select>
+                                <label data-lang-zh="套裝 A" data-lang-en="Set A">套裝 A</label><select id="dps_set2ASelect" class="dps-select"></select>
                             </div>
                             <div class="dps-control-group" id="dps_divSet2B" style="display:none;">
-                                <label>套裝 B</label><select id="dps_set2BSelect" class="dps-select"></select>
+                                <label data-lang-zh="套裝 B" data-lang-en="Set B">套裝 B</label><select id="dps_set2BSelect" class="dps-select"></select>
                             </div>
                         </div>
 
-                        <h3 class="dps-sub-title">聲骸主詞條</h3>
+                        <h3 class="dps-sub-title" data-lang-zh="聲骸主詞條" data-lang-en="Echo Main Stats">聲骸主詞條</h3>
                         <div class="dps-main-config-grid">
                             <div class="dps-control-group"><label>Slot 1</label><select id="dps_echo4"
                                     class="dps-select echo-main"></select></div>
@@ -8918,7 +8920,7 @@
                                     class="dps-select echo-main"></select></div>
                         </div>
 
-                        <h3 class="dps-sub-title">副詞條總和 (手動)</h3>
+                        <h3 class="dps-sub-title" data-lang-zh="副詞條總和 (手動)" data-lang-en="Sub-stat Total (Manual)">副詞條總和 (手動)</h3>
                         <div class="dps-main-config-grid">
                             <div class="dps-control-group"><label>攻擊%</label><input type="number" id="dps_sub_atk_pct"
                                     value="0" step="0.1" class="dps-input"></div>
@@ -8945,7 +8947,7 @@
                             style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                             <div class="dps-support-char"
                                 style="background:#111; padding:10px; border-radius:6px; border:1px solid #333;">
-                                <h3 class="dps-sub-title" style="margin-top:0;">隊友 1</h3>
+                                <h3 class="dps-sub-title" style="margin-top:0;" data-lang-zh="隊友 1" data-lang-en="Teammate 1">隊友 1</h3>
                                 <div class="dps-control-group"><label>角色</label><select id="dps_sup1_role"
                                         class="dps-select sup-input"></select></div>
                                 <div class="dps-control-group"><label>武器</label><select id="dps_sup1_weapon"
@@ -8958,7 +8960,7 @@
                             </div>
                             <div class="dps-support-char"
                                 style="background:#111; padding:10px; border-radius:6px; border:1px solid #333;">
-                                <h3 class="dps-sub-title" style="margin-top:0;">隊友 2</h3>
+                                <h3 class="dps-sub-title" style="margin-top:0;" data-lang-zh="隊友 2" data-lang-en="Teammate 2">隊友 2</h3>
                                 <div class="dps-control-group"><label>角色</label><select id="dps_sup2_role"
                                         class="dps-select sup-input"></select></div>
                                 <div class="dps-control-group"><label>武器</label><select id="dps_sup2_weapon"
@@ -8996,7 +8998,7 @@
                             我們獲授權將其試算表邏輯雲端化，旨在讓玩家無需繁瑣操作，即可享受「從截圖到詳細傷害分析」的一站式體驗。<br><br>
                             <span style="color:var(--accent);font-weight:bold">[開發中]</span>
                         </div>
-                        <button class="btn-dps-back" onclick="dps_toggleResultView(false)">⬅️ 返回配置</button>
+                        <button class="btn-dps-back" onclick="dps_toggleResultView(false)" data-lang-zh="⬅️ 返回配置" data-lang-en="⬅️ Back to Config">⬅️ 返回配置</button>
                     </div>
 
                     <div class="dps-exp-dmg-section">
@@ -9013,7 +9015,7 @@
 
                 <div id="dps-detail-modal" class="dps-modal" onclick="if(event.target===this)this.style.display='none'">
                     <div class="dps-modal-content">
-                        <h3 id="dps-modal-title" style="color:var(--accent); font-size:18px;">詳細計算</h3>
+                        <h3 id="dps-modal-title" style="color:var(--accent); font-size:18px;" data-lang-zh="詳細計算" data-lang-en="Detailed Calculation">詳細計算</h3>
                         <div id="dps-modal-body"></div>
                         <div style="text-align:right; margin-top:20px;">
                             <button onclick="document.getElementById('dps-detail-modal').style.display='none'"
@@ -9029,7 +9031,7 @@
         <div class="db-container" style="max-width:1000px;">
             <div class="db-header">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">🌡️ 副詞條強度熱力圖</h2>
+                    <h2 style="font-size:1.5rem;" data-lang-zh="🌡️ 副詞條強度熱力圖" data-lang-en="🌡️ Sub-stat Heatmap">🌡️ 副詞條強度熱力圖</h2>
                     <div style="color:#888;font-size:0.85rem;">橫軸為詞條種類，縱軸為角色。顏色深淺代表該角色在歷史紀錄中該詞條出現的頻率與權重綜合強度。</div>
                 </div>
                 <button class="db-close-btn"
@@ -21269,18 +21271,18 @@
         <div class="startup-box" style="max-width:1100px; width:95%; text-align:left; background:var(--panel);">
             <h3
                 style="color:var(--accent); margin-top:0; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
-                <span>🚨 錯誤回報 / 意見回饋</span>
+                <span data-lang-zh="🚨 錯誤回報 / 意見回饋" data-lang-en="🚨 Bug Report / Feedback">🚨 錯誤回報 / 意見回饋</span>
                 <button onclick="document.getElementById('feedback-modal').style.display='none'"
                     style="background:none; border:none; color:#888; font-size:1.5rem; cursor:pointer;">×</button>
             </h3>
             <div style="display:flex; gap:20px; height:60vh;">
                 <div style="flex:1.2; display:flex; flex-direction:column; gap:10px;">
-                    <div style="font-size:0.85rem; color:#888;">問題發生時的畫面截圖：</div>
+                    <div style="font-size:0.85rem; color:#888;" data-lang-zh="問題發生時的畫面截圖：" data-lang-en="Screenshot when issue occurred:">問題發生時的畫面截圖：</div>
                     <div id="feedback-screenshot-container"
                         style="flex:1; background:#000; border:1px solid #333; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative;">
                         <img id="feedback-screenshot-img" style="max-width:100%; max-height:100%; object-fit:contain;">
                         <div id="screenshot-loader"
-                            style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#aaa;">
+                            style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#aaa;" data-lang-zh="正在產生截圖..." data-lang-en="Generating screenshot...">
                             正在產生截圖...</div>
                     </div>
                 </div>
@@ -21294,15 +21296,15 @@
                         </div>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:8px;">
-                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;">回報分類：</label>
+                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;" data-lang-zh="回報分類：" data-lang-en="Report Category:">回報分類：</label>
                         <select id="feedback-category" onchange="validateFeedback()"
                             style="width:100%; background:#111; border:1px solid #444; color:#fff; padding:8px 12px; border-radius:8px; font-size:0.92rem; transition:border-color 0.2s; outline:none;"
                             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#444'">
-                            <option value="" disabled selected>-- 請選擇分類 --</option>
-                            <option value="OCR辨識">OCR 辨識錯誤 (詞條、數值)</option>
-                            <option value="UI顯示">介面顯示問題 (錯位、模糊)</option>
-                            <option value="功能建議">功能建議與優化</option>
-                            <option value="其他">其他問題</option>
+                            <option value="" disabled selected data-lang-zh="-- 請選擇分類 --" data-lang-en="-- Select Category --">-- 請選擇分類 --</option>
+                            <option value="OCR辨識" data-lang-zh="OCR 辨識錯誤 (詞條、數值)" data-lang-en="OCR Recognition Error (stats/values)">OCR 辨識錯誤 (詞條、數值)</option>
+                            <option value="UI顯示" data-lang-zh="介面顯示問題 (錯位、模糊)" data-lang-en="UI Display Issue (misalignment, blur)">介面顯示問題 (錯位、模糊)</option>
+                            <option value="功能建議" data-lang-zh="功能建議與優化" data-lang-en="Feature Suggestion &amp; Improvement">功能建議與優化</option>
+                            <option value="其他" data-lang-zh="其他問題" data-lang-en="Other Issues">其他問題</option>
                         </select>
                         <div id="ocr-upload-container" style="display:none; margin-top:2px;">
                             <label
@@ -21313,7 +21315,7 @@
                         </div>
                     </div>
                     <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
-                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;">問題描述與回饋內容：</label>
+                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;" data-lang-zh="問題描述與回饋內容：" data-lang-en="Description &amp; Feedback:">問題描述與回饋內容：</label>
                         <textarea id="feedback-content"
                             placeholder="請詳細描述問題發生的情境...&#10;&#10;💡 引導建議：&#10;1. 哪個詞條或數值辨識錯誤？(正確應為何)&#10;2. 在哪個操作步驟下發生問題？&#10;3. 您希望如何改進此功能？"
                             style="flex:1; background:#111; border:1px solid #444; color:#fff; padding:12px; border-radius:8px; resize:none; font-family:inherit; font-size:0.92rem; transition:border-color 0.2s;"
@@ -21326,9 +21328,9 @@
                     <div
                         style="display:flex; gap:10px; justify-content:flex-end; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
                         <button onclick="document.getElementById('feedback-modal').style.display='none'"
-                            class="btn-confirm-no" style="background:#444; padding:8px 20px;">取消</button>
+                            class="btn-confirm-no" style="background:#444; padding:8px 20px;" data-lang-zh="取消" data-lang-en="Cancel">取消</button>
                         <button onclick="submitFeedback()" class="btn-confirm-yes" id="btn-submit-feedback"
-                            style="padding:8px 30px; font-weight:800; opacity:0.5;" disabled>發送回報</button>
+                            style="padding:8px 30px; font-weight:800; opacity:0.5;" disabled data-lang-zh="發送回報" data-lang-en="Submit Report">發送回報</button>
                     </div>
                 </div>
             </div>
