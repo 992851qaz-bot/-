@@ -7040,18 +7040,18 @@
                     <div class="stat-slide" data-lang-zh="聲骸分析專家 - 正在載入統計資料..." data-lang-en="Echo Analyst - Loading statistics...">聲骸分析專家 - 正在載入統計資料...</div>
                 </div>
             </div>
-            <button class="btn-weights-mini" onclick="event.stopPropagation(); showWeightsModal()">加權值表</button>
+            <button class="btn-weights-mini" onclick="event.stopPropagation(); showWeightsModal()"><span data-lang-zh="加權值表" data-lang-en="Weights">加權值表</span></button>
         </div>
         <div class="input-group"><button class="btn-analyze" style="background:#444;color:#fff;border-color:#666;"
                 onclick="triggerFileUpload()">📂 選擇圖片</button><input type="file" id="file-upload" accept="image/*"
                 style="display:none" onchange="handleFileUpload(this)" multiple><input type="text" id="url-input"
                 placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..."><button id="btn-analyze" class="btn-analyze"
-                disabled>分析演示</button></div>
+                disabled><span data-lang-zh="分析演示" data-lang-en="Analyze Demo">分析演示</span></button></div>
         <!-- New Header Loader -->
         <div id="inline-loader" class="header-loader">
             <div class="loader-content">
                 <div class="loader-icon">⚙️</div>
-                <div class="loader-text-anim">系統初始化中... 完成後即可輸入 UID 或網址</div>
+                <div class="loader-text-anim"><span data-lang-zh="系統初始化中... 完成後即可輸入 UID 或網址" data-lang-en="Initializing... You can enter UID or URL after loading.">系統初始化中... 完成後即可輸入 UID 或網址</span></div>
             </div>
             <div class="loader-progress-track">
                 <div class="loader-progress-bar"></div>
@@ -7061,32 +7061,26 @@
     </header>
     <div id="startup-modal" class="modal-overlay" style="display:flex;">
         <div class="startup-box">
-            <h2 style="color:var(--accent);margin-bottom:15px;">角色資訊卡評分</h2><input type="text" id="login-uid"
-                maxlength="9" placeholder="輸入 UID (9碼純數字)"
+            <h2 style="color:var(--accent);margin-bottom:15px;"><span data-lang-zh="角色資訊卡評分" data-lang-en="Echo Score Analyzer">角色資訊卡評分</span></h2><input type="text" id="login-uid"
+                maxlength="9" placeholder="Enter UID (9 digits)" data-placeholder-zh="輸入 UID (9碼純數字)" data-placeholder-en="Enter UID (9 digits)"
                 oninput="this.value=this.value.replace(/\D/g,'');validateUid()"
                 onkeydown="if(event.key==='Enter') handleLogin()">
-            <p id="login-warning">輸入即視同同意本網站使用規範</p><button id="btn-login" onclick="handleLogin()">不載入歷史資料 -
-                繼續使用</button>
-            <div id="weight-status" style="margin-top:10px;font-size:0.8rem;color:#666;">權重表載入中...</div>
+            <p id="login-warning"><span data-lang-zh="輸入即視同同意本網站使用規範" data-lang-en="By entering, you agree to the site Terms of Use">輸入即視同同意本網站使用規範</span></p><button id="btn-login" onclick="handleLogin()"><span data-lang-zh="不載入歷史資料 - 繼續使用" data-lang-en="Continue Without Loading History">不載入歷史資料 - 繼續使用</span>    <span data-lang-zh="繼續使用" data-lang-en="Continue">繼續使用</span></button>
+            <div id="weight-status" style="margin-top:10px;font-size:0.8rem;color:#666;"><span data-lang-zh="權重表載入中..." data-lang-en="Loading weight table...">權重表載入中...</span></div>
             <div id="pwa-install-area">
-                <div class="pwa-guide-text" id="pwa-ios-guide">📲 <b>安裝為 APP (體驗更佳)</b><br>iOS / Safari: 點擊分享 <span
-                        style="font-size:1.2em;">⎋</span> → 加入主畫面<br>Android: 點擊瀏覽器選單 → 安裝應用程式</div><button
-                    id="btn-pwa-install" class="pwa-btn" onclick="triggerInstall()">📲 點擊安裝 App</button>
+                <div class="pwa-guide-text" id="pwa-ios-guide"><span class="lang-zh-only">📲 <b>安裝為 APP (體驗更佳)</b><br>iOS / Safari: 點擊分享 <span style="font-size:1.2em;">⎋</span> → 加入主畫面<br>Android: 點擊瀏覽器選單 → 安裝應用程式</span><span class="lang-en-only">📲 <b>Install as App (better experience)</b><br>iOS / Safari: Tap Share <span style="font-size:1.2em;">⎋</span> → Add to Home Screen<br>Android: Browser menu → Install App</span></div><button
+                    id="btn-pwa-install" class="pwa-btn" onclick="triggerInstall()"><span data-lang-zh="📲 點擊安裝 App" data-lang-en="📲 Install App">📲 點擊安裝 App</span></button>
             </div>
         </div>
     </div>
     <div id="uid-warning-modal" class="modal-overlay">
         <div class="warning-box">
-            <h2 style="color:var(--error);margin-bottom:15px;">⚠️ UID 異常警告</h2>
+            <h2 style="color:var(--error);margin-bottom:15px;"><span data-lang-zh="⚠️ UID 異常警告" data-lang-en="⚠️ UID Warning">⚠️ UID 異常警告</span></h2>
             <div style="font-size:3rem;margin:10px 0;">🚫</div>
-            <p style="color:#ddd;font-size:1rem;line-height:1.6;margin-bottom:20px;">檢測到 UID 未滿 9 碼。<br>請切換 WWBot 語言為
-                <b>繁體中文</b> 後，再次生成圖片。<br><span style="font-size:0.85rem;color:#aaa;">Please switch the WWBot language to
-                    Traditional Chinese.</span>
+            <p style="color:#ddd;font-size:1rem;line-height:1.6;margin-bottom:20px;"><span class="lang-zh-only">檢測到 UID 未滿 9 碼。<br>請切換 WWBot 語言為 <b>繁體中文</b> 後，再次生成圖片。</span><span class="lang-en-only">Detected UID shorter than 9 digits.<br>Please switch the WWBot language to <b>Traditional Chinese</b> and regenerate the image.</span>
             </p>
-            <div
-                style="background:#333;padding:10px;border-radius:6px;color:var(--accent);font-size:0.9rem;margin-bottom:20px;">
-                本次分析結果 <b>不會</b> 上傳至資料庫，也 <b>不會</b> 紀錄到歷史列表。</div><button class="btn-confirm-yes"
-                onclick="closeUidWarningModal()">我了解了 (關閉預覽)</button>
+            <div style="background:#333;padding:10px;border-radius:6px;color:var(--accent);font-size:0.9rem;margin-bottom:20px;"><span class="lang-zh-only">本次分析結果 <b>不會</b> 上傳至資料庫，也 <b>不會</b> 紀錄到歷史列表。</span><span class="lang-en-only">This analysis result will <b>NOT</b> be uploaded or saved to history.</span></div><button class="btn-confirm-yes"
+                onclick="closeUidWarningModal()"><span data-lang-zh="我了解了 (關閉預覽)" data-lang-en="Understood (Close Preview)">我了解了 (關閉預覽)</span></button>
         </div>
     </div>
     <!-- Animated Loading Borders -->
@@ -7107,56 +7101,54 @@
                 <div class="db-title-group">
                     <div style="font-size:0.9rem; color:var(--accent); font-weight:bold; margin-bottom:5px;">USER
                         STATISTICS</div>
-                    <h2>成就與數據總覽 <button id="db-load-all-btn" class="btn-weights-mini" onclick="dashboard_loadAll()"
-                            style="display: none; background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; font-size: 0.75rem; padding: 4px 12px; margin-left: 10px; box-shadow: 0 0 10px rgba(229,192,123,0.3);">📥
-                            載入全部歷史</button></h2>
+                    <h2><span data-lang-zh="成就與數據總覽" data-lang-en="Achievement Overview">成就與數據總覽</span> <button id="db-load-all-btn" class="btn-weights-mini" onclick="dashboard_loadAll()"
+                            style="display: none; background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; font-size: 0.75rem; padding: 4px 12px; margin-left: 10px; box-shadow: 0 0 10px rgba(229,192,123,0.3);">📥<span data-lang-zh="載入全部歷史" data-lang-en="Load All History">載入全部歷史</span></button></h2>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <button class="btn-weights-mini btn-points-trigger notification-dot" onclick="openPointsModal()"
-                        style="font-size:0.75rem;padding:4px 12px;border-color:#e5c07b;color:#e5c07b;background:rgba(229,192,123,0.1);">⭐
-                        任務與積分獎勵</button>
+                        style="font-size:0.75rem;padding:4px 12px;border-color:#e5c07b;color:#e5c07b;background:rgba(229,192,123,0.1);"><span data-lang-zh="⭐ 任務與積分獎勵" data-lang-en="⭐ Tasks &amp; Points">⭐ 任務與積分獎勵</span></button>
                     <button class="btn-weights-mini" onclick="openHeatmapModal()"
-                        style="border-color:var(--heat-a);color:var(--heat-a);">🌡️ 熱力圖</button>
+                        style="border-color:var(--heat-a);color:var(--heat-a);"><span data-lang-zh="🌡️ 熱力圖" data-lang-en="🌡️ Heatmap">🌡️ 熱力圖</span></button>
                     <button class="btn-weights-mini" onclick="openComparisonModal()"
-                        style="border-color:#61afef;color:#61afef;">⚖️ 對比</button>
+                        style="border-color:#61afef;color:#61afef;"><span data-lang-zh="⚖️ 對比" data-lang-en="⚖️ Compare">⚖️ 對比</span></button>
                     <button class="btn-weights-mini" onclick="openDataManagementModal()"
-                        style="border-color:#98c379;color:#98c379;">💾 資料管理</button>
+                        style="border-color:#98c379;color:#98c379;"><span data-lang-zh="💾 資料管理" data-lang-en="💾 Data Mgmt">💾 資料管理</span></button>
                     <button class="db-close-btn" onclick="dashboard_close()">×</button>
                 </div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">📊 累計分析次數</div>
+                <div class="db-card-title"><span data-lang-zh="📊 累計分析次數" data-lang-en="📊 Total Analyses">📊 累計分析次數</span></div>
                 <div class="db-card-val" id="db-total-count">0</div>
-                <div class="db-card-sub" id="db-total-sub">本週活躍度 +0%</div>
+                <div class="db-card-sub" id="db-total-sub"><span data-lang-zh="本週活躍度 +0%" data-lang-en="This Week's Activity +0%">本週活躍度 +0%</span></div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">🏆 歷史最高評分</div>
+                <div class="db-card-title"><span data-lang-zh="🏆 歷史最高評分" data-lang-en="🏆 Best Score Ever">🏆 歷史最高評分</span></div>
                 <div class="db-card-val" id="db-max-score">0.0%</div>
-                <div class="db-card-sub" id="db-max-role">尚未解鎖</div>
+                <div class="db-card-sub" id="db-max-role"><span data-lang-zh="尚未解鎖" data-lang-en="Not yet unlocked">尚未解鎖</span></div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">✨ 大畢業以上 (全角色聲骸統計)</div>
+                <div class="db-card-title"><span data-lang-zh="✨ 大畢業以上 (全角色聲骸統計)" data-lang-en="✨ Major Graduate+ (All Echoes)">✨ 大畢業以上 (全角色聲骸統計)</span></div>
                 <div class="db-card-val" id="db-luck-val">0</div>
-                <div class="db-card-sub" id="db-luck-sub">極品聲骸獲取機率 0%</div>
+                <div class="db-card-sub" id="db-luck-sub"><span data-lang-zh="極品聲骸獲取機率 0%" data-lang-en="Top Echo Odds: 0%">極品聲骸獲取機率 0%</span></div>
             </div>
 
             <div class="db-card db-chart-box">
                 <div class="db-card-title" style="justify-content:space-between;">
-                    <span>📈 評分成長趨勢</span>
+                    <span data-lang-zh="📈 評分成長趨勢" data-lang-en="📈 Score Growth Trend">📈 評分成長趨勢</span>
                     <select id="db-chart-filter" class="echo-lib-select"
                         style="margin:0; padding:2px 10px; height:24px; font-size:0.75rem;"
                         onchange="dashboard_renderFilteredTrend()">
-                        <option value="all">全角色</option>
+                        <option value="all"><span data-lang-zh="全角色" data-lang-en="All Characters">全角色</span></option>
                     </select>
                 </div>
                 <div class="chart-wrapper" style="height:200px;"><canvas id="chart-trend"></canvas></div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">🔷 副磁條持有數量分布 (戰力雷達)</div>
+                <div class="db-card-title"><span data-lang-zh="🔷 副磁條持有數量分布 (戰力雷達)" data-lang-en="🔷 Sub-stat Distribution (Radar)">🔷 副磁條持有數量分布 (戰力雷達)</span></div>
                 <div class="chart-wrapper" style="height:200px;"><canvas id="chart-radar"></canvas></div>
             </div>
 
@@ -7164,7 +7156,7 @@
                 <div class="db-card-title">🏅 榮譽成就系統</div>
                 <div id="db-partial-hint" class="db-partial-hint">
                     <span style="font-size:1.2rem;">⚠️</span>
-                    <span>目前僅載入部分數據，成就與統計可能不完整。請點擊主介面的「載入全部」按鈕以獲取完整資訊。</span>
+                    <span data-lang-zh="目前僅載入部分數據，成就與統計可能不完整。請點擊主介面的「載入全部」按鈕以獲取完整資訊。" data-lang-en="Only partial data loaded. Achievements may be incomplete. Click 'Load All' in the main UI for full data.">目前僅載入部分數據，成就與統計可能不完整。請點擊主介面的「載入全部」按鈕以獲取完整資訊。</span>
                 </div>
                 <div class="db-badge-grid" id="db-badge-grid">
                     <!-- Achievements dynamicly generated -->
@@ -7296,16 +7288,15 @@
                         style="display: flex; flex-direction: column; transition: transform 0.5s ease;">
                         <div
                             style="height: 60px; display: flex; align-items: center; font-size: 0.95rem; color: #ddd; line-height: 1.6;">
-                            📤 <b style="color:var(--accent); margin: 0 8px;">上傳資料</b>：每成功上傳非重複資料可獲得 <b
-                                style="color:var(--ok);">88 積分</b>
+                            <span class="lang-zh-only">📤 <b style="color:var(--accent); margin: 0 8px;">上傳資料</b>：每成功上傳非重複資料可獲得 <b style="color:var(--ok);">88 積分</b></span><span class="lang-en-only">📤 <b style="color:var(--accent); margin: 0 8px;">Upload Data</b>: Earn <b style="color:var(--ok);">88 points</b> per unique upload</span>
                         </div>
                         <div
                             style="height: 60px; display: flex; align-items: center; font-size: 0.95rem; color: #ddd; line-height: 1.6;">
-                            ⏲️ <b style="color:var(--accent); margin: 0 8px;">有效期限</b>：積分僅在當前登入期間有效，登出後歸零
+                            <span class="lang-zh-only">⏲️ <b style="color:var(--accent); margin: 0 8px;">有效期限</b>：積分僅在當前登入期間有效，登出後歸零</span><span class="lang-en-only">⏲️ <b style="color:var(--accent); margin: 0 8px;">Expiry</b>: Points are valid for the current session only</span>
                         </div>
                         <div
                             style="height: 60px; display: flex; align-items: center; font-size: 0.95rem; color: #ddd; line-height: 1.6;">
-                            ⚒️ <b style="color:var(--accent); margin: 0 8px;">積分用途</b>：消耗積分挑戰菲比權重，達 90% 獲得月卡抽獎資格
+                            <span class="lang-zh-only">⚒️ <b style="color:var(--accent); margin: 0 8px;">積分用途</b>：消耗積分挑戰菲比權重，達 90% 獲得月卡抽獎資格</span><span class="lang-en-only">⚒️ <b style="color:var(--accent); margin: 0 8px;">Usage</b>: Spend points to challenge Phoebe weights — score 90%+ to enter lottery</span>
                         </div>
                     </div>
                 </div>
@@ -7314,12 +7305,15 @@
                     style="padding: 15px; background: rgba(152, 195, 121, 0.05); border-radius: 8px; border-left: 4px solid var(--ok); margin-top: 10px;">
                     <div
                         style="color: var(--ok); font-weight: bold; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 1.1rem;">
-                        🧧 贊助維護與資助獎勵
+                        <span class="lang-zh-only">🧧 贊助維護與資助獎勵</span><span class="lang-en-only">🧧 Sponsor &amp; Support Rewards</span>
                     </div>
                     <div style="font-size: 0.9rem; color: #bbb; line-height: 1.7;">
-                        本工具為純社群開發，不收取任何費用。如果您願意資助每月活動的小月卡，請聯繫開發者。<br>
+                        <span class="lang-zh-only">本工具為純社群開發，不收取任何費用。如果您願意資助每月活動的小月卡，請聯繫開發者。<br>
                         <span style="color:#eee;">• 資助獎勵：</span> 捐助者將獲得特殊標章展示，並顯著提升分析時的「歐氣特效」反饋。<br>
-                        <span style="color:#eee;">• 如何聯繫：</span> 點擊此處加入 [Discord 討論區] 或在鳴潮相關社群聯繫作者。
+                        <span style="color:#eee;">• 如何聯繫：</span> 點擊此處加入 [Discord 討論區] 或在鳴潮相關社群聯繫作者。</span>
+                        <span class="lang-en-only">This tool is community-developed with no fees. If you'd like to sponsor the monthly Mini Pass prize, contact the developer.<br>
+                        <span style="color:#eee;">• Reward:</span> Sponsors get a special badge and boosted "luck" effects.<br>
+                        <span style="color:#eee;">• Contact:</span> Click to join [Discord] or find the author in Wuthering Waves communities.</span>
                     </div>
                 </div>
             </div>
@@ -7328,8 +7322,7 @@
                 <div class="db-card-title">前往挑戰</div>
                 <div style="padding:15px; text-align:center;">
                     <button class="btn-confirm-yes" onclick="imitate_tryStartChallenge()"
-                        style="padding:12px 30px; font-size:1.1rem; background:var(--accent); color:#000; font-weight:bold; box-shadow: 0 0 15px var(--accent-dim);">⚡
-                        進入挑戰模式 (消耗 1 積分)</button>
+                        style="padding:12px 30px; font-size:1.1rem; background:var(--accent); color:#000; font-weight:bold; box-shadow: 0 0 15px var(--accent-dim);"><span data-lang-zh="⚡ 進入挑戰模式 (消耗 1 積分)" data-lang-en="⚡ Enter Challenge Mode (1 Point)">⚡ 進入挑戰模式 (消耗 1 積分)</span></button>
                     <div style="font-size:0.9rem; color:#888; margin-top:12px;">挑戰達成 90% 評分可獲得抽小月卡資格</div>
                 </div>
             </div>
@@ -7363,11 +7356,11 @@
                         onkeypress="if(event.key==='Enter')checkDevCode()">
                     <button class="btn-primary-action" onclick="checkDevCode()"
                         style="flex:0 0 auto; padding:10px 20px;">
-                        🔓 驗證
+                        <span data-lang-zh="🔓 驗證" data-lang-en="🔓 Verify">🔓 驗證</span>
                     </button>
                 </div>
                 <div id="dev-status" style="margin-top:10px; font-size:0.85rem; color:#888;">
-                    狀態: <span id="dev-status-text" style="color:#666;">未啟用</span>
+                    <span data-lang-zh="狀態: " data-lang-en="Status: ">狀態: </span><span id="dev-status-text" style="color:#666;" data-lang-zh="未啟用" data-lang-en="Inactive">未啟用</span>
                 </div>
             </div>
 
@@ -7404,16 +7397,14 @@
                             style="width:20px; height:20px; cursor:pointer;">
                         <div>
                             <div style="font-size:0.95rem; color:#fff;">分析後修正模式 (不立即上傳)</div>
-                            <div style="font-size:0.8rem; color:#888; margin-top:3px;">啟用後，圖片分析完成只先存成待上傳，可先完整修正資料再手動按上傳
+                            <div style="font-size:0.8rem; color:#888; margin-top:3px;"><span data-lang-zh="啟用後，圖片分析完成只先存成待上傳，可先完整修正資料再手動按上傳" data-lang-en="When enabled, completed analyses are queued for manual upload. Fix data first, then upload manually.">啟用後，圖片分析完成只先存成待上傳，可先完整修正資料再手動按上傳</span>
                             </div>
                         </div>
                     </label>
                 </div>
                 <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                    <button class="btn-primary-action" onclick="adminTestWin()" style="padding:8px 14px;">🎯
-                        測試中獎</button>
-                    <button class="btn-primary-action" onclick="testDiscordSend()" style="padding:8px 14px;">📤 測試
-                        Discord</button>
+                    <button class="btn-primary-action" onclick="adminTestWin()" style="padding:8px 14px;"><span data-lang-zh="🎯 測試中獎" data-lang-en="🎯 Test Win">🎯 測試中獎</span></button>
+                    <button class="btn-primary-action" onclick="testDiscordSend()" style="padding:8px 14px;"><span data-lang-zh="📤 測試Discord通知" data-lang-en="📤 Test Discord Notification">📤 測試Discord通知</span></button>
                 </div>
             </div>
         </div>
@@ -7429,7 +7420,7 @@
                             onclick="event.stopPropagation();openPointsModal()"
                             style="font-size:0.7rem;padding:3px 10px;border-color:#e5c07b;color:#e5c07b;margin-left:10px;background:rgba(229,192,123,0.1);">⭐
                             任務與積分獎勵</button></h2>
-                    <div style="color:#888;font-size:0.85rem;">快速前往系統各項功能模組。</div>
+                    <div style="color:#888;font-size:0.85rem;"><span data-lang-zh="快速前往系統各項功能模組。" data-lang-en="Navigate to system function modules.">快速前往系統各項功能模組。</span></div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('feature-list-modal').style.display='none'">×</button>
@@ -7447,7 +7438,7 @@
                             <div class="feature-card-desc">累積積分並在聲骸模擬挑戰中達成 90% 以上評分，獲得抽獎資格。</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
-                                style="background:var(--accent); color:#000; box-shadow: 0 0 10px rgba(229,192,123,0.4);">參加</button>
+                                style="background:var(--accent); color:#000; box-shadow: 0 0 10px rgba(229,192,123,0.4);"><span data-lang-zh="參加" data-lang-en="Join">參加</span></button>
                         </div>
                     </div>
 
@@ -7489,8 +7480,7 @@
                         style="display:flex; justify-content:space-between; align-items:center;">
                         <span>🖼️ 分享與輸出</span>
                         <button class="quick-btn" onclick="openTutorialPanel()"
-                            style="background:rgba(255,255,255,0.1); color:#ccc; border:1px solid rgba(255,255,255,0.2); font-size:0.75rem; padding:2px 8px; width:auto; height:auto;">📋
-                            操作教學</button>
+                            style="background:rgba(255,255,255,0.1); color:#ccc; border:1px solid rgba(255,255,255,0.2); font-size:0.75rem; padding:2px 8px; width:auto; height:auto;"><span data-lang-zh="📋 操作教學" data-lang-en="📋 Tutorial">📋 操作教學</span></button>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();generateShareImage()">
                         <div class="feature-card-icon-box" style="background:rgba(152,195,121,0.12);">📸</div>
@@ -7499,7 +7489,7 @@
                             <div class="feature-card-desc">生成社群卡片或完整列表圖片，可下載分享</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
-                                style="background:#98c379;color:#000;">生成</button></div>
+                                style="background:#98c379;color:#000;"><span data-lang-zh="生成" data-lang-en="Generate">生成</span></button></div>
                     </div>
 
                     <div class="feature-section">🛠️ 系統功能</div>
@@ -7544,7 +7534,7 @@
                             <div class="feature-card-desc">提交意見回饋、功能建議或錯誤回報</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
-                                style="background:#56b6c2;color:#000;">填寫</button></div>
+                                style="background:#56b6c2;color:#000;"><span data-lang-zh="填寫" data-lang-en="Fill In">填寫</span></button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();resetWebsite()">
                         <div class="feature-card-icon-box" style="background:rgba(244,67,54,0.1);">♻️</div>
@@ -7553,7 +7543,7 @@
                             <div class="feature-card-desc">刪除所有本地存擋 (自定聲骸、緩存數據) 並登出當前帳標。</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
-                                style="background:#f44336;color:#fff;">重置</button></div>
+                                style="background:#f44336;color:#fff;"><span data-lang-zh="重置" data-lang-en="Reset">重置</span></button></div>
                     </div>
                 </div>
             </div>
@@ -7586,7 +7576,7 @@
 
             <div id="imitate-chal-hint" class="imitate-main-col"
                 style="display:none; padding:12px; background:rgba(255,193,7,0.1); border:1px solid rgba(255,193,7,0.3); border-radius:8px; margin-bottom:15px; font-size:0.85rem; color:#ffc107; grid-column: 1/-1;">
-                ⚠️ 挑戰模式：消耗 1 積分進行 5 次模擬，達成 90% 以上評分 (菲比權重) 獲取勳章。
+                <span data-lang-zh="⚠️ 挑戰模式：消耗 1 積分進行 5 次模擬，達成 90% 以上評分 (菲比權重) 獲取勳章。" data-lang-en="⚠️ Challenge: Spend 1 point, run 5 simulations. Score 90%+ (Phoebe weight) to earn a badge.">⚠️ 挑戰模式：消耗 1 積分進行 5 次模擬，達成 90% 以上評分 (菲比權重) 獲取勳章。</span>
             </div>
 
             <!-- Left / Main Column -->
@@ -7724,7 +7714,7 @@
     <div id="restricted-modal" class="modal-overlay">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 350px;">
             <h3 style="color:var(--accent);margin-top:0;">功能受限</h3>
-            <p style="color:#ddd;margin-bottom:20px;line-height:1.6;">此功能僅在 POXY 無法載入圖片或辨識異常時才可啟用。<br><span
+            <p style="color:#ddd;margin-bottom:20px;line-height:1.6;"><span class="lang-zh-only">此功能僅在 POXY 無法載入圖片或辨識異常時才可啟用。</span><span class="lang-en-only">Enable this only when PROXY fails to load the image or OCR recognition is abnormal.</span><br><span
                     style="font-size:0.8rem;color:#888;">System only allows local upload when proxy fails.</span></p>
             <button class="btn-confirm-yes" onclick="closeRestrictedModal()">了解</button>
         </div>
@@ -7758,16 +7748,16 @@
                     style="grid-column: span 2; display: flex; gap: 20px; align-items: flex-end;">
                     <div style="flex: 1;">
                         <label>主詞條 2 (主 2 )</label>
-                        <input type="text" value="自訂聲骸" readonly class="dps-input"
+                        <input type="text" value="Custom Echo" readonly class="dps-input"
                             style="background:#222; border-color:#333; color:#aaa; font-style:italic;">
                     </div>
                     <div id="custom-echo-ocr-zone" class="custom-ocr-zone" onclick="handleOcrZoneClick(event)">
                         <div class="upload-hint">
-                            <div style="font-size: 1.2rem; margin-bottom: 4px;">📸 點擊/貼上/拖移</div>
-                            <span>自動讀取副詞條 & 套裝</span>
+                            <div style="font-size: 1.2rem; margin-bottom: 4px;" data-lang-zh="📸 點擊/貼上/拖移" data-lang-en="📸 Click / Paste / Drag">📸 點擊/貼上/拖移</div>
+                            <span data-lang-zh="自動讀取副詞條 &amp; 套裝" data-lang-en="Auto-read sub-stats &amp; suit">自動讀取副詞條 &amp; 套裝</span>
                         </div>
                         <img id="custom-echo-ocr-preview" class="custom-ocr-preview" style="display:none;"
-                            title="點擊放大圖片">
+                            title="Click to zoom image">
                         <button class="custom-ocr-reset"
                             onclick="event.stopPropagation(); resetCustomEchoOcr()">&times;</button>
                         <input type="file" id="custom-echo-ocr-file" accept="image/*" style="display:none;"
@@ -7779,12 +7769,12 @@
                     <label
                         style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; color:#888;">
                         <input type="checkbox" id="custom-echo-deep-scan" style="width:16px; height:16px;">
-                        找不到 5 個詞條時自動執行深度分析 (Deep Scan if < 5 stats) </label>
+                        <span data-lang-zh="找不到 5 個詞條時自動執行深度分析 (Deep Scan if &lt; 5 stats)" data-lang-en="Auto deep scan if fewer than 5 sub-stats found">找不到 5 個詞條時自動執行深度分析 (Deep Scan if &lt; 5 stats)</span> </label>
                             <label
                                 style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; color:var(--accent); font-weight:bold;">
                                 <input type="checkbox" id="custom-echo-auto-suit" checked
                                     style="width:16px; height:16px;">
-                                分析時優先選擇對應黃點 (常用套裝) </label>
+                                <span data-lang-zh="分析時優先選擇對應黃點 (常用套裝)" data-lang-en="Prefer matching yellow-dot suit during analysis">分析時優先選擇對應黃點 (常用套裝)</span> </label>
                 </div>
             </div>
 
@@ -7826,18 +7816,18 @@
             <div
                 style="display:flex; gap:10px; justify-content:flex-end; border-top:1px solid #333; padding-top:20px; margin-top:20px;">
                 <button id="btn-debug-custom-echo" onclick="showCustomEchoDebug()" class="btn-confirm-no"
-                    style="margin-right:auto; border-color:#555; display:none;">Bug 除錯</button>
+                    style="margin-right:auto; border-color:#555; display:none;"><span data-lang-zh="Bug 除錯" data-lang-en="Bug Debug">Bug 除錯</span></button>
                 <button id="btn-save-custom-echo" onclick="addCustomEcho()" class="btn-confirm-yes"
-                    style="width:120px;">保存聲骸</button>
+                    style="width:120px;"><span data-lang-zh="保存聲骸" data-lang-en="Save Echo">保存聲骸</span></button>
                 <button onclick="closeCustomEchoModal()" class="btn-confirm-no">取消</button>
             </div>
             <div id="custom-echo-debug-area"
                 style="display:none; margin-top:20px; padding:15px; background:#111; border:1px solid #333; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.8rem; max-height:300px; overflow-y:auto; border-left:4px solid var(--accent);">
                 <div
                     style="color:var(--accent); font-weight:bold; margin-bottom:10px; display:flex; justify-content:space-between;">
-                    <span>🔍 OCR 除錯資訊</span>
+                    <span data-lang-zh="🔍 OCR 除錯資訊" data-lang-en="🔍 OCR Debug Info">🔍 OCR 除錯資訊</span>
                     <span style="cursor:pointer; color:#888;"
-                        onclick="this.parentElement.parentElement.style.display='none'">[ 關閉 ]</span>
+                        onclick="this.parentElement.parentElement.style.display='none'"><span data-lang-zh="[ 關閉 ]" data-lang-en="[ Close ]">[ 關閉 ]</span>
                 </div>
                 <div id="custom-echo-debug-raw"
                     style="color:#aaa; white-space:pre-wrap; margin-bottom:15px; border-bottom:1px solid #222; padding-bottom:10px;">
@@ -7856,8 +7846,7 @@
                     <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
                         <span style="font-size:1.4rem;">⇄ 聲骸單一比對</span>
                         <button onclick="openCustomEchoModal()" class="db-btn-primary"
-                            style="padding:4px 12px; font-size:0.85rem; background:rgba(92, 124, 250, 0.2); border-color:rgba(92, 124, 250, 0.4); color:#5c7cfa;">+
-                            新增自訂聲骸</button>
+                            style="padding:4px 12px; font-size:0.85rem; background:rgba(92, 124, 250, 0.2); border-color:rgba(92, 124, 250, 0.4); color:#5c7cfa;"><span data-lang-zh="+ 新增自訂聲骸" data-lang-en="+ Add Custom Echo">+ 新增自訂聲骸</span></button>
                         <div
                             style="display:flex; align-items:center; gap:12px; font-size:0.85rem; color:#aaa; font-weight:normal;">
                             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input
@@ -7887,7 +7876,7 @@
                         </div>
                     </div>
                     <div style="font-size:0.8rem; color:#888; font-weight:normal;"><span
-                            style="color:var(--accent)">💡</span> 可以隨心所欲切換聲骸進行比對 (庫存清單自動過濾)</div>
+                            style="color:var(--accent)">💡</span> <span data-lang-zh="可以隨心所欲切換聲骸進行比對 (庫存清單自動過濾)" data-lang-en="Swap echoes freely for comparison (inventory auto-filtered)">可以隨心所欲切換聲骸進行比對 (庫存清單自動過濾)</span></div>
                 </div>
                 <button onclick="document.getElementById('single-compare-modal').style.display='none'"
                     style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">&times;</button>
@@ -7917,8 +7906,7 @@
             <div class="modal-header">
                 <div style="display:flex;gap:10px;align-items:center;">
                     <h3 style="margin:0;color:var(--accent);">角色加權值參考表</h3>
-                    <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()">顯示模式:
-                        權重</button>
+                    <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()"><span data-lang-zh="顯示模式: 權重" data-lang-en="Display: Weights">顯示模式: 權重</span></button>
                     <button class="btn-toggle-view" onclick="openCustomWeightEditor()"
                         style="border-color:var(--accent);color:var(--accent)">✏️ 自訂權重</button>
                 </div><button onclick="closeWeightsModal()">關閉面板</button>
@@ -7934,7 +7922,7 @@
             </div>
             <div class="modal-body" id="role-correction-body">
                 <div class="role-preview-pane"><canvas id="role-correction-canvas" class="role-canvas"></canvas>
-                    <div style="color:#888;font-size:0.8rem;">OCR 辨識結果: <span id="ocr-result-text"
+                    <div style="color:#888;font-size:0.8rem;"><span data-lang-zh="OCR 辨識結果: " data-lang-en="OCR Result: ">OCR 辨識結果: </span><span id="ocr-result-text"
                             style="color:var(--error);font-weight:bold;"></span></div>
                 </div>
                 <div class="role-list-pane"><input type="text" id="role-search" placeholder="🔍 搜尋角色..."
@@ -7948,8 +7936,8 @@
     <div id="refresh-modal" class="modal-overlay">
         <div class="confirm-box">
             <h3 style="color:#eee;margin-top:0;">確認刷新列表?</h3>
-            <p style="color:#aaa;font-size:0.9rem;margin-bottom:15px;line-height:1.6;">1. 將從雲端下載最新數據。<br>2.
-                系統會自動過濾重複項目。<br>3. 此操作有 <span style="color:var(--accent)">30秒冷卻時間</span>。</p>
+            <p style="color:#aaa;font-size:0.9rem;margin-bottom:15px;line-height:1.6;"><span data-lang-zh="1. 將從雲端下載最新數據。2. 系統會自動過濾重複項目。3. 此操作有 30秒冷卻時間。" data-lang-en="1. Latest data will be downloaded from cloud. 2. Duplicates will be filtered automatically. 3. There is a 30-second cooldown.">1. 將從雲端下載最新數據。<br>2.
+                系統會自動過濾重複項目。<br>3. 此操作有 <span style="color:var(--accent)">30秒冷卻時間</span>。</span></p>
             <div class="confirm-btn-group"><button class="btn-confirm-yes"
                     onclick="confirmRefresh()">確認刷新</button><button class="btn-confirm-no"
                     onclick="closeRefreshModal()">取消</button></div>
@@ -7973,11 +7961,11 @@
     <div id="custom-weight-modal" class="modal-overlay">
         <div class="startup-box" style="max-width:600px;text-align:left;">
             <h3 style="color:var(--accent);margin-top:0;display:flex;align-items:center;gap:10px;">
-                ✏️ 自訂權重配置
+                <span data-lang-zh="✏️ 自訂權重配置" data-lang-en="✏️ Custom Weight Config">✏️ 自訂權重配置</span>
                 <span
                     style="font-size:0.8rem;color:#888;font-weight:normal;background:#333;padding:2px 8px;border-radius:4px;">啟用時介面將轉為藍色</span>
             </h3>
-            <p style="color:#bbb;font-size:0.9rem;">請設定各屬性的評分權重 (0 = 不計算)。<br>設定後將建立「自訂方案」，排名將重新計算。</p>
+            <p style="color:#bbb;font-size:0.9rem;"><span data-lang-zh="請設定各屬性的評分權重 (0 = 不計算)。設定後將建立「自訂方案」，排名將重新計算。" data-lang-en="Set score weights for each stat (0 = excluded). A 'Custom Build' will be created and rankings recalculated.">請設定各屬性的評分權重 (0 = 不計算)。<br>設定後將建立「自訂方案」，排名將重新計算。</span></p>
 
             <div id="custom-weight-editor"
                 style="display:grid;grid-template-columns:1fr 1fr;gap:15px;max-height:50vh;overflow-y:auto;padding-right:5px;margin:20px 0;">
@@ -8007,7 +7995,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(0)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 00:00">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 00:00">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🎯</div>
@@ -8021,7 +8009,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(24)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 00:24">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 00:24">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📋</div>
@@ -8035,7 +8023,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(60)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 01:00">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 01:00">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🔍</div>
@@ -8048,7 +8036,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(61)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 01:01">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 01:01">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         ☁️</div>
@@ -8061,7 +8049,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(72)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 01:12">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 01:12">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         ⚖️</div>
@@ -8074,7 +8062,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(84)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 01:24">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 01:24">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🏆</div>
@@ -8087,7 +8075,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(98)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 01:38">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 01:38">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📦</div>
@@ -8100,7 +8088,7 @@
                 <div class="feature-card" onclick="seekTutorialVideo(108)"
                     style="padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; cursor:pointer; transition:background 0.2s;"
                     onmouseover="this.style.background='rgba(255,255,255,0.08)'"
-                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="點擊觀看教學影片 @ 01:48">
+                    onmouseout="this.style.background='rgba(255,255,255,0.03)'" title="Click to watch tutorial video @ 01:48">
                     <div class="feature-card-icon-box"
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📷</div>
@@ -8127,7 +8115,7 @@
             </div>
 
             <div id="text-tutorial-content">
-                <p>⚠️ 請務必使用 <b>WuWaBot</b> 機器人，並使用半形斜線 <span class="highlight-code">/</span> 指令。</p>
+                <p><span class="lang-zh-only">⚠️ 請務必使用 <b>WuWaBot</b> 機器人，並使用半形斜線 <span class="highlight-code">/</span> 指令。</span><span class="lang-en-only">⚠️ You must use the <b>WuWaBot</b> bot with slash (<span class="highlight-code">/</span>) commands.</span></p>
                 <div class="step-card">
                     <div class="step-title"><span class="step-num">1</span>加入 Discord 群組</div>
                     <div class="step-desc">加入「GAME ZH」或官方 Discord 群組，找到機器人頻道。</div>
@@ -8145,14 +8133,11 @@
                     <div class="step-desc">輸入 <span class="highlight-code">/生成</span> 產出聲骸圖片。</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">✅</span>複製連結 (關鍵步驟)</div>
-                    <div class="step-desc">在生成的圖片/縮圖上按 <span style="color:#ed4245">右鍵</span> (手機長按)<br>→ 選擇「<span
-                            style="color:var(--accent);font-weight:bold;">複製連結</span>」(Copy Link)。<br><span
-                            style="font-size:0.8rem;color:#888;">連結應為
-                            https://wutheringwaves-dc.kurogames-global.com/...</span></div>
+                    <div class="step-title"><span class="step-num">✅</span><span data-lang-zh="複製連結 (關鍵步驟)" data-lang-en="Copy Link (Key Step)">複製連結 (關鍵步驟)</span></div>
+                    <div class="step-desc"><span class="lang-zh-only">在生成的圖片/縮圖上按 <span style="color:#ed4245">右鍵</span> (手機長按)<br>→ 選擇「<span style="color:var(--accent);font-weight:bold;">複製連結</span>」(Copy Link)。<br><span style="font-size:0.8rem;color:#888;">連結應為 https://wutheringwaves-dc.kurogames-global.com/...</span></span><span class="lang-en-only">Right-click (or long-press on mobile) the generated image/thumbnail.<br>→ Select "<span style="color:var(--accent);font-weight:bold;">Copy Link</span>".<br><span style="font-size:0.8rem;color:#888;">URL should be: https://wutheringwaves-dc.kurogames-global.com/...</span></span></div>
                 </div>
                 <div class="step-card" style="background: rgba(229,192,123,0.05); border-color: var(--accent);">
-                    <div class="step-title"><span class="step-num">🚀</span>直接輸入網址開始使用</div>
+                    <div class="step-title"><span class="step-num">🚀</span><span data-lang-zh="直接輸入網址開始使用" data-lang-en="Enter URL to Start">直接輸入網址開始使用</span></div>
                     <div class="step-desc">
                         <input type="text" id="welcome-url-input" placeholder="貼上圖片網址並按 Enter 開始分析"
                             style="width:100%; padding:12px 15px; margin-top:10px; background:#1a1a1a; border:2px solid var(--accent); color:var(--accent); border-radius:6px; font-size:1rem; font-family:'JetBrains Mono', monospace;"
@@ -8178,7 +8163,7 @@
     <div class="container">
         <div class="preview-box">
             <div id="img-container">
-                <img id="preview-img" alt="預覽圖">
+                <img id="preview-img" alt="Preview Image">
                 <canvas id="zoom-canvas"></canvas>
                 <div id="cv-overlay"></div>
                 <!-- New Scan Overlay -->
@@ -8187,9 +8172,9 @@
                     <div class="scan-radar"></div>
                 </div>
                 <div id="img-placeholder" class="empty-state">
-                    <div>等待影像輸入...</div>
+                    <div><span data-lang-zh="等待影像輸入..." data-lang-en="Waiting for image...">等待影像輸入...</span></div>
                     <div style="font-size:0.8rem;color:#666;">或 <a href="#" onclick="triggerFileUpload();return false;"
-                            style="color:var(--accent)">選擇本地圖片</a></div>
+                            style="color:var(--accent)"><span data-lang-zh="選擇本地圖片" data-lang-en="Select local image">選擇本地圖片</span></a></div>
                 </div>
             </div>
             <div class="status-bar"><span id="status-text">就緒</span><span id="dim-text"></span></div>
@@ -8286,8 +8271,7 @@
                             <div class="chart-wrapper">
                                 <canvas id="barChart"></canvas>
                             </div>
-                            <div style="text-align:right;font-size:0.8rem;color:#888;margin-top:5px;">* 預設: COST大到小 >
-                                分數高到低</div>
+                            <div style="text-align:right;font-size:0.8rem;color:#888;margin-top:5px;">* <span data-lang-zh="預設: COST大到小 > 分數高到低" data-lang-en="Default: COST desc > Score desc">預設: COST大到小 > 分數高到低</span></div>
                         </div>
                     </div>
                 </div>
@@ -8316,18 +8300,18 @@
                     <div class="db-analysis-content">
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>🎯 屬性分佈熱區</span>
+                                <span data-lang-zh="🎯 屬性分佈熱區" data-lang-en="🎯 Stat Distribution Hotzone">🎯 屬性分佈熱區</span>
                             </div>
                             <div
                                 style="flex:1;position:relative;width:100%;max-width:450px;min-height:280px;margin:0 auto;">
                                 <canvas id="c-radar"></canvas>
                             </div>
                             <div style="font-size:0.75rem;color:#666;margin-top:10px;text-align:center">
-                                黃色區域越飽滿，代表詞條分配越接近理論完美值</div>
+                                <span data-lang-zh="黃色區域越飽滿，代表詞條分配越接近理論完美值" data-lang-en="Fuller yellow area = closer to theoretical ideal">黃色區域越飽滿，代表詞條分配越接近理論完美值</span></div>
                         </div>
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>🏆 得分貢獻來源分析</span>
+                                <span data-lang-zh="🏆 得分貢獻來源分析" data-lang-en="🏆 Score Contribution Analysis">🏆 得分貢獻來源分析</span>
                             </div>
                             <div
                                 style="flex:1;position:relative;width:100%;max-width:450px;min-height:220px;margin:0 auto;">
@@ -8442,7 +8426,7 @@
                                     onclick="rank_triggerRefresh()"
                                     onmouseover="this.style.background='rgba(229,192,123,0.2)'"
                                     onmouseout="this.style.background='rgba(229,192,123,0.1)'">
-                                    ✨ 有新資料，點擊刷新
+                                    <span data-lang-zh="✨ 有新資料，點擊刷新" data-lang-en="✨ New data available, click to refresh">✨ 有新資料，點擊刷新</span>
                                 </div>
                                 <button class="db-btn-primary" onclick="rank_openStrategySummary()" title="查看前60名大數據總結"
                                     style="background:rgba(92, 124, 250, 0.15); border:1px solid #5c7cfa; color:#748ffc;">
@@ -8481,7 +8465,7 @@
                 <!-- Main Library View -->
                 <div id="echo-lib-main-view">
                     <div id="echo-lib-load-hint" class="echo-lib-load-hint">
-                        💡 提示：目前僅顯示部分歷史紀錄，點擊左側 <b>⬇️ 載入全部</b> 鈕可獲得更完整的庫存清單。
+                        <span class="lang-zh-only">💡 提示：目前僅顯示部分歷史紀錄，點擊左側 <b>⬇️ 載入全部</b> 鈕可獲得更完整的庫存清單。</span><span class="lang-en-only">💡 Tip: Only partial history loaded. Click <b>⬇️ Load All</b> on the left for the full inventory list.</span>
                     </div>
                     <div class="echo-lib-filters">
                         <span style="color:#888;font-size:0.9rem">篩選：</span>
@@ -8503,14 +8487,13 @@
                         </select>
                         <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
                             <button onclick="openCustomEchoModal()" class="btn-primary-action"
-                                style="background:#5c7cfa; color:white; font-weight:bold; width:auto; padding:0 12px; font-size:0.9rem;">+
-                                新增自訂聲骸</button>
+                                style="background:#5c7cfa; color:white; font-weight:bold; width:auto; padding:0 12px; font-size:0.9rem;">+<span data-lang-zh="新增自訂聲骸" data-lang-en="Add Custom Echo">新增自訂聲骸</span></button>
                             <button class="btn-primary-action" onclick="toggleSmartView(true)"
                                 style="background:var(--accent);color:#000;font-weight:bold;">✨ 智能配對</button>
                             <button onclick="toggleEchoLibViewAll()" class="btn-toggle-view-card"
                                 id="btn-toggle-all-view" title="切換所有顯示模式 (表格/圖片)">🖼️ 圖表切換</button>
-                            <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="重置所有勾選狀態"
-                                style="width:auto; padding:0 8px; font-size:0.9rem;">☑️ 重置</button>
+                            <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="Reset all selections"
+                                style="width:auto; padding:0 8px; font-size:0.9rem;"><span data-lang-zh="☑️ 重置" data-lang-en="☑️ Reset">☑️ 重置</span></button>
                             <div style="display:flex;align-items:center;gap:6px;cursor:pointer;"
                                 onclick="document.getElementById('toggle-echo-show-all').click()">
                                 <label class="toggle-switch" onclick="event.stopPropagation()">
@@ -8521,7 +8504,7 @@
                                 <span style="font-size:0.8rem;color:#ccc;user-select:none;">跨角色比較</span>
                             </div>
                             <div style="color:#666;font-size:0.8rem;padding-left:12px;border-left:1px solid #444;">
-                                共 <span id="echo-lib-count" style="color:var(--accent);font-weight:bold">0</span> 件
+                                共 <span id="echo-lib-count" style="color:var(--accent);font-weight:bold">0</span> <span data-lang-zh=" 件" data-lang-en=""></span>
                             </div>
                         </div>
                     </div>
@@ -8554,7 +8537,7 @@
                         <div style="border-left:1px solid #444; padding-left:15px; flex:1; min-width: 250px;">
                             <h3
                                 style="margin:0; color:var(--accent); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                                ✨ 智能配對模式
+                                <span data-lang-zh="✨ 智能配對模式" data-lang-en="✨ Smart Match Mode">✨ 智能配對模式</span>
                                 <div
                                     style="font-size:0.8rem; font-weight:normal; display:flex; flex-direction:column; gap:4px;">
                                     <span class="smart-warning"
@@ -8578,7 +8561,7 @@
                             <button onclick="toggleSmartAllImages()" class="btn-toggle-view-card"
                                 id="btn-smart-img-toggle" title="切換所有顯示模式">🖼️ 圖片</button>
                             <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="重置所有勾選狀態"
-                                style="width:auto; padding:0 8px; font-size:0.9rem;">☑️ 重置</button>
+                                style="width:auto; padding:0 8px; font-size:0.9rem;"><span data-lang-zh="☑️ 重置" data-lang-en="☑️ Reset">☑️ 重置</span></button>
                         </div>
                     </div>
 
@@ -8605,7 +8588,7 @@
                 <div id="dps-main-view" class="dps-layout-grid" style="display:none;">
 
                     <div class="dps-box dps-area-main">
-                        <h2 class="dps-section-title">✦ 主角配置 (Main)
+                        <h2 class="dps-section-title">✦ <span data-lang-zh="主角配置" data-lang-en="Main Character Config">主角配置</span> (Main)
                             <span
                                 style="font-size:0.75rem; color:#666; cursor:pointer; margin-left:10px; font-weight:normal;"
                                 ondblclick="dps_syncFromAnalysis()" title="雙擊以重新自動帶入資料">
@@ -8717,7 +8700,7 @@
 
                     <div class="dps-box dps-area-panel">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <h2 class="dps-section-title" style="border:none;padding:0;margin:0;">✦ 最終面板 (Final Stats)
+                            <h2 class="dps-section-title" style="border:none;padding:0;margin:0;">✦ <span data-lang-zh="最終面板" data-lang-en="Final Stats">最終面板</span> (Final Stats)
                             </h2>
                             <button class="btn-dps-start" onclick="dps_toggleResultView(true)">
                                 <span>🚀 開始計算 DPS</span>
@@ -8795,7 +8778,7 @@
             <div class="pill-divider"></div>
             <div id="uid-display" class="pill-uid">未登入</div>
             <div class="pill-divider desktop-only"></div>
-            <div id="bottom-left-pill" class="pill-hint desktop-only">⌨️ Ctrl + 滾輪 縮放 ｜ <span
+            <div id="bottom-left-pill" class="pill-hint desktop-only">⌨️ Ctrl + <span data-lang-zh="滾輪" data-lang-en="Scroll">滾輪</span> <span data-lang-zh="縮放" data-lang-en="Zoom">縮放</span> ｜ <span
                     onclick="openTutorialPanel()" style="cursor:pointer;text-decoration:underline;">教學</span></div>
         </div>
     </div>
@@ -8989,7 +8972,7 @@
         }
     </style>
     <div id="share-capture-area" class="share-capture-container"></div>
-    <div class="mobile-opt-hint">🖥️ 建議使用 PC 瀏覽以獲得最佳體驗</div>
+    <div class="mobile-opt-hint"><span data-lang-zh="🖥️ 建議使用 PC 瀏覽以獲得最佳體驗" data-lang-en="🖥️ PC browser recommended for best experience">🖥️ 建議使用 PC 瀏覽以獲得最佳體驗</span></div>
 
     <!-- 離線編輯模式提示列 -->
     <div id="offline-edit-bar"
@@ -8999,7 +8982,7 @@
             <button onclick="quitOfflineAndReset()"
                 style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;transition:background 0.2s;"
                 onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.15)'">退出並重設權重</button>
+                onmouseout="this.style.background='rgba(255,255,255,0.15)'"><span data-lang-zh="退出並重設權重" data-lang-en="Exit &amp; Reset Weights">退出並重設權重</span></button>
         </div>
     </div>
 
@@ -9011,7 +8994,7 @@
             <button onclick="toggleDebug()"
                 style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;transition:background 0.2s;"
                 onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.15)'">退出排錯模式</button>
+                onmouseout="this.style.background='rgba(255,255,255,0.15)'"><span data-lang-zh="退出排錯模式" data-lang-en="Exit Debug Mode">退出排錯模式</span></button>
         </div>
     </div>
 
@@ -9023,7 +9006,7 @@
                 <div>
                     <h2
                         style="margin:0; font-size:1.8rem; font-weight:800; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        戰略大數據總匯 <span style="font-size: 0.9rem; -webkit-text-fill-color: #555; font-weight: 500;">/
+                        <span data-lang-zh="戰略大數據總匯" data-lang-en="Strategy Big Data Summary">戰略大數據總匯</span> <span style="font-size: 0.9rem; -webkit-text-fill-color: #555; font-weight: 500;">/
                             STRATEGIC META REPORT</span></h2>
                     <div id="strategy-summary-role-badge" style="margin-top:8px;"></div>
                 </div>
@@ -9036,7 +9019,7 @@
                             <path
                                 d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
                         </svg>
-                        生成圖片
+                        <span data-lang-zh="生成圖片" data-lang-en="Generate Image">生成圖片</span>
                     </button>
                     <button onclick="document.getElementById('strategy-summary-modal').style.display='none'"
                         style="background:rgba(255,255,255,0.05); border:none; color:#fff; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.2s;"
@@ -9061,7 +9044,7 @@
         <div class="startup-box" style="max-width:1050px;width:95%;text-align:left;max-height:85vh;overflow-y:auto;">
             <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
                 <div style="display:flex; align-items:center; gap:12px;">
-                    <span>🎓 個人角色評分總表</span>
+                    <span data-lang-zh="🎓 個人角色評分總表" data-lang-en="🎓 Role Score Summary">🎓 個人角色評分總表</span>
                     <span id="grad-uid-display"
                         style="font-size:0.85rem; color:#888; font-family:'JetBrains Mono'; font-weight:normal; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID:
                         -</span>
@@ -11007,8 +10990,8 @@
         }
         function getGrading(percentage) { if (percentage >= 90) return { label: "傳家寶", class: "grad-heirloom" }; if (percentage >= 80) return { label: "大畢業", class: "grad-grand" }; if (percentage >= 65) return { label: "中畢業", class: "grad-medium" }; if (percentage >= 50) return { label: "小畢業", class: "grad-small" }; return { label: "未畢業", class: "grad-none" } }
         function getHeatmapColor(potentialValue, roleWeights) { let allPotentials = []; for (let key in roleWeights) { let w = roleWeights[key]; let m = SUB_STAT_MAX_VALUES[key] || 0; if (w > 0 && m > 0) allPotentials.push(w * m) } allPotentials.sort((a, b) => b - a); if (potentialValue <= 0) return null; if (potentialValue >= allPotentials[Math.min(1, allPotentials.length - 1)]) return 'var(--heat-s)'; if (potentialValue >= allPotentials[Math.min(3, allPotentials.length - 1)]) return 'var(--heat-a)'; if (potentialValue >= allPotentials[Math.min(5, allPotentials.length - 1)]) return 'var(--heat-b)'; return null }
-        function showScoreDetails(idx) { if (idx === -1) { showTotalScoreDetails(); return } if (!g_echoesData[idx] || !g_globalData.role || !g_currentWeights[g_globalData.role]) return; let activeWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let result = calculateEchoScore(g_echoesData[idx], activeWeights); let cv = getCVInfo(g_echoesData[idx]); if (!result) return; let html = `<table><tr><th>詞條</th><th>數值</th><th>權重</th><th>計分</th><th>最大點數</th></tr>`; result.details.forEach(d => { let style = d.weight > 0 ? 'style="color:var(--ok)"' : 'style="color:#666"'; html += `<tr><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.val)}</td><td>${safeFixed(d.weight, 1)}</td><td ${style}>${safeFixed(d.score, 1)}</td><td>${safeFixed(d.maxPoints, 1)}</td></tr>` }); html += `<tr class="score-total-row"><td colspan="3">總計 (SAchieved)</td><td colspan="2">${safeFixed(result.score, 1)} / ${safeFixed(result.maxTheoretical, 1)}</td></tr>`; html += `<tr><td colspan="3" style="font-size:0.75rem;color:#888;">CV公式: <br>暴擊(${cv.cr})*2 + 暴傷(${cv.cd}) / 42 = ${cv.pct}%</td><td colspan="2" style="text-align:right;font-size:0.9rem;">畢業度: <span style="color:var(--cv-val);font-size:1.1rem;">${safeFixed(result.percentage, 1)}%</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) { zoomCanvas.style.opacity = '0' } }
-        function showTotalScoreDetails() { if (!g_globalData.role || !g_currentWeights[g_globalData.role]) return; let roleWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let totalScore = 0, totalMax = 0; let totalCR = 0, totalCD = 0; g_echoesData.forEach(e => { let cv = getCVInfo(e); totalCR += parseFloat(cv.cr) || 0; totalCD += parseFloat(cv.cd) || 0; let res = calculateEchoScore(e, roleWeights); if (res) { totalScore += res.score; totalMax += res.maxTheoretical } }); let totalPct = totalMax > 0 ? (totalScore / totalMax) * 100 : 0; let buffedPct = Math.min(100.0, totalPct * 1.25); let finalBuffedScore = totalScore * 1.25; let bonus = finalBuffedScore - totalScore; let totalCVVal = totalCR * 2 + totalCD; let cvPct = safeFixed(totalCVVal / (42.0 * 5) * 100.0, 0); let html = `<table><tr><th colspan="2" style="color:var(--accent);font-size:1.1rem;border-bottom:2px solid var(--accent)">整機總分計算表</th></tr><tr><td>基礎得分 (Base)</td><td style="font-weight:bold;color:var(--ok)">${safeFixed(totalScore, 1)} / ${safeFixed(totalMax, 1)}</td></tr><tr><td>平衡補分 (Buff)</td><td style="font-weight:bold;color:var(--accent)">+${safeFixed(bonus, 1)}</td></tr><tr><td>最終得分 (Total)</td><td style="font-weight:bold;color:var(--ok);font-size:1.2rem;">${safeFixed(finalBuffedScore, 1)}</td></tr><tr><td>整體畢業度</td><td style="font-weight:bold;color:var(--cv-val)">${safeFixed(buffedPct, 1)}% <span style="font-size:0.7rem;color:#888">(原 ${safeFixed(totalPct, 1)}%)</span></td></tr><tr><td colspan="2" style="height:1px;background:#444;padding:0;"></td></tr><tr><td>總暴擊率</td><td>${safeFixed(totalCR, 1)}%</td></tr><tr><td>總暴擊傷害</td><td>${safeFixed(totalCD, 1)}%</td></tr><tr><td>總雙爆評分 (CV)</td><td style="color:#ddd">${safeFixed(totalCVVal, 1)}</td></tr><tr><td>CV 達成率</td><td>${cvPct}% <span style="font-size:0.7rem;color:#888">(Base 210)</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) zoomCanvas.style.opacity = '0' }
+        function showScoreDetails(idx) { if (idx === -1) { showTotalScoreDetails(); return } if (!g_echoesData[idx] || !g_globalData.role || !g_currentWeights[g_globalData.role]) return; let activeWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let result = calculateEchoScore(g_echoesData[idx], activeWeights); let cv = getCVInfo(g_echoesData[idx]); if (!result) return; let html = g_lang === 'en' ? `<table><tr><th>Sub-stat</th><th>Value</th><th>Weight</th><th>Score</th><th>Max Pts</th></tr>` : `<table><tr><th>詞條</th><th>數值</th><th>權重</th><th>計分</th><th>最大點數</th></tr>`; result.details.forEach(d => { let style = d.weight > 0 ? 'style="color:var(--ok)"' : 'style="color:#666"'; html += `<tr><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.val)}</td><td>${safeFixed(d.weight, 1)}</td><td ${style}>${safeFixed(d.score, 1)}</td><td>${safeFixed(d.maxPoints, 1)}</td></tr>` }); html += `${g_lang === 'en' ? '<tr class="score-total-row"><td colspan="3">Total (Achieved)</td>' : '<tr class="score-total-row"><td colspan="3">總計 (SAchieved)</td>'}<td colspan="2">${safeFixed(result.score, 1)} / ${safeFixed(result.maxTheoretical, 1)}</td></tr>`; html += g_lang === 'en' ? `<tr><td colspan="3" style="font-size:0.75rem;color:#888;">CV Formula: <br>Crit Rate(${cv.cr})×2 + Crit DMG(${cv.cd}) / 42 = ${cv.pct}%</td><td colspan="2" style="text-align:right;font-size:0.9rem;">Grade: <span style="color:var(--cv-val);font-size:1.1rem;">${safeFixed(result.percentage, 1)}%</span></td></tr></table>` : `<tr><td colspan="3" style="font-size:0.75rem;color:#888;">CV公式: <br>暴擊(${cv.cr})*2 + 暴傷(${cv.cd}) / 42 = ${cv.pct}%</td><td colspan="2" style="text-align:right;font-size:0.9rem;">畢業度: <span style="color:var(--cv-val);font-size:1.1rem;">${safeFixed(result.percentage, 1)}%</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) { zoomCanvas.style.opacity = '0' } }
+        function showTotalScoreDetails() { if (!g_globalData.role || !g_currentWeights[g_globalData.role]) return; let roleWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let totalScore = 0, totalMax = 0; let totalCR = 0, totalCD = 0; g_echoesData.forEach(e => { let cv = getCVInfo(e); totalCR += parseFloat(cv.cr) || 0; totalCD += parseFloat(cv.cd) || 0; let res = calculateEchoScore(e, roleWeights); if (res) { totalScore += res.score; totalMax += res.maxTheoretical } }); let totalPct = totalMax > 0 ? (totalScore / totalMax) * 100 : 0; let buffedPct = Math.min(100.0, totalPct * 1.25); let finalBuffedScore = totalScore * 1.25; let bonus = finalBuffedScore - totalScore; let totalCVVal = totalCR * 2 + totalCD; let cvPct = safeFixed(totalCVVal / (42.0 * 5) * 100.0, 0); let html = g_lang === 'en' ? `<table><tr><th colspan="2" style="color:var(--accent);font-size:1.1rem;border-bottom:2px solid var(--accent)">Full Score Breakdown</th></tr><tr><td>Base Score</td>` : `<table><tr><th colspan="2" style="color:var(--accent);font-size:1.1rem;border-bottom:2px solid var(--accent)">整機總分計算表</th></tr><tr><td>基礎得分 (Base)</td>`<td style="font-weight:bold;color:var(--ok)">${safeFixed(totalScore, 1)} / ${safeFixed(totalMax, 1)}</td></tr>${g_lang === 'en' ? '<tr><td>Balance Boost (Buff)</td>' : '<tr><td>平衡補分 (Buff)</td>'}<td style="font-weight:bold;color:var(--accent)">+${safeFixed(bonus, 1)}</td></tr>${g_lang === 'en' ? '<tr><td>Final Score (Total)</td>' : '<tr><td>最終得分 (Total)</td>'}<td style="font-weight:bold;color:var(--ok);font-size:1.2rem;">${safeFixed(finalBuffedScore, 1)}</td></tr>${g_lang === 'en' ? '<tr><td>Overall Grade</td>' : '<tr><td>整體畢業度</td>'}<td style="font-weight:bold;color:var(--cv-val)">${safeFixed(buffedPct, 1)}% <span style="font-size:0.7rem;color:#888">${g_lang === 'en' ? '(base ' : '(原 '}${safeFixed(totalPct, 1)}%)</span></td></tr><tr><td colspan="2" style="height:1px;background:#444;padding:0;"></td></tr>${g_lang === 'en' ? '<tr><td>Total Crit Rate</td>' : '<tr><td>總暴擊率</td>'}<td>${safeFixed(totalCR, 1)}%</td></tr>${g_lang === 'en' ? '<tr><td>Total Crit DMG</td>' : '<tr><td>總暴擊傷害</td>'}<td>${safeFixed(totalCD, 1)}%</td></tr>${g_lang === 'en' ? '<tr><td>Total CV Score</td>' : '<tr><td>總雙爆評分 (CV)</td>'}<td style="color:#ddd">${safeFixed(totalCVVal, 1)}</td></tr>${g_lang === 'en' ? '<tr><td>CV Rate</td>' : '<tr><td>CV 達成率</td>'}<td>${cvPct}% <span style="font-size:0.7rem;color:#888">(Base 210)</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) zoomCanvas.style.opacity = '0' }
         function hideScoreDetails() { if (g_lockedTarget) return; cvOverlay.style.display = 'none'; zoomCanvas.style.opacity = '1' }
         function renderTable(global, chains, echoes) {
             updateEditModeButtonVisibility();
@@ -15310,7 +15293,7 @@
             } catch (error) {
                 console.error('Failed to load history:', error);
                 showMsg('載入失敗，請稍後再試');
-                loadBtn.textContent = '📥 載入全部歷史';
+                loadBtn.textContent = g_lang === 'en' ? '📥 Load All History' : '📥 載入全部歷史';
                 loadBtn.disabled = false;
             } finally {
                 hideLoadingBorders();
@@ -16885,7 +16868,7 @@
                 if (marqueeRight) marqueeRight.classList.add('active');
             } else {
                 if (statusText) {
-                    statusText.innerText = '未啟用';
+                    statusText.innerText = g_lang === 'en' ? 'Inactive' : '未啟用';
                     statusText.style.color = '#666';
                 }
                 if (importBtn) {
@@ -19380,15 +19363,15 @@
                         <img id="feedback-screenshot-img" style="max-width:100%; max-height:100%; object-fit:contain;">
                         <div id="screenshot-loader"
                             style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#aaa;">
-                            正在產生截圖...</div>
+                            <span data-lang-zh="正在產生截圖..." data-lang-en="Generating screenshot...">正在產生截圖...</span></div>
                     </div>
                 </div>
                 <div
                     style="flex:1; display:flex; flex-direction:column; gap:15px; border-left:1px solid rgba(255,255,255,0.05); padding-left:20px;">
                     <div class="feedback-info-row"
                         style="font-size:0.82rem; color:#aaa; background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; line-height:1.6; border:1px solid rgba(255,255,255,0.05);">
-                        <div>🕙 時間：<span id="feedback-time" style="color:#eee;"></span></div>
-                        <div>🔗 圖片：<span id="feedback-url"
+                        <div>🕙 <span data-lang-zh="時間：" data-lang-en="Time: ">時間：</span><span id="feedback-time" style="color:#eee;"></span></div>
+                        <div>🔗 <span data-lang-zh="圖片：" data-lang-en="Image: ">圖片：</span><span id="feedback-url"
                                 style="color:var(--accent); word-break:break-all; font-family:'JetBrains Mono';">N/A</span>
                         </div>
                     </div>
@@ -19406,8 +19389,7 @@
                         <div id="ocr-upload-container" style="display:none; margin-top:2px;">
                             <label
                                 style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.8rem; color:var(--accent); background:rgba(255,255,255,0.03); padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
-                                <input type="checkbox" id="feedback-ocr-upload" checked style="cursor:pointer;"> 附帶當次
-                                OCR 辨識結果 (推薦，協助優化)
+                                <input type="checkbox" id="feedback-ocr-upload" checked style="cursor:pointer;"> <span data-lang-zh="附帶當次 OCR 辨識結果 (推薦，協助優化)" data-lang-en="Include OCR results (recommended)">附帶當次 OCR 辨識結果 (推薦，協助優化)</span>
                             </label>
                         </div>
                     </div>
