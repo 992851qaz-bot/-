@@ -14473,7 +14473,7 @@
         const RANK_MAX_VALS = { "攻擊": 60, "攻擊百分比": 11.6, "生命": 580, "生命百分比": 11.6, "防禦": 70, "防禦百分比": 14.7, "暴擊": 10.5, "暴擊傷害": 21.0, "共鳴效率": 11.6, "普攻傷害加成": 11.6, "重擊傷害加成": 11.6, "共鳴技能傷害加成": 11.6, "共鳴解放傷害加成": 12.4 };
         const RANK_STAT_LABELS = { "暴擊": "暴擊", "暴擊傷害": "暴傷", "共鳴效率": "效率", "攻擊百分比": "攻擊%", "攻擊": "攻固", "生命百分比": "生命%", "生命": "生固", "防禦百分比": "防禦%", "防禦": "防固", "共鳴解放傷害加成": "大招", "共鳴技能傷害加成": "E技", "普攻傷害加成": "普攻", "重擊傷害加成": "重擊" };
         const RANK_STAT_LABELS_EN = { "暴擊": "CR%", "暴擊傷害": "CD%", "共鳴效率": "ER%", "攻擊百分比": "ATK%", "攻擊": "ATK", "生命百分比": "HP%", "生命": "HP", "防禦百分比": "DEF%", "防禦": "DEF", "共鳴解放傷害加成": "Liberation", "共鳴技能傷害加成": "Skill", "普攻傷害加成": "Basic", "重擊傷害加成": "Heavy" };
-        function rankStatLabel(k) { return (g_lang==="en" ? (RANK_STAT_LABELS_EN[k]||k) : (rankStatLabel(k))); }
+        function rankStatLabel(k) { return (g_lang==="en" ? (RANK_STAT_LABELS_EN[k]||k) : (RANK_STAT_LABELS[k]||k)); }
 
 
         async function rank_initDataLoad() {
