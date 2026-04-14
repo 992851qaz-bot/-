@@ -7229,19 +7229,11 @@
     </header>
     <div id="startup-modal" class="modal-overlay" style="display:flex;">
         <div class="startup-box">
-            <h2 style="color:var(--accent);margin:0 0 14px;" data-lang-zh="角色資訊卡評分" data-lang-en="Echo Score Analyzer">角色資訊卡評分</h2>
-            <!-- 語言切換區塊 -->
-            <div style="display:flex;gap:8px;margin-bottom:14px;">
-                <button id="lang-btn-zh" onclick="setLanguage('zh')"
-                    style="flex:1;padding:8px 0;border-radius:8px;border:2px solid var(--accent);background:var(--accent);color:#000;font-weight:700;font-size:0.9rem;cursor:pointer;transition:0.2s;">
-                    🇹🇼 繁體中文
-                </button>
-                <button id="lang-btn-en" onclick="setLanguage('en')"
-                    style="flex:1;padding:8px 0;border-radius:8px;border:2px solid rgba(229,192,123,0.35);background:rgba(229,192,123,0.08);color:#aaa;font-weight:700;font-size:0.9rem;cursor:pointer;transition:0.2s;">
-                    🌐 English
-                </button>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <h2 style="color:var(--accent);margin:0;" data-lang-zh="角色資訊卡評分" data-lang-en="Echo Score Analyzer">角色資訊卡評分</h2>
+                <button class="lang-toggle-btn" onclick="toggleLanguage()" style="background:rgba(229,192,123,0.12);border:1px solid rgba(229,192,123,0.35);color:var(--accent);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-weight:600;white-space:nowrap;">🌐 English</button>
             </div>
-            <p style="font-size:0.75rem;color:#888;margin:-6px 0 14px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖" data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
+            <p style="font-size:0.75rem;color:#888;margin:-8px 0 12px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖" data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
             <input type="text" id="login-uid"
                 maxlength="9" placeholder="輸入 UID (9碼純數字)"
                 oninput="this.value=this.value.replace(/\D/g,'');validateUid()"
@@ -8349,6 +8341,17 @@
             </a>
         </div>
         <div class="welcome-panel" style="flex:2;">
+            <!-- 語言切換區塊 -->
+            <div style="display:flex;gap:8px;margin-bottom:16px;">
+                <button id="lang-btn-zh" onclick="setLanguage('zh')"
+                    style="flex:1;padding:8px 0;border-radius:8px;border:2px solid var(--accent);background:var(--accent);color:#000;font-weight:700;font-size:0.9rem;cursor:pointer;transition:0.2s;">
+                    🇹🇼 繁體中文
+                </button>
+                <button id="lang-btn-en" onclick="setLanguage('en')"
+                    style="flex:1;padding:8px 0;border-radius:8px;border:2px solid rgba(229,192,123,0.35);background:rgba(229,192,123,0.08);color:#aaa;font-weight:700;font-size:0.9rem;cursor:pointer;transition:0.2s;">
+                    🌐 English
+                </button>
+            </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <h3 style="margin:0;">📡 如何獲取圖片網址</h3>
                 <div class="tutorial-toggle-box"
