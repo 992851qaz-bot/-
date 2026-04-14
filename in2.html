@@ -7043,9 +7043,9 @@
             <button class="btn-weights-mini" onclick="event.stopPropagation(); showWeightsModal()"><span data-lang-zh="加權值表" data-lang-en="Weights">加權值表</span></button>
         </div>
         <div class="input-group"><button class="btn-analyze" style="background:#444;color:#fff;border-color:#666;"
-                onclick="triggerFileUpload()">📂 選擇圖片</button><input type="file" id="file-upload" accept="image/*"
+                onclick="triggerFileUpload()"><span data-lang-zh="📂 選擇圖片" data-lang-en="📂 Select Image">📂 選擇圖片</span></button><input type="file" id="file-upload" accept="image/*"
                 style="display:none" onchange="handleFileUpload(this)" multiple><input type="text" id="url-input"
-                placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..."><button id="btn-analyze" class="btn-analyze"
+                placeholder="Enter UID / Paste URL" data-placeholder-zh="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-en="Enter UID (e.g. 900xxxxxx) or paste screenshot URL..."><button id="btn-analyze" class="btn-analyze"
                 disabled><span data-lang-zh="分析演示" data-lang-en="Analyze Demo">分析演示</span></button></div>
         <!-- New Header Loader -->
         <div id="inline-loader" class="header-loader">
@@ -7153,7 +7153,7 @@
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1; display: block;">
-                <div class="db-card-title">🏅 榮譽成就系統</div>
+                <div class="db-card-title"><span data-lang-zh="🏅 榮譽成就系統" data-lang-en="🏅 Achievement System">🏅 榮譽成就系統</span></div>
                 <div id="db-partial-hint" class="db-partial-hint">
                     <span style="font-size:1.2rem;">⚠️</span>
                     <span data-lang-zh="目前僅載入部分數據，成就與統計可能不完整。請點擊主介面的「載入全部」按鈕以獲取完整資訊。" data-lang-en="Only partial data loaded. Achievements may be incomplete. Click 'Load All' in the main UI for full data.">目前僅載入部分數據，成就與統計可能不完整。請點擊主介面的「載入全部」按鈕以獲取完整資訊。</span>
@@ -7164,7 +7164,7 @@
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">📅 歷史里程碑</div>
+                <div class="db-card-title"><span data-lang-zh="📅 歷史里程碑" data-lang-en="📅 Milestones">📅 歷史里程碑</span></div>
                 <div id="db-milestones"
                     style="color:#ddd; font-size:0.9rem; max-height:200px; overflow-y:auto; line-height:1.8;">
                     <span data-lang-zh="載入中..." data-lang-en="Loading...">載入中...</span>
@@ -7178,8 +7178,8 @@
         <div class="db-container" style="max-width:1000px;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">🌡️ 副詞條強度熱力圖</h2>
-                    <div style="color:#888;font-size:0.85rem;">橫軸為詞條種類，縱軸為角色。顏色深淺代表詞條出現頻率與數值強度。</div>
+                    <h2 style="font-size:1.5rem;"><span data-lang-zh="🌡️ 副詞條強度熱力圖" data-lang-en="🌡️ Sub-stat Heatmap">🌡️ 副詞條強度熱力圖</span></h2>
+                    <div style="color:#888;font-size:0.85rem;"><span data-lang-zh="橫軸為詞條種類，縱軸為角色。顏色深淺代表詞條出現頻率與數值強度。" data-lang-en="X-axis: stat types; Y-axis: characters. Color intensity represents frequency and value strength.">橫軸為詞條種類，縱軸為角色。顏色深淺代表詞條出現頻率與數值強度。</span></div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('heatmap-modal').style.display='none'">×</button>
@@ -7195,8 +7195,8 @@
         <div class="db-container" style="max-width:1200px; margin: 0 auto;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⚖️ 聲骸數據對比</h2>
-                    <div style="color:#888;font-size:0.85rem;">選取兩筆歷史紀錄進行詳細對比。</div>
+                    <h2 style="font-size:1.5rem;"><span data-lang-zh="⚖️ 聲骸數據對比" data-lang-en="⚖️ Echo Compare">⚖️ 聲骸數據對比</span></h2>
+                    <div style="color:#888;font-size:0.85rem;"><span data-lang-zh="選取兩筆歷史紀錄進行詳細對比。" data-lang-en="Select two history records for detailed comparison.">選取兩筆歷史紀錄進行詳細對比。</span></div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('comparison-modal').style.display='none'">×</button>
@@ -7204,7 +7204,7 @@
             <div class="comparison-header-grid"
                 style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: stretch;">
                 <div class="db-card">
-                    <div class="db-card-title">🔍 選取紀錄 A (基準)</div>
+                    <div class="db-card-title"><span data-lang-zh="🔍 選取紀錄 A (基準)" data-lang-en="🔍 Select Record A (Baseline)">🔍 選取紀錄 A (基準)</span></div>
                     <select id="compare-select-1" class="echo-lib-select"
                         style="width:100%; margin:0; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem;"
                         onchange="renderComparison()"></select>
@@ -7217,7 +7217,7 @@
                         title="Swap A/B">🔄</button>
                 </div>
                 <div class="db-card">
-                    <div class="db-card-title">🔍 選取紀錄 B (對比)</div>
+                    <div class="db-card-title"><span data-lang-zh="🔍 選取紀錄 B (對比)" data-lang-en="🔍 Select Record B (Compare)">🔍 選取紀錄 B (對比)</span></div>
                     <select id="compare-select-2" class="echo-lib-select"
                         style="width:100%; margin:0; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem;"
                         onchange="renderComparison()"></select>
@@ -7230,7 +7230,7 @@
                 style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div
                     style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px;">
-                    <div class="db-card-title" style="margin:0;">📊 屬性與評分詳細差異</div>
+                    <div class="db-card-title" style="margin:0;"><span data-lang-zh="📊 屬性與評分詳細差異" data-lang-en="📊 Detailed Stat &amp; Score Difference">📊 屬性與評分詳細差異</span></div>
                     <div id="compare-summary-text"
                         style="font-size: 0.9rem; font-weight: bold; padding: 4px 12px; background: rgba(0,0,0,0.3); border-radius: 20px;">
                     </div>
@@ -7263,25 +7263,25 @@
         <div class="db-container" style="max-width:800px; margin: 0 auto;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⭐ 任務與積分獎勵系統</h2>
-                    <div style="color:#bbb;font-size:0.85rem;">每成功上傳一筆聲骸資料即可獲得 88 點積分 (僅當前登入生效)</div>
+                    <h2 style="font-size:1.5rem;"><span data-lang-zh="⭐ 任務與積分獎勵系統" data-lang-en="⭐ Tasks &amp; Points System">⭐ 任務與積分獎勵系統</span></h2>
+                    <div style="color:#bbb;font-size:0.85rem;"><span data-lang-zh="每成功上傳一筆聲骸資料即可獲得 88 點積分 (僅當前登入生效)" data-lang-en="Earn 88 points per successful unique upload (current session only)">每成功上傳一筆聲骸資料即可獲得 88 點積分 (僅當前登入生效)</span></div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('points-modal').style.display='none'">×</button>
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">當前積分</div>
+                <div class="db-card-title"><span data-lang-zh="當前積分" data-lang-en="Current Points">當前積分</span></div>
                 <div style="text-align:center;padding:30px 0;">
                     <div style="font-size:4rem;color:#e5c07b;font-weight:bold;text-shadow: 0 0 20px rgba(229,192,123,0.3);"
                         id="points-display">0</div>
-                    <div style="font-size:1rem;color:#ccc;margin-top:10px;">本次登入累積獲得的積分</div>
+                    <div style="font-size:1rem;color:#ccc;margin-top:10px;"><span data-lang-zh="本次登入累積獲得的積分" data-lang-en="Points earned this session">本次登入累積獲得的積分</span></div>
                 </div>
             </div>
 
             <div class="db-card"
                 style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(229,192,123,0.05) 0%, rgba(20,20,25,0.02) 100%); overflow: hidden;">
-                <div class="db-card-title">📖 積分獲取與系統說明</div>
+                <div class="db-card-title"><span data-lang-zh="📖 積分獲取與系統說明" data-lang-en="📖 Points Guide">📖 積分獲取與系統說明</span></div>
                 <div
                     style="height: 60px; overflow: hidden; position: relative; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 0 15px;">
                     <div id="points-info-carousel"
@@ -7319,18 +7319,18 @@
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">前往挑戰</div>
+                <div class="db-card-title"><span data-lang-zh="前往挑戰" data-lang-en="Go to Challenge">前往挑戰</span></div>
                 <div style="padding:15px; text-align:center;">
                     <button class="btn-confirm-yes" onclick="imitate_tryStartChallenge()"
                         style="padding:12px 30px; font-size:1.1rem; background:var(--accent); color:#000; font-weight:bold; box-shadow: 0 0 15px var(--accent-dim);"><span data-lang-zh="⚡ 進入挑戰模式 (消耗 1 積分)" data-lang-en="⚡ Enter Challenge Mode (1 Point)">⚡ 進入挑戰模式 (消耗 1 積分)</span></button>
-                    <div style="font-size:0.9rem; color:#888; margin-top:12px;">挑戰達成 90% 評分可獲得抽小月卡資格</div>
+                    <div style="font-size:0.9rem; color:#888; margin-top:12px;"><span data-lang-zh="挑戰達成 90% 評分可獲得抽小月卡資格" data-lang-en="Score 90%+ in challenge to qualify for Mini Pass lottery">挑戰達成 90% 評分可獲得抽小月卡資格</span></div>
                 </div>
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">積分歷程</div>
+                <div class="db-card-title"><span data-lang-zh="積分歷程" data-lang-en="Points History">積分歷程</span></div>
                 <div id="points-log" style="max-height:200px;overflow-y:auto;font-size:0.85rem;color:#888;">
-                    <div style="text-align:center;padding:20px;color:#666;">尚無積分記錄</div>
+                    <div style="text-align:center;padding:20px;color:#666;"><span data-lang-zh="尚無積分記錄" data-lang-en="No points records yet">尚無積分記錄</span></div>
                 </div>
             </div>
         </div>
@@ -7341,17 +7341,17 @@
         <div class="db-container" style="max-width:800px;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">💾 資料管理</h2>
-                    <div style="color:#888;font-size:0.85rem;">匯入、匯出與資料備份管理。</div>
+                    <h2 style="font-size:1.5rem;"><span data-lang-zh="💾 資料管理" data-lang-en="💾 Data Management">💾 資料管理</span></h2>
+                    <div style="color:#888;font-size:0.85rem;"><span data-lang-zh="匯入、匯出與資料備份管理。" data-lang-en="Import, export and data backup management.">匯入、匯出與資料備份管理。</span></div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('data-management-modal').style.display='none'">×</button>
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">開發者模式</div>
+                <div class="db-card-title"><span data-lang-zh="開發者模式" data-lang-en="Developer Mode">開發者模式</span></div>
                 <div id="dev-input-container" style="display:flex; gap:10px; align-items:center; margin-top:15px;">
-                    <input type="text" id="dev-code-input" placeholder="輸入啟用序號"
+                    <input type="text" id="dev-code-input" placeholder="Enter activation code" data-placeholder-zh="輸入啟用序號" data-placeholder-en="Enter activation code"
                         style="flex:1; padding:10px; background:#1a1a1a; border:1px solid #444; color:#fff; border-radius:4px; font-size:0.9rem;"
                         onkeypress="if(event.key==='Enter')checkDevCode()">
                     <button class="btn-primary-action" onclick="checkDevCode()"
@@ -7365,12 +7365,12 @@
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">資料操作</div>
+                <div class="db-card-title"><span data-lang-zh="資料操作" data-lang-en="Data Operations">資料操作</span></div>
                 <div style="display:flex; gap:15px; margin-top:15px; flex-wrap:wrap;">
-                    <button class="btn-primary-action" onclick="exportData()" title="匯出資料" style="flex:1;">📤 匯出資料
+                    <button class="btn-primary-action" onclick="exportData()" title="匯出資料" style="flex:1;"><span data-lang-zh="📤 匯出資料" data-lang-en="📤 Export Data">📤 匯出資料</span>
                         (JSON)</button>
-                    <button id="import-btn" class="btn-primary-action" onclick="triggerImport()" title="匯入資料"
-                        style="flex:1; opacity:0.5; cursor:not-allowed;" disabled>📥 匯入資料
+                    <button id="import-btn" class="btn-primary-action" onclick="triggerImport()" title="Import Data" data-title-zh="匯入資料" data-title-en="Import Data"
+                        style="flex:1; opacity:0.5; cursor:not-allowed;" disabled><span data-lang-zh="📥 匯入資料" data-lang-en="📥 Import Data">📥 匯入資料</span>
                         (JSON)</button>
                 </div>
                 <div style="margin-top:10px; font-size:0.85rem; color:#aaa;">
@@ -7380,15 +7380,15 @@
             </div>
 
             <div id="dev-options-card" class="db-card" style="grid-column: 1 / -1; display:none;">
-                <div class="db-card-title">開發者選項</div>
+                <div class="db-card-title"><span data-lang-zh="開發者選項" data-lang-en="Developer Options">開發者選項</span></div>
                 <div style="margin-top:15px;">
                     <label
                         style="display:flex; align-items:center; gap:10px; cursor:pointer; padding:10px; background:rgba(255,255,255,0.05); border-radius:4px;">
                         <input type="checkbox" id="keep-history-switch" onchange="toggleKeepHistory()"
                             style="width:20px; height:20px; cursor:pointer;">
                         <div>
-                            <div style="font-size:0.95rem; color:#fff;">切換 UID 時保留歷史紀錄</div>
-                            <div style="font-size:0.8rem; color:#888; margin-top:3px;">啟用後，切換到不同 UID 時不會清空本地歷史資料</div>
+                            <div style="font-size:0.95rem; color:#fff;"><span data-lang-zh="切換 UID 時保留歷史紀錄" data-lang-en="Keep history when switching UID">切換 UID 時保留歷史紀錄</span></div>
+                            <div style="font-size:0.8rem; color:#888; margin-top:3px;"><span data-lang-zh="啟用後，切換到不同 UID 時不會清空本地歷史資料" data-lang-en="When enabled, local history is preserved when switching UID">啟用後，切換到不同 UID 時不會清空本地歷史資料</span></div>
                         </div>
                     </label>
                     <label
@@ -7396,7 +7396,7 @@
                         <input type="checkbox" id="analyze-fix-switch" onchange="toggleAnalyzeFixMode()"
                             style="width:20px; height:20px; cursor:pointer;">
                         <div>
-                            <div style="font-size:0.95rem; color:#fff;">分析後修正模式 (不立即上傳)</div>
+                            <div style="font-size:0.95rem; color:#fff;"><span data-lang-zh="分析後修正模式 (不立即上傳)" data-lang-en="Post-analysis Edit Mode (no immediate upload)">分析後修正模式 (不立即上傳)</span></div>
                             <div style="font-size:0.8rem; color:#888; margin-top:3px;"><span data-lang-zh="啟用後，圖片分析完成只先存成待上傳，可先完整修正資料再手動按上傳" data-lang-en="When enabled, completed analyses are queued for manual upload. Fix data first, then upload manually.">啟用後，圖片分析完成只先存成待上傳，可先完整修正資料再手動按上傳</span>
                             </div>
                         </div>
@@ -7415,11 +7415,10 @@
         <div class="db-container" style="max-width:960px;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⊡ 功能導航列表 <button
+                    <h2 style="font-size:1.5rem;"><span data-lang-zh="⊡ 功能導航列表" data-lang-en="⊡ Feature Navigation">⊡ 功能導航列表</span> <button
                             class="btn-weights-mini btn-points-trigger notification-dot"
                             onclick="event.stopPropagation();openPointsModal()"
-                            style="font-size:0.7rem;padding:3px 10px;border-color:#e5c07b;color:#e5c07b;margin-left:10px;background:rgba(229,192,123,0.1);">⭐
-                            任務與積分獎勵</button></h2>
+                            style="font-size:0.7rem;padding:3px 10px;border-color:#e5c07b;color:#e5c07b;margin-left:10px;background:rgba(229,192,123,0.1);"><span data-lang-zh="⭐ 任務與積分獎勵" data-lang-en="⭐ Tasks &amp; Points">⭐ 任務與積分獎勵</span></button></h2>
                     <div style="color:#888;font-size:0.85rem;"><span data-lang-zh="快速前往系統各項功能模組。" data-lang-en="Navigate to system function modules.">快速前往系統各項功能模組。</span></div>
                 </div>
                 <button class="db-close-btn"
@@ -7429,109 +7428,109 @@
             <div class="db-card feature-list-scroll"
                 style="grid-column: 1 / -1; padding: 0; background: rgba(0,0,0,0.3);">
                 <div class="feature-grid">
-                    <div class="feature-section">🎯 活動與獎勵</div>
+                    <div class="feature-section"><span data-lang-zh="🎯 活動與獎勵" data-lang-en="🎯 Events &amp; Rewards">🎯 活動與獎勵</span></div>
                     <div class="feature-card" onclick="closeAllModals();openPointsModal()"
                         style="grid-column:1/-1;background:linear-gradient(135deg,rgba(229,192,123,0.1),rgba(20,20,25,0.8));border-color:rgba(229,192,123,0.25);">
                         <div class="feature-card-icon-box" style="background:rgba(229,192,123,0.15);">🎟️</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">分析抽小月卡</div>
-                            <div class="feature-card-desc">累積積分並在聲骸模擬挑戰中達成 90% 以上評分，獲得抽獎資格。</div>
+                            <div class="feature-card-title"><span data-lang-zh="分析抽小月卡" data-lang-en="Draw Mini Pass">分析抽小月卡</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="累積積分並在聲骸模擬挑戰中達成 90% 以上評分，獲得抽獎資格。" data-lang-en="Earn points and score 90%+ in echo challenge to qualify for lottery">累積積分並在聲骸模擬挑戰中達成 90% 以上評分，獲得抽獎資格。</span></div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:var(--accent); color:#000; box-shadow: 0 0 10px rgba(229,192,123,0.4);"><span data-lang-zh="參加" data-lang-en="Join">參加</span></button>
                         </div>
                     </div>
 
-                    <div class="feature-section">📊 分析工具</div>
+                    <div class="feature-section"><span data-lang-zh="📊 分析工具" data-lang-en="📊 Analysis Tools">📊 分析工具</span></div>
                     <div class="feature-card" onclick="closeAllModals();dashboard_open()">
                         <div class="feature-card-icon-box">▣</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">成就數據</div>
-                            <div class="feature-card-desc">個人分析統計、成就獎章與成長曲線</div>
+                            <div class="feature-card-title"><span data-lang-zh="成就數據" data-lang-en="Achievement Stats">成就數據</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="個人分析統計、成就獎章與成長曲線" data-lang-en="Personal stats, achievement badges and growth chart">個人分析統計、成就獎章與成長曲線</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn" data-lang-zh="前往" data-lang-en="Go"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();openComparisonModal()">
                         <div class="feature-card-icon-box">◫</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">聲骸對比</div>
-                            <div class="feature-card-desc">兩筆紀錄屬性與評分詳細對比</div>
+                            <div class="feature-card-title"><span data-lang-zh="聲骸對比" data-lang-en="Echo Compare">聲骸對比</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="兩筆紀錄屬性與評分詳細對比" data-lang-en="Detailed stat and score comparison between two records">兩筆紀錄屬性與評分詳細對比</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();openHeatmapModal()">
                         <div class="feature-card-icon-box">▤</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">熱力圖</div>
-                            <div class="feature-card-desc">副詞條強度分布，直觀查看優劣</div>
+                            <div class="feature-card-title"><span data-lang-zh="熱力圖" data-lang-en="Heatmap">熱力圖</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="副詞條強度分布，直觀查看優劣" data-lang-en="Sub-stat intensity distribution">副詞條強度分布，直觀查看優劣</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();openImitateModal()">
                         <div class="feature-card-icon-box">⚒</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">模擬詞條</div>
-                            <div class="feature-card-desc">模擬開啟過程，推算特定屬性機率</div>
+                            <div class="feature-card-title"><span data-lang-zh="模擬詞條" data-lang-en="Simulate Stats">模擬詞條</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="模擬開啟過程，推算特定屬性機率" data-lang-en="Simulate unlock process and calculate stat probabilities">模擬開啟過程，推算特定屬性機率</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
 
                     <div class="feature-section"
                         style="display:flex; justify-content:space-between; align-items:center;">
-                        <span>🖼️ 分享與輸出</span>
+                        <span data-lang-zh="🖼️ 分享與輸出" data-lang-en="🖼️ Share &amp; Export">��️ 分享與輸出</span>
                         <button class="quick-btn" onclick="openTutorialPanel()"
                             style="background:rgba(255,255,255,0.1); color:#ccc; border:1px solid rgba(255,255,255,0.2); font-size:0.75rem; padding:2px 8px; width:auto; height:auto;"><span data-lang-zh="📋 操作教學" data-lang-en="📋 Tutorial">📋 操作教學</span></button>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();generateShareImage()">
                         <div class="feature-card-icon-box" style="background:rgba(152,195,121,0.12);">📸</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">圖片生成</div>
-                            <div class="feature-card-desc">生成社群卡片或完整列表圖片，可下載分享</div>
+                            <div class="feature-card-title"><span data-lang-zh="圖片生成" data-lang-en="Image Generation">圖片生成</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="生成社群卡片或完整列表圖片，可下載分享" data-lang-en="Generate share card or full list image">生成社群卡片或完整列表圖片，可下載分享</span></div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:#98c379;color:#000;"><span data-lang-zh="生成" data-lang-en="Generate">生成</span></button></div>
                     </div>
 
-                    <div class="feature-section">🛠️ 系統功能</div>
+                    <div class="feature-section"><span data-lang-zh="🛠️ 系統功能" data-lang-en="🛠️ System Features">🛠️ 系統功能</span></div>
                     <div class="feature-card" onclick="closeAllModals();openDataManagementModal()">
                         <div class="feature-card-icon-box">▦</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">資料管理</div>
-                            <div class="feature-card-desc">匯出/匯入歷史紀錄與設定檔</div>
+                            <div class="feature-card-title"><span data-lang-zh="資料管理" data-lang-en="Data Management">資料管理</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="匯出/匯入歷史紀錄與設定檔" data-lang-en="Export/Import history and config">匯出/匯入歷史紀錄與設定檔</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();openCustomWeightEditor()">
                         <div class="feature-card-icon-box">⧉</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">加權編輯</div>
-                            <div class="feature-card-desc">自訂副詞條加權值，影響評分計算</div>
+                            <div class="feature-card-title"><span data-lang-zh="加權編輯" data-lang-en="Weight Editor">加權編輯</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="自訂副詞條加權值，影響評分計算" data-lang-en="Customize sub-stat weights for score calculation">自訂副詞條加權值，影響評分計算</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();switchTab('tab-echo-library')">
                         <div class="feature-card-icon-box">◈</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">聲骸庫</div>
-                            <div class="feature-card-desc">查看已儲存聲骸，支援篩選與排序</div>
+                            <div class="feature-card-title"><span data-lang-zh="聲骸庫" data-lang-en="Echo Library">聲骸庫</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="查看已儲存聲骸，支援篩選與排序" data-lang-en="View saved echoes with filter and sort support">查看已儲存聲骸，支援篩選與排序</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();switchTab('tab-rank')">
                         <div class="feature-card-icon-box">▩</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">排行榜</div>
-                            <div class="feature-card-desc">全球/好友排行與評分梯隊</div>
+                            <div class="feature-card-title"><span data-lang-zh="排行榜" data-lang-en="Leaderboard">排行榜</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="全球/好友排行與評分梯隊" data-lang-en="Global/friend rankings and score tiers">全球/好友排行與評分梯隊</span></div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn"><span data-lang-zh="前往" data-lang-en="Go">前往</span></button></div>
                     </div>
 
-                    <div class="feature-section">💬 回饋與支援</div>
+                    <div class="feature-section"><span data-lang-zh="💬 回饋與支援" data-lang-en="💬 Feedback &amp; Support">💬 回饋與支援</span></div>
                     <div class="feature-card" onclick="window.open('https://forms.gle/9kXktz3Sj22Xj4218', '_blank')">
                         <div class="feature-card-icon-box" style="background:rgba(86,182,194,0.12);">📝</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title">問卷 & 回報 BUG</div>
-                            <div class="feature-card-desc">提交意見回饋、功能建議或錯誤回報</div>
+                            <div class="feature-card-title"><span data-lang-zh="問卷 &amp; 回報 BUG" data-lang-en="Survey &amp; Bug Report">問卷 &amp; 回報 BUG</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="提交意見回饋、功能建議或錯誤回報" data-lang-en="Submit feedback, feature requests or bug reports">提交意見回饋、功能建議或錯誤回報</span></div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:#56b6c2;color:#000;"><span data-lang-zh="填寫" data-lang-en="Fill In">填寫</span></button></div>
@@ -7539,8 +7538,8 @@
                     <div class="feature-card" onclick="closeAllModals();resetWebsite()">
                         <div class="feature-card-icon-box" style="background:rgba(244,67,54,0.1);">♻️</div>
                         <div class="feature-card-main">
-                            <div class="feature-card-title" style="color:#f44336">重置網站並登出</div>
-                            <div class="feature-card-desc">刪除所有本地存擋 (自定聲骸、緩存數據) 並登出當前帳標。</div>
+                            <div class="feature-card-title" style="color:#f44336"><span data-lang-zh="重置網站並登出" data-lang-en="Reset &amp; Logout">重置網站並登出</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="刪除所有本地存擋 (自定聲骸、緩存數據) 並登出當前帳標。" data-lang-en="Delete all local data and logout.">刪除所有本地存擋 (自定聲骸、緩存數據) 並登出當前帳標。</span></div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:#f44336;color:#fff;"><span data-lang-zh="重置" data-lang-en="Reset">重置</span></button></div>
@@ -7555,12 +7554,12 @@
         <div class="db-container">
             <div class="db-header">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⚒ 聲骸模擬開詞條</h2>
+                    <h2 style="font-size:1.5rem;"><span data-lang-zh="⚒ 聲骸模擬開詞條" data-lang-en="⚒ Echo Simulation">⚒ 聲骸模擬開詞條</span></h2>
                     <div style="display:flex; gap:10px; margin-top:8px;">
                         <button id="im-mode-sim" class="btn-confirm-yes" onclick="imitate_setMode('sim')"
-                            style="padding:4px 12px; font-size:0.75rem; min-width:80px;">模擬模式</button>
+                            style="padding:4px 12px; font-size:0.75rem; min-width:80px;"><span data-lang-zh="模擬模式" data-lang-en="Simulate Mode">模擬模式</span></button>
                         <button id="im-mode-chal" class="btn-confirm-no" onclick="imitate_setMode('chal')"
-                            style="padding:4px 12px; font-size:0.75rem; background:#444; min-width:80px;">挑戰模式</button>
+                            style="padding:4px 12px; font-size:0.75rem; background:#444; min-width:80px;"><span data-lang-zh="挑戰模式" data-lang-en="Challenge Mode">挑戰模式</span></button>
                     </div>
                     <!-- Added Toggle for Muting Notifications -->
                     <div
@@ -7568,7 +7567,7 @@
                         <input type="checkbox" id="imitate-mute-toggle"
                             onchange="g_imitateMute = this.checked; localStorage.setItem('imitate_mute', this.checked)"
                             style="width:14px; height:14px; cursor:pointer;">
-                        <label for="imitate-mute-toggle" style="cursor:pointer">⚒ 關閉彈窗提醒 (如重置確認)</label>
+                        <label for="imitate-mute-toggle" style="cursor:pointer"><span data-lang-zh="⚒ 關閉彈窗提醒 (如重置確認)" data-lang-en="⚒ Disable popup alerts (e.g., reset confirmation)">⚒ 關閉彈窗提醒 (如重置確認)</span></label>
                     </div>
                 </div>
                 <button class="db-close-btn" onclick="closeImitateModal()">×</button>
@@ -7583,18 +7582,18 @@
             <div class="imitate-main-col">
                 <div class="db-card" style="margin-bottom:15px; padding: 20px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold;">已開啟詞條</div>
+                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold;"><span data-lang-zh="已開啟詞條" data-lang-en="Revealed Stats">已開啟詞條</span></div>
                         <div style="display:flex; gap:10px;">
                             <button class="btn-confirm-yes" onclick="imitate_start()"
-                                style="padding: 6px 16px; font-size: 0.9rem;">開啟詞條</button>
+                                style="padding: 6px 16px; font-size: 0.9rem;"><span data-lang-zh="開啟詞條" data-lang-en="Reveal Stat">開啟詞條</span></button>
                             <button class="btn-confirm-no" onclick="imitate_reset()"
-                                style="padding: 6px 16px; font-size: 0.9rem; background:#444;">全部重置</button>
+                                style="padding: 6px 16px; font-size: 0.9rem; background:#444;"><span data-lang-zh="全部重置" data-lang-en="Reset All">全部重置</span></button>
                         </div>
                     </div>
 
                     <div class="imitate-list-scroll">
                         <div id="imitate-list" class="imitate-list-grid">
-                            <div class="imitate-empty">尚未開啟任何詞條</div>
+                            <div class="imitate-empty"><span data-lang-zh="尚未開啟任何詞條" data-lang-en="No stats revealed yet">尚未開啟任何詞條</span></div>
                         </div>
                     </div>
                 </div>
@@ -7603,21 +7602,21 @@
             <!-- Right Column / Sidebar -->
             <div class="imitate-side-col">
                 <div id="imitate-role-selector" class="db-card" style="margin-bottom:15px; display:none;">
-                    <div class="db-card-title">⚖️ 角色與權重方案</div>
+                    <div class="db-card-title"><span data-lang-zh="⚖️ 角色與權重方案" data-lang-en="⚖️ Character &amp; Weight Plan">⚖️ 角色與權重方案</span></div>
                     <div style="display:flex; flex-direction:column; gap:10px; margin-top:5px;">
                         <select id="imitate-role-select" onchange="imitate_changeRole()"
                             style="width:100%; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem;">
-                            <option value="">-- 請選擇角色 --</option>
+                            <option value=""><span data-lang-zh="-- 請選擇角色 --" data-lang-en="-- Select Character --">-- 請選擇角色 --</span></option>
                         </select>
                         <select id="imitate-build-select" onchange="imitate_changeBuild()"
                             style="width:100%; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem; display:none;">
-                            <option value="0">通用</option>
+                            <option value="0"><span data-lang-zh="通用" data-lang-en="General">通用</span></option>
                         </select>
                     </div>
                 </div>
 
                 <div class="db-card imitate-summary-card" style="margin-bottom:15px;">
-                    <div class="db-card-title">📊 模擬統計摘要</div>
+                    <div class="db-card-title"><span data-lang-zh="📊 模擬統計摘要" data-lang-en="📊 Simulation Summary">📊 模擬統計摘要</span></div>
                     <div style="text-align:center; padding:15px 0;">
                         <div style="display: flex; align-items: baseline; justify-content: center; gap: 5px;">
                             <div id="imitate-total-score" style="font-size:2.8rem; font-weight:800; color:#fff;">0.0
@@ -7625,7 +7624,7 @@
                             <div id="imitate-total-percent"
                                 style="font-size:1.8rem; font-weight:600; color:var(--accent);"></div>
                         </div>
-                        <div style="font-size:0.85rem; color:#888; margin-top:5px;">目前綜合評分</div>
+                        <div style="font-size:0.85rem; color:#888; margin-top:5px;"><span data-lang-zh="目前綜合評分" data-lang-en="Current Score">目前綜合評分</span></div>
                     </div>
                     <div id="imitate-max-possible"
                         style="font-size:0.8rem; color:#666; text-align:center; margin-top:5px;">
@@ -7634,7 +7633,7 @@
                 </div>
 
                 <div id="imitate-prob-card" class="db-card">
-                    <div class="db-card-title">🔮 勝算機率推算</div>
+                    <div class="db-card-title"><span data-lang-zh="🔮 勝算機率推算" data-lang-en="🔮 Win Probability">🔮 勝算機率推算</span></div>
                     <div id="imitate-prob-area"
                         style="display:grid; grid-template-columns: 1fr; gap:8px; font-size:0.9rem; color:#ccc; margin-top:10px;">
                         <div class="prob-row"><span data-lang-zh="暴擊出現率" data-lang-en="Crit Rate Appearance">暴擊出現率</span><span id="im-gl-bj" style="color:var(--ok);">0%</span></div>
@@ -7659,7 +7658,7 @@
     <!-- Custom Alert/Message Modal -->
     <div id="msg-modal" class="modal-overlay" style="z-index: 20000;">
         <div class="confirm-box" style="border-color: var(--ok); max-width: 90%; width: 400px;">
-            <h3 style="color:var(--ok);margin-top:0;">💡 系統提示</h3>
+            <h3 style="color:var(--ok);margin-top:0;"><span data-lang-zh="💡 系統提示" data-lang-en="💡 System Notice">💡 系統提示</span></h3>
             <p id="msg-modal-text" style="color:#ddd;margin-bottom:20px;line-height:1.6;"></p>
             <button class="btn-confirm-yes" style="width:100%;"
                 onclick="document.getElementById('msg-modal').style.display='none'"><span data-lang-zh="確定" data-lang-en="OK">確定</span></button>
@@ -7669,10 +7668,10 @@
     <!-- Custom Confirm Modal -->
     <div id="confirm-prompt-modal" class="modal-overlay" style="z-index: 20000;">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 400px;">
-            <h3 style="color:var(--accent);margin-top:0;">❓ 操作確認</h3>
+            <h3 style="color:var(--accent);margin-top:0;"><span data-lang-zh="❓ 操作確認" data-lang-en="❓ Confirm Action">❓ 操作確認</span></h3>
             <p id="confirm-prompt-text" style="color:#ddd;margin-bottom:20px;line-height:1.6;"></p>
             <div style="display:flex;gap:10px;">
-                <button id="confirm-prompt-yes" class="btn-confirm-yes" style="flex:1;">執行</button>
+                <button id="confirm-prompt-yes" class="btn-confirm-yes" style="flex:1;"><span data-lang-zh="執行" data-lang-en="Confirm">執行</span></button>
                 <button class="btn-confirm-no" style="flex:1;"
                     onclick="document.getElementById('confirm-prompt-modal').style.display='none'"><span data-lang-zh="取消" data-lang-en="Cancel">取消</span></button>
             </div>
@@ -7682,21 +7681,21 @@
     <!-- Buff Info Modal -->
     <div id="buff-info-modal" class="modal-overlay">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 400px;">
-            <h3 style="color:var(--accent);margin-top:0;">📊 評分機制優化 (補分)</h3>
+            <h3 style="color:var(--accent);margin-top:0;"><span data-lang-zh="📊 評分機制優化 (補分)" data-lang-en="📊 Score Optimization (Buff)">📊 評分機制優化 (補分)</span></h3>
             <p style="color:#ddd;margin-bottom:15px;line-height:1.6;">
                 <span class="lang-zh-only">為了讓評分結果更具參考價值與鼓勵性，系統已自動套用平衡補分機制：</span><span class="lang-en-only">To make scores more meaningful and encouraging, a balance boost has been applied automatically:</span>
             </p>
             <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:8px;margin-bottom:15px;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-                    <span>原始積分：</span><span id="buff-orig-score">0</span>
+                    <span data-lang-zh="原始積分：" data-lang-en="Base Score:">原始積分：</span><span id="buff-orig-score">0</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;color:var(--ok);margin-bottom:8px;">
-                    <span>平衡補分 (x1.25)：</span><span id="buff-bonus-val">+0</span>
+                    <span data-lang-zh="平衡補分 (x1.25)：" data-lang-en="Balance Boost (x1.25):">平衡補分 (x1.25)：</span><span id="buff-bonus-val">+0</span>
                 </div>
                 <div style="height:1px;background:#444;margin:10px 0;"></div>
                 <div
                     style="display:flex;justify-content:space-between;font-weight:bold;font-size:1.1rem;color:var(--accent);">
-                    <span>最終顯分：</span><span id="buff-final-score">0</span>
+                    <span data-lang-zh="最終顯分：" data-lang-en="Final Score:">最終顯分：</span><span id="buff-final-score">0</span>
                 </div>
             </div>
             <p style="font-size:0.85rem;color:#888;">
@@ -7704,19 +7703,19 @@
                 * 若補分後超過 100% 仍會正常顯示。
             </p>
             <div style="display:flex;gap:10px;">
-                <button class="btn-confirm-yes" onclick="closeBuffModal()" style="flex:1;">了解</button>
+                <button class="btn-confirm-yes" onclick="closeBuffModal()" style="flex:1;"><span data-lang-zh="了解" data-lang-en="Got It">了解</span></button>
                 <button class="btn-confirm-yes" onclick="switchToRankFromBuff()"
-                    style="flex:1;background:var(--accent);color:#000;border-color:var(--accent);">前往全服排名</button>
+                    style="flex:1;background:var(--accent);color:#000;border-color:var(--accent);"><span data-lang-zh="前往全服排名" data-lang-en="Go to Global Ranking">前往全服排名</span></button>
             </div>
         </div>
     </div>
 
     <div id="restricted-modal" class="modal-overlay">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 350px;">
-            <h3 style="color:var(--accent);margin-top:0;">功能受限</h3>
+            <h3 style="color:var(--accent);margin-top:0;"><span data-lang-zh="功能受限" data-lang-en="Feature Restricted">功能受限</span></h3>
             <p style="color:#ddd;margin-bottom:20px;line-height:1.6;"><span class="lang-zh-only">此功能僅在 POXY 無法載入圖片或辨識異常時才可啟用。</span><span class="lang-en-only">Enable this only when PROXY fails to load the image or OCR recognition is abnormal.</span><br><span
                     style="font-size:0.8rem;color:#888;">System only allows local upload when proxy fails.</span></p>
-            <button class="btn-confirm-yes" onclick="closeRestrictedModal()">了解</button>
+            <button class="btn-confirm-yes" onclick="closeRestrictedModal()"><span data-lang-zh="了解" data-lang-en="Got It">了解</span></button>
         </div>
     </div>
 
@@ -7725,7 +7724,7 @@
         <div class="startup-box" style="max-width:700px; width:95%; text-align:left;">
             <input type="hidden" id="editing-echo-id" value="">
             <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
-                <span id="custom-echo-modal-title">🆕 新增自訂聲骸</span>
+                <span id="custom-echo-modal-title"><span data-lang-zh="🆕 新增自訂聲骸" data-lang-en="🆕 Add Custom Echo">🆕 新增自訂聲骸</span>
                 <button onclick="closeCustomEchoModal()"
                     style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">&times;</button>
             </h3>
@@ -7741,13 +7740,13 @@
                     </select>
                 </div>
                 <div class="dps-control-group">
-                    <label>主詞條 1 (主 1 )</label>
+                    <label><span data-lang-zh="主詞條 1 (主 1)" data-lang-en="Main Stat 1">主詞條 1 (主 1 )</span></label>
                     <select id="custom-echo-main1" class="dps-select"></select>
                 </div>
                 <div class="dps-control-group"
                     style="grid-column: span 2; display: flex; gap: 20px; align-items: flex-end;">
                     <div style="flex: 1;">
-                        <label>主詞條 2 (主 2 )</label>
+                        <label><span data-lang-zh="主詞條 2 (主 2)" data-lang-en="Main Stat 2">主詞條 2 (主 2 )</span></label>
                         <input type="text" value="Custom Echo" readonly class="dps-input"
                             style="background:#222; border-color:#333; color:#aaa; font-style:italic;">
                     </div>
@@ -7778,12 +7777,12 @@
                 </div>
             </div>
 
-            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;">套裝選擇 (Sonata Set)</label>
+            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;"><span data-lang-zh="套裝選擇 (Sonata Set)" data-lang-en="Sonata Set">套裝選擇 (Sonata Set)</span></label>
             <div id="custom-echo-suit-grid" class="custom-echo-grid">
                 <!-- Suits injected here -->
             </div>
 
-            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;">副詞條配置 (Sub-stats)</label>
+            <label style="color:#888; font-size:0.85rem; margin-bottom:10px; display:block;"><span data-lang-zh="副詞條配置 (Sub-stats)" data-lang-en="Sub-stats Config">副詞條配置 (Sub-stats)</span></label>
             <div id="custom-echo-subs" style="display:flex; flex-direction:column; gap:10px;">
                 <!-- 5 Sub-stat rows -->
                 <div class="custom-sub-row" style="display:flex; gap:10px;">
@@ -7819,7 +7818,7 @@
                     style="margin-right:auto; border-color:#555; display:none;"><span data-lang-zh="Bug 除錯" data-lang-en="Bug Debug">Bug 除錯</span></button>
                 <button id="btn-save-custom-echo" onclick="addCustomEcho()" class="btn-confirm-yes"
                     style="width:120px;"><span data-lang-zh="保存聲骸" data-lang-en="Save Echo">保存聲骸</span></button>
-                <button onclick="closeCustomEchoModal()" class="btn-confirm-no">取消</button>
+                <button onclick="closeCustomEchoModal()" class="btn-confirm-no"><span data-lang-zh="取消" data-lang-en="Cancel">取消</span></button>
             </div>
             <div id="custom-echo-debug-area"
                 style="display:none; margin-top:20px; padding:15px; background:#111; border:1px solid #333; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.8rem; max-height:300px; overflow-y:auto; border-left:4px solid var(--accent);">
@@ -7844,34 +7843,34 @@
             <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-                        <span style="font-size:1.4rem;">⇄ 聲骸單一比對</span>
+                        <span style="font-size:1.4rem;"><span data-lang-zh="⇄ 聲骸單一比對" data-lang-en="⇄ Single Echo Compare">⇄ 聲骸單一比對</span>
                         <button onclick="openCustomEchoModal()" class="db-btn-primary"
                             style="padding:4px 12px; font-size:0.85rem; background:rgba(92, 124, 250, 0.2); border-color:rgba(92, 124, 250, 0.4); color:#5c7cfa;"><span data-lang-zh="+ 新增自訂聲骸" data-lang-en="+ Add Custom Echo">+ 新增自訂聲骸</span></button>
                         <div
                             style="display:flex; align-items:center; gap:12px; font-size:0.85rem; color:#aaa; font-weight:normal;">
                             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input
                                     type="checkbox" id="comp-filter-cost" onchange="renderSingleCompareContent()">
-                                COST同</label>
+                                <span data-lang-zh="COST同" data-lang-en="Same COST">COST同</span></label>
                             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input
                                     type="checkbox" id="comp-filter-suit" onchange="renderSingleCompareContent()">
-                                套裝同</label>
+                                <span data-lang-zh="套裝同" data-lang-en="Same Suit">套裝同</span></label>
                             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input
                                     type="checkbox" id="comp-filter-custom" onchange="renderSingleCompareContent()">
-                                僅自訂</label>
+                                <span data-lang-zh="僅自訂" data-lang-en="Custom Only">僅自訂</span></label>
                             <label
                                 style="display:flex; align-items:center; gap:4px; cursor:pointer; color:var(--ok);"><input
                                     type="checkbox" id="comp-filter-cross-role" checked
                                     onchange="renderSingleCompareContent()">
-                                跨角色</label>
+                                <span data-lang-zh="跨角色" data-lang-en="Cross-Role">跨角色</span></label>
                             <label
                                 style="display:flex; align-items:center; gap:4px; cursor:pointer; color:var(--accent);"><input
                                     type="checkbox" id="comp-show-score" onchange="renderSingleCompareContent()">
-                                顯示分數</label>
-                            <span style="color:#666; margin-left:5px;">| 排序:</span>
+                                <span data-lang-zh="顯示分數" data-lang-en="Show Score">顯示分數</span></label>
+                            <span style="color:#666; margin-left:5px;"><span data-lang-zh="| 排序:" data-lang-en="| Sort:">| 排序:</span>
                             <select id="comp-sort-mode" onchange="renderSingleCompareContent()"
                                 style="background:#222; border:1px solid #444; color:#ddd; font-size:0.8rem; border-radius:3px; padding:2px 4px; cursor:pointer;">
-                                <option value="score">權重分數</option>
-                                <option value="cost">Cost大小</option>
+                                <option value="score"><span data-lang-zh="權重分數" data-lang-en="Weight Score">權重分數</span></option>
+                                <option value="cost"><span data-lang-zh="Cost大小" data-lang-en="Cost Size">Cost大小</span></option>
                             </select>
                         </div>
                     </div>
@@ -7883,33 +7882,33 @@
             </h3>
             <div id="comp-weight-info"
                 style="margin-bottom:15px; font-size:0.8rem; color:#888; display:flex; gap:10px; flex-wrap:wrap; background:rgba(255,255,255,0.03); padding:8px; border-radius:4px; border:1px solid #333;">
-                正在載入權重最大分資訊...
+                <span data-lang-zh="正在載入權重最大分資訊..." data-lang-en="Loading max score info...">正在載入權重最大分資訊...</span>
             </div>
             <div id="single-compare-content" style="max-height:60vh; overflow-y:auto; margin-bottom:20px;">
                 <!-- Comparison table injected here -->
             </div>
             <div style="text-align:right;">
                 <button onclick="document.getElementById('single-compare-modal').style.display='none'"
-                    class="btn-confirm-no">關閉</button>
+                    class="btn-confirm-no"><span data-lang-zh="關閉" data-lang-en="Close">關閉</span></button>
             </div>
         </div>
     </div>
 
     <div id="config-modal" class="modal-overlay">
         <div class="startup-box">
-            <h3>設定後端網址</h3><input type="text" id="gas-url-input" placeholder="https://script.google.com/..."
-                style="width:100%;margin:10px 0;padding:10px;"><button onclick="saveConfig()">儲存</button>
+            <h3><span data-lang-zh="設定後端網址" data-lang-en="Set Backend URL">設定後端網址</span></h3><input type="text" id="gas-url-input" placeholder="https://script.google.com/..."
+                style="width:100%;margin:10px 0;padding:10px;"><button onclick="saveConfig()"><span data-lang-zh="儲存" data-lang-en="Save">儲存</span></button>
         </div>
     </div>
     <div id="weights-modal" class="modal-overlay">
         <div class="modal-full">
             <div class="modal-header">
                 <div style="display:flex;gap:10px;align-items:center;">
-                    <h3 style="margin:0;color:var(--accent);">角色加權值參考表</h3>
+                    <h3 style="margin:0;color:var(--accent);"><span data-lang-zh="角色加權值參考表" data-lang-en="Character Weight Reference">角色加權值參考表</span></h3>
                     <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()"><span data-lang-zh="顯示模式: 權重" data-lang-en="Display: Weights">顯示模式: 權重</span></button>
                     <button class="btn-toggle-view" onclick="openCustomWeightEditor()"
-                        style="border-color:var(--accent);color:var(--accent)">✏️ 自訂權重</button>
-                </div><button onclick="closeWeightsModal()">關閉面板</button>
+                        style="border-color:var(--accent);color:var(--accent)"><span data-lang-zh="✏️ 自訂權重" data-lang-en="✏️ Custom Weights">✏️ 自訂權重</span></button>
+                </div><button onclick="closeWeightsModal()"><span data-lang-zh="關閉面板" data-lang-en="Close Panel">關閉面板</span></button>
             </div>
             <div class="modal-body" id="weights-body"></div>
         </div>
@@ -7917,15 +7916,15 @@
     <div id="role-correction-modal" class="modal-overlay" style="pointer-events: auto;">
         <div class="modal-full" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 style="margin:0;color:var(--accent);">⚠️ 角色名稱修正</h3>
-                <div style="font-size:0.8rem;color:#aaa;">辨識結果不在系統名單內，請手動選擇以繼續。</div>
+                <h3 style="margin:0;color:var(--accent);"><span data-lang-zh="⚠️ 角色名稱修正" data-lang-en="⚠️ Character Name Correction">⚠️ 角色名稱修正</span></h3>
+                <div style="font-size:0.8rem;color:#aaa;"><span data-lang-zh="辨識結果不在系統名單內，請手動選擇以繼續。" data-lang-en="Unrecognized character. Please select manually to continue.">辨識結果不在系統名單內，請手動選擇以繼續。</span></div>
             </div>
             <div class="modal-body" id="role-correction-body">
                 <div class="role-preview-pane"><canvas id="role-correction-canvas" class="role-canvas"></canvas>
                     <div style="color:#888;font-size:0.8rem;"><span data-lang-zh="OCR 辨識結果: " data-lang-en="OCR Result: ">OCR 辨識結果: </span><span id="ocr-result-text"
                             style="color:var(--error);font-weight:bold;"></span></div>
                 </div>
-                <div class="role-list-pane"><input type="text" id="role-search" placeholder="🔍 搜尋角色..."
+                <div class="role-list-pane"><input type="text" id="role-search" placeholder="🔍 Search..." data-placeholder-zh="🔍 搜尋角色..." data-placeholder-en="🔍 Search..."
                         oninput="filterRoleGrid(this.value)">
                     <div class="role-grid" id="role-grid"></div>
                 </div>
@@ -7935,26 +7934,26 @@
     </div>
     <div id="refresh-modal" class="modal-overlay">
         <div class="confirm-box">
-            <h3 style="color:#eee;margin-top:0;">確認刷新列表?</h3>
+            <h3 style="color:#eee;margin-top:0;"><span data-lang-zh="確認刷新列表?" data-lang-en="Confirm Refresh?">確認刷新列表?</span></h3>
             <p style="color:#aaa;font-size:0.9rem;margin-bottom:15px;line-height:1.6;"><span data-lang-zh="1. 將從雲端下載最新數據。2. 系統會自動過濾重複項目。3. 此操作有 30秒冷卻時間。" data-lang-en="1. Latest data will be downloaded from cloud. 2. Duplicates will be filtered automatically. 3. There is a 30-second cooldown.">1. 將從雲端下載最新數據。<br>2.
-                系統會自動過濾重複項目。<br>3. 此操作有 <span style="color:var(--accent)">30秒冷卻時間</span>。</span></p>
+                <span class="lang-zh-only">系統會自動過濾重複項目。<br>3. 此操作有 <span style="color:var(--accent)">30秒冷卻時間</span>。</span></span></p>
             <div class="confirm-btn-group"><button class="btn-confirm-yes"
-                    onclick="confirmRefresh()">確認刷新</button><button class="btn-confirm-no"
-                    onclick="closeRefreshModal()">取消</button></div>
+                    onclick="confirmRefresh()"><span data-lang-zh="確認刷新" data-lang-en="Confirm Refresh">確認刷新</span></button><button class="btn-confirm-no"
+                    onclick="closeRefreshModal()"><span data-lang-zh="取消" data-lang-en="Cancel">取消</span></button></div>
         </div>
     </div>
     <div id="sub-stat-modal" class="modal-overlay">
         <div class="sub-edit-box">
-            <h3 style="margin:0;color:var(--accent)">修正副詞條</h3>
-            <div style="font-size:0.8rem;color:#aaa">OCR 辨識錯誤修正</div><canvas id="sub-edit-canvas"></canvas><select
+            <h3 style="margin:0;color:var(--accent)"><span data-lang-zh="修正副詞條" data-lang-en="Fix Sub-stat">修正副詞條</span></h3>
+            <div style="font-size:0.8rem;color:#aaa"><span data-lang-zh="OCR 辨識錯誤修正" data-lang-en="OCR Error Fix">OCR 辨識錯誤修正</span></div><canvas id="sub-edit-canvas"></canvas><select
                 id="sub-edit-name" class="sub-edit-select" onchange="updateSubValueOptions()"></select><select
                 id="sub-edit-val-select" class="sub-edit-select" style="margin-bottom:5px;"
                 onchange="applySubValueSelect()">
-                <option value="">-- 選擇數值 --</option>
+                <option value=""><span data-lang-zh="-- 選擇數值 --" data-lang-en="-- Select Value --">-- 選擇數值 --</span></option>
             </select>
-            <div class="sub-edit-actions"><button class="btn-save-sub" onclick="saveSubEdit()">保存並繼續</button><button
+            <div class="sub-edit-actions"><button class="btn-save-sub" onclick="saveSubEdit()"><span data-lang-zh="保存並繼續" data-lang-en="Save &amp; Continue">保存並繼續</span></button><button
                     class="btn-cancel-sub"
-                    onclick="document.getElementById('sub-stat-modal').style.display='none'">取消</button></div>
+                    onclick="document.getElementById('sub-stat-modal').style.display='none'"><span data-lang-zh="取消" data-lang-en="Cancel">取消</span></button></div>
         </div>
     </div>
 
@@ -7963,7 +7962,7 @@
             <h3 style="color:var(--accent);margin-top:0;display:flex;align-items:center;gap:10px;">
                 <span data-lang-zh="✏️ 自訂權重配置" data-lang-en="✏️ Custom Weight Config">✏️ 自訂權重配置</span>
                 <span
-                    style="font-size:0.8rem;color:#888;font-weight:normal;background:#333;padding:2px 8px;border-radius:4px;">啟用時介面將轉為藍色</span>
+                    style="font-size:0.8rem;color:#888;font-weight:normal;background:#333;padding:2px 8px;border-radius:4px;"><span data-lang-zh="啟用時介紹" data-lang-en="Intro when enabled">啟用時介面將轉為藍色</span>
             </h3>
             <p style="color:#bbb;font-size:0.9rem;"><span data-lang-zh="請設定各屬性的評分權重 (0 = 不計算)。設定後將建立「自訂方案」，排名將重新計算。" data-lang-en="Set score weights for each stat (0 = excluded). A 'Custom Build' will be created and rankings recalculated.">請設定各屬性的評分權重 (0 = 不計算)。<br>設定後將建立「自訂方案」，排名將重新計算。</span></p>
 
@@ -7974,21 +7973,20 @@
 
             <div style="display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #333;padding-top:20px;">
                 <button onclick="resetCustomWeights()" class="btn-confirm-no"
-                    style="margin-right:auto;background:#444;">恢復預設</button>
-                <button onclick="saveCustomWeights()" class="btn-confirm-yes">保存並套用</button>
+                    style="margin-right:auto;background:#444;"><span data-lang-zh="恢復預設" data-lang-en="Restore Defaults">恢復預設</span></button>
+                <button onclick="saveCustomWeights()" class="btn-confirm-yes"><span data-lang-zh="保存並套用" data-lang-en="Save &amp; Apply">保存並套用</span></button>
                 <button onclick="document.getElementById('custom-weight-modal').style.display='none'"
-                    class="btn-confirm-no">取消</button>
+                    class="btn-confirm-no"><span data-lang-zh="取消" data-lang-en="Cancel">取消</span></button>
             </div>
         </div>
     </div>
 
     <!-- Welcome Panels -->
     <div id="welcome-panels" class="welcome-panels">
-        <button id="btn-close-welcome" class="btn-close-welcome" onclick="closeWelcomePanel()" style="display:none;">✕
-            關閉教學</button>
+        <button id="btn-close-welcome" class="btn-close-welcome" onclick="closeWelcomePanel()" style="display:none;"><span data-lang-zh="✕ 關閉教學" data-lang-en="✕ Close Tutorial">✕ 關閉教學</span></button>
         <div class="welcome-panel" style="flex:1;">
-            <h3>🎯 功能介紹</h3>
-            <p>GAME-ZH 聲骸分析儀提供專業的聲骸評分與數據分析服務</p>
+            <h3><span data-lang-zh="🎯 功能介紹" data-lang-en="🎯 Features">🎯 功能介紹</span></h3>
+            <p><span data-lang-zh="GAME-ZH 聲骸分析儀提供專業的聲骸評分與數據分析服務" data-lang-en="GAME-ZH Echo Analyzer provides professional scoring and data analysis">GAME-ZH 聲骸分析儀提供專業的聲骸評分與數據分析服務</span></p>
             <div class="feature-grid"
                 style="grid-template-columns: 1fr; gap: 8px; margin-top: 15px; background: transparent; padding: 0;">
                 <!-- 功能介紹 -->
@@ -8000,8 +7998,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🎯</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">功能介紹</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">專業聲骸評分與數據分析服務 (00:00)
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="功能介紹" data-lang-en="Features">功能介紹</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="專業聲骸評分與數據分析服務 (00:00)" data-lang-en="Professional echo scoring and analysis (00:00)">專業聲骸評分與數據分析服務 (00:00)</span>
                         </div>
                     </div>
                 </div>
@@ -8014,8 +8012,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📋</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">如何獲取網址</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">DC 教學介紹如何獲取連結 (00:24)
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="如何獲取網址" data-lang-en="Get Image URL">如何獲取網址</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="DC 教學介紹如何獲取連結 (00:24)" data-lang-en="Tutorial: how to get the link (00:24)">DC 教學介紹如何獲取連結 (00:24)</span>
                         </div>
                     </div>
                 </div>
@@ -8028,8 +8026,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🔍</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">智能 OCR 辨識</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">辨識聲骸屬性與數值 (01:00)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="智能 OCR 辨識" data-lang-en="Smart OCR">智能 OCR 辨識</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="辨識聲骸屬性與數值 (01:00)" data-lang-en="Recognize echo stats and values (01:00)">辨識聲骸屬性與數值 (01:00)</span></div>
                     </div>
                 </div>
                 <!-- 雲端同步存檔 -->
@@ -8041,8 +8039,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         ☁️</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">雲端同步存檔</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">歷史紀錄自動保存與同步 (01:01)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="雲端同步存檔" data-lang-en="Cloud Sync">雲端同步存檔</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="歷史紀錄自動保存與同步 (01:01)" data-lang-en="History auto-saved and synced (01:01)">歷史紀錄自動保存與同步 (01:01)</span></div>
                     </div>
                 </div>
                 <!-- 多角色權重評分 -->
@@ -8054,8 +8052,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         ⚖️</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">多角色權重評分</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">支援不同角色的權重配置 (01:12)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="多角色權重評分" data-lang-en="Multi-Role Weights">多角色權重評分</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="支援不同角色的權重配置 (01:12)" data-lang-en="Supports weight configs per character (01:12)">支援不同角色的權重配置 (01:12)</span></div>
                     </div>
                 </div>
                 <!-- 排行榜與對比 -->
@@ -8067,8 +8065,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         🏆</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">排行榜與對比</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">查看排名與數據對比 (01:24)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="排行榜與對比" data-lang-en="Rankings &amp; Compare">排行榜與對比</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="查看排名與數據對比 (01:24)" data-lang-en="View rankings and stat comparison (01:24)">查看排名與數據對比 (01:24)</span></div>
                     </div>
                 </div>
                 <!-- 聲骸庫存管理 -->
@@ -8080,8 +8078,8 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📦</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">聲骸庫存管理</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">高效管理聲骸收藏庫 (01:38)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="聲骸庫存管理" data-lang-en="Echo Inventory">聲骸庫存管理</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="高效管理聲骸收藏庫 (01:38)" data-lang-en="Efficiently manage echo collection (01:38)">高效管理聲骸收藏庫 (01:38)</span></div>
                     </div>
                 </div>
                 <!-- 生成圖片 -->
@@ -8093,44 +8091,44 @@
                         style="width:32px; height:32px; font-size:1.1rem; background: rgba(229, 192, 123, 0.1); color: var(--accent);">
                         📷</div>
                     <div class="feature-card-main">
-                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;">生成圖片</div>
-                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;">快速分享聲骸分析結果 (01:48)</div>
+                        <div class="feature-card-title" style="font-size:0.85rem; color: #fff;"><span data-lang-zh="生成圖片" data-lang-en="Generate Image">生成圖片</span></div>
+                        <div class="feature-card-desc" style="font-size:0.72rem; color: #888;"><span data-lang-zh="快速分享聲骸分析結果 (01:48)" data-lang-en="Quickly share echo analysis results (01:48)">快速分享聲骸分析結果 (01:48)</span></div>
                     </div>
                 </div>
             </div>
             <a href="https://discord.gg/9RrbRbQXdD" target="_blank" class="btn-discord-join">
-                <span style="font-size:1.2rem">👾</span> 加入 Discord (GAME ZH)
+                <span style="font-size:1.2rem">👾</span> <span data-lang-zh="加入 Discord (GAME ZH)" data-lang-en="Join Discord (GAME ZH)">加入 Discord (GAME ZH)</span>
             </a>
         </div>
         <div class="welcome-panel" style="flex:2;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <h3 style="margin:0;">📡 如何獲取圖片網址</h3>
+                <h3 style="margin:0;"><span data-lang-zh="📡 如何獲取圖片網址" data-lang-en="📡 How to Get Image URL">📡 如何獲取圖片網址</span></h3>
                 <div class="tutorial-toggle-box"
                     style="display:flex; background:rgba(255,255,255,0.05); padding:3px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
                     <button id="btn-text-tutorial" onclick="switchTutorial('text')"
-                        style="background:var(--accent); color:#111; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">文字教學</button>
+                        style="background:var(--accent); color:#111; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;"><span data-lang-zh="文字教學" data-lang-en="Text Tutorial">文字教學</span></button>
                     <button id="btn-video-tutorial" onclick="switchTutorial('video')"
-                        style="background:transparent; color:#888; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">影片教學</button>
+                        style="background:transparent; color:#888; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:all 0.2s;"><span data-lang-zh="影片教學" data-lang-en="Video Tutorial">影片教學</span></button>
                 </div>
             </div>
 
             <div id="text-tutorial-content">
                 <p><span class="lang-zh-only">⚠️ 請務必使用 <b>WuWaBot</b> 機器人，並使用半形斜線 <span class="highlight-code">/</span> 指令。</span><span class="lang-en-only">⚠️ You must use the <b>WuWaBot</b> bot with slash (<span class="highlight-code">/</span>) commands.</span></p>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">1</span>加入 Discord 群組</div>
-                    <div class="step-desc">加入「GAME ZH」或官方 Discord 群組，找到機器人頻道。</div>
+                    <div class="step-title"><span class="step-num">1</span><span data-lang-zh="加入 Discord 群組" data-lang-en="Join Discord Server">加入 Discord 群組</span></div>
+                    <div class="step-desc"><span data-lang-zh="加入「GAME ZH」或官方 Discord 群組，找到機器人頻道。" data-lang-en="Join the 'GAME ZH' or official Discord server and find the bot channel.">加入「GAME ZH」或官方 Discord 群組，找到機器人頻道。</span></div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">2</span>語言設定 (重要)</div>
-                    <div class="step-desc">輸入 <span class="highlight-code">/語言</span> 並選擇「繁體中文」。</div>
+                    <div class="step-title"><span class="step-num">2</span><span data-lang-zh="語言設定 (重要)" data-lang-en="Language Setting (Important)">語言設定 (重要)</span></div>
+                    <div class="step-desc"><span class="lang-zh-only">輸入 <span class="highlight-code">/語言</span> 並選擇「繁體中文」。</span><span class="lang-en-only">Enter /language and select Traditional Chinese (繁體中文).</span></div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">3</span>綁定 UID</div>
-                    <div class="step-desc">輸入 <span class="highlight-code">/綁定</span> 並輸入您的 9 碼 UID。</div>
+                    <div class="step-title"><span class="step-num">3</span><span data-lang-zh="綁定 UID" data-lang-en="Bind UID">綁定 UID</span></div>
+                    <div class="step-desc"><span class="lang-zh-only">輸入 <span class="highlight-code">/綁定</span> 並輸入您的 9 碼 UID。</span><span class="lang-en-only">Enter /bind and input your 9-digit UID.</span></div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">4</span>生成圖片</div>
-                    <div class="step-desc">輸入 <span class="highlight-code">/生成</span> 產出聲骸圖片。</div>
+                    <div class="step-title"><span class="step-num">4</span><span data-lang-zh="生成圖片" data-lang-en="Generate Image">生成圖片</span></div>
+                    <div class="step-desc"><span class="lang-zh-only">輸入 <span class="highlight-code">/生成</span> 產出聲骸圖片。</span><span class="lang-en-only">Enter /generate to produce the echo image.</span></div>
                 </div>
                 <div class="step-card">
                     <div class="step-title"><span class="step-num">✅</span><span data-lang-zh="複製連結 (關鍵步驟)" data-lang-en="Copy Link (Key Step)">複製連結 (關鍵步驟)</span></div>
@@ -8139,10 +8137,10 @@
                 <div class="step-card" style="background: rgba(229,192,123,0.05); border-color: var(--accent);">
                     <div class="step-title"><span class="step-num">🚀</span><span data-lang-zh="直接輸入網址開始使用" data-lang-en="Enter URL to Start">直接輸入網址開始使用</span></div>
                     <div class="step-desc">
-                        <input type="text" id="welcome-url-input" placeholder="貼上圖片網址並按 Enter 開始分析"
+                        <input type="text" id="welcome-url-input" placeholder="Paste URL and press Enter to start" data-placeholder-zh="貼上圖片網址並按 Enter 開始分析" data-placeholder-en="Paste image URL and press Enter to start"
                             style="width:100%; padding:12px 15px; margin-top:10px; background:#1a1a1a; border:2px solid var(--accent); color:var(--accent); border-radius:6px; font-size:1rem; font-family:'JetBrains Mono', monospace;"
                             onkeydown="if(event.key==='Enter'){document.getElementById('url-input').value=this.value; document.getElementById('startup-modal').style.display='none'; startProcess();}">
-                        <div style="font-size:0.75rem; color:#888; margin-top:8px;">💡 貼上連結後按 Enter 即可立即開始分析</div>
+                        <div style="font-size:0.75rem; color:#888; margin-top:8px;"><span data-lang-zh="💡 貼上連結後按 Enter 即可立即開始分析" data-lang-en="💡 Paste URL and press Enter to start">💡 貼上連結後按 Enter 即可立即開始分析</span></div>
                     </div>
                 </div>
             </div>
@@ -8154,7 +8152,7 @@
                     </div>
                 </div>
                 <div style="margin-top:12px; color:#888; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
-                    <span style="color:var(--accent);">📺</span> 點擊左側「功能介紹」可快速跳轉至對應教學時段
+                    <span style="color:var(--accent);"><span data-lang-zh="📺 點擊左側「功能介紹」可快速跳轉至對應教學時段" data-lang-en="📺 Click 'Features' on the left to jump to the tutorial segment">📺</span> <span data-lang-zh="點擊左側「功能介紹」可快速跳轉至對應教學時段" data-lang-en="Click 'Features' on the left to jump to the tutorial segment">點擊左側「功能介紹」可快速跳轉至對應教學時段</span>
                 </div>
             </div>
         </div>
@@ -8177,29 +8175,29 @@
                             style="color:var(--accent)"><span data-lang-zh="選擇本地圖片" data-lang-en="Select local image">選擇本地圖片</span></a></div>
                 </div>
             </div>
-            <div class="status-bar"><span id="status-text">就緒</span><span id="dim-text"></span></div>
+            <div class="status-bar"><span id="status-text"><span data-lang-zh="就緒" data-lang-en="Ready">就緒</span><span id="dim-text"></span></div>
             <div class="history-panel">
                 <div class="history-header">
                     <div style="display:flex;gap:10px;align-items:center">
                         <button onclick="openGraduationPanel()"
                             style="background:transparent; border:none; color:inherit; font-size:1rem; font-family:inherit; padding:0; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:5px; transition:color 0.2s;"
                             onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='inherit'"
-                            title="點擊查看畢業面板">📋 歷史紀錄</button>
+                            title="Click to view graduation panel"><span data-lang-zh="📋 歷史紀錄" data-lang-en="📋 History">📋 歷史紀錄</span></button>
                         <span id="history-count" style="font-size:0.75rem;color:#888;font-weight:normal;"></span>
                     </div>
                     <div class="toolbar-group">
-                        <button class="btn-primary-action" onclick="generateShareImage()" title="分享">📷</button>
+                        <button class="btn-primary-action" onclick="generateShareImage()" title="Share" data-title-zh="分享" data-title-en="Share">📷</button>
 
                         <input type="file" id="import-json" style="display:none" accept=".json"
                             onchange="importData(this)">
                         <button class="btn-primary-action" onclick="showRefreshModal()"
-                            style="background:#444;color:#ddd;" title="刷新">🔄</button>
+                            style="background:#444;color:#ddd;" title="Refresh" data-title-zh="刷新" data-title-en="Refresh">🔄</button>
                         <button id="btn-load-all" class="btn-icon-only" onclick="loadAllHistory()" style="display:none;"
-                            title="載入全部">⬇️</button>
-                        <button class="btn-icon-only" onclick="cleanupHistory()" title="整理重複項目">🧹</button>
-                        <button id="debug-btn" class="btn-icon-only" onclick="toggleDebug()" title="排錯模式">🐞</button>
+                            title="Load All" data-title-zh="載入全部" data-title-en="Load All">⬇️</button>
+                        <button class="btn-icon-only" onclick="cleanupHistory()" title="Clean Duplicates" data-title-zh="整理重複項目" data-title-en="Clean Duplicates">🧹</button>
+                        <button id="debug-btn" class="btn-icon-only" onclick="toggleDebug()" title="Debug Mode" data-title-zh="排錯模式" data-title-en="Debug Mode">🐞</button>
                         <button id="offline-edit-btn" class="btn-icon-only" onclick="toggleOfflineEdit()"
-                            title="離線編輯模式">🖊️</button>
+                            title="Offline Edit Mode" data-title-zh="離線編輯模式" data-title-en="Offline Edit Mode">🖊️</button>
                         <div id="edit-mode-container"
                             style="display:none; align-items:center; gap:6px; cursor:pointer; padding:0 8px; border-radius:4px; background:rgba(255,255,255,0.05);"
                             onclick="toggleEditMode()">
@@ -8207,7 +8205,7 @@
                                 <input type="checkbox" id="edit-mode-toggle" onchange="toggleEditMode()">
                                 <span class="slider"></span>
                             </label>
-                            <span style="font-size:0.85rem; color:#ccc; user-select:none;">修改模式</span>
+                            <span style="font-size:0.85rem; color:#ccc; user-select:none;"><span data-lang-zh="修改模式" data-lang-en="Edit Mode">修改模式</span>
                         </div>
                     </div>
                 </div>
@@ -8218,11 +8216,11 @@
 
             <div class="tab-container">
                 <div style="display:flex;gap:5px;align-items:center;flex:1;">
-                    <button class="tab-btn active" onclick="switchTab('tab-analysis')">分析結果</button>
-                    <button class="tab-btn" onclick="switchTab('tab-charts')">圖表分析</button>
-                    <button class="tab-btn" onclick="switchTab('tab-echo-library')">聲骸庫</button>
-                    <button class="tab-btn" onclick="switchTab('tab-rank')">排行資料</button>
-                    <button class="tab-btn" onclick="switchTab('tab-dps')">DPS計算</button>
+                    <button class="tab-btn active" onclick="switchTab('tab-analysis')"><span data-lang-zh="分析結果" data-lang-en="Analysis">分析結果</span></button>
+                    <button class="tab-btn" onclick="switchTab('tab-charts')"><span data-lang-zh="圖表分析" data-lang-en="Charts">圖表分析</span></button>
+                    <button class="tab-btn" onclick="switchTab('tab-echo-library')"><span data-lang-zh="聲骸庫" data-lang-en="Echo Library">聲骸庫</span></button>
+                    <button class="tab-btn" onclick="switchTab('tab-rank')"><span data-lang-zh="排行資料" data-lang-en="Rankings">排行資料</span></button>
+                    <button class="tab-btn" onclick="switchTab('tab-dps')"><span data-lang-zh="DPS計算" data-lang-en="DPS Calc">DPS計算</span></button>
 
                     <!-- Dynamic Rank Display (Back to original position) -->
                     <div id="tab-rank-display"
@@ -8256,7 +8254,7 @@
                     </div>
                     <div class="chart-visuals-col">
                         <div class="chart-box">
-                            <h3 style="margin-top:0;color:var(--accent);font-size:1rem;">能力雷達圖</h3>
+                            <h3 style="margin-top:0;color:var(--accent);font-size:1rem;"><span data-lang-zh="能力雷達圖" data-lang-en="Ability Radar">能力雷達圖</span></h3>
                             <div class="chart-wrapper">
                                 <canvas id="radarChart"></canvas>
                             </div>
@@ -8264,9 +8262,9 @@
                         <div class="chart-box">
                             <div
                                 style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                                <h3 style="margin:0;color:var(--accent);font-size:1rem;">聲骸評分分佈</h3>
+                                <h3 style="margin:0;color:var(--accent);font-size:1rem;"><span data-lang-zh="聲骸評分分佈" data-lang-en="Echo Score Distribution">聲骸評分分佈</span></h3>
                                 <button class="toggle-btn" id="sort-toggle-btn"
-                                    onclick="toggleChartSort()">切換排序</button>
+                                    onclick="toggleChartSort()"><span data-lang-zh="切換排序" data-lang-en="Toggle Sort">切換排序</span></button>
                             </div>
                             <div class="chart-wrapper">
                                 <canvas id="barChart"></canvas>
@@ -8293,7 +8291,7 @@
                 <div id="db-analysis-drawer" class="db-analysis-drawer"
                     onclick="if(event.target.id==='db-analysis-drawer')rank_toggleAnalysis(false)">
                     <div class="db-analysis-header">
-                        <h2 style="margin:0;color:var(--accent);font-size:1.2rem">📊 深度戰略分析儀表板</h2>
+                        <h2 style="margin:0;color:var(--accent);font-size:1.2rem"><span data-lang-zh="📊 深度戰略分析儀表板" data-lang-en="📊 Deep Strategy Dashboard">📊 深度戰略分析儀表板</span></h2>
                         <button onclick="rank_toggleAnalysis(false)"
                             style="background:transparent;border:none;color:#fff;font-size:1.5rem;cursor:pointer">×</button>
                     </div>
@@ -8340,7 +8338,7 @@
                         </div>
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>📊 角色鏈度佔比分佈</span>
+                                <span data-lang-zh="📊 角色鏈度佔比分佈" data-lang-en="📊 Resonance Chain Distribution">📊 角色鏈度佔比分佈</span>
                             </div>
                             <div style="flex:1;position:relative;min-height:100px;display:flex;align-items:center;">
                                 <canvas id="c-chains"></canvas>
@@ -8348,7 +8346,7 @@
                         </div>
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>📈 整體評分分佈 (分數佔比)</span>
+                                <span data-lang-zh="📈 整體評分分佈 (分數佔比)" data-lang-en="📈 Overall Score Distribution">📈 整體評分分佈 (分數佔比)</span>
                             </div>
                             <div style="flex:1;position:relative;min-height:150px;">
                                 <canvas id="c-scores"></canvas>
@@ -8364,7 +8362,7 @@
                             style="position:absolute;top:15px;right:15px;z-index:100;background:rgba(0,0,0,0.6);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.2rem">×</button>
                         <div class="db-detail-left">
                             <div id="d-img-container" class="db-img-container">
-                                <div style="color:#555;position:absolute" id="no-img-txt">無預覽圖</div>
+                                <div style="color:#555;position:absolute" id="no-img-txt"><span data-lang-zh="無預覽圖" data-lang-en="No Preview">無預覽圖</span></div>
                                 <img id="d-img" class="db-detail-img" src="" onerror="this.style.display='none'">
                                 <canvas id="d-zoom" class="db-zoom-canvas"></canvas>
                             </div>
@@ -8377,7 +8375,7 @@
                         </div>
                         <div class="db-detail-right" onmouseleave="rank_unlockPreview()">
                             <div style="padding:20px;border-bottom:1px solid #333;background:#121214">
-                                <h3 id="d-title" style="margin:0;color:var(--accent);font-size:1.3rem">聲骸配置詳情</h3>
+                                <h3 id="d-title" style="margin:0;color:var(--accent);font-size:1.3rem"><span data-lang-zh="聲骸配置詳情" data-lang-en="Echo Config Details">聲骸配置詳情</span></h3>
                             </div>
                             <div id="d-table-container"></div>
                         </div>
@@ -8389,19 +8387,19 @@
                         style="position:absolute;height:100%;transform:translateX(-100%);z-index:100;box-shadow:5px 0 20px rgba(0,0,0,0.8);background:#111;border-right:1px solid #333;transition:transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);width:280px;display:flex;flex-direction:column;">
                         <div class="db-sidebar-header"
                             style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-                            <h3 style="margin:0;color:var(--accent);font-size:1.1rem;white-space:nowrap;">資料庫導航</h3>
-                            <input type="text" id="db-sidebar-search" placeholder="搜尋..." onkeyup="rank_renderSidebar()"
+                            <h3 style="margin:0;color:var(--accent);font-size:1.1rem;white-space:nowrap;"><span data-lang-zh="資料庫導航" data-lang-en="Database Navigation">資料庫導航</span></h3>
+                            <input type="text" id="db-sidebar-search" placeholder="Search..." data-placeholder-zh="搜尋..." data-placeholder-en="Search..." onkeyup="rank_renderSidebar()"
                                 style="flex:1; background:#1a1a1a; border:1px solid #444; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.85rem; min-width:0;">
                             <button onclick="document.getElementById('db-sidebar').style.transform='translateX(-100%)'"
                                 style="background:none;border:none;color:#aaa;cursor:pointer;font-size:1.5rem;padding:0;width:30px;height:30px;flex-shrink:0;">×</button>
                         </div>
                         <div class="db-view-switch" style="margin:10px;margin-top:0;">
                             <button class="db-view-btn active" onclick="rank_toggleViewMode('role')"
-                                id="btn-mode-role">👥 角色列表</button>
-                            <button class="db-view-btn" onclick="rank_toggleViewMode('uid')" id="btn-mode-uid">🆔 玩家
+                                id="btn-mode-role"><span data-lang-zh="👥 角色列表" data-lang-en="👥 Character List">👥 角色列表</span></button>
+                            <button class="db-view-btn" onclick="rank_toggleViewMode('uid')" id="btn-mode-uid"><span data-lang-zh="🆔 玩家" data-lang-en="🆔 Player">🆔 玩家</span>
                                 UID</button>
                             <button class="db-view-btn" onclick="rank_toggleViewMode('fault')" id="btn-mode-fault"
-                                style="color:var(--error)">⚠️ 異常總覽</button>
+                                style="color:var(--error)"><span data-lang-zh="⚠️ 異常總覽" data-lang-en="⚠️ Anomaly Overview">⚠️ 異常總覽</span></button>
                         </div>
                         <div class="db-role-list" id="db-role-list"></div>
                     </div>
@@ -8414,9 +8412,9 @@
                                     style="background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;"
                                     class="menu-toggle">☰</button>
                                 <div>
-                                    <div style="font-size:0.75rem;color:#888;margin-bottom:2px" id="db-top-label">目前檢視
+                                    <div style="font-size:0.75rem;color:#888;margin-bottom:2px" id="db-top-label"><span data-lang-zh="目前檢視" data-lang-en="Currently Viewing">目前檢視</span>
                                     </div>
-                                    <h2 id="db-top-title" style="margin:0;font-size:1.1rem;color:#fff">請選擇</h2>
+                                    <h2 id="db-top-title" style="margin:0;font-size:1.1rem;color:#fff"><span data-lang-zh="請選擇" data-lang-en="Please Select">請選擇</span></h2>
                                 </div>
                                 <div id="db-build-wrap"></div>
                             </div>
@@ -8428,18 +8426,18 @@
                                     onmouseout="this.style.background='rgba(229,192,123,0.1)'">
                                     <span data-lang-zh="✨ 有新資料，點擊刷新" data-lang-en="✨ New data available, click to refresh">✨ 有新資料，點擊刷新</span>
                                 </div>
-                                <button class="db-btn-primary" onclick="rank_openStrategySummary()" title="查看前60名大數據總結"
+                                <button class="db-btn-primary" onclick="rank_openStrategySummary()" title="View top-60 strategy summary" data-title-zh="查看前60名大數據總結" data-title-en="View top-60 strategy summary"
                                     style="background:rgba(92, 124, 250, 0.15); border:1px solid #5c7cfa; color:#748ffc;">
-                                    <span>📋 戰略總表</span>
+                                    <span data-lang-zh="📋 戰略總表" data-lang-en="📋 Strategy Summary">📋 戰略總表</span>
                                 </button>
                                 <button class="db-btn-primary" onclick="rank_toggleAnalysis(true)">
-                                    <span>📊 深度戰略分析</span>
+                                    <span data-lang-zh="📊 深度戰略分析" data-lang-en="📊 Deep Analysis">📊 深度戰略分析</span>
                                 </button>
-                                <button class="db-btn-primary" onclick="rank_triggerRefresh()" title="重新抓取雲端資料"
+                                <button class="db-btn-primary" onclick="rank_triggerRefresh()" title="Refresh cloud data" data-title-zh="重新抓取雲端資料" data-title-en="Refresh cloud data"
                                     style="padding:6px 10px;font-size:1rem;min-width:auto;">
                                     🔄
                                 </button>
-                                <input type="text" id="db-search-input" placeholder="過濾..."
+                                <input type="text" id="db-search-input" placeholder="Filter..." data-placeholder-zh="過濾..." data-placeholder-en="Filter..."
                                     onkeyup="rank_renderTableDebounced()"
                                     style="background:#111;border:1px solid #444;color:#fff;padding:6px 12px;border-radius:6px;width:100px;font-size:0.9rem;">
                             </div>
@@ -8448,12 +8446,12 @@
                         <div class="db-data-area" id="db-data-area" onclick="rank_handleSidebarBlankClick(event)">
                             <div style="text-align:center;color:#666;margin-top:100px;font-size:1.1rem">
                                 <div style="font-size:3rem;margin-bottom:20px">👈</div>
-                                請點擊左上角選單選擇資料
+                                <span data-lang-zh="請點擊左上角選單選擇資料" data-lang-en="Please select data from the top-left menu">請點擊左上角選單選擇資料</span>
                             </div>
                         </div>
 
                         <!-- 快捷前往用戶位置的懸浮按鈕 -->
-                        <div id="rank-user-jump-btn" onclick="rank_jumpToUser()" title="快速前往您的排名位置">
+                        <div id="rank-user-jump-btn" onclick="rank_jumpToUser()" title="Jump to your rank position" data-title-zh="快速前往您的排名位置" data-title-en="Jump to your rank position">
                             ★
                         </div>
                     </div>
@@ -8468,30 +8466,30 @@
                         <span class="lang-zh-only">💡 提示：目前僅顯示部分歷史紀錄，點擊左側 <b>⬇️ 載入全部</b> 鈕可獲得更完整的庫存清單。</span><span class="lang-en-only">💡 Tip: Only partial history loaded. Click <b>⬇️ Load All</b> on the left for the full inventory list.</span>
                     </div>
                     <div class="echo-lib-filters">
-                        <span style="color:#888;font-size:0.9rem">篩選：</span>
+                        <span style="color:#888;font-size:0.9rem"><span data-lang-zh="篩選：" data-lang-en="Filter: ">篩選：</span>
                         <select id="filter-echo-cost" class="echo-lib-select" onchange="renderEchoLibraryDebounced()">
-                            <option value="">所有 COST</option>
+                            <option value=""><span data-lang-zh="所有 COST" data-lang-en="All COST">所有 COST</span></option>
                             <option value="4">4 COST</option>
                             <option value="3">3 COST</option>
                             <option value="1">1 COST</option>
                         </select>
                         <select id="filter-echo-suit" class="echo-lib-select" onchange="renderEchoLibraryDebounced()">
-                            <option value="">所有套裝</option>
+                            <option value=""><span data-lang-zh="所有套裝" data-lang-en="All Suits">所有套裝</span></option>
                         </select>
-                        <span style="color:#888;font-size:0.9rem;margin-left:10px">排序：</span>
+                        <span style="color:#888;font-size:0.9rem;margin-left:10px"><span data-lang-zh="排序：" data-lang-en="Sort: ">排序：</span>
                         <select id="sort-echo-lib" class="echo-lib-select" onchange="renderEchoLibraryDebounced()">
-                            <option value="time">分析時間 (由新到舊)</option>
-                            <option value="score">評分 (由高到低)</option>
-                            <option value="cv">品質 CV (由高到低)</option>
-                            <option value="cost">COST (由大到小)</option>
+                            <option value="time"><span data-lang-zh="分析時間 (由新到舊)" data-lang-en="Analysis Time (Newest First)">分析時間 (由新到舊)</span></option>
+                            <option value="score"><span data-lang-zh="評分 (由高到低)" data-lang-en="Score (High to Low)">評分 (由高到低)</span></option>
+                            <option value="cv"><span data-lang-zh="品質 CV (由高到低)" data-lang-en="CV Quality (High to Low)">品質 CV (由高到低)</span></option>
+                            <option value="cost"><span data-lang-zh="COST (由大到小)" data-lang-en="COST (Descending)">COST (由大到小)</span></option>
                         </select>
                         <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
                             <button onclick="openCustomEchoModal()" class="btn-primary-action"
                                 style="background:#5c7cfa; color:white; font-weight:bold; width:auto; padding:0 12px; font-size:0.9rem;">+<span data-lang-zh="新增自訂聲骸" data-lang-en="Add Custom Echo">新增自訂聲骸</span></button>
                             <button class="btn-primary-action" onclick="toggleSmartView(true)"
-                                style="background:var(--accent);color:#000;font-weight:bold;">✨ 智能配對</button>
+                                style="background:var(--accent);color:#000;font-weight:bold;"><span data-lang-zh="✨ 智能配對" data-lang-en="✨ Smart Match">✨ 智能配對</span></button>
                             <button onclick="toggleEchoLibViewAll()" class="btn-toggle-view-card"
-                                id="btn-toggle-all-view" title="切換所有顯示模式 (表格/圖片)">🖼️ 圖表切換</button>
+                                id="btn-toggle-all-view" title="切換所有顯示模式 (表格/圖片)"><span data-lang-zh="🖼️ 圖表切換" data-lang-en="🖼️ Toggle View">🖼️ 圖表切換</span></button>
                             <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="Reset all selections"
                                 style="width:auto; padding:0 8px; font-size:0.9rem;"><span data-lang-zh="☑️ 重置" data-lang-en="☑️ Reset">☑️ 重置</span></button>
                             <div style="display:flex;align-items:center;gap:6px;cursor:pointer;"
@@ -8501,7 +8499,7 @@
                                         onchange="syncCrossRoleToggle('lib')">
                                     <span class="slider"></span>
                                 </label>
-                                <span style="font-size:0.8rem;color:#ccc;user-select:none;">跨角色比較</span>
+                                <span style="font-size:0.8rem;color:#ccc;user-select:none;"><span data-lang-zh="跨角色比較" data-lang-en="Cross-Role Compare">跨角色比較</span>
                             </div>
                             <div style="color:#666;font-size:0.8rem;padding-left:12px;border-left:1px solid #444;">
                                 共 <span id="echo-lib-count" style="color:var(--accent);font-weight:bold">0</span> <span data-lang-zh=" 件" data-lang-en=""></span>
@@ -8511,18 +8509,18 @@
                     <!-- 角色篩選勾選框 -->
                     <div id="echo-lib-role-filter-bar"
                         style="background:#18181b;border-bottom:1px solid #2a2a2e;padding:8px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;display:none;">
-                        <span style="color:#888;font-size:0.82rem;white-space:nowrap;">角色篩選：</span>
+                        <span style="color:#888;font-size:0.82rem;white-space:nowrap;"><span data-lang-zh="角色篩選：" data-lang-en="Character Filter: ">角色篩選：</span>
                         <label
                             style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:0.82rem;color:#ccc;white-space:nowrap;">
                             <input type="checkbox" id="role-filter-all" checked
                                 onchange="echoLibRoleFilterAll(this.checked)" style="cursor:pointer;">
-                            全部
+                            <span data-lang-zh="全部" data-lang-en="All">全部</span>
                         </label>
                         <div id="echo-lib-role-checkboxes" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
                     </div>
                     <div id="echo-lib-container" class="echo-lib-grid">
                         <div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">
-                            正在整理聲骸庫...
+                            <span data-lang-zh="正在整理聲骸庫..." data-lang-en="Organizing echo library...">正在整理聲骸庫...</span>
                         </div>
                     </div>
                 </div>
@@ -8533,7 +8531,7 @@
                     <div class="smart-toolbar"
                         style="background:#18181b; padding:15px; border-bottom:1px solid #333; display:flex; align-items:center; flex-wrap:wrap; gap:15px;">
                         <button onclick="toggleSmartView(false)" class="db-btn-primary"
-                            style="background:#333;border:1px solid #555;">⬅️ 返回列表</button>
+                            style="background:#333;border:1px solid #555;"><span data-lang-zh="⬅️ 返回列表" data-lang-en="⬅️ Back to List">⬅️ 返回列表</span></button>
                         <div style="border-left:1px solid #444; padding-left:15px; flex:1; min-width: 250px;">
                             <h3
                                 style="margin:0; color:var(--accent); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
@@ -8559,8 +8557,8 @@
                                 包含非當前角色聲骸
                             </label>
                             <button onclick="toggleSmartAllImages()" class="btn-toggle-view-card"
-                                id="btn-smart-img-toggle" title="切換所有顯示模式">🖼️ 圖片</button>
-                            <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="重置所有勾選狀態"
+                                id="btn-smart-img-toggle" title="切換所有顯示模式"><span data-lang-zh="🖼️ 圖片" data-lang-en="🖼️ Image">🖼️ 圖片</span></button>
+                            <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="Reset all selections"
                                 style="width:auto; padding:0 8px; font-size:0.9rem;"><span data-lang-zh="☑️ 重置" data-lang-en="☑️ Reset">☑️ 重置</span></button>
                         </div>
                     </div>
@@ -8581,8 +8579,8 @@
 
             <div id="tab-dps" class="tab-content" style="position:relative; height:100%; overflow:hidden;">
                 <div id="dps-loading">
-                    <div style="font-size:1.5rem; margin-bottom:10px;">☁️ DPS 系統資料載入中...</div>
-                    <div style="color:#888;">正在連接 Google Apps Script 資料庫</div>
+                    <div style="font-size:1.5rem; margin-bottom:10px;"><span data-lang-zh="☁️ DPS 系統資料載入中..." data-lang-en="☁️ Loading DPS System Data...">☁️ DPS 系統資料載入中...</span></div>
+                    <div style="color:#888;"><span data-lang-zh="正在連接 Google Apps Script 資料庫" data-lang-en="Connecting to Google Apps Script database...">正在連接 Google Apps Script 資料庫</span></div>
                 </div>
 
                 <div id="dps-main-view" class="dps-layout-grid" style="display:none;">
@@ -8591,46 +8589,46 @@
                         <h2 class="dps-section-title">✦ <span data-lang-zh="主角配置" data-lang-en="Main Character Config">主角配置</span> (Main)
                             <span
                                 style="font-size:0.75rem; color:#666; cursor:pointer; margin-left:10px; font-weight:normal;"
-                                ondblclick="dps_syncFromAnalysis()" title="雙擊以重新自動帶入資料">
+                                ondblclick="dps_syncFromAnalysis()" title="Double-click to re-sync from analysis" data-title-zh="雙擊以重新自動帶入資料" data-title-en="Double-click to re-sync from analysis">
                                 [自動處理(雙擊)]
                             </span>
                         </h2>
                         <div class="dps-main-config-grid">
                             <div class="dps-control-group">
-                                <label>角色</label>
+                                <label><span data-lang-zh="角色" data-lang-en="Role">角色</span></label>
                                 <select id="dps_roleSelect" class="dps-select dps-select-role"></select>
                             </div>
                             <div class="dps-control-group">
-                                <label>武器</label>
+                                <label><span data-lang-zh="武器" data-lang-en="Weapon">武器</span></label>
                                 <select id="dps_weaponSelect" class="dps-select dps-select-weapon"></select>
                             </div>
                             <div class="dps-control-group">
-                                <label>首位聲骸 (主動效果)</label>
+                                <label><span data-lang-zh="首位聲骸 (主動效果)" data-lang-en="Primary Echo (Active Effect)">首位聲骸 (主動效果)</span></label>
                                 <select id="dps_activeEchoSelect" class="dps-select"></select>
                             </div>
                             <div class="dps-control-group">
-                                <label>套裝模式</label>
+                                <label><span data-lang-zh="套裝模式" data-lang-en="Sonata Mode">套裝模式</span></label>
                                 <select id="dps_sonataMode" class="dps-select">
-                                    <option value="none">無</option>
-                                    <option value="set5">5件套</option>
-                                    <option value="set22">2+2 混搭</option>
+                                    <option value="none"><span data-lang-zh="無" data-lang-en="None">無</span></option>
+                                    <option value="set5"><span data-lang-zh="5件套" data-lang-en="5-piece">5件套</span></option>
+                                    <option value="set22"><span data-lang-zh="2+2 混搭" data-lang-en="2+2 Mix">2+2 混搭</span></option>
                                 </select>
                             </div>
                         </div>
 
                         <div id="dps_sonataOptions" class="dps-main-config-grid" style="margin-top:10px;">
                             <div class="dps-control-group" id="dps_divSet5" style="display:none; grid-column: span 2;">
-                                <label>5件套</label><select id="dps_set5Select" class="dps-select"></select>
+                                <label><span data-lang-zh="5件套" data-lang-en="5-piece Set">5件套</span></label><select id="dps_set5Select" class="dps-select"></select>
                             </div>
                             <div class="dps-control-group" id="dps_divSet2A" style="display:none;">
-                                <label>套裝 A</label><select id="dps_set2ASelect" class="dps-select"></select>
+                                <label><span data-lang-zh="套裝 A" data-lang-en="Set A">套裝 A</span></label><select id="dps_set2ASelect" class="dps-select"></select>
                             </div>
                             <div class="dps-control-group" id="dps_divSet2B" style="display:none;">
-                                <label>套裝 B</label><select id="dps_set2BSelect" class="dps-select"></select>
+                                <label><span data-lang-zh="套裝 B" data-lang-en="Set B">套裝 B</span></label><select id="dps_set2BSelect" class="dps-select"></select>
                             </div>
                         </div>
 
-                        <h3 class="dps-sub-title">聲骸主詞條</h3>
+                        <h3 class="dps-sub-title"><span data-lang-zh="聲骸主詞條" data-lang-en="Echo Main Stats">聲骸主詞條</span></h3>
                         <div class="dps-main-config-grid">
                             <div class="dps-control-group"><label>Slot 1</label><select id="dps_echo4"
                                     class="dps-select echo-main"></select></div>
@@ -8644,55 +8642,55 @@
                                     class="dps-select echo-main"></select></div>
                         </div>
 
-                        <h3 class="dps-sub-title">副詞條總和 (手動)</h3>
+                        <h3 class="dps-sub-title"><span data-lang-zh="副詞條總和 (手動)" data-lang-en="Sub-stat Total (Manual)">副詞條總和 (手動)</span></h3>
                         <div class="dps-main-config-grid">
-                            <div class="dps-control-group"><label>攻擊%</label><input type="number" id="dps_sub_atk_pct"
+                            <div class="dps-control-group"><label><span data-lang-zh="攻擊%" data-lang-en="ATK%">攻擊%</span></label><input type="number" id="dps_sub_atk_pct"
                                     value="0" step="0.1" class="dps-input"></div>
-                            <div class="dps-control-group"><label>生命%</label><input type="number" id="dps_sub_hp_pct"
+                            <div class="dps-control-group"><label><span data-lang-zh="生命%" data-lang-en="HP%">生命%</span></label><input type="number" id="dps_sub_hp_pct"
                                     value="0" step="0.1" class="dps-input"></div>
-                            <div class="dps-control-group"><label>防禦%</label><input type="number" id="dps_sub_def_pct"
+                            <div class="dps-control-group"><label><span data-lang-zh="防禦%" data-lang-en="DEF%">防禦%</span></label><input type="number" id="dps_sub_def_pct"
                                     value="0" step="0.1" class="dps-input"></div>
-                            <div class="dps-control-group"><label>暴擊%</label><input type="number" id="dps_sub_crit_rate"
+                            <div class="dps-control-group"><label><span data-lang-zh="暴擊%" data-lang-en="Crit Rate%">暴擊%</span></label><input type="number" id="dps_sub_crit_rate"
                                     value="0" step="0.1" class="dps-input"></div>
-                            <div class="dps-control-group"><label>暴傷%</label><input type="number" id="dps_sub_crit_dmg"
+                            <div class="dps-control-group"><label><span data-lang-zh="暴傷%" data-lang-en="Crit DMG%">暴傷%</span></label><input type="number" id="dps_sub_crit_dmg"
                                     value="0" step="0.1" class="dps-input"></div>
-                            <div class="dps-control-group"><label>共鳴%</label><input type="number" id="dps_sub_energy"
+                            <div class="dps-control-group"><label><span data-lang-zh="共鳴%" data-lang-en="Resonance%">共鳴%</span></label><input type="number" id="dps_sub_energy"
                                     value="0" step="0.1" class="dps-input"></div>
-                            <div class="dps-control-group"><label>攻擊固定</label><input type="number" id="dps_sub_atk_flat"
+                            <div class="dps-control-group"><label><span data-lang-zh="攻擊固定" data-lang-en="ATK Flat">攻擊固定</span></label><input type="number" id="dps_sub_atk_flat"
                                     value="0" class="dps-input"></div>
-                            <div class="dps-control-group"><label>生命固定</label><input type="number" id="dps_sub_hp_flat"
+                            <div class="dps-control-group"><label><span data-lang-zh="生命固定" data-lang-en="HP Flat">生命固定</span></label><input type="number" id="dps_sub_hp_flat"
                                     value="0" class="dps-input"></div>
-                            <div class="dps-control-group"><label>防禦固定</label><input type="number" id="dps_sub_def_flat"
+                            <div class="dps-control-group"><label><span data-lang-zh="防禦固定" data-lang-en="DEF Flat">防禦固定</span></label><input type="number" id="dps_sub_def_flat"
                                     value="0" class="dps-input"></div>
                         </div>
 
-                        <h2 class="dps-section-title" style="margin-top:20px;">✦ 輔助隊友 (Supports)</h2>
+                        <h2 class="dps-section-title" style="margin-top:20px;"><span data-lang-zh="✦ 輔助隊友 (Supports)" data-lang-en="✦ Support Team">✦ 輔助隊友 (Supports)</span></h2>
                         <div class="dps-support-container"
                             style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                             <div class="dps-support-char"
                                 style="background:#111; padding:10px; border-radius:6px; border:1px solid #333;">
-                                <h3 class="dps-sub-title" style="margin-top:0;">隊友 1</h3>
-                                <div class="dps-control-group"><label>角色</label><select id="dps_sup1_role"
+                                <h3 class="dps-sub-title" style="margin-top:0;"><span data-lang-zh="隊友 1" data-lang-en="Support 1">隊友 1</span></h3>
+                                <div class="dps-control-group"><label><span data-lang-zh="角色" data-lang-en="Role">角色</span></label><select id="dps_sup1_role"
                                         class="dps-select sup-input"></select></div>
-                                <div class="dps-control-group"><label>武器</label><select id="dps_sup1_weapon"
+                                <div class="dps-control-group"><label><span data-lang-zh="武器" data-lang-en="Weapon">武器</span></label><select id="dps_sup1_weapon"
                                         class="dps-select sup-input"></select>
                                 </div>
-                                <div class="dps-control-group"><label>套裝</label><select id="dps_sup1_suit"
+                                <div class="dps-control-group"><label><span data-lang-zh="套裝" data-lang-en="Sonata Set">套裝</span></label><select id="dps_sup1_suit"
                                         class="dps-select sup-input"></select></div>
-                                <div class="dps-control-group"><label>聲骸</label><select id="dps_sup1_echo"
+                                <div class="dps-control-group"><label><span data-lang-zh="聲骸" data-lang-en="Echo">聲骸</span></label><select id="dps_sup1_echo"
                                         class="dps-select sup-input"></select></div>
                             </div>
                             <div class="dps-support-char"
                                 style="background:#111; padding:10px; border-radius:6px; border:1px solid #333;">
-                                <h3 class="dps-sub-title" style="margin-top:0;">隊友 2</h3>
-                                <div class="dps-control-group"><label>角色</label><select id="dps_sup2_role"
+                                <h3 class="dps-sub-title" style="margin-top:0;"><span data-lang-zh="隊友 2" data-lang-en="Support 2">隊友 2</span></h3>
+                                <div class="dps-control-group"><label><span data-lang-zh="角色" data-lang-en="Role">角色</span></label><select id="dps_sup2_role"
                                         class="dps-select sup-input"></select></div>
-                                <div class="dps-control-group"><label>武器</label><select id="dps_sup2_weapon"
+                                <div class="dps-control-group"><label><span data-lang-zh="武器" data-lang-en="Weapon">武器</span></label><select id="dps_sup2_weapon"
                                         class="dps-select sup-input"></select>
                                 </div>
-                                <div class="dps-control-group"><label>套裝</label><select id="dps_sup2_suit"
+                                <div class="dps-control-group"><label><span data-lang-zh="套裝" data-lang-en="Sonata Set">套裝</span></label><select id="dps_sup2_suit"
                                         class="dps-select sup-input"></select></div>
-                                <div class="dps-control-group"><label>聲骸</label><select id="dps_sup2_echo"
+                                <div class="dps-control-group"><label><span data-lang-zh="聲骸" data-lang-en="Echo">聲骸</span></label><select id="dps_sup2_echo"
                                         class="dps-select sup-input"></select></div>
                             </div>
                         </div>
@@ -8703,7 +8701,7 @@
                             <h2 class="dps-section-title" style="border:none;padding:0;margin:0;">✦ <span data-lang-zh="最終面板" data-lang-en="Final Stats">最終面板</span> (Final Stats)
                             </h2>
                             <button class="btn-dps-start" onclick="dps_toggleResultView(true)">
-                                <span>🚀 開始計算 DPS</span>
+                                <span data-lang-zh="🚀 開始計算 DPS" data-lang-en="🚀 Calculate DPS">🚀 開始計算 DPS</span>
                             </button>
                         </div>
                         <div style="height:1px;background:rgba(255,255,255,0.1);margin:10px 0 15px 0;"></div>
@@ -8716,20 +8714,20 @@
                 <div id="dps-result-view" class="dps-result-view">
                     <div class="dps-disclaimer-box">
                         <div class="dps-disclaimer-text">
-                            本專案之 OCR 影像辨識與聲骸評分系統為 Game ZH 團隊自研開發。<br><br>
+                            <span class="lang-zh-only">本專案之 OCR 影像辨識與聲骸評分系統為 Game ZH 團隊自研開發。<br><br>
                             而在未來的 DPS 計算階段，我們採用業界公認最嚴謹的 <strong style="color:var(--accent)">Maygi's Calculator</strong>
                             作為運算核心。<br><br>
                             我們獲授權將其試算表邏輯雲端化，旨在讓玩家無需繁瑣操作，即可享受「從截圖到詳細傷害分析」的一站式體驗。<br><br>
-                            <span style="color:var(--accent);font-weight:bold">[開發中]</span>
+                            <span style="color:var(--accent);font-weight:bold">[開發中]</span></span><span class="lang-en-only">The OCR and echo scoring system is developed by the Game ZH team.<br><br>For future DPS calculations, we use <strong style="color:var(--accent)">Maygi's Calculator</strong> as the computation core.<br><br>We are authorized to cloud-port its spreadsheet logic for a seamless one-stop experience.<br><br><span style="color:var(--accent);font-weight:bold">[In Development]</span></span>
                         </div>
-                        <button class="btn-dps-back" onclick="dps_toggleResultView(false)">⬅️ 返回配置</button>
+                        <button class="btn-dps-back" onclick="dps_toggleResultView(false)"><span data-lang-zh="⬅️ 返回配置" data-lang-en="⬅️ Back to Config">⬅️ 返回配置</span></button>
                     </div>
 
                     <div class="dps-exp-dmg-section">
                         <div
                             style="padding:15px;background:#1a1a1d;border-bottom:1px solid #333;display:flex;align-items:center;gap:10px;">
                             <span style="font-size:1.2rem;">📊</span>
-                            <span style="font-weight:bold;color:#fff;">通用的期望傷害數值</span>
+                            <span style="font-weight:bold;color:#fff;"><span data-lang-zh="通用的期望傷害數值" data-lang-en="General Expected DPS">通用的期望傷害數值</span>
                         </div>
                         <div style="padding:40px;text-align:center;color:#666;">
                             (此區域將顯示詳細的傷害期望值圖表/數據)
@@ -8739,11 +8737,11 @@
 
                 <div id="dps-detail-modal" class="dps-modal" onclick="if(event.target===this)this.style.display='none'">
                     <div class="dps-modal-content">
-                        <h3 id="dps-modal-title" style="color:var(--accent); font-size:18px;">詳細計算</h3>
+                        <h3 id="dps-modal-title" style="color:var(--accent); font-size:18px;"><span data-lang-zh="詳細計算" data-lang-en="Detailed Calculation">詳細計算</span></h3>
                         <div id="dps-modal-body"></div>
                         <div style="text-align:right; margin-top:20px;">
                             <button onclick="document.getElementById('dps-detail-modal').style.display='none'"
-                                style="background:var(--accent); color:#000; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold;">關閉</button>
+                                style="background:var(--accent); color:#000; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold;"><span data-lang-zh="關閉" data-lang-en="Close">關閉</span></button>
                         </div>
                     </div>
                 </div>
@@ -8755,8 +8753,8 @@
         <div class="db-container" style="max-width:1000px;">
             <div class="db-header">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">🌡️ 副詞條強度熱力圖</h2>
-                    <div style="color:#888;font-size:0.85rem;">橫軸為詞條種類，縱軸為角色。顏色深淺代表該角色在歷史紀錄中該詞條出現的頻率與權重綜合強度。</div>
+                    <h2 style="font-size:1.5rem;"><span data-lang-zh="🌡️ 副詞條強度熱力圖" data-lang-en="🌡️ Sub-stat Heatmap">🌡️ 副詞條強度熱力圖</span></h2>
+                    <div style="color:#888;font-size:0.85rem;"><span data-lang-zh="橫軸為詞條種類，縱軸為角色。顏色深淺代表該角色在歷史紀錄中該詞條出現的頻率與權重綜合強度。" data-lang-en="X-axis: stat types; Y-axis: characters. Color represents frequency and weight intensity.">橫軸為詞條種類，縱軸為角色。顏色深淺代表該角色在歷史紀錄中該詞條出現的頻率與權重綜合強度。</span></div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('heatmap-modal').style.display='none'">×</button>
@@ -8771,15 +8769,15 @@
 
     <div id="uid-display-container" class="bottom-pill-container">
         <div class="bottom-pill">
-            <button onclick="openFeedbackModal()" class="pill-btn feedback-btn" title="錯誤回報 / 意見回饋">
+            <button onclick="openFeedbackModal()" class="pill-btn feedback-btn" title="Bug Report / Feedback" data-title-zh="錯誤回報 / 意見回饋" data-title-en="Bug Report / Feedback">
                 <span class="pill-icon">💬</span>
-                <span class="pill-text desktop-only">錯誤回報/意見</span>
+                <span class="pill-text desktop-only"><span data-lang-zh="錯誤回報/意見" data-lang-en="Report/Feedback">錯誤回報/意見</span>
             </button>
             <div class="pill-divider"></div>
-            <div id="uid-display" class="pill-uid">未登入</div>
+            <div id="uid-display" class="pill-uid"><span data-lang-zh="未登入" data-lang-en="Not Logged In">未登入</span></div>
             <div class="pill-divider desktop-only"></div>
             <div id="bottom-left-pill" class="pill-hint desktop-only">⌨️ Ctrl + <span data-lang-zh="滾輪" data-lang-en="Scroll">滾輪</span> <span data-lang-zh="縮放" data-lang-en="Zoom">縮放</span> ｜ <span
-                    onclick="openTutorialPanel()" style="cursor:pointer;text-decoration:underline;">教學</span></div>
+                    onclick="openTutorialPanel()" style="cursor:pointer;text-decoration:underline;"><span data-lang-zh="教學" data-lang-en="Tutorial">教學</span></div>
         </div>
     </div>
     <style>
@@ -9064,7 +9062,7 @@
     <div id="share-modal" class="share-modal">
         <div class="share-modal-content">
             <div class="share-modal-header">
-                <h3 style="color:var(--accent);margin:0;">📷 分享圖片生成器</h3>
+                <h3 style="color:var(--accent);margin:0;"><span data-lang-zh="📷 分享圖片生成器" data-lang-en="📷 Share Image Generator">📷 分享圖片生成器</span></h3>
                 <button class="share-close-btn" onclick="closeShareModal()">×</button>
             </div>
 
@@ -11172,7 +11170,7 @@
         }
         function updateSubValueOptions(currentVal) {
             let name = subEditName.value;
-            subEditValSelect.innerHTML = '<option value="">-- 選擇數值 --</option>';
+            subEditValSelect.innerHTML = '<option value=""><span data-lang-zh="-- 選擇數值 --" data-lang-en="-- Select Value --">-- 選擇數值 --</span></option>';
             let validIndices = [];
             for (const [key, indices] of Object.entries(STAT_MAP)) {
                 if (name === key) {
@@ -12164,7 +12162,7 @@
             const suitFilter = document.getElementById('filter-echo-suit');
             if (suitFilter) {
                 const currentSuitVal = suitFilter.value;
-                suitFilter.innerHTML = '<option value="">所有套裝</option>';
+                suitFilter.innerHTML = '<option value=""><span data-lang-zh="所有套裝" data-lang-en="All Suits">所有套裝</span></option>';
                 Array.from(suits).sort().forEach(s => {
                     const op = document.createElement('option');
                     op.value = s; op.innerText = s;
@@ -19351,13 +19349,13 @@
         <div class="startup-box" style="max-width:1100px; width:95%; text-align:left; background:var(--panel);">
             <h3
                 style="color:var(--accent); margin-top:0; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
-                <span>🚨 錯誤回報 / 意見回饋</span>
+                <span><span data-lang-zh="🚨 錯誤回報 / 意見回饋" data-lang-en="🚨 Bug Report / Feedback">🚨 錯誤回報 / 意見回饋</span>
                 <button onclick="document.getElementById('feedback-modal').style.display='none'"
                     style="background:none; border:none; color:#888; font-size:1.5rem; cursor:pointer;">×</button>
             </h3>
             <div style="display:flex; gap:20px; height:60vh;">
                 <div style="flex:1.2; display:flex; flex-direction:column; gap:10px;">
-                    <div style="font-size:0.85rem; color:#888;">問題發生時的畫面截圖：</div>
+                    <div style="font-size:0.85rem; color:#888;"><span data-lang-zh="問題發生時的畫面截圖：" data-lang-en="Screenshot at time of issue:">問題發生時的畫面截圖：</span></div>
                     <div id="feedback-screenshot-container"
                         style="flex:1; background:#000; border:1px solid #333; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative;">
                         <img id="feedback-screenshot-img" style="max-width:100%; max-height:100%; object-fit:contain;">
@@ -19376,15 +19374,15 @@
                         </div>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:8px;">
-                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;">回報分類：</label>
+                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;"><span data-lang-zh="回報分類：" data-lang-en="Report Category:">回報分類：</span></label>
                         <select id="feedback-category" onchange="validateFeedback()"
                             style="width:100%; background:#111; border:1px solid #444; color:#fff; padding:8px 12px; border-radius:8px; font-size:0.92rem; transition:border-color 0.2s; outline:none;"
                             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#444'">
-                            <option value="" disabled selected>-- 請選擇分類 --</option>
-                            <option value="OCR辨識">OCR 辨識錯誤 (詞條、數值)</option>
-                            <option value="UI顯示">介面顯示問題 (錯位、模糊)</option>
-                            <option value="功能建議">功能建議與優化</option>
-                            <option value="其他">其他問題</option>
+                            <option value="" disabled selected><span data-lang-zh="-- 請選擇分類 --" data-lang-en="-- Select Category --">-- 請選擇分類 --</span></option>
+                            <option value="OCR辨識"><span data-lang-zh="OCR 辨識錯誤 (詞條、數值)" data-lang-en="OCR Recognition Error (stats/values)">OCR 辨識錯誤 (詞條、數值)</span></option>
+                            <option value="UI顯示"><span data-lang-zh="介面顯示問題 (錯位、模糊)" data-lang-en="UI Display Issue (misalignment, blur)">介面顯示問題 (錯位、模糊)</span></option>
+                            <option value="功能建議"><span data-lang-zh="功能建議與優化" data-lang-en="Feature Suggestion &amp; Improvement">功能建議與優化</span></option>
+                            <option value="其他"><span data-lang-zh="其他問題" data-lang-en="Other Issues">其他問題</span></option>
                         </select>
                         <div id="ocr-upload-container" style="display:none; margin-top:2px;">
                             <label
@@ -19394,7 +19392,7 @@
                         </div>
                     </div>
                     <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
-                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;">問題描述與回饋內容：</label>
+                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;"><span data-lang-zh="問題描述與回饋內容：" data-lang-en="Description &amp; Feedback:">問題描述與回饋內容：</span></label>
                         <textarea id="feedback-content"
                             placeholder="請詳細描述問題發生的情境...&#10;&#10;💡 引導建議：&#10;1. 哪個詞條或數值辨識錯誤？(正確應為何)&#10;2. 在哪個操作步驟下發生問題？&#10;3. 您希望如何改進此功能？"
                             style="flex:1; background:#111; border:1px solid #444; color:#fff; padding:12px; border-radius:8px; resize:none; font-family:inherit; font-size:0.92rem; transition:border-color 0.2s;"
@@ -19407,9 +19405,9 @@
                     <div
                         style="display:flex; gap:10px; justify-content:flex-end; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
                         <button onclick="document.getElementById('feedback-modal').style.display='none'"
-                            class="btn-confirm-no" style="background:#444; padding:8px 20px;">取消</button>
+                            class="btn-confirm-no" style="background:#444; padding:8px 20px;"><span data-lang-zh="取消" data-lang-en="Cancel">取消</span></button>
                         <button onclick="submitFeedback()" class="btn-confirm-yes" id="btn-submit-feedback"
-                            style="padding:8px 30px; font-weight:800; opacity:0.5;" disabled>發送回報</button>
+                            style="padding:8px 30px; font-weight:800; opacity:0.5;" disabled><span data-lang-zh="發送回報" data-lang-en="Submit Report">發送回報</span></button>
                     </div>
                 </div>
             </div>
