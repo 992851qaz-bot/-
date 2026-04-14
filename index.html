@@ -9875,6 +9875,7 @@
                 btn.title = g_lang === 'zh' ? 'Switch to English' : '切換為中文';
             });
         }
+        let g_shouldRefreshRank = false; // 標記是否需要刷新排行榜
         let g_userRankPosition = -1; // 用戶在排行榜中的位置索引
         let g_codeErrorCount = 0; // 兌換碼錯誤次數
         let g_usedCodes = new Set(); // 已使用的兌換碼
