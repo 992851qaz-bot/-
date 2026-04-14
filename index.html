@@ -7229,11 +7229,19 @@
     </header>
     <div id="startup-modal" class="modal-overlay" style="display:flex;">
         <div class="startup-box">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-                <h2 style="color:var(--accent);margin:0;" data-lang-zh="角色資訊卡評分" data-lang-en="Echo Score Analyzer">角色資訊卡評分</h2>
-                <button class="lang-toggle-btn" onclick="toggleLanguage()" style="background:rgba(229,192,123,0.12);border:1px solid rgba(229,192,123,0.35);color:var(--accent);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-weight:600;white-space:nowrap;">🌐 English</button>
+            <h2 style="color:var(--accent);margin:0 0 14px;" data-lang-zh="角色資訊卡評分" data-lang-en="Echo Score Analyzer">角色資訊卡評分</h2>
+            <!-- 語言切換區塊 -->
+            <div style="display:flex;gap:8px;margin-bottom:14px;">
+                <button id="lang-btn-zh" onclick="setLanguage('zh')"
+                    style="flex:1;padding:8px 0;border-radius:8px;border:2px solid var(--accent);background:var(--accent);color:#000;font-weight:700;font-size:0.9rem;cursor:pointer;transition:0.2s;">
+                    🇹🇼 繁體中文
+                </button>
+                <button id="lang-btn-en" onclick="setLanguage('en')"
+                    style="flex:1;padding:8px 0;border-radius:8px;border:2px solid rgba(229,192,123,0.35);background:rgba(229,192,123,0.08);color:#aaa;font-weight:700;font-size:0.9rem;cursor:pointer;transition:0.2s;">
+                    🌐 English
+                </button>
             </div>
-            <p style="font-size:0.75rem;color:#888;margin:-8px 0 12px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖" data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
+            <p style="font-size:0.75rem;color:#888;margin:-6px 0 14px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖" data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
             <input type="text" id="login-uid"
                 maxlength="9" placeholder="輸入 UID (9碼純數字)"
                 oninput="this.value=this.value.replace(/\D/g,'');validateUid()"
@@ -9795,8 +9803,8 @@
             if (g_lang !== 'en' || !zhName) return zhName;
             return STAT_ZH_TO_EN[zhName] || zhName;
         }
-        function toggleLanguage() {
-            g_lang = (g_lang === 'zh') ? 'en' : 'zh';
+        function setLanguage(lang) {
+            g_lang = lang;
             localStorage.setItem('ww_lang', g_lang);
             document.querySelectorAll('[data-lang-zh]').forEach(el => {
                 el.textContent = g_lang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
@@ -9804,7 +9812,21 @@
             _updateLangBtnLabels();
             if (g_echoesData.length > 0) renderTable(g_globalData, g_chains, g_echoesData);
         }
+        function toggleLanguage() { setLanguage(g_lang === 'zh' ? 'en' : 'zh'); }
         function _updateLangBtnLabels() {
+            // Two-button selector in login modal
+            const btnZh = document.getElementById('lang-btn-zh');
+            const btnEn = document.getElementById('lang-btn-en');
+            if (btnZh && btnEn) {
+                if (g_lang === 'zh') {
+                    btnZh.style.background = 'var(--accent)'; btnZh.style.color = '#000'; btnZh.style.borderColor = 'var(--accent)';
+                    btnEn.style.background = 'rgba(229,192,123,0.08)'; btnEn.style.color = '#aaa'; btnEn.style.borderColor = 'rgba(229,192,123,0.35)';
+                } else {
+                    btnEn.style.background = 'var(--accent)'; btnEn.style.color = '#000'; btnEn.style.borderColor = 'var(--accent)';
+                    btnZh.style.background = 'rgba(229,192,123,0.08)'; btnZh.style.color = '#aaa'; btnZh.style.borderColor = 'rgba(229,192,123,0.35)';
+                }
+            }
+            // Any remaining toggle-btn pills elsewhere
             document.querySelectorAll('.lang-toggle-btn').forEach(btn => {
                 btn.textContent = g_lang === 'zh' ? '🌐 English' : '🌐 中文';
                 btn.title = g_lang === 'zh' ? 'Switch to English' : '切換為中文';
