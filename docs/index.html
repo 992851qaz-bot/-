@@ -14685,16 +14685,16 @@
                 listEl.innerHTML = uids.map(u => `
  <button class="db-list-btn" data-value="${u}">
  <span style="font-family:'JetBrains Mono'">${u}</span>
- <span style="font-size:0.75rem;color:#666">查看角色</span>
+ <span style="font-size:0.75rem;color:#666">${g_lang === 'en' ? 'View Roles' : '查看角色'}</span>
  </button>
  `).join('');
             } else if (rank_viewMode === 'fault') {
                 listEl.innerHTML = `
  <div style="padding:15px;color:#888;font-size:0.85rem;line-height:1.6">
- <div style="color:var(--error);font-weight:bold;margin-bottom:8px">⚠️ 異常診斷模式</div>
- 此模式會掃描資料庫中所有的玩家紀錄，找出聲骸缺失或配置錯誤的項目。
+ <div style="color:var(--error);font-weight:bold;margin-bottom:8px">${g_lang === 'en' ? '⚠️ Diagnostics Mode' : '⚠️ 異常診斷模式'}</div>
+ ${g_lang === 'en' ? 'This mode scans all player records in the database for missing or misconfigured Echoes.' : '此模式會掃描資料庫中所有的玩家紀錄，找出聲骸缺失或配置錯誤的項目。'}
  <br><br>
- <button class="db-btn-primary" style="width:100%" onclick="rank_calcData()">立即重新掃描</button>
+ <button class="db-btn-primary" style="width:100%" onclick="rank_calcData()">${g_lang === 'en' ? 'Rescan Now' : '立即重新掃描'}</button>
  </div>
  `;
             }
@@ -14845,7 +14845,7 @@
                         if (result) {
                             if (rank_viewMode !== 'fault') rank_list.push(result);
                         } else {
-                            rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: "計算邏輯發生未知錯誤" });
+                            rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: g_lang === 'en' ? 'Unknown calculation error' : '計算邏輯發生未知錯誤' });
                         }
                     } catch (e) {
                         rank_faults.push({ player: d.player, uid: d.uid, role: d.role, reason: `計算異常: ${e.message}` });
@@ -15206,7 +15206,7 @@
                         if (statSpans.length > 0) {
                             statsHtml = `<div style="font-size:0.75rem;line-height:1.6;color:#888;">${statSpans.join('<span style="color:#444;margin:0 6px">|</span>')}</div>`;
                         } else {
-                            statsHtml = '<div style="color:#555;font-size:0.75rem;">無有效數據</div>';
+                            statsHtml = `<div style="color:#555;font-size:0.75rem;">${g_lang === 'en' ? 'No valid data' : '無有效數據'}</div>`;
                         }
                     }
 
@@ -15221,7 +15221,7 @@
                             const iconUrl = (suit && (typeof ATTRIBUTES_PROFILE_PICTURE !== 'undefined') && ATTRIBUTES_PROFILE_PICTURE[suit]) ? ATTRIBUTES_PROFILE_PICTURE[suit] : '';
 
                             echoIconsHtml += `
-                                <div style="position:relative; width:28px; height:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center;" title="${suit || '未知套裝'} (Cost ${cost})">
+                                <div style="position:relative; width:28px; height:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center;" title="${suit || (g_lang === 'en' ? 'Unknown Set' : '未知套裝')} (Cost ${cost})">
                                     ${iconUrl ? `<img src="${iconUrl}" style="width:20px; height:20px; filter:drop-shadow(0 0 2px rgba(0,0,0,0.5));">` : `<span style="font-size:0.6rem;color:#444">${cost}</span>`}
                                     <span style="position:absolute; bottom:-3px; right:-3px; background:#000; color:#fff; font-size:0.6rem; padding:0 2px; border-radius:2px; border:1px solid #444; font-family:'JetBrains Mono';">${cost}</span>
                                 </div>`;
@@ -15236,7 +15236,7 @@
  <div style="font-weight:bold;color:#fff;font-size:1rem">${d.player}</div>
  <div style="font-size:0.75rem;color:#888;display:flex;flex-direction:column">
  <span>${d.uid}</span>
- <span style="color:var(--accent)">${d.role} • ${d.chain}鏈</span>
+ <span style="color:var(--accent)">${d.role} • ${d.chain}${g_lang === 'en' ? '-Seq' : '鏈'}</span>
  </div>
  </div>
  <div style="display:flex; gap:6px; padding:0 10px; align-items:center;">
@@ -15251,10 +15251,10 @@
  </div>
  <div style="min-width:80px;text-align:right;padding-right:10px">
  <div style="font-size:1.3rem;font-weight:bold;color:var(--accent);font-family:'JetBrains Mono'">${safeFixed(d.pct, 1)}%</div>
- <div style="font-size:0.7rem;color:#666;margin-top:2px">${safeFixed(d.max, 0)} 滿分</div>
+ <div style="font-size:0.7rem;color:#666;margin-top:2px">${g_lang === 'en' ? 'Max ' : ''}${safeFixed(d.max, 0)}${g_lang === 'en' ? '' : ' 滿分'}</div>
  </div>
  <div style="display:flex; align-items:center; padding-left:5px;">
- <button class="btn-compare-mini" onclick="event.stopPropagation(); setCompareFromRank(${i})" title="將此玩家加入對比">⚖️</button>
+ <button class="btn-compare-mini" onclick="event.stopPropagation(); setCompareFromRank(${i})" title="${g_lang === 'en' ? 'Add to Compare' : '將此玩家加入對比'}">⚖️</button>
  </div>
  </div>`;
                 });
@@ -15268,19 +15268,19 @@
                     faultHtml += `
  <div style="display:flex;justify-content:space-between;padding:12px 15px;background:rgba(255,107,107,0.05);border-bottom:1px solid #333;font-size:0.9rem">
  <div style="width:140px;color:#eee">${f.player}<br><span style="font-size:0.7rem;color:#666">${f.uid}</span></div>
- <div style="width:100px;color:var(--accent);display:flex;align-items:center">${f.role || '未知'}</div>
+ <div style="width:100px;color:var(--accent);display:flex;align-items:center">${f.role || (g_lang === 'en' ? 'Unknown' : '未知')}</div>
  <div style="flex:1;color:var(--error);padding-left:15px;display:flex;align-items:center">⚠️ ${f.reason}</div>
  </div>
  `;
                 });
 
                 if (faultHtml) {
-                    const titleStr = rank_viewMode === 'fault' ? "全域資料庫異常完整清單" : "當前資料異常診斷報告";
+                    const titleStr = rank_viewMode === 'fault' ? (g_lang === 'en' ? 'Full Database Anomaly Report' : '全域資料庫異常完整清單') : (g_lang === 'en' ? 'Current Data Anomaly Report' : '當前資料異常診斷報告');
                     html += `
  <div style="margin-top:${rank_viewMode === 'fault' ? '0' : '25px'};border:1px solid #444;border-radius:8px;overflow:hidden;background:#1a1a1f">
  <div style="background:#2a2a2f;padding:10px 15px;font-size:0.85rem;font-weight:bold;color:var(--error);display:flex;justify-content:space-between;align-items:center">
  <span>${titleStr} (${rank_faults.length})</span>
- <span style="font-size:0.75rem;color:#777;font-weight:normal">異常項目已自動從排行與圖表中剔除</span>
+ <span style="font-size:0.75rem;color:#777;font-weight:normal">${g_lang === 'en' ? 'Anomalous entries excluded from rankings & charts' : '異常項目已自動從排行與圖表中剔除'}</span>
  </div>
  <div style="max-height:${rank_viewMode === 'fault' ? 'none' : '300px'};overflow-y:auto">
  ${faultHtml}
@@ -15289,10 +15289,10 @@
  `;
                 }
             } else if (rank_viewMode === 'fault') {
-                html = '<div style="text-align:center;color:var(--ok);padding:50px;font-size:1.1rem">🎉 恭喜！資料庫完整掃描後未發現任何異常</div>';
+                html = `<div style="text-align:center;color:var(--ok);padding:50px;font-size:1.1rem">${g_lang === 'en' ? '🎉 All clear! No anomalies found in the full database scan.' : '🎉 恭喜！資料庫完整掃描後未發現任何異常'}</div>`;
             }
 
-            box.innerHTML = html || (rank_viewMode === 'fault' ? '' : '<div style="text-align:center;color:#666;margin-top:20px">無符合資料</div>');
+            box.innerHTML = html || (rank_viewMode === 'fault' ? '' : `<div style="text-align:center;color:#666;margin-top:20px">${g_lang === 'en' ? 'No matching data' : '無符合資料'}</div>`);
 
             // 顯示或隱藏快捷跳轉按鈕
             rank_updateJumpButtonVisibility();
