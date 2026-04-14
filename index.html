@@ -7205,7 +7205,7 @@
             <h1>GAME ZH</h1>
             <div id="stat-carousel" class="stat-carousel">
                 <div id="stat-track" class="stat-track">
-                    <div class="stat-slide" data-lang-zh="聲骸分析專家 - 正在載入統計資料..." data-lang-en="Echo Analyst - Loading statistics...">聲骸分析專家 - 正在載入統計資料...</div>
+                    <div class="stat-slide">聲骸分析專家 - 正在載入統計資料...</div>
                 </div>
             </div>
             <button class="btn-weights-mini" onclick="event.stopPropagation(); showWeightsModal()" data-lang-zh="加權值表" data-lang-en="Weights">加權值表</button>
@@ -7346,7 +7346,7 @@
                 <div class="db-card-title" data-lang-zh="📅 歷史里程碑" data-lang-en="📅 Milestones">📅 歷史里程碑</div>
                 <div id="db-milestones"
                     style="color:#ddd; font-size:0.9rem; max-height:200px; overflow-y:auto; line-height:1.8;">
-                    <span data-lang-zh="載入中..." data-lang-en="Loading...">載入中...</span>
+                    載入中...
                 </div>
             </div>
         </div>
@@ -7393,7 +7393,7 @@
                 <div style="display:flex; align-items:center; justify-content:center;">
                     <button class="btn-primary-action" onclick="swapComparison()"
                         style="width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; padding:0; background:#333; margin-top:40px; border: 1px solid #555;"
-                        title="Swap A/B">🔄</button>
+                        title="對換 A/B">🔄</button>
                 </div>
                 <div class="db-card">
                     <div class="db-card-title" data-lang-zh="🔍 選取紀錄 B (對比)" data-lang-en="🔍 Select Record B (Compare)">🔍 選取紀錄 B (對比)</div>
@@ -7420,14 +7420,14 @@
                     <div id="compare-diff-table">
                         <div style="color:#555;text-align:center;padding:60px;">
                             <span style="font-size:2rem;">⚖️</span><br>
-                            <span data-lang-zh="請選取上方兩筆數據進行對比分析" data-lang-en="Select two entries above to compare">請選取上方兩筆數據進行對比分析</span>
+                            請選取上方兩筆數據進行對比分析
                         </div>
                     </div>
                 </div>
 
                 <div id="compare-chart-side"
                     style="background:rgba(0,0,0,0.2); border-radius:8px; padding:15px; display:flex; flex-direction:column; min-height:400px; border: 1px solid #333;">
-                    <div style="color:#888; font-size:0.8rem; margin-bottom:10px; text-align:center;"><span data-lang-zh="核心屬性比較圖 (Radar)" data-lang-en="Core Stats Radar Chart">核心屬性比較圖 (Radar)</span>
+                    <div style="color:#888; font-size:0.8rem; margin-bottom:10px; text-align:center;">核心屬性比較圖 (Radar)
                     </div>
                     <div style="flex:1; position:relative;">
                         <canvas id="compare-radar-chart"></canvas>
@@ -7835,7 +7835,7 @@
                         </select>
                         <select id="imitate-build-select" onchange="imitate_changeBuild()"
                             style="width:100%; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem; display:none;">
-                            <option value="0" data-lang-zh=g_lang === 'en' ? 'General' : '通用' data-lang-en="General">通用</option>
+                            <option value="0" data-lang-zh="通用" data-lang-en="General">通用</option>
                         </select>
                     </div>
                 </div>
@@ -7853,7 +7853,7 @@
                     </div>
                     <div id="imitate-max-possible"
                         style="font-size:0.8rem; color:#666; text-align:center; margin-top:5px;">
-                        <span data-lang-zh="理論最高分：" data-lang-en="Theoretical Max: ">理論最高分：</span>--
+                        理論最高分：--
                     </div>
                 </div>
 
@@ -7861,14 +7861,14 @@
                     <div class="db-card-title" data-lang-zh="🔮 勝算機率推算" data-lang-en="🔮 Win Probability">🔮 勝算機率推算</div>
                     <div id="imitate-prob-area"
                         style="display:grid; grid-template-columns: 1fr; gap:8px; font-size:0.9rem; color:#ccc; margin-top:10px;">
-                        <div class="prob-row"><span data-lang-zh="暴擊出現率" data-lang-en="Crit Rate Appearance">暴擊出現率</span><span id="im-gl-bj" style="color:var(--ok);">0%</span></div>
-                        <div class="prob-row"><span data-lang-zh="暴傷出現率" data-lang-en="Crit DMG Appearance">暴傷出現率</span><span id="im-gl-bs" style="color:var(--ok);">0%</span></div>
-                        <div class="prob-row"><span data-lang-zh="大攻擊出現率" data-lang-en="ATK% Appearance">大攻擊出現率</span><span id="im-gl-gj" style="color:var(--ok);">0%</span></div>
+                        <div class="prob-row">暴擊出現率<span id="im-gl-bj" style="color:var(--ok);">0%</span></div>
+                        <div class="prob-row">暴傷出現率<span id="im-gl-bs" style="color:var(--ok);">0%</span></div>
+                        <div class="prob-row">大攻擊出現率<span id="im-gl-gj" style="color:var(--ok);">0%</span></div>
                         <div class="prob-row"
                             style="color:var(--accent); font-weight:bold; border-top:1px solid #333; padding-top:10px;">
-                            <span data-lang-zh="雙爆達成機率" data-lang-en="Double Crit Probability">雙爆達成機率</span><span id="im-gl-sb">0%</span>
+                            雙爆達成機率<span id="im-gl-sb">0%</span>
                         </div>
-                        <div class="prob-row" style="font-size:0.8rem; color:#666;"><span data-lang-zh="下個詞條為生存項" data-lang-en="Next sub-stat is survival">下個詞條為生存項</span><span id="im-gl-sf"
+                        <div class="prob-row" style="font-size:0.8rem; color:#666;">下個詞條為生存項<span id="im-gl-sf"
                                 style="color:#e06c75;">0%</span></div>
                     </div>
                 </div>
@@ -7886,7 +7886,7 @@
             <h3 style="color:var(--ok);margin-top:0;" data-lang-zh="💡 系統提示" data-lang-en="💡 System Notice">💡 系統提示</h3>
             <p id="msg-modal-text" style="color:#ddd;margin-bottom:20px;line-height:1.6;"></p>
             <button class="btn-confirm-yes" style="width:100%;"
-                onclick="document.getElementById('msg-modal').style.display='none'"><span data-lang-zh="確定" data-lang-en="OK">確定</span></button>
+                onclick="document.getElementById('msg-modal').style.display='none'">確定</button>
         </div>
     </div>
 
@@ -7898,7 +7898,7 @@
             <div style="display:flex;gap:10px;">
                 <button id="confirm-prompt-yes" class="btn-confirm-yes" style="flex:1;" data-lang-zh="執行" data-lang-en="Confirm">執行</button>
                 <button class="btn-confirm-no" style="flex:1;"
-                    onclick="document.getElementById('confirm-prompt-modal').style.display='none'"><span data-lang-zh="取消" data-lang-en="Cancel">取消</span></button>
+                    onclick="document.getElementById('confirm-prompt-modal').style.display='none'">取消</button>
             </div>
         </div>
     </div>
@@ -7908,7 +7908,7 @@
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 400px;">
             <h3 style="color:var(--accent);margin-top:0;" data-lang-zh="📊 評分機制優化 (補分)" data-lang-en="📊 Score Optimization (Buff)">📊 評分機制優化 (補分)</h3>
             <p style="color:#ddd;margin-bottom:15px;line-height:1.6;">
-                <span class="lang-zh-only">為了讓評分結果更具參考價值與鼓勵性，系統已自動套用平衡補分機制：</span><span class="lang-en-only">To make scores more meaningful and encouraging, a balance boost has been applied automatically:</span>
+                為了讓評分結果更具參考價值與鼓勵性，系統已自動套用平衡補分機制：
             </p>
             <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:8px;margin-bottom:15px;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
@@ -8428,7 +8428,7 @@
                             style="color:var(--accent)">選擇本地圖片</a></div>
                 </div>
             </div>
-            <div class="status-bar"><span id="status-text" data-lang-zh=g_lang === 'en' ? 'Ready' : '就緒' data-lang-en="Ready">就緒</span><span id="dim-text"></span></div>
+            <div class="status-bar"><span id="status-text" data-lang-zh="就緒" data-lang-en="Ready">就緒</span><span id="dim-text"></span></div>
             <div class="history-panel">
                 <div class="history-header">
                     <div style="display:flex;gap:10px;align-items:center">
@@ -8503,7 +8503,7 @@
                     <table id="result-table">
                         <tbody id="table-body">
                             <tr>
-                                <td colspan="6" style="text-align:center;color:#555;padding:50px;">${g_lang === 'en' ? 'Waiting for data...' : '等待資料載入...'}</td>
+                                <td colspan="6" style="text-align:center;color:#555;padding:50px;">等待資料載入...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -8548,7 +8548,7 @@
 
                 <div id="db-loader" class="db-loader">
                     <div style="color:var(--accent);font-size:1.5rem;font-weight:bold;">SYSTEM LOADING</div>
-                    <div id="db-loading-txt" style="color:#888;margin-top:10px;font-family:'JetBrains Mono'">${g_lang === 'en' ? 'Establishing data connection...' : '正在建立數據連線...'}
+                    <div id="db-loading-txt" style="color:#888;margin-top:10px;font-family:'JetBrains Mono'">正在建立數據連線...
                     </div>
                 </div>
 
@@ -9617,7 +9617,7 @@
     <div id="offline-edit-bar"
         style="display:none;position:fixed;bottom:0;left:0;width:100%;z-index:9999;background:linear-gradient(90deg,#2d4a2d,#1a3a1a);border-top:2px solid #4caf50;padding:6px 20px;text-align:center;font-size:0.82rem;color:#98c379;letter-spacing:1px;font-weight:bold;pointer-events:auto;backdrop-filter:blur(5px);box-shadow:0 -5px 20px rgba(0,0,0,0.5);">
         <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
-            <span id="offline-bar-text"><span data-lang-zh="🟢 離線編輯模式 | 內容已修改，關閉模式可還原" data-lang-en="🟢 Offline Edit Mode | Changes made, close to restore">🟢 離線編輯模式 | 內容已修改，關閉模式可還原</span></span>
+            <span id="offline-bar-text">🟢 離線編輯模式 | 內容已修改，關閉模式可還原</span>
             <span id="offline-sync-status"
                 style="background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.2);color:#cfd8dc;padding:2px 8px;border-radius:999px;font-size:0.72rem;">☁️ 離線同步：待命</span>
             <button onclick="quitOfflineAndReset()"
@@ -9631,7 +9631,7 @@
     <div id="debug-edit-bar"
         style="display:none;position:fixed;bottom:0;left:0;width:100%;z-index:9999;background:linear-gradient(90deg,#4a2d2d,#3a1a1a);border-top:2px solid #ff5555;padding:6px 20px;text-align:center;font-size:0.82rem;color:#ff98a4;letter-spacing:1px;font-weight:bold;pointer-events:auto;backdrop-filter:blur(5px);box-shadow:0 -5px 20px rgba(0,0,0,0.5);">
         <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
-            <span id="debug-bar-text"><span data-lang-zh="🐞 排錯模式 | 預覽修改內容中..." data-lang-en="🐞 Debug Mode | Previewing changes...">🐞 排錯模式 | 預覽修改內容中...</span></span>
+            <span id="debug-bar-text">🐞 排錯模式 | 預覽修改內容中...</span>
             <button onclick="toggleDebug()"
                 style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;transition:background 0.2s;"
                 onmouseover="this.style.background='rgba(255,255,255,0.25)'"
@@ -9692,7 +9692,7 @@
                 </div>
                 <div style="display:flex; align-items:center; gap:10px;">
                     <button onclick="generateGraduationImage()" class="quick-btn"
-                        style="padding:4px 12px; font-size:0.75rem;">${g_lang === 'en' ? '📷 Generate Image' : '📷 生成圖片'}</button>
+                        style="padding:4px 12px; font-size:0.75rem;">📷 生成圖片</button>
                     <button onclick="document.getElementById('cross-role-modal').style.display='none'"
                         style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>
                 </div>
@@ -9901,7 +9901,7 @@
         let g_tesseractWorker = null;
         async function getTesseractWorker() {
             if (g_tesseractWorker) return g_tesseractWorker;
-            statusText.innerText = g_lang === 'en' ? 'Initializing OCR engine (first time)...' : '正在初始化 OCR 引擎 (首次)...';
+            statusText.innerText = "正在初始化 OCR 引擎 (首次)...";
             g_tesseractWorker = await Tesseract.createWorker('chi_tra');
             return g_tesseractWorker;
         }
@@ -10015,7 +10015,7 @@
             ];
             for (let p of ps) {
                 try {
-                    if (typeof statusText !== 'undefined') statusText.innerText = g_lang === 'en' ? `Downloading image (${p.name})...` : `下載圖片中 (${p.name})...`;
+                    if (typeof statusText !== 'undefined') statusText.innerText = `下載圖片中 (${p.name})...`;
                     const res = await new Promise((resolve, reject) => {
                         const img = new Image();
                         const timeout = setTimeout(() => {
@@ -10265,7 +10265,7 @@
 
         async function buildTemplates() {
             if (Object.keys(g_suitTemplates).length > 0) return;
-            statusText.innerText = g_lang === 'en' ? 'Downloading icon templates...' : '下載並處理套裝圖示範本...';
+            statusText.innerText = '下載並處理套裝圖示範本...';
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = 50;
             tempCanvas.height = 50;
@@ -10337,12 +10337,12 @@
                 // Logic prioritizes empty input after login
                 if (v === "") {
                     if (g_currentUserUid) {
-                        btn.innerText = g_lang === 'en' ? 'Features' : '功能列表';
+                        btn.innerText = "功能列表";
                         btn.classList.add('metallic-btn');
                         btn.setAttribute('data-text', "功能列表");
                         btn.disabled = false;
                     } else {
-                        btn.innerText = g_lang === 'en' ? 'Add Role Offline' : '離線新增角色';
+                        btn.innerText = "離線新增角色";
                         btn.disabled = false;
                     }
                     return;
@@ -10350,14 +10350,14 @@
 
                 if (/^\d{9}$/.test(v)) {
                     // Valid UID
-                    btn.innerText = g_lang === 'en' ? 'Switch UID' : '切換 UID';
+                    btn.innerText = "切換 UID";
                     btn.style.background = "#2196f3";
                     btn.style.color = "#fff";
                     btn.style.borderColor = "#2196f3";
                     btn.disabled = false;
                 } else if (/^https?:\/\//.test(v)) {
                     // URL input (Simple check, assumes valid if mostly looks like URL)
-                    btn.innerText = g_lang === 'en' ? 'Start Analysis' : '開始分析';
+                    btn.innerText = "開始分析";
                     btn.disabled = false;
                     // Auto-start if URL matches allowed domain
                     if (v.startsWith(ALLOWED_DOMAIN)) {
@@ -10366,21 +10366,21 @@
                 } else if (/^happy$/i.test(v)) {
                     // Hidden redemption code via main input
                     if (!g_currentUserUid || g_currentUserUid.length !== 9) {
-                        showMsg(g_lang === 'en' ? 'Please log in with UID to redeem points.' : '請先登入 UID 才可以兌換積分');
+                        showMsg('請先登入 UID 才可以兌換積分');
                         return;
                     }
 
                     const codeKey = 'HAPPY';
                     if (!isHappyCodeActive()) {
-                        btn.innerText = g_lang === 'en' ? 'Event Ended' : '活動已結束';
+                        btn.innerText = "活動已結束";
                         btn.classList.add('invalid');
-                        showMsg(g_lang === 'en' ? 'This code expired on 4/5.' : '此序號已於 4/5 到期');
+                        showMsg('此序號已於 4/5 到期');
                         return;
                     }
                     if (g_usedCodes.has(codeKey)) {
-                        btn.innerText = g_lang === 'en' ? 'Already Redeemed' : '已兌換過';
+                        btn.innerText = "已兌換過";
                         btn.classList.add('invalid');
-                        showMsg(g_lang === 'en' ? 'You have already redeemed this code.' : '您已經兌換過此序號囉！');
+                        showMsg('您已經兌換過此序號囉！');
                     } else {
                         g_usedCodes.add(codeKey);
                         g_sessionPoints += 88;
@@ -10398,9 +10398,9 @@
                     btn.disabled = false; // Allow click to show help
                     btn.classList.add('invalid');
                     if (/^\d+$/.test(v)) {
-                        btn.innerText = g_lang === 'en' ? 'UID must be 9 digits' : 'UID格式錯誤 (需9碼)';
+                        btn.innerText = "UID格式錯誤 (需9碼)";
                     } else {
-                        btn.innerText = g_lang === 'en' ? 'Invalid format' : '格式不符合要求';
+                        btn.innerText = "格式不符合要求";
                     }
                 }
             });
@@ -10469,7 +10469,7 @@
                 return true;
             } catch (e) {
                 console.error(e);
-                showMsg(g_lang === 'en' ? 'System data load failed. Check network or reload.' : '系統數據載入失敗，請檢查網路或重整頁面。');
+                showMsg("系統數據載入失敗，請檢查網路或重整頁面。");
                 inlineLoader.classList.remove('active');
                 inputGroup.style.display = 'flex';
                 return false;
@@ -10515,7 +10515,7 @@
         function setupPWA() { const icon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iYmFja2dyb3VuZDojMWUxZTI0Ij48cGF0aCBkPSJNMjU2IDMyYy04LjggMC0xNiA3LjItMTYgMTZ2NDE2YzAgOC44IDcuMiAxNiAxNiAxNnMxNi03LjIgMTYtMTZWNDhjMC04LjgtNy4yLTE2LTE2LTE2em0wIDExMmMtOC44IDAtMTYgNy4yLTE2IDE2djE5MmMwIDguOCA3LjIgMTYgMTYgMTZzMTYtNy4yIDE2LTE2VjE2MGMwLTguOC03LjItMTYtMTYtMTZ6IiBmaWxsPSIjZTVjMDdiIi8+PC9zdmc+"; const manifest = { name: "鳴潮分析儀", short_name: "聲骸分析", start_url: ".", display: "standalone", background_color: "#121214", theme_color: "#1e1e24", icons: [{ src: icon, sizes: "512x512", type: "image/svg+xml" }] }; const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' }); document.getElementById('manifest-link').href = URL.createObjectURL(blob); window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); g_installPrompt = e; document.getElementById('pwa-ios-guide').style.display = 'none'; document.getElementById('btn-pwa-install').style.display = 'block' }) }
         async function triggerInstall() { if (g_installPrompt) { g_installPrompt.prompt(); const { outcome } = await g_installPrompt.userChoice; if (outcome === 'accepted') g_installPrompt = null } }
         function saveConfig() { const url = document.getElementById('gas-url-input').value.trim(); if (url) { localStorage.setItem('ww_gas_url', url); document.getElementById('config-modal').style.display = 'none'; document.getElementById('startup-modal').style.display = 'flex'; g_weightsPromise = loadWeightsBackground(url) } }
-        function validateUid() { const val = loginInput.value.trim(); if (val.length === 0) { loginBtn.disabled = false; loginBtn.innerText = g_lang === 'en' ? 'Skip History - Continue' : '不載入歷史資料 - 繼續使用'; loginBtn.classList.remove('active-green') } else if (val.length < 9) { loginBtn.disabled = true; loginBtn.innerText = g_lang === 'en' ? 'UID must be 9 digits' : 'UID 需為 9 碼'; loginBtn.classList.remove('active-green') } else { loginBtn.disabled = false; loginBtn.innerText = g_lang === 'en' ? 'Login & Load History' : '登入並載入歷史'; loginBtn.classList.add('active-green') } }
+        function validateUid() { const val = loginInput.value.trim(); if (val.length === 0) { loginBtn.disabled = false; loginBtn.innerText = "不載入歷史資料 - 繼續使用"; loginBtn.classList.remove('active-green') } else if (val.length < 9) { loginBtn.disabled = true; loginBtn.innerText = "UID 需為 9 碼"; loginBtn.classList.remove('active-green') } else { loginBtn.disabled = false; loginBtn.innerText = "登入並載入歷史"; loginBtn.classList.add('active-green') } }
         function handleLogin() {
             if (document.getElementById('startup-modal').style.display === 'none') return;
             if (loginBtn.disabled) return;
@@ -10543,7 +10543,7 @@
                 updateEditModeButtonVisibility();
                 syncMobileResultToolbar();
             }
-            if (statusText) statusText.innerText = g_lang === 'en' ? `⚠️ Offline mode auto-closed (${reasonText})` : `⚠️ 系統已自動關閉離線模式（${reasonText}）`;
+            if (statusText) statusText.innerText = `⚠️ 系統已自動關閉離線模式（${reasonText}）`;
         }
         function startOfflineRoleFlow() {
             ensureAnalysisPanelVisible();
@@ -10556,7 +10556,7 @@
                 toggleOfflineEdit();
             }
             openRolePickerForCustomRole();
-            statusText.innerText = g_lang === 'en' ? 'Add a role first to start offline editing' : '請先新增角色以開始離線編輯';
+            statusText.innerText = '請先新增角色以開始離線編輯';
         }
         async function handleProfileSwitch(uid, options = {}) {
             const nextUid = (uid || '').trim();
@@ -10582,8 +10582,8 @@
             urlInput.dispatchEvent(new Event('input'));
 
             if (nextUid.length === 9) {
-                statusText.innerText = g_lang === 'en' ? `Loading data for UID: ${nextUid}...` : `正在載入 UID: ${nextUid} 的資料...`;
-                historyListEl.innerHTML = g_lang === 'en' ? '<div style="padding:20px;text-align:center;color:#aaa">☁️ Syncing cloud data...</div>' : '<div style="padding:20px;text-align:center;color:#aaa">☁️ 正在同步雲端資料...</div>';
+                statusText.innerText = `正在載入 UID: ${nextUid} 的資料...`;
+                historyListEl.innerHTML = '<div style="padding:20px;text-align:center;color:#aaa">☁️ 正在同步雲端資料...</div>';
 
                 await fetchCloudHistory(nextUid, 'latest');
                 await pullOfflineEntriesByUid(nextUid, { skipRender: true });
@@ -10594,7 +10594,7 @@
                     btnLoadAll.disabled = false;
                     btnLoadAll.innerText = '⬇️';
                 }
-                statusText.innerText = g_lang === 'en' ? 'Data loaded' : '資料載入完成';
+                statusText.innerText = "資料載入完成";
 
                 // 自動載入最新的一筆紀錄
                 if (!skipAutoLoad) {
@@ -10651,7 +10651,7 @@
                     processWeightsData(json);
                     renderWeightsTable();
                     g_weightsLoaded = true;
-                    weightStatus.innerText = g_lang === 'en' ? 'System data ready' : '系統資料已就緒';
+                    weightStatus.innerText = "系統資料已就緒";
                     weightStatus.style.color = "var(--ok)";
                     initRoleGrid();
                 } else {
@@ -10659,13 +10659,13 @@
                 }
             } catch (e) {
                 console.error(e);
-                weightStatus.innerText = g_lang === 'en' ? 'Data load failed' : '資料載入失敗';
+                weightStatus.innerText = "資料載入失敗";
                 weightStatus.style.color = "var(--error)";
                 throw e; // Propagate for ensureWeightsLoaded
             }
         }
         function processWeightsData(json) { g_weightNames = []; g_currentWeights = {}; const headers = json.headers; json.data.forEach(row => { let charName = row[1]; if (charName && charName !== '(N/A)') { if (!g_weightNames.includes(charName)) g_weightNames.push(charName); if (!g_currentWeights[charName]) g_currentWeights[charName] = []; let charWeights = {}; headers.forEach((h, idx) => { let mappedKey = WEIGHT_KEYS_MAPPING[h]; if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0 } }); let colA = row[0] ? String(row[0]).trim() : "通用"; let match = colA.match(/\d/); let req = match ? parseInt(match[0]) : 0; g_currentWeights[charName].push({ name: colA, minChain: req, weights: charWeights, desc: row[row.length - 1] }) } }) }
-        function toggleWeightMode() { g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? g_lang === 'en' ? 'Display: Max Score (weight×max)' : '顯示模式: 最大分 (權重x最大值)' : g_lang === 'en' ? 'Display: Weights' : '顯示模式: 權重'; renderWeightsTable() }
+        function toggleWeightMode() { g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? "顯示模式: 最大分 (權重x最大值)" : "顯示模式: 權重"; renderWeightsTable() }
         function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => html += `<th>${h}</th>`); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; document.getElementById('weights-body').innerHTML = html }
         function initRoleGrid() { filterRoleGrid("") }
         function getRoleAvatarUrl(name) {
@@ -10700,14 +10700,14 @@
             });
 
             if (!roleGrid.children.length) {
-                roleGrid.innerHTML = g_lang === 'en' ? '<div style="grid-column:1/-1;padding:12px;text-align:center;color:#888;">No matching role found</div>' : '<div style="grid-column:1/-1;padding:12px;text-align:center;color:#888;">找不到符合角色</div>';
+                roleGrid.innerHTML = '<div style="grid-column:1/-1;padding:12px;text-align:center;color:#888;">找不到符合角色</div>';
             }
         }
-        function showRefreshModal() { if (!g_currentUserUid || g_currentUserUid.length !== 9) { showMsg(g_lang === 'en' ? 'Not logged in. Cannot refresh cloud list.' : '未登入 UID，無法刷新雲端列表。'); return } document.getElementById('refresh-modal').style.display = 'flex' }
+        function showRefreshModal() { if (!g_currentUserUid || g_currentUserUid.length !== 9) { showMsg("未登入 UID，無法刷新雲端列表。"); return } document.getElementById('refresh-modal').style.display = 'flex' }
         function closeRefreshModal() { document.getElementById('refresh-modal').style.display = 'none' }
         function showUidWarningModal() { document.getElementById('uid-warning-modal').style.display = 'flex' }
         function closeUidWarningModal() { document.getElementById('uid-warning-modal').style.display = 'none' }
-        function confirmRefresh() { closeRefreshModal(); const now = Date.now(); if (now - g_lastRefreshTime < 30000) { showMsg(g_lang === 'en' ? 'Please wait 30 seconds before refreshing again.' : '請勿頻繁刷新，冷卻時間 30 秒。'); return } g_lastRefreshTime = now; g_echoesData = []; g_globalData = {}; g_chains = []; g_currentEntryId = null; imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#555;padding:50px;">${g_lang === 'en' ? 'Re-downloading data...' : '正在重新下載資料...'}</td></tr>`; statusText.innerText = g_lang === 'en' ? 'Refreshing...' : '重新整理中...'; fetchCloudHistory(g_currentUserUid, 'latest') }
+        function confirmRefresh() { closeRefreshModal(); const now = Date.now(); if (now - g_lastRefreshTime < 30000) { showMsg("請勿頻繁刷新，冷卻時間 30 秒。"); return } g_lastRefreshTime = now; g_echoesData = []; g_globalData = {}; g_chains = []; g_currentEntryId = null; imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#555;padding:50px;">正在重新下載資料...</td></tr>`; statusText.innerText = "重新整理中..."; fetchCloudHistory(g_currentUserUid, 'latest') }
         function loadAllHistory() { if (!g_currentUserUid || g_currentUserUid.length !== 9) return; btnLoadAll.disabled = true; btnLoadAll.innerText = '...'; fetchCloudHistory(g_currentUserUid, 'all') }
         async function fetchCloudHistory(uid, mode) {
             const CACHE_TTL = 300000; // 5分鐘快取
@@ -10716,12 +10716,12 @@
 
             if (mode === 'latest' && lastFetch && (Date.now() - parseInt(lastFetch) < CACHE_TTL)) {
                 console.log("Using cached history for UID:", uid);
-                statusText.innerText = g_lang === 'en' ? 'Loaded history from cache' : '從快取載入歷史紀錄';
+                statusText.innerText = "從快取載入歷史紀錄";
                 renderHistoryList();
                 return;
             }
 
-            historyListEl.innerHTML = g_lang === 'en' ? '<div style="padding:10px;text-align:center;color:#888;">Loading history from cloud...</div>' : '<div style="padding:10px;text-align:center;color:#888;">正在從雲端載入歷史紀錄...</div>';
+            historyListEl.innerHTML = '<div style="padding:10px;text-align:center;color:#888;">正在從雲端載入歷史紀錄...</div>';
             const url = getMainApiUrl();
             try {
                 const res = await fetch(`${url}?action=getHistory&uid=${uid}&mode=${mode}`);
@@ -10729,22 +10729,7 @@
                 if (json.result === 'success') {
                     if (!json.data || json.data.length === 0) {
                         // 雲端查無資料 — 提示用戶上傳
-                        historyListEl.innerHTML = g_lang === 'en' ? `
- <div style="padding:30px 20px;text-align:center;color:#aaa;">
- <div style="font-size:2.5rem;margin-bottom:12px;">📭</div>
- <div style="font-size:1rem;color:#fff;font-weight:bold;margin-bottom:8px;">No cloud analysis records for this UID</div>
- <div style="font-size:0.85rem;color:#888;line-height:1.6;margin-bottom:16px;">
- Upload an Echo screenshot via the Discord bot first,<br>then your history will appear here.
- </div>
- <div style="background:rgba(229,192,123,0.08);border:1px solid rgba(229,192,123,0.2);border-radius:8px;padding:12px;text-align:left;font-size:0.82rem;color:#ccc;line-height:1.7;">
- <div style="color:var(--accent);font-weight:bold;margin-bottom:6px;"> How to get your image URL</div>
- <div>1️⃣ Join the <a href="https://discord.gg/gamezh" target="_blank" style="color:var(--accent);text-decoration:underline;">Discord</a> server and find the bot channel</div>
- <div>2️⃣ Use the <span style="background:#333;padding:2px 4px;border-radius:3px;color:var(--accent)">/language</span> command to set language</div>
- <div>3️⃣ Use the <span style="background:#333;padding:2px 4px;border-radius:3px;color:var(--accent)">/bind</span> command to bind your 9-digit UID</div>
- <div>4️⃣ Use the <span style="background:#333;padding:2px 4px;border-radius:3px;color:var(--accent)">/generate</span> command to produce the Echo image</div>
- <div>5️⃣ Right-click the image and choose "<span style="color:var(--accent);font-weight:bold;">Copy Link</span>" then paste it into this tool</div>
- </div>
- </div>` : `
+                        historyListEl.innerHTML = `
  <div style="padding:30px 20px;text-align:center;color:#aaa;">
  <div style="font-size:2.5rem;margin-bottom:12px;">📭</div>
  <div style="font-size:1rem;color:#fff;font-weight:bold;margin-bottom:8px;">此 UID 尚無雲端分析紀錄</div>
@@ -10761,7 +10746,7 @@
  <div>5️⃣ 右鍵圖片選擇「<span style="color:var(--accent);font-weight:bold;">複製連結</span>」(Copy Link) 並貼入本工具</div>
  </div>
  </div>`;
-                        statusText.innerText = g_lang === 'en' ? 'No cloud data for this UID' : '此 UID 尚無雲端資料';
+                        statusText.innerText = "此 UID 尚無雲端資料";
                         if (btnLoadAll) btnLoadAll.style.display = 'none';
                         return;
                     }
@@ -10791,11 +10776,11 @@
                     localStorage.setItem(`ww_history_ts_${uid}`, Date.now().toString());
                     renderHistoryList();
                     if (mode === 'all') { btnLoadAll.style.display = 'none' }
-                    statusText.innerText = g_lang === 'en' ? 'History sync complete' : '歷史紀錄同步完成'
+                    statusText.innerText = "歷史紀錄同步完成"
                 } else { throw new Error('API Error') }
             } catch (e) {
-                historyListEl.innerHTML = g_lang === 'en' ? `<div style="padding:10px;text-align:center;color:var(--error);">Load failed: ${e.message}</div>` : `<div style="padding:10px;text-align:center;color:var(--error);">載入失敗: ${e.message}</div>`;
-                statusText.innerText = g_lang === 'en' ? 'Sync failed' : '同步失敗'; btnLoadAll.disabled = false; btnLoadAll.innerText = '⬇️'
+                historyListEl.innerHTML = `<div style="padding:10px;text-align:center;color:var(--error);">載入失敗: ${e.message}</div>`;
+                statusText.innerText = "同步失敗"; btnLoadAll.disabled = false; btnLoadAll.innerText = '⬇️'
             }
         }
         function parseCloudSubs(str) { if (!str || typeof str !== 'string') return []; try { return str.split(',').map(s => { let match = s.match(/(.*?)([\d\.\%\+]+)$/); if (match) return { name: match[1], val: match[2], valid: true }; return { name: s, val: "?", valid: false } }) } catch (e) { console.warn('parseCloudSubs 異常:', e); return [] } }
@@ -11008,7 +10993,7 @@
                 if (!g_offlineApiWarned) {
                     g_offlineApiWarned = true;
                     console.warn('離線 API URL 格式無效，請填寫可連線 URL，目前為:', apiUrl);
-                    statusText.innerText = g_lang === 'en' ? 'Offline API URL invalid, saved locally only' : '離線 API URL 無效，僅本地保存';
+                    statusText.innerText = '離線 API URL 無效，僅本地保存';
                 }
                 if (track) setOfflineSyncState('error', `${action} 失敗(URL 無效)`, { fail: true });
                 return null;
@@ -11016,7 +11001,7 @@
             if (apiUrl.includes('/library/') && !g_offlineApiWarned) {
                 g_offlineApiWarned = true;
                 console.warn('目前使用的是 GAS Library URL，建議改用 Web App /exec URL 以供 fetch 呼叫。');
-                statusText.innerText = g_lang === 'en' ? 'Tip: Offline API recommends using GAS Web App /exec URL' : '提示：離線 API 建議使用 GAS Web App /exec URL';
+                statusText.innerText = '提示：離線 API 建議使用 GAS Web App /exec URL';
             }
             if (track) setOfflineSyncState('syncing', `${action} 同步中`);
 
@@ -11324,7 +11309,7 @@
                 html += `<label style="display:flex;align-items:center;gap:4px;color:#ccc;cursor:pointer;"><input type="checkbox" ${chains[i] ? 'checked' : ''} onchange="updateChainByIndex(${i}, this.checked)">C${i + 1}</label>`;
             }
             html += `</div></td></tr>`;
-            html += `<tr class="custom-header-row"><td style="padding:10px;">欄位</td>${echoes.map((_, idx) => `<td style="padding:10px;">聲骸 ${idx + 1} <button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="${g_lang === 'en' ? 'Click to switch compare target' : '點擊切換比對目標'}" aria-label="${g_lang === 'en' ? 'Single Echo Compare' : '單一聲骸比對'}" style="margin-left:6px;">⇄</button></td>`).join('')}</tr>`;
+            html += `<tr class="custom-header-row"><td style="padding:10px;">欄位</td>${echoes.map((_, idx) => `<td style="padding:10px;">聲骸 ${idx + 1} <button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對" style="margin-left:6px;">⇄</button></td>`).join('')}</tr>`;
             html += `<tr><td style="padding:8px;">Cost</td>${echoes.map((e, i) => `<td style="padding:8px;"><input style="${inputStyle}" value="${escapeHtml(e.cost || '')}" onchange="updateEchoField(${i}, 'cost', this.value)"></td>`).join('')}</tr>`;
             html += `<tr><td style="padding:8px;">主詞條名稱</td>${echoes.map((e, i) => `<td style="padding:8px;"><input style="${inputStyle}" value="${escapeHtml(e.main1 || '')}" onchange="updateEchoField(${i}, 'main1', this.value)"></td>`).join('')}</tr>`;
             html += `<tr><td style="padding:8px;">主詞條數值</td>${echoes.map((e, i) => `<td style="padding:8px;"><input style="${inputStyle}" value="${escapeHtml(e.main2 || '')}" onchange="updateEchoField(${i}, 'main2', this.value)"></td>`).join('')}</tr>`;
@@ -11487,19 +11472,19 @@
             const searchInput = document.getElementById('role-search');
 
             if (mode === 'custom') {
-                if (titleEl) titleEl.innerText = g_lang === 'en' ? '🆕 Add Custom Role' : '🆕 新增自訂角色';
-                if (subtitleEl) subtitleEl.innerText = g_lang === 'en' ? 'Select a role (with avatar) to create a local draft.' : '請選擇角色（含頭像）建立本地自訂草稿。';
+                if (titleEl) titleEl.innerText = '🆕 新增自訂角色';
+                if (subtitleEl) subtitleEl.innerText = '請選擇角色（含頭像）建立本地自訂草稿。';
                 if (closeBtn) closeBtn.style.display = 'block';
                 if (previewPane) previewPane.style.display = 'none';
                 ocrResultText.innerText = '';
                 roleCanvas.width = 0;
                 roleCanvas.height = 0;
             } else {
-                if (titleEl) titleEl.innerText = g_lang === 'en' ? '⚠️ Role Name Correction' : '⚠️ 角色名稱修正';
-                if (subtitleEl) subtitleEl.innerText = g_lang === 'en' ? 'Recognition result not in system list. Please select manually.' : '辨識結果不在系統名單內，請手動選擇以繼續。';
+                if (titleEl) titleEl.innerText = '⚠️ 角色名稱修正';
+                if (subtitleEl) subtitleEl.innerText = '辨識結果不在系統名單內，請手動選擇以繼續。';
                 if (closeBtn) closeBtn.style.display = 'none';
                 if (previewPane) previewPane.style.display = 'flex';
-                ocrResultText.innerText = rawName || (g_lang === 'en' ? '(Unrecognized)' : '(無法辨識)');
+                ocrResultText.innerText = rawName || '(無法辨識)';
                 if (g_globalData.role_rect && g_sourceImage) {
                     const [x, y, w, h] = g_globalData.role_rect.split(',').map(Number);
                     roleCanvas.width = w;
@@ -11527,7 +11512,7 @@
 
         function createCustomRoleEntry(roleName) {
             if (!g_offlineEditMode) {
-                showMsg(g_lang === 'en' ? 'Please enable offline edit mode first.' : '請先開啟離線編輯模式');
+                showMsg('請先開啟離線編輯模式');
                 return;
             }
             const history = JSON.parse(localStorage.getItem('ww_history') || '[]');
@@ -11568,13 +11553,13 @@
             syncOfflineEntry(newEntry, 'create');
 
             if (isMobileLayout()) setMobileNavSection('results');
-            statusText.innerText = g_lang === 'en' ? `Custom role created: ${roleName} (local draft)` : `已建立自訂角色：${roleName}（本地草稿）`;
-            showMsg(g_lang === 'en' ? 'Custom role added. Edit mode activated.' : '已新增自訂角色並進入修改模式');
+            statusText.innerText = `已建立自訂角色：${roleName}（本地草稿）`;
+            showMsg('已新增自訂角色並進入修改模式');
         }
 
         function openRolePickerForCustomRole() {
             if (!g_offlineEditMode) {
-                showMsg(g_lang === 'en' ? 'Enable offline edit mode before adding a custom role.' : '請先開啟離線編輯模式，再新增自訂角色');
+                showMsg('請先開啟離線編輯模式，再新增自訂角色');
                 return;
             }
             g_rolePickerMode = 'custom';
@@ -11673,7 +11658,7 @@
 
                 for (let i = 0; i < input.files.length; i++) {
                     const file = input.files[i];
-                    statusText.innerText = g_lang === 'en' ? `Reading batch file (${i + 1}/${input.files.length})...` : `正在讀取批次檔案 (${i + 1}/${input.files.length})...`;
+                    statusText.innerText = `正在讀取批次檔案 (${i + 1}/${input.files.length})...`;
                     imgEl.classList.remove('visible');
                     imgEl.style.display = '';
                     imgPlaceholder.style.display = 'flex';
@@ -11704,15 +11689,15 @@
                         reader.readAsDataURL(file);
                     });
                 }
-                statusText.innerText = g_lang === 'en' ? 'Batch processing complete' : '批次處理完成';
+                statusText.innerText = "批次處理完成";
             }
         }
         async function processImage(img) {
             window._notified119ThisRun = false;
             const worker = await getTesseractWorker(); const scale = img.width / 1920;
             await buildTemplates();
-            statusText.innerText = g_lang === 'en' ? 'Analyzing base data...' : '分析基本資料...'; g_globalData = { _ocrRaw: {}, _ocrClean: {} }; for (let item of COORDS.global) { let c; if (item.id === 'role' || item.id === 'weapon' || item.id === 'player') { c = cropAndScale(img, item.x * scale, item.y * scale, item.w * scale, item.h * scale) } else { c = crop(img, item.x * scale, item.y * scale, item.w * scale, item.h * scale) } const opts = item.numeric ? { tessedit_char_whitelist: '0123456789' } : {}; const { data } = await worker.recognize(c, opts); const rawText = (data && data.text) ? data.text : ''; let txt = cleanText(rawText); if (item.textOnly) txt = txt.replace(/[0-9\+\-\%\.\/]/g, ''); g_globalData._ocrRaw[item.id] = rawText; g_globalData._ocrClean[item.id] = txt; g_globalData[item.id] = txt; g_globalData[item.id + '_rect'] = `${item.x * scale},${item.y * scale},${item.w * scale},${item.h * scale}` } if (g_globalData.role) { g_globalData._ocrBeforeRoleFix = g_globalData._ocrClean.role || g_globalData.role; g_globalData.role = fixRoleName(g_globalData.role); g_globalData._ocrAfterRoleFix = g_globalData.role; } g_chains = COORDS.chains.map(c => { return isChainActive(crop(img, c.x * scale, c.y * scale, c.w * scale, c.h * scale)) }); g_echoesData = []; let isDeepScanAllowed = false; if (g_globalData.uid && g_globalData.uid.length === 9) { isDeepScanAllowed = true } for (let i = 0; i < 5; i++) {
-                statusText.innerText = g_lang === 'en' ? `Analyzing echo ${i + 1}/5...` : `分析聲骸 ${i + 1}/5 ...`; const def = COORDS.echoes[i]; const echoData = { cost: '', main1: '', main2: '', subs: [], rawMain1: '', rawMain2: '', rawSubs: '', note: '', rects: {} };
+            statusText.innerText = "分析基本資料..."; g_globalData = { _ocrRaw: {}, _ocrClean: {} }; for (let item of COORDS.global) { let c; if (item.id === 'role' || item.id === 'weapon' || item.id === 'player') { c = cropAndScale(img, item.x * scale, item.y * scale, item.w * scale, item.h * scale) } else { c = crop(img, item.x * scale, item.y * scale, item.w * scale, item.h * scale) } const opts = item.numeric ? { tessedit_char_whitelist: '0123456789' } : {}; const { data } = await worker.recognize(c, opts); const rawText = (data && data.text) ? data.text : ''; let txt = cleanText(rawText); if (item.textOnly) txt = txt.replace(/[0-9\+\-\%\.\/]/g, ''); g_globalData._ocrRaw[item.id] = rawText; g_globalData._ocrClean[item.id] = txt; g_globalData[item.id] = txt; g_globalData[item.id + '_rect'] = `${item.x * scale},${item.y * scale},${item.w * scale},${item.h * scale}` } if (g_globalData.role) { g_globalData._ocrBeforeRoleFix = g_globalData._ocrClean.role || g_globalData.role; g_globalData.role = fixRoleName(g_globalData.role); g_globalData._ocrAfterRoleFix = g_globalData.role; } g_chains = COORDS.chains.map(c => { return isChainActive(crop(img, c.x * scale, c.y * scale, c.w * scale, c.h * scale)) }); g_echoesData = []; let isDeepScanAllowed = false; if (g_globalData.uid && g_globalData.uid.length === 9) { isDeepScanAllowed = true } for (let i = 0; i < 5; i++) {
+                statusText.innerText = `分析聲骸 ${i + 1}/5 ...`; const def = COORDS.echoes[i]; const echoData = { cost: '', main1: '', main2: '', subs: [], rawMain1: '', rawMain2: '', rawSubs: '', note: '', rects: {} };
 
                 // Suit Recognition
                 const suitRect = SUIT_COORDS[i];
@@ -11735,11 +11720,11 @@
 
                     if (suitName) { echoData.cost = echoData.cost + "-" + suitName; }
 
-                    echoData.main2 = tempMain2.replace(/[^\u4e00-\u9fa5\d\.\%\+\s]/g, '').trim(); const cM1 = cropAndScale(img, def.main1.x * scale, def.main1.y * scale, def.main1.w * scale, def.main1.h * scale); const rM1 = await worker.recognize(cM1, { tessedit_pageseg_mode: '7' }); echoData.rawMain1 = rM1.data.text; echoData.main1 = fixMainStatName(cleanText(rM1.data.text)); const cSub = crop(img, def.sub.x * scale, def.sub.y * scale, def.sub.w * scale, def.sub.h * scale); let rSub = await worker.recognize(cSub, { tessedit_pageseg_mode: '6' }); let parsedSubs = parseSubStats(rSub.data.text); echoData.rawSubs = rSub.data.text; const hasError = parsedSubs.some(s => !s.valid); if ((hasError || parsedSubs.length < 5) && isDeepScanAllowed) { statusText.innerText = g_lang === 'en' ? `Analyzing echo ${i + 1}/5 (deep scan)...` : `分析聲骸 ${i + 1}/5 (深度模式)...`; const deepResults = await deepAnalyzeSubs(worker, cSub); if (validCount(deepResults) > validCount(parsedSubs)) { parsedSubs = deepResults; echoData.rawSubs += `\n[Deep Scan Applied]` } } if ((parsedSubs.length < 3) && !isDeepScanAllowed) { const cSubBin = preprocessImage(cSub); const rSub2 = await worker.recognize(cSubBin, { tessedit_pageseg_mode: '6' }); const parsedSubs2 = parseSubStats(rSub2.data.text); if (validCount(parsedSubs2) > validCount(parsedSubs)) { parsedSubs = parsedSubs2; echoData.rawSubs += `\n--- RETRY 1 (BIN) ---\n${rSub2.data.text}` } } echoData.subs = parsedSubs
+                    echoData.main2 = tempMain2.replace(/[^\u4e00-\u9fa5\d\.\%\+\s]/g, '').trim(); const cM1 = cropAndScale(img, def.main1.x * scale, def.main1.y * scale, def.main1.w * scale, def.main1.h * scale); const rM1 = await worker.recognize(cM1, { tessedit_pageseg_mode: '7' }); echoData.rawMain1 = rM1.data.text; echoData.main1 = fixMainStatName(cleanText(rM1.data.text)); const cSub = crop(img, def.sub.x * scale, def.sub.y * scale, def.sub.w * scale, def.sub.h * scale); let rSub = await worker.recognize(cSub, { tessedit_pageseg_mode: '6' }); let parsedSubs = parseSubStats(rSub.data.text); echoData.rawSubs = rSub.data.text; const hasError = parsedSubs.some(s => !s.valid); if ((hasError || parsedSubs.length < 5) && isDeepScanAllowed) { statusText.innerText = `分析聲骸 ${i + 1}/5 (深度模式)...`; const deepResults = await deepAnalyzeSubs(worker, cSub); if (validCount(deepResults) > validCount(parsedSubs)) { parsedSubs = deepResults; echoData.rawSubs += `\n[Deep Scan Applied]` } } if ((parsedSubs.length < 3) && !isDeepScanAllowed) { const cSubBin = preprocessImage(cSub); const rSub2 = await worker.recognize(cSubBin, { tessedit_pageseg_mode: '6' }); const parsedSubs2 = parseSubStats(rSub2.data.text); if (validCount(parsedSubs2) > validCount(parsedSubs)) { parsedSubs = parsedSubs2; echoData.rawSubs += `\n--- RETRY 1 (BIN) ---\n${rSub2.data.text}` } } echoData.subs = parsedSubs
                 } g_echoesData.push(echoData)
-            } g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length); renderTable(g_globalData, g_chains, g_echoesData); statusText.innerText = g_lang === 'en' ? 'Done' : '完成'
+            } g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length); renderTable(g_globalData, g_chains, g_echoesData); statusText.innerText = "完成"
         }
-        async function uploadCurrentData(entryId) { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let entryIndex = history.findIndex(h => h.id === entryId); let entry = history[entryIndex]; if (!entry || entry.uploadStatus === 'demo') return; const isLocalOnly = !!(entry.isCustomRole || entry.uploadStatus === 'custom_local' || (entry.global && entry.global._localOnly)); if (isLocalOnly) { entry.isCustomRole = true; if (!entry.global) entry.global = {}; entry.global._localOnly = true; entry.uploadStatus = 'custom_local'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = g_lang === 'en' ? 'Custom role is local only, upload disabled' : '自訂角色僅本地保存，禁止上傳'; showMsg(g_lang === 'en' ? 'Custom roles are local drafts and cannot be uploaded.' : '自訂角色為本地草稿，不提供上傳'); return; } if (hasErrors(entry.echoes)) { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = g_lang === 'en' ? 'Error: Fix highlighted errors first' : '錯誤: 請先修正紅字'; return } let roleClean = (entry.global.role || '').replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4); let matched = g_weightNames.find(n => roleClean.includes(n)); if (!matched && g_weightNames.length > 0) { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = g_lang === 'en' ? 'Error: Role not in weight list' : '錯誤: 角色名不在加權清單'; return } if (matched) roleClean = matched; entry.uploadStatus = 'uploading'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = g_lang === 'en' ? 'Uploading...' : '上傳中...'; const url = localStorage.getItem('ww_gas_url'); let chainCount = entry.chains.filter(Boolean).length; let notesStr = entry.echoes.map(e => (e.note || '').replace(/,/g, ' ')).join(','); const payload = { oldId: entry.dbId || "", uid: entry.global.uid, player: entry.global.player, role: roleClean, weapon: entry.global.weapon, chain: chainCount, notes: notesStr, imageUrl: entry.url, ...entry.echoes.reduce((acc, e, idx) => { const i = idx + 1; acc[`e${i}c`] = e.cost; acc[`e${i}m`] = e.main2 ? (e.main1 + "," + e.main2) : e.main1; acc[`e${i}s`] = (e.subs || []).map(s => s.name + s.val).join(','); return acc }, {}) }; try { const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) }); const json = await res.json(); if (json.result === 'success' || json.result === 'duplicate') { if (json.dbId) entry.dbId = json.dbId; const wasSuccess = json.result === 'success'; entry.uploadStatus = wasSuccess ? 'success' : 'duplicate'; entry.hasUnsavedNote = false; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) { statusText.innerText = wasSuccess ? g_lang === 'en' ? 'Upload successful' : '上傳成功' : g_lang === 'en' ? 'Notes updated' : '備註已更新' } if (wasSuccess && json.dbId) { addPoints(json.dbId, roleClean); } } else { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = g_lang === 'en' ? 'Upload error' : '上傳錯誤' } } catch (e) { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = g_lang === 'en' ? 'Upload failed' : '上傳失敗' } }
+        async function uploadCurrentData(entryId) { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let entryIndex = history.findIndex(h => h.id === entryId); let entry = history[entryIndex]; if (!entry || entry.uploadStatus === 'demo') return; const isLocalOnly = !!(entry.isCustomRole || entry.uploadStatus === 'custom_local' || (entry.global && entry.global._localOnly)); if (isLocalOnly) { entry.isCustomRole = true; if (!entry.global) entry.global = {}; entry.global._localOnly = true; entry.uploadStatus = 'custom_local'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = '自訂角色僅本地保存，禁止上傳'; showMsg('自訂角色為本地草稿，不提供上傳'); return; } if (hasErrors(entry.echoes)) { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = "錯誤: 請先修正紅字"; return } let roleClean = (entry.global.role || '').replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4); let matched = g_weightNames.find(n => roleClean.includes(n)); if (!matched && g_weightNames.length > 0) { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = "錯誤: 角色名不在加權清單"; return } if (matched) roleClean = matched; entry.uploadStatus = 'uploading'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = "上傳中..."; const url = localStorage.getItem('ww_gas_url'); let chainCount = entry.chains.filter(Boolean).length; let notesStr = entry.echoes.map(e => (e.note || '').replace(/,/g, ' ')).join(','); const payload = { oldId: entry.dbId || "", uid: entry.global.uid, player: entry.global.player, role: roleClean, weapon: entry.global.weapon, chain: chainCount, notes: notesStr, imageUrl: entry.url, ...entry.echoes.reduce((acc, e, idx) => { const i = idx + 1; acc[`e${i}c`] = e.cost; acc[`e${i}m`] = e.main2 ? (e.main1 + "," + e.main2) : e.main1; acc[`e${i}s`] = (e.subs || []).map(s => s.name + s.val).join(','); return acc }, {}) }; try { const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) }); const json = await res.json(); if (json.result === 'success' || json.result === 'duplicate') { if (json.dbId) entry.dbId = json.dbId; const wasSuccess = json.result === 'success'; entry.uploadStatus = wasSuccess ? 'success' : 'duplicate'; entry.hasUnsavedNote = false; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) { statusText.innerText = wasSuccess ? "上傳成功" : "備註已更新" } if (wasSuccess && json.dbId) { addPoints(json.dbId, roleClean); } } else { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = "上傳錯誤" } } catch (e) { entry.uploadStatus = 'error'; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); if (entryId === g_currentEntryId) statusText.innerText = "上傳失敗" } }
         function saveToHistory(url, global, chains, echoes, isDemo) { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let initialStatus = isDemo ? 'demo' : 'pending'; if (!isDemo) { let currentFp = getFingerprint(echoes); let dup = history.find(h => getFingerprint(h.echoes) === currentFp); if (dup) { initialStatus = 'duplicate'; if (dup.dbId) g_currentEntryId = dup.id } } if (!isDemo && initialStatus !== 'duplicate' && hasErrors(echoes)) initialStatus = 'wait_fix'; const newEntry = { id: g_currentEntryId || Date.now(), dbId: null, ts: g_currentEntryId ? (history.find(h => h.id === g_currentEntryId)?.ts || new Date().toLocaleString()) : new Date().toLocaleString(), url: url, global: global, chains: chains, echoes: echoes, uploadStatus: initialStatus, hasUnsavedNote: false }; if (g_currentEntryId) { const idx = history.findIndex(h => h.id === g_currentEntryId); if (idx !== -1) { if (history[idx].uploadStatus === 'duplicate') newEntry.uploadStatus = 'duplicate'; newEntry.hasUnsavedNote = history[idx].hasUnsavedNote; newEntry.dbId = history[idx].dbId; history[idx] = newEntry } else { history.unshift(newEntry) } } else { let currentFp = getFingerprint(echoes); let dup = history.find(h => getFingerprint(h.echoes) === currentFp); if (dup && dup.dbId) newEntry.dbId = dup.dbId; g_currentEntryId = newEntry.id; history.unshift(newEntry) } localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList(); return g_currentEntryId }
         function updateEchoNote(index, text) { if (g_echoesData[index]) { g_echoesData[index].note = text; let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); const idx = history.findIndex(h => h.id === g_currentEntryId); if (idx !== -1) { history[idx].echoes = g_echoesData; history[idx].hasUnsavedNote = true; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList() } } }
         let g_dragContext = null;
@@ -11896,7 +11881,7 @@
             // Calculate unique characters count
             const uniqueRoles = new Set();
             cleanHistory.forEach(item => {
-                const roleName = item.global.role || (g_lang === 'en' ? 'Unrecognized' : '未辨識');
+                const roleName = item.global.role || '未辨識';
                 uniqueRoles.add(roleName);
             });
 
@@ -11992,7 +11977,7 @@
                 const gradeColor = gradeStr === 'SSS' ? '#ffd700' : gradeStr === 'SS' ? '#ffb74d' : gradeStr === 'S' ? '#7dd3fc' : gradeStr === 'A' ? '#78e08f' : gradeStr === 'B' ? '#ff9f43' : '#9aa0a6';
                 const gradeHtml = `<span style="display:inline-block; padding:2px 6px; background:${gradeColor}22; color:${gradeColor}; border-radius:4px; font-weight:900; font-size:0.75rem; margin-right:8px; border:1px solid ${gradeColor}55;">${gradeStr}</span>`;
 
-                const roleName = item.global.role || (g_lang === 'en' ? 'Unrecognized' : '未辨識');
+                const roleName = item.global.role || '未辨識';
                 let roleKey = roleName;
                 // 嘗試標準化名稱以匹配圖片鍵值
                 if (!RESONATORS_PROFILE_PICTURE[roleKey]) {
@@ -12033,7 +12018,7 @@
             const jsonEl = document.getElementById('custom-echo-debug-json');
             if (!area || !rawEl || !jsonEl) return;
 
-            rawEl.innerText = g_lang === 'en' ? '=== Tesseract Raw Text ===\n' : '=== Tesseract Raw Text ===\n' + (g_lastCustomOcrDebugInfo.raw || "(無資料)");
+            rawEl.innerText = "=== Tesseract Raw Text ===\n" + (g_lastCustomOcrDebugInfo.raw || "(無資料)");
             jsonEl.innerText = "=== Parsed Results ===\n" + JSON.stringify(g_lastCustomOcrDebugInfo.parsed, null, 2);
             area.style.display = 'block';
             area.scrollIntoView({ behavior: 'smooth' });
@@ -12052,7 +12037,7 @@
             unlockPreview();
             urlInput.value = "";
             urlInput.dispatchEvent(new Event('input'));
-            analyzeBtn.innerText = g_lang === 'en' ? 'View History' : '檢視歷史';
+            analyzeBtn.innerText = "檢視歷史";
             g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length);
 
             // 立即渲染一次
@@ -12069,12 +12054,12 @@
             imgPlaceholder.style.display = 'flex';
 
             if (!targetUrl || targetUrl.trim() === '') {
-                imgPlaceholder.innerHTML = '<div style="padding:20px;color:#aaa">${g_lang === 'en' ? 'No preview image URL for this record.' : '此紀錄無預覽圖片網址'}<br><span style="font-size:0.8rem">${g_lang === 'en' ? 'Enter UID or URL to re-analyze.' : '請手動輸入 UID 或網址進行重新分析'}</span></div>';
-                statusText.innerText = g_lang === 'en' ? 'No preview image' : '無預覽圖片';
+                imgPlaceholder.innerHTML = '<div style="padding:20px;color:#aaa">此紀錄無預覽圖片網址<br><span style="font-size:0.8rem">請手動輸入 UID 或網址進行重新分析</span></div>';
+                statusText.innerText = "無預覽圖片";
                 setPreviewLink('');
             } else {
-                imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:#aaa;word-break:break-all;">${g_lang === 'en' ? 'Loading history image...' : '載入歷史圖片中...'}<br><a href="${targetUrl}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${targetUrl}</a></div>`;
-                statusText.innerText = g_lang === 'en' ? 'Downloading image...' : '下載圖片中...';
+                imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:#aaa;word-break:break-all;">載入歷史圖片中...<br><a href="${targetUrl}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${targetUrl}</a></div>`;
+                statusText.innerText = "下載圖片中...";
                 try {
                     const img = await loadImage(targetUrl);
                     g_sourceImage = img;
@@ -12095,10 +12080,10 @@
                         const uH = (Math.max(suitRect[1] + suitRect[3], def.cost.y + def.cost.h) * scale) - uY;
                         e.rects = { cost: `${uX},${uY},${uW},${uH}`, main1: `${def.main1.x * scale},${def.main1.y * scale},${def.main1.w * scale},${def.main1.h * scale}`, main2: `${def.main2.x * scale},${def.main2.y * scale},${def.main2.w * scale},${def.main2.h * scale}`, sub: `${def.sub.x * scale},${def.sub.y * scale},${def.sub.w * scale},${def.sub.h * scale}` }
                     });
-                    statusText.innerText = g_lang === 'en' ? 'History loaded' : '歷史紀錄已載入';
+                    statusText.innerText = "歷史紀錄已載入";
                     renderTable(g_globalData, g_chains, g_echoesData);
                 } catch (e) {
-                    statusText.innerText = g_lang === 'en' ? 'Image load failed' : '圖片載入失敗';
+                    statusText.innerText = "圖片載入失敗";
                     imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:var(--error);word-break:break-all;">載入圖檔失敗 (可能已過期)<br><a href="${targetUrl}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${targetUrl}</a><br><button class="btn-primary-action" style="margin-top:10px" onclick="loadFromHistory(g_historyCache.find(h=>h.id===${item.id}))">🔄 重試載入</button></div>`;
                 }
             }
@@ -12108,7 +12093,7 @@
             let html = `<div class="db-container" style="max-width:900px; padding:20px; display:flex; flex-direction:column; background:#1a1a1e;">`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:15px; flex-shrink:0;">`;
             html += `<div style="display:flex; align-items:center; gap:12px;">`;
-            html += `<h2 style="color:var(--accent); margin:0;">${g_lang === 'en' ? '🎓 Personal Role Score Summary' : '🎓 個人角色評分總表'}</h2>`;
+            html += `<h2 style="color:var(--accent); margin:0;">🎓 個人角色評分總表</h2>`;
             html += `<span style="font-size:0.85rem; color:#888; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID: ${g_currentUserUid || 'N/A'}</span>`;
             html += `</div>`;
             html += `<div style="display:flex; gap:10px; align-items:center;">`;
@@ -12203,7 +12188,7 @@
 
             const u = urlInput.value.trim();
             if (!u && !g_isLocalFile) return;
-            let isDemo = !u; g_isLocalFile = false; if (!isDemo && u.indexOf(ALLOWED_DOMAIN) !== 0) { showMsg(g_lang === 'en' ? 'This link is not supported.' : '不支援此連結'); return } let url = isDemo ? TEST_URL : u; setLoading(true); g_currentEntryId = null; g_selectedBuildIdx = 0; unlockPreview(); statusText.innerText = isDemo ? (g_lang === 'en' ? 'Running demo analysis...' : '正在執行演示分析...') : (g_lang === 'en' ? 'Downloading image...' : '下載圖片中...'); imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:#aaa;word-break:break-all;">${g_lang === 'en' ? 'Downloading image...' : '下載圖片中...'}<br><a href="${url}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${url}</a></div>`; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;">${g_lang === 'en' ? 'Analyzing... ' : '分析中... '}<div class="loader" style="display:inline-block;vertical-align:middle;"></div></td></tr>`; try { const img = await loadImage(url); g_sourceImage = img; imgEl.src = img.src; setPreviewLink(url); imgEl.classList.add('visible'); imgPlaceholder.style.display = 'none'; await processImage(img); finishAnalysis(url, isDemo) } catch (e) { console.error(e); statusText.innerText = g_lang === 'en' ? 'Error: Try manual upload' : '錯誤: 開啟手動上傳'; g_canUploadLocal = true; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--error)">${g_lang === 'en' ? 'Analysis failed: ' : '分析失敗: '}${e.message}<br><button class="btn-analyze" onclick="triggerFileUpload()">${g_lang === 'en' ? '📂 Try manual image upload' : '📂 嘗試手動上傳圖片'}</button></td></tr>` } finally { setLoading(false); urlInput.value = ""; urlInput.dispatchEvent(new Event('input')); }
+            let isDemo = !u; g_isLocalFile = false; if (!isDemo && u.indexOf(ALLOWED_DOMAIN) !== 0) { showMsg("不支援此連結"); return } let url = isDemo ? TEST_URL : u; setLoading(true); g_currentEntryId = null; g_selectedBuildIdx = 0; unlockPreview(); statusText.innerText = isDemo ? "正在執行演示分析..." : "下載圖片中..."; imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:#aaa;word-break:break-all;">下載圖片中...<br><a href="${url}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${url}</a></div>`; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;">分析中... <div class="loader" style="display:inline-block;vertical-align:middle;"></div></td></tr>`; try { const img = await loadImage(url); g_sourceImage = img; imgEl.src = img.src; setPreviewLink(url); imgEl.classList.add('visible'); imgPlaceholder.style.display = 'none'; await processImage(img); finishAnalysis(url, isDemo) } catch (e) { console.error(e); statusText.innerText = "錯誤: 開啟手動上傳"; g_canUploadLocal = true; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--error)">分析失敗: ${e.message}<br><button class="btn-analyze" onclick="triggerFileUpload()">📂 嘗試手動上傳圖片</button></td></tr>` } finally { setLoading(false); urlInput.value = ""; urlInput.dispatchEvent(new Event('input')); }
         }
         async function finishAnalysis(url, isDemo) {
             g_globalData._imageUrl = url || '';
@@ -12214,7 +12199,7 @@
             document.getElementById('welcome-panels').style.display = 'none';
             document.querySelector('.container').style.display = 'flex';
 
-            if (!isDemo && uidClean.length < 9) { showUidWarningModal(); statusText.innerText = g_lang === 'en' ? 'UID error (not saved)' : 'UID 異常 (未存檔)'; return }
+            if (!isDemo && uidClean.length < 9) { showUidWarningModal(); statusText.innerText = "UID 異常 (未存檔)"; return }
             if (isDemo) { g_globalData.uid = "×××××××××" }
             if (g_weightsLoaded && g_weightNames.length > 0) {
                 let recognizedRole = g_globalData.role;
@@ -12236,11 +12221,11 @@
                     }
                     if (autoMatch) {
                         g_globalData.role = autoMatch;
-                        statusText.innerText = g_lang === 'en' ? `Auto-corrected role: ${autoMatch}` : `自動修正角色: ${autoMatch}`;
+                        statusText.innerText = `自動修正角色: ${autoMatch}`;
                         g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length);
                         renderTable(g_globalData, g_chains, g_echoesData)
                     } else {
-                        statusText.innerText = g_lang === 'en' ? 'Verifying role name...' : '角色名稱核對中...';
+                        statusText.innerText = "角色名稱核對中...";
                         const userCorrectedRole = await askUserForRole(recognizedRole);
                         if (userCorrectedRole) {
                             g_globalData.role = userCorrectedRole;
@@ -12253,7 +12238,7 @@
             if (!isDemo && !g_isLocalFile && g_globalData.uid && g_globalData.uid.length === 9) {
                 if (g_currentUserUid !== g_globalData.uid) {
                     autoCloseOfflineMode(`偵測到新 UID ${g_globalData.uid}`);
-                    statusText.innerText = g_lang === 'en' ? `Detected UID ${g_globalData.uid}, loading history...` : `偵測到 UID ${g_globalData.uid}，載入歷史...`;
+                    statusText.innerText = `偵測到 UID ${g_globalData.uid}，載入歷史...`;
                     await handleProfileSwitch(g_globalData.uid, { skipAutoLoad: true });
                 }
             }
@@ -12262,35 +12247,35 @@
             finalizeUpload(entryId, isDemo)
         }
         function savePromptUrl() { const val = document.getElementById('prompt-url-input').value.trim(); if (!val.startsWith('https://wutheringwaves-dc.kurogames-global.com/back/')) { showMsg("請輸入正確的官方圖片網址！"); return } document.getElementById('upload-url-modal').style.display = 'none'; const entryId = saveToHistory(val, g_globalData, g_chains, g_echoesData, false); finalizeUpload(entryId, false) }
-        function skipPromptUrl() { document.getElementById('upload-url-modal').style.display = 'none'; finalizeUpload(null, true); statusText.innerText = g_lang === 'en' ? 'Save skipped' : '已略過存檔'; }
+        function skipPromptUrl() { document.getElementById('upload-url-modal').style.display = 'none'; finalizeUpload(null, true); statusText.innerText = "已略過存檔"; }
         function finalizeUpload(entryId, isDemo) {
             let history = JSON.parse(localStorage.getItem('ww_history') || '[]');
             let entry = history.find(h => h.id === entryId);
             if (!isDemo) {
                 if (entry.uploadStatus === 'duplicate') {
-                    statusText.innerText = g_lang === 'en' ? 'Duplicate data (upload skipped)' : '重複資料 (略過上傳)'
+                    statusText.innerText = "重複資料 (略過上傳)"
                 } else if (g_isDeveloper && g_analyzeFixMode) {
                     if (hasErrors(g_echoesData)) {
-                        statusText.innerText = g_lang === 'en' ? 'Analysis done. Fix data then upload manually.' : '分析完成，請先修正資料後手動上傳';
+                        statusText.innerText = "分析完成，請先修正資料後手動上傳";
                     } else {
-                        statusText.innerText = g_lang === 'en' ? 'Analysis done. Review and upload manually.' : '分析完成，請確認資料後手動按上傳';
+                        statusText.innerText = "分析完成，請確認資料後手動按上傳";
                     }
                 } else if (hasErrors(g_echoesData)) {
-                    statusText.innerText = g_lang === 'en' ? 'Errors detected, please fix...' : '檢測到錯誤，請修正...';
+                    statusText.innerText = "檢測到錯誤，請修正...";
                     triggerNextError()
                 } else {
                     let roleClean = (entry.global.role || '').replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                     let isRoleValid = g_weightNames.some(n => roleClean.includes(n));
                     if (!isRoleValid && g_weightNames.length > 0) {
-                        statusText.innerText = g_lang === 'en' ? 'Role not in list, please correct.' : '角色名不在名單內，請修正';
+                        statusText.innerText = "角色名不在名單內，請修正";
                         return;
                     }
                     uploadCurrentData(entryId)
                 }
             } else if (isDemo) {
-                statusText.innerText = g_lang === 'en' ? 'Demo complete (not uploaded)' : '演示完成 (未上傳)'
+                statusText.innerText = "演示完成 (未上傳)"
             } else if (entry.uploadStatus === 'duplicate') {
-                statusText.innerText = g_lang === 'en' ? 'Duplicate data' : '重複資料'
+                statusText.innerText = "重複資料"
             }
         }
         function setLoading(b) { loader.style.display = b ? 'block' : 'none'; urlInput.disabled = b; document.querySelectorAll('button:not(.cleanup-btn, .btn-weights-mini, .btn-save-note, .btn-upload-manual, .btn-refresh, #btn-load-all, .btn-toggle-view, .btn-save-sub, .btn-cancel-sub, .btn-primary-action, .btn-icon-only)').forEach(btn => btn.disabled = b) }
@@ -12637,46 +12622,46 @@
                 renderEditableAnalysisTable(global, chains, echoes, isDupForEdit);
                 return;
             }
-            g_lastRankInfo = null; let html = ''; let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let currentEntry = history.find(h => h.id === g_currentEntryId); let isDup = currentEntry && currentEntry.uploadStatus === 'duplicate'; let availableBuilds = g_currentWeights[global.role] || []; let currentBuild = availableBuilds[g_selectedBuildIdx] || availableBuilds[0]; let roleDesc = currentBuild ? currentBuild.desc : g_lang === 'en' ? 'No description' : '暫無說明'; let roleWeights = currentBuild ? currentBuild.weights : null; let buildSelectorHtml = ''; if (availableBuilds.length > 1) { buildSelectorHtml = `<select class="build-select" onchange="changeBuild(this.value)" onclick="event.stopPropagation()">`; availableBuilds.forEach((b, idx) => { buildSelectorHtml += `<option value="${idx}" ${idx === g_selectedBuildIdx ? 'selected' : ''}>${b.name}</option>` }); buildSelectorHtml += `</select>` } else if (availableBuilds.length === 1 && availableBuilds[0].name !== "通用") { buildSelectorHtml = `<span style="font-size:0.8rem;color:#888;margin-left:10px;">[${availableBuilds[0].name}]</span>` } let compositeRects = { isComposite: true, role: global.role_rect, uid: global.uid_rect, player: global.player_rect, weapon: global.weapon_rect }; let totalScoreHtml = ''; let totalPct = 0; let totalScore = 0; let totalMax = 0; if (roleWeights) { let totalCR = 0, totalCD = 0; let validEchoesCount = 0; echoes.forEach(e => { let cv = getCVInfo(e); totalCR += parseFloat(cv.cr) || 0; totalCD += parseFloat(cv.cd) || 0; let res = calculateEchoScore(e, roleWeights); if (res) { totalScore += res.score; totalMax += res.maxTheoretical; validEchoesCount++ } }); totalPct = totalMax > 0 ? (totalScore / totalMax) * 100 : 0; let buffedPct = Math.min(100.0, totalPct * 1.25); let finalBuffedScore = totalScore * 1.25; let totalBonus = finalBuffedScore - totalScore; let totalCV = totalCR * 2 + totalCD; let cvPct = safeFixed(totalCV / (42.0 * 5) * 100.0, 0); let grad = getGrading(buffedPct); totalScoreHtml = `<div class="total-score-badge" onclick="showScoreDetails(-1)" title="${g_lang === 'en' ? 'Click to view score details' : '點擊查看詳細計算'}"><div class="ts-header"><span class="ts-label">${g_lang === 'en' ? 'Overall Rating' : '綜合評級'}</span><span class="ts-grade ${grad.class}">${grad.label}</span></div><div class="ts-body"><div class="ts-row"><span class="ts-val-highlight">${safeFixed(buffedPct, 0)}%</span><span class="ts-dim">(${safeFixed(finalBuffedScore, 0)}/${safeFixed(totalMax, 0)})</span></div><div class="ts-row" style="margin-top:2px;"><span style="font-size:0.75rem;color:#aaa;">${g_lang === 'en' ? 'CV' : 'CV雙爆'}</span><span style="font-size:0.75rem;">${cvPct}% <span class="ts-dim">(${safeFixed(totalCV, 0)}/210)</span></span></div></div><button class="rank-btn" onclick="openBuffModal(null, null, null, event)">${g_lang === 'en' ? '🏆 Bonus: ' : '🏆 補分: '}+${safeFixed(totalBonus, 0)}</button></div>` }
+            g_lastRankInfo = null; let html = ''; let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let currentEntry = history.find(h => h.id === g_currentEntryId); let isDup = currentEntry && currentEntry.uploadStatus === 'duplicate'; let availableBuilds = g_currentWeights[global.role] || []; let currentBuild = availableBuilds[g_selectedBuildIdx] || availableBuilds[0]; let roleDesc = currentBuild ? currentBuild.desc : "暫無說明"; let roleWeights = currentBuild ? currentBuild.weights : null; let buildSelectorHtml = ''; if (availableBuilds.length > 1) { buildSelectorHtml = `<select class="build-select" onchange="changeBuild(this.value)" onclick="event.stopPropagation()">`; availableBuilds.forEach((b, idx) => { buildSelectorHtml += `<option value="${idx}" ${idx === g_selectedBuildIdx ? 'selected' : ''}>${b.name}</option>` }); buildSelectorHtml += `</select>` } else if (availableBuilds.length === 1 && availableBuilds[0].name !== "通用") { buildSelectorHtml = `<span style="font-size:0.8rem;color:#888;margin-left:10px;">[${availableBuilds[0].name}]</span>` } let compositeRects = { isComposite: true, role: global.role_rect, uid: global.uid_rect, player: global.player_rect, weapon: global.weapon_rect }; let totalScoreHtml = ''; let totalPct = 0; let totalScore = 0; let totalMax = 0; if (roleWeights) { let totalCR = 0, totalCD = 0; let validEchoesCount = 0; echoes.forEach(e => { let cv = getCVInfo(e); totalCR += parseFloat(cv.cr) || 0; totalCD += parseFloat(cv.cd) || 0; let res = calculateEchoScore(e, roleWeights); if (res) { totalScore += res.score; totalMax += res.maxTheoretical; validEchoesCount++ } }); totalPct = totalMax > 0 ? (totalScore / totalMax) * 100 : 0; let buffedPct = Math.min(100.0, totalPct * 1.25); let finalBuffedScore = totalScore * 1.25; let totalBonus = finalBuffedScore - totalScore; let totalCV = totalCR * 2 + totalCD; let cvPct = safeFixed(totalCV / (42.0 * 5) * 100.0, 0); let grad = getGrading(buffedPct); totalScoreHtml = `<div class="total-score-badge" onclick="showScoreDetails(-1)" title="點擊查看詳細計算"><div class="ts-header"><span class="ts-label">綜合評級</span><span class="ts-grade ${grad.class}">${grad.label}</span></div><div class="ts-body"><div class="ts-row"><span class="ts-val-highlight">${safeFixed(buffedPct, 0)}%</span><span class="ts-dim">(${safeFixed(finalBuffedScore, 0)}/${safeFixed(totalMax, 0)})</span></div><div class="ts-row" style="margin-top:2px;"><span style="font-size:0.75rem;color:#aaa;">CV雙爆</span><span style="font-size:0.75rem;">${cvPct}% <span class="ts-dim">(${safeFixed(totalCV, 0)}/210)</span></span></div></div><button class="rank-btn" onclick="openBuffModal(null, null, null, event)">🏆 補分: +${safeFixed(totalBonus, 0)}</button></div>` }
             if (g_debugMode) {
                 const entryUrl = (currentEntry && currentEntry.url) || global._imageUrl || '';
-                const urlLink = entryUrl ? `<div style="display:flex;gap:5px;align-items:center;"><a href="${escapeHtml(entryUrl)}" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px dashed var(--accent);">${escapeHtml(formatImageLinkText(entryUrl))}</a><button class="btn-primary-action" style="padding:2px 8px;font-size:0.7rem;" onclick="loadFromHistory({id:g_currentEntryId, global:g_globalData, url:'${escapeHtml(entryUrl)}'})">${g_lang === 'en' ? 'Force Load' : '強制載入'}</button></div>` : (g_lang === 'en' ? '<span style="color:#666;">(No URL)</span>' : '<span style="color:#666;">(無網址)</span>');
+                const urlLink = entryUrl ? `<div style="display:flex;gap:5px;align-items:center;"><a href="${escapeHtml(entryUrl)}" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px dashed var(--accent);">${escapeHtml(formatImageLinkText(entryUrl))}</a><button class="btn-primary-action" style="padding:2px 8px;font-size:0.7rem;" onclick="loadFromHistory({id:g_currentEntryId, global:g_globalData, url:'${escapeHtml(entryUrl)}'})">強制載入</button></div>` : '<span style="color:#666;">(無網址)</span>';
                 const ocrRaw = global._ocrRaw || {};
                 const ocrClean = global._ocrClean || {};
                 const roleBefore = global._ocrBeforeRoleFix || ocrClean.role || '';
                 const roleAfter = global._ocrAfterRoleFix || global.role || '';
                 const infoItems = [
-                    { label: g_lang === 'en' ? 'Image URL' : '分析網址', value: urlLink },
-                    { label: g_lang === 'en' ? 'Role' : '角色', value: escapeHtml(global.role || '-') },
-                    { label: g_lang === 'en' ? 'Player' : '玩家', value: escapeHtml(global.player || '-') },
+                    { label: '分析網址', value: urlLink },
+                    { label: '角色', value: escapeHtml(global.role || '-') },
+                    { label: '玩家', value: escapeHtml(global.player || '-') },
                     { label: 'UID', value: escapeHtml(global.uid || '-') },
-                    { label: g_lang === 'en' ? 'Weapon' : '武器', value: escapeHtml(global.weapon || '-') },
+                    { label: '武器', value: escapeHtml(global.weapon || '-') },
                     { label: 'Build', value: escapeHtml(currentBuild ? currentBuild.name : '-') },
-                    { label: g_lang === 'en' ? 'Cloud ID' : '雲端ID', value: escapeHtml(currentEntry && currentEntry.dbId ? currentEntry.dbId : '-') },
-                    { label: g_lang === 'en' ? 'Upload Status' : '上傳狀態', value: escapeHtml(currentEntry && currentEntry.uploadStatus ? currentEntry.uploadStatus : '-') },
-                    { label: g_lang === 'en' ? 'Local ID' : '本地ID', value: escapeHtml(currentEntry && currentEntry.id ? currentEntry.id : '-') },
-                    { label: g_lang === 'en' ? 'Time' : '時間', value: escapeHtml(currentEntry && currentEntry.ts ? currentEntry.ts : '-') },
+                    { label: '雲端ID', value: escapeHtml(currentEntry && currentEntry.dbId ? currentEntry.dbId : '-') },
+                    { label: '上傳狀態', value: escapeHtml(currentEntry && currentEntry.uploadStatus ? currentEntry.uploadStatus : '-') },
+                    { label: '本地ID', value: escapeHtml(currentEntry && currentEntry.id ? currentEntry.id : '-') },
+                    { label: '時間', value: escapeHtml(currentEntry && currentEntry.ts ? currentEntry.ts : '-') },
                     { label: 'Proxy', value: escapeHtml(g_lastUsedProxy || '-') }
                 ];
                 let infoHtml = infoItems.map(i => `<div style="display:flex;gap:8px;align-items:flex-start;padding:3px 0;border-bottom:1px solid #2a2a2e;"><div style="width:80px;color:#888;font-size:0.75rem;">${i.label}</div><div style="color:#ddd;word-break:break-all;font-family:JetBrains Mono;font-size:0.8rem;">${i.value}</div></div>`).join('');
                 let ocrHtml = `<table style="width:100%;border-collapse:collapse;font-size:0.75rem;background:#111;border-radius:6px;overflow:hidden;">`;
-                ocrHtml += `<tr style="color:#666;background:#1a1a1e;"><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">${g_lang === 'en' ? 'Field' : '欄位'}</th><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">${g_lang === 'en' ? 'OCR Raw' : 'OCR 原文'}</th><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">${g_lang === 'en' ? 'Before Fix' : '轉譯前'}</th><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">${g_lang === 'en' ? 'After Fix' : '轉譯後'}</th></tr>`;
+                ocrHtml += `<tr style="color:#666;background:#1a1a1e;"><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">欄位</th><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">OCR 原文</th><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">轉譯前</th><th style="text-align:left;padding:8px 6px;border-bottom:1px solid #333;">轉譯後</th></tr>`;
                 const ocrRows = [
-                    { label: g_lang === 'en' ? 'Role' : '角色', raw: ocrRaw.role, clean: roleBefore, final: roleAfter },
-                    { label: g_lang === 'en' ? 'Player' : '玩家', raw: ocrRaw.player, clean: ocrClean.player, final: global.player },
+                    { label: '角色', raw: ocrRaw.role, clean: roleBefore, final: roleAfter },
+                    { label: '玩家', raw: ocrRaw.player, clean: ocrClean.player, final: global.player },
                     { label: 'UID', raw: ocrRaw.uid, clean: ocrClean.uid, final: global.uid },
-                    { label: g_lang === 'en' ? 'Weapon' : '武器', raw: ocrRaw.weapon, clean: ocrClean.weapon, final: global.weapon }
+                    { label: '武器', raw: ocrRaw.weapon, clean: ocrClean.weapon, final: global.weapon }
                 ];
                 ocrRows.forEach(r => {
                     ocrHtml += `<tr style="border-bottom:1px solid #1a1a1e;"><td style="padding:8px 6px;color:#888;background:#18181c;">${escapeHtml(r.label)}</td><td style="padding:8px 6px;color:#aaa;font-family:JetBrains Mono;">${escapeHtml(r.raw || '')}</td><td style="padding:8px 6px;color:#aaa;font-family:JetBrains Mono;">${escapeHtml(r.clean || '')}</td><td style="padding:8px 6px;color:#e5c07b;font-weight:bold;">${escapeHtml(r.final || '')}</td></tr>`;
                 });
                 ocrHtml += `</table>`;
-                html += `<tr><td colspan="6" class="role-info-cell" style="background:#151518;border:1px solid var(--accent-dim);border-radius:8px;"><div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;"><div style="flex:1;min-width:280px;background:#1a1a1e;padding:15px;border-radius:8px;">${infoHtml}</div><div style="flex:1.5;min-width:320px;"><div style="font-size:0.8rem;color:var(--accent);margin-bottom:10px;font-weight:bold;display:flex;align-items:center;gap:5px;"><span>🔍</span> ${g_lang === 'en' ? 'OCR Translation Reference' : 'OCR 轉譯對照資訊'}</div>${ocrHtml}<div style="font-size:0.75rem;color:#555;margin-top:10px;font-style:italic;">${g_lang === 'en' ? '* Main/sub-stat OCR raw text is shown in the Raw blocks below.' : '* 主詞條/副詞條 OCR 原文請見下方相關項目的 Raw 區塊'}</div></div></div></td></tr>`;
+                html += `<tr><td colspan="6" class="role-info-cell" style="background:#151518;border:1px solid var(--accent-dim);border-radius:8px;"><div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;"><div style="flex:1;min-width:280px;background:#1a1a1e;padding:15px;border-radius:8px;">${infoHtml}</div><div style="flex:1.5;min-width:320px;"><div style="font-size:0.8rem;color:var(--accent);margin-bottom:10px;font-weight:bold;display:flex;align-items:center;gap:5px;"><span>🔍</span> OCR 轉譯對照資訊</div>${ocrHtml}<div style="font-size:0.75rem;color:#555;margin-top:10px;font-style:italic;">* 主詞條/副詞條 OCR 原文請見下方相關項目的 Raw 區塊</div></div></div></td></tr>`;
             } else {
-                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Role' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">${g_lang === 'en' ? 'Player' : '玩家'}</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">${g_lang === 'en' ? 'Weapon' : '武器'}</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:40px;"><button class="rank-btn" style="position:absolute;top:10px;right:15px;margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button>${formatDescText(roleDesc)}</div></div></td></tr>`;
+                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || '未辨識角色'}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:40px;"><button class="rank-btn" style="position:absolute;top:10px;right:15px;margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">📋 角色完整攻略</button>${formatDescText(roleDesc)}</div></div></td></tr>`;
             }
-            html += `<tr class="custom-header-row"><td>${g_lang === 'en' ? 'Item' : '項目'}</td>${echoes.map((e, idx) => `<td>${g_lang === 'en' ? 'Echo ' : '聲骸 '}${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
-            html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">${g_lang === 'en' ? 'Score' : '評分'}</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">${g_lang === 'en' ? 'Valid: ' : '有效: '}${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">${g_lang === 'en' ? 'No Weights' : '無權重'}</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>${g_lang === 'en' ? 'Main Stat' : '主詞條'}</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">${g_lang === 'en' ? 'Sub Stats' : '副詞條'}</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- ${g_lang === 'en' ? 'Empty' : '空'} -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>${g_lang === 'en' ? 'Notes' : '備註'}</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? (g_lang === 'en' ? 'Duplicate - notes locked' : '重複項目不可編輯備註') : (g_lang === 'en' ? 'Click to type...' : '點擊輸入...')}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
+            html += `<tr class="custom-header-row"><td>項目</td>${echoes.map((e, idx) => `<td>聲骸 ${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
+            html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
         }
         function renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml) {
             let html = '';
@@ -12690,33 +12675,33 @@
                 const roleAfter = global._ocrAfterRoleFix || global.role || '';
 
                 const infoItems = [
-                    { label: g_lang === 'en' ? 'URL' : '網址', value: urlLink },
+                    { label: '網址', value: urlLink },
                     { label: '角色', value: escapeHtml(global.role || '-') },
-                    { label: g_lang === 'en' ? 'Cloud ID' : '雲端ID', value: escapeHtml(currentEntry && currentEntry.dbId ? currentEntry.dbId : '-') },
-                    { label: g_lang === 'en' ? 'Local ID' : '本地ID', value: escapeHtml(currentEntry && currentEntry.id ? currentEntry.id : '-') }
+                    { label: '雲端ID', value: escapeHtml(currentEntry && currentEntry.dbId ? currentEntry.dbId : '-') },
+                    { label: '本地ID', value: escapeHtml(currentEntry && currentEntry.id ? currentEntry.id : '-') }
                 ];
                 let infoHtml = infoItems.map(i => `<div style="display:flex;gap:8px;font-size:0.8rem;margin-bottom:4px;"><div style="width:60px;color:#888;">${i.label}</div><div style="color:#ddd;word-break:break-all;">${i.value}</div></div>`).join('');
 
                 html += `<div class="mobile-role-card" style="border-color:var(--accent)">`;
-                html += `<div style="color:var(--accent);font-weight:bold;margin-bottom:10px;font-size:0.9rem;">${g_lang === 'en' ? '🐞 Debug Mode Info' : '🐞 排錯模式資訊'}</div>`;
+                html += `<div style="color:var(--accent);font-weight:bold;margin-bottom:10px;font-size:0.9rem;">🐞 排錯模式資訊</div>`;
                 html += infoHtml;
-                html += `<div style="margin-top:15px;font-size:0.75rem;color:#888;margin-bottom:5px;">${g_lang === 'en' ? 'OCR Translation' : 'OCR 轉譯對照'}</div>`;
+                html += `<div style="margin-top:15px;font-size:0.75rem;color:#888;margin-bottom:5px;">OCR 轉譯對照</div>`;
                 html += `<table style="width:100%;font-size:0.75rem;border-collapse:collapse;background:#111;border-radius:4px;">`;
-                html += `<tr style="color:#666;border-bottom:1px solid #333;"><th style="padding:4px;text-align:left">${g_lang === 'en' ? 'Field' : '欄位'}</th><th style="padding:4px;text-align:left">${g_lang === 'en' ? 'Raw' : '原文'}</th><th style="padding:4px;text-align:left">${g_lang === 'en' ? 'Final' : '分析後'}</th></tr>`;
+                html += `<tr style="color:#666;border-bottom:1px solid #333;"><th style="padding:4px;text-align:left">欄位</th><th style="padding:4px;text-align:left">原文</th><th style="padding:4px;text-align:left">分析後</th></tr>`;
                 const ocrRows = [
-                    { label: g_lang === 'en' ? 'Role' : '角色', raw: ocrRaw.role, final: roleAfter },
+                    { label: '角色', raw: ocrRaw.role, final: roleAfter },
                     { label: 'UID', raw: ocrRaw.uid, final: global.uid },
-                    { label: g_lang === 'en' ? 'Weapon' : '武器', raw: ocrRaw.weapon, final: global.weapon }
+                    { label: '武器', raw: ocrRaw.weapon, final: global.weapon }
                 ];
                 ocrRows.forEach(r => {
                     html += `<tr style="border-bottom:1px solid #222;"><td style="padding:4px;color:#888">${r.label}</td><td style="padding:4px;color:#aaa">${escapeHtml(r.raw || '')}</td><td style="padding:4px;color:#fff">${escapeHtml(r.final || '')}</td></tr>`;
                 });
                 html += `</table></div>`;
             } else {
-                html += `<div class="mobile-role-card"><div style="display:flex;justify-content:space-between;align-items:start;"><div class="role-name-large" style="font-size:1.5rem">${global.role || (g_lang === 'en' ? 'Unrecognized' : '未辨識')}</div>${buildSelectorHtml}</div>`;
+                html += `<div class="mobile-role-card"><div style="display:flex;justify-content:space-between;align-items:start;"><div class="role-name-large" style="font-size:1.5rem">${global.role || '未辨識'}</div>${buildSelectorHtml}</div>`;
                 html += `<div style="display:flex;gap:5px;flex-wrap:wrap;margin:10px 0;">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div>`;
                 html += `<div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">UID: ${global.uid || '-'} | ${global.player || '-'}</div>`;
-                html += `<div style="margin-top:10px;">${totalScoreHtml || g_lang === 'en' ? '<div style="color:#666">No Score</div>' : '<div style="color:#666">暫無評分</div>'}</div>`;
+                html += `<div style="margin-top:10px;">${totalScoreHtml || '<div style="color:#666">暫無評分</div>'}</div>`;
                 if (roleDesc) html += `<div style="margin-top:10px;padding:10px;background:#222;border-radius:6px;color:#aaa;font-size:0.85rem;line-height:1.5;">${formatDescText(roleDesc)}</div></div>`;
             }
 
@@ -12726,11 +12711,11 @@
                     let res = calculateEchoScore(e, roleWeights);
                     if (res) {
                         let grad = getGrading(res.totalPercentage);
-                        scoreHtml = `<div class="mobile-echo-score"><span class="score-grade ${grad.class}">${grad.label}</span> <span style="color:var(--cv-val);font-weight:bold;">${safeFixed(res.totalPercentage, 0)}%</span> <span style="font-size:0.75rem;color:#777">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent)">+${safeFixed(res.bonus, 1)}</span></span><div style="font-size:0.7rem;color:#888;margin-top:2px;">${g_lang === 'en' ? 'Valid: ' : '有效: '}${res.validCount}/${res.denom}</div></div>`;
+                        scoreHtml = `<div class="mobile-echo-score"><span class="score-grade ${grad.class}">${grad.label}</span> <span style="color:var(--cv-val);font-weight:bold;">${safeFixed(res.totalPercentage, 0)}%</span> <span style="font-size:0.75rem;color:#777">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent)">+${safeFixed(res.bonus, 1)}</span></span><div style="font-size:0.7rem;color:#888;margin-top:2px;">有效: ${res.validCount}/${res.denom}</div></div>`;
                     }
                 }
                 html += `<div class="mobile-echo-card">`;
-                html += `<div class="mobile-echo-header"><span class="mobile-echo-idx">#${idx + 1}</span><span style="font-weight:bold;color:#fff;display:flex;align-items:center;gap:8px;">Cost ${e.cost}${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="${g_lang === 'en' ? 'Echo Swap / Single Echo Compare' : '聲骸替換 / 單一聲骸比對'}" aria-label="${g_lang === 'en' ? 'Echo Swap' : '聲骸替換'}" style="margin:0;">⇄</button>`}</span></div>`;
+                html += `<div class="mobile-echo-header"><span class="mobile-echo-idx">#${idx + 1}</span><span style="font-weight:bold;color:#fff;display:flex;align-items:center;gap:8px;">Cost ${e.cost}${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="聲骸替換 / 單一聲骸比對" aria-label="聲骸替換" style="margin:0;">⇄</button>`}</span></div>`;
 
                 if (g_debugMode) {
                     html += `<div style="padding:10px;background:#111;font-size:0.75rem;">`;
@@ -12922,7 +12907,7 @@
 
             if (type === 'default') {
                 // --- Existing Table Layout ---
-                let rankHtml = g_lang === 'en' ? '<span style="color:#666">No rank data</span>' : '<span style="color:#666">暫無排名資料</span>';
+                let rankHtml = '<span style="color:#666">暫無排名資料</span>';
                 if (rankData) { rankHtml = `<div class="share-rank-main">排名: ${rankData.rank} / ${rankData.total} <span style="font-size:1rem">(${rankData.pr}%)</span></div><div class="share-rank-sub">分數: ${rankData.score}</div>` }
                 captureArea.innerHTML = `<div class="share-header"><h2 class="share-title">GAME ZH 角色分析網</h2><div class="share-rank-info">${rankHtml}</div></div><div class="share-table-container">${document.getElementById('result-table').outerHTML}</div><div class="share-footer">https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC</div>`;
                 captureArea.querySelectorAll('.total-score-badge button').forEach(btn => btn.remove()); // Remove rank button
@@ -13539,7 +13524,7 @@
                 // Trigger the data calculation and rendering
                 if (typeof rank_calcData === 'function') rank_calcData();
             } else {
-                content.innerHTML = g_lang === 'en' ? '<div class="empty-state" style="padding:40px;">No rank data</div>' : '<div class="empty-state" style="padding:40px;">暫無排名資料</div>';
+                content.innerHTML = '<div class="empty-state" style="padding:40px;">暫無排名資料</div>';
             }
         }
 
@@ -13557,7 +13542,7 @@
 
             // Set loading state for rank button immediately
             const rankTextSimple = document.getElementById('rank-text-simple');
-            if (rankTextSimple) rankTextSimple.innerText = g_lang === 'en' ? 'Querying...' : '查詢中...';
+            if (rankTextSimple) rankTextSimple.innerText = "查詢中...";
 
             // Trigger rank update
             updateRankButtons();
@@ -13697,12 +13682,12 @@
             const idInput = document.getElementById('editing-echo-id');
 
             if (echoToEdit) {
-                titleEl.innerText = g_lang === 'en' ? '✏️ Edit Custom Echo' : '✏️ 編輯自訂聲骸';
-                saveBtn.innerText = g_lang === 'en' ? 'Update Echo' : '更新聲骸';
+                titleEl.innerText = "✏️ 編輯自訂聲骸";
+                saveBtn.innerText = "更新聲骸";
                 idInput.value = echoToEdit.id;
             } else {
-                titleEl.innerText = g_lang === 'en' ? '🆕 Add Custom Echo' : '🆕 新增自訂聲骸';
-                saveBtn.innerText = g_lang === 'en' ? 'Save Echo' : '保存聲骸';
+                titleEl.innerText = "🆕 新增自訂聲骸";
+                saveBtn.innerText = "保存聲骸";
                 idInput.value = "";
             }
 
@@ -14284,7 +14269,7 @@
  </div>` : `
  <div class="echo-lib-info-panel">
  <div style="color:#888">📅 分析時間：<span style="color:#ccc">${typeof e._meta.ts === 'number' ? new Date(e._meta.ts).toLocaleString() : e._meta.ts}</span></div>
- <div style="margin-top:4px">🔗 原始圖片：${e._meta.url ? `<a href="${e._meta.url}" target="_blank" style="color:var(--accent);text-decoration:none">${g_lang === 'en' ? 'View ↗' : '點擊查看 ↗'}</a>` : g_lang === 'en' ? '<span style="color:#555">No URL</span>' : '<span style="color:#555">無網址紀錄</span>'}</div>
+ <div style="margin-top:4px">🔗 原始圖片：${e._meta.url ? `<a href="${e._meta.url}" target="_blank" style="color:var(--accent);text-decoration:none">點擊查看 ↗</a>` : '<span style="color:#555">無網址紀錄</span>'}</div>
  </div>`}
  </div>`;
         }
@@ -14507,7 +14492,7 @@
             } catch (e) {
                 console.error("DB Load Error", e);
                 if (loader) {
-                    document.getElementById('db-loading-txt').innerText = g_lang === 'en' ? 'Connection failed: ' + e.message : '連線失敗: ' + e.message;
+                    document.getElementById('db-loading-txt').innerText = "連線失敗: " + e.message;
                     setTimeout(() => loader.style.display = 'none', 2000);
                 }
             }
@@ -14581,16 +14566,16 @@
                 listEl.innerHTML = uids.map(u => `
  <button class="db-list-btn" data-value="${u}">
  <span style="font-family:'JetBrains Mono'">${u}</span>
- <span style="font-size:0.75rem;color:#666">${g_lang === 'en' ? 'View Roles' : '查看角色'}</span>
+ <span style="font-size:0.75rem;color:#666">查看角色</span>
  </button>
  `).join('');
             } else if (rank_viewMode === 'fault') {
                 listEl.innerHTML = `
  <div style="padding:15px;color:#888;font-size:0.85rem;line-height:1.6">
- <div style="color:var(--error);font-weight:bold;margin-bottom:8px">${g_lang === 'en' ? '⚠️ Diagnostics Mode' : '⚠️ 異常診斷模式'}</div>
- ${g_lang === 'en' ? 'This mode scans all player records in the database for missing or misconfigured Echoes.' : '此模式會掃描資料庫中所有的玩家紀錄，找出聲骸缺失或配置錯誤的項目。'}
+ <div style="color:var(--error);font-weight:bold;margin-bottom:8px">⚠️ 異常診斷模式</div>
+ 此模式會掃描資料庫中所有的玩家紀錄，找出聲骸缺失或配置錯誤的項目。
  <br><br>
- <button class="db-btn-primary" style="width:100%" onclick="rank_calcData()">${g_lang === 'en' ? 'Rescan Now' : '立即重新掃描'}</button>
+ <button class="db-btn-primary" style="width:100%" onclick="rank_calcData()">立即重新掃描</button>
  </div>
  `;
             }
@@ -14741,7 +14726,7 @@
                         if (result) {
                             if (rank_viewMode !== 'fault') rank_list.push(result);
                         } else {
-                            rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: g_lang === 'en' ? 'Unknown calculation error' : '計算邏輯發生未知錯誤' });
+                            rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: "計算邏輯發生未知錯誤" });
                         }
                     } catch (e) {
                         rank_faults.push({ player: d.player, uid: d.uid, role: d.role, reason: `計算異常: ${e.message}` });
@@ -15102,7 +15087,7 @@
                         if (statSpans.length > 0) {
                             statsHtml = `<div style="font-size:0.75rem;line-height:1.6;color:#888;">${statSpans.join('<span style="color:#444;margin:0 6px">|</span>')}</div>`;
                         } else {
-                            statsHtml = `<div style="color:#555;font-size:0.75rem;">${g_lang === 'en' ? 'No valid data' : '無有效數據'}</div>`;
+                            statsHtml = '<div style="color:#555;font-size:0.75rem;">無有效數據</div>';
                         }
                     }
 
@@ -15117,7 +15102,7 @@
                             const iconUrl = (suit && (typeof ATTRIBUTES_PROFILE_PICTURE !== 'undefined') && ATTRIBUTES_PROFILE_PICTURE[suit]) ? ATTRIBUTES_PROFILE_PICTURE[suit] : '';
 
                             echoIconsHtml += `
-                                <div style="position:relative; width:28px; height:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center;" title="${suit || (g_lang === 'en' ? 'Unknown Set' : '未知套裝')} (Cost ${cost})">
+                                <div style="position:relative; width:28px; height:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center;" title="${suit || '未知套裝'} (Cost ${cost})">
                                     ${iconUrl ? `<img src="${iconUrl}" style="width:20px; height:20px; filter:drop-shadow(0 0 2px rgba(0,0,0,0.5));">` : `<span style="font-size:0.6rem;color:#444">${cost}</span>`}
                                     <span style="position:absolute; bottom:-3px; right:-3px; background:#000; color:#fff; font-size:0.6rem; padding:0 2px; border-radius:2px; border:1px solid #444; font-family:'JetBrains Mono';">${cost}</span>
                                 </div>`;
@@ -15132,7 +15117,7 @@
  <div style="font-weight:bold;color:#fff;font-size:1rem">${d.player}</div>
  <div style="font-size:0.75rem;color:#888;display:flex;flex-direction:column">
  <span>${d.uid}</span>
- <span style="color:var(--accent)">${d.role} • ${d.chain}${g_lang === 'en' ? '-Seq' : '鏈'}</span>
+ <span style="color:var(--accent)">${d.role} • ${d.chain}鏈</span>
  </div>
  </div>
  <div style="display:flex; gap:6px; padding:0 10px; align-items:center;">
@@ -15147,10 +15132,10 @@
  </div>
  <div style="min-width:80px;text-align:right;padding-right:10px">
  <div style="font-size:1.3rem;font-weight:bold;color:var(--accent);font-family:'JetBrains Mono'">${safeFixed(d.pct, 1)}%</div>
- <div style="font-size:0.7rem;color:#666;margin-top:2px">${g_lang === 'en' ? 'Max ' : ''}${safeFixed(d.max, 0)}${g_lang === 'en' ? '' : ' 滿分'}</div>
+ <div style="font-size:0.7rem;color:#666;margin-top:2px">${safeFixed(d.max, 0)} 滿分</div>
  </div>
  <div style="display:flex; align-items:center; padding-left:5px;">
- <button class="btn-compare-mini" onclick="event.stopPropagation(); setCompareFromRank(${i})" title="${g_lang === 'en' ? 'Add to Compare' : '將此玩家加入對比'}">⚖️</button>
+ <button class="btn-compare-mini" onclick="event.stopPropagation(); setCompareFromRank(${i})" title="將此玩家加入對比">⚖️</button>
  </div>
  </div>`;
                 });
@@ -15164,19 +15149,19 @@
                     faultHtml += `
  <div style="display:flex;justify-content:space-between;padding:12px 15px;background:rgba(255,107,107,0.05);border-bottom:1px solid #333;font-size:0.9rem">
  <div style="width:140px;color:#eee">${f.player}<br><span style="font-size:0.7rem;color:#666">${f.uid}</span></div>
- <div style="width:100px;color:var(--accent);display:flex;align-items:center">${f.role || (g_lang === 'en' ? 'Unknown' : '未知')}</div>
+ <div style="width:100px;color:var(--accent);display:flex;align-items:center">${f.role || '未知'}</div>
  <div style="flex:1;color:var(--error);padding-left:15px;display:flex;align-items:center">⚠️ ${f.reason}</div>
  </div>
  `;
                 });
 
                 if (faultHtml) {
-                    const titleStr = rank_viewMode === 'fault' ? (g_lang === 'en' ? 'Full Database Anomaly Report' : '全域資料庫異常完整清單') : (g_lang === 'en' ? 'Current Data Anomaly Report' : '當前資料異常診斷報告');
+                    const titleStr = rank_viewMode === 'fault' ? "全域資料庫異常完整清單" : "當前資料異常診斷報告";
                     html += `
  <div style="margin-top:${rank_viewMode === 'fault' ? '0' : '25px'};border:1px solid #444;border-radius:8px;overflow:hidden;background:#1a1a1f">
  <div style="background:#2a2a2f;padding:10px 15px;font-size:0.85rem;font-weight:bold;color:var(--error);display:flex;justify-content:space-between;align-items:center">
  <span>${titleStr} (${rank_faults.length})</span>
- <span style="font-size:0.75rem;color:#777;font-weight:normal">${g_lang === 'en' ? 'Anomalous entries excluded from rankings & charts' : '異常項目已自動從排行與圖表中剔除'}</span>
+ <span style="font-size:0.75rem;color:#777;font-weight:normal">異常項目已自動從排行與圖表中剔除</span>
  </div>
  <div style="max-height:${rank_viewMode === 'fault' ? 'none' : '300px'};overflow-y:auto">
  ${faultHtml}
@@ -15185,10 +15170,10 @@
  `;
                 }
             } else if (rank_viewMode === 'fault') {
-                html = `<div style="text-align:center;color:var(--ok);padding:50px;font-size:1.1rem">${g_lang === 'en' ? '🎉 All clear! No anomalies found in the full database scan.' : '🎉 恭喜！資料庫完整掃描後未發現任何異常'}</div>`;
+                html = '<div style="text-align:center;color:var(--ok);padding:50px;font-size:1.1rem">🎉 恭喜！資料庫完整掃描後未發現任何異常</div>';
             }
 
-            box.innerHTML = html || (rank_viewMode === 'fault' ? '' : `<div style="text-align:center;color:#666;margin-top:20px">${g_lang === 'en' ? 'No matching data' : '無符合資料'}</div>`);
+            box.innerHTML = html || (rank_viewMode === 'fault' ? '' : '<div style="text-align:center;color:#666;margin-top:20px">無符合資料</div>');
 
             // 顯示或隱藏快捷跳轉按鈕
             rank_updateJumpButtonVisibility();
@@ -15272,14 +15257,14 @@
 
             let html = `
  <div style="background:#1e1e24;border:1px solid var(--accent);border-radius:8px;padding:15px;color:#fff;font-size:0.85rem;box-shadow:0 0 20px rgba(0,0,0,0.5);width:100%;max-width:350px;">
- <h4 style="margin:0 0 10px 0;color:var(--accent);border-bottom:1px solid #333;padding-bottom:5px;">${g_lang === 'en' ? 'Echo Score Details' : '聲骸評分詳情'} (${targetEcho.cost}C)</h4>
+ <h4 style="margin:0 0 10px 0;color:var(--accent);border-bottom:1px solid #333;padding-bottom:5px;">聲骸評分詳情 (${targetEcho.cost}C)</h4>
  <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.75rem;color:#888;">
- <span>${g_lang === 'en' ? 'Sub Stat' : '詞條屬性'}</span> <span>${g_lang === 'en' ? 'Val (Weight) → Score' : '數值 (權重) → 得分'}</span>
+ <span>詞條屬性</span> <span>數值 (權重) → 得分</span>
  </div>
  `;
 
             if (targetEcho.subs.length === 0) {
-                html += `<div style="text-align:center;padding:10px;color:#666;">${g_lang === 'en' ? 'No sub stats' : '無副詞條'}</div>`;
+                html += `<div style="text-align:center;padding:10px;color:#666;">無副詞條</div>`;
             } else {
                 targetEcho.subs.forEach(s => {
                     let score = s.score.toFixed(1);
@@ -15302,7 +15287,7 @@
 
             html += `
  <div style="margin-top:10px;padding-top:5px;border-top:1px solid #444;display:flex;justify-content:space-between;font-weight:bold;">
- <span>${g_lang === 'en' ? 'Total' : '總分'}</span>
+ <span>總分</span>
  <span style="color:var(--accent);font-size:1.1rem;">${targetEcho.score.toFixed(0)} / ${targetEcho.max.toFixed(0)}</span>
  </div>
  <div style="font-size:0.75rem;color:#666;text-align:right;margin-top:2px;">(${targetEcho.pct.toFixed(1)}%)</div>
@@ -15350,7 +15335,7 @@
                     const pr = Math.floor((1 - (json.myRank - 1) / json.total) * 100);
                     document.getElementById('rank-text-simple').innerText = `#${json.myRank}/${json.total} (PR${pr}%)`;
                 } else {
-                    document.getElementById('rank-text-simple').innerText = g_lang === 'en' ? 'Not ranked' : '未入榜';
+                    document.getElementById('rank-text-simple').innerText = "未入榜";
                 }
             } catch (e) {
                 document.getElementById('rank-text-simple').innerText = "";
@@ -15985,7 +15970,7 @@
             const btn = event && event.target;
             if (btn) {
                 btn.disabled = true;
-                btn.innerText = g_lang === 'en' ? '⬇️ Downloading...' : '⬇️ 下載中...';
+                btn.innerText = '⬇️ 下載中...';
                 btn.style.opacity = '0.5';
             }
             if (!blob) {
@@ -15998,7 +15983,7 @@
                         link.href = URL.createObjectURL(g_shareBlobs[type]);
                         link.click();
                         if (btn) {
-                            btn.innerText = g_lang === 'en' ? '✅ Downloaded' : '✅ 已下載';
+                            btn.innerText = '✅ 已下載';
                             btn.style.opacity = '1';
                             btn.disabled = false; // 允許重複下載
                         }
@@ -16007,8 +15992,8 @@
                 // 30秒超時保護
                 setTimeout(() => {
                     clearInterval(checkInterval);
-                    if (btn && btn.innerText === (g_lang === 'en' ? '⬇️ Downloading...' : '⬇️ 下載中...')) {
-                        btn.innerText = g_lang === 'en' ? '❌ Timed out' : '❌ 超時';
+                    if (btn && btn.innerText === '⬇️ 下載中...') {
+                        btn.innerText = '❌ 超時';
                         btn.disabled = false;
                         btn.style.opacity = '1';
                     }
@@ -16151,19 +16136,19 @@
                     bar.style.background = 'linear-gradient(90deg, #4b2d4a, #1a1a3a)';
                     bar.style.borderColor = '#9c27b0';
                     bar.style.color = '#e0b0ff';
-                    if (barText) barText.innerHTML = g_lang === 'en' ? `🟣 Offline Edit + Custom Weights | Previewing...` : `🟣 離線編輯 + 自訂權重 | 預覽修改中...`;
+                    if (barText) barText.innerHTML = `🟣 離線編輯 + 自訂權重 | 預覽修改中...`;
                 } else {
                     document.body.classList.remove('theme-offline-custom');
                     bar.style.background = 'linear-gradient(90deg,#2d4a2d,#1a3a1a)';
                     bar.style.borderColor = '#4caf50';
                     bar.style.color = '#98c379';
-                    if (barText) barText.innerHTML = g_lang === 'en' ? `🟢 Offline Edit Mode | Previewing changes...` : `🟢 離線編輯模式 | 預覽修改內容中...`;
+                    if (barText) barText.innerHTML = `🟢 離線編輯模式 | 預覽修改內容中...`;
                 }
             } else if (dbBar && dbBar.style.display !== 'none') {
                 document.body.classList.remove('theme-offline-custom');
                 document.body.classList.remove('theme-custom');
                 document.body.classList.add('theme-debug'); // Always stay red
-                if (dbBarText) dbBarText.innerHTML = g_lang === 'en' ? `🐞 Debug Mode | Data preview... ${isCustomMode ? '(+Custom Weights)' : ''}` : `🐞 排錯模式 | 數據預覽中... ${isCustomMode ? '(+自訂權重)' : ''}`;
+                if (dbBarText) dbBarText.innerHTML = `🐞 排錯模式 | 數據預覽中... ${isCustomMode ? '(+自訂權重)' : ''}`;
             } else {
                 document.body.classList.remove('theme-offline-custom');
                 document.body.classList.remove('theme-debug');
@@ -17038,7 +17023,7 @@
             let milestoneHtml = sortedHistory.slice(-5).reverse().map(h => {
                 return `<div style="margin-bottom:8px;">• ${h.ts} - 分析 <span style="color:var(--accent)">${h.global?.role}</span> (平均 ${rank_calcItemAvg(h).toFixed(1)}%)</div>`;
             }).join('');
-            document.getElementById('db-milestones').innerHTML = milestoneHtml || g_lang === 'en' ? 'No records yet.' : '尚未有任何紀錄';
+            document.getElementById('db-milestones').innerHTML = milestoneHtml || "尚未有任何紀錄";
 
             // Render Charts
             dashboard_renderFilteredTrend();
@@ -17523,7 +17508,7 @@
             const container = document.getElementById('heatmap-container');
             const history = getCleanHistory();
             if (history.length === 0) {
-                container.innerHTML = g_lang === 'en' ? '<div style="color:#666;text-align:center;padding:40px;">No data available</div>' : '<div style="color:#666;text-align:center;padding:40px;">暫無數據</div>';
+                container.innerHTML = '<div style="color:#666;text-align:center;padding:40px;">暫無數據</div>';
                 return;
             }
 
@@ -17854,7 +17839,7 @@
             if (g_imitateCost.propertyList.length === 0) {
                 list.innerHTML = '<div class="imitate-empty">尚未開啟任何詞條</div>';
                 totalScoreEl.innerText = "0.0";
-                maxPossibleEl.innerText = g_lang === 'en' ? `Theoretical Max: ${maxTheoretical.toFixed(1)}` : `理論最高分：${maxTheoretical.toFixed(1)}`;
+                maxPossibleEl.innerText = `理論最高分：${maxTheoretical.toFixed(1)}`;
             } else {
                 list.innerHTML = g_imitateCost.propertyList.map((p, i) => {
                     let rankNum = p.max - p.idx; // e.g. T1, T2
@@ -17911,7 +17896,7 @@
                 const percentage = maxTheoretical > 0 ? (currentTotalScore / maxTheoretical * 100).toFixed(1) : '0.0';
                 const percentEl = document.getElementById('imitate-total-percent');
                 if (percentEl) percentEl.innerText = `(${percentage}%)`;
-                maxPossibleEl.innerText = g_lang === 'en' ? `Theoretical Max: ${maxTheoretical.toFixed(1)}` : `理論最高分：${maxTheoretical.toFixed(1)}`;
+                maxPossibleEl.innerText = `理論最高分：${maxTheoretical.toFixed(1)}`;
 
                 // Update button text for dev mode
                 if (g_isDeveloper && g_imitateCost.propertyList.length >= 5) {
@@ -18293,7 +18278,7 @@
             let html = '<option value="">-- 請選取紀錄 --</option>';
             html += '<optgroup label="📜 本地歷史紀錄">';
             history.forEach((item, idx) => {
-                const role = item.global?.role || (g_lang === 'en' ? 'Unrecognized' : '未辨識');
+                const role = item.global?.role || '未辨識';
                 html += `<option value="hist_${idx}">${item.ts} - ${role}</option>`;
             });
             html += '</optgroup>';
@@ -18387,7 +18372,7 @@
             const summaryText = document.getElementById('compare-summary-text');
 
             if (val1 === "" || val2 === "") {
-                diffTable.innerHTML = g_lang === 'en' ? '<div style="color:#666;text-align:center;padding:60px;"><span style="font-size:2rem;">⚖️</span><br>Select two entries above to start comparison</div>' : '<div style="color:#666;text-align:center;padding:60px;"><span style="font-size:2rem;">⚖️</span><br>請選取上方兩筆紀錄以開始對比分析</div>';
+                diffTable.innerHTML = '<div style="color:#666;text-align:center;padding:60px;"><span style="font-size:2rem;">⚖️</span><br>請選取上方兩筆紀錄以開始對比分析</div>';
                 if (cont1) cont1.innerHTML = '';
                 if (cont2) cont2.innerHTML = '';
                 if (summaryText) summaryText.innerText = '';
@@ -18402,7 +18387,7 @@
                     const idx = parseInt(val.replace('rank_', ''));
                     const r = rank_list[idx];
                     return {
-                        ts: r.player + (g_lang === 'en' ? ' (Rank #' : ' (排行 #') + (idx + 1) + ')',
+                        ts: r.player + " (排行 #" + (idx + 1) + ")",
                         global: { role: r.role },
                         echoes: r.detailEchoes, // 使用已解析的 detailEchoes
                         isRank: true,
@@ -18458,13 +18443,13 @@
                 return `
  <div style="display:flex; flex-direction:column; gap:8px;">
  <div style="font-size:1.1rem; color:${labelColor}; font-weight:bold;">${info.role}</div>
- <div style="font-size:0.75rem; color:#666;">${g_lang === 'en' ? 'Target: ' : '對象：'}${item.ts}</div>
+ <div style="font-size:0.75rem; color:#666;">對象：${item.ts}</div>
  <div style="display:flex; align-items:baseline; gap:10px; margin-top:10px;">
  <span style="font-size:2.5rem; font-weight:800; color:#fff;">${info.pct.toFixed(1)}%</span>
  <span style="font-size:1rem; color:var(--ok); font-weight:bold;">[${luckRank}]</span>
  </div>
- <div style="font-size:0.85rem; color:#aaa;">${g_lang === 'en' ? 'Weighted Total: ' : '加權總得分：'}${info.totalScore.toFixed(1)} / ${info.totalMax.toFixed(0)}</div>
- <div style="font-size:0.85rem; color:var(--cv-val);">${g_lang === 'en' ? 'CV: ' : 'CV值：'}<b style="font-size:1.1rem;">${cvObj.cv.toFixed(1)}</b> <span style="font-size:0.7rem; color:#666;">(CR:${cvObj.cr.toFixed(1)}/CD:${cvObj.cd.toFixed(1)})</span></div>
+ <div style="font-size:0.85rem; color:#aaa;">加權總得分：${info.totalScore.toFixed(1)} / ${info.totalMax.toFixed(0)}</div>
+ <div style="font-size:0.85rem; color:var(--cv-val);">CV值：<b style="font-size:1.1rem;">${cvObj.cv.toFixed(1)}</b> <span style="font-size:0.7rem; color:#666;">(CR:${cvObj.cr.toFixed(1)}/CD:${cvObj.cd.toFixed(1)})</span></div>
  </div>
  `;
             };
@@ -18474,20 +18459,20 @@
 
             const pctDiff = info2.pct - info1.pct;
             if (pctDiff > 0) {
-                summaryText.innerHTML = g_lang === 'en' ? `⚠️ <span style="color:var(--indicator-up)">B is ${pctDiff.toFixed(1)}% stronger than A</span>` : `⚠️ <span style="color:var(--indicator-up)">B 比 A 強出 ${pctDiff.toFixed(1)}%</span>`;
+                summaryText.innerHTML = `⚠️ <span style="color:var(--indicator-up)">B 比 A 強出 ${pctDiff.toFixed(1)}%</span>`;
             } else if (pctDiff < 0) {
-                summaryText.innerHTML = g_lang === 'en' ? `⚠️ <span style="color:var(--indicator-down)">B is ${Math.abs(pctDiff).toFixed(1)}% weaker than A</span>` : `⚠️ <span style="color:var(--indicator-down)">B 比 A 弱了 ${Math.abs(pctDiff).toFixed(1)}%</span>`;
+                summaryText.innerHTML = `⚠️ <span style="color:var(--indicator-down)">B 比 A 弱了 ${Math.abs(pctDiff).toFixed(1)}%</span>`;
             } else {
-                summaryText.innerText = g_lang === 'en' ? 'Both are equally matched' : '兩者實力相當';
+                summaryText.innerText = '兩者實力相當';
             }
 
             let diffHtml = '<table class="feature-table" style="font-size:0.85rem; margin-top:0; border-collapse: separate;">';
             diffHtml += `<thead style="position:sticky; top:0; z-index:10; background:#1e1e22; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
  <tr>
- <th style="border-bottom: 2px solid var(--accent);">${g_lang === 'en' ? 'Stat' : '屬性項目'}</th>
- <th style="border-bottom: 2px solid #56b6c2;">${g_lang === 'en' ? 'Record A' : '紀錄 A'}</th>
- <th style="border-bottom: 2px solid var(--accent);">${g_lang === 'en' ? 'Record B' : '紀錄 B'}</th>
- <th style="border-bottom: 2px solid #666;">${g_lang === 'en' ? 'Diff' : '差值'}</th>
+ <th style="border-bottom: 2px solid var(--accent);">屬性項目</th>
+ <th style="border-bottom: 2px solid #56b6c2;">紀錄 A</th>
+ <th style="border-bottom: 2px solid var(--accent);">紀錄 B</th>
+ <th style="border-bottom: 2px solid #666;">差值</th>
  </tr>
  </thead><tbody>`;
 
