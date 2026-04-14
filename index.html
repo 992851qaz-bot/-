@@ -14705,6 +14705,9 @@
                 rank_list = [];
                 rank_faults = []; // 重置異常記錄
 
+                // Guard: rank_data must be a valid array before any operation
+                if (!Array.isArray(rank_data)) rank_data = [];
+
                 if (rank_viewMode === 'role') {
                     const targetRole = rank_currSelection ? String(rank_currSelection).trim() : '';
                     rawList = rank_data.filter(d => d.role && String(d.role).trim() === targetRole);
@@ -14713,9 +14716,12 @@
                     rawList = rank_data.filter(d => d.uid && String(d.uid).trim() === targetUid);
                 } else if (rank_viewMode === 'fault') {
                     rawList = rank_data; // 掃描模式下讀取全域資料
-                    document.getElementById('db-top-title').innerText = g_lang === 'en' ? 'Global Fault Summary' : "全域異常總覽";
-                    document.getElementById('db-top-label').innerText = g_lang === 'en' ? 'Diagnosing' : "診斷中";
-                    document.getElementById('db-build-wrap').innerHTML = '';
+                    const titleEl = document.getElementById('db-top-title');
+                    const labelEl = document.getElementById('db-top-label');
+                    const buildWrapEl = document.getElementById('db-build-wrap');
+                    if (titleEl) titleEl.innerText = g_lang === 'en' ? 'Global Fault Summary' : "全域異常總覽";
+                    if (labelEl) labelEl.innerText = g_lang === 'en' ? 'Diagnosing' : "診斷中";
+                    if (buildWrapEl) buildWrapEl.innerHTML = '';
                 }
 
                 rawList.forEach(d => {
@@ -15049,7 +15055,8 @@
         }
 
         function rank_renderTable() {
-            const txt = document.getElementById('db-search-input').value.toLowerCase();
+            const searchEl = document.getElementById('db-search-input');
+            const txt = searchEl ? searchEl.value.toLowerCase() : '';
             const box = document.getElementById('db-data-area');
             if (!box) return;
             let html = '';
@@ -15159,7 +15166,7 @@
             if (rank_faults.length > 0) {
                 let faultHtml = '';
                 rank_faults.forEach(f => {
-                    if (txt && !f.player.toLowerCase().includes(txt) && !f.uid.includes(txt) && !f.role.includes(txt)) return;
+                    if (txt && !(f.player || '').toLowerCase().includes(txt) && !(f.uid || '').includes(txt) && !(f.role || '').includes(txt)) return;
                     faultHtml += `
  <div style="display:flex;justify-content:space-between;padding:12px 15px;background:rgba(255,107,107,0.05);border-bottom:1px solid #333;font-size:0.9rem">
  <div style="width:140px;color:#eee">${f.player}<br><span style="font-size:0.7rem;color:#666">${f.uid}</span></div>
