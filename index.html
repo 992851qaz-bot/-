@@ -8562,18 +8562,18 @@
                     <div class="db-analysis-content">
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>🎯 屬性分佈熱區</span>
+                                <span data-lang-zh="🎯 屬性分佈熱區" data-lang-en="🎯 Stat Distribution">🎯 屬性分佈熱區</span>
                             </div>
                             <div
                                 style="flex:1;position:relative;width:100%;max-width:450px;min-height:280px;margin:0 auto;">
                                 <canvas id="c-radar"></canvas>
                             </div>
                             <div style="font-size:0.75rem;color:#666;margin-top:10px;text-align:center">
-                                黃色區域越飽滿，代表詞條分配越接近理論完美值</div>
+                                <span data-lang-zh="黃色區域越飽滿，代表詞條分配越接近理論完美值" data-lang-en="Fuller yellow area = closer to theoretical perfect distribution.">黃色區域越飽滿，代表詞條分配越接近理論完美值</span></div>
                         </div>
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>🏆 得分貢獻來源分析</span>
+                                <span data-lang-zh="🏆 得分貢獻來源分析" data-lang-en="🏆 Score Contribution Analysis">🏆 得分貢獻來源分析</span>
                             </div>
                             <div
                                 style="flex:1;position:relative;width:100%;max-width:450px;min-height:220px;margin:0 auto;">
@@ -8582,18 +8582,18 @@
                         </div>
                         <div class="db-chart-box">
                             <div class="db-chart-title">
-                                <span>⚖️ 當前權重配置詳情</span>
+                                <span data-lang-zh="⚖️ 當前權重配置詳情" data-lang-en="⚖️ Current Weight Configuration">⚖️ 當前權重配置詳情</span>
                                 <span id="w-max-score" style="font-size:0.9rem;color:#888"></span>
                             </div>
                             <div style="overflow:auto;max-height:250px">
                                 <table class="db-calc-table" style="font-size:0.85rem">
                                     <thead>
                                         <tr>
-                                            <th>屬性</th>
-                                            <th>權重</th>
-                                            <th>極值</th>
-                                            <th>理論分</th>
-                                            <th>佔比</th>
+                                            <th data-lang-zh="屬性" data-lang-en="Stat">屬性</th>
+                                            <th data-lang-zh="權重" data-lang-en="Weight">權重</th>
+                                            <th data-lang-zh="極值" data-lang-en="Max">極值</th>
+                                            <th data-lang-zh="理論分" data-lang-en="Theory">理論分</th>
+                                            <th data-lang-zh="佔比" data-lang-en="Share">佔比</th>
                                         </tr>
                                     </thead>
                                     <tbody id="w-tbody"></tbody>
@@ -12887,7 +12887,7 @@
         }
 
         async function generateShareImage() {
-            if (!g_globalData.role) { showMsg("請先選擇或分析一個角色"); return }
+            if (!g_globalData.role) { showMsg(g_lang==="en"?"Please select or analyze a character first":"請先選擇或分析一個角色"); return }
             document.getElementById('share-modal').style.display = 'flex';
             updateSharePreview('social'); // Default to Social for "Wow" factor
         }
@@ -14472,6 +14472,8 @@
         const RANK_LOOKUP_ROWS = [["60", "11.6%", "580", "11.6%", "70", "14.7%", "10.5%", "21.0%", "11.6%", "11.6%", "11.6%", "11.6%", "12.4%"], ["50", "10.9%", "540", "10.9%", "60", "13.8%", "9.9%", "19.8%", "10.9%", "10.9%", "10.9%", "10.9%", "11.6%"], ["40", "10.1%", "510", "10.1%", "50", "12.8%", "9.3%", "18.6%", "10.1%", "10.1%", "10.1%", "10.1%", "10.8%"], ["30", "9.4%", "470", "9.4%", "40", "11.8%", "8.7%", "17.4%", "9.4%", "9.4%", "9.4%", "9.4%", "10.0%"], ["—", "8.6%", "430", "8.6%", "—", "10.9%", "8.1%", "16.2%", "8.6%", "8.6%", "8.6%", "8.6%", "9.2%"], ["—", "7.9%", "390", "7.9%", "—", "10.0%", "7.5%", "15.0%", "7.9%", "7.9%", "7.9%", "7.9%", "8.4%"], ["—", "7.1%", "360", "7.1%", "—", "9.0%", "6.9%", "13.8%", "7.1%", "7.1%", "7.1%", "7.1%", "7.6%"], ["—", "6.4%", "320", "6.4%", "—", "8.1%", "6.3%", "12.6%", "6.4%", "6.4%", "6.4%", "6.4%", "6.8%"]];
         const RANK_MAX_VALS = { "攻擊": 60, "攻擊百分比": 11.6, "生命": 580, "生命百分比": 11.6, "防禦": 70, "防禦百分比": 14.7, "暴擊": 10.5, "暴擊傷害": 21.0, "共鳴效率": 11.6, "普攻傷害加成": 11.6, "重擊傷害加成": 11.6, "共鳴技能傷害加成": 11.6, "共鳴解放傷害加成": 12.4 };
         const RANK_STAT_LABELS = { "暴擊": "暴擊", "暴擊傷害": "暴傷", "共鳴效率": "效率", "攻擊百分比": "攻擊%", "攻擊": "攻固", "生命百分比": "生命%", "生命": "生固", "防禦百分比": "防禦%", "防禦": "防固", "共鳴解放傷害加成": "大招", "共鳴技能傷害加成": "E技", "普攻傷害加成": "普攻", "重擊傷害加成": "重擊" };
+        const RANK_STAT_LABELS_EN = { "暴擊": "CR%", "暴擊傷害": "CD%", "共鳴效率": "ER%", "攻擊百分比": "ATK%", "攻擊": "ATK", "生命百分比": "HP%", "生命": "HP", "防禦百分比": "DEF%", "防禦": "DEF", "共鳴解放傷害加成": "Liberation", "共鳴技能傷害加成": "Skill", "普攻傷害加成": "Basic", "重擊傷害加成": "Heavy" };
+        function rankStatLabel(k) { return (g_lang==="en" ? (RANK_STAT_LABELS_EN[k]||k) : (rankStatLabel(k))); }
 
 
         async function rank_initDataLoad() {
@@ -14492,7 +14494,7 @@
             } catch (e) {
                 console.error("DB Load Error", e);
                 if (loader) {
-                    document.getElementById('db-loading-txt').innerText = "連線失敗: " + e.message;
+                    document.getElementById('db-loading-txt').innerText = (g_lang==="en"?"Connection failed: ":"連線失敗: ") + e.message;
                     setTimeout(() => loader.style.display = 'none', 2000);
                 }
             }
@@ -14505,7 +14507,7 @@
                 let n = r[1] ? String(r[1]).trim() : ''; if (!n || n === '(N/A)') return;
                 if (!rank_weights[n]) rank_weights[n] = [];
                 let w = {}; h.forEach((x, i) => { let k = map[x]; if (k) w[k] = parseFloat(r[i]) || 0 });
-                rank_weights[n].push({ name: (r[0] ? String(r[0]).trim() : "通用"), weights: w });
+                rank_weights[n].push({ name: (r[0] ? String(r[0]).trim() : (g_lang==="en"?"General":"通用")), weights: w });
             });
         }
 
@@ -14566,16 +14568,16 @@
                 listEl.innerHTML = uids.map(u => `
  <button class="db-list-btn" data-value="${u}">
  <span style="font-family:'JetBrains Mono'">${u}</span>
- <span style="font-size:0.75rem;color:#666">查看角色</span>
+ <span style="font-size:0.75rem;color:#666">${g_lang==="en"?"View":"查看角色"}</span>
  </button>
  `).join('');
             } else if (rank_viewMode === 'fault') {
                 listEl.innerHTML = `
  <div style="padding:15px;color:#888;font-size:0.85rem;line-height:1.6">
- <div style="color:var(--error);font-weight:bold;margin-bottom:8px">⚠️ 異常診斷模式</div>
- 此模式會掃描資料庫中所有的玩家紀錄，找出聲骸缺失或配置錯誤的項目。
+ <div style="color:var(--error);font-weight:bold;margin-bottom:8px">${g_lang==="en"?"⚠️ Anomaly Diagnosis Mode":"⚠️ 異常診斷模式"}</div>
+ ${g_lang==="en"?"This mode scans all player records for missing echoes or configuration errors.":"此模式會掃描資料庫中所有的玩家紀錄，找出聲骸缺失或配置錯誤的項目。"}
  <br><br>
- <button class="db-btn-primary" style="width:100%" onclick="rank_calcData()">立即重新掃描</button>
+ <button class="db-btn-primary" style="width:100%" onclick="rank_calcData()">${g_lang==="en"?"Re-scan Now":"立即重新掃描"}</button>
  </div>
  `;
             }
@@ -14605,19 +14607,19 @@
                     if (sb) sb.classList.remove('show');
                 }
 
-                document.getElementById('db-top-label').innerText = rank_viewMode === 'role' ? '目前檢視角色' : '目前檢視玩家';
+                document.getElementById('db-top-label').innerText = rank_viewMode === 'role' ? (g_lang==="en"?"Viewing Character":"目前檢視角色") : (g_lang==="en"?"Viewing Player":"目前檢視玩家");
                 document.getElementById('db-top-title').innerText = val;
 
                 const buildWrap = document.getElementById('db-build-wrap');
                 if (rank_viewMode === 'role') {
-                    const builds = rank_weights[val] || [{ name: "預設", weights: {} }];
+                    const builds = rank_weights[val] || [{ name: g_lang==="en"?"Default":"預設", weights: {} }];
                     buildWrap.innerHTML = builds.length > 1 ?
                         `<select style="background:#27272a;color:var(--accent);border:1px solid #3f3f46;padding:6px;border-radius:4px" onchange="rank_currBuild=parseInt(this.value);rank_calcData()">
  ${builds.map((b, i) => `<option value="${i}">${b.name}</option>`).join('')}
  </select>` :
                         `<span style="font-size:0.8rem;color:#888;background:#222;padding:4px 8px;border-radius:4px">${builds[0].name}</span>`;
                 } else {
-                    buildWrap.innerHTML = '<span style="font-size:0.75rem;color:#555">玩家總覽模式</span>';
+                    buildWrap.innerHTML = `<span style="font-size:0.75rem;color:#555">${g_lang==="en"?"Player Overview":"玩家總覽模式"}</span>`;
                 }
 
                 rank_calcData();
@@ -14699,15 +14701,15 @@
                     rawList = rank_data.filter(d => d.uid && String(d.uid).trim() === targetUid);
                 } else if (rank_viewMode === 'fault') {
                     rawList = rank_data; // 掃描模式下讀取全域資料
-                    document.getElementById('db-top-title').innerText = "全域異常總覽";
-                    document.getElementById('db-top-label').innerText = "診斷中";
+                    document.getElementById('db-top-title').innerText = g_lang==="en"?"Global Anomaly Overview":"全域異常總覽";
+                    document.getElementById('db-top-label').innerText = g_lang==="en"?"Diagnosing...":"診斷中";
                     document.getElementById('db-build-wrap').innerHTML = '';
                 }
 
                 rawList.forEach(d => {
                     // 基本數據檢查
                     if (!d.echoes || !Array.isArray(d.echoes) || d.echoes.length === 0) {
-                        rank_faults.push({ player: d.player, uid: d.uid, role: d.role, reason: "聲骸資料缺失或為空" });
+                        rank_faults.push({ player: d.player, uid: d.uid, role: d.role, reason: g_lang==="en"?"Echo data missing or empty":"聲骸資料缺失或為空" });
                         return;
                     }
 
@@ -14715,7 +14717,7 @@
                     let builds = rank_weights[role];
 
                     if (!builds || builds.length === 0) {
-                        rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: `角色 [${role}] 缺少權重配置數據` });
+                        rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: g_lang==="en"?`Character [${role}] missing weight config`:`角色 [${role}] 缺少權重配置數據` });
                         return;
                     }
 
@@ -14726,10 +14728,10 @@
                         if (result) {
                             if (rank_viewMode !== 'fault') rank_list.push(result);
                         } else {
-                            rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: "計算邏輯發生未知錯誤" });
+                            rank_faults.push({ player: d.player, uid: d.uid, role: role, reason: g_lang==="en"?"Unknown calculation error":"計算邏輯發生未知錯誤" });
                         }
                     } catch (e) {
-                        rank_faults.push({ player: d.player, uid: d.uid, role: d.role, reason: `計算異常: ${e.message}` });
+                        rank_faults.push({ player: d.player, uid: d.uid, role: d.role, reason: g_lang==="en"?`Calculation error: ${e.message}`:`計算異常: ${e.message}` });
                     }
                 });
 
@@ -14740,7 +14742,7 @@
             } catch (err) {
                 console.error("[Rank Error] calcData failed:", err);
                 const box = document.getElementById('db-data-area');
-                if (box) box.innerHTML = '<div style="text-align:center;color:var(--error);padding:20px;">資料計算發生嚴重錯誤，請查看控制台</div>';
+                if (box) box.innerHTML = `<div style="text-align:center;color:var(--error);padding:20px;">${g_lang==="en"?"Critical calculation error, check console":"資料計算發生嚴重錯誤，請查看控制台"}</div>`;
             }
         }
 
@@ -14760,13 +14762,13 @@
             if (refreshHint) {
                 refreshHint.style.display = 'none';
             }
-            showMsg('正在重新載入排行資料...');
+            showMsg(g_lang==="en"?'Reloading ranking data...':'正在重新載入排行資料...');
             rank_initDataLoad();
         }
 
         function rank_jumpToUser() {
             if (g_userRankPosition === -1) {
-                showMsg('未找到您的資料位置');
+                showMsg(g_lang==="en"?'Your data position not found':'未找到您的資料位置');
                 return;
             }
             const cards = document.querySelectorAll('#db-data-area .db-card');
@@ -14814,7 +14816,7 @@
                 points.push({ label: `${Math.round(r * 100)}%`, ratio: r });
             }
 
-            points.push({ label: '末', ratio: 1 });
+            points.push({ label: g_lang==="en"?'End':'末', ratio: 1 });
             rail.innerHTML = points.map(p => `<button class="rank-rail-btn" onclick="rank_jumpToRatio(${p.ratio})" title="快速前往 ${p.label}">${p.label}</button>`).join('');
         }
 
@@ -14837,8 +14839,8 @@
                 if (rank_chartInstances.contrib) rank_chartInstances.contrib.destroy();
                 if (rank_chartInstances.chains) rank_chartInstances.chains.destroy();
                 if (rank_chartInstances.scores) rank_chartInstances.scores.destroy();
-                document.getElementById('w-tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666">無數據可供分析</td></tr>';
-                document.getElementById('w-max-score').innerText = '理論極限分: N/A';
+                document.getElementById('w-tbody').innerHTML = `<tr><td colspan="5" style="text-align:center;color:#666">${g_lang==="en"?"No data available":"無數據可供分析"}</td></tr>`;
+                document.getElementById('w-max-score').innerText = (g_lang==="en"?"Theoretical Max: N/A":"理論極限分: N/A");
                 return;
             }
             const target = rank_list[0];
@@ -14852,7 +14854,7 @@
             let actualData = [];
             let topStats = weightsArr.slice(0, 6);
             topStats.forEach(stat => {
-                labels.push(RANK_STAT_LABELS[stat.key] || stat.key);
+                labels.push(rankStatLabel(stat.key));
                 let tTotal = stat.val * 5;
                 theoryData.push(tTotal);
                 actualData.push(target.statBreakdown[stat.key] || 0);
@@ -14864,8 +14866,8 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: '理論完美值 (5聲骸總和)', data: theoryData, borderColor: 'rgba(255,255,255,0.3)', backgroundColor: 'rgba(255,255,255,0.05)', borderDash: [5, 5], pointRadius: 0 },
-                        { label: '目前配置得分', data: actualData, borderColor: '#e5c07b', backgroundColor: 'rgba(229,192,123,0.4)', pointBackgroundColor: '#fff' }
+                        { label: g_lang==="en"?'Theoretical Max (5 Echoes)':'理論完美值 (5聲骸總和)', data: theoryData, borderColor: 'rgba(255,255,255,0.3)', backgroundColor: 'rgba(255,255,255,0.05)', borderDash: [5, 5], pointRadius: 0 },
+                        { label: g_lang==="en"?'Current Setup Score':'目前配置得分', data: actualData, borderColor: '#e5c07b', backgroundColor: 'rgba(229,192,123,0.4)', pointBackgroundColor: '#fff' }
                     ]
                 },
                 options: {
@@ -14878,7 +14880,7 @@
             let contribLabels = [];
             Object.keys(target.statBreakdown).forEach(k => {
                 if (target.statBreakdown[k] > 0) {
-                    contribLabels.push(RANK_STAT_LABELS[k] || k);
+                    contribLabels.push(rankStatLabel(k));
                     contribData.push(target.statBreakdown[k]);
                 }
             });
@@ -14927,7 +14929,7 @@
             const chainCounts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
             rank_list.forEach(d => { if (d.chain !== undefined) chainCounts[d.chain]++ });
 
-            const chainLabels = ['0鏈', '1鏈', '2鏈', '3鏈', '4鏈', '5鏈', '6鏈'];
+            const chainLabels = g_lang==="en"?['Chain 0','Chain 1','Chain 2','Chain 3','Chain 4','Chain 5','Chain 6']:['0鏈','1鏈','2鏈','3鏈','4鏈','5鏈','6鏈'];
             const chainData = Object.values(chainCounts);
             const chainColors = ['#3d3d3d', '#8b4513', '#b8860b', '#daa520', '#ffd700', '#ffec8b', '#ffffcd'];
 
@@ -14935,7 +14937,7 @@
             rank_chartInstances.chains = new Chart(document.getElementById('c-chains'), {
                 type: 'bar',
                 data: {
-                    labels: ['鏈度分佈'],
+                    labels: [g_lang==="en"?'Chain Dist.':'鏈度分佈'],
                     datasets: chainLabels.map((l, i) => ({
                         label: l,
                         data: [chainData[i]],
@@ -14973,7 +14975,7 @@
                 data: {
                     labels: Object.keys(scoreBins),
                     datasets: [{
-                        label: '人數',
+                        label: g_lang==="en"?'Players':'人數',
                         data: Object.values(scoreBins),
                         backgroundColor: ['#ff6bb3', '#e5c07b', '#98c379', '#61afef', '#444'],
                         borderRadius: 4
@@ -14994,24 +14996,24 @@
 
             const tbody = document.getElementById('w-tbody');
             if (tbody) {
-                document.getElementById('w-max-score').innerText = `理論極限分: ${safeFixed(target.tMaxSum, 0)} (單件)`;
+                document.getElementById('w-max-score').innerText = g_lang==="en"?`Theoretical Max: ${safeFixed(target.tMaxSum,0)} (per echo)`:`理論極限分: ${safeFixed(target.tMaxSum,0)} (單件)`;
                 let html = '';
                 weightsArr.forEach((item, idx) => {
                     let isTop5 = idx < 5;
                     let pct = target.tMaxSum > 0 ? safeFixed((item.val / target.tMaxSum * 100), 1) : "0.0";
                     let style = isTop5 ? 'color:var(--accent);font-weight:bold' : 'color:#666';
-                    html += `<tr style="${style}"><td>${RANK_STAT_LABELS[item.key] || item.key}</td><td>${item.weight}</td><td>${item.max}</td><td>${safeFixed(item.val, 1)}</td><td>${isTop5 ? pct + '%' : '-'}</td></tr>`;
+                    html += `<tr style="${style}"><td>${rankStatLabel(item.key)}</td><td>${item.weight}</td><td>${item.max}</td><td>${safeFixed(item.val, 1)}</td><td>${isTop5 ? pct + '%' : '-'}</td></tr>`;
                 });
                 tbody.innerHTML = html;
             }
         }
 
         function rank_getGrading(p) {
-            if (p >= 90) return { l: "傳家寶", c: "grad-heirloom" };
-            if (p >= 80) return { l: "大畢業", c: "grad-grand" };
-            if (p >= 65) return { l: "中畢業", c: "grad-medium" };
-            if (p >= 50) return { l: "小畢業", c: "grad-small" };
-            return { l: "未畢業", c: "grad-none" };
+            if (p >= 90) return { l: g_lang==="en"?"S-Tier":"傳家寶", c: "grad-heirloom" };
+            if (p >= 80) return { l: g_lang==="en"?"A-Tier":"大畢業", c: "grad-grand" };
+            if (p >= 65) return { l: g_lang==="en"?"B-Tier":"中畢業", c: "grad-medium" };
+            if (p >= 50) return { l: g_lang==="en"?"C-Tier":"小畢業", c: "grad-small" };
+            return { l: g_lang==="en"?"D-Tier":"未畢業", c: "grad-none" };
         }
 
         function rank_getTierInfo(name, val) {
@@ -15077,7 +15079,7 @@
                         desiredStats.forEach(key => {
                             let val = d.statBreakdown[key];
                             if (val && val > 0) {
-                                let label = RANK_STAT_LABELS[key] || key;
+                                let label = rankStatLabel(key);
                                 let valStr = safeFixed(val, 1);
                                 let unit = (key.includes('百分比') || key.includes('加成') || label.includes('%')) ? '%' : '';
                                 statSpans.push(`<span style="white-space:nowrap"><span style="color:#aaa">${label}</span> <span style="color:#fff;font-family:'JetBrains Mono';font-weight:bold">${valStr}${unit}</span></span>`);
@@ -15087,7 +15089,7 @@
                         if (statSpans.length > 0) {
                             statsHtml = `<div style="font-size:0.75rem;line-height:1.6;color:#888;">${statSpans.join('<span style="color:#444;margin:0 6px">|</span>')}</div>`;
                         } else {
-                            statsHtml = '<div style="color:#555;font-size:0.75rem;">無有效數據</div>';
+                            statsHtml = `<div style="color:#555;font-size:0.75rem;">${g_lang==="en"?"No valid data":"無有效數據"}</div>`;
                         }
                     }
 
@@ -15102,7 +15104,7 @@
                             const iconUrl = (suit && (typeof ATTRIBUTES_PROFILE_PICTURE !== 'undefined') && ATTRIBUTES_PROFILE_PICTURE[suit]) ? ATTRIBUTES_PROFILE_PICTURE[suit] : '';
 
                             echoIconsHtml += `
-                                <div style="position:relative; width:28px; height:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center;" title="${suit || '未知套裝'} (Cost ${cost})">
+                                <div style="position:relative; width:28px; height:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center;" title="${suit || (g_lang==="en"?"Unknown Set":"未知套裝")} (Cost ${cost})">
                                     ${iconUrl ? `<img src="${iconUrl}" style="width:20px; height:20px; filter:drop-shadow(0 0 2px rgba(0,0,0,0.5));">` : `<span style="font-size:0.6rem;color:#444">${cost}</span>`}
                                     <span style="position:absolute; bottom:-3px; right:-3px; background:#000; color:#fff; font-size:0.6rem; padding:0 2px; border-radius:2px; border:1px solid #444; font-family:'JetBrains Mono';">${cost}</span>
                                 </div>`;
@@ -15117,7 +15119,7 @@
  <div style="font-weight:bold;color:#fff;font-size:1rem">${d.player}</div>
  <div style="font-size:0.75rem;color:#888;display:flex;flex-direction:column">
  <span>${d.uid}</span>
- <span style="color:var(--accent)">${d.role} • ${d.chain}鏈</span>
+ <span style="color:var(--accent)">${d.role} • ${g_lang==="en"?"Chain "+d.chain:d.chain+"鏈"}</span>
  </div>
  </div>
  <div style="display:flex; gap:6px; padding:0 10px; align-items:center;">
@@ -15132,10 +15134,10 @@
  </div>
  <div style="min-width:80px;text-align:right;padding-right:10px">
  <div style="font-size:1.3rem;font-weight:bold;color:var(--accent);font-family:'JetBrains Mono'">${safeFixed(d.pct, 1)}%</div>
- <div style="font-size:0.7rem;color:#666;margin-top:2px">${safeFixed(d.max, 0)} 滿分</div>
+ <div style="font-size:0.7rem;color:#666;margin-top:2px">${safeFixed(d.max,0)}${g_lang==="en"?" max":" 滿分"}</div>
  </div>
  <div style="display:flex; align-items:center; padding-left:5px;">
- <button class="btn-compare-mini" onclick="event.stopPropagation(); setCompareFromRank(${i})" title="將此玩家加入對比">⚖️</button>
+ <button class="btn-compare-mini" onclick="event.stopPropagation(); setCompareFromRank(${i})" title="${g_lang==="en"?"Add to compare":"將此玩家加入對比"}">⚖️</button>
  </div>
  </div>`;
                 });
@@ -15149,19 +15151,19 @@
                     faultHtml += `
  <div style="display:flex;justify-content:space-between;padding:12px 15px;background:rgba(255,107,107,0.05);border-bottom:1px solid #333;font-size:0.9rem">
  <div style="width:140px;color:#eee">${f.player}<br><span style="font-size:0.7rem;color:#666">${f.uid}</span></div>
- <div style="width:100px;color:var(--accent);display:flex;align-items:center">${f.role || '未知'}</div>
+ <div style="width:100px;color:var(--accent);display:flex;align-items:center">${f.role || (g_lang==="en"?"Unknown":"未知")}</div>
  <div style="flex:1;color:var(--error);padding-left:15px;display:flex;align-items:center">⚠️ ${f.reason}</div>
  </div>
  `;
                 });
 
                 if (faultHtml) {
-                    const titleStr = rank_viewMode === 'fault' ? "全域資料庫異常完整清單" : "當前資料異常診斷報告";
+                    const titleStr = rank_viewMode === 'fault' ? (g_lang==="en"?"Full Anomaly List":"全域資料庫異常完整清單") : (g_lang==="en"?"Anomaly Report":"當前資料異常診斷報告");
                     html += `
  <div style="margin-top:${rank_viewMode === 'fault' ? '0' : '25px'};border:1px solid #444;border-radius:8px;overflow:hidden;background:#1a1a1f">
  <div style="background:#2a2a2f;padding:10px 15px;font-size:0.85rem;font-weight:bold;color:var(--error);display:flex;justify-content:space-between;align-items:center">
  <span>${titleStr} (${rank_faults.length})</span>
- <span style="font-size:0.75rem;color:#777;font-weight:normal">異常項目已自動從排行與圖表中剔除</span>
+ <span style="font-size:0.75rem;color:#777;font-weight:normal">${g_lang==="en"?"Anomalous items auto-excluded from ranking & charts":"異常項目已自動從排行與圖表中剔除"}</span>
  </div>
  <div style="max-height:${rank_viewMode === 'fault' ? 'none' : '300px'};overflow-y:auto">
  ${faultHtml}
@@ -15170,10 +15172,10 @@
  `;
                 }
             } else if (rank_viewMode === 'fault') {
-                html = '<div style="text-align:center;color:var(--ok);padding:50px;font-size:1.1rem">🎉 恭喜！資料庫完整掃描後未發現任何異常</div>';
+                html = `<div style="text-align:center;color:var(--ok);padding:50px;font-size:1.1rem">${g_lang==="en"?"🎉 No anomalies found in full database scan!":"🎉 恭喜！資料庫完整掃描後未發現任何異常"}</div>`;
             }
 
-            box.innerHTML = html || (rank_viewMode === 'fault' ? '' : '<div style="text-align:center;color:#666;margin-top:20px">無符合資料</div>');
+            box.innerHTML = html || (rank_viewMode === 'fault' ? '' : `<div style="text-align:center;color:#666;margin-top:20px">${g_lang==="en"?"No matching data":"無符合資料"}</div>`);
 
             // 顯示或隱藏快捷跳轉按鈕
             rank_updateJumpButtonVisibility();
@@ -15191,8 +15193,8 @@
             if (d.url) { imgEl.src = d.url; imgEl.style.display = 'block'; noImg.style.display = 'none'; }
             else { imgEl.style.display = 'none'; noImg.style.display = 'block'; }
 
-            document.getElementById('d-title').innerText = `${d.role} 配置詳情`;
-            document.getElementById('d-meta').innerText = `玩家: ${d.player} | UID: ${d.uid} | 武器: ${d.weapon}`;
+            document.getElementById('d-title').innerText = g_lang==="en"?`${d.role} Config Details`:`${d.role} 配置詳情`;
+            document.getElementById('d-meta').innerText = g_lang==="en"?`Player: ${d.player} | UID: ${d.uid} | Weapon: ${d.weapon}`:`玩家: ${d.player} | UID: ${d.uid} | 武器: ${d.weapon}`;
             document.getElementById('d-badge-container').innerHTML = `
  <div class="total-score-badge">
  <span class="db-ts-grade ${d.grad.c}" style="font-size:1.1rem">${d.grad.l}</span>
@@ -15202,17 +15204,17 @@
  </div>
  </div>`;
 
-            let html = `<table class="db-calc-table"><thead><tr><th style="width:40px">C</th><th style="width:80px">評分</th><th style="width:120px">主詞條</th><th>副詞條 (點擊檢視)</th></tr></thead><tbody>`;
+            let html = `<table class="db-calc-table"><thead><tr><th style="width:40px">C</th><th style="width:80px">${g_lang==="en"?"Score":"評分"}</th><th style="width:120px">${g_lang==="en"?"Main Stat":"主詞條"}</th><th>${g_lang==="en"?"Sub-stats (click to view)":"副詞條 (點擊檢視)"}</th></tr></thead><tbody>`;
             d.detailEchoes.forEach((e, i) => {
                 let eGrad = rank_getGrading(e.pct);
                 let subHtml = '';
-                if (e.subs.length === 0) subHtml = '<div style="color:#555;font-size:0.8rem">- 空 -</div>';
+                if (e.subs.length === 0) subHtml = `<div style="color:#555;font-size:0.8rem">${g_lang==="en"?"- Empty -":"- 空 -"}</div>`;
                 else {
                     e.subs.forEach(s => {
                         let tierInfo = rank_getTierInfo(s.name, s.val);
                         let tierHtml = tierInfo ? `<div class="db-tier-bar">${Array(tierInfo.max).fill(0).map((_, t) => `<span class="db-tier-seg ${t < tierInfo.current ? 'on' : ''}"></span>`).join('')}</div>` : '';
                         let style = s.weight > 0 ? `border-left:2px solid var(--accent);background:rgba(229,192,123,0.05)` : `border-left:2px solid #333`;
-                        subHtml += `<div class="db-sub-stat-container" style="${style}"><div style="display:flex;justify-content:space-between"><div style="color:#ddd;font-size:0.8rem">${s.name}</div><div style="font-family:'JetBrains Mono';font-weight:bold;color:#fff">${s.val}</div></div>${tierHtml}</div>`;
+                        subHtml += `<div class="db-sub-stat-container" style="${style}"><div style="display:flex;justify-content:space-between"><div style="color:#ddd;font-size:0.8rem">${g_lang==="en"?(rankStatLabel(s.name)):s.name}</div><div style="font-family:'JetBrains Mono';font-weight:bold;color:#fff">${s.val}</div></div>${tierHtml}</div>`;
                     });
                 }
                 html += `<tr><td style="font-weight:bold;font-size:1.1rem;color:#ddd;text-align:center" onclick="rank_handleLock(this, 'cost', ${i})" onmouseenter="rank_handleFocus('cost', ${i})" onmouseleave="rank_handleBlur()">${e.cost}</td><td onclick="rank_handleLock(this, 'score', ${i})" onmouseenter="rank_handleFocus('score', ${i})" onmouseleave="rank_handleBlur()"><div class="db-ts-grade ${eGrad.c}" style="font-size:0.6rem;padding:2px 4px">${eGrad.l}</div><div style="font-family:'JetBrains Mono';font-size:0.8rem;color:#aaa;margin-top:2px">${safeFixed(e.score, 0)}</div></td><td onclick="rank_handleLock(this, 'main1', ${i})" onmouseenter="rank_handleFocus('main1', ${i})" onmouseleave="rank_handleBlur()"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:0.85rem;color:var(--accent);font-weight:bold">${e.main.n}</span><span style="font-size:1rem;color:#fff;font-family:'JetBrains Mono';font-weight:bold">${e.main.v}</span></div></td><td onclick="rank_handleLock(this, 'sub', ${i})" onmouseenter="rank_handleFocus('sub', ${i})" onmouseleave="rank_handleBlur()">${subHtml}</td></tr>`;
@@ -15255,14 +15257,14 @@
 
             let html = `
  <div style="background:#1e1e24;border:1px solid var(--accent);border-radius:8px;padding:15px;color:#fff;font-size:0.85rem;box-shadow:0 0 20px rgba(0,0,0,0.5);width:100%;max-width:350px;">
- <h4 style="margin:0 0 10px 0;color:var(--accent);border-bottom:1px solid #333;padding-bottom:5px;">聲骸評分詳情 (${targetEcho.cost}C)</h4>
+ <h4 style="margin:0 0 10px 0;color:var(--accent);border-bottom:1px solid #333;padding-bottom:5px;">${g_lang==="en"?"Echo Score Details":"聲骸評分詳情"} (${targetEcho.cost}C)</h4>
  <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.75rem;color:#888;">
- <span>詞條屬性</span> <span>數值 (權重) → 得分</span>
+ ${g_lang==="en"?"<span>Stat</span> <span>Val (Weight) → Score</span>":"<span>詞條屬性</span> <span>數值 (權重) → 得分</span>"}
  </div>
  `;
 
             if (targetEcho.subs.length === 0) {
-                html += `<div style="text-align:center;padding:10px;color:#666;">無副詞條</div>`;
+                html += `<div style="text-align:center;padding:10px;color:#666;">${g_lang==="en"?"No sub-stats":"無副詞條"}</div>`;
             } else {
                 targetEcho.subs.forEach(s => {
                     let score = s.score.toFixed(1);
@@ -15274,7 +15276,7 @@
 
                     html += `
  <div style="display:flex;justify-content:space-between;border-bottom:1px solid #333;padding:4px 0;">
- <span style="color:${color}">${s.name}</span>
+ <span style="color:${color}">${g_lang==="en"?(rankStatLabel(s.name)):s.name}</span>
  <span>
  <span style="color:#aaa;font-size:0.75rem;">${s.val} (x${weight})</span>
  <span style="color:var(--accent);font-weight:bold;min-width:30px;text-align:right;display:inline-block">${score}</span>
@@ -15285,7 +15287,7 @@
 
             html += `
  <div style="margin-top:10px;padding-top:5px;border-top:1px solid #444;display:flex;justify-content:space-between;font-weight:bold;">
- <span>總分</span>
+ ${g_lang==="en"?"<span>Total</span>":"<span>總分</span>"}
  <span style="color:var(--accent);font-size:1.1rem;">${targetEcho.score.toFixed(0)} / ${targetEcho.max.toFixed(0)}</span>
  </div>
  <div style="font-size:0.75rem;color:#666;text-align:right;margin-top:2px;">(${targetEcho.pct.toFixed(1)}%)</div>
@@ -15325,7 +15327,7 @@
             const currentBuild = g_currentWeights[role][g_selectedBuildIdx];
             const buildName = currentBuild ? currentBuild.name : "通用";
             const url = getMainApiUrl();
-            document.getElementById('rank-text-simple').innerText = "查詢中...";
+            document.getElementById('rank-text-simple').innerText = g_lang==="en"?"Searching...":"查詢中...";
             try {
                 const res = await fetch(`${url}?action=getRank&uid=${g_currentUserUid}&role=${encodeURIComponent(role)}&buildName=${encodeURIComponent(buildName)}`);
                 const json = await res.json();
@@ -15333,7 +15335,7 @@
                     const pr = Math.floor((1 - (json.myRank - 1) / json.total) * 100);
                     document.getElementById('rank-text-simple').innerText = `#${json.myRank}/${json.total} (PR${pr}%)`;
                 } else {
-                    document.getElementById('rank-text-simple').innerText = "未入榜";
+                    document.getElementById('rank-text-simple').innerText = g_lang==="en"?"Not ranked":"未入榜";
                 }
             } catch (e) {
                 document.getElementById('rank-text-simple').innerText = "";
@@ -15345,9 +15347,9 @@
 
         // ========== ADVANCED SHARE SYSTEM ==========
         const SHARE_LAYOUTS = {
-            default: { name: '完整列表', icon: '📄' },
-            social: { name: '社群卡片', icon: '✨' },
-            graduation: { name: '畢業總表', icon: '🎓' }
+            default: { name: g_lang==="en"?'Full List':'完整列表', icon: '📄' },
+            social: { name: g_lang==="en"?'Social Card':'社群卡片', icon: '✨' },
+            graduation: { name: g_lang==="en"?'Graduation':'畢業總表', icon: '🎓' }
         };
 
         let g_shareBlobs = {};
@@ -20040,7 +20042,7 @@
         function rank_openStrategySummary() {
             const data = (typeof rank_list !== 'undefined') ? rank_list : [];
             if (!data || data.length === 0) {
-                showMsg("尚未載入排行榜數據，請先選擇角色並抓取資料。");
+                showMsg(g_lang==="en"?"Ranking data not loaded. Please select a character and fetch data first.":"尚未載入排行榜數據，請先選擇角色並抓取資料。");
                 return;
             }
 
@@ -20275,7 +20277,7 @@
                             <span style="font-size:2.6rem; font-weight:900; color:#fff;">${stats.avgEchoScore.toFixed(1)}</span>
                             <span style="font-size:1.2rem; color:#555;">%</span>
                         </div>
-                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">Top 60 玩家平均開發進度</div>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">${g_lang==="en"?"Top 60 avg. build progress":"Top 60 玩家平均開發進度"}</div>
                     </div>
                     <div class="ss-card" style="border-left: 4px solid #e5c07b; padding:20px;">
                         <div style="color:#666; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:10px;">ENERGY REGEN (90th)</div>
@@ -20283,7 +20285,7 @@
                             <span style="font-size:2.6rem; font-weight:900; color:#fff;">${stats.avgER.toFixed(1)}</span>
                             <span style="font-size:1.2rem; color:#555;">%</span>
                         </div>
-                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">推薦充能畢業閾值</div>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">${g_lang==="en"?"Recommended ER graduation threshold":"推薦充能畢業閾值"}</div>
                     </div>
                     <div class="ss-card" style="border-left: 4px solid #98c379; padding:20px;">
                         <div style="color:#666; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:10px;">PERFECT PIECES</div>
@@ -20291,14 +20293,14 @@
                             <span style="font-size:2.6rem; font-weight:900; color:#fff;">${(stats.perfectEchoCount / stats.totalEchoes * 100).toFixed(1)}</span>
                             <span style="font-size:1.2rem; color:#555;">%</span>
                         </div>
-                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">4+ 有效詞條聲骸件數占比</div>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">${g_lang==="en"?"Echoes with 4+ effective sub-stats":"4+ 有效詞條聲骸件數占比"}</div>
                     </div>
                 </div>
 
                 <!-- Section 2: Sonata & Weapons -->
                 <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:24px; margin-bottom:30px;">
                     <div class="ss-card" style="padding:0; overflow:hidden;">
-                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">📊 鳴奏合奏趨勢 (Sonata Combos)</div>
+                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">${g_lang==="en"?"📊 Sonata Combo Trends":"📊 鳴奏合奏趨勢 (Sonata Combos)"}</div>
                         <div style="padding:20px; display:flex; flex-direction:column; gap:12px;">
                             ${sortedSonatas.slice(0, 4).map(([combo, count]) => {
                 const pct = (count / stats.totalBuilds * 100).toFixed(0);
@@ -20326,7 +20328,7 @@
                         </div>
                     </div>
                     <div class="ss-card" style="padding:0; overflow:hidden;">
-                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">⚔️ 核心武器配戴</div>
+                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">${g_lang==="en"?"⚔️ Core Weapons":"⚔️ 核心武器配戴"}</div>
                         <div style="padding:20px;">
                             ${sortedWeapons.slice(0, 4).map(([name, count], idx) => {
                 const pct = (count / stats.totalBuilds * 100).toFixed(0);
@@ -20345,7 +20347,7 @@
                 <!-- Section 3: Cost Matrix & Main Stats -->
                 <div style="display:grid; grid-template-columns: 1fr 1.6fr; gap:24px; margin-bottom:30px;">
                     <div class="ss-card" style="padding:20px;">
-                        <div style="font-weight:700; color:#eee; font-size:0.95rem; margin-bottom:15px;">📦 COST 組合分佈</div>
+                        <div style="font-weight:700; color:#eee; font-size:0.95rem; margin-bottom:15px;">${g_lang==="en"?"📦 COST Distribution":"📦 COST 組合分佈"}</div>
                         <div style="display:flex; flex-wrap:wrap; gap:10px;">
                             ${sortedCosts.map(([k, c]) => {
                 const pct = (c / stats.totalBuilds * 100).toFixed(0);
@@ -20363,7 +20365,7 @@
                 const second = entries[1];
                 return `
                                     <div style="margin-bottom:10px;">
-                                        <div style="font-size:0.7rem; color:#555; font-weight:900; margin-bottom:4px;">COST ${cost} 主詞條偏好</div>
+                                        <div style="font-size:0.7rem; color:#555; font-weight:900; margin-bottom:4px;">${g_lang==="en"?"COST "+cost+" Main Stat Preference":"COST "+cost+" 主詞條偏好"}</div>
                                         <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
                                             <span style="color:#eee;">1. ${top[0]}</span>
                                             <span style="color:var(--accent);">${(top[1] / (cost === 4 ? stats.totalBuilds : stats.totalBuilds * 2) * 100).toFixed(0)}%</span>
@@ -20381,15 +20383,15 @@
                     
                     <div class="ss-card" style="padding:20px; background: linear-gradient(135deg, rgba(92,124,250,0.05) 0%, rgba(0,0,0,0) 100%);">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                            <div style="font-weight:700; color:#eee; font-size:0.95rem;">🎯 90分位畢業屬性參考</div>
-                            <span style="font-size:0.7rem; color:#444;">TOP 6 排行榜數據匯總</span>
+                            <div style="font-weight:700; color:#eee; font-size:0.95rem;">${g_lang==="en"?"🎯 90th Percentile Target Stats":"🎯 90分位畢業屬性參考"}</div>
+                            <span style="font-size:0.7rem; color:#444;">${g_lang==="en"?"Top 6 ranking data":"TOP 6 排行榜數據匯總"}</span>
                         </div>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
                             ${[
-                    { label: '暴擊率', val: stats.targets.critRate, unit: '%', color: '#ffca28' },
-                    { label: '暴擊傷害', val: stats.targets.critDmg, unit: '%', color: '#ffca28' },
-                    { label: '共鳴效率', val: stats.targets.er, unit: '%', color: '#e5c07b' },
-                    { label: '攻擊力加成', val: stats.targets.atkPct, unit: '%', color: '#eee' }
+                    { label: g_lang==="en"?'Crit Rate':'暴擊率', val: stats.targets.critRate, unit: '%', color: '#ffca28' },
+                    { label: g_lang==="en"?'Crit DMG':'暴擊傷害', val: stats.targets.critDmg, unit: '%', color: '#ffca28' },
+                    { label: g_lang==="en"?'Energy Regen':'共鳴效率', val: stats.targets.er, unit: '%', color: '#e5c07b' },
+                    { label: g_lang==="en"?'ATK Bonus':'攻擊力加成', val: stats.targets.atkPct, unit: '%', color: '#eee' }
                 ].map(t => `
                                 <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
                                     <div style="font-size:0.75rem; color:#666; margin-bottom:8px;">${t.label}</div>
@@ -20398,22 +20400,18 @@
                             `).join('')}
                         </div>
                         <div style="margin-top:20px; padding:12px; background:rgba(0,0,0,0.2); border-radius:8px; font-size:0.75rem; color:#888; line-height:1.6;">
-                            <strong style="color:var(--accent);">指標說明：</strong> 以上數值代表前 60 名玩家中排名第 6 左右的高端水平（Top 10%）。若您的角色的實戰數據接近或超過此基準，即代表已進入「畢業級別」。
+                            ${g_lang==="en"?"<strong style=\"color:var(--accent);\">Note:</strong> These values represent the Top 10% (approx. rank 6 of 60). Reaching or exceeding these benchmarks means your build is 'graduation grade'.":"<strong style=\"color:var(--accent);\">指標說明：</strong> 以上數值代表前 60 名玩家中排名第 6 左右的高端水平（Top 10%）。若您的角色的實戰數據接近或超過此基準，即代表已進入「畢業級別」。"}
                         </div>
                     </div>
                 </div>
 
                 <!-- Section 4: Sub-stat Heatmap -->
                 <div class="ss-card" style="padding:0; overflow:hidden;">
-                    <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">📊 全局詞條質量分佈 (Top 60)</div>
+                    <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">${g_lang==="en"?"📊 Global Sub-stat Quality (Top 60)":"📊 全局詞條質量分佈 (Top 60)"}</div>
                     <table class="ss-table">
                         <thead>
                             <tr>
-                                <th>詞條屬性</th>
-                                <th style="text-align:right;">使用率</th>
-                                <th style="text-align:right;">平均數值</th>
-                                <th style="text-align:right;">完美 Roll (T1)</th>
-                                <th style="text-align:right;">評級</th>
+                                ${g_lang==="en"?"<th>Stat</th><th style=\"text-align:right;\">Usage%</th><th style=\"text-align:right;\">Avg Val</th><th style=\"text-align:right;\">Perfect Roll (T1)</th><th style=\"text-align:right;\">Rating</th>":"<th>詞條屬性</th><th style=\"text-align:right;\">使用率</th><th style=\"text-align:right;\">平均數值</th><th style=\"text-align:right;\">完美 Roll (T1)</th><th style=\"text-align:right;\">評級</th>"}
                             </tr>
                         </thead>
                         <tbody>
@@ -20432,7 +20430,7 @@
 
                     return `
                                     <tr class="ss-row-hover">
-                                        <td style="color:${isCritical ? '#fff' : '#888'}; font-weight:${isCritical ? '700' : '400'};">${name}</td>
+                                        <td style="color:${isCritical ? '#fff' : '#888'}; font-weight:${isCritical ? '700' : '400'};">${g_lang==="en"?(RANK_STAT_LABELS_EN[name]||name):name}</td>
                                         <td style="text-align:right; font-family:'JetBrains Mono'; color:var(--accent); font-weight:bold;">${usagePct}%</td>
                                         <td style="text-align:right; font-family:'JetBrains Mono'; color:#eee;">${avg}${name.includes('百分比') || !['生命', '攻擊', '防禦'].includes(name) ? '%' : ''}</td>
                                         <td style="text-align:right;">
