@@ -7280,59 +7280,59 @@
                 <div class="db-title-group">
                     <div style="font-size:0.9rem; color:var(--accent); font-weight:bold; margin-bottom:5px;">USER
                         STATISTICS</div>
-                        <h2>成就與數據總覽</h2>
+                        <h2 data-lang-zh="成就與數據總覽" data-lang-en="Achievement Overview">成就與數據總覽</h2>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <button class="btn-weights-mini btn-points-trigger notification-dot" onclick="openPointsModal()"
-                        style="font-size:0.75rem;padding:4px 12px;border-color:#e5c07b;color:#e5c07b;background:rgba(229,192,123,0.1);">⭐
+                        style="font-size:0.75rem;padding:4px 12px;border-color:#e5c07b;color:#e5c07b;background:rgba(229,192,123,0.1);" data-lang-zh="⭐ 任務與積分獎勵" data-lang-en="⭐ Tasks &amp; Points">⭐
                         任務與積分獎勵</button>
                     <button class="btn-weights-mini" onclick="openHeatmapModal()"
-                        style="border-color:var(--heat-a);color:var(--heat-a);">🌡️ 熱力圖</button>
+                        style="border-color:var(--heat-a);color:var(--heat-a);" data-lang-zh="🌡️ 熱力圖" data-lang-en="🌡️ Heatmap">🌡️ 熱力圖</button>
                     <button class="btn-weights-mini" onclick="openComparisonModal()"
-                        style="border-color:#61afef;color:#61afef;">⚖️ 對比</button>
+                        style="border-color:#61afef;color:#61afef;" data-lang-zh="⚖️ 對比" data-lang-en="⚖️ Compare">⚖️ 對比</button>
                     <button class="btn-weights-mini" onclick="openDataManagementModal()"
-                        style="border-color:#98c379;color:#98c379;">💾 資料管理</button>
+                        style="border-color:#98c379;color:#98c379;" data-lang-zh="💾 資料管理" data-lang-en="💾 Data Mgmt">💾 資料管理</button>
                     <button class="db-close-btn" onclick="dashboard_close()">×</button>
                 </div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">📊 累計分析次數</div>
+                <div class="db-card-title" data-lang-zh="📊 累計分析次數" data-lang-en="📊 Total Analyses">📊 累計分析次數</div>
                 <div class="db-card-val" id="db-total-count">0</div>
-                <div class="db-card-sub" id="db-total-sub">本週活躍度 +0%</div>
+                <div class="db-card-sub" id="db-total-sub" data-lang-zh="本週活躍度 +0%" data-lang-en="This Week's Activity +0%">本週活躍度 +0%</div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">🏆 歷史最高評分</div>
+                <div class="db-card-title" data-lang-zh="🏆 歷史最高評分" data-lang-en="🏆 Best Score Ever">🏆 歷史最高評分</div>
                 <div class="db-card-val" id="db-max-score">0.0%</div>
-                <div class="db-card-sub" id="db-max-role">尚未解鎖</div>
+                <div class="db-card-sub" id="db-max-role" data-lang-zh="尚未解鎖" data-lang-en="Not yet unlocked">尚未解鎖</div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">✨ 大畢業以上 (全角色聲骸統計)</div>
+                <div class="db-card-title" data-lang-zh="✨ 大畢業以上 (全角色聲骸統計)" data-lang-en="✨ Major Graduate+ (All Echoes)">✨ 大畢業以上 (全角色聲骸統計)</div>
                 <div class="db-card-val" id="db-luck-val">0</div>
-                <div class="db-card-sub" id="db-luck-sub">極品聲骸獲取機率 0%</div>
+                <div class="db-card-sub" id="db-luck-sub" data-lang-zh="極品聲骸獲取機率 0%" data-lang-en="Top Echo Odds: 0%">極品聲骸獲取機率 0%</div>
             </div>
 
             <div class="db-card db-chart-box">
                 <div class="db-card-title" style="justify-content:space-between;">
-                    <span>📈 評分成長趨勢</span>
+                    <span data-lang-zh="📈 評分成長趨勢" data-lang-en="📈 Score Growth Trend">📈 評分成長趨勢</span>
                     <select id="db-chart-filter" class="echo-lib-select"
                         style="margin:0; padding:2px 10px; height:24px; font-size:0.75rem;"
                         onchange="dashboard_renderFilteredTrend()">
-                        <option value="all">全角色</option>
+                        <option value="all" data-lang-zh="全角色" data-lang-en="All Characters">全角色</option>
                     </select>
                 </div>
                 <div class="chart-wrapper" style="height:200px;"><canvas id="chart-trend"></canvas></div>
             </div>
 
             <div class="db-card">
-                <div class="db-card-title">🔷 副磁條持有數量分布 (戰力雷達)</div>
+                <div class="db-card-title" data-lang-zh="🔷 副磁條持有數量分布 (戰力雷達)" data-lang-en="🔷 Sub-stat Distribution (Radar)">🔷 副磁條持有數量分布 (戰力雷達)</div>
                 <div class="chart-wrapper" style="height:200px;"><canvas id="chart-radar"></canvas></div>
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1; display: block;">
-                <div class="db-card-title">🏅 榮譽成就系統</div>
+                <div class="db-card-title" data-lang-zh="🏅 榮譽成就系統" data-lang-en="🏅 Achievement System">🏅 榮譽成就系統</div>
                 <div id="db-partial-hint" class="db-partial-hint">
                     <span style="font-size:1.2rem;">⚠️</span>
                     <span>目前僅載入部分數據，成就與統計可能不完整。請點擊主介面的「載入全部」按鈕以獲取完整資訊。</span>
@@ -7343,7 +7343,7 @@
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">📅 歷史里程碑</div>
+                <div class="db-card-title" data-lang-zh="📅 歷史里程碑" data-lang-en="📅 Milestones">📅 歷史里程碑</div>
                 <div id="db-milestones"
                     style="color:#ddd; font-size:0.9rem; max-height:200px; overflow-y:auto; line-height:1.8;">
                     載入中...
@@ -7357,8 +7357,8 @@
         <div class="db-container" style="max-width:1000px;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">🌡️ 副詞條強度熱力圖</h2>
-                    <div style="color:#888;font-size:0.85rem;">橫軸為詞條種類，縱軸為角色。顏色深淺代表詞條出現頻率與數值強度。</div>
+                    <h2 style="font-size:1.5rem;" data-lang-zh="🌡️ 副詞條強度熱力圖" data-lang-en="🌡️ Sub-stat Heatmap">🌡️ 副詞條強度熱力圖</h2>
+                    <div style="color:#888;font-size:0.85rem;" data-lang-zh="橫軸為詞條種類，縱軸為角色。顏色深淺代表詞條出現頻率與數值強度。" data-lang-en="X-axis: stat types, Y-axis: characters. Color intensity represents frequency and value strength.">橫軸為詞條種類，縱軸為角色。顏色深淺代表詞條出現頻率與數值強度。</div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('heatmap-modal').style.display='none'">×</button>
@@ -7374,8 +7374,8 @@
         <div class="db-container" style="max-width:1200px; margin: 0 auto;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⚖️ 聲骸數據對比</h2>
-                    <div style="color:#888;font-size:0.85rem;">選取兩筆歷史紀錄進行詳細對比。</div>
+                    <h2 style="font-size:1.5rem;" data-lang-zh="⚖️ 聲骸數據對比" data-lang-en="⚖️ Echo Data Comparison">⚖️ 聲骸數據對比</h2>
+                    <div style="color:#888;font-size:0.85rem;" data-lang-zh="選取兩筆歷史紀錄進行詳細對比。" data-lang-en="Select two history records for detailed comparison.">選取兩筆歷史紀錄進行詳細對比。</div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('comparison-modal').style.display='none'">×</button>
@@ -7383,7 +7383,7 @@
             <div class="comparison-header-grid"
                 style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: stretch;">
                 <div class="db-card">
-                    <div class="db-card-title">🔍 選取紀錄 A (基準)</div>
+                    <div class="db-card-title" data-lang-zh="🔍 選取紀錄 A (基準)" data-lang-en="🔍 Select Record A (Baseline)">🔍 選取紀錄 A (基準)</div>
                     <select id="compare-select-1" class="echo-lib-select"
                         style="width:100%; margin:0; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem;"
                         onchange="renderComparison()"></select>
@@ -7396,7 +7396,7 @@
                         title="對換 A/B">🔄</button>
                 </div>
                 <div class="db-card">
-                    <div class="db-card-title">🔍 選取紀錄 B (對比)</div>
+                    <div class="db-card-title" data-lang-zh="🔍 選取紀錄 B (對比)" data-lang-en="🔍 Select Record B (Compare)">🔍 選取紀錄 B (對比)</div>
                     <select id="compare-select-2" class="echo-lib-select"
                         style="width:100%; margin:0; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem;"
                         onchange="renderComparison()"></select>
@@ -7409,7 +7409,7 @@
                 style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div
                     style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px;">
-                    <div class="db-card-title" style="margin:0;">📊 屬性與評分詳細差異</div>
+                    <div class="db-card-title" style="margin:0;" data-lang-zh="📊 屬性與評分詳細差異" data-lang-en="📊 Detailed Stat &amp; Score Diff">📊 屬性與評分詳細差異</div>
                     <div id="compare-summary-text"
                         style="font-size: 0.9rem; font-weight: bold; padding: 4px 12px; background: rgba(0,0,0,0.3); border-radius: 20px;">
                     </div>
@@ -7442,25 +7442,25 @@
         <div class="db-container" style="max-width:800px; margin: 0 auto;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⭐ 任務與積分獎勵系統</h2>
-                    <div style="color:#bbb;font-size:0.85rem;">每成功上傳一筆聲骸資料即可獲得 88 點積分 (僅當前登入生效)</div>
+                    <h2 style="font-size:1.5rem;" data-lang-zh="⭐ 任務與積分獎勵系統" data-lang-en="⭐ Tasks &amp; Points System">⭐ 任務與積分獎勵系統</h2>
+                    <div style="color:#bbb;font-size:0.85rem;" data-lang-zh="每成功上傳一筆聲骸資料即可獲得 88 點積分 (僅當前登入生效)" data-lang-en="Earn 88 points per successful echo upload (current login only)">每成功上傳一筆聲骸資料即可獲得 88 點積分 (僅當前登入生效)</div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('points-modal').style.display='none'">×</button>
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">當前積分</div>
+                <div class="db-card-title" data-lang-zh="當前積分" data-lang-en="Current Points">當前積分</div>
                 <div style="text-align:center;padding:30px 0;">
                     <div style="font-size:4rem;color:#e5c07b;font-weight:bold;text-shadow: 0 0 20px rgba(229,192,123,0.3);"
                         id="points-display">0</div>
-                    <div style="font-size:1rem;color:#ccc;margin-top:10px;">本次登入累積獲得的積分</div>
+                    <div style="font-size:1rem;color:#ccc;margin-top:10px;" data-lang-zh="本次登入累積獲得的積分" data-lang-en="Points earned this session">本次登入累積獲得的積分</div>
                 </div>
             </div>
 
             <div class="db-card"
                 style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(229,192,123,0.05) 0%, rgba(20,20,25,0.02) 100%); overflow: hidden;">
-                <div class="db-card-title">📖 積分獲取與系統說明</div>
+                <div class="db-card-title" data-lang-zh="📖 積分獲取與系統說明" data-lang-en="📖 Points &amp; System Guide">📖 積分獲取與系統說明</div>
                 <div
                     style="height: 60px; overflow: hidden; position: relative; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 0 15px;">
                     <div id="points-info-carousel"
@@ -7496,19 +7496,19 @@
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">前往挑戰</div>
+                <div class="db-card-title" data-lang-zh="前往挑戰" data-lang-en="Go to Challenge">前往挑戰</div>
                 <div style="padding:15px; text-align:center;">
                     <button class="btn-confirm-yes" onclick="imitate_tryStartChallenge()"
                         style="padding:12px 30px; font-size:1.1rem; background:var(--accent); color:#000; font-weight:bold; box-shadow: 0 0 15px var(--accent-dim);">⚡
                         進入挑戰模式 (消耗 1 積分)</button>
-                    <div style="font-size:0.9rem; color:#888; margin-top:12px;">挑戰達成 90% 評分可獲得抽小月卡資格</div>
+                    <div style="font-size:0.9rem; color:#888; margin-top:12px;" data-lang-zh="挑戰達成 90% 評分可獲得抽小月卡資格" data-lang-en="Achieve 90%+ score in challenge to qualify for Mini Pass lottery">挑戰達成 90% 評分可獲得抽小月卡資格</div>
                 </div>
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">積分歷程</div>
+                <div class="db-card-title" data-lang-zh="積分歷程" data-lang-en="Points History">積分歷程</div>
                 <div id="points-log" style="max-height:200px;overflow-y:auto;font-size:0.85rem;color:#888;">
-                    <div style="text-align:center;padding:20px;color:#666;">尚無積分記錄</div>
+                    <div style="text-align:center;padding:20px;color:#666;" data-lang-zh="尚無積分記錄" data-lang-en="No points records yet">尚無積分記錄</div>
                 </div>
             </div>
         </div>
@@ -7519,15 +7519,15 @@
         <div class="db-container" style="max-width:800px;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">💾 資料管理</h2>
-                    <div style="color:#888;font-size:0.85rem;">匯入、匯出與資料備份管理。</div>
+                    <h2 style="font-size:1.5rem;" data-lang-zh="💾 資料管理" data-lang-en="💾 Data Management">💾 資料管理</h2>
+                    <div style="color:#888;font-size:0.85rem;" data-lang-zh="匯入、匯出與資料備份管理。" data-lang-en="Import, export and data backup management.">匯入、匯出與資料備份管理。</div>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('data-management-modal').style.display='none'">×</button>
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">開發者模式</div>
+                <div class="db-card-title" data-lang-zh="開發者模式" data-lang-en="Developer Mode">開發者模式</div>
                 <div id="dev-input-container" style="display:flex; gap:10px; align-items:center; margin-top:15px;">
                     <input type="text" id="dev-code-input" placeholder="輸入啟用序號"
                         style="flex:1; padding:10px; background:#1a1a1a; border:1px solid #444; color:#fff; border-radius:4px; font-size:0.9rem;"
@@ -7543,12 +7543,11 @@
             </div>
 
             <div class="db-card" style="grid-column: 1 / -1;">
-                <div class="db-card-title">資料操作</div>
+                <div class="db-card-title" data-lang-zh="資料操作" data-lang-en="Data Operations">資料操作</div>
                 <div style="display:flex; gap:15px; margin-top:15px; flex-wrap:wrap;">
-                    <button class="btn-primary-action" onclick="exportData()" title="匯出資料" style="flex:1;">📤 匯出資料
+                    <button class="btn-primary-action" onclick="exportData()" title="匯出資料" data-title-zh="匯出資料" data-title-en="Export Data" data-lang-zh="📤 匯出資料 (JSON)" data-lang-en="📤 Export Data (JSON)" style="flex:1;">📤 匯出資料
                         (JSON)</button>
-                    <button id="import-btn" class="btn-primary-action" onclick="triggerImport()" title="匯入資料"
-                        style="flex:1; opacity:0.5; cursor:not-allowed;" disabled>📥 匯入資料
+                    <button id="import-btn" class="btn-primary-action" onclick="triggerImport()" title="匯入資料" data-title-zh="匯入資料" data-title-en="Import Data" data-lang-zh="📥 匯入資料 (JSON)" data-lang-en="📥 Import Data (JSON)" style="flex:1; opacity:0.5; cursor:not-allowed;" disabled>📥 匯入資料
                         (JSON)</button>
                 </div>
                 <div style="margin-top:10px; font-size:0.85rem; color:#aaa;">
@@ -7558,15 +7557,15 @@
             </div>
 
             <div id="dev-options-card" class="db-card" style="grid-column: 1 / -1; display:none;">
-                <div class="db-card-title">開發者選項</div>
+                <div class="db-card-title" data-lang-zh="開發者選項" data-lang-en="Developer Options">開發者選項</div>
                 <div style="margin-top:15px;">
                     <label
                         style="display:flex; align-items:center; gap:10px; cursor:pointer; padding:10px; background:rgba(255,255,255,0.05); border-radius:4px;">
                         <input type="checkbox" id="keep-history-switch" onchange="toggleKeepHistory()"
                             style="width:20px; height:20px; cursor:pointer;">
                         <div>
-                            <div style="font-size:0.95rem; color:#fff;">切換 UID 時保留歷史紀錄</div>
-                            <div style="font-size:0.8rem; color:#888; margin-top:3px;">啟用後，切換到不同 UID 時不會清空本地歷史資料</div>
+                            <div style="font-size:0.95rem; color:#fff;" data-lang-zh="切換 UID 時保留歷史紀錄" data-lang-en="Keep history when switching UID">切換 UID 時保留歷史紀錄</div>
+                            <div style="font-size:0.8rem; color:#888; margin-top:3px;" data-lang-zh="啟用後，切換到不同 UID 時不會清空本地歷史資料" data-lang-en="When enabled, local history won't be cleared when switching to a different UID">啟用後，切換到不同 UID 時不會清空本地歷史資料</div>
                         </div>
                     </label>
                     <label
@@ -7574,7 +7573,7 @@
                         <input type="checkbox" id="analyze-fix-switch" onchange="toggleAnalyzeFixMode()"
                             style="width:20px; height:20px; cursor:pointer;">
                         <div>
-                            <div style="font-size:0.95rem; color:#fff;">分析後修正模式 (不立即上傳)</div>
+                            <div style="font-size:0.95rem; color:#fff;" data-lang-zh="分析後修正模式 (不立即上傳)" data-lang-en="Post-analysis Edit Mode (no immediate upload)">分析後修正模式 (不立即上傳)</div>
                             <div style="font-size:0.8rem; color:#888; margin-top:3px;">啟用後，圖片分析完成只先存成待上傳，可先完整修正資料再手動按上傳
                             </div>
                         </div>
@@ -7609,7 +7608,7 @@
             <div class="db-card feature-list-scroll"
                 style="grid-column: 1 / -1; padding: 0; background: rgba(0,0,0,0.3);">
                 <div class="feature-grid">
-                    <div class="feature-section">🎯 活動與獎勵</div>
+                    <div class="feature-section" data-lang-zh="🎯 活動與獎勵" data-lang-en="🎯 Events &amp; Rewards">🎯 活動與獎勵</div>
                     <div class="feature-card" onclick="closeAllModals();openPointsModal()"
                         style="grid-column:1/-1;background:linear-gradient(135deg,rgba(229,192,123,0.1),rgba(20,20,25,0.8));border-color:rgba(229,192,123,0.25);">
                         <div class="feature-card-icon-box" style="background:rgba(229,192,123,0.15);">🎟️</div>
@@ -7622,14 +7621,14 @@
                         </div>
                     </div>
 
-                    <div class="feature-section">📊 分析工具</div>
+                    <div class="feature-section" data-lang-zh="📊 分析工具" data-lang-en="📊 Analysis Tools">📊 分析工具</div>
                     <div class="feature-card" onclick="closeAllModals();dashboard_open()">
                         <div class="feature-card-icon-box">▣</div>
                         <div class="feature-card-main">
                             <div class="feature-card-title" data-lang-zh="成就數據" data-lang-en="Achievement Stats">成就數據</div>
                             <div class="feature-card-desc" data-lang-zh="個人分析統計、成就獎章與成長曲線" data-lang-en="Personal stats, achievement badges and growth chart">個人分析統計、成就獎章與成長曲線</div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">前往</button></div>
+                        <div class="feature-card-action"><button class="quick-btn" data-lang-zh="前往" data-lang-en="Go">前往</button></div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();openComparisonModal()">
                         <div class="feature-card-icon-box">◫</div>
@@ -7685,10 +7684,10 @@
                             <div class="feature-card-title" data-lang-zh="雲端同步刷新" data-lang-en="Cloud Sync Refresh">雲端同步刷新</div>
                             <div class="feature-card-desc" data-lang-zh="重新抓取線上資料與排行榜快取，解決延遲顯示" data-lang-en="Re-fetch online data and rankings cache to fix stale display">重新抓取線上資料與排行榜快取，解決延遲顯示</div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">刷新</button></div>
+                        <div class="feature-card-action"><button class="quick-btn" data-lang-zh="刷新" data-lang-en="Refresh">刷新</button></div>
                     </div>
 
-                    <div class="feature-section">🖼️ 分享與輸出</div>
+                    <div class="feature-section" data-lang-zh="🖼️ 分享與輸出" data-lang-en="🖼️ Share &amp; Export">🖼️ 分享與輸出</div>
                     <div class="feature-card" onclick="closeAllModals();generateShareImage()">
                         <div class="feature-card-icon-box" style="background:rgba(152,195,121,0.12);">📸</div>
                         <div class="feature-card-main">
@@ -7707,7 +7706,7 @@
                         <div class="feature-card-action"><button class="quick-btn">前往</button></div>
                     </div>
 
-                    <div class="feature-section">🛠️ 系統功能</div>
+                    <div class="feature-section" data-lang-zh="🛠️ 系統功能" data-lang-en="🛠️ System Features">🛠️ 系統功能</div>
                     <div class="feature-card" onclick="closeAllModals();openCustomWeightEditor()">
                         <div class="feature-card-icon-box">⧉</div>
                         <div class="feature-card-main">
@@ -7738,10 +7737,10 @@
                             <div class="feature-card-title" data-lang-zh="完整操作教學" data-lang-en="Full Tutorial">完整操作教學</div>
                             <div class="feature-card-desc" data-lang-zh="快速查看新手流程、進階玩法與常見疑難排解" data-lang-en="Quick guide for beginners, advanced play and troubleshooting">快速查看新手流程、進階玩法與常見疑難排解</div>
                         </div>
-                        <div class="feature-card-action"><button class="quick-btn">查看</button></div>
+                        <div class="feature-card-action"><button class="quick-btn" data-lang-zh="查看" data-lang-en="View">查看</button></div>
                     </div>
 
-                    <div class="feature-section">💬 回饋與支援</div>
+                    <div class="feature-section" data-lang-zh="💬 回饋與支援" data-lang-en="💬 Feedback &amp; Support">💬 回饋與支援</div>
                     <div class="feature-card" onclick="window.open('https://forms.gle/9kXktz3Sj22Xj4218', '_blank')">
                         <div class="feature-card-icon-box" style="background:rgba(86,182,194,0.12);">📝</div>
                         <div class="feature-card-main">
@@ -7780,12 +7779,12 @@
         <div class="db-container">
             <div class="db-header">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;">⚒ 聲骸模擬開詞條</h2>
+                    <h2 style="font-size:1.5rem;" data-lang-zh="⚒ 聲骸模擬開詞條" data-lang-en="⚒ Echo Simulate Roll">⚒ 聲骸模擬開詞條</h2>
                     <div style="display:flex; gap:10px; margin-top:8px;">
                         <button id="im-mode-sim" class="btn-confirm-yes" onclick="imitate_setMode('sim')"
-                            style="padding:4px 12px; font-size:0.75rem; min-width:80px;">模擬模式</button>
+                            style="padding:4px 12px; font-size:0.75rem; min-width:80px;" data-lang-zh="模擬模式" data-lang-en="Simulate">模擬模式</button>
                         <button id="im-mode-chal" class="btn-confirm-no" onclick="imitate_setMode('chal')"
-                            style="padding:4px 12px; font-size:0.75rem; background:#444; min-width:80px;">挑戰模式</button>
+                            style="padding:4px 12px; font-size:0.75rem; background:#444; min-width:80px;" data-lang-zh="挑戰模式" data-lang-en="Challenge">挑戰模式</button>
                     </div>
                     <!-- Added Toggle for Muting Notifications -->
                     <div
@@ -7793,7 +7792,7 @@
                         <input type="checkbox" id="imitate-mute-toggle"
                             onchange="g_imitateMute = this.checked; localStorage.setItem('imitate_mute', this.checked)"
                             style="width:14px; height:14px; cursor:pointer;">
-                        <label for="imitate-mute-toggle" style="cursor:pointer">⚒ 關閉彈窗提醒 (如重置確認)</label>
+                        <label for="imitate-mute-toggle" style="cursor:pointer" data-lang-zh="⚒ 關閉彈窗提醒 (如重置確認)" data-lang-en="⚒ Disable popup confirmations (e.g. reset)">⚒ 關閉彈窗提醒 (如重置確認)</label>
                     </div>
                 </div>
                 <button class="db-close-btn" onclick="closeImitateModal()">×</button>
@@ -7808,18 +7807,18 @@
             <div class="imitate-main-col">
                 <div class="db-card" style="margin-bottom:15px; padding: 20px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold;">已開啟詞條</div>
+                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold;" data-lang-zh="已開啟詞條" data-lang-en="Rolled Stats">已開啟詞條</div>
                         <div style="display:flex; gap:10px;">
                             <button class="btn-confirm-yes" onclick="imitate_start()"
-                                style="padding: 6px 16px; font-size: 0.9rem;">開啟詞條</button>
+                                style="padding: 6px 16px; font-size: 0.9rem;" data-lang-zh="開啟詞條" data-lang-en="Roll Stats">開啟詞條</button>
                             <button class="btn-confirm-no" onclick="imitate_reset()"
-                                style="padding: 6px 16px; font-size: 0.9rem; background:#444;">全部重置</button>
+                                style="padding: 6px 16px; font-size: 0.9rem; background:#444;" data-lang-zh="全部重置" data-lang-en="Reset All">全部重置</button>
                         </div>
                     </div>
 
                     <div class="imitate-list-scroll">
                         <div id="imitate-list" class="imitate-list-grid">
-                            <div class="imitate-empty">尚未開啟任何詞條</div>
+                            <div class="imitate-empty" data-lang-zh="尚未開啟任何詞條" data-lang-en="No stats rolled yet">尚未開啟任何詞條</div>
                         </div>
                     </div>
                 </div>
@@ -7828,21 +7827,21 @@
             <!-- Right Column / Sidebar -->
             <div class="imitate-side-col">
                 <div id="imitate-role-selector" class="db-card" style="margin-bottom:15px; display:none;">
-                    <div class="db-card-title">⚖️ 角色與權重方案</div>
+                    <div class="db-card-title" data-lang-zh="⚖️ 角色與權重方案" data-lang-en="⚖️ Character &amp; Weight Build">⚖️ 角色與權重方案</div>
                     <div style="display:flex; flex-direction:column; gap:10px; margin-top:5px;">
                         <select id="imitate-role-select" onchange="imitate_changeRole()"
                             style="width:100%; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem;">
-                            <option value="">-- 請選擇角色 --</option>
+                            <option value="" data-lang-zh="-- 請選擇角色 --" data-lang-en="-- Select Character --">-- 請選擇角色 --</option>
                         </select>
                         <select id="imitate-build-select" onchange="imitate_changeBuild()"
                             style="width:100%; padding:10px; background:#1a1a1a; color:#fff; border:1px solid #444; border-radius:6px; font-size:0.9rem; display:none;">
-                            <option value="0">通用</option>
+                            <option value="0" data-lang-zh="通用" data-lang-en="General">通用</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="db-card imitate-summary-card" style="margin-bottom:15px;">
-                    <div class="db-card-title">📊 模擬統計摘要</div>
+                    <div class="db-card-title" data-lang-zh="📊 模擬統計摘要" data-lang-en="📊 Simulation Summary">📊 模擬統計摘要</div>
                     <div style="text-align:center; padding:15px 0;">
                         <div style="display: flex; align-items: baseline; justify-content: center; gap: 5px;">
                             <div id="imitate-total-score" style="font-size:2.8rem; font-weight:800; color:#fff;">0.0
@@ -7850,7 +7849,7 @@
                             <div id="imitate-total-percent"
                                 style="font-size:1.8rem; font-weight:600; color:var(--accent);"></div>
                         </div>
-                        <div style="font-size:0.85rem; color:#888; margin-top:5px;">目前綜合評分</div>
+                        <div style="font-size:0.85rem; color:#888; margin-top:5px;" data-lang-zh="目前綜合評分" data-lang-en="Current Score">目前綜合評分</div>
                     </div>
                     <div id="imitate-max-possible"
                         style="font-size:0.8rem; color:#666; text-align:center; margin-top:5px;">
@@ -7859,7 +7858,7 @@
                 </div>
 
                 <div id="imitate-prob-card" class="db-card">
-                    <div class="db-card-title">🔮 勝算機率推算</div>
+                    <div class="db-card-title" data-lang-zh="🔮 勝算機率推算" data-lang-en="🔮 Win Probability">🔮 勝算機率推算</div>
                     <div id="imitate-prob-area"
                         style="display:grid; grid-template-columns: 1fr; gap:8px; font-size:0.9rem; color:#ccc; margin-top:10px;">
                         <div class="prob-row">暴擊出現率<span id="im-gl-bj" style="color:var(--ok);">0%</span></div>
@@ -7907,21 +7906,21 @@
     <!-- Buff Info Modal -->
     <div id="buff-info-modal" class="modal-overlay">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 400px;">
-            <h3 style="color:var(--accent);margin-top:0;">📊 評分機制優化 (補分)</h3>
+            <h3 style="color:var(--accent);margin-top:0;" data-lang-zh="📊 評分機制優化 (補分)" data-lang-en="📊 Score Optimization (Buff)">📊 評分機制優化 (補分)</h3>
             <p style="color:#ddd;margin-bottom:15px;line-height:1.6;">
                 為了讓評分結果更具參考價值與鼓勵性，系統已自動套用平衡補分機制：
             </p>
             <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:8px;margin-bottom:15px;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-                    <span>原始積分：</span><span id="buff-orig-score">0</span>
+                    <span data-lang-zh="原始積分：" data-lang-en="Base Score:">原始積分：</span><span id="buff-orig-score">0</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;color:var(--ok);margin-bottom:8px;">
-                    <span>平衡補分 (x1.25)：</span><span id="buff-bonus-val">+0</span>
+                    <span data-lang-zh="平衡補分 (x1.25)：" data-lang-en="Balance Buff (x1.25):">平衡補分 (x1.25)：</span><span id="buff-bonus-val">+0</span>
                 </div>
                 <div style="height:1px;background:#444;margin:10px 0;"></div>
                 <div
                     style="display:flex;justify-content:space-between;font-weight:bold;font-size:1.1rem;color:var(--accent);">
-                    <span>最終顯分：</span><span id="buff-final-score">0</span>
+                    <span data-lang-zh="最終顯分：" data-lang-en="Final Score:">最終顯分：</span><span id="buff-final-score">0</span>
                 </div>
             </div>
             <p style="font-size:0.85rem;color:#888;">
@@ -7929,19 +7928,19 @@
                 * 若補分後超過 100% 仍會正常顯示。
             </p>
             <div style="display:flex;gap:10px;">
-                <button class="btn-confirm-yes" onclick="closeBuffModal()" style="flex:1;">了解</button>
+                <button class="btn-confirm-yes" onclick="closeBuffModal()" style="flex:1;" data-lang-zh="了解" data-lang-en="Got It">了解</button>
                 <button class="btn-confirm-yes" onclick="switchToRankFromBuff()"
-                    style="flex:1;background:var(--accent);color:#000;border-color:var(--accent);">前往全服排名</button>
+                    style="flex:1;background:var(--accent);color:#000;border-color:var(--accent);" data-lang-zh="前往全服排名" data-lang-en="Go to Global Ranking">前往全服排名</button>
             </div>
         </div>
     </div>
 
     <div id="restricted-modal" class="modal-overlay">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 350px;">
-            <h3 style="color:var(--accent);margin-top:0;">功能受限</h3>
+            <h3 style="color:var(--accent);margin-top:0;" data-lang-zh="功能受限" data-lang-en="Feature Restricted">功能受限</h3>
             <p style="color:#ddd;margin-bottom:20px;line-height:1.6;">此功能僅在 POXY 無法載入圖片或辨識異常時才可啟用。<br><span
                     style="font-size:0.8rem;color:#888;">System only allows local upload when proxy fails.</span></p>
-            <button class="btn-confirm-yes" onclick="closeRestrictedModal()">了解</button>
+            <button class="btn-confirm-yes" onclick="closeRestrictedModal()" data-lang-zh="了解" data-lang-en="Got It">了解</button>
         </div>
     </div>
 
@@ -7950,7 +7949,7 @@
         <div class="startup-box" style="max-width:700px; width:95%; text-align:left;">
             <input type="hidden" id="editing-echo-id" value="">
             <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
-                <span id="custom-echo-modal-title">🆕 新增自訂聲骸</span>
+                <span id="custom-echo-modal-title" data-lang-zh="🆕 新增自訂聲骸" data-lang-en="🆕 Add Custom Echo">🆕 新增自訂聲骸</span>
                 <button onclick="closeCustomEchoModal()"
                     style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">&times;</button>
             </h3>
@@ -7966,13 +7965,13 @@
                     </select>
                 </div>
                 <div class="dps-control-group">
-                    <label>主詞條 1 (主 1 )</label>
+                    <label data-lang-zh="主詞條 1 (主 1 )" data-lang-en="Main Stat 1">主詞條 1 (主 1 )</label>
                     <select id="custom-echo-main1" class="dps-select"></select>
                 </div>
                 <div class="dps-control-group"
                     style="grid-column: span 2; display: flex; gap: 20px; align-items: flex-end;">
                     <div style="flex: 1;">
-                        <label>主詞條 2 (主 2 )</label>
+                        <label data-lang-zh="主詞條 2 (主 2 )" data-lang-en="Main Stat 2">主詞條 2 (主 2 )</label>
                         <input type="text" value="自訂聲骸" readonly class="dps-input"
                             style="background:#222; border-color:#333; color:#aaa; font-style:italic;">
                     </div>
@@ -8053,7 +8052,7 @@
                     style="margin-right:auto; border-color:#555; display:none;">Bug 除錯</button>
                 <button id="btn-save-custom-echo" onclick="addCustomEcho()" class="btn-confirm-yes"
                     style="width:120px;">保存聲骸</button>
-                <button onclick="closeCustomEchoModal()" class="btn-confirm-no">取消</button>
+                <button onclick="closeCustomEchoModal()" class="btn-confirm-no" data-lang-zh="取消" data-lang-en="Cancel">取消</button>
             </div>
             <div id="custom-echo-debug-area"
                 style="display:none; margin-top:20px; padding:15px; background:#111; border:1px solid #333; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.8rem; max-height:300px; overflow-y:auto; border-left:4px solid var(--accent);">
@@ -8078,35 +8077,35 @@
             <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-                        <span style="font-size:1.4rem;">⇄ 聲骸單一比對</span>
+                        <span style="font-size:1.4rem;" data-lang-zh="⇄ 聲骸單一比對" data-lang-en="⇄ Echo Comparison">⇄ 聲骸單一比對</span>
                         <button onclick="openCustomEchoModal()" class="db-btn-primary"
-                            style="padding:4px 12px; font-size:0.85rem; background:rgba(92, 124, 250, 0.2); border-color:rgba(92, 124, 250, 0.4); color:#5c7cfa;">+
+                            style="padding:4px 12px; font-size:0.85rem; background:rgba(92, 124, 250, 0.2); border-color:rgba(92, 124, 250, 0.4); color:#5c7cfa;" data-lang-zh="+ 新增自訂聲骸" data-lang-en="+ Add Custom Echo">+
                             新增自訂聲骸</button>
                         <div
                             style="display:flex; align-items:center; gap:12px; font-size:0.85rem; color:#aaa; font-weight:normal;">
                             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input
                                     type="checkbox" id="comp-filter-cost" onchange="renderSingleCompareContent()">
-                                COST同</label>
+                                <span data-lang-zh="COST同" data-lang-en="Same COST">COST同</span></label>
                             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input
                                     type="checkbox" id="comp-filter-suit" onchange="renderSingleCompareContent()">
-                                套裝同</label>
+                                <span data-lang-zh="套裝同" data-lang-en="Same Set">套裝同</span></label>
                             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input
                                     type="checkbox" id="comp-filter-custom" onchange="renderSingleCompareContent()">
-                                僅自訂</label>
+                                <span data-lang-zh="僅自訂" data-lang-en="Custom Only">僅自訂</span></label>
                             <label
                                 style="display:flex; align-items:center; gap:4px; cursor:pointer; color:var(--ok);"><input
                                     type="checkbox" id="comp-filter-cross-role" checked
                                     onchange="renderSingleCompareContent()">
-                                跨角色</label>
+                                <span data-lang-zh="跨角色" data-lang-en="Cross-role">跨角色</span></label>
                             <label
                                 style="display:flex; align-items:center; gap:4px; cursor:pointer; color:var(--accent);"><input
                                     type="checkbox" id="comp-show-score" onchange="renderSingleCompareContent()">
-                                顯示分數</label>
-                            <span style="color:#666; margin-left:5px;">| 排序:</span>
+                                <span data-lang-zh="顯示分數" data-lang-en="Show Score">顯示分數</span></label>
+                            <span style="color:#666; margin-left:5px;" data-lang-zh="| 排序:" data-lang-en="| Sort:">| 排序:</span>
                             <select id="comp-sort-mode" onchange="renderSingleCompareContent()"
                                 style="background:#222; border:1px solid #444; color:#ddd; font-size:0.8rem; border-radius:3px; padding:2px 4px; cursor:pointer;">
-                                <option value="score">權重分數</option>
-                                <option value="cost">Cost大小</option>
+                                <option value="score" data-lang-zh="權重分數" data-lang-en="Weight Score">權重分數</option>
+                                <option value="cost" data-lang-zh="Cost大小" data-lang-en="Cost Size">Cost大小</option>
                             </select>
                         </div>
                     </div>
@@ -8118,34 +8117,34 @@
             </h3>
             <div id="comp-weight-info"
                 style="margin-bottom:15px; font-size:0.8rem; color:#888; display:flex; gap:10px; flex-wrap:wrap; background:rgba(255,255,255,0.03); padding:8px; border-radius:4px; border:1px solid #333;">
-                正在載入權重最大分資訊...
+                <span data-lang-zh="正在載入權重最大分資訊..." data-lang-en="Loading weight max score info...">正在載入權重最大分資訊...</span>
             </div>
             <div id="single-compare-content" style="max-height:60vh; overflow-y:auto; margin-bottom:20px;">
                 <!-- Comparison table injected here -->
             </div>
             <div style="text-align:right;">
                 <button onclick="document.getElementById('single-compare-modal').style.display='none'"
-                    class="btn-confirm-no">關閉</button>
+                    class="btn-confirm-no" data-lang-zh="關閉" data-lang-en="Close">關閉</button>
             </div>
         </div>
     </div>
 
     <div id="config-modal" class="modal-overlay">
         <div class="startup-box">
-            <h3>設定後端網址</h3><input type="text" id="gas-url-input" placeholder="https://script.google.com/..."
-                style="width:100%;margin:10px 0;padding:10px;"><button onclick="saveConfig()">儲存</button>
+            <h3 data-lang-zh="設定後端網址" data-lang-en="Configure Backend URL">設定後端網址</h3><input type="text" id="gas-url-input" placeholder="https://script.google.com/..."
+                style="width:100%;margin:10px 0;padding:10px;"><button onclick="saveConfig()" data-lang-zh="儲存" data-lang-en="Save">儲存</button>
         </div>
     </div>
     <div id="weights-modal" class="modal-overlay">
         <div class="modal-full">
             <div class="modal-header">
                 <div style="display:flex;gap:10px;align-items:center;">
-                    <h3 style="margin:0;color:var(--accent);">角色加權值參考表</h3>
+                    <h3 style="margin:0;color:var(--accent);" data-lang-zh="角色加權值參考表" data-lang-en="Character Weight Reference">角色加權值參考表</h3>
                     <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()">顯示模式:
                         權重</button>
                     <button class="btn-toggle-view" onclick="openCustomWeightEditor()"
-                        style="border-color:var(--accent);color:var(--accent)">✏️ 自訂權重</button>
-                </div><button onclick="closeWeightsModal()">關閉面板</button>
+                        style="border-color:var(--accent);color:var(--accent)" data-lang-zh="✏️ 自訂權重" data-lang-en="✏️ Custom Weights">✏️ 自訂權重</button>
+                </div><button onclick="closeWeightsModal()" data-lang-zh="關閉面板" data-lang-en="Close Panel">關閉面板</button>
             </div>
             <div class="modal-body" id="weights-body"></div>
         </div>
@@ -8153,8 +8152,8 @@
     <div id="role-correction-modal" class="modal-overlay" style="pointer-events: auto;">
         <div class="modal-full" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 id="role-modal-title" style="margin:0;color:var(--accent);">⚠️ 角色名稱修正</h3>
-                <div id="role-modal-subtitle" style="font-size:0.8rem;color:#aaa;">辨識結果不在系統名單內，請手動選擇以繼續。</div>
+                <h3 id="role-modal-title" style="margin:0;color:var(--accent);" data-lang-zh="⚠️ 角色名稱修正" data-lang-en="⚠️ Character Name Correction">⚠️ 角色名稱修正</h3>
+                <div id="role-modal-subtitle" style="font-size:0.8rem;color:#aaa;" data-lang-zh="辨識結果不在系統名單內，請手動選擇以繼續。" data-lang-en="OCR result not found in system. Please select manually to continue.">辨識結果不在系統名單內，請手動選擇以繼續。</div>
                 <button id="role-modal-close-btn" onclick="cancelRolePicker()"
                     style="display:none;background:none;border:none;color:#888;font-size:1.4rem;cursor:pointer;">×</button>
             </div>
@@ -8163,7 +8162,7 @@
                     <div style="color:#888;font-size:0.8rem;">OCR 辨識結果: <span id="ocr-result-text"
                             style="color:var(--error);font-weight:bold;"></span></div>
                 </div>
-                <div class="role-list-pane"><input type="text" id="role-search" placeholder="🔍 搜尋角色..."
+                <div class="role-list-pane"><input type="text" id="role-search" placeholder="🔍 搜尋角色..." data-placeholder-zh="🔍 搜尋角色..." data-placeholder-en="🔍 Search characters..."
                         oninput="filterRoleGrid(this.value)">
                     <div class="role-grid" id="role-grid"></div>
                 </div>
@@ -8173,26 +8172,26 @@
     </div>
     <div id="refresh-modal" class="modal-overlay">
         <div class="confirm-box">
-            <h3 style="color:#eee;margin-top:0;">確認刷新列表?</h3>
+            <h3 style="color:#eee;margin-top:0;" data-lang-zh="確認刷新列表?" data-lang-en="Confirm Refresh?">確認刷新列表?</h3>
             <p style="color:#aaa;font-size:0.9rem;margin-bottom:15px;line-height:1.6;">1. 將從雲端下載最新數據。<br>2.
                 系統會自動過濾重複項目。<br>3. 此操作有 <span style="color:var(--accent)">30秒冷卻時間</span>。</p>
             <div class="confirm-btn-group"><button class="btn-confirm-yes"
-                    onclick="confirmRefresh()">確認刷新</button><button class="btn-confirm-no"
-                    onclick="closeRefreshModal()">取消</button></div>
+                    onclick="confirmRefresh()" data-lang-zh="確認刷新" data-lang-en="Confirm Refresh">確認刷新</button><button class="btn-confirm-no"
+                    onclick="closeRefreshModal()" data-lang-zh="取消" data-lang-en="Cancel">取消</button></div>
         </div>
     </div>
     <div id="sub-stat-modal" class="modal-overlay">
         <div class="sub-edit-box">
-            <h3 style="margin:0;color:var(--accent)">修正副詞條</h3>
-            <div style="font-size:0.8rem;color:#aaa">OCR 辨識錯誤修正</div><canvas id="sub-edit-canvas"></canvas><select
+            <h3 style="margin:0;color:var(--accent)" data-lang-zh="修正副詞條" data-lang-en="Correct Sub-stat">修正副詞條</h3>
+            <div style="font-size:0.8rem;color:#aaa" data-lang-zh="OCR 辨識錯誤修正" data-lang-en="OCR Error Correction">OCR 辨識錯誤修正</div><canvas id="sub-edit-canvas"></canvas><select
                 id="sub-edit-name" class="sub-edit-select" onchange="updateSubValueOptions()"></select><select
                 id="sub-edit-val-select" class="sub-edit-select" style="margin-bottom:5px;"
                 onchange="applySubValueSelect()">
-                <option value="">-- 選擇數值 --</option>
+                <option value="" data-lang-zh="-- 選擇數值 --" data-lang-en="-- Select Value --">-- 選擇數值 --</option>
             </select>
-            <div class="sub-edit-actions"><button class="btn-save-sub" onclick="saveSubEdit()">保存並繼續</button><button
+            <div class="sub-edit-actions"><button class="btn-save-sub" onclick="saveSubEdit()" data-lang-zh="保存並繼續" data-lang-en="Save &amp; Continue">保存並繼續</button><button
                     class="btn-cancel-sub"
-                    onclick="document.getElementById('sub-stat-modal').style.display='none'">取消</button></div>
+                    onclick="document.getElementById('sub-stat-modal').style.display='none'" data-lang-zh="取消" data-lang-en="Cancel">取消</button></div>
         </div>
     </div>
 
@@ -8201,7 +8200,7 @@
             <h3 style="color:var(--accent);margin-top:0;display:flex;align-items:center;gap:10px;">
                 ✏️ 自訂權重配置
                 <span
-                    style="font-size:0.8rem;color:#888;font-weight:normal;background:#333;padding:2px 8px;border-radius:4px;">啟用時介面將轉為藍色</span>
+                    style="font-size:0.8rem;color:#888;font-weight:normal;background:#333;padding:2px 8px;border-radius:4px;" data-lang-zh="啟用時介面將轉為藍色" data-lang-en="Active: UI turns blue">啟用時介面將轉為藍色</span>
             </h3>
             <p style="color:#bbb;font-size:0.9rem;">請設定各屬性的評分權重 (0 = 不計算)。<br>設定後將建立「自訂方案」，排名將重新計算。</p>
 
@@ -8212,10 +8211,10 @@
 
             <div style="display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #333;padding-top:20px;">
                 <button onclick="resetCustomWeights()" class="btn-confirm-no"
-                    style="margin-right:auto;background:#444;">恢復預設</button>
-                <button onclick="saveCustomWeights()" class="btn-confirm-yes">保存並套用</button>
+                    style="margin-right:auto;background:#444;" data-lang-zh="恢復預設" data-lang-en="Reset to Default">恢復預設</button>
+                <button onclick="saveCustomWeights()" class="btn-confirm-yes" data-lang-zh="保存並套用" data-lang-en="Save &amp; Apply">保存並套用</button>
                 <button onclick="document.getElementById('custom-weight-modal').style.display='none'"
-                    class="btn-confirm-no">取消</button>
+                    class="btn-confirm-no" data-lang-zh="取消" data-lang-en="Cancel">取消</button>
             </div>
         </div>
     </div>
@@ -8627,7 +8626,7 @@
                             style="position:absolute;top:15px;right:15px;z-index:100;background:rgba(0,0,0,0.6);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.2rem">×</button>
                         <div class="db-detail-left">
                             <div id="d-img-container" class="db-img-container">
-                                <div style="color:#555;position:absolute" id="no-img-txt">無預覽圖</div>
+                                <div style="color:#555;position:absolute" id="no-img-txt" data-lang-zh="無預覽圖" data-lang-en="No Preview">無預覽圖</div>
                                 <img id="d-img" class="db-detail-img" src="" onerror="this.style.display='none'">
                                 <canvas id="d-zoom" class="db-zoom-canvas"></canvas>
                             </div>
@@ -8640,7 +8639,7 @@
                         </div>
                         <div class="db-detail-right" onmouseleave="rank_unlockPreview()">
                             <div style="padding:20px;border-bottom:1px solid #333;background:#121214">
-                                <h3 id="d-title" style="margin:0;color:var(--accent);font-size:1.3rem">聲骸配置詳情</h3>
+                                <h3 id="d-title" style="margin:0;color:var(--accent);font-size:1.3rem" data-lang-zh="聲骸配置詳情" data-lang-en="Echo Build Details">聲骸配置詳情</h3>
                             </div>
                             <div id="d-table-container"></div>
                         </div>
@@ -8652,15 +8651,15 @@
                         style="position:absolute;height:100%;transform:translateX(-100%);z-index:100;box-shadow:5px 0 20px rgba(0,0,0,0.8);background:#111;border-right:1px solid #333;transition:transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);width:280px;display:flex;flex-direction:column;">
                         <div class="db-sidebar-header"
                             style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-                            <h3 style="margin:0;color:var(--accent);font-size:1.1rem;white-space:nowrap;">資料庫導航</h3>
-                            <input type="text" id="db-sidebar-search" placeholder="搜尋..." onkeyup="rank_renderSidebar()"
+                            <h3 style="margin:0;color:var(--accent);font-size:1.1rem;white-space:nowrap;" data-lang-zh="資料庫導航" data-lang-en="Database Navigation">資料庫導航</h3>
+                            <input type="text" id="db-sidebar-search" placeholder="搜尋..." data-placeholder-zh="搜尋..." data-placeholder-en="Search..." onkeyup="rank_renderSidebar()"
                                 style="flex:1; background:#1a1a1a; border:1px solid #444; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.85rem; min-width:0;">
                             <button onclick="document.getElementById('db-sidebar').style.transform='translateX(-100%)'"
                                 style="background:none;border:none;color:#aaa;cursor:pointer;font-size:1.5rem;padding:0;width:30px;height:30px;flex-shrink:0;">×</button>
                         </div>
                         <div class="db-view-switch" style="margin:10px;margin-top:0;">
                             <button class="db-view-btn active" onclick="rank_toggleViewMode('role')"
-                                id="btn-mode-role">👥 角色列表</button>
+                                id="btn-mode-role" data-lang-zh="👥 角色列表" data-lang-en="👥 Character List">👥 角色列表</button>
                             <button class="db-view-btn" onclick="rank_toggleViewMode('uid')" id="btn-mode-uid">🆔 玩家
                                 UID</button>
                             <button class="db-view-btn" onclick="rank_toggleViewMode('fault')" id="btn-mode-fault"
@@ -8768,7 +8767,7 @@
                             <button onclick="toggleEchoLibViewAll()" class="btn-toggle-view-card"
                                 id="btn-toggle-all-view" title="切換所有顯示模式 (表格/圖片)">🖼️ 圖表切換</button>
                             <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="重置所有勾選狀態"
-                                style="width:auto; padding:0 8px; font-size:0.9rem;">☑️ 重置</button>
+                                style="width:auto; padding:0 8px; font-size:0.9rem;" data-lang-zh="☑️ 重置" data-lang-en="☑️ Reset">☑️ 重置</button>
                             <div style="display:flex;align-items:center;gap:6px;cursor:pointer;"
                                 onclick="document.getElementById('toggle-echo-show-all').click()">
                                 <label class="toggle-switch" onclick="event.stopPropagation()">
@@ -8786,17 +8785,17 @@
                     <!-- 角色篩選勾選框 -->
                     <div id="echo-lib-role-filter-bar"
                         style="background:#18181b;border-bottom:1px solid #2a2a2e;padding:8px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;display:none;">
-                        <span style="color:#888;font-size:0.82rem;white-space:nowrap;">角色篩選：</span>
+                        <span style="color:#888;font-size:0.82rem;white-space:nowrap;" data-lang-zh="角色篩選：" data-lang-en="Filter by Role:">角色篩選：</span>
                         <label
                             style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:0.82rem;color:#ccc;white-space:nowrap;">
                             <input type="checkbox" id="role-filter-all" checked
                                 onchange="echoLibRoleFilterAll(this.checked)" style="cursor:pointer;">
-                            全部
+                            <span data-lang-zh="全部" data-lang-en="All">全部</span>
                         </label>
                         <div id="echo-lib-role-checkboxes" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
                     </div>
                     <div id="echo-lib-container" class="echo-lib-grid">
-                        <div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">
+                        <div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;" data-lang-zh="正在整理聲骸庫..." data-lang-en="Loading Echo Library...">
                             正在整理聲骸庫...
                         </div>
                     </div>
@@ -8808,7 +8807,7 @@
                     <div class="smart-toolbar"
                         style="background:#18181b; padding:15px; border-bottom:1px solid #333; display:flex; align-items:center; flex-wrap:wrap; gap:15px;">
                         <button onclick="toggleSmartView(false)" class="db-btn-primary"
-                            style="background:#333;border:1px solid #555;">⬅️ 返回列表</button>
+                            style="background:#333;border:1px solid #555;" data-lang-zh="⬅️ 返回列表" data-lang-en="⬅️ Back to List">⬅️ 返回列表</button>
                         <div style="border-left:1px solid #444; padding-left:15px; flex:1; min-width: 250px;">
                             <h3
                                 style="margin:0; color:var(--accent); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
@@ -8831,7 +8830,7 @@
                                 style="display:flex; align-items:center; gap:6px; cursor:pointer; color:#ccc; font-size:0.9rem; user-select:none;">
                                 <input type="checkbox" id="smart-toggle-cross-role"
                                     onchange="syncCrossRoleToggle('smart')">
-                                包含非當前角色聲骸
+                                <span data-lang-zh="包含非當前角色聲骸" data-lang-en="Include non-current character echoes">包含非當前角色聲骸</span>
                             </label>
                             <button onclick="toggleSmartAllImages()" class="btn-toggle-view-card"
                                 id="btn-smart-img-toggle" title="切換所有顯示模式">🖼️ 圖片</button>
@@ -8872,7 +8871,7 @@
                         </h2>
                         <div class="dps-main-config-grid">
                             <div class="dps-control-group">
-                                <label>角色</label>
+                                <label data-lang-zh="角色" data-lang-en="Character">角色</label>
                                 <select id="dps_roleSelect" class="dps-select dps-select-role"></select>
                             </div>
                             <div class="dps-control-group">
@@ -8880,7 +8879,7 @@
                                 <select id="dps_weaponSelect" class="dps-select dps-select-weapon"></select>
                             </div>
                             <div class="dps-control-group">
-                                <label>首位聲骸 (主動效果)</label>
+                                <label data-lang-zh="首位聲骸 (主動效果)" data-lang-en="1st Echo (Active Effect)">首位聲骸 (主動效果)</label>
                                 <select id="dps_activeEchoSelect" class="dps-select"></select>
                             </div>
                             <div class="dps-control-group">
@@ -9699,7 +9698,7 @@
     <div id="share-modal" class="share-modal">
         <div class="share-modal-content">
             <div class="share-modal-header">
-                <h3 style="color:var(--accent);margin:0;">📷 分享圖片生成器</h3>
+                <h3 style="color:var(--accent);margin:0;" data-lang-zh="📷 分享圖片生成器" data-lang-en="📷 Share Image Generator">📷 分享圖片生成器</h3>
                 <button class="share-close-btn" onclick="closeShareModal()">×</button>
             </div>
 
