@@ -7197,126 +7197,9 @@
         }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
-    <!-- 防偷取保護 -->
-    <script>
-    (function() {
-        'use strict';
-        // 允許的網域清單
-        var ALLOWED_HOSTS = ['992851qaz-bot.github.io', 'localhost', '127.0.0.1'];
-        var host = window.location.hostname;
-        var isAllowed = ALLOWED_HOSTS.some(function(h) { return host === h || host.endsWith('.' + h); });
-        if (!isAllowed && host !== '') {
-            document.documentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#111;color:#e74c3c;font-size:1.4rem;font-family:sans-serif;text-align:center;padding:20px;">⛔ 此頁面禁止在未授權網域使用<br><small style="color:#888;font-size:0.9rem;margin-top:12px;display:block;">Unauthorized domain detected.</small></div>';
-            return;
-        }
-        // 禁止常見快捷鍵：Ctrl+U, Ctrl+S, Ctrl+A, Ctrl+C, F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-        document.addEventListener('keydown', function(e) {
-            var key = e.key || e.keyCode;
-            if (e.ctrlKey && (key === 'u' || key === 'U' || key === 85)) { e.preventDefault(); return false; }
-            if (e.ctrlKey && (key === 's' || key === 'S' || key === 83)) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'i' || key === 73)) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.shiftKey && (key === 'J' || key === 'j' || key === 74)) { e.preventDefault(); return false; }
-            if (e.ctrlKey && e.shiftKey && (key === 'C' || key === 'c' || key === 67)) { e.preventDefault(); return false; }
-            if (key === 'F12' || key === 123) { e.preventDefault(); return false; }
-        }, true);
-        // DevTools 偵測（大小差異法）
-        var devtoolsOpen = false;
-        setInterval(function() {
-            var w = window.outerWidth - window.innerWidth > 160;
-            var h = window.outerHeight - window.innerHeight > 160;
-            if ((w || h) && !devtoolsOpen) {
-                devtoolsOpen = true;
-                console.clear();
-                console.warn('%c⛔ 警告：偵測到開發者工具！未經授權存取程式碼屬違規行為。', 'color:red;font-size:18px;font-weight:bold;');
-            } else if (!w && !h) {
-                devtoolsOpen = false;
-            }
-        }, 1000);
-    })();
-    </script>
 </head>
 
 <body>
-<!-- 左上角懸浮切換按鈕 -->
-<style>
-#page-switch-fab {
-    position: fixed;
-    top: 14px;
-    left: 14px;
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    background: rgba(30,30,34,0.82);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 999px;
-    color: #fff;
-    font-size: 0.82rem;
-    font-weight: 600;
-    text-decoration: none;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 18px rgba(0,0,0,0.45);
-    transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
-    cursor: pointer;
-    white-space: nowrap;
-    letter-spacing: 0.02em;
-    outline: none;
-    font-family: inherit;
-}
-#page-switch-fab:hover {
-    background: rgba(255,184,77,0.22);
-    border-color: rgba(255,184,77,0.55);
-    transform: translateY(-2px) scale(1.04);
-    box-shadow: 0 8px 28px rgba(255,184,77,0.2);
-    color: #ffe9bf;
-}
-#page-switch-fab:active { transform: scale(0.97); }
-#page-switch-fab svg { flex-shrink: 0; }
-</style>
-<button id="page-switch-fab" onclick="toggleOcrPanel()" title="切換至聲骸辨識頁">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-    切換頁面
-</button>
-<!-- 聲骸辨識頁面嵌入面板 -->
-<div id="ocr-panel-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:99998;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);">
-    <div style="position:relative;width:100%;height:100%;display:flex;flex-direction:column;">
-        <iframe id="ocr-panel-iframe" src="" style="flex:1;width:100%;border:none;" allowfullscreen></iframe>
-    </div>
-</div>
-<script>
-(function(){
-    function toggleOcrPanel(){
-        var overlay=document.getElementById('ocr-panel-overlay');
-        var iframe=document.getElementById('ocr-panel-iframe');
-        var fab=document.getElementById('page-switch-fab');
-        if(overlay.style.display==='none'||overlay.style.display===''){
-            if(!iframe.getAttribute('data-loaded')){
-                iframe.src='in2.html';
-                iframe.setAttribute('data-loaded','1');
-            }
-            overlay.style.display='flex';
-            fab.style.background='rgba(255,184,77,0.35)';
-            fab.style.borderColor='rgba(255,184,77,0.7)';
-            fab.style.color='#ffe9bf';
-        } else {
-            overlay.style.display='none';
-            fab.style.background='';
-            fab.style.borderColor='';
-            fab.style.color='';
-        }
-    }
-    window.toggleOcrPanel=toggleOcrPanel;
-    window.addEventListener('message',function(e){
-        if(e.data==='close-ocr-panel'){
-            var overlay=document.getElementById('ocr-panel-overlay');
-            var fab=document.getElementById('page-switch-fab');
-            if(overlay){overlay.style.display='none';}
-            if(fab){fab.style.background='';fab.style.borderColor='';fab.style.color='';}
-        }
-    });
-})();
-</script>
     <header>
         <div class="header-title-group" onclick="dashboard_open()">
             <h1>GAME ZH</h1>
@@ -7584,16 +7467,16 @@
                         style="display: flex; flex-direction: column; transition: transform 0.5s ease;">
                         <div
                             style="height: 60px; display: flex; align-items: center; font-size: 0.95rem; color: #ddd; line-height: 1.6;">
-                            📤 <b style="color:var(--accent); margin: 0 8px;">上傳資料</b>：每成功上傳非重複資料可獲得 <b
-                                style="color:var(--ok);">88 積分</b>
+                            📤 <b style="color:var(--accent); margin: 0 8px;" data-lang-zh="上傳資料" data-lang-en="Upload Data">上傳資料</b><span data-lang-zh="：每成功上傳非重複資料可獲得 " data-lang-en=": Earn ">：每成功上傳非重複資料可獲得 </span><b
+                                style="color:var(--ok);">88 <span data-lang-zh="積分" data-lang-en="points">積分</span></b><span class="lang-zh-only"> </span><span class="lang-en-only" style="display:none;"> per successful unique upload</span>
                         </div>
                         <div
                             style="height: 60px; display: flex; align-items: center; font-size: 0.95rem; color: #ddd; line-height: 1.6;">
-                            ⏲️ <b style="color:var(--accent); margin: 0 8px;">有效期限</b>：積分僅在當前登入期間有效，登出後歸零
+                            ⏲️ <b style="color:var(--accent); margin: 0 8px;" data-lang-zh="有效期限" data-lang-en="Validity">有效期限</b><span data-lang-zh="：積分僅在當前登入期間有效，登出後歸零" data-lang-en=": Points are valid only during the current login session and reset on logout">：積分僅在當前登入期間有效，登出後歸零</span>
                         </div>
                         <div
                             style="height: 60px; display: flex; align-items: center; font-size: 0.95rem; color: #ddd; line-height: 1.6;">
-                            ⚒️ <b style="color:var(--accent); margin: 0 8px;">積分用途</b>：消耗積分挑戰菲比權重，達 90% 獲得月卡抽獎資格
+                            ⚒️ <b style="color:var(--accent); margin: 0 8px;" data-lang-zh="積分用途" data-lang-en="Points Use">積分用途</b><span data-lang-zh="：消耗積分挑戰菲比權重，達 90% 獲得月卡抽獎資格" data-lang-en=": Spend points to challenge Phebe's weights; reaching 90% qualifies for Mini Pass lottery">：消耗積分挑戰菲比權重，達 90% 獲得月卡抽獎資格</span>
                         </div>
                     </div>
                 </div>
@@ -7602,12 +7485,17 @@
                     style="padding: 15px; background: rgba(152, 195, 121, 0.05); border-radius: 8px; border-left: 4px solid var(--ok); margin-top: 10px;">
                     <div
                         style="color: var(--ok); font-weight: bold; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 1.1rem;">
-                        🧧 贊助維護與資助獎勵
+                        <span data-lang-zh="🧧 贊助維護與資助獎勵" data-lang-en="🧧 Sponsor &amp; Contributor Rewards">🧧 贊助維護與資助獎勵</span>
                     </div>
-                    <div style="font-size: 0.9rem; color: #bbb; line-height: 1.7;">
+                    <div class="lang-zh-only" style="font-size: 0.9rem; color: #bbb; line-height: 1.7;">
                         本工具為純社群開發，不收取任何費用。如果您願意資助每月活動的小月卡，請聯繫開發者。<br>
                         <span style="color:#eee;">• 資助獎勵：</span> 捐助者將獲得特殊標章展示，並顯著提升分析時的「歐氣特效」反饋。<br>
                         <span style="color:#eee;">• 如何聯繫：</span> 點擊此處加入 [Discord 討論區] 或在鳴潮相關社群聯繫作者。
+                    </div>
+                    <div class="lang-en-only" style="display:none; font-size: 0.9rem; color: #bbb; line-height: 1.7;">
+                        This tool is purely community-developed and completely free. If you'd like to sponsor the monthly Mini Pass activity, please contact the developer.<br>
+                        <span style="color:#eee;">• Contributor Reward:</span> Donors receive a special badge display and significantly enhanced "Lucky Aura" effects during analysis.<br>
+                        <span style="color:#eee;">• How to Contact:</span> Click here to join [Discord Community] or reach the author in Wuthering Waves communities.
                     </div>
                 </div>
             </div>
@@ -7616,7 +7504,8 @@
                 <div class="db-card-title" data-lang-zh="前往挑戰" data-lang-en="Go to Challenge">前往挑戰</div>
                 <div style="padding:15px; text-align:center;">
                     <button class="btn-confirm-yes" onclick="imitate_tryStartChallenge()"
-                        style="padding:12px 30px; font-size:1.1rem; background:var(--accent); color:#000; font-weight:bold; box-shadow: 0 0 15px var(--accent-dim);">⚡
+                        style="padding:12px 30px; font-size:1.1rem; background:var(--accent); color:#000; font-weight:bold; box-shadow: 0 0 15px var(--accent-dim);"
+                        data-lang-zh="⚡ 進入挑戰模式 (消耗 1 積分)" data-lang-en="⚡ Enter Challenge Mode (costs 1 point)">⚡
                         進入挑戰模式 (消耗 1 積分)</button>
                     <div style="font-size:0.9rem; color:#888; margin-top:12px;" data-lang-zh="挑戰達成 90% 評分可獲得抽小月卡資格" data-lang-en="Achieve 90%+ score in challenge to qualify for Mini Pass lottery">挑戰達成 90% 評分可獲得抽小月卡資格</div>
                 </div>
@@ -7917,7 +7806,7 @@
 
             <div id="imitate-chal-hint" class="imitate-main-col"
                 style="display:none; padding:12px; background:rgba(255,193,7,0.1); border:1px solid rgba(255,193,7,0.3); border-radius:8px; margin-bottom:15px; font-size:0.85rem; color:#ffc107; grid-column: 1/-1;">
-                ⚠️ 挑戰模式：消耗 1 積分進行 5 次模擬，達成 90% 以上評分 (菲比權重) 獲取勳章。
+                <span data-lang-zh="⚠️ 挑戰模式：消耗 1 積分進行 5 次模擬，達成 90% 以上評分 (菲比權重) 獲取勳章。" data-lang-en="⚠️ Challenge Mode: Spend 1 point for 5 simulation rolls. Reach 90%+ score (Phebe weights) to earn a badge.">⚠️ 挑戰模式：消耗 1 積分進行 5 次模擬，達成 90% 以上評分 (菲比權重) 獲取勳章。</span>
             </div>
 
             <!-- Left / Main Column -->
@@ -8847,7 +8736,7 @@
                 <!-- Main Library View -->
                 <div id="echo-lib-main-view">
                     <div id="echo-lib-load-hint" class="echo-lib-load-hint">
-                        💡 提示：目前僅顯示部分歷史紀錄，點擊左側 <b>⬇️ 載入全部</b> 鈕可獲得更完整的庫存清單。
+                        <span data-lang-zh="💡 提示：目前僅顯示部分歷史紀錄，點擊左側 ⬇️ 載入全部 鈕可獲得更完整的庫存清單。" data-lang-en="💡 Tip: Only partial history is displayed. Click the ⬇️ Load All button on the left for a more complete echo list.">💡 提示：目前僅顯示部分歷史紀錄，點擊左側 <b>⬇️ 載入全部</b> 鈕可獲得更完整的庫存清單。</span>
                     </div>
                     <div class="echo-lib-filters">
                         <span style="color:#888;font-size:0.9rem" data-lang-zh="篩選：" data-lang-en="Filter:">篩選：</span>
@@ -8897,7 +8786,7 @@
                                 <span style="font-size:0.8rem;color:#ccc;user-select:none;" data-lang-zh="跨角色比較" data-lang-en="Cross-role compare">跨角色比較</span>
                             </div>
                             <div style="color:#666;font-size:0.8rem;padding-left:12px;border-left:1px solid #444;">
-                                共 <span id="echo-lib-count" style="color:var(--accent);font-weight:bold">0</span> 件
+                                <span class="lang-zh-only">共 </span><span id="echo-lib-count" style="color:var(--accent);font-weight:bold">0</span><span class="lang-zh-only"> 件</span><span class="lang-en-only" style="display:none;"> items</span>
                             </div>
                         </div>
                     </div>
@@ -9764,7 +9653,7 @@
                 <div>
                     <h2
                         style="margin:0; font-size:1.8rem; font-weight:800; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        戰略大數據總匯 <span style="font-size: 0.9rem; -webkit-text-fill-color: #555; font-weight: 500;">/
+                        <span data-lang-zh="戰略大數據總匯" data-lang-en="Strategic Meta Report">戰略大數據總匯</span> <span style="font-size: 0.9rem; -webkit-text-fill-color: #555; font-weight: 500;">/
                             STRATEGIC META REPORT</span></h2>
                     <div id="strategy-summary-role-badge" style="margin-top:8px;"></div>
                 </div>
@@ -9777,7 +9666,7 @@
                             <path
                                 d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
                         </svg>
-                        生成圖片
+                        <span data-lang-zh="生成圖片" data-lang-en="Generate Image">生成圖片</span>
                     </button>
                     <button onclick="document.getElementById('strategy-summary-modal').style.display='none'"
                         style="background:rgba(255,255,255,0.05); border:none; color:#fff; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.2s;"
@@ -9932,7 +9821,6 @@
         function setLanguage(lang) {
             g_lang = lang;
             localStorage.setItem('ww_lang', g_lang);
-            // Refresh UI elements that depend on language
             document.querySelectorAll('[data-lang-zh]').forEach(el => {
                 el.textContent = g_lang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
             });
@@ -9987,7 +9875,6 @@
                 btn.title = g_lang === 'zh' ? 'Switch to English' : '切換為中文';
             });
         }
-        let g_shouldRefreshRank = false; // 標記是否需要刷新排行榜
         let g_userRankPosition = -1; // 用戶在排行榜中的位置索引
         let g_codeErrorCount = 0; // 兌換碼錯誤次數
         let g_usedCodes = new Set(); // 已使用的兌換碼
@@ -11591,16 +11478,16 @@
             const searchInput = document.getElementById('role-search');
 
             if (mode === 'custom') {
-                if (titleEl) titleEl.innerText = '🆕 新增自訂角色';
-                if (subtitleEl) subtitleEl.innerText = '請選擇角色（含頭像）建立本地自訂草稿。';
+                if (titleEl) titleEl.innerText = g_lang === 'en' ? '🆕 Add Custom Role' : '🆕 新增自訂角色';
+                if (subtitleEl) subtitleEl.innerText = g_lang === 'en' ? 'Select a character (with avatar) to create a local custom draft.' : '請選擇角色（含頭像）建立本地自訂草稿。';
                 if (closeBtn) closeBtn.style.display = 'block';
                 if (previewPane) previewPane.style.display = 'none';
                 ocrResultText.innerText = '';
                 roleCanvas.width = 0;
                 roleCanvas.height = 0;
             } else {
-                if (titleEl) titleEl.innerText = '⚠️ 角色名稱修正';
-                if (subtitleEl) subtitleEl.innerText = '辨識結果不在系統名單內，請手動選擇以繼續。';
+                if (titleEl) titleEl.innerText = g_lang === 'en' ? '⚠️ Character Name Correction' : '⚠️ 角色名稱修正';
+                if (subtitleEl) subtitleEl.innerText = g_lang === 'en' ? 'OCR result not in system list. Please select manually to continue.' : '辨識結果不在系統名單內，請手動選擇以繼續。';
                 if (closeBtn) closeBtn.style.display = 'none';
                 if (previewPane) previewPane.style.display = 'flex';
                 ocrResultText.innerText = rawName || '(無法辨識)';
@@ -11672,13 +11559,13 @@
             syncOfflineEntry(newEntry, 'create');
 
             if (isMobileLayout()) setMobileNavSection('results');
-            statusText.innerText = `已建立自訂角色：${roleName}（本地草稿）`;
-            showMsg('已新增自訂角色並進入修改模式');
+            statusText.innerText = g_lang === 'en' ? `Custom role created: ${roleName} (local draft)` : `已建立自訂角色：${roleName}（本地草稿）`;
+            showMsg(g_lang === 'en' ? 'Custom role added and edit mode activated' : '已新增自訂角色並進入修改模式');
         }
 
         function openRolePickerForCustomRole() {
             if (!g_offlineEditMode) {
-                showMsg('請先開啟離線編輯模式，再新增自訂角色');
+                showMsg(g_lang === 'en' ? 'Please enable Offline Edit Mode before adding a custom role' : '請先開啟離線編輯模式，再新增自訂角色');
                 return;
             }
             g_rolePickerMode = 'custom';
@@ -12777,7 +12664,7 @@
                 ocrHtml += `</table>`;
                 html += `<tr><td colspan="6" class="role-info-cell" style="background:#151518;border:1px solid var(--accent-dim);border-radius:8px;"><div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;"><div style="flex:1;min-width:280px;background:#1a1a1e;padding:15px;border-radius:8px;">${infoHtml}</div><div style="flex:1.5;min-width:320px;"><div style="font-size:0.8rem;color:var(--accent);margin-bottom:10px;font-weight:bold;display:flex;align-items:center;gap:5px;"><span>🔍</span> OCR 轉譯對照資訊</div>${ocrHtml}<div style="font-size:0.75rem;color:#555;margin-top:10px;font-style:italic;">* 主詞條/副詞條 OCR 原文請見下方相關項目的 Raw 區塊</div></div></div></td></tr>`;
             } else {
-                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || '未辨識角色'}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:40px;"><button class="rank-btn" style="position:absolute;top:10px;right:15px;margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">📋 角色完整攻略</button>${formatDescText(roleDesc)}</div></div></td></tr>`;
+                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:40px;"><button class="rank-btn" style="position:absolute;top:10px;right:15px;margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button>${formatDescText(roleDesc)}</div></div></td></tr>`;
             }
             html += `<tr class="custom-header-row"><td>項目</td>${echoes.map((e, idx) => `<td>聲骸 ${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
             html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
@@ -13406,33 +13293,33 @@
                 const advStats = getAdvancedStats(g_globalData.role);
 
                 // 1. Total Stats Table
-                let compareLabel = '全服平均';
+                let compareLabel = g_lang === 'en' ? 'Server Avg' : '全服平均';
                 let compareData = null;
                 if (advStats) {
-                    if (g_statCompareMode === 'top5') { compareLabel = '前五平均'; compareData = advStats.top5; }
-                    else if (g_statCompareMode === 'median') { compareLabel = '中位數'; compareData = advStats.median; }
-                    else { compareLabel = '全服平均'; compareData = advStats.avg; }
+                    if (g_statCompareMode === 'top5') { compareLabel = g_lang === 'en' ? 'Top 5 Avg' : '前五平均'; compareData = advStats.top5; }
+                    else if (g_statCompareMode === 'median') { compareLabel = g_lang === 'en' ? 'Median' : '中位數'; compareData = advStats.median; }
+                    else { compareLabel = g_lang === 'en' ? 'Server Avg' : '全服平均'; compareData = advStats.avg; }
                 }
 
                 const btnStyle = (mode) => `padding:2px 8px;font-size:0.75rem;cursor:pointer;border:1px solid #444;border-radius:4px;background:${g_statCompareMode === mode ? 'var(--accent)' : '#222'};color:${g_statCompareMode === mode ? '#000' : '#888'}`;
                 const toggleHtml = `
  <div style="display:flex;gap:5px;">
  <button onclick="setStatCompareMode('top5')" style="${btnStyle('top5')}">Top 5</button>
- <button onclick="setStatCompareMode('avg')" style="${btnStyle('avg')}">平均</button>
- <button onclick="setStatCompareMode('median')" style="${btnStyle('median')}">中位</button>
+ <button onclick="setStatCompareMode('avg')" style="${btnStyle('avg')}">${g_lang === 'en' ? 'Avg' : '平均'}</button>
+ <button onclick="setStatCompareMode('median')" style="${btnStyle('median')}">${g_lang === 'en' ? 'Median' : '中位'}</button>
  </div>`;
 
                 let tableHtml = `
  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:1px solid #333;padding-bottom:5px;">
- <div style="color:var(--accent);font-weight:bold">全數值加總表</div>
+ <div style="color:var(--accent);font-weight:bold">${g_lang === 'en' ? 'Total Stats Table' : '全數值加總表'}</div>
  ${toggleHtml}
  </div>
- <table class="result-table" style="width:100%"><thead><tr><th style="text-align:left;color:#888">屬性</th><th style="text-align:right">當前</th><th style="text-align:right;color:#aaa">${compareLabel}</th></tr></thead><tbody>`;
+ <table class="result-table" style="width:100%"><thead><tr><th style="text-align:left;color:#888">${g_lang === 'en' ? 'Stat' : '屬性'}</th><th style="text-align:right">${g_lang === 'en' ? 'Current' : '當前'}</th><th style="text-align:right;color:#aaa">${compareLabel}</th></tr></thead><tbody>`;
                 const groups = {
-                    "雙爆": ["暴擊", "暴擊傷害"],
-                    "攻擊": ["攻擊百分比", "攻擊"],
-                    "生存": ["生命百分比", "生命", "防禦百分比", "防禦"],
-                    "增傷": ["共鳴效率", "普攻傷害加成", "重擊傷害加成", "共鳴技能傷害加成", "共鳴解放傷害加成", "冷凝傷害加成", "熱熔傷害加成", "導電傷害加成", "氣動傷害加成", "衍射傷害加成", "湮滅傷害加成"]
+                    [g_lang === 'en' ? 'Double-Crit' : '雙爆']: ["暴擊", "暴擊傷害"],
+                    [g_lang === 'en' ? 'ATK' : '攻擊']: ["攻擊百分比", "攻擊"],
+                    [g_lang === 'en' ? 'Survival' : '生存']: ["生命百分比", "生命", "防禦百分比", "防禦"],
+                    [g_lang === 'en' ? 'DMG Bonus' : '增傷']: ["共鳴效率", "普攻傷害加成", "重擊傷害加成", "共鳴技能傷害加成", "共鳴解放傷害加成", "冷凝傷害加成", "熱熔傷害加成", "導電傷害加成", "氣動傷害加成", "衍射傷害加成", "湮滅傷害加成"]
                 };
 
                 for (let groupName in groups) {
@@ -14027,7 +13914,7 @@
             const btnLoadAll = document.getElementById('btn-load-all');
 
             if (!uid) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">請先登入 UID...</div>';
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">${g_lang === 'en' ? 'Please log in with a UID first...' : '請先登入 UID...'}</div>`;
                 if (countEl) countEl.innerText = '0';
                 return;
             }
@@ -14098,7 +13985,7 @@
             const suitFilter = document.getElementById('filter-echo-suit');
             if (suitFilter) {
                 const currentSuitVal = suitFilter.value;
-                suitFilter.innerHTML = '<option value="">所有套裝</option>';
+                suitFilter.innerHTML = `<option value="">${g_lang === 'en' ? 'All Sets' : '所有套裝'}</option>`;
                 Array.from(suits).sort().forEach(s => {
                     const op = document.createElement('option');
                     op.value = s; op.innerText = s;
@@ -14151,17 +14038,17 @@
             const syncStatusHtml = hasCustomEchoes ? `
                 <div style="grid-column: 1/-1; background:rgba(100,150,200,0.1); border-left:3px solid #64a8d8; padding:8px 12px; margin-bottom:12px; font-size:0.9rem; border-radius:2px;">
                     <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                        <span style="font-weight:bold; color:#64a8d8;">雲端同步：</span>
-                        ${syncCounts.pending > 0 ? `<span style="color:#999;">待上傳 ${syncCounts.pending}</span>` : ''}
-                        ${syncCounts.uploading > 0 ? `<span style="color:#ffb74d;">上傳中... ${syncCounts.uploading}</span>` : ''}
-                        ${syncCounts.success > 0 ? `<span style="color:#98c379;">已上傳 ${syncCounts.success}</span>` : ''}
-                        ${syncCounts.error > 0 ? `<span style="color:#f44336;">失敗 ${syncCounts.error}</span>` : ''}
+                        <span style="font-weight:bold; color:#64a8d8;">${g_lang === 'en' ? 'Cloud Sync:' : '雲端同步：'}</span>
+                        ${syncCounts.pending > 0 ? `<span style="color:#999;">${g_lang === 'en' ? `Pending ${syncCounts.pending}` : `待上傳 ${syncCounts.pending}`}</span>` : ''}
+                        ${syncCounts.uploading > 0 ? `<span style="color:#ffb74d;">${g_lang === 'en' ? `Uploading... ${syncCounts.uploading}` : `上傳中... ${syncCounts.uploading}`}</span>` : ''}
+                        ${syncCounts.success > 0 ? `<span style="color:#98c379;">${g_lang === 'en' ? `Uploaded ${syncCounts.success}` : `已上傳 ${syncCounts.success}`}</span>` : ''}
+                        ${syncCounts.error > 0 ? `<span style="color:#f44336;">${g_lang === 'en' ? `Failed ${syncCounts.error}` : `失敗 ${syncCounts.error}`}</span>` : ''}
                     </div>
                 </div>
             ` : '';
 
             if (uniqueEchoes.length === 0 && customEchoesForUid.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">目前條件下沒有聲骸，請放寬篩選或同步歷史資料。</div>';
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">${g_lang === 'en' ? 'No echoes found under current filters. Try expanding filters or syncing history data.' : '目前條件下沒有聲骸，請放寬篩選或同步歷史資料。'}</div>`;
                 return;
             }
 
@@ -14173,7 +14060,7 @@
             container.innerHTML = html + `
  <div class="add-echo-card" onclick="openCustomEchoModal()">
  <div class="plus-icon">+</div>
- <div class="label">新增自訂聲骸</div>
+ <div class="label">${g_lang === 'en' ? 'Add Custom Echo' : '新增自訂聲骸'}</div>
  </div>
  `;
 
@@ -14724,7 +14611,7 @@
                     if (sb) sb.classList.remove('show');
                 }
 
-                document.getElementById('db-top-label').innerText = rank_viewMode === 'role' ? '目前檢視角色' : '目前檢視玩家';
+                document.getElementById('db-top-label').innerText = rank_viewMode === 'role' ? (g_lang === 'en' ? 'Viewing Character' : '目前檢視角色') : (g_lang === 'en' ? 'Viewing Player' : '目前檢視玩家');
                 document.getElementById('db-top-title').innerText = val;
 
                 const buildWrap = document.getElementById('db-build-wrap');
@@ -14736,7 +14623,7 @@
  </select>` :
                         `<span style="font-size:0.8rem;color:#888;background:#222;padding:4px 8px;border-radius:4px">${builds[0].name}</span>`;
                 } else {
-                    buildWrap.innerHTML = '<span style="font-size:0.75rem;color:#555">玩家總覽模式</span>';
+                    buildWrap.innerHTML = `<span style="font-size:0.75rem;color:#555">${g_lang === 'en' ? 'Player Overview Mode' : '玩家總覽模式'}</span>`;
                 }
 
                 rank_calcData();
@@ -14818,8 +14705,8 @@
                     rawList = rank_data.filter(d => d.uid && String(d.uid).trim() === targetUid);
                 } else if (rank_viewMode === 'fault') {
                     rawList = rank_data; // 掃描模式下讀取全域資料
-                    document.getElementById('db-top-title').innerText = "全域異常總覽";
-                    document.getElementById('db-top-label').innerText = "診斷中";
+                    document.getElementById('db-top-title').innerText = g_lang === 'en' ? 'Global Fault Summary' : "全域異常總覽";
+                    document.getElementById('db-top-label').innerText = g_lang === 'en' ? 'Diagnosing' : "診斷中";
                     document.getElementById('db-build-wrap').innerHTML = '';
                 }
 
@@ -17723,7 +17610,9 @@
         }
         function imitate_setMode(mode) {
             if (mode === 'chal') {
-                const msg = g_isDeveloper ? "開發者模式：免費開啟挑戰，確定嗎？" : "開啟挑戰模式，開啟每個詞條將消耗 1 積分，確定嗎？";
+                const msg = g_isDeveloper
+                    ? (g_lang === 'en' ? "Developer mode: start challenge for free, confirm?" : "開發者模式：免費開啟挑戰，確定嗎？")
+                    : (g_lang === 'en' ? "Enter Challenge Mode: each sub-stat unlocked costs 1 point. Confirm?" : "開啟挑戰模式，開啟每個詞條將消耗 1 積分，確定嗎？");
                 showConfirm(msg, () => {
                     g_imitateMode = 'chal';
                     g_imitateCost.propertyList = [];
@@ -17746,13 +17635,13 @@
                 const entry = document.createElement('div');
                 entry.style.padding = '8px 0';
                 entry.style.borderBottom = '1px solid #333';
-                entry.innerHTML = `<span style="color:#e06c75;">-${val} 積分</span>：開啟聲骸模擬挑戰 <span style="float:right;color:#555;">${new Date().toLocaleTimeString()}</span>`;
+                entry.innerHTML = `<span style="color:#e06c75;">-${val} ${g_lang === 'en' ? 'points' : '積分'}</span>：${g_lang === 'en' ? 'Echo simulation challenge started' : '開啟聲骸模擬挑戰'} <span style="float:right;color:#555;">${new Date().toLocaleTimeString()}</span>`;
                 log.prepend(entry);
             }
         }
         function imitate_tryStartChallenge() {
             if (g_sessionPoints < 1) {
-                if (!g_imitateMute) showMsg("積分不足，無法開啟挑戰");
+                if (!g_imitateMute) showMsg(g_lang === 'en' ? 'Not enough points to start challenge' : "積分不足，無法開啟挑戰");
                 return;
             }
             document.getElementById('points-modal').style.display = 'none';
@@ -17762,7 +17651,7 @@
 
             // 记录第一次进入挑战模式的引导状态
             if (!localStorage.getItem('guide_imitate_chal')) {
-                if (!g_imitateMute) showMsg("已為您自動切換至【挑戰模式】！在此模式下消耗積分開啟詞條，達成 90% 以上評分可獲取勳章與抽獎資格。", 5000);
+                if (!g_imitateMute) showMsg(g_lang === 'en' ? "Switched to Challenge Mode! Spend points to unlock sub-stats. Reach 90%+ score (Phebe weights) to earn a badge and lottery qualification." : "已為您自動切換至【挑戰模式】！在此模式下消耗積分開啟詞條，達成 90% 以上評分可獲取勳章與抽獎資格。", 5000);
                 localStorage.setItem('guide_imitate_chal', 'true');
             }
 
@@ -17772,7 +17661,7 @@
             const doReset = () => {
                 if (g_imitateMode === 'chal') {
                     if (!g_isDeveloper && g_sessionPoints < 1) {
-                        if (!g_imitateMute) showMsg("積分不足，自動切換至模擬模式");
+                        if (!g_imitateMute) showMsg(g_lang === 'en' ? 'Not enough points, switching to simulation mode' : "積分不足，自動切換至模擬模式");
                         g_imitateMode = 'sim';
                     } else if (!g_isDeveloper) {
                         consumePoint(1);
@@ -17806,7 +17695,7 @@
                     g_devSavedPoints += 1;
                 } else {
                     if (g_sessionPoints < 1) {
-                        if (!g_imitateMute) showMsg("積分不足，無法開啟新詞條");
+                        if (!g_imitateMute) showMsg(g_lang === 'en' ? 'Not enough points to unlock new sub-stat' : "積分不足，無法開啟新詞條");
                         return;
                     }
                     consumePoint(1);
@@ -17876,12 +17765,14 @@
                 let hintHtml = `<div style="display:flex; align-items:center; gap:10px;">
  <span style="font-size:1.5rem;">🏆</span>
  <div>
- <div style="font-weight:bold; color:var(--accent); font-size:1rem;">挑戰模式進行中</div>
- <div style="font-size:0.8rem; color:#ccc;">開啟 1 個詞條消耗 1 積分，達成 90% 以上評分獲取抽小月卡資格。</div>
+ <div style="font-weight:bold; color:var(--accent); font-size:1rem;">${g_lang === 'en' ? 'Challenge Mode Active' : '挑戰模式進行中'}</div>
+ <div style="font-size:0.8rem; color:#ccc;">${g_lang === 'en' ? 'Each sub-stat costs 1 point. Reach 90%+ score to qualify for Mini Pass lottery.' : '開啟 1 個詞條消耗 1 積分，達成 90% 以上評分獲取抽小月卡資格。'}</div>
  </div>
  </div>`;
                 if (g_isDeveloper) {
-                    hintHtml = `🛠️ 開發者模式：免消耗積分。期間已節省：<span style="color:#fff; font-weight:bold;">${g_devSavedPoints}</span> 點。`;
+                    hintHtml = g_lang === 'en'
+                        ? `🛠️ Developer Mode: no points consumed. Saved so far: <span style="color:#fff; font-weight:bold;">${g_devSavedPoints}</span> pts.`
+                        : `🛠️ 開發者模式：免消耗積分。期間已節省：<span style="color:#fff; font-weight:bold;">${g_devSavedPoints}</span> 點。`;
 
                     // Real challenge history stats (instead of Monte Carlo)
                     if (g_chalScoreHistory.length > 0) {
@@ -20791,7 +20682,9 @@
                 if (bar) bar.style.display = 'block';
 
                 if (!silent) {
-                    showMsg('✏️ 離線編輯模式已開啟\n所有修改儲存於本地，不會上傳。\n可從歷史列表底部或工具列「＋」新增自訂角色。');
+                    showMsg(g_lang === 'en'
+                        ? '✏️ Offline Edit Mode Enabled\nAll changes are saved locally and will not be uploaded.\nAdd custom roles from the bottom of the history list or the toolbar "+" button.'
+                        : '✏️ 離線編輯模式已開啟\n所有修改儲存於本地，不會上傳。\n可從歷史列表底部或工具列「＋」新增自訂角色。');
                 }
 
                 // 隱藏除錯/管理按鈕
@@ -21095,7 +20988,16 @@
                 "權重配置會直接影響評分標準，請務必確認角色定位。🎯",
                 "建議定期檢查聲骸庫，清理低評分的過渡裝備。📦"
             ],
+            baseQuotesEn: [
+                "Compare weight configs across characters to find the optimal setup. ⚖️",
+                "Configuration change detected — some slots still have room for improvement. 🔍",
+                "If OCR is incorrect, please use the feedback button at the bottom-right. 📢",
+                "Share this tool with teammates to boost everyone's echo performance! 🚀",
+                "Weight configuration directly affects scoring — confirm your character's role. 🎯",
+                "Regularly check the echo library and clear low-score transitional gear. 📦"
+            ],
             currentQuotes: [],
+            currentQuotesEn: [],
             quoteIdx: 0,
             interval: null,
 
@@ -21164,7 +21066,9 @@
             },
 
             renderCurrentQuote() {
-                const quoteText = this.currentQuotes[this.quoteIdx] || this.baseQuotes[0];
+                const quotes = g_lang === 'en' ? (this.currentQuotesEn && this.currentQuotesEn.length ? this.currentQuotesEn : this.baseQuotesEn) : this.currentQuotes;
+                const fallback = g_lang === 'en' ? this.baseQuotesEn[0] : this.baseQuotes[0];
+                const quoteText = (quotes && quotes[this.quoteIdx]) || fallback;
                 const svgHtml = `<div class="quote-countdown"><svg><circle cx="11" cy="11" r="10"></circle><circle class="progress active" cx="11" cy="11" r="10"></circle></svg></div>`;
 
                 [document.getElementById('quote-desktop'), document.getElementById('quote-mobile')].forEach(el => {
@@ -21183,6 +21087,7 @@
 
             showRandomQuote(isNewAnalysis = false) {
                 let quotes = [...this.baseQuotes];
+                let quotesEn = [...this.baseQuotesEn];
 
                 if (typeof g_echoesData !== 'undefined' && g_echoesData.length > 0) {
                     const role = typeof g_globalData !== 'undefined' && g_globalData ? (g_globalData.role || "") : "";
@@ -21240,38 +21145,55 @@
                     const top3Max = maxRollCandidates.slice(0, 3);
 
                     const analysisQuotes = [];
+                    const analysisQuotesEn = [];
 
                     if (!hasWeights && score === 0) {
                         analysisQuotes.push(`資料庫狀態：專屬權重資料未載入，目前無法為 ${role || '此角色'} 提供精密的屬性診斷。請先確認左上方角色名稱是否正確。⚠️`);
+                        analysisQuotesEn.push(`DB Status: Dedicated weight data not loaded — cannot provide detailed diagnostics for ${role || 'this character'}. Verify the character name shown top-left. ⚠️`);
                     } else {
                         if (typeof g_lastRankInfo !== 'undefined' && g_lastRankInfo) {
                             const { rank, pr } = g_lastRankInfo;
-                            if (rank <= 5) analysisQuotes.push(`數據分析：配置位列全服第 ${rank} 名，屬於頂尖極限紀錄！🏆`);
-                            else if (pr > 50) {
+                            if (rank <= 5) {
+                                analysisQuotes.push(`數據分析：配置位列全服第 ${rank} 名，屬於頂尖極限紀錄！🏆`);
+                                analysisQuotesEn.push(`Data Analysis: Your build ranks #${rank} server-wide — a top-tier record! 🏆`);
+                            } else if (pr > 50) {
                                 const inflatedPr = Math.min(99.9, pr + 15);
                                 analysisQuotes.push(`實力評估：評分勝過全庫約 ${inflatedPr.toFixed(1)}% 的建檔配置。🔥`);
+                                analysisQuotesEn.push(`Strength Assessment: Your score surpasses ~${inflatedPr.toFixed(1)}% of all recorded builds. 🔥`);
                             }
                         }
 
                         top3Max.forEach(m => {
                             let eName = m.echo === '4' ? '4C部位' : (m.echo === '3' ? '3C部位' : (m.echo === '1' ? '1C部位' : (m.echo || '該部位')));
+                            let eNameEn = m.echo === '4' ? '4-cost slot' : (m.echo === '3' ? '3-cost slot' : (m.echo === '1' ? '1-cost slot' : (m.echo || 'the slot')));
                             analysisQuotes.push(`屬性偵測：${eName}的『${m.name} (${m.val})』已達極值，屬頂級詞條！✨`);
+                            analysisQuotesEn.push(`Stat Detect: "${statLabel(m.name)} (${m.val})" on ${eNameEn} has reached max roll — top-tier sub-stat! ✨`);
                         });
 
-                        if (score > 0) analysisQuotes.push(`數值反饋：當前約 ${score.toFixed(1)} 分，包含 ${validTotal} 個有效加成詞條。📊`);
-                        if (hasDoubleCrit) analysisQuotes.push("配比分析：具備完美雙爆屬性，核心輸出價值極高！⚔️");
+                        if (score > 0) {
+                            analysisQuotes.push(`數值反饋：當前約 ${score.toFixed(1)} 分，包含 ${validTotal} 個有效加成詞條。📊`);
+                            analysisQuotesEn.push(`Score Feedback: Current ~${score.toFixed(1)} pts with ${validTotal} effective sub-stat rolls. 📊`);
+                        }
+                        if (hasDoubleCrit) {
+                            analysisQuotes.push("配比分析：具備完美雙爆屬性，核心輸出價值極高！⚔️");
+                            analysisQuotesEn.push("Ratio Analysis: Perfect double-crit achieved — extremely high core DPS value! ⚔️");
+                        }
 
                         if (minEcho && minScore < 60) {
                             let missingCritical = "";
+                            let missingCriticalEn = "";
                             const subNames = minEcho.subs?.map(s => s.name) || [];
                             const criticalSubs = Object.entries(weights)
                                 .filter(([n, w]) => !n.startsWith('_') && w >= 0.8 && !subNames.includes(n))
                                 .sort((a, b) => b[1] - a[1]);
                             if (criticalSubs.length > 0) {
                                 missingCritical = `，且欠缺高收益的『${criticalSubs[0][0]}』`;
+                                missingCriticalEn = ` and is missing high-value "${statLabel(criticalSubs[0][0])}"`;
                             }
                             let minEchoName = minEcho.cost && minEcho.cost !== '' ? minEcho.cost + 'C部位' : '其中一個部位';
+                            let minEchoNameEn = minEcho.cost && minEcho.cost !== '' ? minEcho.cost + '-cost slot' : 'one slot';
                             analysisQuotes.push(`改進建議：『${minEchoName}』評分偏低 (${minScore.toFixed(1)}%)${missingCritical}，建議優先汰換。💡`);
+                            analysisQuotesEn.push(`Improvement Tip: "${minEchoNameEn}" has a low score (${minScore.toFixed(1)}%)${missingCriticalEn} — prioritize replacing it. 💡`);
                         }
 
                         let totalCR = 0, totalCD = 0, totalEnergy = 0, totalAtkPct = 0;
@@ -21292,27 +21214,35 @@
                         if (weights["暴擊"] > 0 || weights["暴擊傷害"] > 0) {
                             if (realCR < 50 && totalCD > 30) {
                                 analysisQuotes.push(`配比診斷：暴擊率僅 ${realCR.toFixed(1)}% 難以穩定發揮，建議優先補強『暴擊率』。⚖️`);
+                                analysisQuotesEn.push(`Ratio Diagnosis: Crit Rate only ${realCR.toFixed(1)}% — inconsistent output; prioritize "Crit Rate". ⚖️`);
                             } else if (realCR > 85 && realCD < 200) {
                                 analysisQuotes.push(`配比診斷：暴擊率充足但暴傷偏弱，建議 4C 改用『暴擊傷害』主詞條提升上限。💥`);
+                                analysisQuotesEn.push(`Ratio Diagnosis: Crit Rate sufficient but Crit DMG is low — try "Crit DMG" main stat on the 4-cost piece. 💥`);
                             } else if (!hasDoubleCrit && score < 70) {
                                 analysisQuotes.push(`配比診斷：多件裝備缺少『雙爆』。雙爆為核心乘區，建議後續以此為優先目標。🎯`);
+                                analysisQuotesEn.push(`Ratio Diagnosis: Multiple pieces lack double-crit. Double-crit is a core multiplier — prioritize this going forward. 🎯`);
                             }
                         }
 
                         if (weights["共鳴效率"] >= 0.8 && totalEnergy < 15) {
                             analysisQuotes.push(`充能診斷：大招依賴度高但充能僅 ${totalEnergy.toFixed(1)}%。恐導致技能斷檔，建議補強充能。🔋`);
+                            analysisQuotesEn.push(`Energy Diagnosis: High Resonance Liberation reliance but only ${totalEnergy.toFixed(1)}% energy regen — may cause downtime; increase Energy Regen. 🔋`);
                         } else if (weights["共鳴效率"] && weights["共鳴效率"] <= 0.1 && totalEnergy > 25) {
                             analysisQuotes.push(`充能診斷：實戰不依賴充能但溢出至 ${totalEnergy.toFixed(1)}%。建議替換為攻擊或雙爆提升傷害。♻️`);
+                            analysisQuotesEn.push(`Energy Diagnosis: Liberation not needed but energy regen overflows at ${totalEnergy.toFixed(1)}% — replace with ATK or double-crit. ♻️`);
                         }
 
                         if (weights["攻擊百分比"] >= 0.8 && totalAtkPct < 25) {
                             analysisQuotes.push(`面板診斷：『大攻擊』收益極高但加成僅 ${totalAtkPct.toFixed(1)}%。建議補強攻擊詞條提升底盤。🗡️`);
+                            analysisQuotesEn.push(`Panel Diagnosis: ATK% is highly valued but your total ATK% bonus is only ${totalAtkPct.toFixed(1)}% — increase ATK sub-stats. 🗡️`);
                         }
                     }
                     quotes = analysisQuotes.length > 0 ? analysisQuotes.concat(this.baseQuotes) : this.baseQuotes;
+                    quotesEn = analysisQuotesEn.length > 0 ? analysisQuotesEn.concat(this.baseQuotesEn) : this.baseQuotesEn;
                 }
 
                 this.currentQuotes = quotes;
+                this.currentQuotesEn = quotesEn;
                 this.quoteIdx = 0;
                 this.renderCurrentQuote();
                 this.resetInterval();
