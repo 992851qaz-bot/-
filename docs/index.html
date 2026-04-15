@@ -9875,6 +9875,7 @@
                 btn.title = g_lang === 'zh' ? 'Switch to English' : '切換為中文';
             });
         }
+        let g_shouldRefreshRank = false; // 標記是否需要刷新排行榜
         let g_userRankPosition = -1; // 用戶在排行榜中的位置索引
         let g_codeErrorCount = 0; // 兌換碼錯誤次數
         let g_usedCodes = new Set(); // 已使用的兌換碼
@@ -14048,7 +14049,11 @@
             ` : '';
 
             if (uniqueEchoes.length === 0 && customEchoesForUid.length === 0) {
-                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">${g_lang === 'en' ? 'No echoes found under current filters. Try expanding filters or syncing history data.' : '目前條件下沒有聲骸，請放寬篩選或同步歷史資料。'}</div>`;
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#555; padding:50px;">${g_lang === 'en' ? 'No echoes found under current filters. Try expanding filters or syncing history data.' : '目前條件下沒有聲骸，請放寬篩選或同步歷史資料。'}</div>
+<div class="add-echo-card" onclick="openCustomEchoModal()">
+<div class="plus-icon">+</div>
+<div class="label">${g_lang === 'en' ? 'Add Custom Echo' : '新增自訂聲骸'}</div>
+</div>`;
                 return;
             }
 
