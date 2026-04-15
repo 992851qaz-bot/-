@@ -13150,12 +13150,10 @@
             if (tabId === 'tab-charts') {
                 setTimeout(renderCharts, 200);
             } else if (tabId === 'tab-rank') {
-                const rankTabContent = document.getElementById('rank-tab-content');
-                if (rankTabContent) rankTabContent.innerHTML = '';
                 if (rank_data.length === 0) {
                     rank_initDataLoad();
                 } else {
-                    rank_calcData();
+                    updateRankTab();
                 }
             } else if (tabId === 'tab-echo-library') {
                 renderEchoLibrary();
