@@ -20581,6 +20581,7 @@
             const container = document.getElementById('smart-analysis-content');
             if (!container) return;
             const zh = g_lang !== 'en';
+            const gradLabelsEn = {'grad-heirloom':'Heirloom','grad-grand':'S-Tier','grad-medium':'A-Tier','grad-small':'B-Tier','grad-none':'C-Tier'};
 
             // === Weights & player echoes ===
             const buildIdx = g_selectedBuildIdx || 0;
@@ -20725,7 +20726,7 @@
                     <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${gradColor};border-radius:12px;padding:14px;">
                         <div style="font-size:0.65rem;color:#555;letter-spacing:1px;margin-bottom:6px;">${zh?'整體畢業度':'GRADUATION'}</div>
                         <div style="font-size:2rem;font-weight:900;color:${gradColor};">${buffedPct.toFixed(1)}<span style="font-size:0.9rem;color:#555;">%</span></div>
-                        <div style="font-size:0.78rem;color:#666;margin-top:2px;">${grad.label}${hasBench ? ' · Top60 avg: '+stats.avgEchoScore.toFixed(1)+'%' : ''}</div>
+                        <div style="font-size:0.78rem;color:#666;margin-top:2px;">${zh?grad.label:(gradLabelsEn[grad.class]||grad.label)}${hasBench ? ' · Top60 avg: '+stats.avgEchoScore.toFixed(1)+'%' : ''}</div>
                     </div>
                     <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid #ffca28;border-radius:12px;padding:14px;">
                         <div style="font-size:0.65rem;color:#555;letter-spacing:1px;margin-bottom:6px;">${zh?'雙爆 CV 值':'CRIT VALUE'}</div>
@@ -20772,9 +20773,9 @@
                                     : `<span style="color:#e06c75;" title="${zh?'建議換成：':'Recommend: '}${ea.recommendMain}">❌ <span style="color:#888;font-size:0.7rem;">${zh?'→':'→'}${ea.recommendMain||'?'}</span></span>`;
                                 const wastedCell = ea.wastedSubs.length === 0
                                     ? `<span style="color:#555;">${zh?'無':'none'}</span>`
-                                    : `<span style="color:#e06c75;">${ea.wastedSubs.map(s=>escapeHtml(s)).join(', ')}</span>`;
+                                    : `<span style="color:#e06c75;">${ea.wastedSubs.map(s=>escapeHtml(statLabel(s))).join(', ')}</span>`;
                                 return `<tr style="border-bottom:1px solid #1a1a1a;">
-                                    <td style="padding:7px 8px;color:#888;">聲骸 ${ea.idx+1}<div style="font-size:0.65rem;color:#444;">Cost ${ea.cost}</div></td>
+                                    <td style="padding:7px 8px;color:#888;">${zh?'聲骸':'Echo'} ${ea.idx+1}<div style="font-size:0.65rem;color:#444;">Cost ${ea.cost}</div></td>
                                     <td style="padding:7px 8px;color:#ddd;">${escapeHtml(ea.echo.main1||'-')}<div style="font-size:0.68rem;color:#888;">${escapeHtml(ea.echo.main2||'')}</div></td>
                                     <td style="padding:7px 8px;text-align:center;font-family:'JetBrains Mono';font-weight:700;color:${scoreColor};">${ea.res ? ea.pct.toFixed(1)+'%' : '-'}</td>
                                     <td style="padding:7px 8px;text-align:center;">
@@ -20808,7 +20809,7 @@
                         const statColor = playerVal === 0 ? '#555' : (p90 && playerVal >= p90 ? '#98c379' : '#e5c07b');
                         return `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px;">
                             <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                                <span style="color:#ccc;font-size:0.82rem;">${escapeHtml(k)}</span>
+                                <span style="color:#ccc;font-size:0.82rem;">${escapeHtml(statLabel(k))}</span>
                                 <span style="font-family:'JetBrains Mono';font-weight:700;color:${statColor};font-size:0.9rem;">${playerVal.toFixed(1)}${k.includes('百分比')||k.includes('率')||k.includes('傷害加成')||k==='暴擊'||k==='暴擊傷害'||k==='共鳴效率'?'%':''}</span>
                             </div>
                             <div style="position:relative;height:5px;background:#1a1a1a;border-radius:3px;overflow:visible;margin-bottom:5px;">
@@ -20831,8 +20832,8 @@
                     <div style="display:flex;flex-direction:column;gap:8px;">
                     ${priorityOrder.map((ea, rank) => {
                         const reasons = [];
-                        if (!ea.mainOk && ea.recommendMain) reasons.push(zh ? `主詞條建議換為「${ea.recommendMain}」` : `Main stat: switch to "${ea.recommendMain}"`);
-                        if (ea.wastedSubs.length > 0) reasons.push(zh ? `${ea.wastedSubs.length} 個零權重副詞條 (${ea.wastedSubs.slice(0,3).join('、')})` : `${ea.wastedSubs.length} wasted sub(s): ${ea.wastedSubs.slice(0,3).join(', ')}`);
+                        if (!ea.mainOk && ea.recommendMain) reasons.push(zh ? `主詞條建議換為「${ea.recommendMain}」` : `Main stat: switch to "${statLabel(ea.recommendMain)}"`);
+                        if (ea.wastedSubs.length > 0) reasons.push(zh ? `${ea.wastedSubs.length} 個零權重副詞條 (${ea.wastedSubs.slice(0,3).join('、')})` : `${ea.wastedSubs.length} wasted sub(s): ${ea.wastedSubs.slice(0,3).map(statLabel).join(', ')}`);
                         if (ea.validCount < 3) reasons.push(zh ? `有效詞條僅 ${ea.validCount}/5，遠低於目標` : `Only ${ea.validCount}/5 valid subs, well below target`);
                         else if (ea.validCount < 4) reasons.push(zh ? `有效詞條 ${ea.validCount}/5，仍有提升空間` : `${ea.validCount}/5 valid subs — room to improve`);
                         if (ea.pct < 50 && reasons.length === 0) reasons.push(zh ? `聲骸評分偏低 (${ea.pct.toFixed(1)}%)` : `Low echo score (${ea.pct.toFixed(1)}%)`);
