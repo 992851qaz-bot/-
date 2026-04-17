@@ -11088,6 +11088,7 @@
                         changed = true;
                     }
                 }
+                if (!Array.isArray(item.echoes)) item.echoes = [];
                 item.echoes.forEach(e => {
                     if (e.main1) e.main1 = fixMainStatName(e.main1);
                 });
@@ -21748,6 +21749,7 @@
 
         let g_ytPlayer = null, g_ytReady = false, g_ytPendingPlay = false;
         function onYouTubeIframeAPIReady() {
+            if (g_ytPlayer) return;
             g_ytPlayer = new YT.Player('tutorial-video-player', {
                 height: '100%',
                 width: '100%',
@@ -21771,6 +21773,7 @@
                 }
             });
         }
+        window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
         function switchTutorial(mode) {
             const textContent = document.getElementById('text-tutorial-content');
@@ -21786,6 +21789,9 @@
                 btnText.style.background = 'transparent';
                 btnText.style.color = '#888';
 
+                if (!g_ytPlayer && typeof YT !== 'undefined' && typeof YT.Player === 'function') {
+                    onYouTubeIframeAPIReady();
+                }
                 if (g_ytReady && g_ytPlayer && typeof g_ytPlayer.playVideo === 'function') {
                     // Force a small delay to ensure YouTube internal state is ready for play() after visibility change
                     setTimeout(() => {
