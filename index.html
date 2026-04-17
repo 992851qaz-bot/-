@@ -8802,6 +8802,13 @@
                                 <canvas id="c-scores"></canvas>
                             </div>
                         </div>
+                        <div class="db-chart-box">
+                            <div class="db-chart-title">
+                                <span data-lang-zh="🔬 3D 得分·鏈度·集中度分析" data-lang-en="🔬 3D Score·Chain·Concentration">🔬 3D 得分·鏈度·集中度分析</span>
+                            </div>
+                            <div style="font-size:0.72rem;color:#666;margin-bottom:4px;text-align:center" data-lang-zh="X: 分數% ｜ Y: 鏈度 ｜ Z: 詞條集中度%（可拖曳旋轉）" data-lang-en="X: Score% ｜ Y: Chain ｜ Z: Concentration%（drag to rotate）">X: 分數% ｜ Y: 鏈度 ｜ Z: 詞條集中度%（可拖曳旋轉）</div>
+                            <div id="c-scatter3d" style="width:100%;height:360px;"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -15162,6 +15169,8 @@
                 if (rank_chartInstances.contrib) rank_chartInstances.contrib.destroy();
                 if (rank_chartInstances.chains) rank_chartInstances.chains.destroy();
                 if (rank_chartInstances.scores) rank_chartInstances.scores.destroy();
+                const s3d = document.getElementById('c-scatter3d');
+                if (s3d && window.Plotly) Plotly.purge(s3d);
                 document.getElementById('w-tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666">無數據可供分析</td></tr>';
                 document.getElementById('w-max-score').innerText = '理論極限分: N/A';
                 return;
@@ -15329,6 +15338,74 @@
                 });
                 tbody.innerHTML = html;
             }
+            rank_render3DScatter();
+        }
+
+        function rank_render3DScatter() {
+            const el = document.getElementById('c-scatter3d');
+            if (!el) return;
+            if (!rank_list || rank_list.length === 0) {
+                if (window.Plotly) Plotly.purge(el);
+                return;
+            }
+            if (!window.Plotly) {
+                el.innerHTML = '<div style="text-align:center;padding:30px;color:#666;font-size:0.85rem">⏳ 載入 3D 圖表引擎中...</div>';
+                const s = document.createElement('script');
+                s.src = 'https://cdn.plot.ly/plotly-gl3d-2.29.1.min.js';
+                s.onload = () => rank_render3DScatter();
+                s.onerror = () => { el.innerHTML = '<div style="text-align:center;padding:30px;color:#e06c75;font-size:0.85rem">⚠️ 3D 圖表引擎載入失敗，請確認網路連線</div>'; };
+                document.head.appendChild(s);
+                return;
+            }
+
+            const gradeColors = { '傳家寶': '#ffd700', '大畢業': '#ffb74d', '中畢業': '#7dd3fc', '小畢業': '#78e08f', '未畢業': '#888' };
+            const groups = {};
+            rank_list.forEach(d => {
+                const bd = d.statBreakdown || {};
+                const total = Object.values(bd).reduce((a, b) => a + b, 0);
+                const topVal = total > 0 ? Math.max(...Object.values(bd)) : 0;
+                const concentration = total > 0 ? parseFloat(safeFixed(topVal / total * 100, 1)) : 0;
+                const grade = (d.grad && d.grad.l) ? d.grad.l : '未畢業';
+                if (!groups[grade]) groups[grade] = { x: [], y: [], z: [], text: [] };
+                groups[grade].x.push(parseFloat(safeFixed(d.pct, 1)));
+                groups[grade].y.push(d.chain || 0);
+                groups[grade].z.push(concentration);
+                const uid = escapeHtml(String(d.uid || ''));
+                const player = escapeHtml(String(d.player || uid));
+                groups[grade].text.push(`${player}<br>分數: ${safeFixed(d.pct, 1)}%<br>鏈度: ${d.chain || 0}<br>詞條集中度: ${concentration}%`);
+            });
+
+            const traces = Object.entries(groups).map(([grade, data]) => ({
+                type: 'scatter3d',
+                mode: 'markers',
+                name: grade,
+                x: data.x,
+                y: data.y,
+                z: data.z,
+                text: data.text,
+                hovertemplate: '%{text}<extra></extra>',
+                marker: {
+                    size: 4,
+                    color: gradeColors[grade] || '#888',
+                    opacity: 0.82,
+                    line: { width: 0 }
+                }
+            }));
+
+            const layout = {
+                paper_bgcolor: 'transparent',
+                font: { color: '#aaa', size: 10 },
+                margin: { l: 0, r: 0, t: 10, b: 0 },
+                scene: {
+                    bgcolor: 'rgba(20,20,24,0)',
+                    xaxis: { title: { text: '分數%', font: { size: 10, color: '#aaa' } }, color: '#666', gridcolor: '#2a2a2e', zerolinecolor: '#444' },
+                    yaxis: { title: { text: '鏈度', font: { size: 10, color: '#aaa' } }, color: '#666', gridcolor: '#2a2a2e', zerolinecolor: '#444', dtick: 1 },
+                    zaxis: { title: { text: '集中度%', font: { size: 10, color: '#aaa' } }, color: '#666', gridcolor: '#2a2a2e', zerolinecolor: '#444' }
+                },
+                legend: { font: { color: '#aaa', size: 10 }, bgcolor: 'rgba(0,0,0,0)', x: 0, y: 1 }
+            };
+
+            Plotly.react(el, traces, layout, { responsive: true, displayModeBar: false });
         }
 
         function rank_getGrading(p) {
