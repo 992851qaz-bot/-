@@ -14636,6 +14636,31 @@
         const RANK_STAT_LABELS = { "暴擊": "暴擊", "暴擊傷害": "暴傷", "共鳴效率": "效率", "攻擊百分比": "攻擊%", "攻擊": "攻固", "生命百分比": "生命%", "生命": "生固", "防禦百分比": "防禦%", "防禦": "防固", "共鳴解放傷害加成": "大招", "共鳴技能傷害加成": "E技", "普攻傷害加成": "普攻", "重擊傷害加成": "重擊" };
 
 
+        // ── Suit Icon CSS class injection ──────────────────────────────
+        let _suitIconCssInjected = false;
+        function rank_injectSuitIconCSS() {
+            if (_suitIconCssInjected) return;
+            _suitIconCssInjected = true;
+            let css = '.si{display:inline-block;width:20px;height:20px;background-size:contain;background-repeat:no-repeat;background-position:center;border-radius:2px;vertical-align:middle;flex-shrink:0;}';
+            Object.entries(ATTRIBUTES_PROFILE_PICTURE).forEach(([name, url]) => {
+                // Build a safe ASCII class suffix from the index (avoids CJK escaping)
+                const key = btoa(unescape(encodeURIComponent(name))).replace(/[^A-Za-z0-9]/g, '_');
+                css += `.si-${key}{background-image:url(${url});}`;
+            });
+            const el = document.createElement('style');
+            el.id = 'suit-icon-styles';
+            el.textContent = css;
+            document.head.appendChild(el);
+        }
+        function rank_getSuitIconClass(suitName) {
+            if (!suitName) return '';
+            const key = btoa(unescape(encodeURIComponent(suitName))).replace(/[^A-Za-z0-9]/g, '_');
+            return `si si-${key}`;
+        }
+        // Pagination state
+        let rank_renderPageSize = 60;
+        let rank_renderOffset = 0;
+
         async function rank_initDataLoad() {
             // Keep user provided URL logic
             const url = document.getElementById('gas-url') ? document.getElementById('gas-url').value : RANK_GAS_URL;
@@ -15202,11 +15227,13 @@
             return { current: max - matchedRow, max: max };
         }
 
-        function rank_renderTable() {
+        function rank_renderTable(appendMode) {
+            rank_injectSuitIconCSS();
             const searchEl = document.getElementById('db-search-input');
             const txt = searchEl ? searchEl.value.toLowerCase() : '';
             const box = document.getElementById('db-data-area');
             if (!box) return;
+            if (!appendMode) rank_renderOffset = 0;
             let html = '';
             g_userRankPosition = -1; // 重置用戶位置
 
@@ -15218,8 +15245,13 @@
 
             // 1. 渲染正常資料 (在異常總覽模式下略過，除非您也想看正常資料)
             if (rank_viewMode !== 'fault') {
+                let visibleIdx = 0;
+                const endIdx = rank_renderOffset + rank_renderPageSize;
                 rank_list.forEach((d, i) => {
                     if (txt && !d.player.toLowerCase().includes(txt) && !d.uid.includes(txt)) return;
+                    visibleIdx++;
+                    if (visibleIdx <= rank_renderOffset) return; // already rendered in previous pages
+                    if (visibleIdx > endIdx) return; // beyond current page
                     let rCls = (rank_viewMode === 'role') ? (i === 0 ? 'db-rank-1' : '') : '';
                     let rankTxt = (rank_viewMode === 'role') ? `#${i + 1}` : (i + 1);
 
@@ -15260,7 +15292,7 @@
                         }
                     }
 
-                    // Build echo icons display
+                    // Build echo icons display (CSS-class icons: one decoded buffer per suit URL)
                     let echoIconsHtml = '';
                     if (d.echoes && Array.isArray(d.echoes)) {
                         d.echoes.forEach(e => {
@@ -15268,13 +15300,8 @@
                             const parts = costStr.split('-');
                             const cost = parts[0] || "?";
                             const suit = parts[1] ? parts[1].trim() : "";
-                            const iconUrl = (suit && (typeof ATTRIBUTES_PROFILE_PICTURE !== 'undefined') && ATTRIBUTES_PROFILE_PICTURE[suit]) ? ATTRIBUTES_PROFILE_PICTURE[suit] : '';
-
-                            echoIconsHtml += `
-                                <div style="position:relative; width:28px; height:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center;" title="${suit || '未知套裝'} (Cost ${cost})">
-                                    ${iconUrl ? `<img src="${iconUrl}" style="width:20px; height:20px; filter:drop-shadow(0 0 2px rgba(0,0,0,0.5));">` : `<span style="font-size:0.6rem;color:#444">${cost}</span>`}
-                                    <span style="position:absolute; bottom:-3px; right:-3px; background:#000; color:#fff; font-size:0.6rem; padding:0 2px; border-radius:2px; border:1px solid #444; font-family:'JetBrains Mono';">${cost}</span>
-                                </div>`;
+                            const iconCls = suit ? rank_getSuitIconClass(suit) : '';
+                            echoIconsHtml += `<div style="position:relative;width:28px;height:28px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:4px;display:flex;align-items:center;justify-content:center;" title="${escapeHtml(suit || '未知套裝')} (Cost ${cost})">${iconCls ? `<div class="${iconCls}" style="filter:drop-shadow(0 0 2px rgba(0,0,0,0.5));"></div>` : `<span style="font-size:0.6rem;color:#444">${cost}</span>`}<span style="position:absolute;bottom:-3px;right:-3px;background:#000;color:#fff;font-size:0.6rem;padding:0 2px;border-radius:2px;border:1px solid #444;font-family:'JetBrains Mono';">${cost}</span></div>`;
                         });
                     }
 
@@ -15308,6 +15335,17 @@
  </div>
  </div>`;
                 });
+                // "Load more" button if there are more rows to show
+                const totalVisible = rank_list.filter(d => !txt || d.player.toLowerCase().includes(txt) || d.uid.includes(txt)).length;
+                const nextOffset = rank_renderOffset + rank_renderPageSize;
+                if (nextOffset < totalVisible) {
+                    const remaining = totalVisible - nextOffset;
+                    html += `<div class="rank-load-more-wrap" style="text-align:center;padding:16px 0;">
+                        <button onclick="rank_loadMoreRows()" style="background:rgba(229,192,123,0.1);border:1px solid rgba(229,192,123,0.3);color:var(--accent);padding:8px 24px;border-radius:20px;cursor:pointer;font-size:0.85rem;font-weight:600;">
+                            ⬇ ${g_lang==='en'?'Load More':'載入更多'} (${remaining} ${g_lang==='en'?'remaining':'筆'})
+                        </button>
+                    </div>`;
+                }
             }
 
             // 2. 渲染異常資料診斷報告 (如果有異常且符合搜索字串)
@@ -15342,10 +15380,24 @@
                 html = '<div style="text-align:center;color:var(--ok);padding:50px;font-size:1.1rem">🎉 恭喜！資料庫完整掃描後未發現任何異常</div>';
             }
 
-            box.innerHTML = html || (rank_viewMode === 'fault' ? '' : '<div style="text-align:center;color:#666;margin-top:20px">無符合資料</div>');
+            if (appendMode) {
+                // Remove old "load more" button if present
+                const oldLM = box.querySelector('.rank-load-more-wrap');
+                if (oldLM) oldLM.remove();
+                box.insertAdjacentHTML('beforeend', html);
+                rank_renderOffset += rank_renderPageSize;
+            } else {
+                box.innerHTML = html || (rank_viewMode === 'fault' ? '' : '<div style="text-align:center;color:#666;margin-top:20px">無符合資料</div>');
+                // rank_renderOffset was already set to 0 at top, now mark how many we rendered
+                rank_renderOffset = rank_renderPageSize;
+            }
 
             // 顯示或隱藏快捷跳轉按鈕
             rank_updateJumpButtonVisibility();
+        }
+
+        function rank_loadMoreRows() {
+            rank_renderTable(true);
         }
 
         let rank_currentEntry = null;
@@ -20482,6 +20534,7 @@
         }
 
         function rank_renderStrategySummary(stats) {
+            rank_injectSuitIconCSS();
             const container = document.getElementById('strategy-summary-content');
 
             // Mappings
@@ -20495,7 +20548,8 @@
             // Themed Icon Background with Fallback Logic
             const getSetIcon = (name, color) => {
                 const suitKey = name ? name.replace('套裝', '').replace(/ \+ /g, '') : '';
-                const iconUrl = (typeof ATTRIBUTES_PROFILE_PICTURE !== 'undefined') ? (ATTRIBUTES_PROFILE_PICTURE[suitKey] || '') : '';
+                // Use pre-injected CSS class for the background image (shares decode cache)
+                const iconCls = rank_getSuitIconClass(suitKey);
 
                 // Attribute and fallback color mapping
                 let attr = 'None', fallbackBg = '#222';
@@ -20507,11 +20561,9 @@
                 else if (name.includes('嘯谷') || name.includes('凌立')) { attr = 'Wind'; fallbackBg = '#81c784'; }
                 else if (name.includes('輕雲')) { attr = 'Aero'; fallbackBg = '#90a4ae'; }
 
-                const bgStyle = iconUrl ? `background-image: url(${iconUrl}); background-size: cover;` : `background: ${fallbackBg}33;`;
-
                 return `
-                <div style="${bgStyle} background-color: ${fallbackBg}22; width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,0.1); box-shadow:0 4px 12px rgba(0,0,0,0.3); overflow:hidden;">
-                    ${attr !== 'None' ? `<img src="https://wutheringwaves-dc.kurogames-global.com/back/static/icon/Attribute_${attr}.png" style="width:28px; height:28px; filter:drop-shadow(0 0 4px rgba(0,0,0,0.5)); border:none; outline:none;" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; this.style.opacity='0.5';">` : ''}
+                <div class="${iconCls}" style="background-color:${fallbackBg}22;background-size:cover;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.1);box-shadow:0 4px 12px rgba(0,0,0,0.3);overflow:hidden;">
+                    ${attr !== 'None' ? `<img src="https://wutheringwaves-dc.kurogames-global.com/back/static/icon/Attribute_${attr}.png" style="width:28px;height:28px;filter:drop-shadow(0 0 4px rgba(0,0,0,0.5));border:none;outline:none;" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';this.style.opacity='0.5';">` : ''}
                 </div>`;
             };
 
