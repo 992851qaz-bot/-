@@ -246,6 +246,7 @@
             padding: 20px 0;
         }
 
+        @keyframes dlm-spin { to { transform: rotate(360deg); } }
         @keyframes marquee-vertical {
             0% {
                 transform: translateY(100%);
@@ -7248,6 +7249,60 @@
             </div>
         </div>
     </div>
+
+    <!-- ── Data Loading Progress Modal ──────────────────────────── -->
+    <div id="data-loading-modal" class="modal-overlay" style="display:none;z-index:25000;background:rgba(0,0,0,0.88);">
+        <div style="max-width:500px;width:92%;background:#18181b;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px 28px 24px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.8);">
+            <!-- Close button (always available) -->
+            <button id="dlm-close-btn" onclick="closeDlm()"
+                style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.05);border:none;color:#888;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:0.2s;"
+                onmouseover="this.style.background='rgba(255,0,0,0.2)';this.style.color='#fff'"
+                onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#888'">×</button>
+            <!-- Title -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                <span id="dlm-spinner" style="display:inline-block;width:20px;height:20px;border:2px solid rgba(229,192,123,0.25);border-top-color:#e5c07b;border-radius:50%;animation:dlm-spin 0.8s linear infinite;"></span>
+                <span id="dlm-title" style="font-size:1.1rem;font-weight:800;color:#fff;"
+                    data-lang-zh="正在載入資料..." data-lang-en="Loading data...">正在載入資料...</span>
+            </div>
+            <!-- Progress bar -->
+            <div style="background:rgba(255,255,255,0.06);border-radius:4px;height:6px;margin-bottom:18px;overflow:hidden;">
+                <div id="dlm-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#e5c07b,#98c379);border-radius:4px;transition:width 0.4s ease;"></div>
+            </div>
+            <div id="dlm-step" style="font-size:0.78rem;color:#555;margin-bottom:20px;min-height:1.2em;"
+                data-lang-zh="初始化中..." data-lang-en="Initializing...">初始化中...</div>
+            <!-- Feature cards -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div style="background:rgba(229,192,123,0.07);border:1px solid rgba(229,192,123,0.15);border-radius:12px;padding:12px 14px;">
+                    <div style="font-size:1.1rem;margin-bottom:4px;">🏆</div>
+                    <div style="font-size:0.8rem;font-weight:700;color:#e5c07b;"
+                        data-lang-zh="聲骸評分" data-lang-en="Echo Scoring">聲骸評分</div>
+                    <div style="font-size:0.72rem;color:#666;margin-top:2px;line-height:1.4;"
+                        data-lang-zh="依角色加權值精準打分" data-lang-en="Score echoes by character weights">依角色加權值精準打分</div>
+                </div>
+                <div style="background:rgba(152,195,121,0.07);border:1px solid rgba(152,195,121,0.15);border-radius:12px;padding:12px 14px;">
+                    <div style="font-size:1.1rem;margin-bottom:4px;">🧠</div>
+                    <div style="font-size:0.8rem;font-weight:700;color:#98c379;"
+                        data-lang-zh="智慧分析" data-lang-en="Smart Analysis">智慧分析</div>
+                    <div style="font-size:0.72rem;color:#666;margin-top:2px;line-height:1.4;"
+                        data-lang-zh="AI 優化聲骸建議" data-lang-en="AI-powered echo recommendations">AI 優化聲骸建議</div>
+                </div>
+                <div style="background:rgba(97,175,254,0.07);border:1px solid rgba(97,175,254,0.15);border-radius:12px;padding:12px 14px;">
+                    <div style="font-size:1.1rem;margin-bottom:4px;">📊</div>
+                    <div style="font-size:0.8rem;font-weight:700;color:#61afef;"
+                        data-lang-zh="排行大數據" data-lang-en="Ranking Database">排行大數據</div>
+                    <div style="font-size:0.72rem;color:#666;margin-top:2px;line-height:1.4;"
+                        data-lang-zh="前60名配裝趨勢分析" data-lang-en="Top-60 build trend analysis">前60名配裝趨勢分析</div>
+                </div>
+                <div style="background:rgba(198,120,221,0.07);border:1px solid rgba(198,120,221,0.15);border-radius:12px;padding:12px 14px;">
+                    <div style="font-size:1.1rem;margin-bottom:4px;">📋</div>
+                    <div style="font-size:0.8rem;font-weight:700;color:#c678dd;"
+                        data-lang-zh="角色攻略" data-lang-en="Character Guide">角色攻略</div>
+                    <div style="font-size:0.72rem;color:#666;margin-top:2px;line-height:1.4;"
+                        data-lang-zh="主詞條╱武器╱詞條優先序" data-lang-en="Main stats, weapons, sub priority">主詞條╱武器╱詞條優先序</div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="uid-warning-modal" class="modal-overlay">
         <div class="warning-box">
             <h2 style="color:var(--error);margin-bottom:15px;" data-lang-zh="⚠️ UID 異常警告" data-lang-en="⚠️ UID Warning">⚠️ UID 異常警告</h2>
@@ -10545,7 +10600,60 @@
         function setupPWA() { const icon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iYmFja2dyb3VuZDojMWUxZTI0Ij48cGF0aCBkPSJNMjU2IDMyYy04LjggMC0xNiA3LjItMTYgMTZ2NDE2YzAgOC44IDcuMiAxNiAxNiAxNnMxNi03LjIgMTYtMTZWNDhjMC04LjgtNy4yLTE2LTE2LTE2em0wIDExMmMtOC44IDAtMTYgNy4yLTE2IDE2djE5MmMwIDguOCA3LjIgMTYgMTYgMTZzMTYtNy4yIDE2LTE2VjE2MGMwLTguOC03LjItMTYtMTYtMTZ6IiBmaWxsPSIjZTVjMDdiIi8+PC9zdmc+"; const manifest = { name: "鳴潮分析儀", short_name: "聲骸分析", start_url: ".", display: "standalone", background_color: "#121214", theme_color: "#1e1e24", icons: [{ src: icon, sizes: "512x512", type: "image/svg+xml" }] }; const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' }); document.getElementById('manifest-link').href = URL.createObjectURL(blob); window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); g_installPrompt = e; document.getElementById('pwa-ios-guide').style.display = 'none'; document.getElementById('btn-pwa-install').style.display = 'block' }) }
         async function triggerInstall() { if (g_installPrompt) { g_installPrompt.prompt(); const { outcome } = await g_installPrompt.userChoice; if (outcome === 'accepted') g_installPrompt = null } }
         function saveConfig() { const url = document.getElementById('gas-url-input').value.trim(); if (url) { localStorage.setItem('ww_gas_url', url); document.getElementById('config-modal').style.display = 'none'; document.getElementById('startup-modal').style.display = 'flex'; g_weightsPromise = loadWeightsBackground(url) } }
-        function validateUid() { const val = loginInput.value.trim(); if (val.length === 0) { loginBtn.disabled = false; loginBtn.innerText = "不載入歷史資料 - 繼續使用"; loginBtn.classList.remove('active-green') } else if (val.length < 9) { loginBtn.disabled = true; loginBtn.innerText = "UID 需為 9 碼"; loginBtn.classList.remove('active-green') } else { loginBtn.disabled = false; loginBtn.innerText = "登入並載入歷史"; loginBtn.classList.add('active-green') } }
+        // ── Data Loading Modal helpers ────────────────────────────────────
+        let g_dlmAutoCloseTimer = null;
+        function showDlm(zh) {
+            const m = document.getElementById('data-loading-modal');
+            if (!m) return;
+            // Apply language to dlm elements
+            m.querySelectorAll('[data-lang-zh]').forEach(el => {
+                el.textContent = zh ? el.getAttribute('data-lang-zh') : el.getAttribute('data-lang-en');
+            });
+            document.getElementById('dlm-bar').style.width = '0%';
+            document.getElementById('dlm-spinner').style.display = 'inline-block';
+            m.style.display = 'flex';
+        }
+        function updateDlm(pct, stepTextZh, stepTextEn) {
+            const bar = document.getElementById('dlm-bar');
+            const step = document.getElementById('dlm-step');
+            const title = document.getElementById('dlm-title');
+            if (!bar) return;
+            const zh = g_lang !== 'en';
+            if (bar) bar.style.width = pct + '%';
+            if (step) step.textContent = zh ? stepTextZh : stepTextEn;
+            if (pct >= 100) {
+                if (title) title.textContent = zh ? '✅ 載入完成！' : '✅ Done!';
+                const spinner = document.getElementById('dlm-spinner');
+                if (spinner) spinner.style.display = 'none';
+            }
+        }
+        function closeDlm() {
+            if (g_dlmAutoCloseTimer) { clearTimeout(g_dlmAutoCloseTimer); g_dlmAutoCloseTimer = null; }
+            const m = document.getElementById('data-loading-modal');
+            if (m) m.style.display = 'none';
+        }
+        function autoDlmClose(delayMs) {
+            if (g_dlmAutoCloseTimer) clearTimeout(g_dlmAutoCloseTimer);
+            g_dlmAutoCloseTimer = setTimeout(closeDlm, delayMs || 1200);
+        }
+
+        function validateUid() {
+            const val = loginInput.value.trim();
+            const zh = g_lang !== 'en';
+            if (val.length === 0) {
+                loginBtn.disabled = false;
+                loginBtn.innerText = zh ? "不載入歷史資料 - 繼續使用" : "Continue Without Loading History";
+                loginBtn.classList.remove('active-green');
+            } else if (val.length < 9) {
+                loginBtn.disabled = true;
+                loginBtn.innerText = zh ? "UID 需為 9 碼" : "UID must be 9 digits";
+                loginBtn.classList.remove('active-green');
+            } else {
+                loginBtn.disabled = false;
+                loginBtn.innerText = zh ? "登入並載入歷史" : "Login & Load History";
+                loginBtn.classList.add('active-green');
+            }
+        }
         function handleLogin() {
             if (document.getElementById('startup-modal').style.display === 'none') return;
             if (loginBtn.disabled) return;
@@ -10612,11 +10720,19 @@
             urlInput.dispatchEvent(new Event('input'));
 
             if (nextUid.length === 9) {
-                statusText.innerText = `正在載入 UID: ${nextUid} 的資料...`;
-                historyListEl.innerHTML = '<div style="padding:20px;text-align:center;color:#aaa">☁️ 正在同步雲端資料...</div>';
+                const zh = g_lang !== 'en';
+                showDlm(!zh ? false : true);
+                updateDlm(5, '準備同步雲端紀錄...', 'Preparing cloud sync...');
+                statusText.innerText = zh ? `正在載入 UID: ${nextUid} 的資料...` : `Loading UID: ${nextUid}...`;
+                historyListEl.innerHTML = '<div style="padding:20px;text-align:center;color:#aaa">☁️ ' + (zh ? '正在同步雲端資料...' : 'Syncing cloud data...') + '</div>';
 
+                updateDlm(15, '同步雲端歷史紀錄...', 'Syncing cloud history...');
                 await fetchCloudHistory(nextUid, 'latest');
+
+                updateDlm(55, '讀取本地離線資料...', 'Loading offline data...');
                 await pullOfflineEntriesByUid(nextUid, { skipRender: true });
+
+                updateDlm(80, '載入自訂聲骸...', 'Loading custom echoes...');
                 await pullCustomEchoesByUid(nextUid);
 
                 if (btnLoadAll) {
@@ -10624,8 +10740,8 @@
                     btnLoadAll.disabled = false;
                     btnLoadAll.innerText = '⬇️';
                 }
-                statusText.innerText = "資料載入完成";
 
+                updateDlm(95, '載入最新紀錄...', 'Loading latest record...');
                 // 自動載入最新的一筆紀錄
                 if (!skipAutoLoad) {
                     const history = getCleanHistory();
@@ -10633,6 +10749,10 @@
                         loadFromHistory(history[0]);
                     }
                 }
+
+                updateDlm(100, '資料載入完成！', 'Data loaded successfully!');
+                statusText.innerText = zh ? "資料載入完成" : "Data loaded";
+                autoDlmClose(1400);
             } else {
                 await pullOfflineEntriesByUid(nextUid, { skipRender: true });
                 renderHistoryList();
@@ -12688,7 +12808,9 @@
                 ocrHtml += `</table>`;
                 html += `<tr><td colspan="6" class="role-info-cell" style="background:#151518;border:1px solid var(--accent-dim);border-radius:8px;"><div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;"><div style="flex:1;min-width:280px;background:#1a1a1e;padding:15px;border-radius:8px;">${infoHtml}</div><div style="flex:1.5;min-width:320px;"><div style="font-size:0.8rem;color:var(--accent);margin-bottom:10px;font-weight:bold;display:flex;align-items:center;gap:5px;"><span>🔍</span> OCR 轉譯對照資訊</div>${ocrHtml}<div style="font-size:0.75rem;color:#555;margin-top:10px;font-style:italic;">* 主詞條/副詞條 OCR 原文請見下方相關項目的 Raw 區塊</div></div></div></td></tr>`;
             } else {
-                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:54px;"><div style="position:absolute;top:10px;right:15px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.5);backdrop-filter:blur(10px);color:#98c379;font-weight:700;width:auto;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button><button class="rank-btn" style="margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button></div>${formatDescText(roleDesc)}</div></div></td></tr>`;
+                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:54px;"><div style="position:absolute;top:10px;right:15px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.5);backdrop-filter:blur(10px);color:#98c379;font-weight:700;width:auto;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button><button class="rank-btn" style="margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button></div>${g_lang==='en'
+                    ? `<div id="desc-guide-content">${rank_generateEnGuideHtml(global.role)}</div>`
+                    : formatDescText(roleDesc)}</div></div></td></tr>`;
             }
             html += `<tr class="custom-header-row"><td>項目</td>${echoes.map((e, idx) => `<td>聲骸 ${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
             html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
@@ -12733,7 +12855,11 @@
                 html += `<div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">UID: ${global.uid || '-'} | ${global.player || '-'}</div>`;
                 html += `<div style="margin-top:10px;">${totalScoreHtml || '<div style="color:#666">暫無評分</div>'}</div>`;
                 html += `<div style="margin-top:8px;"><button class="rank-btn" style="width:100%;font-size:0.82rem;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.45);color:#98c379;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button></div>`;
-                if (roleDesc) html += `<div style="margin-top:10px;padding:10px;background:#222;border-radius:6px;color:#aaa;font-size:0.85rem;line-height:1.5;">${formatDescText(roleDesc)}</div></div>`;
+                if (g_lang === 'en') {
+                html += `<div style="margin-top:10px;padding:10px;background:#222;border-radius:6px;font-size:0.85rem;line-height:1.5;"><div id="desc-guide-content-mobile">${rank_generateEnGuideHtml(global.role)}</div></div></div>`;
+            } else if (roleDesc) {
+                html += `<div style="margin-top:10px;padding:10px;background:#222;border-radius:6px;color:#aaa;font-size:0.85rem;line-height:1.5;">${formatDescText(roleDesc)}</div></div>`;
+            }
             }
 
             echoes.forEach((e, idx) => {
@@ -20084,6 +20210,91 @@
         // =====================================================================
         // 功能 2：戰略總表 (Strategy Summary)
         // =====================================================================
+        // ── EN Guide: generate from rank data ────────────────────────────
+        function rank_generateEnGuideHtml(role) {
+            const MIN_BUILDS = 5;
+            const canGenerate = role && rank_list && rank_list.length >= MIN_BUILDS
+                && rank_currSelection === role;
+
+            if (!canGenerate) {
+                const isLoading = !rank_data || rank_data.length === 0;
+                return `<div style="font-size:0.8rem;color:#555;padding:8px 0;">
+                    <div style="margin-bottom:8px;">${isLoading
+                        ? '📊 Rank guide available after loading ranking data.'
+                        : `📊 Not enough ranking data for <b style="color:#aaa;">${escapeHtml(role||'this character')}</b> yet.`}
+                    </div>
+                    <button onclick="rank_loadEnGuide('${escapeHtml(role||'')}', this)"
+                        style="background:rgba(97,175,254,0.12);border:1px solid rgba(97,175,254,0.35);color:#61afef;padding:4px 12px;border-radius:16px;cursor:pointer;font-size:0.75rem;font-weight:600;">
+                        🔄 Load Guide
+                    </button>
+                </div>`;
+            }
+
+            const stats = rank_calculateStrategyStats(rank_list.slice(0, 60));
+            const topWeapons = Object.entries(stats.weapons).sort((a,b)=>b[1]-a[1]).slice(0,3)
+                .map(([w,c])=>`<span style="color:#eee;">${escapeHtml(w)}</span> <span style="color:#555;font-size:0.7rem;">(${(c/stats.totalBuilds*100).toFixed(0)}%)</span>`)
+                .join('<span style="color:#333;margin:0 4px;">·</span>');
+            const c4Top = Object.entries(stats.mainStats.c4||{}).sort((a,b)=>b[1]-a[1])[0];
+            const c4Alt = Object.entries(stats.mainStats.c4||{}).sort((a,b)=>b[1]-a[1])[1];
+            const c3Top = Object.entries(stats.mainStats.c3||{}).sort((a,b)=>b[1]-a[1])[0];
+            const c3Alt = Object.entries(stats.mainStats.c3||{}).sort((a,b)=>b[1]-a[1])[1];
+            const c1Top = Object.entries(stats.mainStats.c1||{}).sort((a,b)=>b[1]-a[1])[0];
+            const topSubs = Object.entries(stats.subStats).sort((a,b)=>b[1].count-a[1].count).slice(0,5)
+                .map(([n])=>escapeHtml(statLabel(n))).join(' > ');
+            const topSonata = Object.entries(stats.sonataCombos||{}).sort((a,b)=>b[1]-a[1])[0];
+            const mainPct = (stat, total) => stat ? ` <span style="color:#555;font-size:0.7rem;">(${(stat[1]/total*100).toFixed(0)}%)</span>` : '';
+
+            const row = (icon, label, val) => val
+                ? `<div style="display:flex;gap:6px;align-items:baseline;margin-bottom:3px;">
+                    <span style="color:#666;min-width:14px;font-size:0.85rem;">${icon}</span>
+                    <span style="color:#888;font-size:0.75rem;min-width:68px;flex-shrink:0;">${label}</span>
+                    <span style="font-size:0.78rem;line-height:1.4;">${val}</span>
+                   </div>` : '';
+
+            return `<div style="font-size:0.78rem;line-height:1.6;color:#aaa;">
+                <div style="color:#61afef;font-weight:700;margin-bottom:6px;font-size:0.8rem;">
+                    �� Guide <span style="color:#333;font-weight:400;">· from top ${stats.totalBuilds} ranking builds</span>
+                </div>
+                ${row('⚔️','Weapons:', topWeapons)}
+                ${row('🔷','Cost-4 Main:', c4Top ? `<span style="color:#eee;">${escapeHtml(statLabel(c4Top[0]))}</span>${mainPct(c4Top,stats.totalBuilds)}${c4Alt?` <span style="color:#555;">/ ${escapeHtml(statLabel(c4Alt[0]))}</span>`:''}` : '')}
+                ${row('🔶','Cost-3 Main:', c3Top ? `<span style="color:#eee;">${escapeHtml(statLabel(c3Top[0]))}</span>${mainPct(c3Top,stats.totalBuilds*2)}${c3Alt?` <span style="color:#555;">/ ${escapeHtml(statLabel(c3Alt[0]))}</span>`:''}` : '')}
+                ${row('🔹','Cost-1 Main:', c1Top ? `<span style="color:#eee;">${escapeHtml(statLabel(c1Top[0]))}</span>` : '')}
+                ${row('✨','Key Subs:', `<span style="color:#e5c07b;">${topSubs}</span>`)}
+                ${topSonata ? row('🎵','Sonata:', `<span style="color:#eee;">${escapeHtml(topSonata[0].replace(/\+/g,' + '))}</span> <span style="color:#555;font-size:0.7rem;">(${(topSonata[1]/stats.totalBuilds*100).toFixed(0)}%)</span>`) : ''}
+                ${stats.avgER > 0 ? row('⚡','Energy Regen:', `<span style="color:#eee;">${stats.avgER.toFixed(1)}%</span> <span style="color:#555;font-size:0.7rem;">threshold</span>`) : ''}
+            </div>`;
+        }
+
+        async function rank_loadEnGuide(role, btn) {
+            const guideDiv = document.getElementById('desc-guide-content');
+            if (guideDiv) {
+                guideDiv.innerHTML = '<span style="color:#555;font-size:0.78rem;">'
+                    + '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(97,175,254,0.3);border-top-color:#61afef;border-radius:50%;animation:dlm-spin 0.8s linear infinite;vertical-align:middle;margin-right:6px;"></span>'
+                    + 'Loading guide data...</span>';
+            }
+            if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+            try {
+                if (!rank_data || rank_data.length === 0) {
+                    await rank_initDataLoad();
+                }
+                if (role && rank_currSelection !== role) {
+                    if (rank_viewMode !== 'role') rank_viewMode = 'role';
+                    rank_currSelection = role;
+                    rank_calcData();
+                }
+            } catch(e) {
+                console.error('rank_loadEnGuide failed:', e);
+            }
+
+            // Refresh both desktop and mobile guide divs without re-rendering the whole table
+            const html = rank_generateEnGuideHtml(role);
+            ['desc-guide-content', 'desc-guide-content-mobile'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = html;
+            });
+        }
+
         function rank_openStrategySummary() {
             const data = (typeof rank_list !== 'undefined') ? rank_list : [];
             if (!data || data.length === 0) {
