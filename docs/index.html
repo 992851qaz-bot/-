@@ -11065,6 +11065,8 @@
                 renderHistoryList();
                 statusText.innerText = "就緒";
             }
+            // Auto-close anniversary notice after login & data load completes
+            setTimeout(function() { var an = document.getElementById('anniversary-notice'); if (an) an.style.display = 'none'; }, 1800);
         }
         function closeWelcomePanel() {
             const welcomePanels = document.getElementById('welcome-panels');
