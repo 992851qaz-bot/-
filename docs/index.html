@@ -9695,9 +9695,15 @@
                     <h2 style="margin:0; font-size:1.5rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:10px;">🧠 <span data-lang-zh="智慧分析建議" data-lang-en="Smart Analysis">智慧分析建議</span></h2>
                     <div style="font-size:0.78rem; color:#555; margin-top:5px;" data-lang-zh="基於排行榜大數據的個人化建議" data-lang-en="Personalized recommendations based on ranking big data">基於排行榜大數據的個人化建議</div>
                 </div>
-                <button onclick="document.getElementById('smart-analysis-modal').style.display='none'"
-                    style="background:rgba(255,255,255,0.05); border:none; color:#fff; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:0.2s;"
-                    onmouseover="this.style.background='rgba(255,0,0,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <button id="smart-analysis-export-btn" onclick="rank_exportSmartAnalysisImage()"
+                        style="background:rgba(152,195,121,0.12);border:1px solid rgba(152,195,121,0.4);color:#98c379;padding:5px 14px;border-radius:20px;cursor:pointer;font-size:0.8rem;font-weight:700;transition:0.2s;"
+                        onmouseover="this.style.background='rgba(152,195,121,0.25)'" onmouseout="this.style.background='rgba(152,195,121,0.12)'"
+                        data-lang-zh="📸 分享報告" data-lang-en="📸 Share Report">📸 分享報告</button>
+                    <button onclick="document.getElementById('smart-analysis-modal').style.display='none'"
+                        style="background:rgba(255,255,255,0.05); border:none; color:#fff; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:0.2s;"
+                        onmouseover="this.style.background='rgba(255,0,0,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+                </div>
             </div>
             <div id="smart-analysis-content"></div>
         </div>
@@ -20770,13 +20776,13 @@
                                 const scoreColor = ea.pct >= 80 ? '#98c379' : ea.pct >= 55 ? '#e5c07b' : '#e06c75';
                                 const mainCell = ea.mainOk
                                     ? `<span style="color:#98c379;">✅</span>`
-                                    : `<span style="color:#e06c75;" title="${zh?'建議換成：':'Recommend: '}${ea.recommendMain}">❌ <span style="color:#888;font-size:0.7rem;">${zh?'→':'→'}${ea.recommendMain||'?'}</span></span>`;
+                                    : `<span style="color:#e06c75;" title="${zh?'建議換成：':'Recommend: '}${statLabel(ea.recommendMain)}">❌ <span style="color:#888;font-size:0.7rem;">${zh?'→':'→'}${statLabel(ea.recommendMain)||'?'}</span></span>`;
                                 const wastedCell = ea.wastedSubs.length === 0
                                     ? `<span style="color:#555;">${zh?'無':'none'}</span>`
                                     : `<span style="color:#e06c75;">${ea.wastedSubs.map(s=>escapeHtml(statLabel(s))).join(', ')}</span>`;
                                 return `<tr style="border-bottom:1px solid #1a1a1a;">
                                     <td style="padding:7px 8px;color:#888;">${zh?'聲骸':'Echo'} ${ea.idx+1}<div style="font-size:0.65rem;color:#444;">Cost ${ea.cost}</div></td>
-                                    <td style="padding:7px 8px;color:#ddd;">${escapeHtml(ea.echo.main1||'-')}<div style="font-size:0.68rem;color:#888;">${escapeHtml(ea.echo.main2||'')}</div></td>
+                                    <td style="padding:7px 8px;color:#ddd;">${escapeHtml(statLabel(ea.echo.main1)||'-')}<div style="font-size:0.68rem;color:#888;">${escapeHtml(ea.echo.main2||'')}</div></td>
                                     <td style="padding:7px 8px;text-align:center;font-family:'JetBrains Mono';font-weight:700;color:${scoreColor};">${ea.res ? ea.pct.toFixed(1)+'%' : '-'}</td>
                                     <td style="padding:7px 8px;text-align:center;">
                                         <span style="color:${ea.validCount>=4?'#98c379':ea.validCount>=3?'#e5c07b':'#e06c75'};font-weight:700;">${ea.validCount}</span><span style="color:#444;">/5</span>
@@ -20847,7 +20853,7 @@
                                 <div style="font-size:0.68rem;color:#444;margin-top:2px;">${zh?'聲骸':'Echo'} ${ea.idx+1} (C${ea.cost})</div>
                             </div>
                             <div style="flex:1;">
-                                <div style="font-size:0.8rem;color:#ccc;margin-bottom:4px;">${escapeHtml(ea.echo.main1||'-')} <span style="color:#555;">${escapeHtml(ea.echo.main2||'')}</span> <span style="font-family:'JetBrains Mono';font-size:0.72rem;color:${ea.pct>=70?'#98c379':ea.pct>=50?'#e5c07b':'#e06c75'};">${ea.res?ea.pct.toFixed(1)+'%':'-'}</span></div>
+                                <div style="font-size:0.8rem;color:#ccc;margin-bottom:4px;">${escapeHtml(statLabel(ea.echo.main1)||'-')} <span style="color:#555;">${escapeHtml(ea.echo.main2|'')}</span> <span style="font-family:'JetBrains Mono';font-size:0.72rem;color:${ea.pct>=70?'#98c379':ea.pct>=50?'#e5c07b':'#e06c75'};">${ea.res?ea.pct.toFixed(1)+'%':'-'}</span></div>
                                 <ul style="margin:0;padding-left:14px;color:#666;font-size:0.75rem;line-height:1.7;">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>
                             </div>
                         </div>`;
@@ -20891,6 +20897,114 @@
         // =====================================================================
         // 功能 2：聲骸庫角色篩選勾選框
         let g_echoLibQuickMode = 'custom_role';
+
+        // ─── Smart Analysis: Export Report Image ───────────────────────────────────
+        async function rank_exportSmartAnalysisImage() {
+            const btn = document.getElementById('smart-analysis-export-btn');
+            if (!btn) return;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ ...';
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+
+            const container = document.getElementById('smart-analysis-content');
+            if (!container) { btn.innerHTML = originalText; btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; return; }
+
+            try {
+                // Expand container to full height for capture
+                const prevMaxH = container.parentElement.style.maxHeight;
+                const prevOverflow = container.parentElement.style.overflowY;
+                container.parentElement.style.maxHeight = 'none';
+                container.parentElement.style.overflowY = 'visible';
+                // Hide close+export buttons during capture
+                const btnRow = btn.parentElement;
+                btnRow.style.visibility = 'hidden';
+
+                await new Promise(r => setTimeout(r, 200));
+
+                const captureTarget = container.parentElement;
+                const raw = await html2canvas(captureTarget, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#18181b',
+                    logging: false,
+                    onclone: (doc) => {
+                        const el = doc.querySelector('#smart-analysis-content')?.parentElement;
+                        if (el) {
+                            el.style.maxHeight = 'none';
+                            el.style.overflowY = 'visible';
+                            el.style.borderRadius = '0';
+                        }
+                    }
+                });
+
+                // Restore UI
+                container.parentElement.style.maxHeight = prevMaxH;
+                container.parentElement.style.overflowY = prevOverflow;
+                btnRow.style.visibility = 'visible';
+
+                // Draw watermark onto a new canvas
+                const final = document.createElement('canvas');
+                const PAD = 32;
+                const WM_H = 44;
+                final.width = raw.width;
+                final.height = raw.height + WM_H * 2;
+                const ctx = final.getContext('2d');
+
+                // Background fill
+                ctx.fillStyle = '#18181b';
+                ctx.fillRect(0, 0, final.width, final.height);
+
+                // Header watermark bar
+                ctx.fillStyle = '#111113';
+                ctx.fillRect(0, 0, final.width, WM_H);
+                const zh = g_lang !== 'en';
+                const siteLabel = zh ? '鳴潮聲骸分析儀' : 'WuWa Echo Analyzer';
+                ctx.fillStyle = '#98c379';
+                ctx.font = `bold ${Math.round(13 * 2)}px JetBrains Mono, monospace`;
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🌊 ' + siteLabel, PAD, WM_H / 2);
+                const role = (g_globalData && g_globalData.role) || '';
+                if (role) {
+                    ctx.fillStyle = '#888';
+                    ctx.font = `${Math.round(11 * 2)}px JetBrains Mono, monospace`;
+                    ctx.fillText('— ' + role, PAD + ctx.measureText('🌊 ' + siteLabel).width + 12, WM_H / 2);
+                }
+
+                // Main captured image
+                ctx.drawImage(raw, 0, WM_H);
+
+                // Footer watermark bar
+                const footerY = WM_H + raw.height;
+                ctx.fillStyle = '#111113';
+                ctx.fillRect(0, footerY, final.width, WM_H);
+                ctx.fillStyle = '#555';
+                ctx.font = `${Math.round(10 * 2)}px JetBrains Mono, monospace`;
+                ctx.textBaseline = 'middle';
+                const dateStr = new Date().toLocaleDateString();
+                const footText = zh
+                    ? `SMART ANALYSIS REPORT • ${dateStr} • 992851qaz-bot.github.io/-/`
+                    : `SMART ANALYSIS REPORT • ${dateStr} • 992851qaz-bot.github.io/-/`;
+                ctx.fillText(footText, PAD, footerY + WM_H / 2);
+
+                const roleName = (g_globalData && g_globalData.role) || 'echo';
+                const link = document.createElement('a');
+                link.download = `SmartAnalysis_${roleName}_${Date.now()}.png`;
+                link.href = final.toDataURL('image/png', 1.0);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+            } catch (err) {
+                console.error('Smart Analysis export failed:', err);
+                alert(g_lang === 'en' ? 'Image export failed. Please screenshot manually.' : '圖片生成失敗，請手動截圖。');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            }
+        }
+
 
         function setEchoLibraryQuickMode(mode) {
             const allowed = new Set(['role_only', 'custom_only', 'custom_role', 'cross_custom']);
