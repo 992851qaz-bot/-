@@ -9872,7 +9872,7 @@
     </div>
 
     <!-- 3D 散點圖分析 Modal (Sci-Fi Fullscreen) -->
-    <div id="rank-3d-modal" style="display:none;position:fixed;inset:0;z-index:22000;background:#000;overflow:hidden;">
+    <div id="rank-3d-modal" style="display:none;position:fixed;inset:0;z-index:22000;background:#000;overflow:hidden;" oncontextmenu="return false;">
         <style>
             #rank-3d-modal {
                 --neon: #00ffb4;
@@ -9969,6 +9969,32 @@
                 font-size:0.68rem;color:rgba(0,255,180,0.35);letter-spacing:0.08em;
                 padding:0 28px 6px;position:relative;z-index:10;
             }
+            #rank-3d-modal .r3d-sw-btn {
+                background:rgba(0,255,180,0.06);border:1px solid rgba(0,255,180,0.25);
+                color:rgba(0,255,180,0.55);padding:5px 12px;border-radius:6px;
+                cursor:pointer;font-size:0.7rem;letter-spacing:0.08em;
+                font-family:'JetBrains Mono','Courier New',monospace;
+                display:flex;flex-direction:column;align-items:center;gap:1px;
+                transition:all 0.18s;line-height:1.2;
+            }
+            #rank-3d-modal .r3d-sw-btn .r3d-sw-en {
+                font-size:0.58rem;color:rgba(0,255,180,0.3);letter-spacing:0.12em;
+            }
+            #rank-3d-modal .r3d-sw-btn:hover {
+                background:rgba(0,255,180,0.14);border-color:rgba(0,255,180,0.5);
+                color:rgba(0,255,180,0.9);box-shadow:0 0 8px rgba(0,255,180,0.25);
+            }
+            #rank-3d-modal .r3d-sw-btn:hover .r3d-sw-en { color:rgba(0,255,180,0.5); }
+            #rank-3d-modal .r3d-sw-btn.r3d-sw-active {
+                background:rgba(0,255,180,0.18);border-color:rgba(0,255,180,0.7);
+                color:#00ffb4;box-shadow:0 0 10px rgba(0,255,180,0.3),inset 0 0 6px rgba(0,255,180,0.1);
+            }
+            #rank-3d-modal .r3d-sw-btn.r3d-sw-active .r3d-sw-en { color:rgba(0,255,180,0.55); }
+            #rank-3d-modal #r3d-loading {
+                position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+                background:rgba(5,5,10,0.85);z-index:20;pointer-events:none;
+                transition:opacity 0.3s;
+            }
         </style>
         <div class="r3d-bg"></div>
         <div class="r3d-grid"></div>
@@ -9983,8 +10009,16 @@
                     <div class="r3d-title-glow">◈ 3D SCATTER ANALYSIS &nbsp;/&nbsp; <span data-lang-zh="三維散點分析儀" data-lang-en="3D SCATTER ANALYZER">三維散點分析儀</span></div>
                     <div class="r3d-sub">WUTHERING WAVES · RANKING DATABASE · MULTI-AXIS CORRELATION VIEWER</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:14px;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
                     <div id="r3d-count-badge" style="font-size:0.75rem;color:rgba(0,255,180,0.6);letter-spacing:0.1em;"></div>
+                    <div style="display:flex;gap:6px;">
+                        <button id="r3d-btn-grade" class="r3d-sw-btn r3d-sw-active" onclick="rank_switch3DChart('grade')">
+                            <span>畢業等級</span><span class="r3d-sw-en">GRADE</span>
+                        </button>
+                        <button id="r3d-btn-weapon" class="r3d-sw-btn" onclick="rank_switch3DChart('weapon')">
+                            <span>武器著色</span><span class="r3d-sw-en">WEAPON</span>
+                        </button>
+                    </div>
                     <button class="r3d-close" onclick="rank_close3DAnalysis()">×</button>
                 </div>
             </div>
@@ -9996,10 +10030,43 @@
                 <div class="r3d-meta-item"><div class="r3d-meta-dot" style="background:#666;box-shadow:0 0 4px #666"></div>未畢業 &lt;50%</div>
                 <div style="margin-left:auto;font-size:0.65rem;color:rgba(0,255,180,0.3);">DRAG TO ROTATE · SCROLL TO ZOOM · CLICK TO INSPECT</div>
             </div>
-            <div class="r3d-axis-hint" data-lang-zh="X 軸: 整體分數%　|　Y 軸: 鏈度 (0-6)　|　Z 軸: 詞條集中度% (最高單項佔比)" data-lang-en="X: Score%  |  Y: Chain (0-6)  |  Z: Concentration% (top-stat ratio)">
-                X 軸: 整體分數%　|　Y 軸: 鏈度 (0–6)　|　Z 軸: 詞條集中度% (最高單項佔比)
+            <div class="r3d-axis-hint">
+                <span style="color:rgba(0,255,180,0.6);">X</span> 分數% / Score
+                &nbsp;｜&nbsp;
+                <span style="color:rgba(0,180,255,0.6);">Y</span> 鏈度 / Chain (0–6)
+                &nbsp;｜&nbsp;
+                <span style="color:rgba(180,0,255,0.6);">Z</span> 詞條集中度% / Stat Concentration
             </div>
             <div class="r3d-chart-area" id="r3d-chart-area">
+                <div id="r3d-loading" style="display:flex;align-items:center;justify-content:center;background:rgba(5,5,10,0.85);z-index:20;pointer-events:none;position:absolute;inset:0;">
+                    <div style="text-align:center;">
+                        <div style="color:var(--neon);font-size:0.9rem;letter-spacing:0.2em;margin-bottom:8px;text-shadow:0 0 8px var(--neon);">◉ INITIALIZING 3D ENGINE</div>
+                        <div style="color:rgba(0,255,180,0.4);font-size:0.68rem;letter-spacing:0.15em;">LOADING WEBGL RENDERER...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="r3d-meta-bar">
+                <div class="r3d-meta-item"><div class="r3d-meta-dot" style="background:#ffd700;box-shadow:0 0 4px #ffd700"></div>傳家寶 ≥90%</div>
+                <div class="r3d-meta-item"><div class="r3d-meta-dot" style="background:#ffb74d;box-shadow:0 0 4px #ffb74d"></div>大畢業 ≥80%</div>
+                <div class="r3d-meta-item"><div class="r3d-meta-dot" style="background:#7dd3fc;box-shadow:0 0 4px #7dd3fc"></div>中畢業 ≥65%</div>
+                <div class="r3d-meta-item"><div class="r3d-meta-dot" style="background:#78e08f;box-shadow:0 0 4px #78e08f"></div>小畢業 ≥50%</div>
+                <div class="r3d-meta-item"><div class="r3d-meta-dot" style="background:#666;box-shadow:0 0 4px #666"></div>未畢業 &lt;50%</div>
+                <div style="margin-left:auto;font-size:0.65rem;color:rgba(0,255,180,0.3);">DRAG TO ROTATE · SCROLL TO ZOOM · CLICK TO INSPECT</div>
+            </div>
+            <div class="r3d-axis-hint">
+                <span style="color:rgba(0,255,180,0.6);">X</span> 分數% / Score
+                &nbsp;｜&nbsp;
+                <span style="color:rgba(0,180,255,0.6);">Y</span> 鏈度 / Chain (0–6)
+                &nbsp;｜&nbsp;
+                <span style="color:rgba(180,0,255,0.6);">Z</span> 詞條集中度% / Stat Concentration
+            </div>
+            <div class="r3d-chart-area" id="r3d-chart-area">
+                <div id="r3d-loading" style="display:flex;align-items:center;justify-content:center;background:rgba(5,5,10,0.85);z-index:20;pointer-events:none;position:absolute;inset:0;">
+                    <div style="text-align:center;">
+                        <div style="color:var(--neon);font-size:0.9rem;letter-spacing:0.2em;margin-bottom:8px;text-shadow:0 0 8px var(--neon);">◉ INITIALIZING 3D ENGINE</div>
+                        <div style="color:rgba(0,255,180,0.4);font-size:0.68rem;letter-spacing:0.15em;">LOADING WEBGL RENDERER...</div>
+                    </div>
+                </div>
                 <div id="r3d-plotly" style="width:100%;height:100%;"></div>
             </div>
         </div>
@@ -15469,6 +15536,8 @@
             }
         }
 
+        let r3d_chartType = 'grade';
+
         function rank_open3DAnalysis() {
             if (!rank_list || rank_list.length === 0) {
                 showMsg('尚未載入排行榜數據，請先選擇角色並抓取資料。');
@@ -15479,17 +15548,26 @@
             modal.classList.add('is-open');
             const badge = document.getElementById('r3d-count-badge');
             if (badge) badge.textContent = `[ ${rank_list.length} ENTRIES LOADED ]`;
+            // Reset to grade view each open, update button state
+            r3d_chartType = 'grade';
+            ['grade', 'weapon'].forEach(t => {
+                const b = document.getElementById('r3d-btn-' + t);
+                if (b) b.classList.toggle('r3d-sw-active', t === 'grade');
+            });
             const plotEl = document.getElementById('r3d-plotly');
+            const loading = document.getElementById('r3d-loading');
             if (!plotEl) return;
+            if (loading) { loading.style.opacity = '1'; loading.style.display = 'flex'; }
             if (!window.Plotly) {
-                plotEl.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:rgba(0,255,180,0.5);font-size:0.85rem;letter-spacing:0.15em;">⏳ LOADING 3D ENGINE...</div>';
                 const s = document.createElement('script');
                 s.src = 'https://cdn.plot.ly/plotly-gl3d-2.29.1.min.js';
-                s.onload = () => rank_draw3DScatter(plotEl);
-                s.onerror = () => { plotEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#e06c75;font-size:0.85rem;">⚠ ENGINE LOAD FAILED</div>'; };
+                s.onload = () => rank_draw3DScatter(plotEl, r3d_chartType);
+                s.onerror = () => {
+                    if (loading) loading.innerHTML = '<div style="color:#e06c75;font-size:0.85rem;letter-spacing:0.1em;">⚠ ENGINE LOAD FAILED</div>';
+                };
                 document.head.appendChild(s);
             } else {
-                rank_draw3DScatter(plotEl);
+                rank_draw3DScatter(plotEl, r3d_chartType);
             }
         }
 
@@ -15499,46 +15577,103 @@
             modal.classList.remove('is-open');
         }
 
-        function rank_draw3DScatter(el) {
-            if (!el || !window.Plotly) return;
-            const gradeColors = { '傳家寶': '#ffd700', '大畢業': '#ffb74d', '中畢業': '#7dd3fc', '小畢業': '#78e08f', '未畢業': '#888888' };
-            const groups = {};
-            rank_list.forEach(d => {
-                const bd = d.statBreakdown || {};
-                const total = Object.values(bd).reduce((a, b) => a + b, 0);
-                const topVal = total > 0 ? Math.max(...Object.values(bd)) : 0;
-                const concentration = total > 0 ? parseFloat(safeFixed(topVal / total * 100, 1)) : 0;
-                const grade = (d.grad && d.grad.l) ? d.grad.l : '未畢業';
-                if (!groups[grade]) groups[grade] = { x: [], y: [], z: [], text: [] };
-                groups[grade].x.push(parseFloat(safeFixed(d.pct, 1)));
-                groups[grade].y.push(d.chain || 0);
-                groups[grade].z.push(concentration);
-                const player = escapeHtml(String(d.player || d.uid || ''));
-                groups[grade].text.push(`${player}<br>分數: ${safeFixed(d.pct, 1)}%<br>鏈度: ${d.chain || 0}<br>詞條集中度: ${concentration}%`);
+        function rank_switch3DChart(type) {
+            if (r3d_chartType === type) return;
+            r3d_chartType = type;
+            ['grade', 'weapon'].forEach(t => {
+                const b = document.getElementById('r3d-btn-' + t);
+                if (b) b.classList.toggle('r3d-sw-active', t === type);
             });
-            const traces = Object.entries(groups).map(([grade, data]) => ({
-                type: 'scatter3d', mode: 'markers', name: grade,
-                x: data.x, y: data.y, z: data.z, text: data.text,
-                hovertemplate: '%{text}<extra></extra>',
-                marker: { size: 4.5, color: gradeColors[grade] || '#888', opacity: 0.88, line: { width: 0 } }
-            }));
+            const plotEl = document.getElementById('r3d-plotly');
+            const loading = document.getElementById('r3d-loading');
+            if (loading) { loading.style.opacity = '1'; loading.style.display = 'flex'; }
+            if (plotEl && window.Plotly) rank_draw3DScatter(plotEl, type);
+        }
+
+        function rank_draw3DScatter(el, chartType) {
+            if (!el || !window.Plotly) return;
+            const loading = document.getElementById('r3d-loading');
+
+            const xLabel = '分數% / Score';
+            const yLabel = '鏈度 / Chain';
+            const zLabel = '集中度% / Concentration';
             const neonGrid = 'rgba(0,255,180,0.07)';
             const neonLine = 'rgba(0,255,180,0.18)';
+
+            let traces;
+            if (chartType === 'weapon') {
+                const weaponColors = ['#ff6b9d','#ffd700','#00ffb4','#00b4ff','#b46bff','#ff9f43','#a29bfe','#fd79a8','#55efc4','#74b9ff','#e17055','#81ecec','#636e72','#dfe6e9','#6c5ce7'];
+                const weaponMap = {};
+                let wIdx = 0;
+                rank_list.forEach(d => { const w = d.weapon || '未知'; if (!(w in weaponMap)) weaponMap[w] = weaponColors[wIdx++ % weaponColors.length]; });
+                const groups = {};
+                rank_list.forEach(d => {
+                    const bd = d.statBreakdown || {};
+                    const total = Object.values(bd).reduce((a, b) => a + b, 0);
+                    const topVal = total > 0 ? Math.max(...Object.values(bd)) : 0;
+                    const concentration = total > 0 ? parseFloat(safeFixed(topVal / total * 100, 1)) : 0;
+                    const w = d.weapon || '未知';
+                    if (!groups[w]) groups[w] = { x: [], y: [], z: [], text: [], color: weaponMap[w] };
+                    groups[w].x.push(parseFloat(safeFixed(d.pct, 1)));
+                    groups[w].y.push(d.chain || 0);
+                    groups[w].z.push(concentration);
+                    const player = escapeHtml(String(d.player || d.uid || ''));
+                    groups[w].text.push(`${player}<br>武器: ${escapeHtml(w)}<br>分數: ${safeFixed(d.pct, 1)}%<br>鏈度: ${d.chain || 0}<br>集中度: ${concentration}%`);
+                });
+                traces = Object.entries(groups).map(([wName, data]) => ({
+                    type: 'scatter3d', mode: 'markers', name: wName,
+                    x: data.x, y: data.y, z: data.z, text: data.text,
+                    hovertemplate: '%{text}<extra></extra>',
+                    marker: { size: 4.5, color: data.color, opacity: 0.88, line: { width: 0 } }
+                }));
+            } else {
+                const gradeColors = { '傳家寶': '#ffd700', '大畢業': '#ffb74d', '中畢業': '#7dd3fc', '小畢業': '#78e08f', '未畢業': '#888888' };
+                const groups = {};
+                rank_list.forEach(d => {
+                    const bd = d.statBreakdown || {};
+                    const total = Object.values(bd).reduce((a, b) => a + b, 0);
+                    const topVal = total > 0 ? Math.max(...Object.values(bd)) : 0;
+                    const concentration = total > 0 ? parseFloat(safeFixed(topVal / total * 100, 1)) : 0;
+                    const grade = (d.grad && d.grad.l) ? d.grad.l : '未畢業';
+                    if (!groups[grade]) groups[grade] = { x: [], y: [], z: [], text: [] };
+                    groups[grade].x.push(parseFloat(safeFixed(d.pct, 1)));
+                    groups[grade].y.push(d.chain || 0);
+                    groups[grade].z.push(concentration);
+                    const player = escapeHtml(String(d.player || d.uid || ''));
+                    groups[grade].text.push(`${player}<br>分數: ${safeFixed(d.pct, 1)}%<br>鏈度: ${d.chain || 0}<br>集中度: ${concentration}%`);
+                });
+                traces = Object.entries(groups).map(([grade, data]) => ({
+                    type: 'scatter3d', mode: 'markers', name: grade,
+                    x: data.x, y: data.y, z: data.z, text: data.text,
+                    hovertemplate: '%{text}<extra></extra>',
+                    marker: { size: 4.5, color: gradeColors[grade] || '#888', opacity: 0.88, line: { width: 0 } }
+                }));
+            }
+
             const layout = {
                 paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
                 font: { color: 'rgba(0,255,180,0.7)', size: 10, family: 'JetBrains Mono, Courier New, monospace' },
                 margin: { l: 0, r: 0, t: 0, b: 0 },
+                uirevision: chartType,
                 scene: {
                     bgcolor: 'rgba(0,5,15,0.0)',
-                    xaxis: { title: { text: 'SCORE %', font: { size: 10, color: 'rgba(0,255,180,0.6)' } }, color: 'rgba(0,255,180,0.35)', gridcolor: neonGrid, zerolinecolor: neonLine, tickfont: { color: 'rgba(0,255,180,0.5)', size: 9 } },
-                    yaxis: { title: { text: 'CHAIN', font: { size: 10, color: 'rgba(0,180,255,0.6)' } }, color: 'rgba(0,180,255,0.35)', gridcolor: 'rgba(0,180,255,0.06)', zerolinecolor: 'rgba(0,180,255,0.18)', dtick: 1, tickfont: { color: 'rgba(0,180,255,0.5)', size: 9 } },
-                    zaxis: { title: { text: 'CONCENTRATION %', font: { size: 10, color: 'rgba(180,0,255,0.6)' } }, color: 'rgba(180,0,255,0.35)', gridcolor: 'rgba(180,0,255,0.06)', zerolinecolor: 'rgba(180,0,255,0.18)', tickfont: { color: 'rgba(180,0,255,0.5)', size: 9 } },
+                    xaxis: { title: { text: xLabel, font: { size: 10, color: 'rgba(0,255,180,0.8)' } }, color: 'rgba(0,255,180,0.35)', gridcolor: neonGrid, zerolinecolor: neonLine, tickfont: { color: 'rgba(0,255,180,0.5)', size: 9 } },
+                    yaxis: { title: { text: yLabel, font: { size: 10, color: 'rgba(0,180,255,0.8)' } }, color: 'rgba(0,180,255,0.35)', gridcolor: 'rgba(0,180,255,0.06)', zerolinecolor: 'rgba(0,180,255,0.18)', dtick: 1, tickfont: { color: 'rgba(0,180,255,0.5)', size: 9 } },
+                    zaxis: { title: { text: zLabel, font: { size: 10, color: 'rgba(180,0,255,0.8)' } }, color: 'rgba(180,0,255,0.35)', gridcolor: 'rgba(180,0,255,0.06)', zerolinecolor: 'rgba(180,0,255,0.18)', tickfont: { color: 'rgba(180,0,255,0.5)', size: 9 } },
                     camera: { eye: { x: 1.5, y: 1.5, z: 0.9 } }
                 },
                 legend: { font: { color: 'rgba(255,255,255,0.65)', size: 10 }, bgcolor: 'rgba(0,0,0,0)', x: 0.01, y: 0.99 },
                 hoverlabel: { bgcolor: 'rgba(0,8,18,0.92)', bordercolor: 'rgba(0,255,180,0.5)', font: { color: '#fff', size: 12, family: 'JetBrains Mono, Courier New, monospace' } }
             };
-            Plotly.react(el, traces, layout, { responsive: true, displayModeBar: true, displaylogo: false, modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'], modeBarStyle: { backgroundColor: 'transparent' } });
+            const config = {
+                responsive: false, displayModeBar: true, displaylogo: false,
+                modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'resetCameraLastSave3d', 'hoverClosest3d'],
+                scrollZoom: true
+            };
+            Plotly.react(el, traces, layout, config).then(() => {
+                if (loading) { loading.style.opacity = '0'; setTimeout(() => { loading.style.display = 'none'; }, 280); }
+                setTimeout(() => { try { Plotly.Plots.resize(el); } catch (e) {} }, 60);
+            });
         }
 
         function rank_getGrading(p) {
@@ -19956,6 +20091,13 @@
             const featureModal = document.getElementById('feature-list-modal');
             const imgEl = document.getElementById('preview-img');
             if (!featureModal) return;
+
+            // Suppress right-click menu inside 3D analysis modal (needed for 3D rotation)
+            const r3dModal = document.getElementById('rank-3d-modal');
+            if (r3dModal && r3dModal.style.display !== 'none' && r3dModal.contains(e.target)) {
+                e.preventDefault();
+                return;
+            }
 
             // If right-clicking inside the feature modal, close it
             if (featureModal.style.display !== 'none' && (featureModal.contains(e.target) || e.target === featureModal)) {
