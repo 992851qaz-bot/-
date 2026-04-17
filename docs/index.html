@@ -8701,6 +8701,10 @@
                                     style="background:rgba(92, 124, 250, 0.15); border:1px solid #5c7cfa; color:#748ffc;">
                                     <span data-lang-zh="📋 戰略總表" data-lang-en="📋 Strategy Report">📋 戰略總表</span>
                                 </button>
+                                <button class="db-btn-primary" onclick="rank_openSmartAnalysis()" title="依大數據給與個人化建議" data-title-zh="依大數據給與個人化建議" data-title-en="Personalized advice from big data"
+                                    style="background:rgba(152,195,121,0.12); border:1px solid #98c379; color:#98c379;">
+                                    <span data-lang-zh="🧠 智慧分析" data-lang-en="🧠 Smart Analysis">🧠 智慧分析</span>
+                                </button>
                                 <button class="db-btn-primary" onclick="rank_toggleAnalysis(true)">
                                     <span data-lang-zh="📊 深度戰略分析" data-lang-en="📊 Deep Strategy Analysis">📊 深度戰略分析</span>
                                 </button>
@@ -9683,6 +9687,22 @@
             <div id="strategy-summary-content">
                 <!-- Premium Dynamic Content -->
             </div>
+        </div>
+    </div>
+
+    <!-- 智慧分析建議 Modal -->
+    <div id="smart-analysis-modal" class="modal-overlay" style="z-index:20001; display:none;">
+        <div style="max-width:820px; width:92%; background:#18181b; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:28px; position:relative; max-height:90vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,0.7);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
+                <div>
+                    <h2 style="margin:0; font-size:1.5rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:10px;">🧠 <span data-lang-zh="智慧分析建議" data-lang-en="Smart Analysis">智慧分析建議</span></h2>
+                    <div style="font-size:0.78rem; color:#555; margin-top:5px;" data-lang-zh="基於排行榜大數據的個人化建議" data-lang-en="Personalized recommendations based on ranking big data">基於排行榜大數據的個人化建議</div>
+                </div>
+                <button onclick="document.getElementById('smart-analysis-modal').style.display='none'"
+                    style="background:rgba(255,255,255,0.05); border:none; color:#fff; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:0.2s;"
+                    onmouseover="this.style.background='rgba(255,0,0,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+            </div>
+            <div id="smart-analysis-content"></div>
         </div>
     </div>
 
@@ -20543,9 +20563,182 @@
         }
 
         // =====================================================================
-        // 功能 2：聲骸庫角色篩選勾選框
+        // 功能：智慧分析建議 (Smart Analysis)
         // =====================================================================
-        let g_echoLibRoleFilter = new Set(); // 空表示全部顯示
+        function rank_openSmartAnalysis() {
+            const role = g_globalData && g_globalData.role;
+            if (!role) {
+                showMsg(g_lang === 'en' ? 'Please load a character first.' : '請先載入角色資料進行分析');
+                return;
+            }
+            const modal = document.getElementById('smart-analysis-modal');
+            if (!modal) return;
+            const rankDataForRole = (typeof rank_list !== 'undefined' && Array.isArray(rank_list)) ? rank_list : [];
+            const stats = rankDataForRole.length >= 3 ? rank_calculateStrategyStats(rankDataForRole.slice(0, 60)) : null;
+            rank_renderSmartAnalysis(stats, role);
+            modal.style.display = 'flex';
+        }
+
+        function rank_renderSmartAnalysis(stats, role) {
+            const container = document.getElementById('smart-analysis-content');
+            if (!container) return;
+
+            const weights = (g_currentWeights && g_currentWeights[role] && g_currentWeights[role][g_selectedBuildIdx || 0])
+                ? g_currentWeights[role][g_selectedBuildIdx || 0].weights
+                : (g_currentWeights && g_currentWeights[role] && g_currentWeights[role][0] ? g_currentWeights[role][0].weights : null);
+
+            // --- Calculate current player stats ---
+            let playerTotalScore = 0, playerTotalMax = 0;
+            let playerSubStats = {}; // { statName: totalValue }
+            let hasPlayerData = g_echoesData && g_echoesData.length > 0;
+
+            if (hasPlayerData && weights) {
+                g_echoesData.forEach(echo => {
+                    const res = calculateEchoScore(echo, weights);
+                    if (res) { playerTotalScore += res.score; playerTotalMax += res.maxTheoretical; }
+                    if (echo.subs) {
+                        echo.subs.forEach(s => {
+                            if (!s.valid) return;
+                            let name = s.name;
+                            if (['攻擊', '生命', '防禦'].includes(name) && String(s.val || '').includes('%')) name += '百分比';
+                            playerSubStats[name] = (playerSubStats[name] || 0) + (parseFloat(s.val) || 0);
+                        });
+                    }
+                });
+            }
+            const playerPct = playerTotalMax > 0 ? (playerTotalScore / playerTotalMax * 100) : 0;
+
+            // --- Build tips array ---
+            let tips = [];
+
+            if (stats) {
+                // 1. Overall graduation score comparison
+                const gap = stats.avgEchoScore - playerPct;
+                if (hasPlayerData && playerTotalMax > 0) {
+                    if (gap > 10) {
+                        tips.push({ icon: '📈', color: '#e06c75', title: g_lang === 'en' ? 'Score Improvement Opportunity' : '整體評分提升空間', desc: (g_lang === 'en' ? `Your echo graduation score ${playerPct.toFixed(1)}% is ${gap.toFixed(1)}% below the Top 60 average (${stats.avgEchoScore.toFixed(1)}%). There's significant room to improve.` : `您的聲骸畢業度 ${playerPct.toFixed(1)}% 低於 Top 60 平均 ${stats.avgEchoScore.toFixed(1)}%，差距 ${gap.toFixed(1)}%，仍有顯著提升空間。`) });
+                    } else if (gap > 0) {
+                        tips.push({ icon: '✅', color: '#56b6c2', title: g_lang === 'en' ? 'Close to Top Level' : '接近頂尖水準', desc: (g_lang === 'en' ? `Your echo graduation score ${playerPct.toFixed(1)}% is only ${gap.toFixed(1)}% below the Top 60 average. Keep it up!` : `您的聲骸畢業度 ${playerPct.toFixed(1)}% 僅比 Top 60 平均低 ${gap.toFixed(1)}%，繼續加油！`) });
+                    } else {
+                        tips.push({ icon: '🏆', color: '#e5c07b', title: g_lang === 'en' ? 'Above Average!' : '超越頂尖平均！', desc: (g_lang === 'en' ? `Your echo score ${playerPct.toFixed(1)}% surpasses the Top 60 average — excellent performance!` : `您的聲骸畢業度 ${playerPct.toFixed(1)}% 已超越 Top 60 平均水準，表現卓越！`) });
+                    }
+                }
+
+                // 2. Weapon recommendation
+                const topWeapons = Object.entries(stats.weapons).sort((a, b) => b[1] - a[1]);
+                if (topWeapons.length > 0) {
+                    const topWeapon = topWeapons[0];
+                    const topPct = (topWeapon[1] / stats.totalBuilds * 100).toFixed(0);
+                    const playerWeapon = g_globalData && g_globalData.weapon ? String(g_globalData.weapon).trim() : '';
+                    const isUsing = playerWeapon && playerWeapon.includes(topWeapon[0]);
+                    if (!isUsing && playerWeapon) {
+                        tips.push({ icon: '⚔️', color: '#61afef', title: g_lang === 'en' ? 'Weapon Recommendation' : '武器配置建議', desc: (g_lang === 'en' ? `${topPct}% of Top 60 players use "${topWeapon[0]}" — the most popular weapon. You are using "${playerWeapon}".` : `Top 60 中有 ${topPct}% 的玩家使用「${topWeapon[0]}」，是最主流武器選擇。您目前使用的是「${playerWeapon}」。`) });
+                    } else {
+                        tips.push({ icon: '⚔️', color: '#98c379', title: g_lang === 'en' ? 'Weapon: Optimal Choice' : '武器：最佳選擇', desc: (g_lang === 'en' ? `You are using "${topWeapon[0]}", the #1 weapon among Top 60 (${topPct}% usage rate). Great choice!` : `您使用的「${topWeapon[0]}」正是 Top 60 最熱門武器（使用率 ${topPct}%），配置最優！`) });
+                    }
+                }
+
+                // 3. Sonata set recommendation
+                const topSonatas = Object.entries(stats.sonataCombos).sort((a, b) => b[1] - a[1]);
+                if (topSonatas.length > 0) {
+                    const topSonata = topSonatas[0];
+                    const sonataPct = (topSonata[1] / stats.totalBuilds * 100).toFixed(0);
+                    tips.push({ icon: '🎶', color: '#c678dd', title: g_lang === 'en' ? 'Sonata Trend' : '鳴奏套裝趨勢', desc: (g_lang === 'en' ? `Top 60 most popular combo: "${topSonata[0]}" at ${sonataPct}% usage rate. Verify your sonata matches this trend.` : `Top 60 最熱門套裝組合為「${topSonata[0]}」，使用率 ${sonataPct}%。請確認您的套裝配置是否符合主流。`) });
+                }
+
+                // 4. Crit stats benchmark
+                const crS = stats.subStats['暴擊'];
+                const cdS = stats.subStats['暴擊傷害'];
+                if (crS && cdS && weights && ((weights['暴擊'] || 0) > 0 || (weights['暴擊傷害'] || 0) > 0)) {
+                    const avgCrPerPiece = (crS.totalVal / crS.count).toFixed(1);
+                    const avgCdPerPiece = (cdS.totalVal / cdS.count).toFixed(1);
+                    const playerCrTotal = safeFixed(playerSubStats['暴擊'] || 0, 1);
+                    const playerCdTotal = safeFixed(playerSubStats['暴擊傷害'] || 0, 1);
+                    tips.push({ icon: '🎯', color: '#e5c07b', title: g_lang === 'en' ? 'Crit Sub-stat Benchmark' : '雙爆詞條目標參考', desc: (g_lang === 'en' ? `Top 60 avg per piece — Crit Rate: ${avgCrPerPiece}%, Crit DMG: ${avgCdPerPiece}%. Your sub-stat totals: CR ${playerCrTotal}%, CD ${playerCdTotal}%.` : `頂尖玩家平均單件：暴擊率 ${avgCrPerPiece}%、暴擊傷害 ${avgCdPerPiece}%。您的副詞條總和：暴擊 ${playerCrTotal}%、暴傷 ${playerCdTotal}%。`) });
+                }
+
+                // 5. ER threshold
+                if (stats.targets && stats.targets.er > 100 && weights && (weights['共鳴效率'] || 0) > 0) {
+                    const erTarget = stats.targets.er.toFixed(1);
+                    const playerER = safeFixed(playerSubStats['共鳴效率'] || 0, 1);
+                    tips.push({ icon: '⚡', color: '#e5c07b', title: g_lang === 'en' ? 'Energy Regen Threshold' : '共鳴效率閾值建議', desc: (g_lang === 'en' ? `Top 10% players reach ${erTarget}% ER in sub-stats. Your current sub-stat ER total: ${playerER}%. Target this for smooth rotation.` : `Top 10% 玩家共鳴效率副詞條達 ${erTarget}%。您目前副詞條共鳴效率總和：${playerER}%。達標可確保循環順暢。`) });
+                }
+
+                // 6. Main stat Cost4 check
+                if (stats.mainStats && stats.mainStats.c4 && hasPlayerData) {
+                    const topMain4Entries = Object.entries(stats.mainStats.c4).sort((a, b) => b[1] - a[1]);
+                    if (topMain4Entries.length > 0) {
+                        const topMain4 = topMain4Entries[0][0];
+                        const topMain4Pct = (topMain4Entries[0][1] / stats.totalBuilds * 100).toFixed(0);
+                        const echo4 = g_echoesData.find(e => parseInt(String(e.cost || '').split('-')[0]) === 4);
+                        if (echo4 && echo4.main1 && echo4.main1 !== topMain4) {
+                            tips.push({ icon: '💎', color: '#e06c75', title: g_lang === 'en' ? 'Cost 4 Main Stat Tip' : 'Cost 4 主詞條最佳化', desc: (g_lang === 'en' ? `${topMain4Pct}% of Top 60 use "${topMain4}" as Cost 4 main stat. You have "${echo4.main1}" — consider optimizing.` : `Top 60 中 ${topMain4Pct}% 的玩家 Cost 4 選用「${topMain4}」，而您目前是「${echo4.main1}」，可考慮調整主詞條。`) });
+                        }
+                    }
+                }
+
+                // 7. Perfect piece ratio
+                if (stats.totalEchoes > 0) {
+                    const perfPct = (stats.perfectEchoCount / stats.totalEchoes * 100).toFixed(1);
+                    tips.push({ icon: '✨', color: '#56b6c2', title: g_lang === 'en' ? 'Perfect Piece Benchmark' : '完美詞條件數參考', desc: (g_lang === 'en' ? `Top 60 players have ${perfPct}% of echoes with 4+ weighted sub-stats. Aim to maximize your high-quality echo count.` : `Top 60 玩家有 ${perfPct}% 的聲骸達到 4+ 有效加權詞條。建議以此為目標，持續提升高品質聲骸數量。`) });
+                }
+            } else {
+                tips.push({ icon: '📡', color: '#e5c07b', title: g_lang === 'en' ? 'Ranking Data Needed' : '需要排行榜資料', desc: (g_lang === 'en' ? 'Please go to the Ranking tab, select a character and load data. Smart Analysis will then provide personalized tips based on Top 60 players.' : '請先切換至排行榜頁面，選取角色並抓取資料。智慧分析將根據 Top 60 玩家數據，為您提供個人化建議。') });
+            }
+
+            if (!hasPlayerData) {
+                tips.push({ icon: '📷', color: '#888', title: g_lang === 'en' ? 'No Personal Data' : '尚無個人分析資料', desc: (g_lang === 'en' ? 'Complete an echo OCR analysis for your character to get personalized comparisons.' : '請先對您的角色進行聲骸 OCR 分析，以獲得個人化對比數據。') });
+            }
+
+            // --- Render ---
+            const totalBuildsLabel = stats ? `${g_lang === 'en' ? 'Based on Top' : '基於 Top'} ${Math.min(60, stats.totalBuilds)} ${g_lang === 'en' ? 'players data' : '玩家數據'}` : (g_lang === 'en' ? '⚠ No rank data loaded' : '⚠ 未載入排行榜資料');
+
+            let html = `
+                <div style="margin-bottom:22px;">
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:${(hasPlayerData && playerTotalMax > 0 && stats) ? '14px' : '0'};">
+                        <span style="background:rgba(229,192,123,0.1); color:var(--accent); font-size:0.85rem; padding:4px 12px; border-radius:20px; border:1px solid rgba(229,192,123,0.2);">${role}</span>
+                        <span style="font-size:0.72rem; color:#555;">${totalBuildsLabel}</span>
+                    </div>
+                    ${(hasPlayerData && playerTotalMax > 0 && stats) ? `
+                    <div style="display:flex; align-items:center; gap:20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px; flex-wrap:wrap;">
+                        <div>
+                            <div style="font-size:0.68rem; color:#666; margin-bottom:4px; letter-spacing:1px;">${g_lang === 'en' ? 'YOUR SCORE' : '您的畢業度'}</div>
+                            <div style="font-size:2rem; font-weight:900; color:#fff;">${playerPct.toFixed(1)}<span style="font-size:0.95rem; color:#555;">%</span></div>
+                        </div>
+                        <div style="width:1px; height:40px; background:#333;"></div>
+                        <div>
+                            <div style="font-size:0.68rem; color:#666; margin-bottom:4px; letter-spacing:1px;">${g_lang === 'en' ? 'TOP 60 AVG' : 'Top 60 平均'}</div>
+                            <div style="font-size:2rem; font-weight:900; color:var(--accent);">${stats.avgEchoScore.toFixed(1)}<span style="font-size:0.95rem; color:#555;">%</span></div>
+                        </div>
+                        <div style="flex:1; min-width:120px;">
+                            <div style="height:6px; background:#222; border-radius:3px; overflow:hidden; margin-bottom:6px;">
+                                <div style="height:100%; width:${Math.min(100, (playerPct / Math.max(playerPct, stats.avgEchoScore)) * 100).toFixed(1)}%; background:linear-gradient(to right, #56b6c2, var(--accent)); border-radius:3px; transition:width 0.6s ease;"></div>
+                            </div>
+                            <div style="font-size:0.75rem; color:${playerPct >= stats.avgEchoScore ? '#98c379' : '#e06c75'};">
+                                ${playerPct >= stats.avgEchoScore ? '▲ ' + (g_lang === 'en' ? 'Above average' : '超越平均') : '▼ ' + (g_lang === 'en' ? `Gap: ${(stats.avgEchoScore - playerPct).toFixed(1)}%` : `差距: ${(stats.avgEchoScore - playerPct).toFixed(1)}%`)}
+                            </div>
+                        </div>
+                    </div>` : ''}
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:14px;">
+                    ${tips.map(t => `
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-left:3px solid ${t.color}; border-radius:12px; padding:16px;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                            <span style="font-size:1.2rem;">${t.icon}</span>
+                            <span style="font-weight:700; color:#eee; font-size:0.88rem;">${t.title}</span>
+                        </div>
+                        <div style="font-size:0.8rem; color:#888; line-height:1.65;">${t.desc}</div>
+                    </div>`).join('')}
+                </div>
+                <div style="margin-top:20px; text-align:center; font-size:0.68rem; color:#333; letter-spacing:1.5px; font-family:'JetBrains Mono';">
+                    SMART ANALYSIS • WUTHERING WAVES • ${new Date().toLocaleDateString()}
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        // =====================================================================
+        // 功能 2：聲骸庫角色篩選勾選框
         let g_echoLibQuickMode = 'custom_role';
 
         function setEchoLibraryQuickMode(mode) {
