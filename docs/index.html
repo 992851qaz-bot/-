@@ -8701,10 +8701,7 @@
                                     style="background:rgba(92, 124, 250, 0.15); border:1px solid #5c7cfa; color:#748ffc;">
                                     <span data-lang-zh="📋 戰略總表" data-lang-en="📋 Strategy Report">📋 戰略總表</span>
                                 </button>
-                                <button class="db-btn-primary" onclick="rank_openSmartAnalysis()" title="依大數據給與個人化建議" data-title-zh="依大數據給與個人化建議" data-title-en="Personalized advice from big data"
-                                    style="background:rgba(152,195,121,0.12); border:1px solid #98c379; color:#98c379;">
-                                    <span data-lang-zh="🧠 智慧分析" data-lang-en="🧠 Smart Analysis">🧠 智慧分析</span>
-                                </button>
+
                                 <button class="db-btn-primary" onclick="rank_toggleAnalysis(true)">
                                     <span data-lang-zh="📊 深度戰略分析" data-lang-en="📊 Deep Strategy Analysis">📊 深度戰略分析</span>
                                 </button>
@@ -12685,7 +12682,7 @@
                 ocrHtml += `</table>`;
                 html += `<tr><td colspan="6" class="role-info-cell" style="background:#151518;border:1px solid var(--accent-dim);border-radius:8px;"><div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;"><div style="flex:1;min-width:280px;background:#1a1a1e;padding:15px;border-radius:8px;">${infoHtml}</div><div style="flex:1.5;min-width:320px;"><div style="font-size:0.8rem;color:var(--accent);margin-bottom:10px;font-weight:bold;display:flex;align-items:center;gap:5px;"><span>🔍</span> OCR 轉譯對照資訊</div>${ocrHtml}<div style="font-size:0.75rem;color:#555;margin-top:10px;font-style:italic;">* 主詞條/副詞條 OCR 原文請見下方相關項目的 Raw 區塊</div></div></div></td></tr>`;
             } else {
-                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:40px;"><button class="rank-btn" style="position:absolute;top:10px;right:15px;margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button>${formatDescText(roleDesc)}</div></div></td></tr>`;
+                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:54px;"><div style="position:absolute;top:10px;right:15px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.5);backdrop-filter:blur(10px);color:#98c379;font-weight:700;width:auto;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button><button class="rank-btn" style="margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button></div>${formatDescText(roleDesc)}</div></div></td></tr>`;
             }
             html += `<tr class="custom-header-row"><td>項目</td>${echoes.map((e, idx) => `<td>聲骸 ${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
             html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
@@ -12729,6 +12726,7 @@
                 html += `<div style="display:flex;gap:5px;flex-wrap:wrap;margin:10px 0;">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div>`;
                 html += `<div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">UID: ${global.uid || '-'} | ${global.player || '-'}</div>`;
                 html += `<div style="margin-top:10px;">${totalScoreHtml || '<div style="color:#666">暫無評分</div>'}</div>`;
+                html += `<div style="margin-top:8px;"><button class="rank-btn" style="width:100%;font-size:0.82rem;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.45);color:#98c379;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button></div>`;
                 if (roleDesc) html += `<div style="margin-top:10px;padding:10px;background:#222;border-radius:6px;color:#aaa;font-size:0.85rem;line-height:1.5;">${formatDescText(roleDesc)}</div></div>`;
             }
 
@@ -20582,161 +20580,313 @@
         function rank_renderSmartAnalysis(stats, role) {
             const container = document.getElementById('smart-analysis-content');
             if (!container) return;
+            const zh = g_lang !== 'en';
 
-            const weights = (g_currentWeights && g_currentWeights[role] && g_currentWeights[role][g_selectedBuildIdx || 0])
-                ? g_currentWeights[role][g_selectedBuildIdx || 0].weights
-                : (g_currentWeights && g_currentWeights[role] && g_currentWeights[role][0] ? g_currentWeights[role][0].weights : null);
+            // === Weights & player echoes ===
+            const buildIdx = g_selectedBuildIdx || 0;
+            const roleBuilds = g_currentWeights && g_currentWeights[role];
+            const activeBuild = roleBuilds ? (roleBuilds[buildIdx] || roleBuilds[0]) : null;
+            const weights = activeBuild ? activeBuild.weights : null;
+            const buildName = activeBuild ? activeBuild.name : (zh ? '通用' : 'General');
 
-            // --- Calculate current player stats ---
-            let playerTotalScore = 0, playerTotalMax = 0;
-            let playerSubStats = {}; // { statName: totalValue }
-            let hasPlayerData = g_echoesData && g_echoesData.length > 0;
+            const echoes = (g_echoesData && g_echoesData.length > 0) ? g_echoesData : [];
+            const hasPlayer = echoes.length > 0;
+            const weapon = (g_globalData && g_globalData.weapon) ? String(g_globalData.weapon).trim() : '';
+            const chainCount = (g_chains && g_chains.filter(Boolean).length) || 0;
 
-            if (hasPlayerData && weights) {
-                g_echoesData.forEach(echo => {
+            // === Overall player score ===
+            let totalScore = 0, totalMax = 0, totalCR = 0, totalCD = 0;
+            const echoResults = [];
+            if (hasPlayer && weights) {
+                echoes.forEach(echo => {
                     const res = calculateEchoScore(echo, weights);
-                    if (res) { playerTotalScore += res.score; playerTotalMax += res.maxTheoretical; }
-                    if (echo.subs) {
-                        echo.subs.forEach(s => {
-                            if (!s.valid) return;
-                            let name = s.name;
-                            if (['攻擊', '生命', '防禦'].includes(name) && String(s.val || '').includes('%')) name += '百分比';
-                            playerSubStats[name] = (playerSubStats[name] || 0) + (parseFloat(s.val) || 0);
-                        });
-                    }
+                    const cv = getCVInfo(echo);
+                    totalCR += parseFloat(cv.cr) || 0;
+                    totalCD += parseFloat(cv.cd) || 0;
+                    if (res) { totalScore += res.score; totalMax += res.maxTheoretical; }
+                    echoResults.push({ res, cv });
                 });
             }
-            const playerPct = playerTotalMax > 0 ? (playerTotalScore / playerTotalMax * 100) : 0;
+            const playerPct = totalMax > 0 ? (totalScore / totalMax * 100) : 0;
+            const buffedPct = Math.min(100, playerPct * 1.25);
+            const totalCV = totalCR * 2 + totalCD;
+            const grad = getGrading(buffedPct);
 
-            // --- Build tips array ---
-            let tips = [];
+            // === Per-echo analysis ===
+            const echoAnalysis = echoes.map((echo, idx) => {
+                const r = echoResults[idx] || {};
+                const res = r.res;
+                const pct = res ? res.totalPercentage : 0;
+                const validCount = res ? res.validCount : 0;
 
-            if (stats) {
-                // 1. Overall graduation score comparison
-                const gap = stats.avgEchoScore - playerPct;
-                if (hasPlayerData && playerTotalMax > 0) {
-                    if (gap > 10) {
-                        tips.push({ icon: '📈', color: '#e06c75', title: g_lang === 'en' ? 'Score Improvement Opportunity' : '整體評分提升空間', desc: (g_lang === 'en' ? `Your echo graduation score ${playerPct.toFixed(1)}% is ${gap.toFixed(1)}% below the Top 60 average (${stats.avgEchoScore.toFixed(1)}%). There's significant room to improve.` : `您的聲骸畢業度 ${playerPct.toFixed(1)}% 低於 Top 60 平均 ${stats.avgEchoScore.toFixed(1)}%，差距 ${gap.toFixed(1)}%，仍有顯著提升空間。`) });
-                    } else if (gap > 0) {
-                        tips.push({ icon: '✅', color: '#56b6c2', title: g_lang === 'en' ? 'Close to Top Level' : '接近頂尖水準', desc: (g_lang === 'en' ? `Your echo graduation score ${playerPct.toFixed(1)}% is only ${gap.toFixed(1)}% below the Top 60 average. Keep it up!` : `您的聲骸畢業度 ${playerPct.toFixed(1)}% 僅比 Top 60 平均低 ${gap.toFixed(1)}%，繼續加油！`) });
-                    } else {
-                        tips.push({ icon: '🏆', color: '#e5c07b', title: g_lang === 'en' ? 'Above Average!' : '超越頂尖平均！', desc: (g_lang === 'en' ? `Your echo score ${playerPct.toFixed(1)}% surpasses the Top 60 average — excellent performance!` : `您的聲骸畢業度 ${playerPct.toFixed(1)}% 已超越 Top 60 平均水準，表現卓越！`) });
-                    }
+                // Wasted subs: sub with weight = 0
+                const wastedSubs = [];
+                const missingStats = [];
+                if (echo.subs && weights) {
+                    echo.subs.forEach(s => {
+                        if (!s.valid) return;
+                        let name = s.name;
+                        if (['攻擊','生命','防禦'].includes(name) && String(s.val).includes('%')) name += '百分比';
+                        if ((weights[name] || 0) === 0) wastedSubs.push(s.name);
+                    });
                 }
 
-                // 2. Weapon recommendation
-                const topWeapons = Object.entries(stats.weapons).sort((a, b) => b[1] - a[1]);
-                if (topWeapons.length > 0) {
-                    const topWeapon = topWeapons[0];
-                    const topPct = (topWeapon[1] / stats.totalBuilds * 100).toFixed(0);
-                    const playerWeapon = g_globalData && g_globalData.weapon ? String(g_globalData.weapon).trim() : '';
-                    const isUsing = playerWeapon && playerWeapon.includes(topWeapon[0]);
-                    if (!isUsing && playerWeapon) {
-                        tips.push({ icon: '⚔️', color: '#61afef', title: g_lang === 'en' ? 'Weapon Recommendation' : '武器配置建議', desc: (g_lang === 'en' ? `${topPct}% of Top 60 players use "${topWeapon[0]}" — the most popular weapon. You are using "${playerWeapon}".` : `Top 60 中有 ${topPct}% 的玩家使用「${topWeapon[0]}」，是最主流武器選擇。您目前使用的是「${playerWeapon}」。`) });
-                    } else {
-                        tips.push({ icon: '⚔️', color: '#98c379', title: g_lang === 'en' ? 'Weapon: Optimal Choice' : '武器：最佳選擇', desc: (g_lang === 'en' ? `You are using "${topWeapon[0]}", the #1 weapon among Top 60 (${topPct}% usage rate). Great choice!` : `您使用的「${topWeapon[0]}」正是 Top 60 最熱門武器（使用率 ${topPct}%），配置最優！`) });
-                    }
-                }
-
-                // 3. Sonata set recommendation
-                const topSonatas = Object.entries(stats.sonataCombos).sort((a, b) => b[1] - a[1]);
-                if (topSonatas.length > 0) {
-                    const topSonata = topSonatas[0];
-                    const sonataPct = (topSonata[1] / stats.totalBuilds * 100).toFixed(0);
-                    tips.push({ icon: '🎶', color: '#c678dd', title: g_lang === 'en' ? 'Sonata Trend' : '鳴奏套裝趨勢', desc: (g_lang === 'en' ? `Top 60 most popular combo: "${topSonata[0]}" at ${sonataPct}% usage rate. Verify your sonata matches this trend.` : `Top 60 最熱門套裝組合為「${topSonata[0]}」，使用率 ${sonataPct}%。請確認您的套裝配置是否符合主流。`) });
-                }
-
-                // 4. Crit stats benchmark
-                const crS = stats.subStats['暴擊'];
-                const cdS = stats.subStats['暴擊傷害'];
-                if (crS && cdS && weights && ((weights['暴擊'] || 0) > 0 || (weights['暴擊傷害'] || 0) > 0)) {
-                    const avgCrPerPiece = (crS.totalVal / crS.count).toFixed(1);
-                    const avgCdPerPiece = (cdS.totalVal / cdS.count).toFixed(1);
-                    const playerCrTotal = safeFixed(playerSubStats['暴擊'] || 0, 1);
-                    const playerCdTotal = safeFixed(playerSubStats['暴擊傷害'] || 0, 1);
-                    tips.push({ icon: '🎯', color: '#e5c07b', title: g_lang === 'en' ? 'Crit Sub-stat Benchmark' : '雙爆詞條目標參考', desc: (g_lang === 'en' ? `Top 60 avg per piece — Crit Rate: ${avgCrPerPiece}%, Crit DMG: ${avgCdPerPiece}%. Your sub-stat totals: CR ${playerCrTotal}%, CD ${playerCdTotal}%.` : `頂尖玩家平均單件：暴擊率 ${avgCrPerPiece}%、暴擊傷害 ${avgCdPerPiece}%。您的副詞條總和：暴擊 ${playerCrTotal}%、暴傷 ${playerCdTotal}%。`) });
-                }
-
-                // 5. ER threshold
-                if (stats.targets && stats.targets.er > 100 && weights && (weights['共鳴效率'] || 0) > 0) {
-                    const erTarget = stats.targets.er.toFixed(1);
-                    const playerER = safeFixed(playerSubStats['共鳴效率'] || 0, 1);
-                    tips.push({ icon: '⚡', color: '#e5c07b', title: g_lang === 'en' ? 'Energy Regen Threshold' : '共鳴效率閾值建議', desc: (g_lang === 'en' ? `Top 10% players reach ${erTarget}% ER in sub-stats. Your current sub-stat ER total: ${playerER}%. Target this for smooth rotation.` : `Top 10% 玩家共鳴效率副詞條達 ${erTarget}%。您目前副詞條共鳴效率總和：${playerER}%。達標可確保循環順暢。`) });
-                }
-
-                // 6. Main stat Cost4 check
-                if (stats.mainStats && stats.mainStats.c4 && hasPlayerData) {
-                    const topMain4Entries = Object.entries(stats.mainStats.c4).sort((a, b) => b[1] - a[1]);
-                    if (topMain4Entries.length > 0) {
-                        const topMain4 = topMain4Entries[0][0];
-                        const topMain4Pct = (topMain4Entries[0][1] / stats.totalBuilds * 100).toFixed(0);
-                        const echo4 = g_echoesData.find(e => parseInt(String(e.cost || '').split('-')[0]) === 4);
-                        if (echo4 && echo4.main1 && echo4.main1 !== topMain4) {
-                            tips.push({ icon: '💎', color: '#e06c75', title: g_lang === 'en' ? 'Cost 4 Main Stat Tip' : 'Cost 4 主詞條最佳化', desc: (g_lang === 'en' ? `${topMain4Pct}% of Top 60 use "${topMain4}" as Cost 4 main stat. You have "${echo4.main1}" — consider optimizing.` : `Top 60 中 ${topMain4Pct}% 的玩家 Cost 4 選用「${topMain4}」，而您目前是「${echo4.main1}」，可考慮調整主詞條。`) });
+                // Check main stat vs top60
+                const cost = parseInt(String(echo.cost || '').split('-')[0]) || 0;
+                let mainOk = true;
+                let recommendMain = '';
+                if (stats && stats.mainStats) {
+                    const costKey = `c${cost}`;
+                    if (stats.mainStats[costKey]) {
+                        const topEntries = Object.entries(stats.mainStats[costKey]).sort((a,b)=>b[1]-a[1]);
+                        if (topEntries.length > 0) {
+                            recommendMain = topEntries[0][0];
+                            const echoMain = echo.main1 || '';
+                            mainOk = echoMain.includes(recommendMain) || recommendMain.includes(echoMain) || recommendMain === echoMain;
                         }
                     }
                 }
 
-                // 7. Perfect piece ratio
-                if (stats.totalEchoes > 0) {
-                    const perfPct = (stats.perfectEchoCount / stats.totalEchoes * 100).toFixed(1);
-                    tips.push({ icon: '✨', color: '#56b6c2', title: g_lang === 'en' ? 'Perfect Piece Benchmark' : '完美詞條件數參考', desc: (g_lang === 'en' ? `Top 60 players have ${perfPct}% of echoes with 4+ weighted sub-stats. Aim to maximize your high-quality echo count.` : `Top 60 玩家有 ${perfPct}% 的聲骸達到 4+ 有效加權詞條。建議以此為目標，持續提升高品質聲骸數量。`) });
-                }
-            } else {
-                tips.push({ icon: '📡', color: '#e5c07b', title: g_lang === 'en' ? 'Ranking Data Needed' : '需要排行榜資料', desc: (g_lang === 'en' ? 'Please go to the Ranking tab, select a character and load data. Smart Analysis will then provide personalized tips based on Top 60 players.' : '請先切換至排行榜頁面，選取角色並抓取資料。智慧分析將根據 Top 60 玩家數據，為您提供個人化建議。') });
+                // Priority score: lower pct + more wasted subs = higher priority
+                const priorityScore = (100 - pct) + wastedSubs.length * 8 + (mainOk ? 0 : 15);
+
+                return { idx, echo, cost, pct, validCount, wastedSubs, mainOk, recommendMain, priorityScore, res };
+            });
+
+            // Sort by priority (higher = replace first)
+            const priorityOrder = [...echoAnalysis].sort((a, b) => b.priorityScore - a.priorityScore);
+
+            // === Sub-stat profile (player totals) ===
+            const playerSubTotals = {};
+            echoes.forEach(echo => {
+                if (!echo.subs) return;
+                echo.subs.forEach(s => {
+                    if (!s.valid) return;
+                    let name = s.name;
+                    if (['攻擊','生命','防禦'].includes(name) && String(s.val).includes('%')) name += '百分比';
+                    playerSubTotals[name] = (playerSubTotals[name] || 0) + (parseFloat(s.val) || 0);
+                });
+            });
+
+            // Key stats to show (based on weights) – sorted by weight desc
+            const keyStats = weights ? Object.entries(weights)
+                .filter(([k, v]) => !k.startsWith('_') && v > 0)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6)
+                .map(([k]) => k) : [];
+
+            // === Top60 benchmarks ===
+            const hasBench = !!(stats && stats.totalBuilds >= 3);
+            const benchP90 = {};
+            const benchAvg = {};
+            if (hasBench) {
+                keyStats.forEach(k => {
+                    const list = (stats.statLists && stats.statLists[
+                        k === '暴擊' ? 'critRate' : k === '暴擊傷害' ? 'critDmg' : k === '共鳴效率' ? 'er' : k.includes('攻擊百分比') ? 'atkPct' : null
+                    ]) || [];
+                    if (list.length > 0) {
+                        const sorted = [...list].sort((a,b)=>a-b);
+                        const p90idx = Math.max(0, Math.floor(sorted.length * 0.9) - 1);
+                        benchP90[k] = sorted[p90idx];
+                        benchAvg[k] = sorted.reduce((a,b)=>a+b,0) / sorted.length;
+                    }
+                });
             }
 
-            if (!hasPlayerData) {
-                tips.push({ icon: '📷', color: '#888', title: g_lang === 'en' ? 'No Personal Data' : '尚無個人分析資料', desc: (g_lang === 'en' ? 'Complete an echo OCR analysis for your character to get personalized comparisons.' : '請先對您的角色進行聲骸 OCR 分析，以獲得個人化對比數據。') });
-            }
+            // === Rank data for equipment ===
+            const topWeapon = hasBench ? Object.entries(stats.weapons).sort((a,b)=>b[1]-a[1])[0] : null;
+            const topSonata = hasBench ? Object.entries(stats.sonataCombos).sort((a,b)=>b[1]-a[1])[0] : null;
+
+            // === Build HTML ===
+            const benchLabel = hasBench
+                ? `${zh ? '基於 Top' : 'Based on Top'} ${Math.min(60, stats.totalBuilds)} ${zh ? '玩家大數據' : 'players data'}`
+                : `${zh ? '⚠ 未載入排行榜資料（個人深度分析模式）' : '⚠ No rank data loaded (personal deep analysis)'}`;
+
+            const gradColors = { 'grad-heirloom': '#e5c07b', 'grad-grand': '#98c379', 'grad-medium': '#61afef', 'grad-small': '#888', 'grad-none': '#555' };
+            const gradColor = gradColors[grad.class] || '#888';
+            const priorityBadge = (pa) => {
+                const p = pa.priorityScore;
+                if (p >= 70) return `<span style="background:rgba(224,108,117,0.15);color:#e06c75;border:1px solid rgba(224,108,117,0.3);padding:1px 7px;border-radius:10px;font-size:0.7rem;font-weight:700;">${zh ? '優先替換' : 'REPLACE'}</span>`;
+                if (p >= 40) return `<span style="background:rgba(229,192,123,0.12);color:#e5c07b;border:1px solid rgba(229,192,123,0.3);padding:1px 7px;border-radius:10px;font-size:0.7rem;font-weight:700;">${zh ? '可優化' : 'IMPROVE'}</span>`;
+                return `<span style="background:rgba(152,195,121,0.12);color:#98c379;border:1px solid rgba(152,195,121,0.3);padding:1px 7px;border-radius:10px;font-size:0.7rem;font-weight:700;">${zh ? '良好' : 'GOOD'}</span>`;
+            };
 
             // --- Render ---
-            const totalBuildsLabel = stats ? `${g_lang === 'en' ? 'Based on Top' : '基於 Top'} ${Math.min(60, stats.totalBuilds)} ${g_lang === 'en' ? 'players data' : '玩家數據'}` : (g_lang === 'en' ? '⚠ No rank data loaded' : '⚠ 未載入排行榜資料');
-
             let html = `
-                <div style="margin-bottom:22px;">
-                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:${(hasPlayerData && playerTotalMax > 0 && stats) ? '14px' : '0'};">
-                        <span style="background:rgba(229,192,123,0.1); color:var(--accent); font-size:0.85rem; padding:4px 12px; border-radius:20px; border:1px solid rgba(229,192,123,0.2);">${role}</span>
-                        <span style="font-size:0.72rem; color:#555;">${totalBuildsLabel}</span>
+            <div style="margin-bottom:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <span style="background:rgba(229,192,123,0.1);color:var(--accent);font-size:0.85rem;padding:4px 12px;border-radius:20px;border:1px solid rgba(229,192,123,0.2);">${escapeHtml(role)}</span>
+                <span style="background:rgba(255,255,255,0.04);color:#666;font-size:0.75rem;padding:3px 10px;border-radius:20px;">${escapeHtml(buildName)}</span>
+                <span style="font-size:0.7rem;color:#444;">${benchLabel}</span>
+            </div>`;
+
+            // Section A: Score Overview
+            if (hasPlayer && totalMax > 0) {
+                html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px;">
+                    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${gradColor};border-radius:12px;padding:14px;">
+                        <div style="font-size:0.65rem;color:#555;letter-spacing:1px;margin-bottom:6px;">${zh?'整體畢業度':'GRADUATION'}</div>
+                        <div style="font-size:2rem;font-weight:900;color:${gradColor};">${buffedPct.toFixed(1)}<span style="font-size:0.9rem;color:#555;">%</span></div>
+                        <div style="font-size:0.78rem;color:#666;margin-top:2px;">${grad.label}${hasBench ? ' · Top60 avg: '+stats.avgEchoScore.toFixed(1)+'%' : ''}</div>
                     </div>
-                    ${(hasPlayerData && playerTotalMax > 0 && stats) ? `
-                    <div style="display:flex; align-items:center; gap:20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px; flex-wrap:wrap;">
-                        <div>
-                            <div style="font-size:0.68rem; color:#666; margin-bottom:4px; letter-spacing:1px;">${g_lang === 'en' ? 'YOUR SCORE' : '您的畢業度'}</div>
-                            <div style="font-size:2rem; font-weight:900; color:#fff;">${playerPct.toFixed(1)}<span style="font-size:0.95rem; color:#555;">%</span></div>
-                        </div>
-                        <div style="width:1px; height:40px; background:#333;"></div>
-                        <div>
-                            <div style="font-size:0.68rem; color:#666; margin-bottom:4px; letter-spacing:1px;">${g_lang === 'en' ? 'TOP 60 AVG' : 'Top 60 平均'}</div>
-                            <div style="font-size:2rem; font-weight:900; color:var(--accent);">${stats.avgEchoScore.toFixed(1)}<span style="font-size:0.95rem; color:#555;">%</span></div>
-                        </div>
-                        <div style="flex:1; min-width:120px;">
-                            <div style="height:6px; background:#222; border-radius:3px; overflow:hidden; margin-bottom:6px;">
-                                <div style="height:100%; width:${Math.min(100, (playerPct / Math.max(playerPct, stats.avgEchoScore)) * 100).toFixed(1)}%; background:linear-gradient(to right, #56b6c2, var(--accent)); border-radius:3px; transition:width 0.6s ease;"></div>
-                            </div>
-                            <div style="font-size:0.75rem; color:${playerPct >= stats.avgEchoScore ? '#98c379' : '#e06c75'};">
-                                ${playerPct >= stats.avgEchoScore ? '▲ ' + (g_lang === 'en' ? 'Above average' : '超越平均') : '▼ ' + (g_lang === 'en' ? `Gap: ${(stats.avgEchoScore - playerPct).toFixed(1)}%` : `差距: ${(stats.avgEchoScore - playerPct).toFixed(1)}%`)}
-                            </div>
-                        </div>
+                    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid #ffca28;border-radius:12px;padding:14px;">
+                        <div style="font-size:0.65rem;color:#555;letter-spacing:1px;margin-bottom:6px;">${zh?'雙爆 CV 值':'CRIT VALUE'}</div>
+                        <div style="font-size:2rem;font-weight:900;color:#ffca28;">${safeFixed(totalCV,1)}</div>
+                        <div style="font-size:0.78rem;color:#666;margin-top:2px;">CR ${safeFixed(totalCR,1)}% · CD ${safeFixed(totalCD,1)}% / ${zh?'滿分 210':'Max 210'}</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid #56b6c2;border-radius:12px;padding:14px;">
+                        <div style="font-size:0.65rem;color:#555;letter-spacing:1px;margin-bottom:6px;">${zh?'有效聲骸':'VALID ECHOES'}</div>
+                        <div style="font-size:2rem;font-weight:900;color:#56b6c2;">${echoAnalysis.filter(e=>e.validCount>=4).length}<span style="font-size:0.9rem;color:#555;">/${echoes.length}</span></div>
+                        <div style="font-size:0.78rem;color:#666;margin-top:2px;">${zh?'4+ 有效詞條件數':'pieces with 4+ weighted sub-stats'}</div>
+                    </div>
+                    ${hasBench && stats.targets ? `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid #c678dd;border-radius:12px;padding:14px;">
+                        <div style="font-size:0.65rem;color:#555;letter-spacing:1px;margin-bottom:6px;">${zh?'完美件數佔比':'PERFECT PIECE %'}</div>
+                        <div style="font-size:2rem;font-weight:900;color:#c678dd;">${(stats.perfectEchoCount/stats.totalEchoes*100).toFixed(0)}<span style="font-size:0.9rem;color:#555;">%</span></div>
+                        <div style="font-size:0.78rem;color:#666;margin-top:2px;">${zh?'Top 60 整體 4+ 詞條件數率':'Top 60 ratio of 4+ weighted pieces'}</div>
                     </div>` : ''}
-                </div>
-                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:14px;">
-                    ${tips.map(t => `
-                    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-left:3px solid ${t.color}; border-radius:12px; padding:16px;">
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                            <span style="font-size:1.2rem;">${t.icon}</span>
-                            <span style="font-weight:700; color:#eee; font-size:0.88rem;">${t.title}</span>
-                        </div>
-                        <div style="font-size:0.8rem; color:#888; line-height:1.65;">${t.desc}</div>
-                    </div>`).join('')}
-                </div>
-                <div style="margin-top:20px; text-align:center; font-size:0.68rem; color:#333; letter-spacing:1.5px; font-family:'JetBrains Mono';">
-                    SMART ANALYSIS • WUTHERING WAVES • ${new Date().toLocaleDateString()}
-                </div>
-            `;
+                </div>`;
+            } else {
+                html += `<div style="background:rgba(229,192,123,0.06);border:1px solid rgba(229,192,123,0.15);border-radius:12px;padding:16px;margin-bottom:24px;color:#888;font-size:0.85rem;">${zh?'⚠ 請先在「分析結果」頁面完成聲骸 OCR 分析，以解鎖逐件深度分析。':'⚠ Complete echo OCR analysis first to unlock per-echo deep analysis.'}</div>`;
+            }
+
+            // Section B: Per-Echo Deep Analysis
+            if (hasPlayer && weights) {
+                html += `<div style="margin-bottom:24px;">
+                    <div style="font-size:0.8rem;font-weight:700;color:#ccc;margin-bottom:10px;display:flex;align-items:center;gap:6px;">🔬 ${zh?'聲骸逐件深度分析':'Per-Echo Deep Analysis'}</div>
+                    <div style="overflow-x:auto;">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                        <thead>
+                            <tr style="color:#555;font-size:0.68rem;letter-spacing:0.5px;border-bottom:1px solid #222;">
+                                <th style="padding:6px 8px;text-align:left;">#</th>
+                                <th style="padding:6px 8px;text-align:left;">${zh?'主詞條':'Main Stat'}</th>
+                                <th style="padding:6px 8px;text-align:center;">${zh?'得分':'Score'}</th>
+                                <th style="padding:6px 8px;text-align:center;">${zh?'有效詞條':'Valid Sub'}</th>
+                                <th style="padding:6px 8px;text-align:left;">${zh?'零權重詞條':'Wasted Subs'}</th>
+                                <th style="padding:6px 8px;text-align:center;">${zh?'主詞條':'Main OK'}</th>
+                                <th style="padding:6px 8px;text-align:center;">${zh?'評估':'Status'}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${echoAnalysis.map(ea => {
+                                const scoreColor = ea.pct >= 80 ? '#98c379' : ea.pct >= 55 ? '#e5c07b' : '#e06c75';
+                                const mainCell = ea.mainOk
+                                    ? `<span style="color:#98c379;">✅</span>`
+                                    : `<span style="color:#e06c75;" title="${zh?'建議換成：':'Recommend: '}${ea.recommendMain}">❌ <span style="color:#888;font-size:0.7rem;">${zh?'→':'→'}${ea.recommendMain||'?'}</span></span>`;
+                                const wastedCell = ea.wastedSubs.length === 0
+                                    ? `<span style="color:#555;">${zh?'無':'none'}</span>`
+                                    : `<span style="color:#e06c75;">${ea.wastedSubs.map(s=>escapeHtml(s)).join(', ')}</span>`;
+                                return `<tr style="border-bottom:1px solid #1a1a1a;">
+                                    <td style="padding:7px 8px;color:#888;">聲骸 ${ea.idx+1}<div style="font-size:0.65rem;color:#444;">Cost ${ea.cost}</div></td>
+                                    <td style="padding:7px 8px;color:#ddd;">${escapeHtml(ea.echo.main1||'-')}<div style="font-size:0.68rem;color:#888;">${escapeHtml(ea.echo.main2||'')}</div></td>
+                                    <td style="padding:7px 8px;text-align:center;font-family:'JetBrains Mono';font-weight:700;color:${scoreColor};">${ea.res ? ea.pct.toFixed(1)+'%' : '-'}</td>
+                                    <td style="padding:7px 8px;text-align:center;">
+                                        <span style="color:${ea.validCount>=4?'#98c379':ea.validCount>=3?'#e5c07b':'#e06c75'};font-weight:700;">${ea.validCount}</span><span style="color:#444;">/5</span>
+                                    </td>
+                                    <td style="padding:7px 8px;">${wastedCell}</td>
+                                    <td style="padding:7px 8px;text-align:center;">${mainCell}</td>
+                                    <td style="padding:7px 8px;text-align:center;">${priorityBadge(ea)}</td>
+                                </tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>`;
+            }
+
+            // Section C: Sub-stat Gap Analysis
+            if (hasPlayer && weights && keyStats.length > 0) {
+                html += `<div style="margin-bottom:24px;">
+                    <div style="font-size:0.8rem;font-weight:700;color:#ccc;margin-bottom:10px;">📊 ${zh?'關鍵詞條數值剖析':'Key Sub-stat Profile'}</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;">
+                    ${keyStats.map(k => {
+                        const playerVal = playerSubTotals[k] || 0;
+                        const maxStatVal = SUB_STAT_MAX_VALUES[k] || 1;
+                        const theoreticalMax = maxStatVal * 5;
+                        const fillPct = Math.min(100, playerVal / theoreticalMax * 100);
+                        const p90 = benchP90[k];
+                        const avg = benchAvg[k];
+                        const p90Pct = p90 ? Math.min(100, p90 / theoreticalMax * 100) : null;
+                        const shortfall = p90 ? (p90 - playerVal) : null;
+                        const statColor = playerVal === 0 ? '#555' : (p90 && playerVal >= p90 ? '#98c379' : '#e5c07b');
+                        return `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px;">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                                <span style="color:#ccc;font-size:0.82rem;">${escapeHtml(k)}</span>
+                                <span style="font-family:'JetBrains Mono';font-weight:700;color:${statColor};font-size:0.9rem;">${playerVal.toFixed(1)}${k.includes('百分比')||k.includes('率')||k.includes('傷害加成')||k==='暴擊'||k==='暴擊傷害'||k==='共鳴效率'?'%':''}</span>
+                            </div>
+                            <div style="position:relative;height:5px;background:#1a1a1a;border-radius:3px;overflow:visible;margin-bottom:5px;">
+                                <div style="height:100%;width:${fillPct.toFixed(1)}%;background:${statColor};border-radius:3px;transition:width 0.5s;"></div>
+                                ${p90Pct ? `<div style="position:absolute;top:-4px;height:13px;width:2px;background:#e5c07b55;border-radius:1px;left:${Math.min(99,p90Pct).toFixed(1)}%;" title="Top 10% benchmark"></div>` : ''}
+                            </div>
+                            <div style="font-size:0.68rem;color:#444;">
+                                ${p90 ? `P90: ${p90.toFixed(1)}${k.includes('百分比')||k.includes('率')||k.includes('傷害加成')||k==='暴擊'||k==='暴擊傷害'||k==='共鳴效率'?'%':''} · ${shortfall>0?`<span style="color:#e06c75;">${zh?'仍需 ':'need +'}${shortfall.toFixed(1)}</span>`:`<span style="color:#98c379;">${zh?'已達標':'✓ reached'}</span>`}` : (zh?'暫無基準數據':'No benchmark')}
+                            </div>
+                        </div>`;
+                    }).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // Section D: Upgrade Priority Queue
+            if (hasPlayer && weights) {
+                html += `<div style="margin-bottom:24px;">
+                    <div style="font-size:0.8rem;font-weight:700;color:#ccc;margin-bottom:10px;">🔧 ${zh?'換裝優先順序建議':'Upgrade Priority Queue'}</div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                    ${priorityOrder.map((ea, rank) => {
+                        const reasons = [];
+                        if (!ea.mainOk && ea.recommendMain) reasons.push(zh ? `主詞條建議換為「${ea.recommendMain}」` : `Main stat: switch to "${ea.recommendMain}"`);
+                        if (ea.wastedSubs.length > 0) reasons.push(zh ? `${ea.wastedSubs.length} 個零權重副詞條 (${ea.wastedSubs.slice(0,3).join('、')})` : `${ea.wastedSubs.length} wasted sub(s): ${ea.wastedSubs.slice(0,3).join(', ')}`);
+                        if (ea.validCount < 3) reasons.push(zh ? `有效詞條僅 ${ea.validCount}/5，遠低於目標` : `Only ${ea.validCount}/5 valid subs, well below target`);
+                        else if (ea.validCount < 4) reasons.push(zh ? `有效詞條 ${ea.validCount}/5，仍有提升空間` : `${ea.validCount}/5 valid subs — room to improve`);
+                        if (ea.pct < 50 && reasons.length === 0) reasons.push(zh ? `聲骸評分偏低 (${ea.pct.toFixed(1)}%)` : `Low echo score (${ea.pct.toFixed(1)}%)`);
+                        if (reasons.length === 0) reasons.push(zh ? '配置良好，保留即可' : 'Build looks good — keep it');
+
+                        const borderColor = rank === 0 ? '#e06c75' : rank === 1 ? '#e5c07b' : '#333';
+                        const rankLabel = rank === 0 ? `🥇 ${zh?'最優先':'#1 Priority'}` : rank === 1 ? `🥈 ${zh?'次優先':'#2 Priority'}` : `#${rank+1}`;
+                        return `<div style="background:rgba(255,255,255,0.02);border:1px solid ${borderColor}22;border-left:3px solid ${borderColor};border-radius:10px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+                            <div style="min-width:80px;text-align:center;">
+                                <div style="font-size:0.75rem;font-weight:700;color:#888;">${rankLabel}</div>
+                                <div style="font-size:0.68rem;color:#444;margin-top:2px;">${zh?'聲骸':'Echo'} ${ea.idx+1} (C${ea.cost})</div>
+                            </div>
+                            <div style="flex:1;">
+                                <div style="font-size:0.8rem;color:#ccc;margin-bottom:4px;">${escapeHtml(ea.echo.main1||'-')} <span style="color:#555;">${escapeHtml(ea.echo.main2||'')}</span> <span style="font-family:'JetBrains Mono';font-size:0.72rem;color:${ea.pct>=70?'#98c379':ea.pct>=50?'#e5c07b':'#e06c75'};">${ea.res?ea.pct.toFixed(1)+'%':'-'}</span></div>
+                                <ul style="margin:0;padding-left:14px;color:#666;font-size:0.75rem;line-height:1.7;">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // Section E: Equipment Comparison (rank data)
+            if (hasBench) {
+                const weaponPct = topWeapon ? (topWeapon[1]/stats.totalBuilds*100).toFixed(0) : 0;
+                const sonataPct = topSonata ? (topSonata[1]/stats.totalBuilds*100).toFixed(0) : 0;
+                const weaponMatch = topWeapon && weapon && (weapon.includes(topWeapon[0]) || topWeapon[0].includes(weapon));
+                html += `<div style="margin-bottom:24px;">
+                    <div style="font-size:0.8rem;font-weight:700;color:#ccc;margin-bottom:10px;">⚔️ ${zh?'裝備配置對比 (Top 60)':'Equipment Benchmark (Top 60)'}</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+                        ${topWeapon ? `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:14px;">
+                            <div style="font-size:0.68rem;color:#555;margin-bottom:6px;">${zh?'最熱門武器':'TOP WEAPON'} · ${weaponPct}% ${zh?'使用率':'usage'}</div>
+                            <div style="color:#eee;font-weight:700;margin-bottom:4px;">${escapeHtml(topWeapon[0])}</div>
+                            <div style="font-size:0.75rem;color:${weaponMatch?'#98c379':'#e5c07b'};">
+                                ${weapon ? (weaponMatch ? `✅ ${zh?'您正在使用':'You are using this'}` : `⚠ ${zh?'您：':'You: '}${escapeHtml(weapon)}`) : `<span style="color:#555;">${zh?'無武器資訊':'No weapon info'}</span>`}
+                            </div>
+                        </div>` : ''}
+                        ${topSonata ? `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:14px;">
+                            <div style="font-size:0.68rem;color:#555;margin-bottom:6px;">${zh?'最熱門鳴奏':'TOP SONATA'} · ${sonataPct}% ${zh?'使用率':'usage'}</div>
+                            <div style="color:#eee;font-weight:700;margin-bottom:4px;">${escapeHtml(topSonata[0])}</div>
+                            <div style="font-size:0.75rem;color:#888;">${zh?'請確認您的套裝組合是否相符':'Verify your sonata combination matches'}</div>
+                        </div>` : ''}
+                        ${stats.targets && stats.targets.er > 100 ? `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:14px;">
+                            <div style="font-size:0.68rem;color:#555;margin-bottom:6px;">${zh?'建議共鳴效率閾值':'ER THRESHOLD (P90)'}</div>
+                            <div style="font-size:1.5rem;font-weight:900;color:#e5c07b;">${stats.targets.er.toFixed(1)}<span style="font-size:0.8rem;color:#555;">%</span></div>
+                            <div style="font-size:0.75rem;color:#888;">${zh?'Top 10% 玩家副詞條 ER 總量':'Top 10% players sub-stat ER total'}</div>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+            }
+
+            html += `<div style="text-align:center;font-size:0.65rem;color:#2a2a2a;letter-spacing:2px;font-family:'JetBrains Mono';">SMART ANALYSIS • WUTHERING WAVES • ${new Date().toLocaleDateString()}</div>`;
             container.innerHTML = html;
         }
-
         // =====================================================================
         // 功能 2：聲骸庫角色篩選勾選框
         let g_echoLibQuickMode = 'custom_role';
