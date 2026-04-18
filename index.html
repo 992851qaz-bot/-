@@ -12826,20 +12826,19 @@
             }
 
             // 刷新目前 active 的其他 tab
-            const _activeTab = document.querySelector('.tab-content.active');
-            if (_activeTab) {
-                const _activeTabId = _activeTab.id;
-                if (_activeTabId === 'tab-charts') {
-                    setTimeout(renderCharts, 200);
-                } else if (_activeTabId === 'tab-rank') {
-                    if (typeof updateRankTab === 'function') updateRankTab();
-                } else if (_activeTabId === 'tab-echo-library') {
-                    if (typeof renderEchoLibrary === 'function') renderEchoLibrary();
-                } else if (_activeTabId === 'tab-dps') {
-                    if (typeof dps_renderPanel === 'function' && typeof g_dpsBase !== 'undefined' && g_dpsBase) {
-                        dps_renderPanel(g_dpsBase);
+            // Note: tab-charts and tab-echo-library are already refreshed by renderTable → onTableRendered
+            try {
+                const _activeTab = document.querySelector('.tab-content.active');
+                if (_activeTab) {
+                    const _activeTabId = _activeTab.id;
+                    if (_activeTabId === 'tab-rank') {
+                        if (typeof updateRankTab === 'function') updateRankTab();
+                    } else if (_activeTabId === 'tab-dps') {
+                        if (typeof dps_syncFromAnalysis === 'function') dps_syncFromAnalysis();
                     }
                 }
+            } catch (e) {
+                console.warn('Tab refresh error:', e);
             }
 
             // 清除之前的圖片顯示狀態
