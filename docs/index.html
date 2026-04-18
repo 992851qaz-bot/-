@@ -13124,9 +13124,9 @@
                 ocrHtml += `</table>`;
                 html += `<tr><td colspan="6" class="role-info-cell" style="background:#151518;border:1px solid var(--accent-dim);border-radius:8px;"><div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;"><div style="flex:1;min-width:280px;background:#1a1a1e;padding:15px;border-radius:8px;">${infoHtml}</div><div style="flex:1.5;min-width:320px;"><div style="font-size:0.8rem;color:var(--accent);margin-bottom:10px;font-weight:bold;display:flex;align-items:center;gap:5px;"><span>🔍</span> OCR 轉譯對照資訊</div>${ocrHtml}<div style="font-size:0.75rem;color:#555;margin-top:10px;font-style:italic;">* 主詞條/副詞條 OCR 原文請見下方相關項目的 Raw 區塊</div></div></div></td></tr>`;
             } else {
-                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:54px;"><div style="position:absolute;top:10px;right:15px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.5);backdrop-filter:blur(10px);color:#98c379;font-weight:700;width:auto;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button><button class="rank-btn" style="margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button></div>${g_lang==='en'
+                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:54px;"><div style="position:absolute;top:10px;right:15px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.5);backdrop-filter:blur(10px);color:#98c379;font-weight:700;width:auto;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button>${g_lang !== 'en' ? `<button id="zh-desc-toggle-btn" class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:rgba(97,175,254,0.1);border:1px solid rgba(97,175,254,0.35);backdrop-filter:blur(10px);color:#61afef;font-weight:700;width:auto;" onclick="toggleZhDescGuide()">📊 配置導覽</button>` : ''}<button class="rank-btn" style="margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button></div>${g_lang==='en'
                     ? `<div id="desc-guide-content">${rank_generateEnGuideHtml(global.role)}</div>`
-                    : formatDescText(roleDesc)}</div></div></td></tr>`;
+                    : `<div id="zh-desc-text">${formatDescText(roleDesc)}</div><div id="zh-guide-content" style="display:none">${rank_generateZhGuideHtml(global.role)}</div>`}</div></div></td></tr>`;
             }
             html += `<tr class="custom-header-row"><td>項目</td>${echoes.map((e, idx) => `<td>聲骸 ${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
             html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
@@ -13173,8 +13173,12 @@
                 html += `<div style="margin-top:8px;"><button class="rank-btn" style="width:100%;font-size:0.82rem;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.45);color:#98c379;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button></div>`;
                 if (g_lang === 'en') {
                 html += `<div style="margin-top:10px;padding:10px;background:#222;border-radius:6px;font-size:0.85rem;line-height:1.5;"><div id="desc-guide-content-mobile">${rank_generateEnGuideHtml(global.role)}</div></div></div>`;
-            } else if (roleDesc) {
-                html += `<div style="margin-top:10px;padding:10px;background:#222;border-radius:6px;color:#aaa;font-size:0.85rem;line-height:1.5;">${formatDescText(roleDesc)}</div></div>`;
+            } else {
+                html += `<div style="margin-top:8px;display:flex;gap:6px;"><button id="zh-desc-toggle-btn-mobile" class="rank-btn" style="flex:1;font-size:0.8rem;background:rgba(97,175,254,0.1);border:1px solid rgba(97,175,254,0.35);color:#61afef;" onclick="toggleZhDescGuideMobile()">📊 配置導覽</button></div>`;
+                html += `<div style="margin-top:8px;padding:10px;background:#222;border-radius:6px;font-size:0.85rem;line-height:1.5;">`;
+                html += `<div id="zh-desc-text-mobile" style="color:#aaa;">${formatDescText(roleDesc)}</div>`;
+                html += `<div id="zh-guide-content-mobile" style="display:none">${rank_generateZhGuideHtml(global.role)}</div>`;
+                html += `</div></div>`;
             }
             }
 
@@ -20810,6 +20814,111 @@
             });
         }
 
+        function rank_generateZhGuideHtml(role) {
+            const MIN_BUILDS = 5;
+            const canGenerate = role && rank_list && rank_list.length >= MIN_BUILDS
+                && rank_currSelection === role;
+
+            if (!canGenerate) {
+                const isLoading = !rank_data || rank_data.length === 0;
+                return `<div style="font-size:0.8rem;color:#555;padding:8px 0;">
+                    <div style="margin-bottom:8px;">${isLoading
+                        ? '📊 載入排行榜數據後即可顯示配置導覽。'
+                        : `📊 <b style="color:#aaa;">${escapeHtml(role||'此角色')}</b> 的排行榜數據不足。`}
+                    </div>
+                    <button onclick="rank_loadZhGuide('${escapeHtml(role||'')}', this)"
+                        style="background:rgba(97,175,254,0.12);border:1px solid rgba(97,175,254,0.35);color:#61afef;padding:4px 12px;border-radius:16px;cursor:pointer;font-size:0.75rem;font-weight:600;">
+                        🔄 載入導覽
+                    </button>
+                </div>`;
+            }
+
+            const stats = rank_calculateStrategyStats(rank_list.slice(0, 60));
+            const topWeapons = Object.entries(stats.weapons).sort((a,b)=>b[1]-a[1]).slice(0,3)
+                .map(([w,c])=>`<span style="color:#eee;">${escapeHtml(w)}</span> <span style="color:#555;font-size:0.7rem;">(${(c/stats.totalBuilds*100).toFixed(0)}%)</span>`)
+                .join('<span style="color:#333;margin:0 4px;">·</span>');
+            const c4Top = Object.entries(stats.mainStats.c4||{}).sort((a,b)=>b[1]-a[1])[0];
+            const c4Alt = Object.entries(stats.mainStats.c4||{}).sort((a,b)=>b[1]-a[1])[1];
+            const c3Top = Object.entries(stats.mainStats.c3||{}).sort((a,b)=>b[1]-a[1])[0];
+            const c3Alt = Object.entries(stats.mainStats.c3||{}).sort((a,b)=>b[1]-a[1])[1];
+            const c1Top = Object.entries(stats.mainStats.c1||{}).sort((a,b)=>b[1]-a[1])[0];
+            const topSubs = Object.entries(stats.subStats).sort((a,b)=>b[1].count-a[1].count).slice(0,5)
+                .map(([n])=>escapeHtml(statLabel(n))).join(' > ');
+            const topSonata = Object.entries(stats.sonataCombos||{}).sort((a,b)=>b[1]-a[1])[0];
+            const mainPct = (stat, total) => stat ? ` <span style="color:#555;font-size:0.7rem;">(${(stat[1]/total*100).toFixed(0)}%)</span>` : '';
+
+            const row = (icon, label, val) => val
+                ? `<div style="display:flex;gap:6px;align-items:baseline;margin-bottom:3px;">
+                    <span style="color:#666;min-width:14px;font-size:0.85rem;">${icon}</span>
+                    <span style="color:#888;font-size:0.75rem;min-width:68px;flex-shrink:0;">${label}</span>
+                    <span style="font-size:0.78rem;line-height:1.4;">${val}</span>
+                   </div>` : '';
+
+            return `<div style="font-size:0.78rem;line-height:1.6;color:#aaa;">
+                <div style="color:#61afef;font-weight:700;margin-bottom:6px;font-size:0.8rem;">
+                    📊 配置導覽 <span style="color:#333;font-weight:400;">· 來自前 ${stats.totalBuilds} 名排行榜配置</span>
+                </div>
+                ${row('⚔️','武器:', topWeapons)}
+                ${row('🔷','4費主詞條:', c4Top ? `<span style="color:#eee;">${escapeHtml(statLabel(c4Top[0]))}</span>${mainPct(c4Top,stats.totalBuilds)}${c4Alt?` <span style="color:#555;">/ ${escapeHtml(statLabel(c4Alt[0]))}</span>`:''}` : '')}
+                ${row('🔶','3費主詞條:', c3Top ? `<span style="color:#eee;">${escapeHtml(statLabel(c3Top[0]))}</span>${mainPct(c3Top,stats.totalBuilds*2)}${c3Alt?` <span style="color:#555;">/ ${escapeHtml(statLabel(c3Alt[0]))}</span>`:''}` : '')}
+                ${row('🔹','1費主詞條:', c1Top ? `<span style="color:#eee;">${escapeHtml(statLabel(c1Top[0]))}</span>` : '')}
+                ${row('✨','關鍵副詞條:', `<span style="color:#e5c07b;">${topSubs}</span>`)}
+                ${topSonata ? row('🎵','鳴響套裝:', `<span style="color:#eee;">${escapeHtml(topSonata[0].replace(/\+/g,' + '))}</span> <span style="color:#555;font-size:0.7rem;">(${(topSonata[1]/stats.totalBuilds*100).toFixed(0)}%)</span>`) : ''}
+                ${stats.avgER > 0 ? row('⚡','共鳴效率:', `<span style="color:#eee;">${stats.avgER.toFixed(1)}%</span> <span style="color:#555;font-size:0.7rem;">門檻</span>`) : ''}
+            </div>`;
+        }
+
+        async function rank_loadZhGuide(role, btn) {
+            const guideDiv = document.getElementById('zh-guide-content');
+            if (guideDiv) {
+                guideDiv.innerHTML = '<span style="color:#555;font-size:0.78rem;">'
+                    + '<span style="display:inline-block;width:12px;height:12px;border:2px solid rgba(97,175,254,0.3);border-top-color:#61afef;border-radius:50%;animation:dlm-spin 0.8s linear infinite;vertical-align:middle;margin-right:6px;"></span>'
+                    + '載入導覽數據中...</span>';
+            }
+            if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+            try {
+                if (!rank_data || rank_data.length === 0) {
+                    await rank_initDataLoad();
+                }
+                if (role && rank_currSelection !== role) {
+                    if (rank_viewMode !== 'role') rank_viewMode = 'role';
+                    rank_currSelection = role;
+                    rank_calcData();
+                }
+            } catch(e) {
+                console.error('rank_loadZhGuide failed:', e);
+            }
+
+            const html = rank_generateZhGuideHtml(role);
+            ['zh-guide-content', 'zh-guide-content-mobile'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = html;
+            });
+        }
+
+        function toggleZhDescGuide() {
+            const desc = document.getElementById('zh-desc-text');
+            const guide = document.getElementById('zh-guide-content');
+            const btn = document.getElementById('zh-desc-toggle-btn');
+            if (!desc || !guide) return;
+            const guideVisible = guide.style.display !== 'none';
+            desc.style.display = guideVisible ? '' : 'none';
+            guide.style.display = guideVisible ? 'none' : '';
+            if (btn) btn.textContent = guideVisible ? '📊 配置導覽' : '📝 說明文字';
+        }
+
+        function toggleZhDescGuideMobile() {
+            const desc = document.getElementById('zh-desc-text-mobile');
+            const guide = document.getElementById('zh-guide-content-mobile');
+            const btn = document.getElementById('zh-desc-toggle-btn-mobile');
+            if (!desc || !guide) return;
+            const guideVisible = guide.style.display !== 'none';
+            desc.style.display = guideVisible ? '' : 'none';
+            guide.style.display = guideVisible ? 'none' : '';
+            if (btn) btn.textContent = guideVisible ? '📊 配置導覽' : '📝 說明文字';
+        }
+
         function rank_openStrategySummary() {
             const data = (typeof rank_list !== 'undefined') ? rank_list : [];
             if (!data || data.length === 0) {
@@ -21539,17 +21648,18 @@
                         const p90Pct = p90 ? Math.min(100, p90 / theoreticalMax * 100) : null;
                         const shortfall = p90 ? (p90 - playerVal) : null;
                         const statColor = playerVal === 0 ? '#555' : (p90 && playerVal >= p90 ? '#98c379' : '#e5c07b');
+                        const unit = k.includes('百分比')||k.includes('率')||k.includes('傷害加成')||k==='暴擊'||k==='暴擊傷害'||k==='共鳴效率' ? '%' : '';
                         return `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px;">
                             <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
                                 <span style="color:#ccc;font-size:0.82rem;">${escapeHtml(statLabel(k))}</span>
-                                <span style="font-family:'JetBrains Mono';font-weight:700;color:${statColor};font-size:0.9rem;">${playerVal.toFixed(1)}${k.includes('百分比')||k.includes('率')||k.includes('傷害加成')||k==='暴擊'||k==='暴擊傷害'||k==='共鳴效率'?'%':''}</span>
+                                <span style="font-family:'JetBrains Mono';font-weight:700;color:${statColor};font-size:0.9rem;">${playerVal.toFixed(1)}${unit}</span>
                             </div>
-                            <div style="position:relative;height:5px;background:#1a1a1a;border-radius:3px;overflow:visible;margin-bottom:5px;">
-                                <div style="height:100%;width:${fillPct.toFixed(1)}%;background:${statColor};border-radius:3px;transition:width 0.5s;"></div>
-                                ${p90Pct ? `<div style="position:absolute;top:-4px;height:13px;width:2px;background:#e5c07b55;border-radius:1px;left:${Math.min(99,p90Pct).toFixed(1)}%;" title="Top 10% benchmark"></div>` : ''}
+                            <div style="position:relative;height:8px;background:#222;border-radius:4px;overflow:visible;margin-bottom:${p90Pct ? '22' : '8'}px;">
+                                <div style="height:100%;width:${fillPct.toFixed(1)}%;background:${statColor};border-radius:4px;transition:width 0.5s;"></div>
+                                ${p90Pct ? `<div style="position:absolute;top:-4px;height:16px;width:2px;background:#e5c07b;border-radius:1px;left:${Math.min(99,p90Pct).toFixed(1)}%;"><span style="position:absolute;top:18px;left:50%;transform:translateX(-50%);font-size:0.6rem;color:#e5c07b;font-weight:700;white-space:nowrap;">P90</span></div>` : ''}
                             </div>
-                            <div style="font-size:0.68rem;color:#444;">
-                                ${p90 ? `P90: ${p90.toFixed(1)}${k.includes('百分比')||k.includes('率')||k.includes('傷害加成')||k==='暴擊'||k==='暴擊傷害'||k==='共鳴效率'?'%':''} · ${shortfall>0?`<span style="color:#e06c75;">${zh?'仍需 ':'need +'}${shortfall.toFixed(1)}</span>`:`<span style="color:#98c379;">${zh?'已達標':'✓ reached'}</span>`}` : (zh?'暫無基準數據':'No benchmark')}
+                            <div style="font-size:0.72rem;color:#777;">
+                                ${p90 ? `P90: <b style="color:#e5c07b;">${p90.toFixed(1)}${unit}</b> · ${shortfall>0?`<span style="color:#e06c75;">${zh?'仍需 ':'need +'}${shortfall.toFixed(1)}${unit}</span>`:`<span style="color:#98c379;font-weight:700;">${zh?'✓ 已達標':'✓ reached'}</span>`}` : `<span style="color:#555;">${zh?'暫無基準數據':'No benchmark'}</span>`}
                             </div>
                         </div>`;
                     }).join('')}
