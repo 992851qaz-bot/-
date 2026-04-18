@@ -10763,10 +10763,11 @@
         }
 
         function getCustomEchoStatusMeta(status) {
-            if (status === 'uploading') return { text: '上傳中...', color: '#e5c07b' };
-            if (status === 'success') return { text: '已上傳', color: '#98c379' };
-            if (status === 'error') return { text: '上傳失敗', color: '#ff6b6b' };
-            return { text: '待上傳', color: '#aaa' };
+            const en = g_lang === 'en';
+            if (status === 'uploading') return { text: en ? 'Uploading...' : '上傳中...', color: '#e5c07b' };
+            if (status === 'success') return { text: en ? 'Uploaded' : '已上傳', color: '#98c379' };
+            if (status === 'error') return { text: en ? 'Upload Failed' : '上傳失敗', color: '#ff6b6b' };
+            return { text: en ? 'Pending' : '待上傳', color: '#aaa' };
         }
 
         function queueCustomEchoSync(echoId, mode = 'update') {
@@ -14906,9 +14907,10 @@
         ];
 
         function createEchoCardHTML(e, idx, activeWeights, viewMode, fromSmart = false) {
+            const isEN = g_lang === 'en';
             const costParts = String(e.cost).split('-');
             const cost = costParts[0];
-            const suit = costParts[1] || "普通";
+            const suit = costParts[1] || (isEN ? "Normal" : "普通");
             const calc = e._calc;
             const gradColor = getColor(calc.grad.c);
             const suitIcon = ATTRIBUTES_PROFILE_PICTURE[suit] || '';
@@ -14925,7 +14927,7 @@
 
                     subsHtml += `
  <div class="echo-lib-sub-item" style="${w > 0 ? 'background:rgba(229,192,123,0.05)' : ''}">
- <span class="echo-lib-sub-name" style="${w > 0 ? 'color:var(--accent)' : ''}">${s.name}</span>
+ <span class="echo-lib-sub-name" style="${w > 0 ? 'color:var(--accent)' : ''}">${statLabel(s.name)}</span>
  <div class="echo-lib-sub-val-group">
  ${scoreDisp}
  <span class="echo-lib-sub-val">${s.val}</span>
@@ -14984,14 +14986,14 @@
  <div style="flex:1; display:flex; align-items:center; gap:4px; margin-left:8px;">
  <span class="echo-lib-suit-tag" style="white-space:nowrap; margin-right:auto;">${suit}</span>
  <div style="display:flex; gap:6px; align-items:center;">
- <button onclick="editCustomEcho('${e.id}', event)" style="background:none; border:none; color:var(--accent); font-size:1rem; cursor:pointer; padding:0;" title="編輯">✏️</button>
- <button onclick="deleteCustomEcho('${e.id}', event)" style="background:none; border:none; color:#f44336; font-size:1rem; cursor:pointer; padding:0;" title="刪除">🗑️</button>
+ <button onclick="editCustomEcho('${e.id}', event)" style="background:none; border:none; color:var(--accent); font-size:1rem; cursor:pointer; padding:0;" title="${isEN ? 'Edit' : '編輯'}">✏️</button>
+ <button onclick="deleteCustomEcho('${e.id}', event)" style="background:none; border:none; color:#f44336; font-size:1rem; cursor:pointer; padding:0;" title="${isEN ? 'Delete' : '刪除'}">🗑️</button>
  </div>
  </div>` : `<span class="echo-lib-suit-tag">${suit}</span>`}
  </div>
  </div>
  <div style="display:flex;gap:5px;">
- ${imgUrl ? `<button class="btn-toggle-view-card" onclick="${toggleFn}" title="切換圖片/表格">🖼️</button>` : ''}
+ ${imgUrl ? `<button class="btn-toggle-view-card" onclick="${toggleFn}" title="${isEN ? 'Toggle Image/Table' : '切換圖片/表格'}">🖼️</button>` : ''}
  ${!e.isCustom && !fromSmart ? `<button class="echo-lib-meta-btn" onclick="toggleLibMeta(${idx})">...</button>` : ''}
  </div>
  </div>
@@ -15003,8 +15005,8 @@
  
  <div class="echo-lib-body">
  <div class="echo-lib-main-stat-row">
- <div class="echo-lib-main-1" style="flex:1;text-align:center">${e.main1}</div>
- ${e.isCustom ? (() => { const st = getCustomEchoStatusMeta(e.uploadStatus); return `<div class="echo-lib-main-2" style="flex:1;text-align:center;color:${st.color};font-size:0.85rem;font-weight:bold;">${st.text}</div>`; })() : (e.main2 && e.main2 !== '--' ? `<div class="echo-lib-main-2" style="flex:1;text-align:center">${e.main2}</div>` : '')}
+ <div class="echo-lib-main-1" style="flex:1;text-align:center">${statLabel(e.main1)}</div>
+ ${e.isCustom ? (() => { const st = getCustomEchoStatusMeta(e.uploadStatus); return `<div class="echo-lib-main-2" style="flex:1;text-align:center;color:${st.color};font-size:0.85rem;font-weight:bold;">${st.text}</div>`; })() : (e.main2 && e.main2 !== '--' ? `<div class="echo-lib-main-2" style="flex:1;text-align:center">${statLabel(e.main2)}</div>` : '')}
  </div>
  <div class="echo-lib-sub-stats">
  ${subsHtml}
@@ -15025,11 +15027,11 @@
  </div>
  </div>
  ${fromSmart ? `<div class="echo-lib-info-panel" style="display:block;margin-top:10px;padding-top:10px;border-top:1px solid #333">
- <div style="color:#888;font-size:0.8rem">來自: ${typeof e._meta.ts === 'number' ? new Date(e._meta.ts).toLocaleString() : e._meta.ts}</div>
+ <div style="color:#888;font-size:0.8rem">${isEN ? 'From:' : '來自:'} ${typeof e._meta.ts === 'number' ? new Date(e._meta.ts).toLocaleString() : e._meta.ts}</div>
  </div>` : `
  <div class="echo-lib-info-panel">
- <div style="color:#888">📅 分析時間：<span style="color:#ccc">${typeof e._meta.ts === 'number' ? new Date(e._meta.ts).toLocaleString() : e._meta.ts}</span></div>
- <div style="margin-top:4px">🔗 原始圖片：${e._meta.url ? `<a href="${e._meta.url}" target="_blank" style="color:var(--accent);text-decoration:none">點擊查看 ↗</a>` : '<span style="color:#555">無網址紀錄</span>'}</div>
+ <div style="color:#888">📅 ${isEN ? 'Analyzed:' : '分析時間：'}<span style="color:#ccc">${typeof e._meta.ts === 'number' ? new Date(e._meta.ts).toLocaleString() : e._meta.ts}</span></div>
+ <div style="margin-top:4px">🔗 ${isEN ? 'Source:' : '原始圖片：'}${e._meta.url ? `<a href="${e._meta.url}" target="_blank" style="color:var(--accent);text-decoration:none">${isEN ? 'View ↗' : '點擊查看 ↗'}</a>` : `<span style="color:#555">${isEN ? 'No URL' : '無網址紀錄'}</span>`}</div>
  </div>`}
  </div>`;
         }
@@ -21891,7 +21893,7 @@
 
                     return `
                                     <tr class="ss-row-hover">
-                                        <td style="color:${isCritical ? '#fff' : '#888'}; font-weight:${isCritical ? '700' : '400'};">${name}</td>
+                                        <td style="color:${isCritical ? '#fff' : '#888'}; font-weight:${isCritical ? '700' : '400'};">${statLabel(name)}</td>
                                         <td style="text-align:right; font-family:'JetBrains Mono'; color:var(--accent); font-weight:bold;">${usagePct}%</td>
                                         <td style="text-align:right; font-family:'JetBrains Mono'; color:#eee;">${avg}${name.includes('百分比') || !['生命', '攻擊', '防禦'].includes(name) ? '%' : ''}</td>
                                         <td style="text-align:right;">
