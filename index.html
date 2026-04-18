@@ -8211,7 +8211,7 @@
     <div id="buff-info-modal" class="modal-overlay">
         <div class="confirm-box" style="border-color: var(--accent); max-width: 90%; width: 400px;">
             <h3 style="color:var(--accent);margin-top:0;" data-lang-zh="📊 評分機制優化 (補分)" data-lang-en="📊 Score Optimization (Buff)">📊 評分機制優化 (補分)</h3>
-            <p style="color:#ddd;margin-bottom:15px;line-height:1.6;">
+            <p style="color:#ddd;margin-bottom:15px;line-height:1.6;" data-lang-zh="為了讓評分結果更具參考價值與鼓勵性，系統已自動套用平衡補分機制：" data-lang-en="To make scores more meaningful and encouraging, the system automatically applies a balance buff:">
                 為了讓評分結果更具參考價值與鼓勵性，系統已自動套用平衡補分機制：
             </p>
             <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:8px;margin-bottom:15px;">
@@ -8228,8 +8228,10 @@
                 </div>
             </div>
             <p style="font-size:0.85rem;color:#888;">
-                * 此機制僅影響顯分與百分比，理論最大分數不參與補分計算，確保公平透明。<br>
-                * 若補分後超過 100% 仍會正常顯示。
+                <span class="lang-zh-only">* 此機制僅影響顯分與百分比，理論最大分數不參與補分計算，確保公平透明。<br>
+                * 若補分後超過 100% 仍會正常顯示。</span>
+                <span class="lang-en-only" style="display:none;">* This only affects displayed scores and percentages; the theoretical max is excluded from the buff calculation.<br>
+                * Scores above 100% after buffing will still display normally.</span>
             </p>
             <div style="display:flex;gap:10px;">
                 <button class="btn-confirm-yes" onclick="closeBuffModal()" style="flex:1;" data-lang-zh="了解" data-lang-en="Got It">了解</button>
@@ -9401,7 +9403,7 @@
             <div class="pill-divider"></div>
             <div id="uid-display" class="pill-uid" data-lang-zh="未登入" data-lang-en="Not Logged In">未登入</div>
             <div class="pill-divider desktop-only"></div>
-            <div id="bottom-left-pill" class="pill-hint desktop-only">⌨️ Ctrl + 滾輪 縮放 ｜ <span
+            <div id="bottom-left-pill" class="pill-hint desktop-only"><span data-lang-zh="⌨️ Ctrl + 滾輪 縮放 ｜" data-lang-en="⌨️ Ctrl + Scroll Zoom ｜">⌨️ Ctrl + 滾輪 縮放 ｜</span> <span
                     onclick="openTutorialPanel()" style="cursor:pointer;text-decoration:underline;" data-lang-zh="教學" data-lang-en="Tutorial">教學</span></div>
         </div>
     </div>
@@ -10226,14 +10228,14 @@
         <div class="startup-box" style="max-width:1050px;width:95%;text-align:left;max-height:85vh;overflow-y:auto;">
             <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
                 <div style="display:flex; align-items:center; gap:12px;">
-                    <span>🎓 個人角色評分總表</span>
+                    <span data-lang-zh="🎓 個人角色評分總表" data-lang-en="🎓 Personal Score Summary">🎓 個人角色評分總表</span>
                     <span id="grad-uid-display"
                         style="font-size:0.85rem; color:#888; font-family:'JetBrains Mono'; font-weight:normal; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID:
                         -</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:10px;">
                     <button onclick="generateGraduationImage()" class="quick-btn"
-                        style="padding:4px 12px; font-size:0.75rem;">📷 生成圖片</button>
+                        style="padding:4px 12px; font-size:0.75rem;" data-lang-zh="📷 生成圖片" data-lang-en="📷 Generate Image">📷 生成圖片</button>
                     <button onclick="document.getElementById('cross-role-modal').style.display='none'"
                         style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>
                 </div>
@@ -12760,11 +12762,11 @@
             let html = `<div class="db-container" style="max-width:900px; padding:20px; display:flex; flex-direction:column; background:#1a1a1e;">`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:15px; flex-shrink:0;">`;
             html += `<div style="display:flex; align-items:center; gap:12px;">`;
-            html += `<h2 style="color:var(--accent); margin:0;">🎓 個人角色評分總表</h2>`;
+            html += `<h2 style="color:var(--accent); margin:0;">🎓 ${g_lang === 'en' ? 'Personal Score Summary' : '個人角色評分總表'}</h2>`;
             html += `<span style="font-size:0.85rem; color:#888; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID: ${g_currentUserUid || 'N/A'}</span>`;
             html += `</div>`;
             html += `<div style="display:flex; gap:10px; align-items:center;">`;
-            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px; font-size:0.75rem;">📷 生成圖片</button>`;
+            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px; font-size:0.75rem;">📷 ${g_lang === 'en' ? 'Generate Image' : '生成圖片'}</button>`;
             html += `<button class="db-close-btn" onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>`;
             html += `</div></div>`;
 
@@ -13330,7 +13332,7 @@
                     : `<div id="zh-desc-text"${hasDesc ? '' : ' style="display:none"'}>${formatDescText(roleDesc)}</div><div id="zh-guide-content"${hasDesc ? ' style="display:none"' : ''}>${rank_generateZhGuideHtml(global.role)}</div>`}</div></div></td></tr>`;
             }
             html += `<tr class="custom-header-row"><td>項目</td>${echoes.map((e, idx) => `<td>聲骸 ${idx + 1} ${g_debugMode ? '' : `<button class="btn-compare-single ${g_singleCompareTargetMeta && g_singleCompareTargetMeta.index === idx ? 'active' : ''}" onclick="openSingleCompare(${idx})" title="點擊切換比對目標" aria-label="單一聲骸比對">⇄</button>`}</td>`).join('')}</tr>`;
-            html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${e.cost || '-'}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
+            html += `<tr><td>Cost</td>${echoes.map(e => { let rC = (e.rects && e.rects.cost) ? e.rects.cost : ''; const cStr = String(e.cost || ''); const cDisplay = cStr.includes('-') ? cStr.split('-')[0] + '-' + sonataName(cStr.split('-')[1]) : (cStr || '-'); return `<td style="font-weight:bold;color:#fff;" onclick="handleCellClick(this, '${rC}')" onmouseenter="handleCellEnter(this, '${rC}')" onmouseleave="handleCellLeave()">${cDisplay}</td>` }).join('')}</tr>`; html += `<tr><td style="color:var(--cv-val);font-weight:bold;">評分</td>${echoes.map((e, idx) => { let cv = getCVInfo(e); if (roleWeights) { let res = calculateEchoScore(e, roleWeights); if (!res) return '<td>-</td>'; let grad = getGrading(res.totalPercentage); return `<td onclick="handleCellClick(this, '', ${idx})" onmouseenter="handleCellEnter(this, '', ${idx})" onmouseleave="handleCellLeave()"><div class="score-cell-inner"><div class="score-row-top"><span class="score-main-block"><span class="score-grade ${grad.class}">${grad.label}</span><span class="score-pct-text">${safeFixed(res.totalPercentage, 0)}%</span></span><span class="score-sub-text">${safeFixed(res.totalScore, 1)} <span style="color:var(--accent);font-size:0.7rem;">(+${safeFixed(res.bonus, 1)})</span></span></div><div class="score-row-bottom">有效: ${res.validCount}/${res.denom} <span style="margin:0 4px;color:#444">|</span> CV: <span style="color:var(--cv-val)">${cv.pct}%</span> - ${cv.val}/42</div></div></td>` } else { return `<td><div style="color:#777;font-size:0.8rem;">無權重</div><div style="font-size:0.7rem;color:#666">CV: ${cv.val}</div></td>` } }).join('')}</tr>`; html += `<tr><td>主詞條</td>${echoes.map(e => { if (g_debugMode) return `<td style="vertical-align:top"><div class="raw-label">Raw M1</div><div class="raw-text">${e.rawMain1}</div><div class="raw-label">Raw M2</div><div class="raw-text">${e.rawMain2}</div></td>`; else { let rM = (e.rects && e.rects.main1) ? e.rects.main1 : ''; return `<td onclick="handleCellClick(this, '${rM}')" onmouseenter="handleCellEnter(this, '${rM}')" onmouseleave="handleCellLeave()"><div class="main-stat-box"><span class="main-stat-name">${statLabel(e.main1)}</span><span class="main-stat-val">${e.main2}</span></div></td>` } }).join('')}</tr>`; html += `<tr><td style="vertical-align:top">副詞條</td>`; echoes.forEach((e, echoIdx) => { let rS = (e.rects && e.rects.sub) ? e.rects.sub : ''; html += `<td style="vertical-align:top;" onclick="handleCellClick(this, '${rS}')" onmouseenter="handleCellEnter(this, '${rS}')" onmouseleave="handleCellLeave()">`; if (g_debugMode) html += `<div class="raw-label">Raw Subs</div><div class="raw-text">${e.rawSubs}</div>`; else { if (!e.subs || e.subs.length === 0) html += `<div style="color:#444;text-align:center;padding-top:10px;">- 空 -</div>`; else e.subs.forEach((s, subIdx) => { const colorClass = s.valid ? 'val-ok' : 'val-error'; let style = ''; let clickAttr = ''; if (!s.valid) { clickAttr = `onclick="event.stopPropagation();editSubStat(${echoIdx},${subIdx})"` } if (s.valid && roleWeights) { let statKey = s.name; if (['攻擊', '生命', '防禦'].includes(statKey) && s.val.includes('%')) statKey += '百分比'; let weight = roleWeights[statKey] || 0; let maxVal = SUB_STAT_MAX_VALUES[statKey] || 0; let potential = weight * maxVal; let heatColor = getHeatmapColor(potential, roleWeights); if (heatColor) style = `style="background: ${heatColor}11;border-left: 3px solid ${heatColor};padding-left:8px;"` } let tierHtml = ''; if (s.valid) { const tierData = getTierInfo(s.name, s.val); if (tierData) { tierHtml = `<div class="tier-bar">`; for (let i = 0; i < tierData.max; i++) { tierHtml += `<span class="tier-seg ${i < tierData.current ? 'on' : ''}"></span>` } tierHtml += `</div>` } } html += `<div class="sub-stat-container" ${style} ${clickAttr}><div class="sub-stat-row"><span class="sub-stat-name ${s.valid ? '' : 'val-error'}">${statLabel(s.name)}</span><span class="sub-stat-val ${colorClass}">${s.val}</span></div>${tierHtml}</div>` }) } html += `</td>` }); html += `</tr>`; html += `<tr><td>備註</td>`; echoes.forEach((e, idx) => { html += `<td><textarea class="note-input" placeholder="${isDup ? '重複項目不可編輯備註' : '點擊輸入...'}" rows="1" ${isDup ? 'disabled' : ''} onchange="updateEchoNote(${idx}, this.value)">${e.note || ''}</textarea></td>` }); html += `</tr>`; tableBody.innerHTML = html; renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml); if (typeof onTableRendered === 'function') onTableRendered();
         }
         function renderMobileView(global, chains, echoes, roleWeights, roleDesc, availableBuilds, buildSelectorHtml, totalScoreHtml) {
             let html = '';
@@ -22567,8 +22569,9 @@
             document.getElementById('feedback-window-size').innerText =
                 `${window.innerWidth}×${window.innerHeight}`;
             document.getElementById('feedback-dpr').innerText = dpr.toFixed(2);
-            document.getElementById('feedback-zoom-info').innerText =
-                `瀏覽器 ${browserZoomPct}%，功能選單 ${featureZoomPct}%`;
+            document.getElementById('feedback-zoom-info').innerText = g_lang === 'en'
+                ? `Browser ${browserZoomPct}%, Menu ${featureZoomPct}%`
+                : `瀏覽器 ${browserZoomPct}%，功能選單 ${featureZoomPct}%`;
 
             modal.style.display = 'flex';
             updateMobilePillAnchor();
