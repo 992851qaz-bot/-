@@ -10372,6 +10372,8 @@
         let g_analyzeFixMode = false; // 分析後先修正再手動上傳
         let g_editMode = false; // 可編輯分析表格模式
         let g_lang = localStorage.getItem('ww_lang') || 'zh'; // 'zh' | 'en'
+        // Tabs that need a re-render next time they become active (e.g. after a language switch)
+        const g_tabsDirty = new Set();
         // Stat name translation (ZH → EN) for display layer only
         const STAT_ZH_TO_EN = {
             // Main stats
@@ -10434,27 +10436,31 @@
             // Re-render history list so role names and badges reflect the new language
             if (typeof renderHistoryList === 'function') renderHistoryList();
             if (g_echoesData.length > 0) renderTable(g_globalData, g_chains, g_echoesData);
-            // Re-render the currently active tab so its content reflects the new language
+            // Re-render all loaded tabs so every tab reflects the new language,
+            // regardless of which tab is currently active.
+            // Charts use a canvas so they must only be rendered while visible.
             const _activeLangTab = document.querySelector('.tab-content.active');
-            if (_activeLangTab) {
-                if (_activeLangTab.id === 'tab-charts') {
-                    if (typeof renderCharts === 'function') renderCharts();
-                } else if (_activeLangTab.id === 'tab-rank') {
-                    if (typeof rank_renderSidebar === 'function') rank_renderSidebar();
-                    if (typeof rank_renderTable === 'function') rank_renderTable();
-                    // Also update the top-bar label which is set dynamically by rank_selectItem
-                    if (typeof rank_currSelection !== 'undefined' && rank_currSelection) {
-                        const topLabel = document.getElementById('db-top-label');
-                        const topTitle = document.getElementById('db-top-title');
-                        if (topLabel) topLabel.innerText = (typeof rank_viewMode !== 'undefined' && rank_viewMode === 'role')
-                            ? (g_lang === 'en' ? 'Viewing Character' : '目前檢視角色')
-                            : (g_lang === 'en' ? 'Viewing Player' : '目前檢視玩家');
-                        if (topTitle) topTitle.innerText = rank_currSelection;
-                    }
-                } else if (_activeLangTab.id === 'tab-echo-library') {
-                    if (typeof renderEchoLibrary === 'function') renderEchoLibrary();
-                }
+            const _activeLangTabId = _activeLangTab ? _activeLangTab.id : '';
+            if (_activeLangTabId === 'tab-charts') {
+                if (typeof renderCharts === 'function') renderCharts();
+            } else {
+                // Mark charts as needing a refresh next time the tab is opened.
+                g_tabsDirty.add('tab-charts');
             }
+            // Rank sidebar + table (no canvas – safe to update while hidden)
+            if (typeof rank_renderSidebar === 'function') rank_renderSidebar();
+            if (typeof rank_renderTable === 'function' && typeof rank_data !== 'undefined' && rank_data.length > 0) rank_renderTable();
+            // Also update the top-bar label which is set dynamically by rank_selectItem
+            if (typeof rank_currSelection !== 'undefined' && rank_currSelection) {
+                const topLabel = document.getElementById('db-top-label');
+                const topTitle = document.getElementById('db-top-title');
+                if (topLabel) topLabel.innerText = (typeof rank_viewMode !== 'undefined' && rank_viewMode === 'role')
+                    ? (g_lang === 'en' ? 'Viewing Character' : '目前檢視角色')
+                    : (g_lang === 'en' ? 'Viewing Player' : '目前檢視玩家');
+                if (topTitle) topTitle.innerText = rank_currSelection;
+            }
+            // Echo library (no canvas – safe to update while hidden)
+            if (typeof renderEchoLibrary === 'function') renderEchoLibrary();
             // Re-render weights table (inside tab-rank) if data is loaded
             if (typeof renderWeightsTable === 'function' && typeof g_weightsRawData !== 'undefined' && g_weightsRawData) {
                 renderWeightsTable();
@@ -12834,21 +12840,23 @@
                 try { dps_syncFromAnalysis(); } catch (e) { console.warn("DPS sync failed", e); }
             }
 
-            // 刷新目前 active 的其他 tab
+            // Refresh all loaded tabs with the new history data.
+            // Charts use a canvas so they must only be rendered while visible.
             const _activeTab = document.querySelector('.tab-content.active');
-            if (_activeTab) {
-                const _activeTabId = _activeTab.id;
-                if (_activeTabId === 'tab-charts') {
-                    setTimeout(renderCharts, 200);
-                } else if (_activeTabId === 'tab-rank') {
-                    if (typeof updateRankTab === 'function') updateRankTab();
-                } else if (_activeTabId === 'tab-echo-library') {
-                    if (typeof renderEchoLibrary === 'function') renderEchoLibrary();
-                } else if (_activeTabId === 'tab-dps') {
-                    if (typeof dps_renderPanel === 'function' && typeof g_dpsBase !== 'undefined' && g_dpsBase) {
-                        dps_renderPanel(g_dpsBase);
-                    }
-                }
+            const _activeTabId = _activeTab ? _activeTab.id : '';
+            if (_activeTabId === 'tab-charts') {
+                setTimeout(renderCharts, 200);
+            } else {
+                g_tabsDirty.add('tab-charts');
+            }
+            // Rank (no canvas – safe to update while hidden)
+            if (typeof rank_renderSidebar === 'function') rank_renderSidebar();
+            if (typeof rank_renderTable === 'function' && typeof rank_data !== 'undefined' && rank_data.length > 0) rank_renderTable();
+            // Echo library (no canvas – safe to update while hidden)
+            if (typeof renderEchoLibrary === 'function') renderEchoLibrary();
+            // DPS panel
+            if (typeof dps_renderPanel === 'function' && typeof g_dpsBase !== 'undefined' && g_dpsBase) {
+                dps_renderPanel(g_dpsBase);
             }
 
             // 清除之前的圖片顯示狀態
@@ -13965,6 +13973,9 @@
 
             target.classList.add('active');
 
+            // Clear the dirty flag now that the tab is becoming visible
+            g_tabsDirty.delete(tabId);
+
             if (tabId === 'tab-charts') {
                 setTimeout(renderCharts, 200);
             } else if (tabId === 'tab-rank') {
@@ -13977,6 +13988,10 @@
                 renderEchoLibrary();
             } else if (tabId === 'tab-dps') {
                 dps_syncFromAnalysis();
+                // Re-render the DPS stats panel so translated labels are shown
+                if (typeof dps_renderPanel === 'function' && typeof g_dpsBase !== 'undefined' && g_dpsBase) {
+                    dps_renderPanel(g_dpsBase);
+                }
             }
 
             if (typeof rank_updateJumpButtonVisibility === 'function') {
