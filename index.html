@@ -7307,24 +7307,24 @@
     <!-- ── Anniversary Redemption Code Notice ── -->
     <div id="anniversary-notice" style="display:none;">
         <div class="notice-header">
-            <span class="notice-title">🎉 二週年兌換碼</span>
-            <button class="notice-close" onclick="document.getElementById('anniversary-notice').style.display='none'" title="關閉">✕</button>
+            <span class="notice-title" data-lang-zh="🎉 二週年兌換碼" data-lang-en="🎉 2nd Anniversary Codes">🎉 二週年兌換碼</span>
+            <button class="notice-close" onclick="document.getElementById('anniversary-notice').style.display='none'" data-title-zh="關閉" data-title-en="Close" title="關閉">✕</button>
         </div>
         <div class="notice-codes">
             <div class="code-pill">
                 <span>EVERSHINE</span>
-                <button class="code-copy-btn" onclick="copyCode('EVERSHINE', this)">複製</button>
+                <button class="code-copy-btn" onclick="copyCode('EVERSHINE', this)" data-lang-zh="複製" data-lang-en="Copy">複製</button>
             </div>
             <div class="code-pill">
                 <span>2NDANNIVERSARY</span>
-                <button class="code-copy-btn" onclick="copyCode('2NDANNIVERSARY', this)">複製</button>
+                <button class="code-copy-btn" onclick="copyCode('2NDANNIVERSARY', this)" data-lang-zh="複製" data-lang-en="Copy">複製</button>
             </div>
             <div class="code-pill">
                 <span>FACEALEPH1</span>
-                <button class="code-copy-btn" onclick="copyCode('FACEALEPH1', this)">複製</button>
+                <button class="code-copy-btn" onclick="copyCode('FACEALEPH1', this)" data-lang-zh="複製" data-lang-en="Copy">複製</button>
             </div>
         </div>
-        <div class="notice-deadline">⏰ 限時至 4/19 23:59</div>
+        <div class="notice-deadline" data-lang-zh="⏰ 限時至 4/19 23:59" data-lang-en="⏰ Expires 4/19 23:59">⏰ 限時至 4/19 23:59</div>
     </div>
     <header>
         <div class="header-title-group" onclick="dashboard_open()">
@@ -8326,7 +8326,7 @@
             <div class="modal-header">
                 <div style="display:flex;gap:10px;align-items:center;">
                     <h3 style="margin:0;color:var(--accent);" data-lang-zh="角色加權值參考表" data-lang-en="Character Weight Reference">角色加權值參考表</h3>
-                    <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()">顯示模式:
+                    <button class="btn-toggle-view" id="btn-weight-toggle" onclick="toggleWeightMode()" data-lang-zh="顯示模式: 權重" data-lang-en="Mode: Weights">顯示模式:
                         權重</button>
                     <button class="btn-toggle-view" onclick="openCustomWeightEditor()"
                         style="border-color:var(--accent);color:var(--accent)" data-lang-zh="✏️ 自訂權重" data-lang-en="✏️ Custom Weights">✏️ 自訂權重</button>
@@ -8412,21 +8412,27 @@
     <div id="smart-weight-modal" class="modal-overlay" style="display:none;z-index:10001;">
         <div class="startup-box" style="max-width:680px;text-align:left;max-height:90vh;display:flex;flex-direction:column;">
             <h3 style="color:#61afef;margin-top:0;display:flex;align-items:center;gap:10px;flex-shrink:0;">
-                💡 智慧建議權重
-                <span style="font-size:0.75rem;color:#555;font-weight:normal;background:#222;padding:2px 8px;border-radius:4px;">來自排行榜大數據分析</span>
+                <span data-lang-zh="💡 智慧建議權重" data-lang-en="💡 Smart Weight Suggestion">💡 智慧建議權重</span>
+                <span style="font-size:0.75rem;color:#555;font-weight:normal;background:#222;padding:2px 8px;border-radius:4px;" data-lang-zh="來自排行榜大數據分析" data-lang-en="From leaderboard big-data analysis">來自排行榜大數據分析</span>
             </h3>
-            <div style="color:#888;font-size:0.82rem;background:#1a1a1e;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.6;flex-shrink:0;">
+            <div style="color:#888;font-size:0.82rem;background:#1a1a1e;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.6;flex-shrink:0;" class="lang-zh-only">
                 <b style="color:#aaa;">📐 計算方式：</b>純粹根據排行榜原始聲骸副詞條出現頻率與數值分析，<b style="color:#e5c07b;">不參考任何現有評分或預設權重</b>。<br>
                 分析指標：① 出現密度（平均每5格聲骸中出現幾次）② 平均數值（所有出現的平均值）③ 相對強度（平均數值 ÷ 理論上限）<br>
                 建議權重 = 出現密度 × √數值強度，正規化至 0–2 區間；密度 &lt; 1% 的詞條自動歸零。<br>
                 <b style="color:#aaa;">📥 導入規則：</b>僅保留建議值 ≥ 0.5 的前 5 個詞條，確保評分分母與預設權重一致，避免分數大跌。
             </div>
+            <div style="color:#888;font-size:0.82rem;background:#1a1a1e;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.6;flex-shrink:0;display:none;" class="lang-en-only">
+                <b style="color:#aaa;">📐 Method:</b> Purely derived from leaderboard echo sub-stat frequency and value analysis — <b style="color:#e5c07b;">no existing scores or preset weights are referenced</b>.<br>
+                Metrics: ① Occurrence density (avg. appearances per 5-echo build) ② Average value ③ Relative strength (avg value ÷ theoretical max)<br>
+                Suggested weight = density × √value strength, normalized to 0–2; stats with density &lt;1% are zeroed out.<br>
+                <b style="color:#aaa;">📥 Import rule:</b> Only the top 5 stats with suggestion ≥ 0.5 are kept, keeping the scoring denominator consistent with preset builds to prevent score drops.
+            </div>
             <div id="smart-weight-table-container" style="overflow-y:auto;flex:1;min-height:0;margin-bottom:12px;">
                 <!-- Generated by JS -->
             </div>
             <div style="display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #333;padding-top:16px;flex-shrink:0;">
-                <button onclick="document.getElementById('smart-weight-modal').style.display='none'" class="btn-confirm-no">取消</button>
-                <button onclick="importSmartWeights()" class="btn-confirm-yes" style="min-width:120px;">✅ 導入建議權重</button>
+                <button onclick="document.getElementById('smart-weight-modal').style.display='none'" class="btn-confirm-no" data-lang-zh="取消" data-lang-en="Cancel">取消</button>
+                <button onclick="importSmartWeights()" class="btn-confirm-yes" style="min-width:120px;" data-lang-zh="✅ 導入建議權重" data-lang-en="✅ Import Suggested Weights">✅ 導入建議權重</button>
             </div>
         </div>
     </div>
@@ -11150,8 +11156,9 @@
             }
         }
         function processWeightsData(json) { g_weightNames = []; g_currentWeights = {}; const headers = json.headers; json.data.forEach(row => { let charName = row[1]; if (charName && charName !== '(N/A)') { if (!g_weightNames.includes(charName)) g_weightNames.push(charName); if (!g_currentWeights[charName]) g_currentWeights[charName] = []; let charWeights = {}; headers.forEach((h, idx) => { let mappedKey = WEIGHT_KEYS_MAPPING[h]; if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0 } }); let colA = row[0] ? String(row[0]).trim() : "通用"; let match = colA.match(/\d/); let req = match ? parseInt(match[0]) : 0; g_currentWeights[charName].push({ name: colA, minChain: req, weights: charWeights, desc: row[row.length - 1] }) } }) }
-        function toggleWeightMode() { g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? "顯示模式: 最大分 (權重x最大值)" : "顯示模式: 權重"; renderWeightsTable() }
-        function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => html += `<th>${h}</th>`); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; document.getElementById('weights-body').innerHTML = html }
+        function toggleWeightMode() { g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? (g_lang === 'en' ? "Mode: Max Score (weight×max)" : "顯示模式: 最大分 (權重x最大值)") : (g_lang === 'en' ? "Mode: Weights" : "顯示模式: 權重"); renderWeightsTable() }
+        const WEIGHT_TABLE_HEADER_EN = { '配置': 'Build', '方案': 'Build', '角色': 'Character', '說明': 'Notes', '備註': 'Notes' };
+        function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => { let label = h; if (g_lang === 'en') { const mapped = WEIGHT_KEYS_MAPPING[h]; label = mapped ? (STAT_ZH_TO_EN[mapped] || mapped) : (WEIGHT_TABLE_HEADER_EN[h] || h); } html += `<th>${label}</th>`; }); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; document.getElementById('weights-body').innerHTML = html }
         function initRoleGrid() { filterRoleGrid("") }
         function getRoleAvatarUrl(name) {
             if (!name) return '';
@@ -13854,7 +13861,7 @@
                             const rowStyle = isImportant ? `background:rgba(229, 192, 123, 0.08);border-left:2px solid var(--accent);` : '';
                             const nameStyle = isImportant ? 'color:var(--accent);font-weight:bold' : 'color:#ccc';
 
-                            groupHtml += `<tr style="${rowStyle}"><td style="${nameStyle}">${stat}</td><td style="text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold">${currDisp}</td><td style="text-align:right;font-family:'JetBrains Mono';${compStyle}"><span style="color:${indicatorColor};margin-right:4px;font-size:0.7rem">${indicator}</span>${compDisp}</td></tr>`;
+                            groupHtml += `<tr style="${rowStyle}"><td style="${nameStyle}">${statLabel(stat)}</td><td style="text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold">${currDisp}</td><td style="text-align:right;font-family:'JetBrains Mono';${compStyle}"><span style="color:${indicatorColor};margin-right:4px;font-size:0.7rem">${indicator}</span>${compDisp}</td></tr>`;
                         }
                     });
                     if (groupHtml) {
@@ -13876,7 +13883,7 @@
                 });
 
                 let datasets = [{
-                    label: '當前配置',
+                    label: g_lang === 'en' ? 'Current Build' : '當前配置',
                     data: radarData,
                     backgroundColor: 'rgba(229, 192, 123, 0.4)',
                     borderColor: '#e5c07b',
@@ -13904,15 +13911,15 @@
                             order: 2
                         });
                     };
-                    addRadarSet('前五平均', advStats.top5, '#e91e63');
-                    addRadarSet('中位數', advStats.median, '#2196f3', [5, 5]);
-                    addRadarSet('全服平均', advStats.avg, '#888', [2, 2]);
+                    addRadarSet(g_lang === 'en' ? 'Top 5 Avg' : '前五平均', advStats.top5, '#e91e63');
+                    addRadarSet(g_lang === 'en' ? 'Median' : '中位數', advStats.median, '#2196f3', [5, 5]);
+                    addRadarSet(g_lang === 'en' ? 'Server Avg' : '全服平均', advStats.avg, '#888', [2, 2]);
                 }
 
                 g_chartInstanceRadar = new Chart(ctxRadar, {
                     type: 'radar',
                     data: {
-                        labels: radarAxes,
+                        labels: radarAxes.map(k => statLabel(k)),
                         datasets: datasets
                     },
                     options: {
@@ -13974,7 +13981,7 @@
                     data: {
                         labels: barData.map(d => `#${d.idx} (C${d.cost})`),
                         datasets: [{
-                            label: '得分',
+                            label: g_lang === 'en' ? 'Score' : '得分',
                             data: barData.map(d => d.score),
                             backgroundColor: barData.map(d => getColor(d.color)),
                             borderColor: '#000',
@@ -14000,7 +14007,7 @@
             } catch (chartErr) {
                 console.error('renderCharts 錯誤:', chartErr);
                 const chartArea = document.getElementById('total-stats-table');
-                if (chartArea) chartArea.innerHTML = `<div style="padding:20px;text-align:center;color:var(--error);border:1px solid var(--error);border-radius:8px;background:rgba(224,108,117,0.08);"><div style="font-size:1.5rem;margin-bottom:8px;">⚠️</div><div>圖表分析載入異常</div><div style="font-size:0.8rem;color:#888;margin-top:6px;">${chartErr.message || '未知錯誤'}<br>請重新上傳圖片或切換角色重試</div></div>`;
+                if (chartArea) chartArea.innerHTML = `<div style="padding:20px;text-align:center;color:var(--error);border:1px solid var(--error);border-radius:8px;background:rgba(224,108,117,0.08);"><div style="font-size:1.5rem;margin-bottom:8px;">⚠️</div><div>${g_lang === 'en' ? 'Chart analysis failed to load.' : '圖表分析載入異常'}</div><div style="font-size:0.8rem;color:#888;margin-top:6px;">${chartErr.message || (g_lang === 'en' ? 'Unknown error' : '未知錯誤')}<br>${g_lang === 'en' ? 'Please re-upload the image or switch character and try again.' : '請重新上傳圖片或切換角色重試'}</div></div>`;
             }
         }
 
@@ -16880,7 +16887,7 @@
 
         function openSmartWeightSuggestion() {
             const role = g_globalData && g_globalData.role;
-            if (!role) { showMsg('請先選擇角色'); return; }
+            if (!role) { showMsg(g_lang === 'en' ? 'Please select a character first.' : '請先選擇角色'); return; }
 
             // Ensure ranking data covers this role
             const hasData = (typeof rank_data !== 'undefined') &&
@@ -16892,10 +16899,10 @@
             if (!hasData) {
                 container.innerHTML = `<div style="padding:20px;text-align:center;color:#888;">
                     <div style="font-size:2rem;margin-bottom:10px;">📊</div>
-                    <div style="margin-bottom:12px;">尚未載入 <b style="color:#aaa;">${escapeHtml(role)}</b> 的排行榜數據。</div>
+                    <div style="margin-bottom:12px;">${g_lang === 'en' ? `Leaderboard data for <b style="color:#aaa;">${escapeHtml(role)}</b> has not been loaded yet.` : `尚未載入 <b style="color:#aaa;">${escapeHtml(role)}</b> 的排行榜數據。`}</div>
                     <button onclick="rank_loadForSmartSuggest('${escapeHtml(role)}')"
                         style="background:rgba(97,175,254,0.15);border:1px solid rgba(97,175,254,0.4);color:#61afef;padding:6px 18px;border-radius:16px;cursor:pointer;font-size:0.85rem;font-weight:600;">
-                        🔄 載入排行榜數據
+                        ${g_lang === 'en' ? '🔄 Load Leaderboard Data' : '🔄 載入排行榜數據'}
                     </button>
                 </div>`;
                 g_smartSuggestedWeights = null;
@@ -16905,7 +16912,7 @@
 
             const result = rank_suggestWeightsFromData(role);
             if (!result || result.rows.length === 0) {
-                container.innerHTML = `<div style="padding:20px;color:#888;text-align:center;">數據不足，無法計算建議。</div>`;
+                container.innerHTML = `<div style="padding:20px;color:#888;text-align:center;">${g_lang === 'en' ? 'Insufficient data to compute suggestions.' : '數據不足，無法計算建議。'}</div>`;
                 g_smartSuggestedWeights = null;
             } else {
                 g_smartSuggestedWeights = result;
@@ -16917,18 +16924,17 @@
         function renderSmartWeightTable(result) {
             const { rows, totalBuilds, role } = result;
             let html = `<div style="font-size:0.78rem;color:#666;margin-bottom:8px;">
-                角色：<b style="color:#aaa;">${escapeHtml(role)}</b> ·
-                樣本：<b style="color:#e5c07b;">${totalBuilds}</b> 筆排行榜配裝（純副詞條統計）
+                ${g_lang === 'en' ? `Character: <b style="color:#aaa;">${escapeHtml(role)}</b> · Samples: <b style="color:#e5c07b;">${totalBuilds}</b> leaderboard builds (sub-stat statistics only)` : `角色：<b style="color:#aaa;">${escapeHtml(role)}</b> · 樣本：<b style="color:#e5c07b;">${totalBuilds}</b> 筆排行榜配裝（純副詞條統計）`}
             </div>`;
             html += `<table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
                 <thead>
                     <tr style="border-bottom:1px solid #333;color:#888;">
-                        <th style="padding:6px 8px;text-align:left;font-weight:600;">詞條</th>
-                        <th style="padding:6px 8px;text-align:right;font-weight:600;" title="平均每5格聲骸出現次數（密度）">出現密度</th>
-                        <th style="padding:6px 8px;text-align:right;font-weight:600;">平均數值</th>
-                        <th style="padding:6px 8px;text-align:right;font-weight:600;" title="平均數值 ÷ 理論上限">相對強度</th>
-                        <th style="padding:6px 8px;text-align:right;font-weight:600;">建議權重</th>
-                        <th style="padding:6px 8px;text-align:left;font-weight:600;">視覺化</th>
+                        <th style="padding:6px 8px;text-align:left;font-weight:600;">${g_lang === 'en' ? 'Stat' : '詞條'}</th>
+                        <th style="padding:6px 8px;text-align:right;font-weight:600;" title="${g_lang === 'en' ? 'Avg. appearances per 5-echo build (density)' : '平均每5格聲骸出現次數（密度）'}">${g_lang === 'en' ? 'Density' : '出現密度'}</th>
+                        <th style="padding:6px 8px;text-align:right;font-weight:600;">${g_lang === 'en' ? 'Avg Value' : '平均數值'}</th>
+                        <th style="padding:6px 8px;text-align:right;font-weight:600;" title="${g_lang === 'en' ? 'Avg value ÷ theoretical max' : '平均數值 ÷ 理論上限'}">${g_lang === 'en' ? 'Rel. Strength' : '相對強度'}</th>
+                        <th style="padding:6px 8px;text-align:right;font-weight:600;">${g_lang === 'en' ? 'Suggested' : '建議權重'}</th>
+                        <th style="padding:6px 8px;text-align:left;font-weight:600;">${g_lang === 'en' ? 'Visual' : '視覺化'}</th>
                     </tr>
                 </thead>
                 <tbody>`;
@@ -16950,7 +16956,7 @@
                 const rowBg = r.suggested >= 1.0 ? 'rgba(255,255,255,0.03)' : 'transparent';
 
                 html += `<tr style="border-bottom:1px solid #1e1e1e;background:${rowBg};">
-                    <td style="padding:6px 8px;color:${r.suggested > 0 ? '#ccc' : '#555'};">${escapeHtml(r.name)}</td>
+                    <td style="padding:6px 8px;color:${r.suggested > 0 ? '#ccc' : '#555'};">${escapeHtml(statLabel(r.name))}</td>
                     <td style="padding:6px 8px;text-align:right;color:${densityHighlight ? '#e5c07b' : '#888'};">${densityStr}</td>
                     <td style="padding:6px 8px;text-align:right;color:#aaa;font-family:'JetBrains Mono',monospace;">${avgVal}</td>
                     <td style="padding:6px 8px;text-align:right;color:#aaa;">${relStr}</td>
@@ -16971,7 +16977,7 @@
             const container = document.getElementById('smart-weight-table-container');
             container.innerHTML = `<div style="padding:20px;text-align:center;color:#888;">
                 <span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(97,175,254,0.3);border-top-color:#61afef;border-radius:50%;animation:dlm-spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;"></span>
-                載入排行榜數據中...
+                ${g_lang === 'en' ? 'Loading leaderboard data...' : '載入排行榜數據中...'}
             </div>`;
             try {
                 if (!rank_data || rank_data.length === 0) await rank_initDataLoad();
@@ -16982,7 +16988,7 @@
 
             const result = rank_suggestWeightsFromData(role);
             if (!result || result.rows.length === 0) {
-                container.innerHTML = `<div style="padding:20px;color:#888;text-align:center;">數據不足，無法計算建議。</div>`;
+                container.innerHTML = `<div style="padding:20px;color:#888;text-align:center;">${g_lang === 'en' ? 'Insufficient data to compute suggestions.' : '數據不足，無法計算建議。'}</div>`;
                 g_smartSuggestedWeights = null;
             } else {
                 g_smartSuggestedWeights = result;
@@ -22963,9 +22969,11 @@
             }
         })();
         function copyCode(code, btn) {
+            var copiedLabel = g_lang === 'en' ? '✓ Copied' : '✓ 已複製';
+            var origLabel = g_lang === 'en' ? 'Copy' : '複製';
             navigator.clipboard.writeText(code).then(function () {
                 var orig = btn.textContent;
-                btn.textContent = '✓ 已複製';
+                btn.textContent = copiedLabel;
                 btn.style.background = 'var(--ok)';
                 btn.style.color = '#000';
                 setTimeout(function () {
@@ -22981,8 +22989,8 @@
                 el.select();
                 document.execCommand('copy');
                 document.body.removeChild(el);
-                btn.textContent = '✓ 已複製';
-                setTimeout(function () { btn.textContent = '複製'; }, 2000);
+                btn.textContent = copiedLabel;
+                setTimeout(function () { btn.textContent = origLabel; }, 2000);
             });
         }
     </script>
