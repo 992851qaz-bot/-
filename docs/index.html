@@ -10438,6 +10438,15 @@
                 } else if (_activeLangTab.id === 'tab-rank') {
                     if (typeof rank_renderSidebar === 'function') rank_renderSidebar();
                     if (typeof rank_renderTable === 'function') rank_renderTable();
+                    // Also update the top-bar label which is set dynamically by rank_selectItem
+                    if (typeof rank_currSelection !== 'undefined' && rank_currSelection) {
+                        const topLabel = document.getElementById('db-top-label');
+                        const topTitle = document.getElementById('db-top-title');
+                        if (topLabel) topLabel.innerText = (typeof rank_viewMode !== 'undefined' && rank_viewMode === 'role')
+                            ? (g_lang === 'en' ? 'Viewing Character' : '目前檢視角色')
+                            : (g_lang === 'en' ? 'Viewing Player' : '目前檢視玩家');
+                        if (topTitle) topTitle.innerText = rank_currSelection;
+                    }
                 } else if (_activeLangTab.id === 'tab-echo-library') {
                     if (typeof renderEchoLibrary === 'function') renderEchoLibrary();
                 }
@@ -10454,6 +10463,12 @@
             // If the DPS panel has results, re-render them with translated labels
             if (typeof dps_renderPanel === 'function' && typeof g_dpsBase !== 'undefined' && g_dpsBase) {
                 dps_renderPanel(g_dpsBase);
+            }
+            // If the rank detail modal is open, re-render its dynamic content with the new language
+            const rankDetailModal = document.getElementById('db-detail-modal');
+            if (rankDetailModal && rankDetailModal.style.display !== 'none' && typeof rank_openDetail === 'function' && typeof rank_currentEntry !== 'undefined' && rank_currentEntry && typeof rank_list !== 'undefined') {
+                const reIdx = rank_list.indexOf(rank_currentEntry);
+                if (reIdx !== -1) rank_openDetail(reIdx);
             }
         }
         function toggleLanguage() { setLanguage(g_lang === 'zh' ? 'en' : 'zh'); }
