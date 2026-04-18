@@ -417,6 +417,9 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
             position: relative;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translateZ(0);
         }
 
         .feature-card::before {
@@ -7780,12 +7783,22 @@
         <div class="db-container" style="max-width:960px;">
             <div class="db-header" style="flex-direction:row;align-items:center;">
                 <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">⊡ 功能導航列表
+                    <h2 style="font-size:1.5rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">⊡ <span data-lang-zh="功能導航列表" data-lang-en="Feature Navigator">功能導航列表</span>
                         <button class="quick-btn" onclick="openTutorialPanel()"
-                            style="background:rgba(255,255,255,0.1); color:#ccc; border:1px solid rgba(255,255,255,0.2); font-size:0.75rem; padding:3px 10px; width:auto; height:auto;">📋
+                            style="background:rgba(255,255,255,0.1); color:#ccc; border:1px solid rgba(255,255,255,0.2); font-size:0.75rem; padding:3px 10px; width:auto; height:auto;" data-lang-zh="📋 操作教學" data-lang-en="📋 Tutorial">📋
                             操作教學</button>
                     </h2>
-                    <div style="color:#888;font-size:0.85rem;">快速前往系統各項功能模組。</div>
+                    <div style="color:#888;font-size:0.85rem;" data-lang-zh="快速前往系統各項功能模組。" data-lang-en="Jump quickly to any feature module.">快速前往系統各項功能模組。</div>
+                </div>
+                <div id="feature-modal-lang-group" style="display:flex;gap:6px;align-items:center;flex-shrink:0;margin:0 12px 0 auto;">
+                    <button id="modal-lang-btn-zh" onclick="setLanguage('zh')"
+                        style="padding:4px 12px;border-radius:16px;border:2px solid var(--accent);background:var(--accent);color:#000;font-weight:700;font-size:0.78rem;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s,border-color 0.2s;">
+                        🇹🇼 繁中
+                    </button>
+                    <button id="modal-lang-btn-en" onclick="setLanguage('en')"
+                        style="padding:4px 12px;border-radius:16px;border:2px solid rgba(229,192,123,0.35);background:rgba(229,192,123,0.08);color:#aaa;font-weight:700;font-size:0.78rem;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s,border-color 0.2s;">
+                        🌐 EN
+                    </button>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('feature-list-modal').style.display='none'">×</button>
@@ -10284,6 +10297,18 @@
                 } else {
                     btnEn.style.background = 'var(--accent)'; btnEn.style.color = '#000'; btnEn.style.borderColor = 'var(--accent)';
                     btnZh.style.background = 'rgba(229,192,123,0.08)'; btnZh.style.color = '#aaa'; btnZh.style.borderColor = 'rgba(229,192,123,0.35)';
+                }
+            }
+            // Feature-list-modal header language buttons
+            const mBtnZh = document.getElementById('modal-lang-btn-zh');
+            const mBtnEn = document.getElementById('modal-lang-btn-en');
+            if (mBtnZh && mBtnEn) {
+                if (g_lang === 'zh') {
+                    mBtnZh.style.background = 'var(--accent)'; mBtnZh.style.color = '#000'; mBtnZh.style.borderColor = 'var(--accent)';
+                    mBtnEn.style.background = 'rgba(229,192,123,0.08)'; mBtnEn.style.color = '#aaa'; mBtnEn.style.borderColor = 'rgba(229,192,123,0.35)';
+                } else {
+                    mBtnEn.style.background = 'var(--accent)'; mBtnEn.style.color = '#000'; mBtnEn.style.borderColor = 'var(--accent)';
+                    mBtnZh.style.background = 'rgba(229,192,123,0.08)'; mBtnZh.style.color = '#aaa'; mBtnZh.style.borderColor = 'rgba(229,192,123,0.35)';
                 }
             }
             // Any remaining toggle-btn pills elsewhere
