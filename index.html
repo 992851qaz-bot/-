@@ -12560,7 +12560,9 @@
             // Update history count display
             const historyCountEl = document.getElementById('history-count');
             if (historyCountEl) {
-                historyCountEl.textContent = `${uniqueRoles.size} 角色 / ${cleanHistory.length} 筆`;
+                historyCountEl.textContent = g_lang === 'en'
+                    ? `${uniqueRoles.size} chars / ${cleanHistory.length} records`
+                    : `${uniqueRoles.size} 角色 / ${cleanHistory.length} 筆`;
             }
 
             const ITEM_HEIGHT = 80; // 項目高度 + 間距
@@ -12592,41 +12594,42 @@
 
                 let statusTag = '';
                 let actionBtnHtml = '';
+                const isEN = g_lang === 'en';
                 if (item.isCustomRole || item.uploadStatus === 'custom_local') {
-                    statusTag = '<span class="status-badge status-custom">本地自訂</span>';
-                    actionBtnHtml = `<button class="btn-compare-mini" onclick="deleteLocalCustomEntry(${item.id}, event)" title="刪除此本地角色" style="background:#4a2020;border-color:#7a3a3a;">🗑️</button>`;
+                    statusTag = `<span class="status-badge status-custom">${isEN ? 'Local Custom' : '本地自訂'}</span>`;
+                    actionBtnHtml = `<button class="btn-compare-mini" onclick="deleteLocalCustomEntry(${item.id}, event)" title="${isEN ? 'Delete this local character' : '刪除此本地角色'}" style="background:#4a2020;border-color:#7a3a3a;">🗑️</button>`;
                 } else if (item.uploadStatus === 'demo') {
                     statusTag = '<span class="status-badge status-demo">DEMO</span>'
                 } else {
                     if (item.uploadStatus === 'wait_fix') {
                         if (hasErrors(item.echoes)) {
-                            statusTag = '<span class="status-badge status-wait">需修正</span>'
+                            statusTag = `<span class="status-badge status-wait">${isEN ? 'Fix Needed' : '需修正'}</span>`
                         } else {
-                            statusTag = '<span class="status-badge status-pending">待上傳</span>';
+                            statusTag = `<span class="status-badge status-pending">${isEN ? 'Pending' : '待上傳'}</span>`;
                             if (!isDup) {
-                                actionBtnHtml = `<button class="btn-upload-manual" onclick="uploadCurrentData(${item.id})">☁️ 上傳</button>`
+                                actionBtnHtml = `<button class="btn-upload-manual" onclick="uploadCurrentData(${item.id})">${isEN ? '☁️ Upload' : '☁️ 上傳'}</button>`
                             }
                         }
                     } else if (item.hasUnsavedNote) {
-                        statusTag = '<span class="status-badge status-pending" style="background:#e91e63">備註未存</span>';
-                        actionBtnHtml = `<button class="btn-save-note" onclick="uploadCurrentData(${item.id})">💾 儲存備註</button>`
+                        statusTag = `<span class="status-badge status-pending" style="background:#e91e63">${isEN ? 'Note Unsaved' : '備註未存'}</span>`;
+                        actionBtnHtml = `<button class="btn-save-note" onclick="uploadCurrentData(${item.id})">${isEN ? '💾 Save Note' : '💾 儲存備註'}</button>`
                     } else if (item.uploadStatus === 'success') {
-                        statusTag = '<span class="status-badge status-success">已上傳</span>'
+                        statusTag = `<span class="status-badge status-success">${isEN ? 'Uploaded' : '已上傳'}</span>`
                     } else if (item.uploadStatus === 'duplicate') {
-                        statusTag = '<span class="status-badge status-dup">重複</span>'
+                        statusTag = `<span class="status-badge status-dup">${isEN ? 'Duplicate' : '重複'}</span>`
                     } else if (item.uploadStatus === 'uploading') {
-                        statusTag = '<span class="status-badge status-pending">上傳中...</span>'
+                        statusTag = `<span class="status-badge status-pending">${isEN ? 'Uploading...' : '上傳中...'}</span>`
                     } else {
-                        statusTag = '<span class="status-badge status-pending">待上傳</span>';
+                        statusTag = `<span class="status-badge status-pending">${isEN ? 'Pending' : '待上傳'}</span>`;
                         if (!isDup) {
-                            actionBtnHtml = `<button class="btn-upload-manual" onclick="uploadCurrentData(${item.id})">☁️ 上傳</button>`
+                            actionBtnHtml = `<button class="btn-upload-manual" onclick="uploadCurrentData(${item.id})">${isEN ? '☁️ Upload' : '☁️ 上傳'}</button>`
                         }
                     }
                 }
 
                 // Add Compare Button to all items
-                actionBtnHtml += `<button class="btn-compare-mini" onclick="setCompare(${i})" title="加入數據對比">⚖️</button>`;
-                actionBtnHtml += `<button class="btn-compare-mini" onclick="showCrossRoleScore(${i})" title="查看其他角色適配度表" style="background:#2a2a4a;border-color:#555;font-size:0.85rem;">📊</button>`;
+                actionBtnHtml += `<button class="btn-compare-mini" onclick="setCompare(${i})" title="${isEN ? 'Add to comparison' : '加入數據對比'}">⚖️</button>`;
+                actionBtnHtml += `<button class="btn-compare-mini" onclick="showCrossRoleScore(${i})" title="${isEN ? 'View compatibility table' : '查看其他角色適配度表'}" style="background:#2a2a4a;border-color:#555;font-size:0.85rem;">📊</button>`;
 
                 let avgScore = 0;
                 let echoCount = 0;
@@ -12649,7 +12652,7 @@
                 const gradeColor = gradeStr === 'SSS' ? '#ffd700' : gradeStr === 'SS' ? '#ffb74d' : gradeStr === 'S' ? '#7dd3fc' : gradeStr === 'A' ? '#78e08f' : gradeStr === 'B' ? '#ff9f43' : '#9aa0a6';
                 const gradeHtml = `<span style="display:inline-block; padding:2px 6px; background:${gradeColor}22; color:${gradeColor}; border-radius:4px; font-weight:900; font-size:0.75rem; margin-right:8px; border:1px solid ${gradeColor}55;">${gradeStr}</span>`;
 
-                const roleName = item.global.role || '未辨識';
+                const roleName = item.global.role || (g_lang === 'en' ? 'Unknown' : '未辨識');
                 // In English mode, show English character name for clarity
                 const displayRoleName = (g_lang === 'en' && ROLE_ZH_TO_EN[roleName]) ? ROLE_ZH_TO_EN[roleName] : roleName;
                 let roleKey = roleName;
@@ -12660,7 +12663,7 @@
                 const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
                 const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" class="history-role-icon" onerror="this.style.display='none'">` : '<span class="history-role-icon-placeholder">?</span>';
 
-                div.innerHTML = `<div class="history-main">${iconHtml}<div style="flex:1;min-width:0;"><div class="h-info">${gradeHtml}${escapeHtml(displayRoleName)} ${statusTag} ${actionBtnHtml}</div><div class="h-time" style="font-size:0.7rem;line-height:1;">${escapeHtml(item.ts)}</div><div style="font-size:0.75rem;color:#888;">UID: ${escapeHtml(item.global.uid) || '?'}</div></div></div><button class="history-mobile-arrow" onclick="openHistoryItemFromMobile(${i}, event)" title="前往此筆結果">➜</button>`;
+                div.innerHTML = `<div class="history-main">${iconHtml}<div style="flex:1;min-width:0;"><div class="h-info">${gradeHtml}${escapeHtml(displayRoleName)} ${statusTag} ${actionBtnHtml}</div><div class="h-time" style="font-size:0.7rem;line-height:1;">${escapeHtml(item.ts)}</div><div style="font-size:0.75rem;color:#888;">UID: ${escapeHtml(item.global.uid) || '?'}</div></div></div><button class="history-mobile-arrow" onclick="openHistoryItemFromMobile(${i}, event)" title="${isEN ? 'Go to result' : '前往此筆結果'}">➜</button>`;
                 historyListEl.appendChild(div);
             }
 
