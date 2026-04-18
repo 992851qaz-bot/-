@@ -8277,13 +8277,13 @@
                     style="grid-column: span 2; display: flex; gap: 20px; align-items: flex-end;">
                     <div style="flex: 1;">
                         <label data-lang-zh="主詞條 2 (主 2 )" data-lang-en="Main Stat 2">主詞條 2 (主 2 )</label>
-                        <input type="text" value="自訂聲骸" readonly class="dps-input"
+                        <input type="text" value="自訂聲骸" data-lang-zh-val="自訂聲骸" data-lang-en-val="Custom Echo" readonly class="dps-input"
                             style="background:#222; border-color:#333; color:#aaa; font-style:italic;">
                     </div>
                     <div id="custom-echo-ocr-zone" class="custom-ocr-zone" onclick="handleOcrZoneClick(event)">
                         <div class="upload-hint">
-                            <div style="font-size: 1.2rem; margin-bottom: 4px;">📸 點擊/貼上/拖移</div>
-                            <span>自動讀取副詞條 & 套裝</span>
+                            <div style="font-size: 1.2rem; margin-bottom: 4px;" data-lang-zh="📸 點擊/貼上/拖移" data-lang-en="📸 Click/Paste/Drop">📸 點擊/貼上/拖移</div>
+                            <span data-lang-zh="自動讀取副詞條 & 套裝" data-lang-en="Auto-read sub-stats & set">自動讀取副詞條 & 套裝</span>
                         </div>
                         <img id="custom-echo-ocr-preview" class="custom-ocr-preview" style="display:none;"
                             title="點擊放大圖片">
@@ -8298,12 +8298,12 @@
                     <label
                         style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; color:#888;">
                         <input type="checkbox" id="custom-echo-deep-scan" style="width:16px; height:16px;">
-                        找不到 5 個詞條時自動執行深度分析 (Deep Scan if < 5 stats) </label>
+                        <span data-lang-zh="找不到 5 個詞條時自動執行深度分析" data-lang-en="Auto deep scan if < 5 stats found">找不到 5 個詞條時自動執行深度分析 (Deep Scan if &lt; 5 stats)</span> </label>
                             <label
                                 style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; color:var(--accent); font-weight:bold;">
                                 <input type="checkbox" id="custom-echo-auto-suit" checked
                                     style="width:16px; height:16px;">
-                                分析時優先選擇對應黃點 (常用套裝) </label>
+                                <span data-lang-zh="分析時優先選擇對應黃點 (常用套裝)" data-lang-en="Prioritize recommended set (highlighted dots)">分析時優先選擇對應黃點 (常用套裝)</span> </label>
                             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                                 <label for="custom-echo-ocr-model" style="font-size:0.85rem; color:#bbb;" data-lang-zh="辨識模型" data-lang-en="OCR Model">辨識模型</label>
                                 <select id="custom-echo-ocr-model" class="dps-select" onchange="setCustomEchoOcrModel(this.value)"
@@ -8311,7 +8311,7 @@
                                     <option value="A" data-lang-zh="A 模型 (原本邏輯)" data-lang-en="Model A (Original)">A 模型 (原本邏輯)</option>
                                     <option value="B" data-lang-zh="B 模型 (上傳端邏輯 + 後修)" data-lang-en="Model B (Upload Logic + Post-edit)">B 模型 (上傳端邏輯 + 後修)</option>
                                 </select>
-                                <span style="font-size:0.78rem; color:#888;">可依截圖品質即時切換</span>
+                                <span style="font-size:0.78rem; color:#888;" data-lang-zh="可依截圖品質即時切換" data-lang-en="Switch anytime based on screenshot quality">可依截圖品質即時切換</span>
                             </div>
                 </div>
             </div>
@@ -8354,18 +8354,18 @@
             <div
                 style="display:flex; gap:10px; justify-content:flex-end; border-top:1px solid #333; padding-top:20px; margin-top:20px;">
                 <button id="btn-debug-custom-echo" onclick="showCustomEchoDebug()" class="btn-confirm-no"
-                    style="margin-right:auto; border-color:#555; display:none;">Bug 除錯</button>
+                    style="margin-right:auto; border-color:#555; display:none;" data-lang-zh="Bug 除錯" data-lang-en="Debug">Bug 除錯</button>
                 <button id="btn-save-custom-echo" onclick="addCustomEcho()" class="btn-confirm-yes"
-                    style="width:120px;">保存聲骸</button>
+                    style="width:120px;" data-lang-zh="保存聲骸" data-lang-en="Save Echo">保存聲骸</button>
                 <button onclick="closeCustomEchoModal()" class="btn-confirm-no" data-lang-zh="取消" data-lang-en="Cancel">取消</button>
             </div>
             <div id="custom-echo-debug-area"
                 style="display:none; margin-top:20px; padding:15px; background:#111; border:1px solid #333; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.8rem; max-height:300px; overflow-y:auto; border-left:4px solid var(--accent);">
                 <div
                     style="color:var(--accent); font-weight:bold; margin-bottom:10px; display:flex; justify-content:space-between;">
-                    <span>🔍 OCR 除錯資訊</span>
+                    <span data-lang-zh="🔍 OCR 除錯資訊" data-lang-en="🔍 OCR Debug Info">🔍 OCR 除錯資訊</span>
                     <span style="cursor:pointer; color:#888;"
-                        onclick="this.parentElement.parentElement.style.display='none'">[ 關閉 ]</span>
+                        onclick="this.parentElement.parentElement.style.display='none'" data-lang-zh="[ 關閉 ]" data-lang-en="[ Close ]">[ 關閉 ]</span>
                 </div>
                 <div id="custom-echo-debug-raw"
                     style="color:#aaa; white-space:pre-wrap; margin-bottom:15px; border-bottom:1px solid #222; padding-bottom:10px;">
@@ -10396,6 +10396,9 @@
             });
             document.querySelectorAll('[data-title-zh]').forEach(el => {
                 el.title = g_lang === 'en' ? el.getAttribute('data-title-en') : el.getAttribute('data-title-zh');
+            });
+            document.querySelectorAll('[data-lang-zh-val]').forEach(el => {
+                el.value = g_lang === 'en' ? el.getAttribute('data-lang-en-val') : el.getAttribute('data-lang-zh-val');
             });
             document.querySelectorAll('.lang-zh-only').forEach(el => {
                 el.style.display = g_lang === 'en' ? 'none' : '';
@@ -14439,12 +14442,12 @@
             const idInput = document.getElementById('editing-echo-id');
 
             if (echoToEdit) {
-                titleEl.innerText = "✏️ 編輯自訂聲骸";
-                saveBtn.innerText = "更新聲骸";
+                titleEl.innerText = g_lang === 'en' ? "✏️ Edit Custom Echo" : "✏️ 編輯自訂聲骸";
+                saveBtn.innerText = g_lang === 'en' ? "Update Echo" : "更新聲骸";
                 idInput.value = echoToEdit.id;
             } else {
-                titleEl.innerText = "🆕 新增自訂聲骸";
-                saveBtn.innerText = "保存聲骸";
+                titleEl.innerText = g_lang === 'en' ? "🆕 Add Custom Echo" : "🆕 新增自訂聲骸";
+                saveBtn.innerText = g_lang === 'en' ? "Save Echo" : "保存聲骸";
                 idInput.value = "";
             }
 
@@ -14455,7 +14458,7 @@
             // Add "Unlimited" option
             const unlimitedItem = document.createElement('div');
             unlimitedItem.className = 'suit-item';
-            unlimitedItem.innerHTML = `<span style="font-size:1.5rem; margin-bottom:4px;">∞</span><span>不限</span>`;
+            unlimitedItem.innerHTML = `<span style="font-size:1.5rem; margin-bottom:4px;">∞</span><span>${g_lang === 'en' ? 'Any' : '不限'}</span>`;
             unlimitedItem.onclick = () => {
                 document.querySelectorAll('.suit-item').forEach(el => el.classList.remove('active'));
                 unlimitedItem.classList.add('active');
@@ -14467,7 +14470,7 @@
                 const item = document.createElement('div');
                 item.className = 'suit-item';
                 const hasDot = usedInfo.suits.has(name);
-                item.innerHTML = `<img src="${url}"><span>${name}</span>${hasDot ? '<div class="used-dot" title="此角色使用過此套裝"></div>' : ''}`;
+                item.innerHTML = `<img src="${url}"><span>${sonataName(name)}</span>${hasDot ? `<div class="used-dot" title="${g_lang === 'en' ? 'This character has used this set' : '此角色使用過此套裝'}"></div>` : ''}`;
                 item.onclick = () => {
                     document.querySelectorAll('.suit-item').forEach(el => el.classList.remove('active'));
                     item.classList.add('active');
@@ -14494,8 +14497,8 @@
                 const nameSelect = row.querySelector('.custom-sub-name');
                 const valSelect = row.querySelector('.custom-sub-val');
 
-                let html = '<option value="">-- 選擇屬性 --</option>';
-                subNames.forEach(name => html += `<option value="${name}">${name}</option>`);
+                let html = `<option value="">${g_lang === 'en' ? '-- Select Stat --' : '-- 選擇屬性 --'}</option>`;
+                subNames.forEach(name => html += `<option value="${name}">${statLabel(name)}</option>`);
                 nameSelect.innerHTML = html;
 
                 if (echoToEdit && echoToEdit.subs[idx]) {
@@ -14523,7 +14526,7 @@
 
             main1Select.innerHTML = options.map(o => {
                 const isHighlight = usedInfo.mainStats.has(`${cost}:${o}`);
-                return `<option value="${o}" class="${isHighlight ? 'stat-highlight' : ''}" style="${isHighlight ? 'background:#e5c07b; color:#000;' : ''}">${o}${isHighlight ? ' ★' : ''}</option>`;
+                return `<option value="${o}" class="${isHighlight ? 'stat-highlight' : ''}" style="${isHighlight ? 'background:#e5c07b; color:#000;' : ''}">${statLabel(o)}${isHighlight ? ' ★' : ''}</option>`;
             }).join('');
 
             if (currentVal) main1Select.value = currentVal;
@@ -14551,7 +14554,7 @@
             const cost = document.getElementById('custom-echo-cost').value;
             const main1 = document.getElementById('custom-echo-main1').value;
             const editingId = document.getElementById('editing-echo-id').value;
-            if (!g_selectedCustomSuit) return showMsg("請選擇套裝");
+            if (!g_selectedCustomSuit) return showMsg(g_lang === 'en' ? "Please select a sonata set" : "請選擇套裝");
 
             // Standard Level 25 Gold Echo Main Stat Values (used for CV/Score, but card will show text)
             let main2 = "--";
@@ -14984,12 +14987,12 @@
  ${suitIcon ? `<img src="${suitIcon}" style="width:16px;height:16px;filter:drop-shadow(0 0 2px rgba(0,0,0,0.5))">` : ''}
  ${e.isCustom ? `
  <div style="flex:1; display:flex; align-items:center; gap:4px; margin-left:8px;">
- <span class="echo-lib-suit-tag" style="white-space:nowrap; margin-right:auto;">${suit}</span>
+ <span class="echo-lib-suit-tag" style="white-space:nowrap; margin-right:auto;">${sonataName(suit)}</span>
  <div style="display:flex; gap:6px; align-items:center;">
  <button onclick="editCustomEcho('${e.id}', event)" style="background:none; border:none; color:var(--accent); font-size:1rem; cursor:pointer; padding:0;" title="${isEN ? 'Edit' : '編輯'}">✏️</button>
  <button onclick="deleteCustomEcho('${e.id}', event)" style="background:none; border:none; color:#f44336; font-size:1rem; cursor:pointer; padding:0;" title="${isEN ? 'Delete' : '刪除'}">🗑️</button>
  </div>
- </div>` : `<span class="echo-lib-suit-tag">${suit}</span>`}
+ </div>` : `<span class="echo-lib-suit-tag">${sonataName(suit)}</span>`}
  </div>
  </div>
  <div style="display:flex;gap:5px;">
