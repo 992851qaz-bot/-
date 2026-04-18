@@ -10433,6 +10433,7 @@
 
         // --- Optimization Caches ---
         let g_historyCache = null;
+        let g_loadFromHistoryId = 0;
         let g_historyDirty = true;
         let g_calcMaxCache = {}; // Cache for max theoretical scores
 
@@ -12695,13 +12696,17 @@
         function autoSelectBuild(charName, chainCount) { if (!g_currentWeights[charName]) return 0; const builds = g_currentWeights[charName]; let bestIdx = 0; let maxReq = -1; builds.forEach((b, idx) => { if (chainCount >= b.minChain) { if (b.minChain > maxReq) { maxReq = b.minChain; bestIdx = idx } } }); return bestIdx }
         async function loadFromHistory(item) {
             if (!item) return;
+            const loadId = ++g_loadFromHistoryId;
+
             g_currentEntryId = item.id;
-            g_globalData = item.global || {};
+            // Deep-copy so that mutations to g_globalData / g_echoesData do not
+            // corrupt the history cache (which holds the original item references).
+            g_globalData = JSON.parse(JSON.stringify(item.global || {}));
             // 優先從全域數據取網址，若無則從項目層級取
             const targetUrl = item.url || g_globalData._imageUrl || '';
             g_globalData._imageUrl = targetUrl;
-            g_chains = item.chains || [false, false, false, false, false, false];
-            g_echoesData = item.echoes || [];
+            g_chains = JSON.parse(JSON.stringify(item.chains || [false, false, false, false, false, false]));
+            g_echoesData = JSON.parse(JSON.stringify(item.echoes || []));
 
             unlockPreview();
             urlInput.value = "";
@@ -12731,6 +12736,9 @@
                 statusText.innerText = "下載圖片中...";
                 try {
                     const img = await loadImage(targetUrl);
+                    // Guard: another loadFromHistory call was made while we were awaiting.
+                    // Discard this stale result to avoid overwriting the current item's state.
+                    if (loadId !== g_loadFromHistoryId) return;
                     g_sourceImage = img;
                     imgEl.src = img.src;
                     setPreviewLink(targetUrl);
@@ -12752,6 +12760,7 @@
                     statusText.innerText = "歷史紀錄已載入";
                     renderTable(g_globalData, g_chains, g_echoesData);
                 } catch (e) {
+                    if (loadId !== g_loadFromHistoryId) return;
                     statusText.innerText = "圖片載入失敗";
                     imgPlaceholder.innerHTML = `<div style="padding:20px;text-align:center;color:var(--error);word-break:break-all;">載入圖檔失敗 (可能已過期)<br><a href="${targetUrl}" target="_blank" style="color:var(--primary);font-size:0.75rem;text-decoration:underline;">${targetUrl}</a><br><button class="btn-primary-action" style="margin-top:10px" onclick="loadFromHistory(g_historyCache.find(h=>h.id===${item.id}))">🔄 重試載入</button></div>`;
                 }
