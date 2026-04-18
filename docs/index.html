@@ -9989,7 +9989,7 @@
                 <div>
                     <h2
                         style="margin:0; font-size:1.8rem; font-weight:800; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        <span data-lang-zh="戰略大數據總匯" data-lang-en="Strategic Meta Report">戰略大數據總匯</span> <span style="font-size: 0.9rem; -webkit-text-fill-color: #555; font-weight: 500;">/
+                        <span data-lang-zh="戰略大數據總匯" data-lang-en="Strategic Meta Report">戰略大數據總匯</span><span class="lang-zh-only" style="font-size: 0.9rem; -webkit-text-fill-color: #555; font-weight: 500;"> /
                             STRATEGIC META REPORT</span></h2>
                     <div id="strategy-summary-role-badge" style="margin-top:8px;"></div>
                 </div>
@@ -10421,6 +10421,22 @@
             // Re-render history list so role names and badges reflect the new language
             if (typeof renderHistoryList === 'function') renderHistoryList();
             if (g_echoesData.length > 0) renderTable(g_globalData, g_chains, g_echoesData);
+            // Re-render the currently active tab so its content reflects the new language
+            const _activeLangTab = document.querySelector('.tab-content.active');
+            if (_activeLangTab) {
+                if (_activeLangTab.id === 'tab-charts') {
+                    if (typeof renderCharts === 'function') renderCharts();
+                } else if (_activeLangTab.id === 'tab-rank') {
+                    if (typeof rank_renderSidebar === 'function') rank_renderSidebar();
+                    if (typeof rank_renderTable === 'function') rank_renderTable();
+                } else if (_activeLangTab.id === 'tab-echo-library') {
+                    if (typeof renderEchoLibrary === 'function') renderEchoLibrary();
+                }
+            }
+            // Re-render weights table (inside tab-rank) if data is loaded
+            if (typeof renderWeightsTable === 'function' && typeof g_weightsRawData !== 'undefined' && g_weightsRawData) {
+                renderWeightsTable();
+            }
             // If the cross-role summary modal is open, re-render it with the new language
             const crModal = document.getElementById('cross-role-modal');
             if (crModal && crModal.style.display !== 'none' && typeof showCrossRoleScore === 'function' && g_crHistIdx >= 0) {
