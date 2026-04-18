@@ -16824,13 +16824,18 @@
 
             allData.forEach(build => {
                 const seen = new Set();
-                const echoes = build.detailEchoes || [];
-                echoes.forEach(echo => {
-                    (echo.subs || []).forEach(s => {
-                        let name = s.name;
-                        const valStr = String(s.val || '0');
-                        if (['攻擊', '生命', '防禦'].includes(name) && valStr.includes('%')) name += '百分比';
+                // rank_data entries store raw echo array (d.echoes); detailEchoes only exists after rank_calcSingleEntry
+                const rawEchoes = build.echoes || [];
+                rawEchoes.forEach(e => {
+                    if (!e.s || typeof e.s !== 'string') return;
+                    (typeof safeSplit === 'function' ? safeSplit(e.s, ',') : e.s.split(',')).forEach(s => {
+                        const m = s.match(/(.*?)([\d\.]+%?)$/);
+                        if (!m) return;
+                        let name = m[1].trim();
+                        const valStr = m[2];
+                        const isPercent = valStr.includes('%');
                         const val = parseFloat(valStr) || 0;
+                        if (['攻擊', '生命', '防禦'].includes(name) && isPercent) name += '百分比';
                         if (!subUsage[name]) subUsage[name] = { count: 0, valSum: 0, buildCount: 0 };
                         subUsage[name].count++;
                         subUsage[name].valSum += val;
