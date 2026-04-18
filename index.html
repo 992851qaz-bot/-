@@ -390,19 +390,66 @@
 
         .feature-section {
             grid-column: 1 / -1;
-            background: rgba(229, 192, 123, 0.06);
+            background: linear-gradient(90deg, rgba(229, 192, 123, 0.1) 0%, rgba(229, 192, 123, 0.02) 100%);
             color: var(--accent);
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            padding: 8px 12px;
-            border-bottom: 2px solid rgba(229, 192, 123, 0.25);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(229, 192, 123, 0.2);
+            border-left: 3px solid var(--accent);
             border-radius: 0;
-            margin-top: 4px;
+            margin-top: 8px;
+            text-transform: uppercase;
+            scroll-margin-top: 8px;
         }
 
         .feature-section:first-child {
             margin-top: 0;
+        }
+
+        .feature-section-tabs {
+            display: flex;
+            gap: 6px;
+            padding: 8px 14px;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(0, 0, 0, 0.3);
+            scrollbar-width: none;
+            flex-shrink: 0;
+        }
+
+        .feature-section-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .fst-btn {
+            flex-shrink: 0;
+            padding: 5px 13px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: #999;
+            font-size: 0.76rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            white-space: nowrap;
+            font-family: inherit;
+            line-height: 1;
+        }
+
+        .fst-btn:hover {
+            background: rgba(229, 192, 123, 0.1);
+            color: var(--accent);
+            border-color: rgba(229, 192, 123, 0.3);
+        }
+
+        .fst-btn.active {
+            background: rgba(229, 192, 123, 0.15);
+            color: var(--accent);
+            border-color: rgba(229, 192, 123, 0.5);
+            font-weight: 700;
         }
 
         .feature-card {
@@ -7856,8 +7903,16 @@
 
             <div class="db-card feature-list-scroll"
                 style="grid-column: 1 / -1; padding: 0; background: rgba(0,0,0,0.3);">
-                <div class="feature-grid">
-                    <div class="feature-section" data-lang-zh="🎯 活動與獎勵" data-lang-en="🎯 Events &amp; Rewards">🎯 活動與獎勵</div>
+                <div class="feature-section-tabs" id="feature-section-tabs">
+                    <button class="fst-btn active" data-section="fs-events" onclick="scrollToFeatureSection('fs-events')" data-lang-zh="🎯 活動獎勵" data-lang-en="🎯 Events">🎯 活動獎勵</button>
+                    <button class="fst-btn" data-section="fs-analysis" onclick="scrollToFeatureSection('fs-analysis')" data-lang-zh="📊 分析工具" data-lang-en="📊 Analysis">📊 分析工具</button>
+                    <button class="fst-btn" data-section="fs-share" onclick="scrollToFeatureSection('fs-share')" data-lang-zh="🖼️ 分享輸出" data-lang-en="🖼️ Share">🖼️ 分享輸出</button>
+                    <button class="fst-btn" data-section="fs-system" onclick="scrollToFeatureSection('fs-system')" data-lang-zh="🛠️ 系統功能" data-lang-en="🛠️ System">🛠️ 系統功能</button>
+                    <button class="fst-btn" data-section="fs-feedback" onclick="scrollToFeatureSection('fs-feedback')" data-lang-zh="💬 回饋支援" data-lang-en="💬 Feedback">💬 回饋支援</button>
+                    <button class="fst-btn" data-section="fs-lang" onclick="scrollToFeatureSection('fs-lang')" data-lang-zh="🌐 語言" data-lang-en="🌐 Lang">🌐 語言</button>
+                </div>
+                <div class="feature-grid" onscroll="updateFSTabOnScroll(this)">
+                    <div id="fs-events" class="feature-section" data-lang-zh="🎯 活動與獎勵" data-lang-en="🎯 Events &amp; Rewards">🎯 活動與獎勵</div>
                     <div class="feature-card" onclick="closeAllModals();openPointsModal()"
                         style="grid-column:1/-1;background:linear-gradient(135deg,rgba(229,192,123,0.1),rgba(20,20,25,0.8));border-color:rgba(229,192,123,0.25);">
                         <div class="feature-card-icon-box" style="background:rgba(229,192,123,0.15);">🎟️</div>
@@ -7870,7 +7925,7 @@
                         </div>
                     </div>
 
-                    <div class="feature-section" data-lang-zh="📊 分析工具" data-lang-en="📊 Analysis Tools">📊 分析工具</div>
+                    <div id="fs-analysis" class="feature-section" data-lang-zh="📊 分析工具" data-lang-en="📊 Analysis Tools">📊 分析工具</div>
                     <div class="feature-card" onclick="closeAllModals();dashboard_open()">
                         <div class="feature-card-icon-box">▣</div>
                         <div class="feature-card-main">
@@ -7936,7 +7991,7 @@
                         <div class="feature-card-action"><button class="quick-btn" data-lang-zh="刷新" data-lang-en="Refresh">刷新</button></div>
                     </div>
 
-                    <div class="feature-section" data-lang-zh="🖼️ 分享與輸出" data-lang-en="🖼️ Share &amp; Export">🖼️ 分享與輸出</div>
+                    <div id="fs-share" class="feature-section" data-lang-zh="🖼️ 分享與輸出" data-lang-en="🖼️ Share &amp; Export">🖼️ 分享與輸出</div>
                     <div class="feature-card" onclick="closeAllModals();generateShareImage()">
                         <div class="feature-card-icon-box" style="background:rgba(152,195,121,0.12);">📸</div>
                         <div class="feature-card-main">
@@ -7955,7 +8010,7 @@
                         <div class="feature-card-action"><button class="quick-btn" data-lang-zh="前往" data-lang-en="Go">前往</button></div>
                     </div>
 
-                    <div class="feature-section" data-lang-zh="🛠️ 系統功能" data-lang-en="🛠️ System Features">🛠️ 系統功能</div>
+                    <div id="fs-system" class="feature-section" data-lang-zh="🛠️ 系統功能" data-lang-en="🛠️ System Features">🛠️ 系統功能</div>
                     <div class="feature-card" onclick="closeAllModals();openCustomWeightEditor()">
                         <div class="feature-card-icon-box">⧉</div>
                         <div class="feature-card-main">
@@ -7989,7 +8044,7 @@
                         <div class="feature-card-action"><button class="quick-btn" data-lang-zh="查看" data-lang-en="View">查看</button></div>
                     </div>
 
-                    <div class="feature-section" data-lang-zh="💬 回饋與支援" data-lang-en="💬 Feedback &amp; Support">💬 回饋與支援</div>
+                    <div id="fs-feedback" class="feature-section" data-lang-zh="💬 回饋與支援" data-lang-en="💬 Feedback &amp; Support">💬 回饋與支援</div>
                     <div class="feature-card" onclick="window.open('https://forms.gle/9kXktz3Sj22Xj4218', '_blank')">
                         <div class="feature-card-icon-box" style="background:rgba(86,182,194,0.12);">📝</div>
                         <div class="feature-card-main">
@@ -8009,7 +8064,7 @@
                                 style="background:#f44336;color:#fff;">重置</button></div>
                     </div>
 
-                    <div class="feature-section">🌐 語言 / Language</div>
+                    <div id="fs-lang" class="feature-section">🌐 語言 / Language</div>
                     <div class="feature-card" onclick="event.stopPropagation();toggleLanguage()">
                         <div class="feature-card-icon-box" style="background:rgba(97,175,239,0.12);">🌐</div>
                         <div class="feature-card-main">
@@ -19202,6 +19257,32 @@
             if (label) label.textContent = Math.round(g_featureMenuZoom * 100) + '%';
             if (btnMinus) btnMinus.disabled = g_featureMenuZoom <= FEATURE_ZOOM_STEPS[0];
             if (btnPlus) btnPlus.disabled = g_featureMenuZoom >= FEATURE_ZOOM_STEPS[FEATURE_ZOOM_STEPS.length - 1];
+        }
+
+        function scrollToFeatureSection(id) {
+            const section = document.getElementById(id);
+            const grid = document.querySelector('#feature-list-modal .feature-grid');
+            if (!section || !grid) return;
+            const delta = section.getBoundingClientRect().top - grid.getBoundingClientRect().top;
+            grid.scrollTop += delta - 8;
+            updateActiveFSTab(id);
+        }
+
+        function updateActiveFSTab(id) {
+            document.querySelectorAll('#feature-section-tabs .fst-btn').forEach(b => b.classList.remove('active'));
+            const btn = document.querySelector('#feature-section-tabs .fst-btn[data-section="' + id + '"]');
+            if (btn) btn.classList.add('active');
+        }
+
+        function updateFSTabOnScroll(grid) {
+            const sections = ['fs-events', 'fs-analysis', 'fs-share', 'fs-system', 'fs-feedback', 'fs-lang'];
+            const gridTop = grid.getBoundingClientRect().top;
+            let current = sections[0];
+            for (const id of sections) {
+                const el = document.getElementById(id);
+                if (el && el.getBoundingClientRect().top - gridTop <= 24) current = id;
+            }
+            updateActiveFSTab(current);
         }
 
         function closeAllModals() {
