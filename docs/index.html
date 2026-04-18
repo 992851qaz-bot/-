@@ -407,7 +407,7 @@
 
         .feature-card {
             display: flex;
-            align-items: center;
+            align-items: stretch;
             gap: 12px;
             padding: 14px 16px;
             background: rgba(20, 20, 25, 0.65);
@@ -446,6 +446,7 @@
             flex-shrink: 0;
             width: 42px;
             height: 42px;
+            align-self: center;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -457,6 +458,7 @@
         .feature-card-main {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             gap: 3px;
             min-width: 0;
             flex: 1;
@@ -485,7 +487,7 @@
 
         .feature-card-action {
             flex-shrink: 0;
-            margin-left: auto;
+            align-self: center;
         }
 
         .feature-card-action .quick-btn {
