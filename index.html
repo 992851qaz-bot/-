@@ -10355,7 +10355,8 @@
         let g_offlineUidWarnAt = 0;
         let g_offlineSyncState = {
             status: 'idle',
-            text: '待命',
+            textZh: '待命',
+            textEn: 'Standby',
             successCount: 0,
             failCount: 0,
             retryCount: 0,
@@ -10424,6 +10425,8 @@
             _updateLangBtnLabels();
             // Restore dynamic uid display that was overwritten by the [data-lang-zh] loop above
             updateUidDisplay();
+            // Re-render offline sync status badge (dynamic text, not driven by data-lang-zh)
+            if (typeof renderOfflineSyncStatus === 'function') renderOfflineSyncStatus();
             // Re-calculate the analyze button state (its text is dynamic, not data-lang-zh driven)
             if (typeof urlInput !== 'undefined' && urlInput) {
                 urlInput.dispatchEvent(new Event('input'));
@@ -11648,9 +11651,11 @@
             const el = document.getElementById('offline-sync-status');
             if (!el) return;
             const s = g_offlineSyncState || {};
-            const baseText = s.text || '待命';
+            const baseText = g_lang === 'en' ? (s.textEn || 'Standby') : (s.textZh || '待命');
             const statText = `S:${s.successCount || 0} F:${s.failCount || 0} R:${s.retryCount || 0}`;
-            el.innerText = `☁️ 離線同步：${baseText} | ${statText}`;
+            el.innerText = g_lang === 'en'
+                ? `☁️ Offline Sync: ${baseText} | ${statText}`
+                : `☁️ 離線同步：${baseText} | ${statText}`;
 
             if (s.status === 'success') {
                 el.style.background = 'rgba(76,175,80,0.2)';
@@ -11674,9 +11679,13 @@
                 el.style.color = '#cfd8dc';
             }
         }
-        function setOfflineSyncState(status, text, options = {}) {
+        function setOfflineSyncState(status, textOrObj, options = {}) {
+            const isObj = textOrObj && typeof textOrObj === 'object';
+            const textZh = isObj ? textOrObj.zh : textOrObj;
+            const textEn = isObj ? textOrObj.en : textOrObj;
             g_offlineSyncState.status = status || g_offlineSyncState.status;
-            g_offlineSyncState.text = text || g_offlineSyncState.text;
+            if (textZh) g_offlineSyncState.textZh = textZh;
+            if (textEn) g_offlineSyncState.textEn = textEn;
             if (options.success) g_offlineSyncState.successCount += 1;
             if (options.fail) g_offlineSyncState.failCount += 1;
             if (options.retry) g_offlineSyncState.retryCount += 1;
@@ -11689,7 +11698,7 @@
         }
         function ensureOfflineSyncAllowed(uid, showPrompt = true) {
             if (isOfflineSyncUidAllowed(uid)) return true;
-            setOfflineSyncState('idle', '需輸入9碼UID開通');
+            setOfflineSyncState('idle', { zh: '需輸入9碼UID開通', en: '9-digit UID required to enable sync' });
             if (showPrompt && Date.now() - g_offlineUidWarnAt > 5000) {
                 g_offlineUidWarnAt = Date.now();
                 showMsg('OFFLINE_LOCAL 僅本地保存\n請先輸入 9 碼 UID，才可開通離線資料同步上傳。');
@@ -11757,7 +11766,7 @@
                     console.warn('離線 API URL 格式無效，請填寫可連線 URL，目前為:', apiUrl);
                     statusText.innerText = '離線 API URL 無效，僅本地保存';
                 }
-                if (track) setOfflineSyncState('error', `${action} 失敗(URL 無效)`, { fail: true });
+                if (track) setOfflineSyncState('error', { zh: `${action} 失敗(URL 無效)`, en: `${action} failed (invalid URL)` }, { fail: true });
                 return null;
             }
             if (apiUrl.includes('/library/') && !g_offlineApiWarned) {
@@ -11765,7 +11774,7 @@
                 console.warn('目前使用的是 GAS Library URL，建議改用 Web App /exec URL 以供 fetch 呼叫。');
                 statusText.innerText = '提示：離線 API 建議使用 GAS Web App /exec URL';
             }
-            if (track) setOfflineSyncState('syncing', `${action} 同步中`);
+            if (track) setOfflineSyncState('syncing', { zh: `${action} 同步中`, en: `${action} syncing` });
 
             for (let attempt = 0; attempt <= maxRetries; attempt++) {
                 try {
@@ -11793,18 +11802,18 @@
                         throw new Error(json.error || json.message || 'offline_api_error');
                     }
 
-                    if (track) setOfflineSyncState('success', `${action} 成功`, { success: true });
+                    if (track) setOfflineSyncState('success', { zh: `${action} 成功`, en: `${action} succeeded` }, { success: true });
                     return json;
                 } catch (err) {
                     const isLast = attempt >= maxRetries;
                     if (!isLast) {
-                        if (track) setOfflineSyncState('retrying', `${action} 重試 ${attempt + 1}/${maxRetries}`, { retry: true });
+                        if (track) setOfflineSyncState('retrying', { zh: `${action} 重試 ${attempt + 1}/${maxRetries}`, en: `${action} retrying ${attempt + 1}/${maxRetries}` }, { retry: true });
                         await new Promise(r => setTimeout(r, 250));
                         continue;
                     }
                     const errMsg = (err && err.message) ? String(err.message) : 'unknown';
                     console.warn('Offline API call failed:', err);
-                    if (track) setOfflineSyncState('error', `${action} 失敗(${errMsg})`, { fail: true });
+                    if (track) setOfflineSyncState('error', { zh: `${action} 失敗(${errMsg})`, en: `${action} failed (${errMsg})` }, { fail: true });
                     return null;
                 }
             }
@@ -11960,10 +11969,10 @@
                 const updated = await callOfflineApi('offlineUpdate', payload, null, { maxRetries: 2, track: true });
                 if (!updated) {
                     // 後端查無資料時改走 create，避免 update 失敗後不同步
-                    setOfflineSyncState('retrying', 'offlineUpdate 失敗，改用 offlineCreate 補建', { retry: true });
+                    setOfflineSyncState('retrying', { zh: 'offlineUpdate 失敗，改用 offlineCreate 補建', en: 'offlineUpdate failed, falling back to offlineCreate' }, { retry: true });
                     const created = await callOfflineApi('offlineCreate', payload, null, { maxRetries: 2, track: true });
                     if (created) {
-                        setOfflineSyncState('success', 'offlineUpdate 自動補建成功', { success: true });
+                        setOfflineSyncState('success', { zh: 'offlineUpdate 自動補建成功', en: 'offlineUpdate auto-fallback to offlineCreate succeeded' }, { success: true });
                     }
                 }
             }
