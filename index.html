@@ -494,6 +494,50 @@
             font-size: 0.75rem;
         }
 
+        .feature-zoom-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3px 8px;
+        }
+
+        .feature-zoom-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            color: #bbb;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            padding: 0;
+        }
+
+        .feature-zoom-btn:hover {
+            background: rgba(229, 192, 123, 0.18);
+            color: var(--accent);
+            border-color: rgba(229, 192, 123, 0.3);
+        }
+
+        .feature-zoom-label {
+            font-size: 0.72rem;
+            color: #888;
+            min-width: 34px;
+            text-align: center;
+            font-weight: 700;
+            user-select: none;
+        }
+
         @media (max-width: 768px) {
             .feature-grid {
                 grid-template-columns: 1fr;
@@ -7790,7 +7834,7 @@
                     </h2>
                     <div style="color:#888;font-size:0.85rem;" data-lang-zh="快速前往系統各項功能模組。" data-lang-en="Jump quickly to any feature module.">快速前往系統各項功能模組。</div>
                 </div>
-                <div id="feature-modal-lang-group" style="display:flex;gap:6px;align-items:center;flex-shrink:0;margin:0 12px 0 auto;">
+                <div id="feature-modal-lang-group" style="display:flex;gap:6px;align-items:center;flex-shrink:0;margin:0 8px 0 auto;">
                     <button id="modal-lang-btn-zh" onclick="setLanguage('zh')"
                         style="padding:4px 12px;border-radius:16px;border:2px solid var(--accent);background:var(--accent);color:#000;font-weight:700;font-size:0.78rem;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s,border-color 0.2s;">
                         🇹🇼 繁中
@@ -7799,6 +7843,11 @@
                         style="padding:4px 12px;border-radius:16px;border:2px solid rgba(229,192,123,0.35);background:rgba(229,192,123,0.08);color:#aaa;font-weight:700;font-size:0.78rem;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s,border-color 0.2s;">
                         🌐 EN
                     </button>
+                </div>
+                <div class="feature-zoom-ctrl" id="feature-zoom-ctrl" title="調整顯示縮放 / Adjust display zoom">
+                    <button class="feature-zoom-btn" onclick="adjustFeatureMenuZoom(-1)">−</button>
+                    <span class="feature-zoom-label" id="feature-zoom-label">100%</span>
+                    <button class="feature-zoom-btn" onclick="adjustFeatureMenuZoom(1)">+</button>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('feature-list-modal').style.display='none'">×</button>
@@ -19106,6 +19155,7 @@
                 el.style.zIndex = "25000";
                 el.style.display = 'flex';
             }
+            initFeatureMenuZoom();
             updateMobilePillAnchor();
         }
 
@@ -19113,6 +19163,44 @@
             const el = document.getElementById('feature-list-modal');
             if (el) el.style.display = 'none';
             updateMobilePillAnchor();
+        }
+
+        let g_featureMenuZoom = 1.0;
+        const FEATURE_ZOOM_STEPS = [0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5];
+
+        function initFeatureMenuZoom() {
+            const saved = parseFloat(localStorage.getItem('featureMenuZoom'));
+            if (!isNaN(saved) && saved >= 0.7 && saved <= 1.5) {
+                g_featureMenuZoom = saved;
+            } else {
+                // Auto-detect: increase zoom on high-DPI displays where content may appear smaller
+                const dpr = window.devicePixelRatio || 1;
+                if (dpr >= 2) g_featureMenuZoom = 1.2;
+                else if (dpr >= 1.5) g_featureMenuZoom = 1.1;
+                else g_featureMenuZoom = 1.0;
+            }
+            applyFeatureMenuZoom();
+        }
+
+        function adjustFeatureMenuZoom(dir) {
+            const cur = Math.round(g_featureMenuZoom * 10) / 10;
+            let idx = FEATURE_ZOOM_STEPS.findIndex(s => Math.abs(s - cur) < 0.01);
+            if (idx < 0) idx = FEATURE_ZOOM_STEPS.indexOf(1.0);
+            const newIdx = Math.max(0, Math.min(FEATURE_ZOOM_STEPS.length - 1, idx + dir));
+            g_featureMenuZoom = FEATURE_ZOOM_STEPS[newIdx];
+            localStorage.setItem('featureMenuZoom', g_featureMenuZoom);
+            applyFeatureMenuZoom();
+        }
+
+        function applyFeatureMenuZoom() {
+            const grid = document.querySelector('#feature-list-modal .feature-grid');
+            const label = document.getElementById('feature-zoom-label');
+            const btnMinus = document.querySelector('#feature-zoom-ctrl .feature-zoom-btn:first-child');
+            const btnPlus = document.querySelector('#feature-zoom-ctrl .feature-zoom-btn:last-child');
+            if (grid) grid.style.zoom = String(g_featureMenuZoom);
+            if (label) label.textContent = Math.round(g_featureMenuZoom * 100) + '%';
+            if (btnMinus) btnMinus.disabled = g_featureMenuZoom <= FEATURE_ZOOM_STEPS[0];
+            if (btnPlus) btnPlus.disabled = g_featureMenuZoom >= FEATURE_ZOOM_STEPS[FEATURE_ZOOM_STEPS.length - 1];
         }
 
         function closeAllModals() {
