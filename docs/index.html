@@ -12817,8 +12817,15 @@
             analyzeBtn.innerText = g_lang === 'en' ? "View History" : "檢視歷史";
             g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length);
 
-            // 立即渲染一次
-            renderTable(g_globalData, g_chains, g_echoesData);
+            // 確保結果面板可見
+            if (typeof ensureAnalysisPanelVisible === 'function') ensureAnalysisPanelVisible();
+
+            // 立即渲染一次（包 try-catch 確保 renderHistoryList 必定執行）
+            try {
+                renderTable(g_globalData, g_chains, g_echoesData);
+            } catch (e) {
+                console.warn("[loadFromHistory] renderTable failed:", e);
+            }
             renderHistoryList();
 
             if (typeof dps_syncFromAnalysis === 'function') {
