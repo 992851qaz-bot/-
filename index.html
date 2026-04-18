@@ -7434,8 +7434,7 @@
         <div class="input-group"><button class="btn-analyze" style="background:#444;color:#fff;border-color:#666;"
                 onclick="triggerFileUpload()" data-lang-zh="📂 選擇圖片" data-lang-en="📂 Upload Image">📂 選擇圖片</button><input type="file" id="file-upload" accept="image/*"
                 style="display:none" onchange="handleFileUpload(this)" multiple><input type="text" id="url-input"
-                placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-zh="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-en="Enter UID or paste official screenshot URL..."><button id="btn-analyze" class="btn-analyze"
-             data-lang-zh="離線新增角色" data-lang-en="Add Role Offline">離線新增角色</button></div>
+                placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-zh="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-en="Enter UID or paste official screenshot URL..."><button id="btn-analyze" class="btn-analyze">離線新增角色</button></div>
         <!-- New Header Loader -->
         <div id="inline-loader" class="header-loader">
             <div class="loader-content">
@@ -10385,17 +10384,13 @@
                     stEl.textContent = g_lang === 'en' ? 'Ready' : '就緒';
                 }
             }
-            // Update btn-analyze if it shows the offline-add-role text
-            const baEl = document.getElementById('btn-analyze');
-            if (baEl) {
-                const cur = baEl.textContent.trim();
-                if (cur === '離線新增角色' || cur === 'Add Role Offline') {
-                    baEl.textContent = g_lang === 'en' ? 'Add Role Offline' : '離線新增角色';
-                }
-            }
             _updateLangBtnLabels();
             // Restore dynamic uid display that was overwritten by the [data-lang-zh] loop above
             updateUidDisplay();
+            // Re-calculate the analyze button state (its text is dynamic, not data-lang-zh driven)
+            if (typeof urlInput !== 'undefined' && urlInput) {
+                urlInput.dispatchEvent(new Event('input'));
+            }
             // Re-render history list so role names and badges reflect the new language
             if (typeof renderHistoryList === 'function') renderHistoryList();
             if (g_echoesData.length > 0) renderTable(g_globalData, g_chains, g_echoesData);
@@ -10940,12 +10935,12 @@
                 // Logic prioritizes empty input after login
                 if (v === "") {
                     if (g_currentUserUid) {
-                        btn.innerText = "功能列表";
+                        btn.innerText = g_lang === 'en' ? "Features" : "功能列表";
                         btn.classList.add('metallic-btn');
-                        btn.setAttribute('data-text', "功能列表");
+                        btn.setAttribute('data-text', g_lang === 'en' ? "Features" : "功能列表");
                         btn.disabled = false;
                     } else {
-                        btn.innerText = "離線新增角色";
+                        btn.innerText = g_lang === 'en' ? "Add Role Offline" : "離線新增角色";
                         btn.disabled = false;
                     }
                     return;
@@ -10953,14 +10948,14 @@
 
                 if (/^\d{9}$/.test(v)) {
                     // Valid UID
-                    btn.innerText = "切換 UID";
+                    btn.innerText = g_lang === 'en' ? "Switch UID" : "切換 UID";
                     btn.style.background = "#2196f3";
                     btn.style.color = "#fff";
                     btn.style.borderColor = "#2196f3";
                     btn.disabled = false;
                 } else if (/^https?:\/\//.test(v)) {
                     // URL input (Simple check, assumes valid if mostly looks like URL)
-                    btn.innerText = "開始分析";
+                    btn.innerText = g_lang === 'en' ? "Analyze" : "開始分析";
                     btn.disabled = false;
                     // Auto-start if URL matches allowed domain
                     if (v.startsWith(ALLOWED_DOMAIN)) {
@@ -10975,13 +10970,13 @@
 
                     const codeKey = 'HAPPY';
                     if (!isHappyCodeActive()) {
-                        btn.innerText = "活動已結束";
+                        btn.innerText = g_lang === 'en' ? "Event Ended" : "活動已結束";
                         btn.classList.add('invalid');
                         showMsg('此序號已於 4/5 到期');
                         return;
                     }
                     if (g_usedCodes.has(codeKey)) {
-                        btn.innerText = "已兌換過";
+                        btn.innerText = g_lang === 'en' ? "Already Redeemed" : "已兌換過";
                         btn.classList.add('invalid');
                         showMsg('您已經兌換過此序號囉！');
                     } else {
@@ -10993,7 +10988,7 @@
                             openPointsModal();
                         });
                         urlInput.value = '';
-                        btn.innerText = "功能列表";
+                        btn.innerText = g_lang === 'en' ? "Features" : "功能列表";
                     }
                     return;
                 } else {
@@ -11001,9 +10996,9 @@
                     btn.disabled = false; // Allow click to show help
                     btn.classList.add('invalid');
                     if (/^\d+$/.test(v)) {
-                        btn.innerText = "UID格式錯誤 (需9碼)";
+                        btn.innerText = g_lang === 'en' ? "Invalid UID (9 digits)" : "UID格式錯誤 (需9碼)";
                     } else {
-                        btn.innerText = "格式不符合要求";
+                        btn.innerText = g_lang === 'en' ? "Invalid Format" : "格式不符合要求";
                     }
                 }
             });
@@ -12724,7 +12719,7 @@
             unlockPreview();
             urlInput.value = "";
             urlInput.dispatchEvent(new Event('input'));
-            analyzeBtn.innerText = "檢視歷史";
+            analyzeBtn.innerText = g_lang === 'en' ? "View History" : "檢視歷史";
             g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length);
 
             // 立即渲染一次
