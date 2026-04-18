@@ -10544,6 +10544,44 @@
             "斑駁粉飾之沫": "https://prod-alicdn-community.kurobbs.com/forum/0720ce54d75b47a3a5dd9e8ff34484a420260204.png",
             "聽取語意之願": "https://prod-alicdn-community.kurobbs.com/forum/db00d18ae6ff47c4b38a593a6c5becee20260204.png"
         };
+        const SONATA_ZH_TO_EN = {
+            "浮星祛暗": "Sierra Gale",
+            "熔山裂谷": "Molten Rift",
+            "凝夜白霜": "Freezing Frost",
+            "沉日劫明": "Midnight Veil",
+            "沈日劫明": "Midnight Veil",
+            "徹空冥雷": "Void Thunder",
+            "絕空冥雷": "Void Thunder",
+            "嘯谷長風": "Lingering Tunes",
+            "輕雲出月": "Moonlit Clouds",
+            "隱世回光": "Rejuvenating Glow",
+            "不絕餘音": "Endless Resonance",
+            "凌冽決斷之心": "Frosty Resolve",
+            "此間永駐之光": "Eternal Radiance",
+            "幽夜隱匿之帷": "Twilight Shroud",
+            "高天共奏之曲": "Celestial Harmony",
+            "無懼浪濤之勇": "Fearless Surge",
+            "流雲逝盡之空": "Dissipating Sky",
+            "願戴榮光之旅": "Glorious Journey",
+            "奔狼燎原之焰": "Prairie Blaze",
+            "失序彼岸之夢": "Dreamless Shore",
+            "榮鬥鑄鋒之冠": "Honored Blade",
+            "息界同調之律": "Resonant Accord",
+            "焚羽獵魔之影": "Incandescent Hunter",
+            "命理崩毀之弦": "Fate's Toll",
+            "逆光躍彩之約": "Backlit Vow",
+            "流金溯真之式": "Gilded Truth",
+            "星構尋輝之環": "Stellar Seeker",
+            "長路啟航之星": "Journeying Star",
+            "斑駁粉飾之沫": "Patched Glimmer",
+            "聽取語意之願": "Spoken Wish"
+        };
+        function sonataName(zhKey) {
+            if (typeof g_lang !== 'undefined' && g_lang === 'en') {
+                return SONATA_ZH_TO_EN[zhKey] || zhKey;
+            }
+            return zhKey;
+        }
         const SUIT_COORDS = [
             [267, 662, 50, 50],
             [640, 662, 50, 50],
@@ -13237,7 +13275,7 @@
             let totalPercentage = maxTheoreticalScore > 0 ? (totalScore / maxTheoreticalScore) * 100 : 0;
             return { score: scoreAchieved, bonus: bonus, totalScore: totalScore, totalPercentage: totalPercentage, maxTheoretical: maxTheoreticalScore, percentage: percentage, details: scoreDetails, validCount: effectiveCount, denom: denom }
         }
-        function getGrading(percentage) { if (percentage >= 90) return { label: "傳家寶", class: "grad-heirloom" }; if (percentage >= 80) return { label: "大畢業", class: "grad-grand" }; if (percentage >= 65) return { label: "中畢業", class: "grad-medium" }; if (percentage >= 50) return { label: "小畢業", class: "grad-small" }; return { label: "未畢業", class: "grad-none" } }
+        function getGrading(percentage) { const en = typeof g_lang !== 'undefined' && g_lang === 'en'; if (percentage >= 90) return { label: en ? "Heirloom" : "傳家寶", class: "grad-heirloom" }; if (percentage >= 80) return { label: en ? "Major Grad" : "大畢業", class: "grad-grand" }; if (percentage >= 65) return { label: en ? "Mid Grad" : "中畢業", class: "grad-medium" }; if (percentage >= 50) return { label: en ? "Minor Grad" : "小畢業", class: "grad-small" }; return { label: en ? "Not Yet" : "未畢業", class: "grad-none" } }
         function getHeatmapColor(potentialValue, roleWeights) { let allPotentials = []; for (let key in roleWeights) { let w = roleWeights[key]; let m = SUB_STAT_MAX_VALUES[key] || 0; if (w > 0 && m > 0) allPotentials.push(w * m) } allPotentials.sort((a, b) => b - a); if (potentialValue <= 0) return null; if (potentialValue >= allPotentials[Math.min(1, allPotentials.length - 1)]) return 'var(--heat-s)'; if (potentialValue >= allPotentials[Math.min(3, allPotentials.length - 1)]) return 'var(--heat-a)'; if (potentialValue >= allPotentials[Math.min(5, allPotentials.length - 1)]) return 'var(--heat-b)'; return null }
         function showScoreDetails(idx) { if (idx === -1) { showTotalScoreDetails(); return } if (!g_echoesData[idx] || !g_globalData.role || !g_currentWeights[g_globalData.role]) return; let activeWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let result = calculateEchoScore(g_echoesData[idx], activeWeights); let cv = getCVInfo(g_echoesData[idx]); if (!result) return; let html = `<table><tr><th>詞條</th><th>數值</th><th>權重</th><th>計分</th><th>最大點數</th></tr>`; result.details.forEach(d => { let style = d.weight > 0 ? 'style="color:var(--ok)"' : 'style="color:#666"'; html += `<tr><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.val)}</td><td>${safeFixed(d.weight, 1)}</td><td ${style}>${safeFixed(d.score, 1)}</td><td>${safeFixed(d.maxPoints, 1)}</td></tr>` }); html += `<tr class="score-total-row"><td colspan="3">總計 (SAchieved)</td><td colspan="2">${safeFixed(result.score, 1)} / ${safeFixed(result.maxTheoretical, 1)}</td></tr>`; html += `<tr><td colspan="3" style="font-size:0.75rem;color:#888;">CV公式: <br>暴擊(${cv.cr})*2 + 暴傷(${cv.cd}) / 42 = ${cv.pct}%</td><td colspan="2" style="text-align:right;font-size:0.9rem;">畢業度: <span style="color:var(--cv-val);font-size:1.1rem;">${safeFixed(result.percentage, 1)}%</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) { zoomCanvas.style.opacity = '0' } }
         function showTotalScoreDetails() { if (!g_globalData.role || !g_currentWeights[g_globalData.role]) return; let roleWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let totalScore = 0, totalMax = 0; let totalCR = 0, totalCD = 0; g_echoesData.forEach(e => { let cv = getCVInfo(e); totalCR += parseFloat(cv.cr) || 0; totalCD += parseFloat(cv.cd) || 0; let res = calculateEchoScore(e, roleWeights); if (res) { totalScore += res.score; totalMax += res.maxTheoretical } }); let totalPct = totalMax > 0 ? (totalScore / totalMax) * 100 : 0; let buffedPct = Math.min(100.0, totalPct * 1.25); let finalBuffedScore = totalScore * 1.25; let bonus = finalBuffedScore - totalScore; let totalCVVal = totalCR * 2 + totalCD; let cvPct = safeFixed(totalCVVal / (42.0 * 5) * 100.0, 0); let html = `<table><tr><th colspan="2" style="color:var(--accent);font-size:1.1rem;border-bottom:2px solid var(--accent)">整機總分計算表</th></tr><tr><td>基礎得分 (Base)</td><td style="font-weight:bold;color:var(--ok)">${safeFixed(totalScore, 1)} / ${safeFixed(totalMax, 1)}</td></tr><tr><td>平衡補分 (Buff)</td><td style="font-weight:bold;color:var(--accent)">+${safeFixed(bonus, 1)}</td></tr><tr><td>最終得分 (Total)</td><td style="font-weight:bold;color:var(--ok);font-size:1.2rem;">${safeFixed(finalBuffedScore, 1)}</td></tr><tr><td>整體畢業度</td><td style="font-weight:bold;color:var(--cv-val)">${safeFixed(buffedPct, 1)}% <span style="font-size:0.7rem;color:#888">(原 ${safeFixed(totalPct, 1)}%)</span></td></tr><tr><td colspan="2" style="height:1px;background:#444;padding:0;"></td></tr><tr><td>總暴擊率</td><td>${safeFixed(totalCR, 1)}%</td></tr><tr><td>總暴擊傷害</td><td>${safeFixed(totalCD, 1)}%</td></tr><tr><td>總雙爆評分 (CV)</td><td style="color:#ddd">${safeFixed(totalCVVal, 1)}</td></tr><tr><td>CV 達成率</td><td>${cvPct}% <span style="font-size:0.7rem;color:#888">(Base 210)</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) zoomCanvas.style.opacity = '0' }
@@ -15823,11 +15861,12 @@
         }
 
         function rank_getGrading(p) {
-            if (p >= 90) return { l: "傳家寶", c: "grad-heirloom" };
-            if (p >= 80) return { l: "大畢業", c: "grad-grand" };
-            if (p >= 65) return { l: "中畢業", c: "grad-medium" };
-            if (p >= 50) return { l: "小畢業", c: "grad-small" };
-            return { l: "未畢業", c: "grad-none" };
+            const en = typeof g_lang !== 'undefined' && g_lang === 'en';
+            if (p >= 90) return { l: en ? "Heirloom" : "傳家寶", c: "grad-heirloom" };
+            if (p >= 80) return { l: en ? "Major Grad" : "大畢業", c: "grad-grand" };
+            if (p >= 65) return { l: en ? "Mid Grad" : "中畢業", c: "grad-medium" };
+            if (p >= 50) return { l: en ? "Minor Grad" : "小畢業", c: "grad-small" };
+            return { l: en ? "Not Yet" : "未畢業", c: "grad-none" };
         }
 
         function rank_getTierInfo(name, val) {
@@ -16642,7 +16681,7 @@
  <div class="social-echo-header">
  ${suitIcon ? `<img src="${suitIcon}" class="social-echo-icon" crossorigin="anonymous">` : '<div class="social-echo-icon"></div>'}
  <div class="social-echo-info">
- <div class="social-echo-suit">${suitKey}</div>
+ <div class="social-echo-suit">${sonataName(suitKey)}</div>
  <div class="social-suit-icon">COST ${costTxt}</div>
  </div>
  <div class="social-echo-score-wrap">
@@ -22508,9 +22547,11 @@
         async function openFeedbackModal() {
             const modal = document.getElementById('feedback-modal');
             if (!modal) return;
+            // Re-apply language so modal labels are correctly translated
+            if (typeof setLanguage === 'function') setLanguage(g_lang);
 
             document.getElementById('feedback-time').innerText = new Date().toLocaleString();
-            const url = (g_globalData && g_globalData._imageUrl) || "無網址";
+            const url = (g_globalData && g_globalData._imageUrl) || (g_lang === 'en' ? "No URL" : "無網址");
             document.getElementById('feedback-url').innerText = url;
             document.getElementById('feedback-content').value = "";
             document.getElementById('feedback-category').value = "";
@@ -22547,7 +22588,7 @@
                     document.getElementById('screenshot-loader').style.display = 'none';
                 } catch (e) {
                     console.error("截圖失敗:", e);
-                    document.getElementById('screenshot-loader').innerText = "截圖失敗，請手動描述問題";
+                    document.getElementById('screenshot-loader').innerText = g_lang === 'en' ? "Screenshot failed, please describe the issue manually" : "截圖失敗，請手動描述問題";
                 }
             }, 300);
         }
@@ -23120,19 +23161,19 @@
                     style="flex:1; display:flex; flex-direction:column; gap:15px; border-left:1px solid rgba(255,255,255,0.05); padding-left:20px;">
                     <div class="feedback-info-row"
                         style="font-size:0.82rem; color:#aaa; background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; line-height:1.6; border:1px solid rgba(255,255,255,0.05);">
-                        <div>🕙 時間：<span id="feedback-time" style="color:#eee;"></span></div>
-                        <div>🔗 圖片：<span id="feedback-url"
+                        <div><span data-lang-zh="🕙 時間：" data-lang-en="🕙 Time:">🕙 時間：</span><span id="feedback-time" style="color:#eee;"></span></div>
+                        <div><span data-lang-zh="🔗 圖片：" data-lang-en="🔗 Image:">🔗 圖片：</span><span id="feedback-url"
                                 style="color:var(--accent); word-break:break-all; font-family:'JetBrains Mono';">N/A</span>
                         </div>
                         <div style="margin-top:4px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.06);">
-                            🖥️ 解析度：<span id="feedback-screen-res" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                            <span data-lang-zh="🖥️ 解析度：" data-lang-en="🖥️ Resolution:">🖥️ 解析度：</span><span id="feedback-screen-res" style="color:#eee; font-family:'JetBrains Mono';">-</span>
                             <span style="color:#555; margin:0 4px;">·</span>
-                            視窗：<span id="feedback-window-size" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                            <span data-lang-zh="視窗：" data-lang-en="Window:">視窗：</span><span id="feedback-window-size" style="color:#eee; font-family:'JetBrains Mono';">-</span>
                         </div>
                         <div>
                             📐 DPR：<span id="feedback-dpr" style="color:#eee; font-family:'JetBrains Mono';">-</span>
                             <span style="color:#555; margin:0 4px;">·</span>
-                            縮放：<span id="feedback-zoom-info" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                            <span data-lang-zh="縮放：" data-lang-en="Zoom:">縮放：</span><span id="feedback-zoom-info" style="color:#eee; font-family:'JetBrains Mono';">-</span>
                         </div>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:8px;">
@@ -23149,8 +23190,8 @@
                         <div id="ocr-upload-container" style="display:none; margin-top:2px;">
                             <label
                                 style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.8rem; color:var(--accent); background:rgba(255,255,255,0.03); padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
-                                <input type="checkbox" id="feedback-ocr-upload" checked style="cursor:pointer;"> 附帶當次
-                                OCR 辨識結果 (推薦，協助優化)
+                                <input type="checkbox" id="feedback-ocr-upload" checked style="cursor:pointer;"> <span data-lang-zh="附帶當次 OCR 辨識結果 (推薦，協助優化)" data-lang-en="Attach OCR result (recommended)">附帶當次
+                                OCR 辨識結果 (推薦，協助優化)</span>
                             </label>
                         </div>
                     </div>
