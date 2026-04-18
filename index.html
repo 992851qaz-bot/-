@@ -10295,6 +10295,8 @@
         const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxzbZHtWKMFY5dv2Rb2Qg_kzzqf0IVwyhakI-Jq29s9wZhHAWNg7LIloTZX_OwFaLwP/exec"; const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbz5ZDfnE5KMcJoMmTFQNkZHe-6PB8Af4Ok_t8V69IakZKGG8OLFyy06MEjuqVDm42Br/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
         const SUB_ALIAS_MAP = { "生命": "生命", "生命值": "生命", "生命固定": "生命", "生命百分比": "生命百分比", "生命%": "生命百分比", "攻擊": "攻擊", "攻擊力": "攻擊", "攻擊固定": "攻擊", "攻擊百分比": "攻擊百分比", "攻擊%": "攻擊百分比", "防禦": "防禦", "防御": "防禦", "防禦力": "防禦", "防御力": "防禦", "防禦百分比": "防禦百分比", "防禦%": "防禦百分比", "防御百分比": "防禦百分比", "暴擊": "暴擊", "爆擊": "暴擊", "暴擎": "暴擊", "暴擊傷害": "暴擊傷害", "爆擊傷害": "暴擊傷害", "暴傷": "暴擊傷害", "爆擊率": "暴擊", "共鳴效率": "共鳴效率", "效率": "共鳴效率", "普攻傷害加成": "普攻傷害加成", "普攻": "普攻傷害加成", "重擊傷害加成": "重擊傷害加成", "重擊": "重擊傷害加成", "共鳴技能傷害加成": "共鳴技能傷害加成", "共鳴技能": "共鳴技能傷害加成", "技能": "共鳴技能傷害加成", "E技能": "共鳴技能傷害加成", "共鳴解放傷害加成": "共鳴解放傷害加成", "共鳴解放": "共鳴解放傷害加成", "大招": "共鳴解放傷害加成", "解放": "共鳴解放傷害加成" };
         const ROLE_EN_MAP = { "Jinhsi": "今汐", "Jiyan": "忌炎", "Changli": "長離", "Zhezhi": "折枝", "Yinlin": "吟霖", "Xiangli Yao": "相里要", "Camellya": "椿", "Shorekeeper": "守岸人", "Encore": "安可", "Calcharo": "卡卡羅", "Verina": "維里奈", "Lingyang": "凌陽", "Jianxin": "鑑心", "Rover": "漂泊者", "Havoc Rover": "漂泊者(湮滅)", "Spectro Rover": "漂泊者(衍射)", "Sanhua": "散華", "Danjin": "丹瑾", "Mortefi": "莫特斐", "Baizhi": "白芷", "Chixia": "熾霞", "Yangyang": "秧秧", "Yuanwu": "淵武", "Taoqi": "桃祈", "Aalto": "秋水" };
+        // Reverse map: Chinese name → English name
+        const ROLE_ZH_TO_EN = Object.fromEntries(Object.entries(ROLE_EN_MAP).map(([en, zh]) => [zh, en]));
         const LOOKUP_ROWS = [["60", "11.6%", "580", "11.6%", "70", "14.7%", "10.5%", "21.0%", "11.6%", "11.6%", "11.6%", "11.6%", "12.4%"], ["50", "10.9%", "540", "10.9%", "60", "13.8%", "9.9%", "19.8%", "10.9%", "10.9%", "10.9%", "10.9%", "11.6%"], ["40", "10.1%", "510", "10.1%", "50", "12.8%", "9.3%", "18.6%", "10.1%", "10.1%", "10.1%", "10.1%", "10.8%"], ["30", "9.4%", "470", "9.4%", "40", "11.8%", "8.7%", "17.4%", "9.4%", "9.4%", "9.4%", "9.4%", "10.0%"], ["—", "8.6%", "430", "8.6%", "—", "10.9%", "8.1%", "16.2%", "8.6%", "8.6%", "8.6%", "8.6%", "9.2%"], ["—", "7.9%", "390", "7.9%", "—", "10.0%", "7.5%", "15.0%", "7.9%", "7.9%", "7.9%", "7.9%", "8.4%"], ["—", "7.1%", "360", "7.1%", "—", "9.0%", "6.9%", "13.8%", "7.1%", "7.1%", "7.1%", "7.1%", "7.6%"], ["—", "6.4%", "320", "6.4%", "—", "8.1%", "6.3%", "12.6%", "6.4%", "6.4%", "6.4%", "6.4%", "6.8%"]];
         const STAT_MAP = { '攻擊': [0, 1], '生命': [2, 3], '防禦': [4, 5], '防御': [4, 5], '暴擊': [6], '爆擊': [6], '暴擊傷害': [7], '爆擊傷害': [7], '普攻傷害加成': [8], '普攻': [8], '重擊傷害加成': [9], '重擊': [9], '共鳴技能傷害加成': [10], '共鳴技能': [10], '技能': [10], '共鳴解放傷害加成': [11], '共鳴解除傷害加成': [11], '共鳴解放': [11], '解放': [11], '共鳴傷害': [11], '解放傷害': [11], '共鳴效率': [12], '效率': [12] };
         const SUB_STAT_MAX_VALUES = { "攻擊": 60, "攻擊百分比": 11.6, "生命": 580, "生命百分比": 11.6, "防禦": 70, "防禦百分比": 14.7, "暴擊": 10.5, "暴擊傷害": 21.0, "共鳴效率": 11.6, "普攻傷害加成": 11.6, "重擊傷害加成": 11.6, "共鳴技能傷害加成": 11.6, "共鳴解放傷害加成": 12.4 };
@@ -12648,6 +12650,8 @@
                 const gradeHtml = `<span style="display:inline-block; padding:2px 6px; background:${gradeColor}22; color:${gradeColor}; border-radius:4px; font-weight:900; font-size:0.75rem; margin-right:8px; border:1px solid ${gradeColor}55;">${gradeStr}</span>`;
 
                 const roleName = item.global.role || '未辨識';
+                // In English mode, show English character name for clarity
+                const displayRoleName = (g_lang === 'en' && ROLE_ZH_TO_EN[roleName]) ? ROLE_ZH_TO_EN[roleName] : roleName;
                 let roleKey = roleName;
                 // 嘗試標準化名稱以匹配圖片鍵值
                 if (!RESONATORS_PROFILE_PICTURE[roleKey]) {
@@ -12656,7 +12660,7 @@
                 const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
                 const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" class="history-role-icon" onerror="this.style.display='none'">` : '<span class="history-role-icon-placeholder">?</span>';
 
-                div.innerHTML = `<div class="history-main">${iconHtml}<div style="flex:1;min-width:0;"><div class="h-info">${gradeHtml}${escapeHtml(roleName)} ${statusTag} ${actionBtnHtml}</div><div class="h-time" style="font-size:0.7rem;line-height:1;">${escapeHtml(item.ts)}</div><div style="font-size:0.75rem;color:#888;">UID: ${escapeHtml(item.global.uid) || '?'}</div></div></div><button class="history-mobile-arrow" onclick="openHistoryItemFromMobile(${i}, event)" title="前往此筆結果">➜</button>`;
+                div.innerHTML = `<div class="history-main">${iconHtml}<div style="flex:1;min-width:0;"><div class="h-info">${gradeHtml}${escapeHtml(displayRoleName)} ${statusTag} ${actionBtnHtml}</div><div class="h-time" style="font-size:0.7rem;line-height:1;">${escapeHtml(item.ts)}</div><div style="font-size:0.75rem;color:#888;">UID: ${escapeHtml(item.global.uid) || '?'}</div></div></div><button class="history-mobile-arrow" onclick="openHistoryItemFromMobile(${i}, event)" title="前往此筆結果">➜</button>`;
                 historyListEl.appendChild(div);
             }
 
@@ -12820,10 +12824,16 @@
                     const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
                     const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid ${colorClass}; margin-bottom:4px;">` : `<div style="width:50px;height:50px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 4px auto;border:2px solid ${colorClass};">?</div>`;
 
+                    // English name cross-reference
+                    const enName = ROLE_ZH_TO_EN[g.role] || '';
+                    const cardPrimaryName = (g_lang === 'en' && enName) ? enName : g.role;
+                    const cardSubName = (g_lang === 'en' && enName) ? `<div style="font-size:0.7rem; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;" title="${g.role}">${g.role}</div>` : '';
+
                     out += `<div style="width:85px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px 4px; text-align:center; position:relative; transition:transform 0.2s, background 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.transform='none'; this.style.background='rgba(255,255,255,0.02)'">`;
                     out += `<div style="position:absolute; top:-6px; right:-6px; font-size:0.7rem; background:#222; padding:2px 6px; border-radius:6px; font-weight:bold; border:1px solid ${colorClass}; z-index:2;" class="${g.grad.c || ''}">${g.grad.l || g.grad.label || ''}</div>`;
                     out += iconHtml;
-                    out += `<div style="font-size:0.85rem; font-weight:bold; color:#e0e0e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g.role}">${g.role}</div>`;
+                    out += `<div style="font-size:0.85rem; font-weight:bold; color:#e0e0e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g.role}">${escapeHtml(cardPrimaryName)}</div>`;
+                    out += cardSubName;
                     out += `<div style="color:#aaa; font-size:0.8rem; font-family:'JetBrains Mono'; margin-top:2px;">${safeFixed(g.score, 1)}%</div>`;
                     out += `</div>`;
                 });
@@ -12834,9 +12844,10 @@
             html += `<style>.grad-card-container { display:flex; flex-direction:column; gap:20px; overflow-y:auto; max-height:75vh; padding-right:5px;} .grad-card-container::-webkit-scrollbar { width:6px; } .grad-card-container::-webkit-scrollbar-thumb { background:#555; border-radius:3px; }</style>`;
             html += `<div class="grad-card-container">`;
 
-            html += renderCardList([...buckets.heirloom, ...buckets.grand], "🏆 極品畢業 (≥80%)", "#ffca28", "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
-            html += renderCardList(buckets.med, "🏅 標準畢業 (≥50%)", "#78e08f", "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
-            html += renderCardList(buckets.none, "❌ 未畢業 (<50%)", "#ff5555", "無未畢業角色", "rgba(255, 85, 85, 0.2)");
+            const isEN = g_lang === 'en';
+            html += renderCardList([...buckets.heirloom, ...buckets.grand], isEN ? "🏆 Top Grade (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", isEN ? "No top-grade characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
+            html += renderCardList(buckets.med, isEN ? "🏅 Standard Grade (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", isEN ? "No standard-grade characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
+            html += renderCardList(buckets.none, isEN ? "❌ Not Graduated (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", isEN ? "No ungraded characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
 
             html += `</div>`;
             html += `</div>`;
