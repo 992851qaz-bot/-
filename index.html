@@ -7426,7 +7426,7 @@
             <h1>GAME ZH</h1>
             <div id="stat-carousel" class="stat-carousel">
                 <div id="stat-track" class="stat-track">
-                    <div class="stat-slide">聲骸分析專家 - 正在載入統計資料...</div>
+                    <div class="stat-slide" data-lang-zh="聲骸分析專家 - 正在載入統計資料..." data-lang-en="Echo Analyst - Loading stats...">聲骸分析專家 - 正在載入統計資料...</div>
                 </div>
             </div>
             <button class="btn-weights-mini" onclick="event.stopPropagation(); showWeightsModal()" data-lang-zh="加權值表" data-lang-en="Weights">加權值表</button>
@@ -9965,13 +9965,14 @@
     <div id="offline-edit-bar"
         style="display:none;position:fixed;bottom:0;left:0;width:100%;z-index:9999;background:linear-gradient(90deg,#2d4a2d,#1a3a1a);border-top:2px solid #4caf50;padding:6px 20px;text-align:center;font-size:0.82rem;color:#98c379;letter-spacing:1px;font-weight:bold;pointer-events:auto;backdrop-filter:blur(5px);box-shadow:0 -5px 20px rgba(0,0,0,0.5);">
         <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
-            <span id="offline-bar-text">🟢 離線編輯模式 | 內容已修改，關閉模式可還原</span>
+            <span id="offline-bar-text" data-lang-zh="🟢 離線編輯模式 | 內容已修改，關閉模式可還原" data-lang-en="🟢 Offline Edit Mode | Modified, close to revert">🟢 離線編輯模式 | 內容已修改，關閉模式可還原</span>
             <span id="offline-sync-status"
-                style="background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.2);color:#cfd8dc;padding:2px 8px;border-radius:999px;font-size:0.72rem;">☁️ 離線同步：待命</span>
+                style="background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.2);color:#cfd8dc;padding:2px 8px;border-radius:999px;font-size:0.72rem;" data-lang-zh="☁️ 離線同步：待命" data-lang-en="☁️ Offline Sync: Standby">☁️ 離線同步：待命</span>
             <button onclick="quitOfflineAndReset()"
                 style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;transition:background 0.2s;"
                 onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.15)'">退出並重設權重</button>
+                onmouseout="this.style.background='rgba(255,255,255,0.15)'"
+                data-lang-zh="退出並重設權重" data-lang-en="Exit &amp; Reset Weights">退出並重設權重</button>
         </div>
     </div>
 
@@ -10470,6 +10471,8 @@
                 const reIdx = rank_list.indexOf(rank_currentEntry);
                 if (reIdx !== -1) rank_openDetail(reIdx);
             }
+            // Re-render header carousel stats in the new language
+            if (typeof dashboard_updateCarousel === 'function') dashboard_updateCarousel();
         }
         function toggleLanguage() { setLanguage(g_lang === 'zh' ? 'en' : 'zh'); }
         function _updateLangBtnLabels() {
@@ -17362,19 +17365,19 @@
                     bar.style.background = 'linear-gradient(90deg, #4b2d4a, #1a1a3a)';
                     bar.style.borderColor = '#9c27b0';
                     bar.style.color = '#e0b0ff';
-                    if (barText) barText.innerHTML = `🟣 離線編輯 + 自訂權重 | 預覽修改中...`;
+                    if (barText) barText.innerHTML = g_lang === 'en' ? `🟣 Offline Edit + Custom Weights | Previewing...` : `🟣 離線編輯 + 自訂權重 | 預覽修改中...`;
                 } else {
                     document.body.classList.remove('theme-offline-custom');
                     bar.style.background = 'linear-gradient(90deg,#2d4a2d,#1a3a1a)';
                     bar.style.borderColor = '#4caf50';
                     bar.style.color = '#98c379';
-                    if (barText) barText.innerHTML = `🟢 離線編輯模式 | 預覽修改內容中...`;
+                    if (barText) barText.innerHTML = g_lang === 'en' ? `🟢 Offline Edit Mode | Previewing changes...` : `🟢 離線編輯模式 | 預覽修改內容中...`;
                 }
             } else if (dbBar && dbBar.style.display !== 'none') {
                 document.body.classList.remove('theme-offline-custom');
                 document.body.classList.remove('theme-custom');
                 document.body.classList.add('theme-debug'); // Always stay red
-                if (dbBarText) dbBarText.innerHTML = `🐞 排錯模式 | 數據預覽中... ${isCustomMode ? '(+自訂權重)' : ''}`;
+                if (dbBarText) dbBarText.innerHTML = g_lang === 'en' ? `🐞 Debug Mode | Previewing data... ${isCustomMode ? '(+Custom Weights)' : ''}` : `🐞 排錯模式 | 數據預覽中... ${isCustomMode ? '(+自訂權重)' : ''}`;
             } else {
                 document.body.classList.remove('theme-offline-custom');
                 document.body.classList.remove('theme-debug');
@@ -18677,16 +18680,26 @@
             let maxVal = rank_calcItemAvg(maxScoreItem);
             let lastRole = history[history.length - 1].global?.role || "---";
 
+            const _en = typeof g_lang !== 'undefined' && g_lang === 'en';
             let slides = [
-                `成長曲線 - <span class="stat-highlight">點擊此處查看您的個人戰力發展報告</span>`,
-                `聲骸分析專家 - <span class="stat-highlight">已累計分析 ${totalAnalyses} 次</span>`,
-                `巔峰之作 - <span class="stat-highlight">${maxRole}</span> 評分高達 <span class="stat-highlight">${maxVal.toFixed(1)}%</span>`,
-                `探索進度 - 已解鎖 <span class="stat-highlight">${new Set(history.map(h => h.global?.role)).size}</span> 位角色的聲骸庫`,
-                `歐氣鑑定 - 目前 <span class="stat-highlight">SSS/SS</span> 稀有級獲取數：<span class="stat-highlight">${history.filter(h => {
+                _en ? `Growth Curve - <span class="stat-highlight">Click here to view your personal power report</span>`
+                    : `成長曲線 - <span class="stat-highlight">點擊此處查看您的個人戰力發展報告</span>`,
+                _en ? `Echo Analyst - <span class="stat-highlight">Total analyses: ${totalAnalyses}</span>`
+                    : `聲骸分析專家 - <span class="stat-highlight">已累計分析 ${totalAnalyses} 次</span>`,
+                _en ? `Peak Work - <span class="stat-highlight">${maxRole}</span> scored <span class="stat-highlight">${maxVal.toFixed(1)}%</span>`
+                    : `巔峰之作 - <span class="stat-highlight">${maxRole}</span> 評分高達 <span class="stat-highlight">${maxVal.toFixed(1)}%</span>`,
+                _en ? `Explorer - Unlocked echo library for <span class="stat-highlight">${new Set(history.map(h => h.global?.role)).size}</span> characters`
+                    : `探索進度 - 已解鎖 <span class="stat-highlight">${new Set(history.map(h => h.global?.role)).size}</span> 位角色的聲骸庫`,
+                _en ? `Lucky Draw - SSS/SS count: <span class="stat-highlight">${history.filter(h => {
+                    let weights = (g_currentWeights[h.global?.role] && g_currentWeights[h.global?.role][0]) ? g_currentWeights[h.global?.role][0].weights : {};
+                    return h.echoes.some(e => e.cost && (calculateEchoScoreSimple(e, weights)?.percentage >= 90));
+                }).length}</span>`
+                    : `歐氣鑑定 - 目前 <span class="stat-highlight">SSS/SS</span> 稀有級獲取數：<span class="stat-highlight">${history.filter(h => {
                     let weights = (g_currentWeights[h.global?.role] && g_currentWeights[h.global?.role][0]) ? g_currentWeights[h.global?.role][0].weights : {};
                     return h.echoes.some(e => e.cost && (calculateEchoScoreSimple(e, weights)?.percentage >= 90));
                 }).length}</span>`,
-                `偏好分析 - 您最常分析的角色為：<span class="stat-highlight">${lastRole}</span>`
+                _en ? `Preference - Most analyzed character: <span class="stat-highlight">${lastRole}</span>`
+                    : `偏好分析 - 您最常分析的角色為：<span class="stat-highlight">${lastRole}</span>`
             ];
 
             track.innerHTML = slides.map(s => `<div class="stat-slide">${s}</div>`).join('');
