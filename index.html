@@ -8718,14 +8718,20 @@
                     <div class="step-desc" data-lang-zh="輸入 /生成 產出聲骸圖片。" data-lang-en="Enter /generate to produce the echo image.">輸入 <span class="highlight-code">/生成</span> 產出聲骸圖片。</div>
                 </div>
                 <div class="step-card">
-                    <div class="step-title"><span class="step-num">✅</span>複製連結 (關鍵步驟)</div>
-                    <div class="step-desc">在生成的圖片/縮圖上按 <span style="color:#ed4245">右鍵</span> (手機長按)<br>→ 選擇「<span
-                            style="color:var(--accent);font-weight:bold;">複製連結</span>」(Copy Link)。<br><span
-                            style="font-size:0.8rem;color:#888;">連結應為
-                            https://wutheringwaves-dc.kurogames-global.com/...</span></div>
+                    <div class="step-title"><span class="step-num">✅</span><span data-lang-zh="複製連結 (關鍵步驟)" data-lang-en="Copy Link (Key Step)">複製連結 (關鍵步驟)</span></div>
+                    <div class="step-desc">
+                        <span class="lang-zh-only">在生成的圖片/縮圖上按 <span style="color:#ed4245">右鍵</span> (手機長按)<br>→ 選擇「<span
+                                style="color:var(--accent);font-weight:bold;">複製連結</span>」(Copy Link)。<br><span
+                                style="font-size:0.8rem;color:#888;">連結應為
+                                https://wutheringwaves-dc.kurogames-global.com/...</span></span>
+                        <span class="lang-en-only" style="display:none;">Right-click (or long-press on mobile) the generated image/thumbnail<br>→ Select "<span
+                                style="color:var(--accent);font-weight:bold;">Copy Link</span>".<br><span
+                                style="font-size:0.8rem;color:#888;">Link should start with
+                                https://wutheringwaves-dc.kurogames-global.com/...</span></span>
+                    </div>
                 </div>
                 <div class="step-card" style="background: rgba(229,192,123,0.05); border-color: var(--accent);">
-                    <div class="step-title"><span class="step-num">🚀</span>直接輸入網址開始使用</div>
+                    <div class="step-title"><span class="step-num">🚀</span><span data-lang-zh="直接輸入網址開始使用" data-lang-en="Enter URL to Start">直接輸入網址開始使用</span></div>
                     <div class="step-desc">
                         <input type="text" id="welcome-url-input" placeholder="貼上圖片網址並按 Enter 開始分析" data-placeholder-zh="貼上圖片網址並按 Enter 開始分析" data-placeholder-en="Paste image URL and press Enter to start"
                             style="width:100%; padding:12px 15px; margin-top:10px; background:#1a1a1a; border:2px solid var(--accent); color:var(--accent); border-radius:6px; font-size:1rem; font-family:'JetBrains Mono', monospace;"
@@ -11443,7 +11449,7 @@
                 return;
             }
 
-            historyListEl.innerHTML = '<div style="padding:10px;text-align:center;color:#888;">正在從雲端載入歷史紀錄...</div>';
+            historyListEl.innerHTML = `<div style="padding:10px;text-align:center;color:#888;">${g_lang === 'en' ? 'Loading cloud history...' : '正在從雲端載入歷史紀錄...'}</div>`;
             const url = getMainApiUrl();
             try {
                 const res = await fetch(`${url}?action=getHistory&uid=${uid}&mode=${mode}`);
@@ -11451,7 +11457,22 @@
                 if (json.result === 'success') {
                     if (!json.data || json.data.length === 0) {
                         // 雲端查無資料 — 提示用戶上傳
-                        historyListEl.innerHTML = `
+                        historyListEl.innerHTML = g_lang === 'en' ? `
+ <div style="padding:30px 20px;text-align:center;color:#aaa;">
+ <div style="font-size:2.5rem;margin-bottom:12px;">📭</div>
+ <div style="font-size:1rem;color:#fff;font-weight:bold;margin-bottom:8px;">No cloud analysis records for this UID</div>
+ <div style="font-size:0.85rem;color:#888;line-height:1.6;margin-bottom:16px;">
+ Please upload an echo screenshot via the Discord bot first.<br>
+ Records will appear here after analysis.
+ </div>
+ <div style="background:rgba(229,192,123,0.08);border:1px solid rgba(229,192,123,0.2);border-radius:8px;padding:12px;text-align:left;font-size:0.82rem;color:#ccc;line-height:1.7;">
+ <div style="color:var(--accent);font-weight:bold;margin-bottom:6px;"> How to get the image URL</div>
+ <div>1️⃣ Join the <a href="https://discord.gg/gamezh" target="_blank" style="color:var(--accent);text-decoration:underline;">Discord</a> server and find the bot channel</div>
+ <div>2️⃣ Use <span style="background:#333;padding:2px 4px;border-radius:3px;color:var(--accent)">/language</span> to set your language</div>
+ <div>3️⃣ Use <span style="background:#333;padding:2px 4px;border-radius:3px;color:var(--accent)">/bind</span> to link your 9-digit UID</div>
+ <div>4️⃣ Use <span style="background:#333;padding:2px 4px;border-radius:3px;color:var(--accent)">/generate</span> to produce the echo image</div>
+ <div>5️⃣ Right-click the image and select "<span style="color:var(--accent);font-weight:bold;">Copy Link</span>", then paste it into this tool</div>
+ </div>` : `
  <div style="padding:30px 20px;text-align:center;color:#aaa;">
  <div style="font-size:2.5rem;margin-bottom:12px;">📭</div>
  <div style="font-size:1rem;color:#fff;font-weight:bold;margin-bottom:8px;">此 UID 尚無雲端分析紀錄</div>
@@ -11468,7 +11489,7 @@
  <div>5️⃣ 右鍵圖片選擇「<span style="color:var(--accent);font-weight:bold;">複製連結</span>」(Copy Link) 並貼入本工具</div>
  </div>
  </div>`;
-                        statusText.innerText = "此 UID 尚無雲端資料";
+                        statusText.innerText = g_lang === 'en' ? "No cloud data for this UID" : "此 UID 尚無雲端資料";
                         if (btnLoadAll) btnLoadAll.style.display = 'none';
                         return;
                     }
@@ -15238,6 +15259,8 @@
         const RANK_LOOKUP_ROWS = [["60", "11.6%", "580", "11.6%", "70", "14.7%", "10.5%", "21.0%", "11.6%", "11.6%", "11.6%", "11.6%", "12.4%"], ["50", "10.9%", "540", "10.9%", "60", "13.8%", "9.9%", "19.8%", "10.9%", "10.9%", "10.9%", "10.9%", "11.6%"], ["40", "10.1%", "510", "10.1%", "50", "12.8%", "9.3%", "18.6%", "10.1%", "10.1%", "10.1%", "10.1%", "10.8%"], ["30", "9.4%", "470", "9.4%", "40", "11.8%", "8.7%", "17.4%", "9.4%", "9.4%", "9.4%", "9.4%", "10.0%"], ["—", "8.6%", "430", "8.6%", "—", "10.9%", "8.1%", "16.2%", "8.6%", "8.6%", "8.6%", "8.6%", "9.2%"], ["—", "7.9%", "390", "7.9%", "—", "10.0%", "7.5%", "15.0%", "7.9%", "7.9%", "7.9%", "7.9%", "8.4%"], ["—", "7.1%", "360", "7.1%", "—", "9.0%", "6.9%", "13.8%", "7.1%", "7.1%", "7.1%", "7.1%", "7.6%"], ["—", "6.4%", "320", "6.4%", "—", "8.1%", "6.3%", "12.6%", "6.4%", "6.4%", "6.4%", "6.4%", "6.8%"]];
         const RANK_MAX_VALS = { "攻擊": 60, "攻擊百分比": 11.6, "生命": 580, "生命百分比": 11.6, "防禦": 70, "防禦百分比": 14.7, "暴擊": 10.5, "暴擊傷害": 21.0, "共鳴效率": 11.6, "普攻傷害加成": 11.6, "重擊傷害加成": 11.6, "共鳴技能傷害加成": 11.6, "共鳴解放傷害加成": 12.4 };
         const RANK_STAT_LABELS = { "暴擊": "暴擊", "暴擊傷害": "暴傷", "共鳴效率": "效率", "攻擊百分比": "攻擊%", "攻擊": "攻固", "生命百分比": "生命%", "生命": "生固", "防禦百分比": "防禦%", "防禦": "防固", "共鳴解放傷害加成": "大招", "共鳴技能傷害加成": "E技", "普攻傷害加成": "普攻", "重擊傷害加成": "重擊" };
+        const RANK_STAT_LABELS_EN = { "暴擊": "C.Rate", "暴擊傷害": "C.DMG", "共鳴效率": "Energy", "攻擊百分比": "ATK%", "攻擊": "ATK", "生命百分比": "HP%", "生命": "HP", "防禦百分比": "DEF%", "防禦": "DEF", "共鳴解放傷害加成": "Ult.", "共鳴技能傷害加成": "Skill", "普攻傷害加成": "Basic", "重擊傷害加成": "Heavy" };
+        function getRankStatLabel(key) { return (g_lang === 'en' ? RANK_STAT_LABELS_EN[key] : RANK_STAT_LABELS[key]) || key; }
 
 
         // ── Suit Icon CSS class injection ──────────────────────────────
@@ -15649,7 +15672,7 @@
             let actualData = [];
             let topStats = weightsArr.slice(0, 6);
             topStats.forEach(stat => {
-                labels.push(RANK_STAT_LABELS[stat.key] || stat.key);
+                labels.push(getRankStatLabel(stat.key));
                 let tTotal = stat.val * 5;
                 theoryData.push(tTotal);
                 actualData.push(target.statBreakdown[stat.key] || 0);
@@ -15675,7 +15698,7 @@
             let contribLabels = [];
             Object.keys(target.statBreakdown).forEach(k => {
                 if (target.statBreakdown[k] > 0) {
-                    contribLabels.push(RANK_STAT_LABELS[k] || k);
+                    contribLabels.push(getRankStatLabel(k));
                     contribData.push(target.statBreakdown[k]);
                 }
             });
@@ -15797,7 +15820,7 @@
                     let isTop5 = idx < 5;
                     let pct = target.tMaxSum > 0 ? safeFixed((item.val / target.tMaxSum * 100), 1) : "0.0";
                     let style = isTop5 ? 'color:var(--accent);font-weight:bold' : 'color:#666';
-                    html += `<tr style="${style}"><td>${RANK_STAT_LABELS[item.key] || item.key}</td><td>${item.weight}</td><td>${item.max}</td><td>${safeFixed(item.val, 1)}</td><td>${isTop5 ? pct + '%' : '-'}</td></tr>`;
+                    html += `<tr style="${style}"><td>${getRankStatLabel(item.key)}</td><td>${item.weight}</td><td>${item.max}</td><td>${safeFixed(item.val, 1)}</td><td>${isTop5 ? pct + '%' : '-'}</td></tr>`;
                 });
                 tbody.innerHTML = html;
             }
@@ -16023,7 +16046,7 @@
                         desiredStats.forEach(key => {
                             let val = d.statBreakdown[key];
                             if (val && val > 0) {
-                                let label = RANK_STAT_LABELS[key] || key;
+                                let label = getRankStatLabel(key);
                                 let valStr = safeFixed(val, 1);
                                 let unit = (key.includes('百分比') || key.includes('加成') || label.includes('%')) ? '%' : '';
                                 statSpans.push(`<span style="white-space:nowrap"><span style="color:#aaa">${label}</span> <span style="color:#fff;font-family:'JetBrains Mono';font-weight:bold">${valStr}${unit}</span></span>`);
@@ -16033,7 +16056,7 @@
                         if (statSpans.length > 0) {
                             statsHtml = `<div style="font-size:0.75rem;line-height:1.6;color:#888;">${statSpans.join('<span style="color:#444;margin:0 6px">|</span>')}</div>`;
                         } else {
-                            statsHtml = '<div style="color:#555;font-size:0.75rem;">無有效數據</div>';
+                            statsHtml = `<div style="color:#555;font-size:0.75rem;">${g_lang === 'en' ? 'No data' : '無有效數據'}</div>`;
                         }
                     }
 
@@ -16046,7 +16069,7 @@
                             const cost = parts[0] || "?";
                             const suit = parts[1] ? parts[1].trim() : "";
                             const iconCls = suit ? rank_getSuitIconClass(suit) : '';
-                            echoIconsHtml += `<div style="position:relative;width:28px;height:28px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:4px;display:flex;align-items:center;justify-content:center;" title="${escapeHtml(suit || '未知套裝')} (Cost ${cost})">${iconCls ? `<div class="${iconCls}" style="filter:drop-shadow(0 0 2px rgba(0,0,0,0.5));"></div>` : `<span style="font-size:0.6rem;color:#444">${cost}</span>`}<span style="position:absolute;bottom:-3px;right:-3px;background:#000;color:#fff;font-size:0.6rem;padding:0 2px;border-radius:2px;border:1px solid #444;font-family:'JetBrains Mono';">${cost}</span></div>`;
+                            echoIconsHtml += `<div style="position:relative;width:28px;height:28px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:4px;display:flex;align-items:center;justify-content:center;" title="${escapeHtml(g_lang === 'en' ? (sonataName(suit) || 'Unknown Set') : (suit || '未知套裝'))} (Cost ${cost})">${iconCls ? `<div class="${iconCls}" style="filter:drop-shadow(0 0 2px rgba(0,0,0,0.5));"></div>` : `<span style="font-size:0.6rem;color:#444">${cost}</span>`}<span style="position:absolute;bottom:-3px;right:-3px;background:#000;color:#fff;font-size:0.6rem;padding:0 2px;border-radius:2px;border:1px solid #444;font-family:'JetBrains Mono';">${cost}</span></div>`;
                         });
                     }
 
@@ -16058,7 +16081,7 @@
  <div style="font-weight:bold;color:#fff;font-size:1rem">${d.player}</div>
  <div style="font-size:0.75rem;color:#888;display:flex;flex-direction:column">
  <span>${d.uid}</span>
- <span style="color:var(--accent)">${d.role} • ${d.chain}鏈</span>
+ <span style="color:var(--accent)">${g_lang === 'en' ? (ROLE_ZH_TO_EN[d.role] || d.role) : d.role} • ${d.chain}${g_lang === 'en' ? '-Chain' : '鏈'}</span>
  </div>
  </div>
  <div style="display:flex; gap:6px; padding:0 10px; align-items:center;">
@@ -16073,7 +16096,7 @@
  </div>
  <div style="min-width:80px;text-align:right;padding-right:10px">
  <div style="font-size:1.3rem;font-weight:bold;color:var(--accent);font-family:'JetBrains Mono'">${safeFixed(d.pct, 1)}%</div>
- <div style="font-size:0.7rem;color:#666;margin-top:2px">${safeFixed(d.max, 0)} 滿分</div>
+ <div style="font-size:0.7rem;color:#666;margin-top:2px">${safeFixed(d.max, 0)} ${g_lang === 'en' ? 'Max' : '滿分'}</div>
  </div>
  <div style="display:flex; align-items:center; padding-left:5px;">
  <button class="btn-compare-mini" onclick="event.stopPropagation(); setCompareFromRank(${i})" title="將此玩家加入對比">⚖️</button>
@@ -16132,7 +16155,7 @@
                 box.insertAdjacentHTML('beforeend', html);
                 rank_renderOffset += rank_renderPageSize;
             } else {
-                box.innerHTML = html || (rank_viewMode === 'fault' ? '' : '<div style="text-align:center;color:#666;margin-top:20px">無符合資料</div>');
+                box.innerHTML = html || (rank_viewMode === 'fault' ? '' : `<div style="text-align:center;color:#666;margin-top:20px">${g_lang === 'en' ? 'No matching data' : '無符合資料'}</div>`);
                 // rank_renderOffset was already set to 0 at top, now mark how many we rendered
                 rank_renderOffset = rank_renderPageSize;
             }
