@@ -16533,6 +16533,7 @@
             });
 
             const renderCardList = (arr, title, colorClass, emptyText, borderCol) => {
+                const glIsEN = g_lang === 'en';
                 arr.sort((a, b) => b.score - a.score);
                 let out = `<div style="background:#1e1e24; border:1px solid ${borderCol}; border-radius:12px; padding:20px; margin-bottom:15px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
                     <h3 style="color:${colorClass}; margin-top:0; border-bottom:1px solid #333; padding-bottom:10px; display:flex; justify-content:center; align-items:center; gap:10px;">
@@ -16545,10 +16546,14 @@
                     let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                     const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
                     const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" style="width:55px; height:55px; border-radius:50%; object-fit:cover; border:2px solid ${colorClass}; margin-bottom:6px;">` : `<div style="width:55px;height:55px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 6px auto;border:2px solid ${colorClass};">?</div>`;
+                    const enName = ROLE_ZH_TO_EN[g.role] || '';
+                    const primaryName = (glIsEN && enName) ? enName : g.role;
+                    const subName = (glIsEN && enName) ? `<div style="font-size:0.65rem; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;" title="${g.role}">${g.role}</div>` : '';
                     out += `<div style="width:100px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:12px 6px; text-align:center;">`;
                     out += `<div style="font-size:0.75rem; background:#222; padding:2px 6px; border-radius:6px; font-weight:bold; border:1px solid ${colorClass}; margin-bottom:5px;">${g.grad.l || g.grad.label || ''}</div>`;
                     out += iconHtml;
-                    out += `<div style="font-size:0.9rem; font-weight:bold; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${g.role}</div>`;
+                    out += `<div style="font-size:0.9rem; font-weight:bold; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g.role}">${escapeHtml(primaryName)}</div>`;
+                    out += subName;
                     out += `<div style="color:${colorClass}; font-size:0.85rem; font-family:'JetBrains Mono'; font-weight:bold; margin-top:4px;">${safeFixed(g.score, 1)}%</div>`;
                     out += `</div>`;
                 });
@@ -16556,23 +16561,24 @@
                 return out;
             };
 
+            const glIsEN = g_lang === 'en';
             let out = `<div id="capture-graduation-summary" style="background:#121214; padding:35px; min-width:850px; font-family:var(--font); color:#fff; border-radius:1px;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px; border-bottom:1px solid #333; padding-bottom:15px;">
                     <div>
-                        <h1 style="color:var(--accent); margin:0; font-size:2rem; letter-spacing:1px;">🎓 角色個人評分畢業總表</h1>
-                        <p style="color:#666; margin:5px 0 0 0; font-size:0.85rem;">GAME-ZH 聲骸分析儀 | 提供專業分析服務</p>
+                        <h1 style="color:var(--accent); margin:0; font-size:2rem; letter-spacing:1px;">${glIsEN ? '🎓 Personal Score Summary' : '🎓 角色個人評分畢業總表'}</h1>
+                        <p style="color:#666; margin:5px 0 0 0; font-size:0.85rem;">${glIsEN ? 'GAME-ZH Echo Analyzer | Professional Analysis' : 'GAME-ZH 聲骸分析儀 | 提供專業分析服務'}</p>
                     </div>
                     <div style="text-align:right;">
                         <div style="background:rgba(255,255,255,0.05); padding:6px 15px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:5px;">
-                            <span style="color:#888; font-size:0.8rem; margin-right:8px;">當前 UID</span>
+                            <span style="color:#888; font-size:0.8rem; margin-right:8px;">${glIsEN ? 'UID' : '當前 UID'}</span>
                             <span style="color:var(--accent); font-family:'JetBrains Mono'; font-weight:bold; font-size:1.1rem;">${g_currentUserUid || 'N/A'}</span>
                         </div>
-                        <span style="color:#555; font-size:0.75rem;">📅 生成時間: ${new Date().toLocaleString()}</span>
+                        <span style="color:#555; font-size:0.75rem;">📅 ${glIsEN ? 'Generated: ' : '生成時間: '}${new Date().toLocaleString()}</span>
                     </div>
                 </div>`;
-            out += renderCardList([...buckets.heirloom, ...buckets.grand], "🏆 極品畢業 (≥80%)", "#ffca28", "尚論極品畢業角色", "rgba(255, 202, 40, 0.2)");
-            out += renderCardList(buckets.med, "🏅 標準畢業 (≥50%)", "#78e08f", "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
-            out += renderCardList(buckets.none, "❌ 未畢業 (<50%)", "#ff5555", "無未畢業角色", "rgba(255, 85, 85, 0.2)");
+            out += renderCardList([...buckets.heirloom, ...buckets.grand], glIsEN ? "🏆 Top Grade (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", glIsEN ? "No top-grade characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
+            out += renderCardList(buckets.med, glIsEN ? "🏅 Standard Grade (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", glIsEN ? "No standard-grade characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
+            out += renderCardList(buckets.none, glIsEN ? "❌ Not Graduated (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", glIsEN ? "No ungraded characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
             out += `</div>`;
             return out;
         }
@@ -21061,7 +21067,11 @@
             const metaEl = document.getElementById('cross-role-meta');
             const wrapEl = document.getElementById('cross-role-table-wrap');
 
-            metaEl.textContent = `原始角色：${g_crOrigRole || '未辨識'}  ·  分析時間：${item.ts}`;
+            const crIsEN = g_lang === 'en';
+            const crOrigDisplay = crIsEN ? (ROLE_ZH_TO_EN[g_crOrigRole] || g_crOrigRole || 'Unknown') : (g_crOrigRole || '未辨識');
+            metaEl.textContent = crIsEN
+                ? `Character: ${crOrigDisplay}  ·  Analysis Time: ${item.ts}`
+                : `原始角色：${g_crOrigRole || '未辨識'}  ·  分析時間：${item.ts}`;
 
             const thStyle = "padding:8px 12px;text-align:right;border-bottom:1px solid #333;cursor:pointer;user-select:none;position:relative;transition:background 0.2s;";
             const thHover = "onmouseover=\"this.style.background='rgba(255,255,255,0.05)'\" onmouseout=\"this.style.background='transparent'\"";
@@ -21070,13 +21080,13 @@
             let html = `<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
                 <thead><tr style="background:#252530;color:var(--accent);">
                     <th style="padding:8px 12px;text-align:left;border-bottom:1px solid #333;">#</th>
-                    <th style="padding:8px 12px;text-align:left;border-bottom:1px solid #333;cursor:pointer;transition:background 0.2s;" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'role')">角色${getSortIcon('role')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'baseScore')">基礎得分${getSortIcon('baseScore')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'buff')">補分${getSortIcon('buff')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'totalScore')">最終得分${getSortIcon('totalScore')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'sumValid')">有效值${getSortIcon('sumValid')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'avgPct')">評級${getSortIcon('avgPct')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'avgPct')">評分 %${getSortIcon('avgPct')}</th>
+                    <th style="padding:8px 12px;text-align:left;border-bottom:1px solid #333;cursor:pointer;transition:background 0.2s;" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'role')">${crIsEN ? 'Character' : '角色'}${getSortIcon('role')}</th>
+                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'baseScore')">${crIsEN ? 'Base Score' : '基礎得分'}${getSortIcon('baseScore')}</th>
+                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'buff')">${crIsEN ? 'Bonus' : '補分'}${getSortIcon('buff')}</th>
+                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'totalScore')">${crIsEN ? 'Total Score' : '最終得分'}${getSortIcon('totalScore')}</th>
+                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'sumValid')">${crIsEN ? 'Valid' : '有效值'}${getSortIcon('sumValid')}</th>
+                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'avgPct')">${crIsEN ? 'Grade' : '評級'}${getSortIcon('avgPct')}</th>
+                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'avgPct')">${crIsEN ? 'Score %' : '評分 %'}${getSortIcon('avgPct')}</th>
                 </tr></thead><tbody>`;
 
             g_crRows.forEach((r, idx) => {
@@ -21085,7 +21095,7 @@
                 const rowStyle = isOrig ? 'background:rgba(229,192,123,0.07);border-left:3px solid var(--accent);' : (idx % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : '');
                 html += `<tr style="${rowStyle}">
                     <td style="padding:7px 12px;color:#666;">${idx + 1}</td>
-                    <td style="padding:7px 12px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${r.role}${isOrig ? ' ⭐' : ''}</td>
+                    <td style="padding:7px 12px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${crIsEN ? (ROLE_ZH_TO_EN[r.role] || r.role) : r.role}${isOrig ? ' ⭐' : ''}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#aaa;">${r.baseScore.toFixed(1)}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);">+${r.buff.toFixed(1)}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold;">${r.totalScore.toFixed(1)}</td>
@@ -21103,7 +21113,7 @@
             });
 
             html += `</tbody></table>
-                <div style="font-size:0.73rem;color:#555;margin-top:10px;">* 點擊表頭可進行升降排序。每顆聲骸以各角色最佳配置計分，補分 x1.25 後平均，僅供參考。</div>`;
+                <div style="font-size:0.73rem;color:#555;margin-top:10px;">${crIsEN ? '* Click column headers to sort ascending/descending. Each echo is scored using each character\'s best build, with bonus ×1.25 averaged in. For reference only.' : '* 點擊表頭可進行升降排序。每顆聲骸以各角色最佳配置計分，補分 x1.25 後平均，僅供參考。'}</div>`;
 
             wrapEl.innerHTML = html;
             modal.style.display = 'flex';
