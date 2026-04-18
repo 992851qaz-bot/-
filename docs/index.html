@@ -8384,11 +8384,12 @@
     <div id="custom-weight-modal" class="modal-overlay">
         <div class="startup-box" style="max-width:600px;text-align:left;">
             <h3 style="color:var(--accent);margin-top:0;display:flex;align-items:center;gap:10px;">
-                ✏️ 自訂權重配置
+                <span data-lang-zh="✏️ 自訂權重配置" data-lang-en="✏️ Custom Weight Config">✏️ 自訂權重配置</span>
                 <span
                     style="font-size:0.8rem;color:#888;font-weight:normal;background:#333;padding:2px 8px;border-radius:4px;" data-lang-zh="啟用時介面將轉為藍色" data-lang-en="Active: UI turns blue">啟用時介面將轉為藍色</span>
             </h3>
-            <p style="color:#bbb;font-size:0.9rem;">請設定各屬性的評分權重 (0 = 不計算)。<br>設定後將建立「自訂方案」，排名將重新計算。</p>
+            <p style="color:#bbb;font-size:0.9rem;" class="lang-zh-only">請設定各屬性的評分權重 (0 = 不計算)。<br>設定後將建立「自訂方案」，排名將重新計算。</p>
+            <p style="color:#bbb;font-size:0.9rem;display:none;" class="lang-en-only">Set the scoring weight for each stat (0 = ignored).<br>A Custom build will be created and scores will recalculate.</p>
 
             <div id="custom-weight-editor"
                 style="display:grid;grid-template-columns:1fr 1fr;gap:15px;max-height:50vh;overflow-y:auto;padding-right:5px;margin:20px 0;">
@@ -16731,7 +16732,7 @@
 
         // ========== CUSTOM WEIGHT SYSTEM ==========
         function openCustomWeightEditor() {
-            if (!g_globalData.role) { showMsg("請先選擇一個角色"); return; }
+            if (!g_globalData.role) { showMsg(g_lang === 'en' ? "Please load a character first" : "請先選擇一個角色"); return; }
             closeAllModals();
             document.getElementById('custom-weight-modal').style.display = 'flex';
 
@@ -16748,7 +16749,7 @@
                 let isHigh = val > 0;
                 html += `
  <div style="display:flex;align-items:center;justify-content:space-between;background:${isHigh ? 'rgba(255,255,255,0.05)' : 'transparent'};padding:5px;border-radius:4px;">
- <label style="color:${isHigh ? '#fff' : '#888'};font-size:0.9rem;">${key}</label>
+ <label style="color:${isHigh ? '#fff' : '#888'};font-size:0.9rem;">${statLabel(key)}</label>
  <input type="number" step="0.1" value="${val}" class="custom-weight-input" data-key="${key}" style="width:70px;background:#222;border:1px solid #444;color:#fff;padding:4px;border-radius:4px;text-align:right" onfocus="this.select()">
  </div>
  `;
@@ -16768,16 +16769,16 @@
                 }
             });
 
-            if (!hasValue) { showMsg("請至少設定一項權重 > 0"); return; }
+            if (!hasValue) { showMsg(g_lang === 'en' ? "Please set at least one weight > 0" : "請至少設定一項權重 > 0"); return; }
 
             const role = g_globalData.role;
-            if (!role || !g_currentWeights[role]) { showMsg("請先載入角色資料"); return; }
+            if (!role || !g_currentWeights[role]) { showMsg(g_lang === 'en' ? "Please load a character first" : "請先載入角色資料"); return; }
 
             // Add or Update "Custom" build
             let customIdx = g_currentWeights[role].findIndex(b => b.isCustom);
             if (customIdx === -1) {
                 g_currentWeights[role].push({
-                    name: "自訂權重",
+                    name: g_lang === 'en' ? "Custom Weights" : "自訂權重",
                     weights: newWeights,
                     isCustom: true
                 });
@@ -16791,7 +16792,7 @@
 
             // Trigger update
             renderTable(g_globalData, g_chains, g_echoesData);
-            showMsg("自訂權重已套用");
+            showMsg(g_lang === 'en' ? "Custom weights applied" : "自訂權重已套用");
         }
 
         function resetCustomWeights() {
@@ -16803,7 +16804,7 @@
                     g_selectedBuildIdx = 0;
                     document.getElementById('custom-weight-modal').style.display = 'none';
                     renderTable(g_globalData, g_chains, g_echoesData);
-                    showMsg("已恢復預設權重");
+                    showMsg(g_lang === 'en' ? "Weights reset to default" : "已恢復預設權重");
                 } else {
                     document.getElementById('custom-weight-modal').style.display = 'none';
                 }
@@ -16979,9 +16980,9 @@
         }
 
         function importSmartWeights() {
-            if (!g_smartSuggestedWeights) { showMsg('尚無建議數據，請先開啟智慧建議'); return; }
+            if (!g_smartSuggestedWeights) { showMsg(g_lang === 'en' ? 'No suggestion data yet. Open Smart Suggest first.' : '尚無建議數據，請先開啟智慧建議'); return; }
             const role = g_globalData && g_globalData.role;
-            if (!role || !g_currentWeights[role]) { showMsg('請先選擇角色'); return; }
+            if (!role || !g_currentWeights[role]) { showMsg(g_lang === 'en' ? 'Please select a character first.' : '請先選擇角色'); return; }
 
             // Only import stats that are genuinely significant.
             // Keeping too many non-zero-weight stats inflates maxTheoreticalScore
@@ -16995,14 +16996,14 @@
                 .sort((a, b) => b.suggested - a.suggested)
                 .slice(0, 5);
 
-            if (significant.length === 0) { showMsg('建議權重均為 0，無法導入'); return; }
+            if (significant.length === 0) { showMsg(g_lang === 'en' ? 'All suggested weights are 0, cannot import.' : '建議權重均為 0，無法導入'); return; }
 
             const newWeights = {};
             significant.forEach(r => { newWeights[r.name] = r.suggested; });
 
             let customIdx = g_currentWeights[role].findIndex(b => b.isCustom);
             if (customIdx === -1) {
-                g_currentWeights[role].push({ name: '自訂權重', weights: newWeights, isCustom: true });
+                g_currentWeights[role].push({ name: g_lang === 'en' ? 'Custom Weights' : '自訂權重', weights: newWeights, isCustom: true });
                 customIdx = g_currentWeights[role].length - 1;
             } else {
                 g_currentWeights[role][customIdx].weights = newWeights;
@@ -17013,7 +17014,7 @@
             document.getElementById('custom-weight-modal').style.display = 'none';
 
             renderTable(g_globalData, g_chains, g_echoesData);
-            showMsg('智慧建議權重已導入並套用');
+            showMsg(g_lang === 'en' ? 'Smart weight suggestions imported and applied.' : '智慧建議權重已導入並套用');
         }
 
         // Hook renderTable to apply theme & update status bar
