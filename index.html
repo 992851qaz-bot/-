@@ -416,19 +416,19 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
             position: relative;
-            overflow: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            transform: translateZ(0);
         }
 
         .feature-card::before {
             content: '';
             position: absolute;
             inset: 0;
+            border-radius: inherit;
             background: linear-gradient(135deg, rgba(229, 192, 123, 0.04) 0%, transparent 60%);
             opacity: 0;
             transition: opacity 0.2s;
+            pointer-events: none;
         }
 
         .feature-card:hover {
@@ -477,11 +477,12 @@
         }
 
         .feature-card-desc {
-            color: #777;
+            color: #9a9a9a;
             font-size: 0.78rem;
             line-height: 1.5;
             white-space: normal;
             word-break: break-word;
+            margin-top: 2px;
         }
 
         .feature-card-action {
@@ -22434,6 +22435,19 @@
             document.getElementById('feedback-category').value = "";
             document.getElementById('feedback-screenshot-img').style.opacity = '0';
             document.getElementById('screenshot-loader').style.display = 'block';
+
+            // Populate resolution / zoom info
+            const dpr = window.devicePixelRatio || 1;
+            const browserZoomPct = Math.round(dpr * 100);
+            const featureZoomPct = Math.round((g_featureMenuZoom || 1.0) * 100);
+            document.getElementById('feedback-screen-res').innerText =
+                `${window.screen.width}×${window.screen.height}`;
+            document.getElementById('feedback-window-size').innerText =
+                `${window.innerWidth}×${window.innerHeight}`;
+            document.getElementById('feedback-dpr').innerText = dpr.toFixed(2);
+            document.getElementById('feedback-zoom-info').innerText =
+                `瀏覽器 ${browserZoomPct}%，功能選單 ${featureZoomPct}%`;
+
             modal.style.display = 'flex';
             updateMobilePillAnchor();
             validateFeedback(); // Initial validation
@@ -23028,6 +23042,16 @@
                         <div>🕙 時間：<span id="feedback-time" style="color:#eee;"></span></div>
                         <div>🔗 圖片：<span id="feedback-url"
                                 style="color:var(--accent); word-break:break-all; font-family:'JetBrains Mono';">N/A</span>
+                        </div>
+                        <div style="margin-top:4px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.06);">
+                            🖥️ 解析度：<span id="feedback-screen-res" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                            <span style="color:#555; margin:0 4px;">·</span>
+                            視窗：<span id="feedback-window-size" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                        </div>
+                        <div>
+                            📐 DPR：<span id="feedback-dpr" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                            <span style="color:#555; margin:0 4px;">·</span>
+                            縮放：<span id="feedback-zoom-info" style="color:#eee; font-family:'JetBrains Mono';">-</span>
                         </div>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:8px;">
