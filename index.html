@@ -16157,10 +16157,8 @@
             if (d.url) { imgEl.src = d.url; imgEl.style.display = 'block'; noImg.style.display = 'none'; }
             else { imgEl.style.display = 'none'; noImg.style.display = 'block'; }
 
-            document.getElementById('d-title').innerText = g_lang === 'en' ? `${d.role} Build Details` : `${d.role} 配置詳情`;
-            document.getElementById('d-meta').innerText = g_lang === 'en'
-                ? `Player: ${d.player} | UID: ${d.uid} | Weapon: ${d.weapon}`
-                : `玩家: ${d.player} | UID: ${d.uid} | 武器: ${d.weapon}`;
+            document.getElementById('d-title').innerText = `${d.role} 配置詳情`;
+            document.getElementById('d-meta').innerText = `玩家: ${d.player} | UID: ${d.uid} | 武器: ${d.weapon}`;
             document.getElementById('d-badge-container').innerHTML = `
  <div class="total-score-badge">
  <span class="db-ts-grade ${d.grad.c}" style="font-size:1.1rem">${d.grad.l}</span>
@@ -16170,17 +16168,17 @@
  </div>
  </div>`;
 
-            let html = `<table class="db-calc-table"><thead><tr><th style="width:40px">C</th><th style="width:80px">${g_lang === 'en' ? 'Score' : '評分'}</th><th style="width:120px">${g_lang === 'en' ? 'Main Stat' : '主詞條'}</th><th>${g_lang === 'en' ? 'Sub-stats (click to view)' : '副詞條 (點擊檢視)'}</th></tr></thead><tbody>`;
+            let html = `<table class="db-calc-table"><thead><tr><th style="width:40px">C</th><th style="width:80px">評分</th><th style="width:120px">主詞條</th><th>副詞條 (點擊檢視)</th></tr></thead><tbody>`;
             d.detailEchoes.forEach((e, i) => {
                 let eGrad = rank_getGrading(e.pct);
                 let subHtml = '';
-                if (e.subs.length === 0) subHtml = `<div style="color:#555;font-size:0.8rem">${g_lang === 'en' ? '- empty -' : '- 空 -'}</div>`;
+                if (e.subs.length === 0) subHtml = '<div style="color:#555;font-size:0.8rem">- 空 -</div>';
                 else {
                     e.subs.forEach(s => {
                         let tierInfo = rank_getTierInfo(s.name, s.val);
                         let tierHtml = tierInfo ? `<div class="db-tier-bar">${Array(tierInfo.max).fill(0).map((_, t) => `<span class="db-tier-seg ${t < tierInfo.current ? 'on' : ''}"></span>`).join('')}</div>` : '';
                         let style = s.weight > 0 ? `border-left:2px solid var(--accent);background:rgba(229,192,123,0.05)` : `border-left:2px solid #333`;
-                        subHtml += `<div class="db-sub-stat-container" style="${style}"><div style="display:flex;justify-content:space-between"><div style="color:#ddd;font-size:0.8rem">${statLabel(s.name)}</div><div style="font-family:'JetBrains Mono';font-weight:bold;color:#fff">${s.val}</div></div>${tierHtml}</div>`;
+                        subHtml += `<div class="db-sub-stat-container" style="${style}"><div style="display:flex;justify-content:space-between"><div style="color:#ddd;font-size:0.8rem">${s.name}</div><div style="font-family:'JetBrains Mono';font-weight:bold;color:#fff">${s.val}</div></div>${tierHtml}</div>`;
                     });
                 }
                 html += `<tr><td style="font-weight:bold;font-size:1.1rem;color:#ddd;text-align:center" onclick="rank_handleLock(this, 'cost', ${i})" onmouseenter="rank_handleFocus('cost', ${i})" onmouseleave="rank_handleBlur()">${e.cost}</td><td onclick="rank_handleLock(this, 'score', ${i})" onmouseenter="rank_handleFocus('score', ${i})" onmouseleave="rank_handleBlur()"><div class="db-ts-grade ${eGrad.c}" style="font-size:0.6rem;padding:2px 4px">${eGrad.l}</div><div style="font-family:'JetBrains Mono';font-size:0.8rem;color:#aaa;margin-top:2px">${safeFixed(e.score, 0)}</div></td><td onclick="rank_handleLock(this, 'main1', ${i})" onmouseenter="rank_handleFocus('main1', ${i})" onmouseleave="rank_handleBlur()"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:0.85rem;color:var(--accent);font-weight:bold">${e.main.n}</span><span style="font-size:1rem;color:#fff;font-family:'JetBrains Mono';font-weight:bold">${e.main.v}</span></div></td><td onclick="rank_handleLock(this, 'sub', ${i})" onmouseenter="rank_handleFocus('sub', ${i})" onmouseleave="rank_handleBlur()">${subHtml}</td></tr>`;
@@ -16223,14 +16221,14 @@
 
             let html = `
  <div style="background:#1e1e24;border:1px solid var(--accent);border-radius:8px;padding:15px;color:#fff;font-size:0.85rem;box-shadow:0 0 20px rgba(0,0,0,0.5);width:100%;max-width:350px;">
- <h4 style="margin:0 0 10px 0;color:var(--accent);border-bottom:1px solid #333;padding-bottom:5px;">${g_lang === 'en' ? `Echo Score Details (${targetEcho.cost}C)` : `聲骸評分詳情 (${targetEcho.cost}C)`}</h4>
+ <h4 style="margin:0 0 10px 0;color:var(--accent);border-bottom:1px solid #333;padding-bottom:5px;">聲骸評分詳情 (${targetEcho.cost}C)</h4>
  <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.75rem;color:#888;">
- <span>${g_lang === 'en' ? 'Stat' : '詞條屬性'}</span> <span>${g_lang === 'en' ? 'Value (weight) → Score' : '數值 (權重) → 得分'}</span>
+ <span>詞條屬性</span> <span>數值 (權重) → 得分</span>
  </div>
  `;
 
             if (targetEcho.subs.length === 0) {
-                html += `<div style="text-align:center;padding:10px;color:#666;">${g_lang === 'en' ? 'No sub-stats' : '無副詞條'}</div>`;
+                html += `<div style="text-align:center;padding:10px;color:#666;">無副詞條</div>`;
             } else {
                 targetEcho.subs.forEach(s => {
                     let score = s.score.toFixed(1);
@@ -16242,7 +16240,7 @@
 
                     html += `
  <div style="display:flex;justify-content:space-between;border-bottom:1px solid #333;padding:4px 0;">
- <span style="color:${color}">${statLabel(s.name)}</span>
+ <span style="color:${color}">${s.name}</span>
  <span>
  <span style="color:#aaa;font-size:0.75rem;">${s.val} (x${weight})</span>
  <span style="color:var(--accent);font-weight:bold;min-width:30px;text-align:right;display:inline-block">${score}</span>
@@ -16253,7 +16251,7 @@
 
             html += `
  <div style="margin-top:10px;padding-top:5px;border-top:1px solid #444;display:flex;justify-content:space-between;font-weight:bold;">
- <span>${g_lang === 'en' ? 'Total' : '總分'}</span>
+ <span>總分</span>
  <span style="color:var(--accent);font-size:1.1rem;">${targetEcho.score.toFixed(0)} / ${targetEcho.max.toFixed(0)}</span>
  </div>
  <div style="font-size:0.75rem;color:#666;text-align:right;margin-top:2px;">(${targetEcho.pct.toFixed(1)}%)</div>
@@ -16293,7 +16291,7 @@
             const currentBuild = g_currentWeights[role][g_selectedBuildIdx];
             const buildName = currentBuild ? currentBuild.name : "通用";
             const url = getMainApiUrl();
-            document.getElementById('rank-text-simple').innerText = g_lang === 'en' ? "Searching..." : "查詢中...";
+            document.getElementById('rank-text-simple').innerText = "查詢中...";
             try {
                 const res = await fetch(`${url}?action=getRank&uid=${g_currentUserUid}&role=${encodeURIComponent(role)}&buildName=${encodeURIComponent(buildName)}`);
                 const json = await res.json();
@@ -16301,7 +16299,7 @@
                     const pr = Math.floor((1 - (json.myRank - 1) / json.total) * 100);
                     document.getElementById('rank-text-simple').innerText = `#${json.myRank}/${json.total} (PR${pr}%)`;
                 } else {
-                    document.getElementById('rank-text-simple').innerText = g_lang === 'en' ? "Not ranked" : "未入榜";
+                    document.getElementById('rank-text-simple').innerText = "未入榜";
                 }
             } catch (e) {
                 document.getElementById('rank-text-simple').innerText = "";
