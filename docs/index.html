@@ -7434,8 +7434,7 @@
         <div class="input-group"><button class="btn-analyze" style="background:#444;color:#fff;border-color:#666;"
                 onclick="triggerFileUpload()" data-lang-zh="📂 選擇圖片" data-lang-en="📂 Upload Image">📂 選擇圖片</button><input type="file" id="file-upload" accept="image/*"
                 style="display:none" onchange="handleFileUpload(this)" multiple><input type="text" id="url-input"
-                placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-zh="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-en="Enter UID or paste official screenshot URL..."><button id="btn-analyze" class="btn-analyze"
-             data-lang-zh="離線新增角色" data-lang-en="Add Role Offline">離線新增角色</button></div>
+                placeholder="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-zh="輸入 UID (如 900xxxxxx) 或貼上官方截圖網址..." data-placeholder-en="Enter UID or paste official screenshot URL..."><button id="btn-analyze" class="btn-analyze">離線新增角色</button></div>
         <!-- New Header Loader -->
         <div id="inline-loader" class="header-loader">
             <div class="loader-content">
@@ -10294,9 +10293,38 @@
         ];
         const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxzbZHtWKMFY5dv2Rb2Qg_kzzqf0IVwyhakI-Jq29s9wZhHAWNg7LIloTZX_OwFaLwP/exec"; const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbz5ZDfnE5KMcJoMmTFQNkZHe-6PB8Af4Ok_t8V69IakZKGG8OLFyy06MEjuqVDm42Br/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
         const SUB_ALIAS_MAP = { "生命": "生命", "生命值": "生命", "生命固定": "生命", "生命百分比": "生命百分比", "生命%": "生命百分比", "攻擊": "攻擊", "攻擊力": "攻擊", "攻擊固定": "攻擊", "攻擊百分比": "攻擊百分比", "攻擊%": "攻擊百分比", "防禦": "防禦", "防御": "防禦", "防禦力": "防禦", "防御力": "防禦", "防禦百分比": "防禦百分比", "防禦%": "防禦百分比", "防御百分比": "防禦百分比", "暴擊": "暴擊", "爆擊": "暴擊", "暴擎": "暴擊", "暴擊傷害": "暴擊傷害", "爆擊傷害": "暴擊傷害", "暴傷": "暴擊傷害", "爆擊率": "暴擊", "共鳴效率": "共鳴效率", "效率": "共鳴效率", "普攻傷害加成": "普攻傷害加成", "普攻": "普攻傷害加成", "重擊傷害加成": "重擊傷害加成", "重擊": "重擊傷害加成", "共鳴技能傷害加成": "共鳴技能傷害加成", "共鳴技能": "共鳴技能傷害加成", "技能": "共鳴技能傷害加成", "E技能": "共鳴技能傷害加成", "共鳴解放傷害加成": "共鳴解放傷害加成", "共鳴解放": "共鳴解放傷害加成", "大招": "共鳴解放傷害加成", "解放": "共鳴解放傷害加成" };
-        const ROLE_EN_MAP = { "Jinhsi": "今汐", "Jiyan": "忌炎", "Changli": "長離", "Zhezhi": "折枝", "Yinlin": "吟霖", "Xiangli Yao": "相里要", "Camellya": "椿", "Shorekeeper": "守岸人", "Encore": "安可", "Calcharo": "卡卡羅", "Verina": "維里奈", "Lingyang": "凌陽", "Jianxin": "鑑心", "Rover": "漂泊者", "Havoc Rover": "漂泊者(湮滅)", "Spectro Rover": "漂泊者(衍射)", "Sanhua": "散華", "Danjin": "丹瑾", "Mortefi": "莫特斐", "Baizhi": "白芷", "Chixia": "熾霞", "Yangyang": "秧秧", "Yuanwu": "淵武", "Taoqi": "桃祈", "Aalto": "秋水" };
+        const ROLE_EN_MAP = { "Jinhsi": "今汐", "Jiyan": "忌炎", "Changli": "長離", "Zhezhi": "折枝", "Yinlin": "吟霖", "Xiangli Yao": "相里要", "Camellya": "椿", "Shorekeeper": "守岸人", "Encore": "安可", "Calcharo": "卡卡羅", "Verina": "維里奈", "Lingyang": "凌陽", "Jianxin": "鑒心", "Rover": "漂泊者", "Rover (K)": "漂泊者暗", "Rover (M)": "漂泊者光", "Rover (F)": "漂泊者風", "Havoc Rover": "漂泊者(湮滅)", "Spectro Rover": "漂泊者(衍射)", "Sanhua": "散華", "Danjin": "丹瑾", "Mortefi": "莫特斐", "Baizhi": "白芷", "Chixia": "熾霞", "Yangyang": "秧秧", "Yuanwu": "淵武", "Taoqi": "桃祈", "Aalto": "秋水", "Brant": "布蘭特", "Youhu": "釉瑚", "Lumi": "燈燈", "Carlotta": "珂萊塔", "Roccia": "洛可可", "Phoebe": "菲比", "Cantarella": "坎特雷拉", "Zani": "贊妮", "Ciaccona": "夏空", "Cartethyia": "卡提希婭", "Lupa": "露帕", "Phrolova": "弗洛洛", "Augusta": "奧古斯塔", "Iuno": "尤諾", "Galbrena": "嘉貝莉娜", "Qiuyuan": "仇遠", "Chisa": "千咲", "Buling": "卜靈", "Lynae": "琳奈", "Mornye": "莫寧", "Aemeath": "愛彌斯", "Luuk Herssen": "陸赫斯", "Sigrika": "西格莉卡", "Hiyuki": "緋雪", "Denia": "達妮婭" };
         // Reverse map: Chinese name → English name
         const ROLE_ZH_TO_EN = Object.fromEntries(Object.entries(ROLE_EN_MAP).map(([en, zh]) => [zh, en]));
+        // Alternate spellings / simplified-traditional variants from weight sheet
+        ROLE_ZH_TO_EN["鑑心"] = "Jianxin";
+        ROLE_ZH_TO_EN["璧心"] = "Jianxin";      // alternate glyph seen in some weight sheets
+        ROLE_ZH_TO_EN["漂泊者熱熔"] = "Rover (K)";
+        ROLE_ZH_TO_EN["卡提希娅"] = "Cartethyia"; // simplified variant of 卡提希婭
+        ROLE_ZH_TO_EN["卡提希姬"] = "Cartethyia"; // another variant
+        ROLE_ZH_TO_EN["赞妮"] = "Zani";           // simplified 贊妮
+        ROLE_ZH_TO_EN["弗洛洛娃"] = "Phrolova";   // alternate spelling
+        ROLE_ZH_TO_EN["嘉贝莉娜"] = "Galbrena";   // simplified 嘉貝莉娜
+        ROLE_ZH_TO_EN["琳奈"] = "Lynae";
+        ROLE_ZH_TO_EN["爱弥斯"] = "Aemeath";      // simplified 愛彌斯
+        ROLE_ZH_TO_EN["西格莉卡"] = "Sigrika";
+        ROLE_ZH_TO_EN["达妮娅"] = "Denia";        // simplified 達妮婭
+        // Fuzzy lookup helper: try exact first, then strip non-CJK/ASCII punctuation, then partial
+        function lookupRoleEN(zhName) {
+            if (!zhName) return '';
+            if (ROLE_ZH_TO_EN[zhName]) return ROLE_ZH_TO_EN[zhName];
+            // Try normalizing: remove spaces/punctuation
+            const norm = zhName.replace(/[\s\(\)（）·]/g, '');
+            for (const [key, val] of Object.entries(ROLE_ZH_TO_EN)) {
+                const kn = key.replace(/[\s\(\)（）·]/g, '');
+                if (kn === norm) return val;
+            }
+            // Partial: key contains name or name contains key (min 2 chars)
+            for (const [key, val] of Object.entries(ROLE_ZH_TO_EN)) {
+                if (key.length >= 2 && (zhName.includes(key) || key.includes(zhName))) return val;
+            }
+            return '';
+        }
         const LOOKUP_ROWS = [["60", "11.6%", "580", "11.6%", "70", "14.7%", "10.5%", "21.0%", "11.6%", "11.6%", "11.6%", "11.6%", "12.4%"], ["50", "10.9%", "540", "10.9%", "60", "13.8%", "9.9%", "19.8%", "10.9%", "10.9%", "10.9%", "10.9%", "11.6%"], ["40", "10.1%", "510", "10.1%", "50", "12.8%", "9.3%", "18.6%", "10.1%", "10.1%", "10.1%", "10.1%", "10.8%"], ["30", "9.4%", "470", "9.4%", "40", "11.8%", "8.7%", "17.4%", "9.4%", "9.4%", "9.4%", "9.4%", "10.0%"], ["—", "8.6%", "430", "8.6%", "—", "10.9%", "8.1%", "16.2%", "8.6%", "8.6%", "8.6%", "8.6%", "9.2%"], ["—", "7.9%", "390", "7.9%", "—", "10.0%", "7.5%", "15.0%", "7.9%", "7.9%", "7.9%", "7.9%", "8.4%"], ["—", "7.1%", "360", "7.1%", "—", "9.0%", "6.9%", "13.8%", "7.1%", "7.1%", "7.1%", "7.1%", "7.6%"], ["—", "6.4%", "320", "6.4%", "—", "8.1%", "6.3%", "12.6%", "6.4%", "6.4%", "6.4%", "6.4%", "6.8%"]];
         const STAT_MAP = { '攻擊': [0, 1], '生命': [2, 3], '防禦': [4, 5], '防御': [4, 5], '暴擊': [6], '爆擊': [6], '暴擊傷害': [7], '爆擊傷害': [7], '普攻傷害加成': [8], '普攻': [8], '重擊傷害加成': [9], '重擊': [9], '共鳴技能傷害加成': [10], '共鳴技能': [10], '技能': [10], '共鳴解放傷害加成': [11], '共鳴解除傷害加成': [11], '共鳴解放': [11], '解放': [11], '共鳴傷害': [11], '解放傷害': [11], '共鳴效率': [12], '效率': [12] };
         const SUB_STAT_MAX_VALUES = { "攻擊": 60, "攻擊百分比": 11.6, "生命": 580, "生命百分比": 11.6, "防禦": 70, "防禦百分比": 14.7, "暴擊": 10.5, "暴擊傷害": 21.0, "共鳴效率": 11.6, "普攻傷害加成": 11.6, "重擊傷害加成": 11.6, "共鳴技能傷害加成": 11.6, "共鳴解放傷害加成": 12.4 };
@@ -10383,16 +10411,25 @@
                     stEl.textContent = g_lang === 'en' ? 'Ready' : '就緒';
                 }
             }
-            // Update btn-analyze if it shows the offline-add-role text
-            const baEl = document.getElementById('btn-analyze');
-            if (baEl) {
-                const cur = baEl.textContent.trim();
-                if (cur === '離線新增角色' || cur === 'Add Role Offline') {
-                    baEl.textContent = g_lang === 'en' ? 'Add Role Offline' : '離線新增角色';
-                }
-            }
             _updateLangBtnLabels();
+            // Restore dynamic uid display that was overwritten by the [data-lang-zh] loop above
+            updateUidDisplay();
+            // Re-calculate the analyze button state (its text is dynamic, not data-lang-zh driven)
+            if (typeof urlInput !== 'undefined' && urlInput) {
+                urlInput.dispatchEvent(new Event('input'));
+            }
+            // Re-render history list so role names and badges reflect the new language
+            if (typeof renderHistoryList === 'function') renderHistoryList();
             if (g_echoesData.length > 0) renderTable(g_globalData, g_chains, g_echoesData);
+            // If the cross-role summary modal is open, re-render it with the new language
+            const crModal = document.getElementById('cross-role-modal');
+            if (crModal && crModal.style.display !== 'none' && typeof showCrossRoleScore === 'function' && g_crHistIdx >= 0) {
+                showCrossRoleScore(g_crHistIdx);
+            }
+            // If the DPS panel has results, re-render them with translated labels
+            if (typeof dps_renderPanel === 'function' && typeof g_dpsBase !== 'undefined' && g_dpsBase) {
+                dps_renderPanel(g_dpsBase);
+            }
         }
         function toggleLanguage() { setLanguage(g_lang === 'zh' ? 'en' : 'zh'); }
         function _updateLangBtnLabels() {
@@ -10934,12 +10971,12 @@
                 // Logic prioritizes empty input after login
                 if (v === "") {
                     if (g_currentUserUid) {
-                        btn.innerText = "功能列表";
+                        btn.innerText = g_lang === 'en' ? "Features" : "功能列表";
                         btn.classList.add('metallic-btn');
-                        btn.setAttribute('data-text', "功能列表");
+                        btn.setAttribute('data-text', g_lang === 'en' ? "Features" : "功能列表");
                         btn.disabled = false;
                     } else {
-                        btn.innerText = "離線新增角色";
+                        btn.innerText = g_lang === 'en' ? "Add Role Offline" : "離線新增角色";
                         btn.disabled = false;
                     }
                     return;
@@ -10947,14 +10984,14 @@
 
                 if (/^\d{9}$/.test(v)) {
                     // Valid UID
-                    btn.innerText = "切換 UID";
+                    btn.innerText = g_lang === 'en' ? "Switch UID" : "切換 UID";
                     btn.style.background = "#2196f3";
                     btn.style.color = "#fff";
                     btn.style.borderColor = "#2196f3";
                     btn.disabled = false;
                 } else if (/^https?:\/\//.test(v)) {
                     // URL input (Simple check, assumes valid if mostly looks like URL)
-                    btn.innerText = "開始分析";
+                    btn.innerText = g_lang === 'en' ? "Analyze" : "開始分析";
                     btn.disabled = false;
                     // Auto-start if URL matches allowed domain
                     if (v.startsWith(ALLOWED_DOMAIN)) {
@@ -10969,13 +11006,13 @@
 
                     const codeKey = 'HAPPY';
                     if (!isHappyCodeActive()) {
-                        btn.innerText = "活動已結束";
+                        btn.innerText = g_lang === 'en' ? "Event Ended" : "活動已結束";
                         btn.classList.add('invalid');
                         showMsg('此序號已於 4/5 到期');
                         return;
                     }
                     if (g_usedCodes.has(codeKey)) {
-                        btn.innerText = "已兌換過";
+                        btn.innerText = g_lang === 'en' ? "Already Redeemed" : "已兌換過";
                         btn.classList.add('invalid');
                         showMsg('您已經兌換過此序號囉！');
                     } else {
@@ -10987,7 +11024,7 @@
                             openPointsModal();
                         });
                         urlInput.value = '';
-                        btn.innerText = "功能列表";
+                        btn.innerText = g_lang === 'en' ? "Features" : "功能列表";
                     }
                     return;
                 } else {
@@ -10995,9 +11032,9 @@
                     btn.disabled = false; // Allow click to show help
                     btn.classList.add('invalid');
                     if (/^\d+$/.test(v)) {
-                        btn.innerText = "UID格式錯誤 (需9碼)";
+                        btn.innerText = g_lang === 'en' ? "Invalid UID (9 digits)" : "UID格式錯誤 (需9碼)";
                     } else {
-                        btn.innerText = "格式不符合要求";
+                        btn.innerText = g_lang === 'en' ? "Invalid Format" : "格式不符合要求";
                     }
                 }
             });
@@ -11295,7 +11332,7 @@
             const bottomPill = document.getElementById('bottom-left-pill');
             const uidContainer = document.getElementById('uid-display-container');
             if (displayEl) {
-                displayEl.innerText = (g_currentUserUid ? "UID: " + g_currentUserUid : "未登入");
+                displayEl.innerText = (g_currentUserUid ? "UID: " + g_currentUserUid : (g_lang === 'en' ? 'Not Logged In' : '未登入'));
             }
             if (bottomPill) {
                 bottomPill.style.display = (g_currentUserUid ? "block" : "none");
@@ -11331,7 +11368,7 @@
         function processWeightsData(json) { g_weightNames = []; g_currentWeights = {}; const headers = json.headers; json.data.forEach(row => { let charName = row[1]; if (charName && charName !== '(N/A)') { if (!g_weightNames.includes(charName)) g_weightNames.push(charName); if (!g_currentWeights[charName]) g_currentWeights[charName] = []; let charWeights = {}; headers.forEach((h, idx) => { let mappedKey = WEIGHT_KEYS_MAPPING[h]; if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0 } }); let colA = row[0] ? String(row[0]).trim() : "通用"; let match = colA.match(/\d/); let req = match ? parseInt(match[0]) : 0; g_currentWeights[charName].push({ name: colA, minChain: req, weights: charWeights, desc: row[row.length - 1] }) } }) }
         function toggleWeightMode() { g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? (g_lang === 'en' ? "Mode: Max Score (weight×max)" : "顯示模式: 最大分 (權重x最大值)") : (g_lang === 'en' ? "Mode: Weights" : "顯示模式: 權重"); renderWeightsTable() }
         const WEIGHT_TABLE_HEADER_EN = { '配置': 'Build', '方案': 'Build', '角色': 'Character', '說明': 'Notes', '備註': 'Notes' };
-        function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => { let label = h; if (g_lang === 'en') { const mapped = WEIGHT_KEYS_MAPPING[h]; label = mapped ? (STAT_ZH_TO_EN[mapped] || mapped) : (WEIGHT_TABLE_HEADER_EN[h] || h); } html += `<th>${label}</th>`; }); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; document.getElementById('weights-body').innerHTML = html }
+        function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => { let label = h; if (g_lang === 'en') { const mapped = WEIGHT_KEYS_MAPPING[h]; label = mapped ? (STAT_ZH_TO_EN[mapped] || mapped) : (WEIGHT_TABLE_HEADER_EN[h] || h); } html += `<th>${label}</th>`; }); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } if (g_lang === 'en' && WEIGHT_TABLE_HEADER_EN[headerName] === 'Character') { valText = lookupRoleEN(valText) || valText; } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; document.getElementById('weights-body').innerHTML = html }
         function initRoleGrid() { filterRoleGrid("") }
         function getRoleAvatarUrl(name) {
             if (!name) return '';
@@ -12654,7 +12691,7 @@
 
                 const roleName = item.global.role || (g_lang === 'en' ? 'Unknown' : '未辨識');
                 // In English mode, show English character name for clarity
-                const displayRoleName = (g_lang === 'en' && ROLE_ZH_TO_EN[roleName]) ? ROLE_ZH_TO_EN[roleName] : roleName;
+                const displayRoleName = (g_lang === 'en') ? (lookupRoleEN(roleName) || roleName) : roleName;
                 let roleKey = roleName;
                 // 嘗試標準化名稱以匹配圖片鍵值
                 if (!RESONATORS_PROFILE_PICTURE[roleKey]) {
@@ -12718,7 +12755,7 @@
             unlockPreview();
             urlInput.value = "";
             urlInput.dispatchEvent(new Event('input'));
-            analyzeBtn.innerText = "檢視歷史";
+            analyzeBtn.innerText = g_lang === 'en' ? "View History" : "檢視歷史";
             g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length);
 
             // 立即渲染一次
@@ -12828,7 +12865,7 @@
                     const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid ${colorClass}; margin-bottom:4px;">` : `<div style="width:50px;height:50px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 4px auto;border:2px solid ${colorClass};">?</div>`;
 
                     // English name cross-reference
-                    const enName = ROLE_ZH_TO_EN[g.role] || '';
+                    const enName = lookupRoleEN(g.role) || '';
                     const cardPrimaryName = (g_lang === 'en' && enName) ? enName : g.role;
                     const cardSubName = (g_lang === 'en' && enName) ? `<div style="font-size:0.7rem; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;" title="${g.role}">${g.role}</div>` : '';
 
@@ -13350,7 +13387,7 @@
                 ocrHtml += `</table>`;
                 html += `<tr><td colspan="6" class="role-info-cell" style="background:#151518;border:1px solid var(--accent-dim);border-radius:8px;"><div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;"><div style="flex:1;min-width:280px;background:#1a1a1e;padding:15px;border-radius:8px;">${infoHtml}</div><div style="flex:1.5;min-width:320px;"><div style="font-size:0.8rem;color:var(--accent);margin-bottom:10px;font-weight:bold;display:flex;align-items:center;gap:5px;"><span>🔍</span> OCR 轉譯對照資訊</div>${ocrHtml}<div style="font-size:0.75rem;color:#555;margin-top:10px;font-style:italic;">* 主詞條/副詞條 OCR 原文請見下方相關項目的 Raw 區塊</div></div></div></td></tr>`;
             } else {
-                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${global.role || (g_lang === 'en' ? 'Unrecognized Character' : '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:54px;"><div style="position:absolute;top:10px;right:15px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.5);backdrop-filter:blur(10px);color:#98c379;font-weight:700;width:auto;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button>${g_lang !== 'en' ? `<button id="zh-desc-toggle-btn" class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:rgba(97,175,254,0.1);border:1px solid rgba(97,175,254,0.35);backdrop-filter:blur(10px);color:#61afef;font-weight:700;width:auto;" onclick="toggleZhDescGuide()">${hasDesc ? '📊 配置導覽' : '📝 說明文字'}</button>` : ''}<button class="rank-btn" style="margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button></div>${g_lang==='en'
+                html += `<tr><td colspan="6" class="role-info-cell"><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;"><div style="flex:1;min-width:250px;text-align:center;" onclick='handleCellClick(this, ${JSON.stringify(compositeRects)})' onmouseenter='handleCellEnter(this, ${JSON.stringify(compositeRects)})' onmouseleave="handleCellLeave()"><div style="display:flex;justify-content:center;align-items:center;"><div class="role-name-large">${g_lang === 'en' ? (lookupRoleEN(global.role) || global.role || 'Unrecognized Character') : (global.role || '未辨識角色')}</div>${buildSelectorHtml}</div><div class="role-meta-row"><div class="role-tag"><span class="label">UID</span> <span>${global.uid || '-'}</span></div><div class="role-tag"><span class="label">玩家</span> <span>${global.player || '-'}</span></div><div class="role-tag"><span class="label">武器</span> <span>${global.weapon || '-'}</span></div></div><div style="margin-top:10px">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div></div>${totalScoreHtml}<div class="desc-cell" style="flex:1.5;border-left:1px solid #333;padding-left:20px;position:relative;padding-top:54px;"><div style="position:absolute;top:10px;right:15px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:linear-gradient(135deg,rgba(152,195,121,0.18) 0%,rgba(152,195,121,0.08) 100%);border:1px solid rgba(152,195,121,0.5);backdrop-filter:blur(10px);color:#98c379;font-weight:700;width:auto;" onclick="rank_openSmartAnalysis()">${g_lang === 'en' ? '🧠 Smart Analysis' : '🧠 智慧分析'}</button>${g_lang !== 'en' ? `<button id="zh-desc-toggle-btn" class="rank-btn" style="margin:0;padding:5px 12px;font-size:0.78rem;border-radius:20px;background:rgba(97,175,254,0.1);border:1px solid rgba(97,175,254,0.35);backdrop-filter:blur(10px);color:#61afef;font-weight:700;width:auto;" onclick="toggleZhDescGuide()">${hasDesc ? '📊 配置導覽' : '📝 說明文字'}</button>` : ''}<button class="rank-btn" style="margin:0;padding:6px 16px;font-size:0.82rem;border-radius:20px;background:linear-gradient(135deg, rgba(229,192,123,0.2) 0%, rgba(229,192,123,0.1) 100%);border:1px solid rgba(229,192,123,0.4);backdrop-filter:blur(10px);box-shadow:0 8px 15px rgba(0,0,0,0.2);color:#fff;font-weight:700;width:auto;min-width:140px;" onclick="rank_openStrategySummary()">${g_lang === 'en' ? '📋 Full Character Guide' : '📋 角色完整攻略'}</button></div>${g_lang==='en'
                     ? `<div id="desc-guide-content">${rank_generateEnGuideHtml(global.role)}</div>`
                     : `<div id="zh-desc-text"${hasDesc ? '' : ' style="display:none"'}>${formatDescText(roleDesc)}</div><div id="zh-guide-content"${hasDesc ? ' style="display:none"' : ''}>${rank_generateZhGuideHtml(global.role)}</div>`}</div></div></td></tr>`;
             }
@@ -13392,7 +13429,7 @@
                 });
                 html += `</table></div>`;
             } else {
-                html += `<div class="mobile-role-card"><div style="display:flex;justify-content:space-between;align-items:start;"><div class="role-name-large" style="font-size:1.5rem">${global.role || '未辨識'}</div>${buildSelectorHtml}</div>`;
+                html += `<div class="mobile-role-card"><div style="display:flex;justify-content:space-between;align-items:start;"><div class="role-name-large" style="font-size:1.5rem">${g_lang === 'en' ? (lookupRoleEN(global.role) || global.role || 'Unknown') : (global.role || '未辨識')}</div>${buildSelectorHtml}</div>`;
                 html += `<div style="display:flex;gap:5px;flex-wrap:wrap;margin:10px 0;">${chains.map(a => `<span class="chain-indicator" style="background:${a ? 'var(--chain-on)' : 'var(--chain-off)'}"></span>`).join('')}</div>`;
                 html += `<div style="font-size:0.8rem;color:#ccc;margin-bottom:10px;">UID: ${global.uid || '-'} | ${global.player || '-'}</div>`;
                 html += `<div style="margin-top:10px;">${totalScoreHtml || '<div style="color:#666">暫無評分</div>'}</div>`;
@@ -16546,7 +16583,7 @@
                     let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                     const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
                     const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" style="width:55px; height:55px; border-radius:50%; object-fit:cover; border:2px solid ${colorClass}; margin-bottom:6px;">` : `<div style="width:55px;height:55px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 6px auto;border:2px solid ${colorClass};">?</div>`;
-                    const enName = ROLE_ZH_TO_EN[g.role] || '';
+                    const enName = lookupRoleEN(g.role) || '';
                     const primaryName = (glIsEN && enName) ? enName : g.role;
                     const subName = (glIsEN && enName) ? `<div style="font-size:0.65rem; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;" title="${g.role}">${g.role}</div>` : '';
                     out += `<div style="width:100px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:12px 6px; text-align:center;">`;
@@ -17291,6 +17328,7 @@
         const DPS_API_URL = "https://script.google.com/macros/s/AKfycbzi35fr-pRnvXkme2MXX1LwTJIJywciZQaU6BQwM-QC7Kd-Mz6HLpFiR2Dn5YgPFErPHg/exec";
         let g_dpsDB = {};
         let g_dpsLogs = {};
+        let g_dpsBase = null;
         let g_dpsLoaded = false;
 
         async function dps_init() {
@@ -17528,10 +17566,10 @@
             });
 
             dps_renderPanel(base);
+            g_dpsBase = base;
         }
 
-        function dps_processStats(data, source, logFn, isTeam) {
-            for (let key in data) {
+        function dps_processStats(data, source, logFn, isTeam) { for (let key in data) {
                 if (['角色', '武器名稱', '套裝名稱', '聲骸名稱', 'COST', '聲骸主詞條', '屬性', '武器'].includes(key)) continue;
                 let valStr = data[key];
                 let val = dps_parseNum(valStr);
@@ -17585,13 +17623,14 @@
 
             // 1. Primary Stats Order (Image: HP, ATK, DEF, Energy, Crit, CritDmg)
             // Note: keys must match dps_processStats mapping: 'hp', 'atk', 'def', '共鳴效率', '暴擊率', '暴擊傷害'
+            const _isEN = g_lang === 'en';
             const primaryKeys = [
-                { k: 'hp', label: '生命', color: 'hp' },
-                { k: 'atk', label: '攻擊', color: 'atk' },
-                { k: 'def', label: '防禦', color: 'def' },
-                { k: '共鳴效率', label: '共鳴效率', color: 'dmg', isPct: true, base: 100 },
-                { k: '暴擊率', label: '暴擊', color: 'crit', isPct: true, base: 5 },
-                { k: '暴擊傷害', label: '暴擊傷害', color: 'crit', isPct: true, base: 150 }
+                { k: 'hp', label: _isEN ? 'HP' : '生命', color: 'hp' },
+                { k: 'atk', label: _isEN ? 'ATK' : '攻擊', color: 'atk' },
+                { k: 'def', label: _isEN ? 'DEF' : '防禦', color: 'def' },
+                { k: '共鳴效率', label: _isEN ? 'Energy Regen' : '共鳴效率', color: 'dmg', isPct: true, base: 100 },
+                { k: '暴擊率', label: _isEN ? 'Crit. Rate' : '暴擊', color: 'crit', isPct: true, base: 5 },
+                { k: '暴擊傷害', label: _isEN ? 'Crit. DMG' : '暴擊傷害', color: 'crit', isPct: true, base: 150 }
             ];
 
             primaryKeys.forEach(item => {
@@ -17653,7 +17692,8 @@
 
                 if (total > 0) {
                     let subText = teamAdd > 0 ? `(+${teamAdd.toFixed(1)}% = ${total.toFixed(1)}%)` : '';
-                    dps_createCard(container, key, selfAdd.toFixed(1) + '%', subText, 'dmg', key, true);
+                    const displayKey = (typeof statLabel === 'function') ? statLabel(key) : key;
+                    dps_createCard(container, displayKey, selfAdd.toFixed(1) + '%', subText, 'dmg', key, true);
                 }
             });
         }
@@ -21068,7 +21108,7 @@
             const wrapEl = document.getElementById('cross-role-table-wrap');
 
             const crIsEN = g_lang === 'en';
-            const crOrigDisplay = crIsEN ? (ROLE_ZH_TO_EN[g_crOrigRole] || g_crOrigRole || 'Unknown') : (g_crOrigRole || '未辨識');
+            const crOrigDisplay = crIsEN ? (lookupRoleEN(g_crOrigRole) || g_crOrigRole || 'Unknown') : (g_crOrigRole || '未辨識');
             metaEl.textContent = crIsEN
                 ? `Character: ${crOrigDisplay}  ·  Analysis Time: ${item.ts}`
                 : `原始角色：${g_crOrigRole || '未辨識'}  ·  分析時間：${item.ts}`;
@@ -21095,7 +21135,7 @@
                 const rowStyle = isOrig ? 'background:rgba(229,192,123,0.07);border-left:3px solid var(--accent);' : (idx % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : '');
                 html += `<tr style="${rowStyle}">
                     <td style="padding:7px 12px;color:#666;">${idx + 1}</td>
-                    <td style="padding:7px 12px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${crIsEN ? (ROLE_ZH_TO_EN[r.role] || r.role) : r.role}${isOrig ? ' ⭐' : ''}</td>
+                    <td style="padding:7px 12px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${crIsEN ? (lookupRoleEN(r.role) || r.role) : r.role}${isOrig ? ' ⭐' : ''}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#aaa;">${r.baseScore.toFixed(1)}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);">+${r.buff.toFixed(1)}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold;">${r.totalScore.toFixed(1)}</td>
