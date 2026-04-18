@@ -7583,7 +7583,7 @@
             </div>
 
             <div class="db-card">
-                <div class="db-card-title" data-lang-zh="✨ 大畢業以上 (全角色聲骸統計)" data-lang-en="✨ Major Graduate+ (All Echoes)">✨ 大畢業以上 (全角色聲骸統計)</div>
+                <div class="db-card-title" data-lang-zh="✨ 大畢業以上 (全角色聲骸統計)" data-lang-en="✨ Highly Sufficient+ (All Echoes)">✨ 大畢業以上 (全角色聲骸統計)</div>
                 <div class="db-card-val" id="db-luck-val">0</div>
                 <div class="db-card-sub" id="db-luck-sub" data-lang-zh="極品聲骸獲取機率 0%" data-lang-en="Top Echo Odds: 0%">極品聲骸獲取機率 0%</div>
             </div>
@@ -7977,7 +7977,7 @@
                         <div class="feature-card-icon-box">🎓</div>
                         <div class="feature-card-main">
                             <div class="feature-card-title" data-lang-zh="個人成績總表" data-lang-en="Personal Best Summary">個人成績總表</div>
-                            <div class="feature-card-desc" data-lang-zh="整合每個角色最佳紀錄，快速檢視畢業進度" data-lang-en="Integrates best records per character for quick graduation progress">整合每個角色最佳紀錄，快速檢視畢業進度</div>
+                            <div class="feature-card-desc" data-lang-zh="整合每個角色最佳紀錄，快速檢視畢業進度" data-lang-en="Integrates best records per character for a quick sufficiency check">整合每個角色最佳紀錄，快速檢視畢業進度</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn" data-lang-zh="前往" data-lang-en="Go">前往</button></div>
                     </div>
@@ -12901,9 +12901,9 @@
             html += `<div class="grad-card-container">`;
 
             const isEN = g_lang === 'en';
-            html += renderCardList([...buckets.heirloom, ...buckets.grand], isEN ? "🏆 Top Grade (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", isEN ? "No top-grade characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
-            html += renderCardList(buckets.med, isEN ? "🏅 Standard Grade (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", isEN ? "No standard-grade characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
-            html += renderCardList(buckets.none, isEN ? "❌ Not Graduated (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", isEN ? "No ungraded characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
+            html += renderCardList([...buckets.heirloom, ...buckets.grand], isEN ? "🏆 Highly Sufficient (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", isEN ? "No highly sufficient characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
+            html += renderCardList(buckets.med, isEN ? "🏅 Sufficient (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", isEN ? "No sufficient characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
+            html += renderCardList(buckets.none, isEN ? "❌ Insufficient (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", isEN ? "No insufficient characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
 
             html += `</div>`;
             html += `</div>`;
@@ -13353,7 +13353,7 @@
             let totalPercentage = maxTheoreticalScore > 0 ? (totalScore / maxTheoreticalScore) * 100 : 0;
             return { score: scoreAchieved, bonus: bonus, totalScore: totalScore, totalPercentage: totalPercentage, maxTheoretical: maxTheoreticalScore, percentage: percentage, details: scoreDetails, validCount: effectiveCount, denom: denom }
         }
-        function getGrading(percentage) { const en = typeof g_lang !== 'undefined' && g_lang === 'en'; if (percentage >= 90) return { label: en ? "Heirloom" : "傳家寶", class: "grad-heirloom" }; if (percentage >= 80) return { label: en ? "Major Grad" : "大畢業", class: "grad-grand" }; if (percentage >= 65) return { label: en ? "Mid Grad" : "中畢業", class: "grad-medium" }; if (percentage >= 50) return { label: en ? "Minor Grad" : "小畢業", class: "grad-small" }; return { label: en ? "Not Yet" : "未畢業", class: "grad-none" } }
+        function getGrading(percentage) { const en = typeof g_lang !== 'undefined' && g_lang === 'en'; if (percentage >= 90) return { label: en ? "Heirloom" : "傳家寶", class: "grad-heirloom" }; if (percentage >= 80) return { label: en ? "Highly Sufficient" : "大畢業", class: "grad-grand" }; if (percentage >= 65) return { label: en ? "Sufficient" : "中畢業", class: "grad-medium" }; if (percentage >= 50) return { label: en ? "Barely Sufficient" : "小畢業", class: "grad-small" }; return { label: en ? "Insufficient" : "未畢業", class: "grad-none" } }
         function getHeatmapColor(potentialValue, roleWeights) { let allPotentials = []; for (let key in roleWeights) { let w = roleWeights[key]; let m = SUB_STAT_MAX_VALUES[key] || 0; if (w > 0 && m > 0) allPotentials.push(w * m) } allPotentials.sort((a, b) => b - a); if (potentialValue <= 0) return null; if (potentialValue >= allPotentials[Math.min(1, allPotentials.length - 1)]) return 'var(--heat-s)'; if (potentialValue >= allPotentials[Math.min(3, allPotentials.length - 1)]) return 'var(--heat-a)'; if (potentialValue >= allPotentials[Math.min(5, allPotentials.length - 1)]) return 'var(--heat-b)'; return null }
         function showScoreDetails(idx) { if (idx === -1) { showTotalScoreDetails(); return } if (!g_echoesData[idx] || !g_globalData.role || !g_currentWeights[g_globalData.role]) return; let activeWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let result = calculateEchoScore(g_echoesData[idx], activeWeights); let cv = getCVInfo(g_echoesData[idx]); if (!result) return; let html = `<table><tr><th>詞條</th><th>數值</th><th>權重</th><th>計分</th><th>最大點數</th></tr>`; result.details.forEach(d => { let style = d.weight > 0 ? 'style="color:var(--ok)"' : 'style="color:#666"'; html += `<tr><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.val)}</td><td>${safeFixed(d.weight, 1)}</td><td ${style}>${safeFixed(d.score, 1)}</td><td>${safeFixed(d.maxPoints, 1)}</td></tr>` }); html += `<tr class="score-total-row"><td colspan="3">總計 (SAchieved)</td><td colspan="2">${safeFixed(result.score, 1)} / ${safeFixed(result.maxTheoretical, 1)}</td></tr>`; html += `<tr><td colspan="3" style="font-size:0.75rem;color:#888;">CV公式: <br>暴擊(${cv.cr})*2 + 暴傷(${cv.cd}) / 42 = ${cv.pct}%</td><td colspan="2" style="text-align:right;font-size:0.9rem;">畢業度: <span style="color:var(--cv-val);font-size:1.1rem;">${safeFixed(result.percentage, 1)}%</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) { zoomCanvas.style.opacity = '0' } }
         function showTotalScoreDetails() { if (!g_globalData.role || !g_currentWeights[g_globalData.role]) return; let roleWeights = g_currentWeights[g_globalData.role][g_selectedBuildIdx].weights; let totalScore = 0, totalMax = 0; let totalCR = 0, totalCD = 0; g_echoesData.forEach(e => { let cv = getCVInfo(e); totalCR += parseFloat(cv.cr) || 0; totalCD += parseFloat(cv.cd) || 0; let res = calculateEchoScore(e, roleWeights); if (res) { totalScore += res.score; totalMax += res.maxTheoretical } }); let totalPct = totalMax > 0 ? (totalScore / totalMax) * 100 : 0; let buffedPct = Math.min(100.0, totalPct * 1.25); let finalBuffedScore = totalScore * 1.25; let bonus = finalBuffedScore - totalScore; let totalCVVal = totalCR * 2 + totalCD; let cvPct = safeFixed(totalCVVal / (42.0 * 5) * 100.0, 0); let html = `<table><tr><th colspan="2" style="color:var(--accent);font-size:1.1rem;border-bottom:2px solid var(--accent)">整機總分計算表</th></tr><tr><td>基礎得分 (Base)</td><td style="font-weight:bold;color:var(--ok)">${safeFixed(totalScore, 1)} / ${safeFixed(totalMax, 1)}</td></tr><tr><td>平衡補分 (Buff)</td><td style="font-weight:bold;color:var(--accent)">+${safeFixed(bonus, 1)}</td></tr><tr><td>最終得分 (Total)</td><td style="font-weight:bold;color:var(--ok);font-size:1.2rem;">${safeFixed(finalBuffedScore, 1)}</td></tr><tr><td>整體畢業度</td><td style="font-weight:bold;color:var(--cv-val)">${safeFixed(buffedPct, 1)}% <span style="font-size:0.7rem;color:#888">(原 ${safeFixed(totalPct, 1)}%)</span></td></tr><tr><td colspan="2" style="height:1px;background:#444;padding:0;"></td></tr><tr><td>總暴擊率</td><td>${safeFixed(totalCR, 1)}%</td></tr><tr><td>總暴擊傷害</td><td>${safeFixed(totalCD, 1)}%</td></tr><tr><td>總雙爆評分 (CV)</td><td style="color:#ddd">${safeFixed(totalCVVal, 1)}</td></tr><tr><td>CV 達成率</td><td>${cvPct}% <span style="font-size:0.7rem;color:#888">(Base 210)</span></td></tr></table>`; cvOverlay.innerHTML = html; cvOverlay.style.display = 'block'; if (!g_lockedTarget) zoomCanvas.style.opacity = '0' }
@@ -15941,10 +15941,10 @@
         function rank_getGrading(p) {
             const en = typeof g_lang !== 'undefined' && g_lang === 'en';
             if (p >= 90) return { l: en ? "Heirloom" : "傳家寶", c: "grad-heirloom" };
-            if (p >= 80) return { l: en ? "Major Grad" : "大畢業", c: "grad-grand" };
-            if (p >= 65) return { l: en ? "Mid Grad" : "中畢業", c: "grad-medium" };
-            if (p >= 50) return { l: en ? "Minor Grad" : "小畢業", c: "grad-small" };
-            return { l: en ? "Not Yet" : "未畢業", c: "grad-none" };
+            if (p >= 80) return { l: en ? "Highly Sufficient" : "大畢業", c: "grad-grand" };
+            if (p >= 65) return { l: en ? "Sufficient" : "中畢業", c: "grad-medium" };
+            if (p >= 50) return { l: en ? "Barely Sufficient" : "小畢業", c: "grad-small" };
+            return { l: en ? "Insufficient" : "未畢業", c: "grad-none" };
         }
 
         function rank_getTierInfo(name, val) {
@@ -16629,9 +16629,9 @@
                         <span style="color:#555; font-size:0.75rem;">📅 ${glIsEN ? 'Generated: ' : '生成時間: '}${new Date().toLocaleString()}</span>
                     </div>
                 </div>`;
-            out += renderCardList([...buckets.heirloom, ...buckets.grand], glIsEN ? "🏆 Top Grade (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", glIsEN ? "No top-grade characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
-            out += renderCardList(buckets.med, glIsEN ? "🏅 Standard Grade (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", glIsEN ? "No standard-grade characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
-            out += renderCardList(buckets.none, glIsEN ? "❌ Not Graduated (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", glIsEN ? "No ungraded characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
+            out += renderCardList([...buckets.heirloom, ...buckets.grand], glIsEN ? "🏆 Highly Sufficient (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", glIsEN ? "No highly sufficient characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
+            out += renderCardList(buckets.med, glIsEN ? "🏅 Sufficient (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", glIsEN ? "No sufficient characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
+            out += renderCardList(buckets.none, glIsEN ? "❌ Insufficient (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", glIsEN ? "No insufficient characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
             out += `</div>`;
             return out;
         }
@@ -21682,6 +21682,7 @@
         function rank_renderStrategySummary(stats) {
             rank_injectSuitIconCSS();
             const container = document.getElementById('strategy-summary-content');
+            const isEN = typeof g_lang !== 'undefined' && g_lang === 'en';
 
             // Mappings
             const setColors = {
@@ -21726,12 +21727,12 @@
                 <!-- Section 1: Benchmarks -->
                 <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin-bottom:30px;">
                     <div class="ss-card" style="border-left: 4px solid var(--accent); padding:20px;">
-                        <div style="color:#666; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:10px;">AVERAGE GRADUATION</div>
+                        <div style="color:#666; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:10px;">${isEN ? 'AVG SUFFICIENCY' : 'AVERAGE GRADUATION'}</div>
                         <div style="display:flex; align-items:baseline; gap:5px;">
                             <span style="font-size:2.6rem; font-weight:900; color:#fff;">${stats.avgEchoScore.toFixed(1)}</span>
                             <span style="font-size:1.2rem; color:#555;">%</span>
                         </div>
-                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">Top 60 玩家平均開發進度</div>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">${isEN ? 'Avg build score across Top 60 players' : 'Top 60 玩家平均開發進度'}</div>
                     </div>
                     <div class="ss-card" style="border-left: 4px solid #e5c07b; padding:20px;">
                         <div style="color:#666; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:10px;">ENERGY REGEN (90th)</div>
@@ -21739,7 +21740,7 @@
                             <span style="font-size:2.6rem; font-weight:900; color:#fff;">${stats.avgER.toFixed(1)}</span>
                             <span style="font-size:1.2rem; color:#555;">%</span>
                         </div>
-                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">推薦充能畢業閾值</div>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">${isEN ? 'Recommended ER threshold for top builds' : '推薦充能畢業閾值'}</div>
                     </div>
                     <div class="ss-card" style="border-left: 4px solid #98c379; padding:20px;">
                         <div style="color:#666; font-size:0.75rem; font-weight:900; letter-spacing:1px; margin-bottom:10px;">PERFECT PIECES</div>
@@ -21747,14 +21748,14 @@
                             <span style="font-size:2.6rem; font-weight:900; color:#fff;">${(stats.perfectEchoCount / stats.totalEchoes * 100).toFixed(1)}</span>
                             <span style="font-size:1.2rem; color:#555;">%</span>
                         </div>
-                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">4+ 有效詞條聲骸件數占比</div>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">${isEN ? 'Echoes with 4+ viable sub-stats' : '4+ 有效詞條聲骸件數占比'}</div>
                     </div>
                 </div>
 
                 <!-- Section 2: Sonata & Weapons -->
                 <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:24px; margin-bottom:30px;">
                     <div class="ss-card" style="padding:0; overflow:hidden;">
-                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">📊 鳴奏合奏趨勢 (Sonata Combos)</div>
+                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">${isEN ? '📊 Sonata Combos' : '📊 鳴奏合奏趨勢 (Sonata Combos)'}</div>
                         <div style="padding:20px; display:flex; flex-direction:column; gap:12px;">
                             ${sortedSonatas.slice(0, 4).map(([combo, count]) => {
                 const pct = (count / stats.totalBuilds * 100).toFixed(0);
@@ -21782,7 +21783,7 @@
                         </div>
                     </div>
                     <div class="ss-card" style="padding:0; overflow:hidden;">
-                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">⚔️ 核心武器配戴</div>
+                        <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">${isEN ? '⚔️ Core Weapon Picks' : '⚔️ 核心武器配戴'}</div>
                         <div style="padding:20px;">
                             ${sortedWeapons.slice(0, 4).map(([name, count], idx) => {
                 const pct = (count / stats.totalBuilds * 100).toFixed(0);
@@ -21801,7 +21802,7 @@
                 <!-- Section 3: Cost Matrix & Main Stats -->
                 <div style="display:grid; grid-template-columns: 1fr 1.6fr; gap:24px; margin-bottom:30px;">
                     <div class="ss-card" style="padding:20px;">
-                        <div style="font-weight:700; color:#eee; font-size:0.95rem; margin-bottom:15px;">📦 COST 組合分佈</div>
+                        <div style="font-weight:700; color:#eee; font-size:0.95rem; margin-bottom:15px;">${isEN ? '📦 COST Setup Distribution' : '📦 COST 組合分佈'}</div>
                         <div style="display:flex; flex-wrap:wrap; gap:10px;">
                             ${sortedCosts.map(([k, c]) => {
                 const pct = (c / stats.totalBuilds * 100).toFixed(0);
@@ -21819,7 +21820,7 @@
                 const second = entries[1];
                 return `
                                     <div style="margin-bottom:10px;">
-                                        <div style="font-size:0.7rem; color:#555; font-weight:900; margin-bottom:4px;">COST ${cost} 主詞條偏好</div>
+                                        <div style="font-size:0.7rem; color:#555; font-weight:900; margin-bottom:4px;">${isEN ? `COST ${cost} Main Stat Preference` : `COST ${cost} 主詞條偏好`}</div>
                                         <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
                                             <span style="color:#eee;">1. ${top[0]}</span>
                                             <span style="color:var(--accent);">${(top[1] / (cost === 4 ? stats.totalBuilds : stats.totalBuilds * 2) * 100).toFixed(0)}%</span>
@@ -21837,39 +21838,41 @@
                     
                     <div class="ss-card" style="padding:20px; background: linear-gradient(135deg, rgba(92,124,250,0.05) 0%, rgba(0,0,0,0) 100%);">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                            <div style="font-weight:700; color:#eee; font-size:0.95rem;">🎯 90分位畢業屬性參考</div>
-                            <span style="font-size:0.7rem; color:#444;">TOP 6 排行榜數據匯總</span>
+                            <div style="font-weight:700; color:#eee; font-size:0.95rem;">${isEN ? '🎯 90th Pct Build Targets' : '🎯 90分位畢業屬性參考'}</div>
+                            <span style="font-size:0.7rem; color:#444;">${isEN ? 'Top 6 leaderboard data' : 'TOP 6 排行榜數據匯總'}</span>
                         </div>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
                             ${[
-                    { label: '暴擊率', val: stats.targets.critRate, unit: '%', color: '#ffca28' },
-                    { label: '暴擊傷害', val: stats.targets.critDmg, unit: '%', color: '#ffca28' },
-                    { label: '共鳴效率', val: stats.targets.er, unit: '%', color: '#e5c07b' },
-                    { label: '攻擊力加成', val: stats.targets.atkPct, unit: '%', color: '#eee' }
+                    { labelZh: '暴擊率', labelEn: 'Crit Rate', val: stats.targets.critRate, unit: '%', color: '#ffca28' },
+                    { labelZh: '暴擊傷害', labelEn: 'Crit DMG', val: stats.targets.critDmg, unit: '%', color: '#ffca28' },
+                    { labelZh: '共鳴效率', labelEn: 'Energy Regen', val: stats.targets.er, unit: '%', color: '#e5c07b' },
+                    { labelZh: '攻擊力加成', labelEn: 'ATK Bonus', val: stats.targets.atkPct, unit: '%', color: '#eee' }
                 ].map(t => `
                                 <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
-                                    <div style="font-size:0.75rem; color:#666; margin-bottom:8px;">${t.label}</div>
+                                    <div style="font-size:0.75rem; color:#666; margin-bottom:8px;">${isEN ? t.labelEn : t.labelZh}</div>
                                     <div style="font-family:'JetBrains Mono'; font-size:1.4rem; font-weight:900; color:${t.color};">${t.val.toFixed(1)}${t.unit}</div>
                                 </div>
                             `).join('')}
                         </div>
                         <div style="margin-top:20px; padding:12px; background:rgba(0,0,0,0.2); border-radius:8px; font-size:0.75rem; color:#888; line-height:1.6;">
-                            <strong style="color:var(--accent);">指標說明：</strong> 以上數值代表前 60 名玩家中排名第 6 左右的高端水平（Top 10%）。若您的角色的實戰數據接近或超過此基準，即代表已進入「畢業級別」。
+                            ${isEN
+                                ? `<strong style="color:var(--accent);">What this means:</strong> These numbers represent roughly the top 10% threshold among the Top 60 players. If your character's stats are close to or above these targets, your build is considered sufficient.`
+                                : `<strong style="color:var(--accent);">指標說明：</strong> 以上數值代表前 60 名玩家中排名第 6 左右的高端水平（Top 10%）。若您的角色的實戰數據接近或超過此基準，即代表已進入「畢業級別」。`}
                         </div>
                     </div>
                 </div>
 
                 <!-- Section 4: Sub-stat Heatmap -->
                 <div class="ss-card" style="padding:0; overflow:hidden;">
-                    <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">📊 全局詞條質量分佈 (Top 60)</div>
+                    <div style="padding:15px 20px; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:700; color:#eee; font-size:0.95rem;">${isEN ? '📊 Sub-Stat Distribution (Top 60)' : '📊 全局詞條質量分佈 (Top 60)'}</div>
                     <table class="ss-table">
                         <thead>
                             <tr>
-                                <th>詞條屬性</th>
-                                <th style="text-align:right;">使用率</th>
-                                <th style="text-align:right;">平均數值</th>
-                                <th style="text-align:right;">完美 Roll (T1)</th>
-                                <th style="text-align:right;">評級</th>
+                                <th>${isEN ? 'Sub-Stat' : '詞條屬性'}</th>
+                                <th style="text-align:right;">${isEN ? 'Usage' : '使用率'}</th>
+                                <th style="text-align:right;">${isEN ? 'Avg Value' : '平均數值'}</th>
+                                <th style="text-align:right;">${isEN ? 'Perfect Roll (T1)' : '完美 Roll (T1)'}</th>
+                                <th style="text-align:right;">${isEN ? 'Rating' : '評級'}</th>
                             </tr>
                         </thead>
                         <tbody>
