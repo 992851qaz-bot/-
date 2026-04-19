@@ -12301,55 +12301,50 @@
 
         // ── 範例隊伍表格 & 角色定位表 ─────────────────────────────────────
         const EXAMPLE_TEAMS = [
-            { name: "今汐標準隊", chars: ["今汐", "白芷", "散華"], note: "今汐 + 奶媽 + 輔助，最穩定通用配置" },
-            { name: "長離火隊", chars: ["長離", "莫特斐", "維里奈"], note: "火屬性爆發隊，維里奈提供治療與增傷" },
-            { name: "相里要激化隊", chars: ["相里要", "散華", "維里奈"], note: "電屬性強力配置，散華提供倍率加成" },
-            { name: "椿湮滅隊", chars: ["椿", "守岸人", "丹瑾"], note: "椿為主輸出，守岸人輔助，丹瑾副輸出" },
-            { name: "忌炎風隊", chars: ["忌炎", "秋水", "白芷"], note: "風屬性隊伍，秋水提供減抗增傷" },
-            { name: "吟霖雷隊", chars: ["吟霖", "凌陽", "維里奈"], note: "雷屬性配置，凌陽輔助提供共鳴效率" },
-            { name: "珂萊塔冰隊", chars: ["珂萊塔", "散華", "守岸人"], note: "冰屬性爆發流，散華縮CD輔助" },
-            { name: "坎特雷拉毒隊", chars: ["坎特雷拉", "守岸人", "散華"], note: "坎特雷拉主C，守岸人提供護盾與增傷" },
-            { name: "夏空隊", chars: ["夏空", "守岸人", "散華"], note: "夏空主輸出，守岸人 + 散華輔助" },
-            { name: "安可火隊", chars: ["安可", "白芷", "莫特斐"], note: "安可召喚流，白芷治療，莫特斐輔助" },
-            { name: "布蘭特隊", chars: ["布蘭特", "維里奈", "散華"], note: "布蘭特主C，維里奈奶媽，散華縮CD" },
-            { name: "卡提希婭隊", chars: ["卡提希婭", "守岸人", "散華"], note: "卡提希婭主輸出強隊" },
-            { name: "贊妮隊", chars: ["贊妮", "守岸人", "散華"], note: "贊妮近程爆發流" },
-            { name: "凌陽冰隊", chars: ["凌陽", "白芷", "散華"], note: "凌陽治療型輸出，白芷增益" },
-            { name: "菲比隊", chars: ["菲比", "守岸人", "散華"], note: "菲比主C，守岸人+散華標準輔助" },
+            { system: "共鳴連鎖 (Tune Rupture)", mainC: "愛彌斯", bestSub: "琳奈", altSubs: "露帕 > 仇遠 > 嘉貝莉娜", bestSupport: "莫寧", altSupports: "守岸人 > 維里奈 > 卜靈", rotation: "琳奈鋪設連鎖場域後，愛彌斯透過高頻共鳴刷新機制達成「雙大招」爆發。" },
+            { system: "時停導電 (Time Stop)", mainC: "奧古斯塔", bestSub: "尤諾", altSubs: "吟霖 > 淵武 > 散華", bestSupport: "守岸人", altSupports: "維里奈 > 鑒心 > 釉瑚", rotation: "奧古斯塔時停期間，尤諾的後台協同傷害會被鎖定並在結束時一次性瞬間結算。" },
+            { system: "氣動重擊 (Aero Heavy)", mainC: "西格莉卡 / 忌炎", bestSub: "莫特斐", altSubs: "仇遠 > 秋水 > 秧秧", bestSupport: "守岸人", altSupports: "維里奈 > 秧秧 > 白芷", rotation: "莫特斐提供重擊增傷，西格莉卡與忌炎利用變奏進場進行大規模聚怪與重擊收割。" },
+            { system: "衍射共奏 (Spectro Sync)", mainC: "今汐 / 贊妮", bestSub: "折枝", altSubs: "菲比 > 淵武 > 漂泊者(光)", bestSupport: "維里奈", altSupports: "守岸人 > 卜靈 > 白芷", rotation: "依賴副C的協同攻擊快速疊加「韶光/衍射碎裂」層數，由主C施放高倍率技能結算。" },
+            { system: "熱熔合軸 (Fusion Swap)", mainC: "長離 / 漂泊者(熱)", bestSub: "安可", altSubs: "緋雪 > 熾霞 > 莫特斐", bestSupport: "達妮婭", altSupports: "維里奈 > 守岸人 > 燈燈", rotation: "雙熱熔C位進行頻繁合軸換人，取消後搖。達妮婭提供熱熔專屬減抗。" },
+            { system: "湮滅血祭 (Havoc Sacrifice)", mainC: "椿 / 弗洛洛", bestSub: "坎特雷拉", altSubs: "丹瑾 > 漂泊者(暗) > 散華", bestSupport: "守岸人", altSupports: "維里奈 > 白芷 > 桃祈", rotation: "丹瑾或坎特雷拉扣血換取全隊湮滅增傷，椿切換空中型態進行大範圍裁決打擊。" },
+            { system: "冷凝碎裂 (Glacio Shatter)", mainC: "珂萊塔 / 凌陽", bestSub: "千咲", altSubs: "散華 > 洛可可 > 釉瑚", bestSupport: "莫寧", altSupports: "維里奈 > 守岸人 > 釉瑚", rotation: "千咲施加寒冷標記，珂萊塔利用重擊觸發「碎裂」機制，莫寧則負責拉高全隊攻速。" },
+            { system: "物理重擊 (Pure Phys)", mainC: "陸赫斯", bestSub: "布蘭特", altSubs: "卡提希婭(3鏈) > 桃祈", bestSupport: "卜靈", altSupports: "鑒心 > 桃祈 > 夏空", rotation: "捨棄屬性反應，利用陸赫斯極致的物理倍率，配合布蘭特的物理穿透硬灌傷害。" },
+            { system: "新手/平民戰神 (F2P Core)", mainC: "卡提希婭", bestSub: "夏空", altSubs: "熾霞 > 秧秧 > 秋水", bestSupport: "燈燈", altSupports: "釉瑚 > 白芷 > 漂泊者(風)", rotation: "卡提希婭在高連段下有質變，夏空提供生存，燈燈作為副手補充熱熔傷害。" },
         ];
 
         const ROLE_POSITIONS = {
             "🌟 全域 T0 輔助奶媽 (必帶隨插即用)": {
                 color: "#ffd700",
                 bg: "rgba(255,215,0,0.1)",
-                chars: ["守岸人", "維里奈", "莫寧"]
+                chars: ["守岸人", "維里奈", "莫寧"],
+                charNotes: ["屬性增傷/暴擊提升", "全域增傷/攻擊提升", "3.x 強力泛用輔助"]
             },
-            "⚡ 導電/時停 增傷/副C": {
+            "⚡ 各系增傷/副C特化 — 導電/時停": {
                 color: "#61afef",
                 bg: "rgba(97,175,239,0.1)",
                 chars: ["吟霖", "淵武", "尤諾", "嘉貝莉娜"]
             },
-            "✨ 衍射 增傷/副C": {
+            "✨ 各系增傷/副C特化 — 衍射": {
                 color: "#e5c07b",
                 bg: "rgba(229,192,123,0.1)",
                 chars: ["折枝", "菲比", "卜靈", "漂泊者(光)"]
             },
-            "🔥 熱熔 增傷/副C": {
+            "🔥 各系增傷/副C特化 — 熱熔": {
                 color: "#e06c75",
                 bg: "rgba(224,108,117,0.1)",
                 chars: ["莫特斐", "達妮婭", "緋雪", "燈燈", "漂泊者(熱)"]
             },
-            "🌑 湮滅 增傷/副C": {
+            "🌑 各系增傷/副C特化 — 湮滅": {
                 color: "#c678dd",
                 bg: "rgba(198,120,221,0.1)",
                 chars: ["丹瑾", "坎特雷拉", "弗洛洛", "漂泊者(暗)"]
             },
-            "💨 氣動 增傷/副C": {
+            "💨 各系增傷/副C特化 — 氣動": {
                 color: "#56b6c2",
                 bg: "rgba(86,182,194,0.1)",
                 chars: ["秋水", "秧秧", "仇遠", "露帕", "漂泊者(風)"]
             },
-            "❄️ 冷凝/物理 增傷/副C": {
+            "❄️ 各系增傷/副C特化 — 冷凝/物理": {
                 color: "#98c379",
                 bg: "rgba(152,195,121,0.1)",
                 chars: ["散華", "洛可可", "千咲", "布蘭特"]
@@ -12373,28 +12368,29 @@
             const isEN = g_lang === 'en';
             let html = `<div style="color:#aaa;font-size:0.85rem;margin-bottom:16px;">`;
             html += isEN
-                ? `Common meta team compositions for reference. Characters marked with ★ are recommended main DPS.`
-                : `以下為常見隊伍配置參考，僅供新手入門使用，實際配置請依角色共鳴鏈與裝備情況調整。`;
+                ? `Meta team compositions by core system. Sub-C and support alternatives are listed in priority order.`
+                : `各核心體系隊伍配置參考，副C與輔助下位替代按優先順序排列。`;
             html += `</div>`;
-            html += `<div style="overflow-x:auto;"><table class="weights-table" style="min-width:500px;">`;
+            html += `<div style="overflow-x:auto;"><table class="weights-table" style="min-width:900px;">`;
             html += `<thead><tr>`;
-            html += `<th style="width:160px;">${isEN ? 'Team Name' : '隊伍名稱'}</th>`;
-            html += `<th>${isEN ? 'Character 1 (Main DPS)' : '角色1 (主輸出)'}</th>`;
-            html += `<th>${isEN ? 'Character 2' : '角色2'}</th>`;
-            html += `<th>${isEN ? 'Character 3' : '角色3'}</th>`;
-            html += `<th>${isEN ? 'Notes' : '備註'}</th>`;
+            html += `<th style="width:130px;">${isEN ? 'Core System' : '核心體系'}</th>`;
+            html += `<th>${isEN ? 'Main DPS' : '核心主C'}</th>`;
+            html += `<th>${isEN ? 'Best Sub-C' : '最佳副C/協同'}</th>`;
+            html += `<th>${isEN ? 'Alt Sub-C (Priority)' : '副C下位替代 (按順序)'}</th>`;
+            html += `<th>${isEN ? 'Best Support' : '最佳生存/輔助'}</th>`;
+            html += `<th>${isEN ? 'Alt Support (Priority)' : '輔助下位替代 (按順序)'}</th>`;
+            html += `<th>${isEN ? 'Rotation Logic' : '輪軸說明'}</th>`;
             html += `</tr></thead><tbody>`;
             EXAMPLE_TEAMS.forEach((team, idx) => {
                 const rowBg = idx % 2 === 0 ? '' : 'style="background:rgba(255,255,255,0.02)"';
                 html += `<tr ${rowBg}>`;
-                html += `<td style="font-weight:bold;color:var(--accent);">${team.name}</td>`;
-                team.chars.forEach((c, ci) => {
-                    const enName = lookupRoleEN(c) || c;
-                    const displayName = isEN ? (enName || c) : c;
-                    const style = ci === 0 ? 'style="color:#ff7070;font-weight:bold;"' : '';
-                    html += `<td ${style}>${displayName}</td>`;
-                });
-                html += `<td style="color:#999;font-size:0.82rem;">${team.note}</td>`;
+                html += `<td style="font-weight:bold;color:var(--accent);">${team.system}</td>`;
+                html += `<td style="color:#ff7070;font-weight:bold;">${team.mainC}</td>`;
+                html += `<td style="color:#61afef;">${team.bestSub}</td>`;
+                html += `<td style="color:#999;font-size:0.82rem;">${team.altSubs}</td>`;
+                html += `<td style="color:#78e08f;">${team.bestSupport}</td>`;
+                html += `<td style="color:#999;font-size:0.82rem;">${team.altSupports}</td>`;
+                html += `<td style="color:#999;font-size:0.82rem;">${team.rotation}</td>`;
                 html += `</tr>`;
             });
             html += `</tbody></table></div>`;
@@ -12422,10 +12418,18 @@
                 html += `<div style="background:${info.bg};border:1px solid ${info.color}44;border-radius:8px;padding:12px 16px;">`;
                 html += `<div style="font-size:1rem;font-weight:bold;color:${info.color};margin-bottom:10px;">${roleName}</div>`;
                 html += `<div style="display:flex;flex-wrap:wrap;gap:8px;">`;
-                info.chars.forEach(c => {
+                info.chars.forEach((c, ci) => {
                     const enName = lookupRoleEN(c) || c;
                     const displayName = isEN ? (enName || c) : c;
-                    html += `<span style="background:rgba(255,255,255,0.07);border:1px solid ${info.color}66;border-radius:4px;padding:3px 10px;font-size:0.88rem;color:#ddd;">${displayName}</span>`;
+                    const note = info.charNotes ? info.charNotes[ci] : null;
+                    if (note) {
+                        html += `<div style="background:rgba(255,255,255,0.07);border:1px solid ${info.color}66;border-radius:4px;padding:4px 10px;font-size:0.88rem;color:#ddd;display:flex;flex-direction:column;gap:2px;">`;
+                        html += `<span>${displayName}</span>`;
+                        html += `<span style="font-size:0.75rem;color:${info.color}bb;">${note}</span>`;
+                        html += `</div>`;
+                    } else {
+                        html += `<span style="background:rgba(255,255,255,0.07);border:1px solid ${info.color}66;border-radius:4px;padding:3px 10px;font-size:0.88rem;color:#ddd;">${displayName}</span>`;
+                    }
                 });
                 html += `</div></div>`;
             });
