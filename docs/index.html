@@ -14381,6 +14381,20 @@
                         const el = document.getElementById(id);
                         if (el) el.innerHTML = _guideHtml;
                     });
+                    // In Chinese mode, if rank guide has real data, make it visible (override hasDesc hidden state)
+                    if (g_lang !== 'en' && typeof rank_list !== 'undefined' && rank_list.length >= 5 && rank_currSelection === g_globalData.role) {
+                        const pairs = [['zh-guide-content','zh-desc-text','zh-desc-toggle-btn'],['zh-guide-content-mobile','zh-desc-text-mobile','zh-desc-toggle-btn-mobile']];
+                        pairs.forEach(([guideId, descId, btnId]) => {
+                            const guide = document.getElementById(guideId);
+                            const desc = document.getElementById(descId);
+                            const btn = document.getElementById(btnId);
+                            if (guide && guide.style.display === 'none') {
+                                guide.style.display = '';
+                                if (desc) desc.style.display = 'none';
+                                if (btn) btn.textContent = '📝 說明文字';
+                            }
+                        });
+                    }
                 }
             }
         }
