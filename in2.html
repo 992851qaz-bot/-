@@ -12651,6 +12651,54 @@
             }
         }
 
+        // ── 範例隊伍資料 ────────────────────────────────────────────────────
+        const EXAMPLE_TEAMS = [
+            { system: "共鳴連鎖 (Tune Rupture)", mainC: "愛彌斯", bestSub: "琳奈", altSubs: "露帕 > 仇遠 > 嘉貝莉娜", bestSupport: "莫寧", altSupports: "守岸人 > 維里奈 > 卜靈", rotation: "琳奈鋪設連鎖場域後，愛彌斯透過高頻共鳴刷新機制達成「雙大招」爆發。" },
+            { system: "時停導電 (Time Stop)", mainC: "奧古斯塔", bestSub: "尤諾", altSubs: "吟霖 > 淵武 > 散華", bestSupport: "守岸人", altSupports: "維里奈 > 鑒心 > 釉瑚", rotation: "奧古斯塔時停期間，尤諾的後台協同傷害會被鎖定並在結束時一次性瞬間結算。" },
+            { system: "氣動重擊 (Aero Heavy)", mainC: "西格莉卡 / 忌炎", bestSub: "莫特斐", altSubs: "仇遠 > 秋水 > 秧秧", bestSupport: "守岸人", altSupports: "維里奈 > 秧秧 > 白芷", rotation: "莫特斐提供重擊增傷，西格莉卡與忌炎利用變奏進場進行大規模聚怪與重擊收割。" },
+            { system: "衍射共奏 (Spectro Sync)", mainC: "今汐 / 贊妮", bestSub: "折枝", altSubs: "菲比 > 淵武 > 漂泊者(光)", bestSupport: "維里奈", altSupports: "守岸人 > 卜靈 > 白芷", rotation: "依賴副C的協同攻擊快速疊加「韶光/衍射碎裂」層數，由主C施放高倍率技能結算。" },
+            { system: "熱熔合軸 (Fusion Swap)", mainC: "長離 / 漂泊者(熱)", bestSub: "安可", altSubs: "緋雪 > 熾霞 > 莫特斐", bestSupport: "達妮婭", altSupports: "維里奈 > 守岸人 > 燈燈", rotation: "雙熱熔C位進行頻繁合軸換人，取消後搖。達妮婭提供熱熔專屬減抗。" },
+            { system: "湮滅血祭 (Havoc Sacrifice)", mainC: "椿 / 弗洛洛", bestSub: "坎特雷拉", altSubs: "丹瑾 > 漂泊者(暗) > 散華", bestSupport: "守岸人", altSupports: "維里奈 > 白芷 > 桃祈", rotation: "丹瑾或坎特雷拉扣血換取全隊湮滅增傷，椿切換空中型態進行大範圍裁決打擊。" },
+            { system: "冷凝碎裂 (Glacio Shatter)", mainC: "珂萊塔 / 凌陽", bestSub: "千咲", altSubs: "散華 > 洛可可 > 釉瑚", bestSupport: "莫寧", altSupports: "維里奈 > 守岸人 > 釉瑚", rotation: "千咲施加寒冷標記，珂萊塔利用重擊觸發「碎裂」機制，莫寧則負責拉高全隊攻速。" },
+            { system: "物理重擊 (Pure Phys)", mainC: "陸赫斯", bestSub: "布蘭特", altSubs: "卡提希婭(3鏈) > 桃祈", bestSupport: "卜靈", altSupports: "鑒心 > 桃祈 > 夏空", rotation: "捨棄屬性反應，利用陸赫斯極致的物理倍率，配合布蘭特的物理穿透硬灌傷害。" },
+            { system: "新手/平民戰神 (F2P Core)", mainC: "卡提希婭", bestSub: "夏空", altSubs: "熾霞 > 秧秧 > 秋水", bestSupport: "燈燈", altSupports: "釉瑚 > 白芷 > 漂泊者(風)", rotation: "卡提希婭在高連段下有質變，夏空提供生存，燈燈作為副手補充熱熔傷害。" },
+        ];
+
+        function getExampleTeamBanner(role, isEN) {
+            if (!role || !EXAMPLE_TEAMS || !EXAMPLE_TEAMS.length) return '';
+            const matches = EXAMPLE_TEAMS.filter(t => {
+                const allText = [t.mainC, t.bestSub, t.altSubs, t.bestSupport, t.altSupports].join('|');
+                return allText.includes(role);
+            });
+            if (matches.length === 0) return '';
+            let html = `<div style="grid-column:1/-1;background:rgba(92,124,250,0.08);border:1px solid rgba(92,124,250,0.3);border-radius:10px;padding:14px 18px;margin-bottom:4px;">`;
+            html += `<div style="font-size:0.88rem;color:#5c7cfa;font-weight:bold;margin-bottom:10px;">👥 ${isEN ? 'Recommended Team Compositions (from Example Teams)' : '建議隊伍配置（依範例隊伍）'}</div>`;
+            matches.forEach(team => {
+                let roleLabel = '';
+                let roleColor = '#ccc';
+                if (team.mainC.includes(role)) { roleLabel = isEN ? '★ Main DPS' : '★ 核心主 C'; roleColor = '#ff7070'; }
+                else if (team.bestSub.includes(role)) { roleLabel = isEN ? '◆ Best Sub-C' : '◆ 最佳副 C / 協同'; roleColor = '#61afef'; }
+                else if (team.bestSupport.includes(role)) { roleLabel = isEN ? '♥ Best Support' : '♥ 最佳生存 / 輔助'; roleColor = '#78e08f'; }
+                else { roleLabel = isEN ? '· Sub / Alt' : '· 替代位'; roleColor = '#aaa'; }
+                html += `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;">`;
+                html += `<div style="flex:0 0 auto;min-width:140px;">`;
+                html += `<div style="font-size:0.88rem;font-weight:bold;color:var(--accent);margin-bottom:4px;">${team.system}</div>`;
+                html += `<div style="font-size:0.78rem;color:${roleColor};font-weight:bold;">${roleLabel}</div>`;
+                html += `</div>`;
+                html += `<div style="flex:1;display:flex;flex-wrap:wrap;gap:6px;font-size:0.8rem;align-content:flex-start;">`;
+                html += `<span style="background:rgba(255,112,112,0.1);border:1px solid rgba(255,112,112,0.3);border-radius:4px;padding:2px 8px;color:#ff7070;">${isEN ? 'Main: ' : '主C：'}${team.mainC}</span>`;
+                html += `<span style="background:rgba(97,175,239,0.1);border:1px solid rgba(97,175,239,0.3);border-radius:4px;padding:2px 8px;color:#61afef;">${isEN ? 'Sub: ' : '副C：'}${team.bestSub}</span>`;
+                if (team.altSubs) html += `<span style="background:rgba(153,153,153,0.07);border:1px solid rgba(153,153,153,0.2);border-radius:4px;padding:2px 8px;color:#999;">${isEN ? 'Alt Sub: ' : '副C替代：'}${team.altSubs}</span>`;
+                html += `<span style="background:rgba(120,224,143,0.1);border:1px solid rgba(120,224,143,0.3);border-radius:4px;padding:2px 8px;color:#78e08f;">${isEN ? 'Support: ' : '輔助：'}${team.bestSupport}</span>`;
+                if (team.altSupports) html += `<span style="background:rgba(153,153,153,0.07);border:1px solid rgba(153,153,153,0.2);border-radius:4px;padding:2px 8px;color:#999;">${isEN ? 'Alt Support: ' : '輔助替代：'}${team.altSupports}</span>`;
+                html += `</div>`;
+                html += `<div style="flex:0 0 100%;font-size:0.78rem;color:#888;margin-top:4px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);">${team.rotation}</div>`;
+                html += `</div>`;
+            });
+            html += `</div>`;
+            return html;
+        }
+
         function runSmartMatching() {
             const role = g_globalData.role;
             const activeBuildWeights = (g_currentWeights[role] && g_currentWeights[role][g_selectedBuildIdx]) ? g_currentWeights[role][g_selectedBuildIdx].weights : null;
@@ -12702,6 +12750,10 @@
             let html = '';
             let usedIds = new Set();
             if (!resultsContainer) return;
+
+            // Team suggestion banner based on EXAMPLE_TEAMS
+            const isEN = g_lang === 'en';
+            html += getExampleTeamBanner(role, isEN);
 
             // Global Image State Check
             const isImgMode = document.getElementById('btn-smart-img-toggle').classList.contains('active');

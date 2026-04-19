@@ -12335,12 +12335,12 @@
             html += `<div style="overflow-x:auto;"><table class="weights-table" style="min-width:900px;">`;
             html += `<thead><tr>`;
             html += `<th style="width:130px;">${isEN ? 'Core System' : '核心體系'}</th>`;
-            html += `<th>${isEN ? 'Main DPS' : '核心主C'}</th>`;
-            html += `<th>${isEN ? 'Best Sub-C' : '最佳副C/協同'}</th>`;
-            html += `<th>${isEN ? 'Alt Sub-C (Priority)' : '副C下位替代 (按順序)'}</th>`;
-            html += `<th>${isEN ? 'Best Support' : '最佳生存/輔助'}</th>`;
+            html += `<th>${isEN ? 'Main DPS' : '核心主 C (Main DPS)'}</th>`;
+            html += `<th>${isEN ? 'Best Sub-C / Synergy' : '最佳副 C / 協同'}</th>`;
+            html += `<th>${isEN ? 'Alt Sub-C (Priority)' : '副 C 下位替代 (按順序)'}</th>`;
+            html += `<th>${isEN ? 'Best Sustain / Support' : '最佳生存 / 輔助'}</th>`;
             html += `<th>${isEN ? 'Alt Support (Priority)' : '輔助下位替代 (按順序)'}</th>`;
-            html += `<th>${isEN ? 'Rotation Logic' : '輪軸說明'}</th>`;
+            html += `<th>${isEN ? 'Rotation Logic' : '輪軸說明 (Rotation Logic)'}</th>`;
             html += `</tr></thead><tbody>`;
             EXAMPLE_TEAMS.forEach((team, idx) => {
                 const rowBg = idx % 2 === 0 ? '' : 'style="background:rgba(255,255,255,0.02)"';
@@ -12362,6 +12362,41 @@
         function closeExampleTeamModal() {
             const modal = document.getElementById('example-team-modal');
             if (modal) modal.style.display = 'none';
+        }
+
+        function getExampleTeamBanner(role, isEN) {
+            if (!role || !EXAMPLE_TEAMS || !EXAMPLE_TEAMS.length) return '';
+            const matches = EXAMPLE_TEAMS.filter(t => {
+                const allText = [t.mainC, t.bestSub, t.altSubs, t.bestSupport, t.altSupports].join('|');
+                return allText.includes(role);
+            });
+            if (matches.length === 0) return '';
+            let html = `<div style="grid-column:1/-1;background:rgba(92,124,250,0.08);border:1px solid rgba(92,124,250,0.3);border-radius:10px;padding:14px 18px;margin-bottom:4px;">`;
+            html += `<div style="font-size:0.88rem;color:#5c7cfa;font-weight:bold;margin-bottom:10px;">👥 ${isEN ? 'Recommended Team Compositions (from Example Teams)' : '建議隊伍配置（依範例隊伍）'}</div>`;
+            matches.forEach(team => {
+                let roleLabel = '';
+                let roleColor = '#ccc';
+                if (team.mainC.includes(role)) { roleLabel = isEN ? '★ Main DPS' : '★ 核心主 C'; roleColor = '#ff7070'; }
+                else if (team.bestSub.includes(role)) { roleLabel = isEN ? '◆ Best Sub-C' : '◆ 最佳副 C / 協同'; roleColor = '#61afef'; }
+                else if (team.bestSupport.includes(role)) { roleLabel = isEN ? '♥ Best Support' : '♥ 最佳生存 / 輔助'; roleColor = '#78e08f'; }
+                else { roleLabel = isEN ? '· Sub / Alt' : '· 替代位'; roleColor = '#aaa'; }
+                html += `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;">`;
+                html += `<div style="flex:0 0 auto;min-width:140px;">`;
+                html += `<div style="font-size:0.88rem;font-weight:bold;color:var(--accent);margin-bottom:4px;">${team.system}</div>`;
+                html += `<div style="font-size:0.78rem;color:${roleColor};font-weight:bold;">${roleLabel}</div>`;
+                html += `</div>`;
+                html += `<div style="flex:1;display:flex;flex-wrap:wrap;gap:6px;font-size:0.8rem;align-content:flex-start;">`;
+                html += `<span style="background:rgba(255,112,112,0.1);border:1px solid rgba(255,112,112,0.3);border-radius:4px;padding:2px 8px;color:#ff7070;">${isEN ? 'Main: ' : '主C：'}${team.mainC}</span>`;
+                html += `<span style="background:rgba(97,175,239,0.1);border:1px solid rgba(97,175,239,0.3);border-radius:4px;padding:2px 8px;color:#61afef;">${isEN ? 'Sub: ' : '副C：'}${team.bestSub}</span>`;
+                if (team.altSubs) html += `<span style="background:rgba(153,153,153,0.07);border:1px solid rgba(153,153,153,0.2);border-radius:4px;padding:2px 8px;color:#999;">${isEN ? 'Alt Sub: ' : '副C替代：'}${team.altSubs}</span>`;
+                html += `<span style="background:rgba(120,224,143,0.1);border:1px solid rgba(120,224,143,0.3);border-radius:4px;padding:2px 8px;color:#78e08f;">${isEN ? 'Support: ' : '輔助：'}${team.bestSupport}</span>`;
+                if (team.altSupports) html += `<span style="background:rgba(153,153,153,0.07);border:1px solid rgba(153,153,153,0.2);border-radius:4px;padding:2px 8px;color:#999;">${isEN ? 'Alt Support: ' : '輔助替代：'}${team.altSupports}</span>`;
+                html += `</div>`;
+                html += `<div style="flex:0 0 100%;font-size:0.78rem;color:#888;margin-top:4px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);">${team.rotation}</div>`;
+                html += `</div>`;
+            });
+            html += `</div>`;
+            return html;
         }
 
         function openRolePositionModal() {
@@ -15404,6 +15439,10 @@
             let html = '';
             let usedIds = new Set();
             if (!resultsContainer) return;
+
+            // Team suggestion banner based on EXAMPLE_TEAMS
+            const isEN = g_lang === 'en';
+            html += getExampleTeamBanner(role, isEN);
 
             // Global Image State Check
             const isImgMode = document.getElementById('btn-smart-img-toggle').classList.contains('active');
