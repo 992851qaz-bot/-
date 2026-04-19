@@ -1102,6 +1102,20 @@
                 width: 95% !important;
                 margin: 0 auto;
             }
+
+            /* Achievement grid — single column on small screens */
+            .db-badge-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .db-badge-item {
+                padding: 14px !important;
+                gap: 12px !important;
+            }
+
+            .db-badge-icon {
+                font-size: 2rem !important;
+            }
         }
 
         .db-badge-grid {
@@ -13347,9 +13361,12 @@
             html += `</div></div>`;
 
             // Tabs
-            html += `<div style="display:flex;gap:4px;margin-bottom:0;flex-shrink:0;">`;
+            html += `<div style="display:flex;gap:4px;margin-bottom:0;flex-shrink:0;flex-wrap:wrap;align-items:flex-end;">`;
             html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:7px 20px;border-radius:7px 7px 0 0;border:1px solid #444;border-bottom:none;background:rgba(97,175,254,0.15);color:#61afef;font-size:0.85rem;cursor:pointer;font-weight:bold;">${isEN?'🎓 Score Overview':'🎓 評分總覽'}</button>`;
             html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:7px 20px;border-radius:7px 7px 0 0;border:1px solid #2a2a30;border-bottom:none;background:rgba(255,255,255,0.02);color:#666;font-size:0.85rem;cursor:pointer;">${isEN?'👥 Team Pairing':'👥 個性化配對'}</button>`;
+            html += `<div style="flex:1;"></div>`;
+            html += `<button onclick="openExampleTeamModal()" style="padding:5px 12px;border-radius:8px;border:1px solid #5c7cfa;background:rgba(92,124,250,0.1);color:#5c7cfa;font-size:0.8rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN?'👥 Example Teams':'👥 範例隊伍'}</button>`;
+            html += `<button onclick="openRolePositionModal()" style="padding:5px 12px;border-radius:8px;border:1px solid #78e08f;background:rgba(120,224,143,0.1);color:#78e08f;font-size:0.8rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN?'📋 Role Types':'📋 角色定位'}</button>`;
             html += `</div>`;
             html += `<div style="border-top:1px solid #444;margin-bottom:14px;"></div>`;
 
