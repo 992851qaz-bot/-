@@ -10458,7 +10458,7 @@
             }
             // If the cross-role summary modal is open, re-render it with the new language
             const crModal = document.getElementById('cross-role-modal');
-            if (crModal && crModal.style.display !== 'none' && typeof showCrossRoleScore === 'function' && g_crHistIdx >= 0) {
+            if (crModal && crModal.style.display === 'flex' && typeof showCrossRoleScore === 'function' && g_crHistIdx >= 0) {
                 showCrossRoleScore(g_crHistIdx);
             }
             // If the DPS panel has results, re-render them with translated labels
@@ -12817,8 +12817,15 @@
             analyzeBtn.innerText = g_lang === 'en' ? "View History" : "檢視歷史";
             g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length);
 
-            // 立即渲染一次
-            renderTable(g_globalData, g_chains, g_echoesData);
+            // 確保結果面板可見
+            if (typeof ensureAnalysisPanelVisible === 'function') ensureAnalysisPanelVisible();
+
+            // 立即渲染一次（包 try-catch 確保 renderHistoryList 必定執行）
+            try {
+                renderTable(g_globalData, g_chains, g_echoesData);
+            } catch (e) {
+                console.warn("[loadFromHistory] renderTable failed:", e);
+            }
             renderHistoryList();
 
             if (typeof dps_syncFromAnalysis === 'function') {
@@ -14367,6 +14374,14 @@
             if (g_globalData.role && typeof rank_data !== 'undefined' && rank_data.length > 0) {
                 if (rank_viewMode !== 'role') rank_toggleViewMode('role');
                 rank_selectItem(g_globalData.role);
+                // Refresh guide content divs after rank_list is recalculated for the new role
+                if (typeof rank_generateZhGuideHtml === 'function' && typeof rank_generateEnGuideHtml === 'function') {
+                    const _guideHtml = (g_lang === 'en') ? rank_generateEnGuideHtml(g_globalData.role) : rank_generateZhGuideHtml(g_globalData.role);
+                    ['zh-guide-content', 'zh-guide-content-mobile', 'desc-guide-content', 'desc-guide-content-mobile'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.innerHTML = _guideHtml;
+                    });
+                }
             }
         }
 
