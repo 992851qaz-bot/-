@@ -8798,8 +8798,8 @@
                 <div class="history-header">
                     <div style="display:flex;gap:10px;align-items:center">
                         <button onclick="openGraduationPanel()"
-                            style="background:transparent; border:none; color:inherit; font-size:1rem; font-family:inherit; padding:0; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:5px; transition:color 0.2s;"
-                            onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='inherit'"
+                            style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-radius:6px; color:inherit; font-size:0.9rem; font-family:inherit; padding:4px 10px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:5px; transition:all 0.2s;"
+                            onmouseover="this.style.background='rgba(229,192,123,0.15)';this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.18)';this.style.color='inherit'"
                             title="點擊查看畢業面板"><span data-lang-zh="📋 歷史紀錄" data-lang-en="📋 History">📋 歷史紀錄</span></button>
                         <span id="history-count" style="font-size:0.75rem;color:#888;font-weight:normal;"></span>
                     </div>
@@ -10268,6 +10268,10 @@
                         -</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:10px;">
+                    <button onclick="openExampleTeamModal()" class="quick-btn"
+                        style="padding:4px 10px; font-size:0.75rem; border-color:#5c7cfa; color:#5c7cfa; background:rgba(92,124,250,0.08);" data-lang-zh="👥 範例隊伍" data-lang-en="👥 Example Teams">👥 範例隊伍</button>
+                    <button onclick="openRolePositionModal()" class="quick-btn"
+                        style="padding:4px 10px; font-size:0.75rem; border-color:#78e08f; color:#78e08f; background:rgba(120,224,143,0.08);" data-lang-zh="📋 角色定位" data-lang-en="📋 Role Types">📋 角色定位</button>
                     <button onclick="generateGraduationImage()" class="quick-btn"
                         style="padding:4px 12px; font-size:0.75rem;" data-lang-zh="📷 生成圖片" data-lang-en="📷 Generate Image">📷 生成圖片</button>
                     <button onclick="document.getElementById('cross-role-modal').style.display='none'"
