@@ -12893,99 +12893,233 @@
                 }
             }
         }
+        // Role type classification for team pairing
+        const GRAD_ROLE_TYPE = {
+            // Main DPS
+            '今汐':'dps','長離':'dps','吟霖':'dps','相里要':'dps','椿':'dps','安可':'dps','卡卡羅':'dps','凌陽':'dps','忌炎':'dps','熾霞':'dps',
+            '珂萊塔':'dps','洛可可':'dps','菲比':'dps','坎特雷拉':'dps','布蘭特':'dps','千咲':'dps','鑒心':'dps','仇遠':'dps','緋雪':'dps','達妮婭':'dps',
+            '漂泊者風':'dps','漂泊者光':'dps','漂泊者暗':'dps','漂泊者熱熔':'dps','奧古斯塔':'dps','嘉貝莉娜':'dps','西格莉卡':'dps','莫寧':'dps',
+            // Support / Healer
+            '維里奈':'support','白芷':'support','守岸人':'support','燈燈':'support','秧秧':'support','桃祈':'support',
+            '卜靈':'support','琳奈':'support','愛彌斯':'support',
+            // Sub-DPS / Amplifier
+            '散華':'sub','莫特斐':'sub','淵武':'sub','丹瑾':'sub','秋水':'sub','釉瑚':'sub','夏空':'sub','贊妮':'sub','折枝':'sub',
+            '陸赫斯':'sub','尤諾':'sub','露帕':'sub','弗洛洛':'sub'
+        };
+        function grad_getRoleType(role) {
+            const key = role.replace(/[^\u4e00-\u9fa5]/g,'').substring(0,4);
+            return GRAD_ROLE_TYPE[key] || GRAD_ROLE_TYPE[role] || 'dps';
+        }
+
         function openGraduationPanel() {
             closeAllModals();
-            let html = `<div class="db-container" style="max-width:900px; padding:20px; display:flex; flex-direction:column; background:#1a1a1e;">`;
-            html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:15px; flex-shrink:0;">`;
-            html += `<div style="display:flex; align-items:center; gap:12px;">`;
-            html += `<h2 style="color:var(--accent); margin:0;">🎓 ${g_lang === 'en' ? 'Personal Score Summary' : '個人角色評分總表'}</h2>`;
-            html += `<span style="font-size:0.85rem; color:#888; font-family:'JetBrains Mono'; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID: ${g_currentUserUid || 'N/A'}</span>`;
-            html += `</div>`;
-            html += `<div style="display:flex; gap:10px; align-items:center;">`;
-            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px; font-size:0.75rem;">📷 ${g_lang === 'en' ? 'Generate Image' : '生成圖片'}</button>`;
-            html += `<button class="db-close-btn" onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>`;
-            html += `</div></div>`;
+            const isEN = g_lang === 'en';
 
             const history = getCleanHistory();
             const roleBest = {};
             history.forEach(item => {
                 const role = item.global?.role;
                 if (!role) return;
-                let avgScore = 0, echoCount = 0;
-                const weights = (g_currentWeights[role] && g_currentWeights[role][0]) ? g_currentWeights[role][0].weights : {};
+                const chainCount = (item.chains || []).filter(Boolean).length;
+                const weapon = item.global.weapon || '';
+                const builds = g_currentWeights[role] || [];
+                const buildIdx = (typeof autoSelectBuild === 'function') ? autoSelectBuild(role, chainCount) : 0;
+                const weights = (builds[buildIdx] || builds[0]) ? (builds[buildIdx] || builds[0]).weights : {};
+                let avgScore = 0, echoCount = 0, totalCV = 0;
                 (item.echoes || []).forEach(e => {
                     if (e.cost) {
                         const sData = calculateEchoScoreSimple(e, weights);
                         if (sData) { avgScore += sData.percentage; echoCount++; }
+                        if (typeof getCVInfo === 'function') {
+                            const cv = getCVInfo(e);
+                            totalCV += parseFloat(cv.cr || 0) * 2 + parseFloat(cv.cd || 0);
+                        }
                     }
                 });
                 avgScore = echoCount > 0 ? (avgScore / echoCount) : 0;
                 if (!roleBest[role] || avgScore > roleBest[role].score) {
-                    roleBest[role] = { score: avgScore, ts: item.ts, uid: item.global.uid };
+                    roleBest[role] = { score: avgScore, ts: item.ts, uid: item.global.uid, chainCount, weapon, totalCV: safeFixed(totalCV, 0) };
                 }
             });
 
-            const buckets = { heirloom: [], grand: [], med: [], small: [], none: [] };
+            const allCards = [];
+            const buckets = { heirloom: [], grand: [], med: [], none: [] };
             Object.keys(roleBest).forEach(role => {
                 const data = roleBest[role];
-                const grad = typeof getGrading === 'function' ? getGrading(data.score) : (typeof rank_getGrading === 'function' ? rank_getGrading(data.score) : { l: '未畢業', c: '' });
+                const grad = typeof getGrading === 'function' ? getGrading(data.score) : { l: '?', c: '' };
                 let group = 'none';
                 if (data.score >= 80) group = 'heirloom';
                 else if (data.score >= 65) group = 'grand';
                 else if (data.score >= 50) group = 'med';
-                else group = 'none';
-
-                buckets[group].push({ role, ...data, grad });
+                const entry = { role, ...data, grad, type: grad_getRoleType(role) };
+                buckets[group].push(entry);
+                allCards.push(entry);
             });
+
+            const buildRoleCard = (g, colorClass) => {
+                let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
+                const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
+                const iconHtml = roleIconUrl
+                    ? `<img src="${roleIconUrl}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid ${colorClass};margin-bottom:4px;">`
+                    : `<div style="width:50px;height:50px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 4px;border:2px solid ${colorClass};">?</div>`;
+                const enName = lookupRoleEN(g.role) || '';
+                const cardName = (isEN && enName) ? enName : g.role;
+                const chainDots = Array(6).fill(0).map((_, i) => `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i < g.chainCount ? 'var(--chain-on,#7fc)' : 'var(--chain-off,#444)'};"></span>`).join('');
+                const typeLabel = g.type === 'support' ? (isEN ? 'Sup' : '輔助') : g.type === 'sub' ? (isEN ? 'Sub' : '副輸') : (isEN ? 'DPS' : 'DPS');
+                const typeColor = g.type === 'support' ? '#61afef' : g.type === 'sub' ? '#c678dd' : '#e06c75';
+                let out = `<div style="width:90px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 4px;text-align:center;position:relative;transition:transform 0.18s,background 0.18s;" onmouseover="this.style.transform='translateY(-3px)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.transform='none';this.style.background='rgba(255,255,255,0.02)'">`;
+                out += `<div style="position:absolute;top:-7px;right:-7px;font-size:0.65rem;background:#222;padding:2px 5px;border-radius:6px;font-weight:bold;border:1px solid ${colorClass};z-index:2;" class="${g.grad.c||''}">${g.grad.l||g.grad.label||''}</div>`;
+                out += `<div style="position:absolute;top:-7px;left:-7px;font-size:0.6rem;background:${typeColor}22;padding:2px 5px;border-radius:6px;font-weight:bold;border:1px solid ${typeColor};color:${typeColor};z-index:2;">${typeLabel}</div>`;
+                out += iconHtml;
+                out += `<div style="font-size:0.82rem;font-weight:bold;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${g.role}">${escapeHtml(cardName)}</div>`;
+                out += `<div style="color:#aaa;font-size:0.78rem;font-family:'JetBrains Mono';margin-top:1px;">${safeFixed(g.score, 1)}%</div>`;
+                out += `<div style="margin-top:3px;">${chainDots}</div>`;
+                if (g.weapon) out += `<div style="font-size:0.65rem;color:#777;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(g.weapon)}">🗡 ${escapeHtml(g.weapon.substring(0,5))}${g.weapon.length>5?'…':''}</div>`;
+                if (g.totalCV > 0) out += `<div style="font-size:0.65rem;color:#aaa;margin-top:1px;">CV: ${g.totalCV}</div>`;
+                out += `</div>`;
+                return out;
+            };
 
             const renderCardList = (arr, title, colorClass, emptyText, borderCol) => {
                 arr.sort((a, b) => b.score - a.score);
-                let out = `<div style="background:#1e1e24; border:1px solid ${borderCol}; border-radius:8px; padding:15px; box-shadow:0 4px 15px rgba(0,0,0,0.2);"><h3 style="color:${colorClass}; margin-top:0; border-bottom:1px solid #333; padding-bottom:10px; display:flex; justify-content:center; align-items:center; gap:10px;"><span>${title}</span> <span style="font-size:0.85rem; background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px; color:#ddd;">${arr.length}</span></h3><div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">`;
-                if (arr.length === 0) out += `<div style="color:#666; width:100%; text-align:center; padding:20px;">${emptyText}</div>`;
-                arr.forEach(g => {
-                    let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
-                    const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
-                    const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid ${colorClass}; margin-bottom:4px;">` : `<div style="width:50px;height:50px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 4px auto;border:2px solid ${colorClass};">?</div>`;
-
-                    // English name cross-reference
-                    const enName = lookupRoleEN(g.role) || '';
-                    const cardPrimaryName = (g_lang === 'en' && enName) ? enName : g.role;
-                    const cardSubName = (g_lang === 'en' && enName) ? `<div style="font-size:0.7rem; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;" title="${g.role}">${g.role}</div>` : '';
-
-                    out += `<div style="width:85px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:10px 4px; text-align:center; position:relative; transition:transform 0.2s, background 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.transform='none'; this.style.background='rgba(255,255,255,0.02)'">`;
-                    out += `<div style="position:absolute; top:-6px; right:-6px; font-size:0.7rem; background:#222; padding:2px 6px; border-radius:6px; font-weight:bold; border:1px solid ${colorClass}; z-index:2;" class="${g.grad.c || ''}">${g.grad.l || g.grad.label || ''}</div>`;
-                    out += iconHtml;
-                    out += `<div style="font-size:0.85rem; font-weight:bold; color:#e0e0e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g.role}">${escapeHtml(cardPrimaryName)}</div>`;
-                    out += cardSubName;
-                    out += `<div style="color:#aaa; font-size:0.8rem; font-family:'JetBrains Mono'; margin-top:2px;">${safeFixed(g.score, 1)}%</div>`;
-                    out += `</div>`;
-                });
+                let out = `<div style="background:#1e1e24;border:1px solid ${borderCol};border-radius:8px;padding:15px;box-shadow:0 4px 15px rgba(0,0,0,0.2);">`;
+                out += `<h3 style="color:${colorClass};margin-top:0;border-bottom:1px solid #333;padding-bottom:10px;display:flex;justify-content:center;align-items:center;gap:10px;"><span>${title}</span><span style="font-size:0.85rem;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:10px;color:#ddd;">${arr.length}</span></h3>`;
+                out += `<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;">`;
+                if (arr.length === 0) out += `<div style="color:#666;width:100%;text-align:center;padding:20px;">${emptyText}</div>`;
+                arr.forEach(g => { out += buildRoleCard(g, colorClass); });
                 out += `</div></div>`;
                 return out;
             };
 
-            html += `<style>.grad-card-container { display:flex; flex-direction:column; gap:20px; overflow-y:auto; max-height:75vh; padding-right:5px;} .grad-card-container::-webkit-scrollbar { width:6px; } .grad-card-container::-webkit-scrollbar-thumb { background:#555; border-radius:3px; }</style>`;
-            html += `<div class="grad-card-container">`;
+            // Team pairing logic
+            const buildTeamCards = () => {
+                const scored = allCards.slice().sort((a,b) => b.score - a.score);
+                const dpsPool = scored.filter(c => c.type === 'dps');
+                const subPool = scored.filter(c => c.type === 'sub');
+                const supPool = scored.filter(c => c.type === 'support');
+                const teams = [];
+                const used = new Set();
+                const pick = (pool) => pool.find(c => !used.has(c.role));
+                const addTeam = (a, b, c) => { if (!a || !b || !c) return false; teams.push([a,b,c]); used.add(a.role); used.add(b.role); used.add(c.role); return true; };
+                // Priority: DPS + Sub + Support
+                while (true) {
+                    const d = pick(dpsPool), s = pick(subPool), u = pick(supPool);
+                    if (!addTeam(d, s, u)) break;
+                    if (teams.length >= 5) break;
+                }
+                // Fill remaining with any combination
+                const remaining = scored.filter(c => !used.has(c.role));
+                for (let i = 0; i + 2 < remaining.length && teams.length < 5; i += 3) {
+                    teams.push([remaining[i], remaining[i+1], remaining[i+2]]);
+                }
+                if (teams.length === 0) {
+                    return `<div style="color:#666;text-align:center;padding:40px;">${isEN ? 'Need at least 3 characters with records' : '需要至少3個角色的歷史紀錄才能生成配對'}</div>`;
+                }
+                const typeColor = t => t==='support'?'#61afef':t==='sub'?'#c678dd':'#e06c75';
+                const typeLabel = t => t==='support'?(isEN?'Support':'輔助'):t==='sub'?(isEN?'Sub DPS':'副輸出'):(isEN?'Main DPS':'主輸出');
+                let out = `<div style="display:flex;flex-direction:column;gap:16px;">`;
+                teams.forEach((team, ti) => {
+                    const avgScore = safeFixed(team.reduce((s,c)=>s+c.score,0)/3, 1);
+                    const hasSupport = team.some(c=>c.type==='support');
+                    const badge = hasSupport ? (isEN?'✅ Balanced':'✅ 均衡隊伍') : (isEN?'⚡ Attack':'⚡ 攻擊隊伍');
+                    const badgeColor = hasSupport ? '#78e08f' : '#e5c07b';
+                    out += `<div style="background:#1e1e24;border:1px solid #333;border-radius:10px;padding:14px;">`;
+                    out += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">`;
+                    out += `<span style="font-size:0.9rem;font-weight:bold;color:#ddd;">${isEN?`Team ${ti+1}`:`第 ${ti+1} 隊`}</span>`;
+                    out += `<div style="display:flex;gap:8px;align-items:center;"><span style="font-size:0.75rem;color:${badgeColor};border:1px solid ${badgeColor};border-radius:10px;padding:1px 8px;">${badge}</span><span style="font-size:0.75rem;color:#888;">${isEN?'Avg':'均分'}: <b style="color:#ccc;">${avgScore}%</b></span></div>`;
+                    out += `</div><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">`;
+                    team.forEach(c => {
+                        let roleKey = c.role.replace(/[^\u4e00-\u9fa5]/g,'').substring(0,4);
+                        const iconUrl = RESONATORS_PROFILE_PICTURE[roleKey]||'';
+                        const enName = lookupRoleEN(c.role)||'';
+                        const displayName = (isEN && enName) ? enName : c.role;
+                        const tc = typeColor(c.type); const tl = typeLabel(c.type);
+                        const chainDots = Array(6).fill(0).map((_,i)=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i<c.chainCount?'var(--chain-on,#7fc)':'var(--chain-off,#444)'};"></span>`).join('');
+                        out += `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.06);min-width:90px;">`;
+                        out += iconUrl ? `<img src="${iconUrl}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid ${tc};">`
+                                       : `<div style="width:48px;height:48px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.1rem;border:2px solid ${tc};">?</div>`;
+                        out += `<div style="font-size:0.8rem;font-weight:bold;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;" title="${escapeHtml(c.role)}">${escapeHtml(displayName)}</div>`;
+                        out += `<div style="font-size:0.65rem;color:${tc};border:1px solid ${tc};border-radius:8px;padding:0 5px;">${tl}</div>`;
+                        out += `<div style="font-size:0.75rem;color:#aaa;font-family:'JetBrains Mono';">${safeFixed(c.score,1)}%</div>`;
+                        out += `<div>${chainDots}</div>`;
+                        if (c.weapon) out += `<div style="font-size:0.62rem;color:#777;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;" title="${escapeHtml(c.weapon)}">🗡 ${escapeHtml(c.weapon.substring(0,6))}${c.weapon.length>6?'…':''}</div>`;
+                        out += `</div>`;
+                    });
+                    out += `</div></div>`;
+                });
+                out += `</div>`;
+                return out;
+            };
 
-            const isEN = g_lang === 'en';
-            html += renderCardList([...buckets.heirloom, ...buckets.grand], isEN ? "🏆 Highly Sufficient (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", isEN ? "No highly sufficient characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
-            html += renderCardList(buckets.med, isEN ? "🏅 Sufficient (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", isEN ? "No sufficient characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
-            html += renderCardList(buckets.none, isEN ? "❌ Insufficient (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", isEN ? "No insufficient characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
-
+            let html = `<div class="db-container" style="max-width:960px;padding:20px;display:flex;flex-direction:column;background:#1a1a1e;">`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #333;padding-bottom:12px;flex-shrink:0;">`;
+            html += `<div style="display:flex;align-items:center;gap:12px;">`;
+            html += `<h2 style="color:var(--accent);margin:0;">🎓 ${isEN ? 'Personal Score Summary' : '個人角色評分總表'}</h2>`;
+            html += `<span style="font-size:0.85rem;color:#888;font-family:'JetBrains Mono';background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;">UID: ${g_currentUserUid || 'N/A'}</span>`;
+            html += `<span style="font-size:0.8rem;color:#666;">${isEN?`${allCards.length} chars`:`共 ${allCards.length} 角色`}</span>`;
             html += `</div>`;
+            html += `<div style="display:flex;gap:10px;align-items:center;">`;
+            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px;font-size:0.75rem;">📷 ${isEN ? 'Generate Image' : '生成圖片'}</button>`;
+            html += `<button class="db-close-btn" onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>`;
+            html += `</div></div>`;
+
+            // Tabs
+            html += `<div style="display:flex;gap:4px;margin-bottom:14px;flex-shrink:0;">`;
+            html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:6px 18px;border-radius:6px 6px 0 0;border:1px solid #444;border-bottom:none;background:rgba(97,175,254,0.15);color:#61afef;font-size:0.85rem;cursor:pointer;font-weight:bold;">${isEN ? '🎓 Score Overview' : '🎓 評分總覽'}</button>`;
+            html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:6px 18px;border-radius:6px 6px 0 0;border:1px solid #333;border-bottom:none;background:rgba(255,255,255,0.03);color:#888;font-size:0.85rem;cursor:pointer;">${isEN ? '👥 Team Pairing' : '👥 個性化配對'}</button>`;
+            html += `</div>`;
+
+            html += `<style>.grad-card-container{display:flex;flex-direction:column;gap:20px;overflow-y:auto;max-height:70vh;padding-right:5px;}.grad-card-container::-webkit-scrollbar{width:6px;}.grad-card-container::-webkit-scrollbar-thumb{background:#555;border-radius:3px;}</style>`;
+
+            // Overview tab
+            html += `<div id="grad-panel-overview" class="grad-card-container">`;
+            html += renderCardList([...buckets.heirloom, ...buckets.grand], isEN ? "🏆 Highly Sufficient (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", isEN ? "No highly sufficient characters yet" : "尚無極品畢業角色", "rgba(255,202,40,0.2)");
+            html += renderCardList(buckets.med, isEN ? "🏅 Sufficient (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", isEN ? "No sufficient characters yet" : "尚無標準畢業角色", "rgba(120,224,143,0.2)");
+            html += renderCardList(buckets.none, isEN ? "❌ Insufficient (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", isEN ? "No insufficient characters" : "無未畢業角色", "rgba(255,85,85,0.2)");
+            html += `</div>`;
+
+            // Team pairing tab
+            html += `<div id="grad-panel-team" class="grad-card-container" style="display:none;">`;
+            html += `<div style="background:#1e1e24;border:1px solid #333;border-radius:8px;padding:12px 15px;font-size:0.8rem;color:#888;line-height:1.6;">`;
+            html += isEN
+                ? `<b style="color:#ccc;">How pairing works:</b> Characters are split into <span style="color:#e06c75;">Main DPS</span>, <span style="color:#c678dd;">Sub DPS</span>, and <span style="color:#61afef;">Support</span> roles. Each team is composed of one from each category, sorted by score. Remaining characters fill additional teams.`
+                : `<b style="color:#ccc;">配對說明：</b>系統會根據角色定位分為 <span style="color:#e06c75;">主輸出</span>、<span style="color:#c678dd;">副輸出</span>、<span style="color:#61afef;">輔助</span> 三類，優先組成每類各一人的均衡隊伍，依評分排序。剩餘角色補充額外隊伍。`;
+            html += `</div>`;
+            html += buildTeamCards();
+            html += `</div>`;
+
             html += `</div>`;
 
             let modal = document.getElementById('graduation-modal');
             if (!modal) {
                 modal = document.createElement('div');
                 modal.id = 'graduation-modal';
-                modal.className = 'dashboard-modal'; // This applies the full screen overlay
+                modal.className = 'dashboard-modal';
                 modal.style.display = 'none';
                 modal.style.zIndex = '19000';
                 document.body.appendChild(modal);
             }
             modal.innerHTML = html;
             modal.style.display = 'flex';
+        }
+
+        function grad_switchTab(tab) {
+            const overviewPanel = document.getElementById('grad-panel-overview');
+            const teamPanel = document.getElementById('grad-panel-team');
+            const overviewBtn = document.getElementById('grad-tab-overview');
+            const teamBtn = document.getElementById('grad-tab-team');
+            if (!overviewPanel || !teamPanel) return;
+            if (tab === 'overview') {
+                overviewPanel.style.display = '';
+                teamPanel.style.display = 'none';
+                if (overviewBtn) { overviewBtn.style.background='rgba(97,175,254,0.15)'; overviewBtn.style.color='#61afef'; overviewBtn.style.borderColor='#444'; }
+                if (teamBtn) { teamBtn.style.background='rgba(255,255,255,0.03)'; teamBtn.style.color='#888'; teamBtn.style.borderColor='#333'; }
+            } else {
+                overviewPanel.style.display = 'none';
+                teamPanel.style.display = '';
+                if (teamBtn) { teamBtn.style.background='rgba(97,175,254,0.15)'; teamBtn.style.color='#61afef'; teamBtn.style.borderColor='#444'; }
+                if (overviewBtn) { overviewBtn.style.background='rgba(255,255,255,0.03)'; overviewBtn.style.color='#888'; overviewBtn.style.borderColor='#333'; }
+            }
         }
         function cleanupHistory() { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let beforeCount = history.length; history = history.filter(h => h.uploadStatus !== 'duplicate' && h.uploadStatus !== 'error'); localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; g_currentEntryId = null; unlockPreview(); renderHistoryList(); showMsg(`已整理歷史紀錄！\n移除項目: ${beforeCount - history.length} 筆`) }
         function changeBuild(idx) { g_selectedBuildIdx = parseInt(idx); renderTable(g_globalData, g_chains, g_echoesData) }
