@@ -13049,9 +13049,9 @@
                     teams.push({ members, synergyPair: !!synergyPair, synergyLabel: synergyLabel||'' });
                 };
 
-                // Synergy-first pass: for each DPS, try to find its preferred sub first
+                // Synergy-first pass: for each DPS, try to find its preferred sub first (no cap here)
                 for (const d of dpsPool) {
-                    if (used.has(d.role) || teams.length >= 6) continue;
+                    if (used.has(d.role)) continue;
                     const prefNames = grad_getSynergy(d.role);
                     let bestSub = null, synergyLabel = '';
                     for (const pn of prefNames) {
@@ -13076,14 +13076,14 @@
                     }
                 }
 
-                // Fill remaining chars into extra teams (3 per team)
+                // Fill remaining chars into extra teams (3 per team) — no hard cap
                 const rem = scored.filter(c=>!used.has(c.role));
-                for (let i = 0; i+2 < rem.length && teams.length < 6; i += 3) {
+                for (let i = 0; i+2 < rem.length; i += 3) {
                     commit([rem[i], rem[i+1], rem[i+2]], false, '');
                 }
-                // If there are leftover 1–2 chars, append to last team or make small team
+                // If there are leftover 1–2 chars, make small team
                 const rem2 = scored.filter(c=>!used.has(c.role));
-                if (rem2.length > 0 && teams.length < 6) commit(rem2, false, '');
+                if (rem2.length > 0) commit(rem2, false, '');
 
                 if (teams.length === 0) {
                     return `<div style="color:#666;text-align:center;padding:40px;font-size:0.9rem;">${isEN?'Need at least 3 characters with records':'需要至少 3 個角色的歷史紀錄才能生成配對'}</div>`;
@@ -13114,7 +13114,7 @@
                     out += `<div style="background:#e5c07b22;border:1px solid #e5c07b55;border-radius:8px;padding:10px 14px;font-size:0.8rem;color:#e5c07b;margin-bottom:12px;">⚠️ ${isEN?'No healers found — teams may lack sustain. Consider leveling a healer (Verina, Baizhi, Shorekeeper…)':'未偵測到奶媽角色，建議培養奶媽（維里奈、白芷、守岸人…）以組成穩定隊伍'}</div>`;
                 }
 
-                teams.forEach((teamObj, ti) => {
+                const renderTeamCard = (teamObj, ti) => {
                     const team = teamObj.members;
                     const hasSynergy = teamObj.synergyPair;
                     const synLabel   = teamObj.synergyLabel;
@@ -13128,23 +13128,39 @@
                     else if (hasDps && hasSub)          compTag = isEN ? '⚡ High DMG' : '⚡ 純輸出';
                     else                                compTag = isEN ? '🔧 Mixed' : '🔧 混合';
                     const tagColor = (hasDps&&hasSub&&hasHealer)?'#78e08f':hasHealer?'#56b6c2':'#e5c07b';
-
-                    // Synergy score: meta bonus + avg score
                     const synergy = Math.min(100, parseFloat(avgScore) + (hasDps&&hasSub&&hasHealer?8:0) + (hasHealer?3:0) + (hasSynergy?5:0));
+                    let r = `<div style="background:#1e1e24;border:1px solid ${hasSynergy?'#e5c07b44':'#2a2a30'};border-radius:12px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.3);">`;
+                    r += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">`;
+                    r += `<span style="font-size:0.9rem;font-weight:bold;color:#ddd;">${isEN?`Team ${ti+1}`:`第 ${ti+1} 隊`}</span>`;
+                    r += `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">`;
+                    r += `<span style="font-size:0.72rem;color:${tagColor};border:1px solid ${tagColor};border-radius:10px;padding:1px 9px;">${compTag}</span>`;
+                    if (hasSynergy) r += `<span style="font-size:0.72rem;color:#e5c07b;border:1px solid #e5c07b66;border-radius:10px;padding:1px 9px;" title="${escapeHtml(synLabel)}">💎 ${isEN?'Best Partner':'最佳拍檔'}</span>`;
+                    r += `<span style="font-size:0.72rem;color:#888;">均分 <b style="color:#61afef;">${avgScore}%</b></span>`;
+                    r += `<span style="font-size:0.72rem;color:#888;">綜效 <b style="color:#e5c07b;">${safeFixed(synergy,0)}</b></span>`;
+                    r += `</div></div>`;
+                    r += `<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">`;
+                    team.forEach(c => { r += teamMember(c); });
+                    r += `</div></div>`;
+                    return r;
+                };
 
-                    out += `<div style="background:#1e1e24;border:1px solid ${hasSynergy?'#e5c07b44':'#2a2a30'};border-radius:12px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.3);">`;
-                    out += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">`;
-                    out += `<span style="font-size:0.9rem;font-weight:bold;color:#ddd;">${isEN?`Team ${ti+1}`:`第 ${ti+1} 隊`}</span>`;
-                    out += `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">`;
-                    out += `<span style="font-size:0.72rem;color:${tagColor};border:1px solid ${tagColor};border-radius:10px;padding:1px 9px;">${compTag}</span>`;
-                    if (hasSynergy) out += `<span style="font-size:0.72rem;color:#e5c07b;border:1px solid #e5c07b66;border-radius:10px;padding:1px 9px;" title="${escapeHtml(synLabel)}">💎 ${isEN?'Best Partner':'最佳拍檔'}</span>`;
-                    out += `<span style="font-size:0.72rem;color:#888;">均分 <b style="color:#61afef;">${avgScore}%</b></span>`;
-                    out += `<span style="font-size:0.72rem;color:#888;">綜效 <b style="color:#e5c07b;">${safeFixed(synergy,0)}</b></span>`;
-                    out += `</div></div>`;
-                    out += `<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">`;
-                    team.forEach(c => { out += teamMember(c); });
-                    out += `</div></div>`;
-                });
+                // First 3 teams always visible; remaining collapsed
+                const FIRST_N = 3;
+                const visibleTeams  = teams.slice(0, FIRST_N);
+                const hiddenTeams   = teams.slice(FIRST_N);
+
+                out += `<div class="grad-team-grid" id="grad-teams-visible">`;
+                visibleTeams.forEach((t, i) => { out += renderTeamCard(t, i); });
+                out += `</div>`;
+
+                if (hiddenTeams.length > 0) {
+                    out += `<div style="text-align:center;margin:14px 0 4px;">`;
+                    out += `<button id="grad-teams-toggle-btn" onclick="(function(){var el=document.getElementById('grad-teams-extra');var btn=document.getElementById('grad-teams-toggle-btn');if(el.style.display==='none'){el.style.display='';btn.textContent='${isEN?'▲ Hide Extra Teams':'▲ 收起額外隊伍'}';}else{el.style.display='none';btn.textContent='${isEN?`▼ View All Teams (${hiddenTeams.length} more)`:`▼ 查看全部隊伍（還有 ${hiddenTeams.length} 支）`}';}})();" style="padding:7px 22px;border-radius:8px;background:rgba(97,175,239,0.12);border:1px solid #61afef55;color:#61afef;font-size:0.82rem;cursor:pointer;font-weight:bold;">▼ ${isEN?`View All Teams (${hiddenTeams.length} more)`:`查看全部隊伍（還有 ${hiddenTeams.length} 支）`}</button>`;
+                    out += `</div>`;
+                    out += `<div id="grad-teams-extra" class="grad-team-grid" style="display:none;margin-top:8px;">`;
+                    hiddenTeams.forEach((t, i) => { out += renderTeamCard(t, i + FIRST_N); });
+                    out += `</div>`;
+                }
                 return out;
             };
 
@@ -13215,7 +13231,7 @@
                 ? `<b style="color:#bbb;">Meta Comp (WW):</b> <span style="color:#e06c75;">Main DPS</span> + <span style="color:#c678dd;">Sub DPS/Amplifier</span> + <span style="color:#56b6c2;">Healer (奶媽)</span>. Teams are generated by scoring and assigning each role slot optimally.`
                 : `<b style="color:#bbb;">鳴潮主流配隊：</b><span style="color:#e06c75;">主輸出</span> + <span style="color:#c678dd;">副輸出 / 增幅</span> + <span style="color:#56b6c2;">奶媽</span>。系統依評分排序自動分配最佳組合。綜效分 = 均分 + 配隊加成。`;
             html += `</div>`;
-            html += `<div class="grad-team-grid">${buildTeamContent()}</div>`;
+            html += `<div>${buildTeamContent()}</div>`;
             html += `</div>`;
 
             html += `</div>`;
