@@ -8440,6 +8440,28 @@
                 style="width:100%;margin:10px 0;padding:10px;"><button onclick="saveConfig()" data-lang-zh="儲存" data-lang-en="Save">儲存</button>
         </div>
     </div>
+
+    <!-- 範例隊伍表格 Modal -->
+    <div id="example-team-modal" class="modal-overlay" onclick="if(event.target===this)closeExampleTeamModal()">
+        <div class="modal-full" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 style="margin:0;color:#5c7cfa;" data-lang-zh="👥 範例隊伍配置表" data-lang-en="👥 Example Team Compositions">👥 範例隊伍配置表</h3>
+                <button onclick="closeExampleTeamModal()" data-lang-zh="關閉" data-lang-en="Close">關閉</button>
+            </div>
+            <div class="modal-body" id="example-team-body" style="padding:16px;"></div>
+        </div>
+    </div>
+
+    <!-- 角色定位表 Modal -->
+    <div id="role-position-modal" class="modal-overlay" onclick="if(event.target===this)closeRolePositionModal()">
+        <div class="modal-full" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 style="margin:0;color:#78e08f;" data-lang-zh="📋 角色定位分類表" data-lang-en="📋 Character Role Classification">📋 角色定位分類表</h3>
+                <button onclick="closeRolePositionModal()" data-lang-zh="關閉" data-lang-en="Close">關閉</button>
+            </div>
+            <div class="modal-body" id="role-position-body" style="padding:16px;"></div>
+        </div>
+    </div>
     <div id="weights-modal" class="modal-overlay">
         <div class="modal-full">
             <div class="modal-header">
@@ -9176,6 +9198,12 @@
                                     onchange="syncCrossRoleToggle('smart')">
                                 <span data-lang-zh="包含非當前角色聲骸" data-lang-en="Include non-current character echoes">包含非當前角色聲骸</span>
                             </label>
+                            <button onclick="openExampleTeamModal()" class="btn-toggle-view-card"
+                                title="查看範例隊伍表格" data-lang-zh="👥 範例隊伍" data-lang-en="👥 Example Teams"
+                                style="width:auto; padding:0 10px; font-size:0.9rem; border-color:#5c7cfa; color:#5c7cfa;">👥 範例隊伍</button>
+                            <button onclick="openRolePositionModal()" class="btn-toggle-view-card"
+                                title="查看角色定位表" data-lang-zh="📋 角色定位" data-lang-en="📋 Role Types"
+                                style="width:auto; padding:0 10px; font-size:0.9rem; border-color:#78e08f; color:#78e08f;">📋 角色定位</button>
                             <button onclick="toggleSmartAllImages()" class="btn-toggle-view-card"
                                 id="btn-smart-img-toggle" title="切換所有顯示模式" data-lang-zh="🖼️ 圖片" data-lang-en="🖼️ Images" data-title-zh="切換所有顯示模式" data-title-en="Toggle display mode">🖼️ 圖片</button>
                             <button onclick="resetEchoExclusion()" class="btn-toggle-view-card" title="重置所有勾選狀態" data-lang-zh="☑️ 重置" data-lang-en="☑️ Reset" data-title-zh="重置所有勾選狀態" data-title-en="Reset all selections"
@@ -12187,6 +12215,126 @@
         function hideFocus() { if (g_lockedTarget) return; imgContainer.classList.remove('zoomed'); imgContainer.style.borderColor = "#333"; zoomCanvas.style.opacity = '0'; if (!imgEl.src) imgPlaceholder.style.display = 'flex'; else imgEl.style.opacity = '1' }
         function showWeightsModal() { document.getElementById('weights-modal').style.display = 'flex' }
         function closeWeightsModal() { document.getElementById('weights-modal').style.display = 'none' }
+
+        // ── 範例隊伍表格 & 角色定位表 ─────────────────────────────────────
+        const EXAMPLE_TEAMS = [
+            { name: "今汐標準隊", chars: ["今汐", "白芷", "散華"], note: "今汐 + 奶媽 + 輔助，最穩定通用配置" },
+            { name: "長離火隊", chars: ["長離", "莫特斐", "維里奈"], note: "火屬性爆發隊，維里奈提供治療與增傷" },
+            { name: "相里要激化隊", chars: ["相里要", "散華", "維里奈"], note: "電屬性強力配置，散華提供倍率加成" },
+            { name: "椿湮滅隊", chars: ["椿", "守岸人", "丹瑾"], note: "椿為主輸出，守岸人輔助，丹瑾副輸出" },
+            { name: "忌炎風隊", chars: ["忌炎", "秋水", "白芷"], note: "風屬性隊伍，秋水提供減抗增傷" },
+            { name: "吟霖雷隊", chars: ["吟霖", "凌陽", "維里奈"], note: "雷屬性配置，凌陽輔助提供共鳴效率" },
+            { name: "珂萊塔冰隊", chars: ["珂萊塔", "散華", "守岸人"], note: "冰屬性爆發流，散華縮CD輔助" },
+            { name: "坎特雷拉毒隊", chars: ["坎特雷拉", "守岸人", "散華"], note: "坎特雷拉主C，守岸人提供護盾與增傷" },
+            { name: "夏空隊", chars: ["夏空", "守岸人", "散華"], note: "夏空主輸出，守岸人 + 散華輔助" },
+            { name: "安可火隊", chars: ["安可", "白芷", "莫特斐"], note: "安可召喚流，白芷治療，莫特斐輔助" },
+            { name: "布蘭特隊", chars: ["布蘭特", "維里奈", "散華"], note: "布蘭特主C，維里奈奶媽，散華縮CD" },
+            { name: "卡提希婭隊", chars: ["卡提希婭", "守岸人", "散華"], note: "卡提希婭主輸出強隊" },
+            { name: "贊妮隊", chars: ["贊妮", "守岸人", "散華"], note: "贊妮近程爆發流" },
+            { name: "凌陽冰隊", chars: ["凌陽", "白芷", "散華"], note: "凌陽治療型輸出，白芷增益" },
+            { name: "菲比隊", chars: ["菲比", "守岸人", "散華"], note: "菲比主C，守岸人+散華標準輔助" },
+        ];
+
+        const ROLE_POSITIONS = {
+            "主輸出 (Main DPS)": {
+                color: "#ff5252",
+                bg: "rgba(255,82,82,0.1)",
+                chars: ["今汐", "長離", "相里要", "椿", "忌炎", "吟霖", "珂萊塔", "坎特雷拉", "贊妮", "夏空", "卡提希婭", "菲比", "布蘭特", "洛可可", "安可", "卡卡羅"]
+            },
+            "副輸出 (Sub-DPS)": {
+                color: "#ffca28",
+                bg: "rgba(255,202,40,0.1)",
+                chars: ["散華", "丹瑾", "莫特斐", "熾霞", "秋水", "折枝", "釉瑚", "凌陽"]
+            },
+            "輔助 (Support)": {
+                color: "#5c7cfa",
+                bg: "rgba(92,124,250,0.1)",
+                chars: ["守岸人", "鑒心", "秧秧", "淵武", "桃祈", "燈燈", "釉瑚", "露帕", "尤諾"]
+            },
+            "治療 (Healer)": {
+                color: "#78e08f",
+                bg: "rgba(120,224,143,0.1)",
+                chars: ["白芷", "維里奈", "凌陽"]
+            },
+            "輔助/輸出 (Flex)": {
+                color: "#c3a6ff",
+                bg: "rgba(195,166,255,0.1)",
+                chars: ["漂泊者", "漂泊者(湮滅)", "漂泊者(衍射)", "秋水", "淵武", "達妮婭", "嘉貝莉娜"]
+            }
+        };
+
+        function openExampleTeamModal() {
+            const modal = document.getElementById('example-team-modal');
+            const body = document.getElementById('example-team-body');
+            if (!modal || !body) return;
+            const isEN = g_lang === 'en';
+            let html = `<div style="color:#aaa;font-size:0.85rem;margin-bottom:16px;">`;
+            html += isEN
+                ? `Common meta team compositions for reference. Characters marked with ★ are recommended main DPS.`
+                : `以下為常見隊伍配置參考，僅供新手入門使用，實際配置請依角色共鳴鏈與裝備情況調整。`;
+            html += `</div>`;
+            html += `<div style="overflow-x:auto;"><table class="weights-table" style="min-width:500px;">`;
+            html += `<thead><tr>`;
+            html += `<th style="width:160px;">${isEN ? 'Team Name' : '隊伍名稱'}</th>`;
+            html += `<th>${isEN ? 'Character 1 (Main DPS)' : '角色1 (主輸出)'}</th>`;
+            html += `<th>${isEN ? 'Character 2' : '角色2'}</th>`;
+            html += `<th>${isEN ? 'Character 3' : '角色3'}</th>`;
+            html += `<th>${isEN ? 'Notes' : '備註'}</th>`;
+            html += `</tr></thead><tbody>`;
+            EXAMPLE_TEAMS.forEach((team, idx) => {
+                const rowBg = idx % 2 === 0 ? '' : 'style="background:rgba(255,255,255,0.02)"';
+                html += `<tr ${rowBg}>`;
+                html += `<td style="font-weight:bold;color:var(--accent);">${team.name}</td>`;
+                team.chars.forEach((c, ci) => {
+                    const enName = lookupRoleEN(c) || c;
+                    const displayName = isEN ? (enName || c) : c;
+                    const style = ci === 0 ? 'style="color:#ff7070;font-weight:bold;"' : '';
+                    html += `<td ${style}>${displayName}</td>`;
+                });
+                html += `<td style="color:#999;font-size:0.82rem;">${team.note}</td>`;
+                html += `</tr>`;
+            });
+            html += `</tbody></table></div>`;
+            body.innerHTML = html;
+            modal.style.display = 'flex';
+        }
+
+        function closeExampleTeamModal() {
+            const modal = document.getElementById('example-team-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function openRolePositionModal() {
+            const modal = document.getElementById('role-position-modal');
+            const body = document.getElementById('role-position-body');
+            if (!modal || !body) return;
+            const isEN = g_lang === 'en';
+            let html = `<div style="color:#aaa;font-size:0.85rem;margin-bottom:16px;">`;
+            html += isEN
+                ? `Character role classification table. Roles are based on general meta playstyle.`
+                : `角色定位分類表，依據角色主流玩法分類，部分角色可兼任多種定位。`;
+            html += `</div>`;
+            html += `<div style="display:flex;flex-direction:column;gap:14px;">`;
+            Object.entries(ROLE_POSITIONS).forEach(([roleName, info]) => {
+                html += `<div style="background:${info.bg};border:1px solid ${info.color}44;border-radius:8px;padding:12px 16px;">`;
+                html += `<div style="font-size:1rem;font-weight:bold;color:${info.color};margin-bottom:10px;">${roleName}</div>`;
+                html += `<div style="display:flex;flex-wrap:wrap;gap:8px;">`;
+                info.chars.forEach(c => {
+                    const enName = lookupRoleEN(c) || c;
+                    const displayName = isEN ? (enName || c) : c;
+                    html += `<span style="background:rgba(255,255,255,0.07);border:1px solid ${info.color}66;border-radius:4px;padding:3px 10px;font-size:0.88rem;color:#ddd;">${displayName}</span>`;
+                });
+                html += `</div></div>`;
+            });
+            html += `</div>`;
+            body.innerHTML = html;
+            modal.style.display = 'flex';
+        }
+
+        function closeRolePositionModal() {
+            const modal = document.getElementById('role-position-modal');
+            if (modal) modal.style.display = 'none';
+        }
         function configureRolePickerModal(mode, rawName = '') {
             const titleEl = document.getElementById('role-modal-title');
             const subtitleEl = document.getElementById('role-modal-subtitle');
@@ -19422,7 +19570,8 @@
                 'comparison-modal', 'heatmap-modal', 'imitate-modal', 'refresh-modal',
                 'custom-weight-modal', 'smart-weight-modal', 'feature-list-modal',
                 'upload-url-modal', 'buff-info-modal', 'sub-stat-modal', 'msg-modal',
-                'confirm-prompt-modal', 'points-modal', 'data-management-modal'
+                'confirm-prompt-modal', 'points-modal', 'data-management-modal',
+                'example-team-modal', 'role-position-modal'
             ];
             modals.forEach(id => {
                 const el = document.getElementById(id);
