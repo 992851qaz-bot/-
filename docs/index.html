@@ -12894,15 +12894,16 @@
             }
         }
         // Role type classification for team pairing
+        // 'healer' = 奶媽 (dedicated healer/buffer with sustained heal), 'sub' = amplifier/enabler, 'dps' = main damage dealer
         const GRAD_ROLE_TYPE = {
             // Main DPS
             '今汐':'dps','長離':'dps','吟霖':'dps','相里要':'dps','椿':'dps','安可':'dps','卡卡羅':'dps','凌陽':'dps','忌炎':'dps','熾霞':'dps',
             '珂萊塔':'dps','洛可可':'dps','菲比':'dps','坎特雷拉':'dps','布蘭特':'dps','千咲':'dps','鑒心':'dps','仇遠':'dps','緋雪':'dps','達妮婭':'dps',
             '漂泊者風':'dps','漂泊者光':'dps','漂泊者暗':'dps','漂泊者熱熔':'dps','奧古斯塔':'dps','嘉貝莉娜':'dps','西格莉卡':'dps','莫寧':'dps',
-            // Support / Healer
-            '維里奈':'support','白芷':'support','守岸人':'support','燈燈':'support','秧秧':'support','桃祈':'support',
-            '卜靈':'support','琳奈':'support','愛彌斯':'support',
-            // Sub-DPS / Amplifier
+            // Healer / 奶媽 (priority: dedicated healers first)
+            '維里奈':'healer','白芷':'healer','守岸人':'healer','燈燈':'healer','秧秧':'healer','桃祈':'healer',
+            '卜靈':'healer','琳奈':'healer','愛彌斯':'healer',
+            // Sub-DPS / Amplifier / Enabler
             '散華':'sub','莫特斐':'sub','淵武':'sub','丹瑾':'sub','秋水':'sub','釉瑚':'sub','夏空':'sub','贊妮':'sub','折枝':'sub',
             '陸赫斯':'sub','尤諾':'sub','露帕':'sub','弗洛洛':'sub'
         };
@@ -12910,6 +12911,8 @@
             const key = role.replace(/[^\u4e00-\u9fa5]/g,'').substring(0,4);
             return GRAD_ROLE_TYPE[key] || GRAD_ROLE_TYPE[role] || 'dps';
         }
+        const GRAD_TYPE_COLOR = { dps:'#e06c75', sub:'#c678dd', healer:'#56b6c2' };
+        const GRAD_TYPE_LABEL = (t, isEN) => t==='healer'?(isEN?'Healer':'奶媽'):t==='sub'?(isEN?'Sub':'副輸'):(isEN?'DPS':'主輸');
 
         function openGraduationPanel() {
             closeAllModals();
@@ -12943,149 +12946,216 @@
             });
 
             const allCards = [];
-            const buckets = { heirloom: [], grand: [], med: [], none: [] };
+            const buckets = { top: [], mid: [], low: [] };
             Object.keys(roleBest).forEach(role => {
                 const data = roleBest[role];
                 const grad = typeof getGrading === 'function' ? getGrading(data.score) : { l: '?', c: '' };
-                let group = 'none';
-                if (data.score >= 80) group = 'heirloom';
-                else if (data.score >= 65) group = 'grand';
-                else if (data.score >= 50) group = 'med';
+                let group = 'low';
+                if (data.score >= 80) group = 'top';
+                else if (data.score >= 50) group = 'mid';
                 const entry = { role, ...data, grad, type: grad_getRoleType(role) };
                 buckets[group].push(entry);
                 allCards.push(entry);
             });
+            ['top','mid','low'].forEach(g => buckets[g].sort((a,b)=>b.score-a.score));
+
+            const totalCount = allCards.length;
+            const gradCount = buckets.top.length + buckets.mid.length;
+            const avgAll = totalCount > 0 ? safeFixed(allCards.reduce((s,c)=>s+c.score,0)/totalCount,1) : '0';
+            const dpsCount  = allCards.filter(c=>c.type==='dps').length;
+            const subCount  = allCards.filter(c=>c.type==='sub').length;
+            const healCount = allCards.filter(c=>c.type==='healer').length;
 
             const buildRoleCard = (g, colorClass) => {
                 let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                 const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
                 const iconHtml = roleIconUrl
-                    ? `<img src="${roleIconUrl}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid ${colorClass};margin-bottom:4px;">`
-                    : `<div style="width:50px;height:50px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 4px;border:2px solid ${colorClass};">?</div>`;
+                    ? `<img src="${roleIconUrl}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid ${colorClass};display:block;margin:0 auto 4px;">`
+                    : `<div style="width:52px;height:52px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 4px;border:2px solid ${colorClass};">?</div>`;
                 const enName = lookupRoleEN(g.role) || '';
                 const cardName = (isEN && enName) ? enName : g.role;
-                const chainDots = Array(6).fill(0).map((_, i) => `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i < g.chainCount ? 'var(--chain-on,#7fc)' : 'var(--chain-off,#444)'};"></span>`).join('');
-                const typeLabel = g.type === 'support' ? (isEN ? 'Sup' : '輔助') : g.type === 'sub' ? (isEN ? 'Sub' : '副輸') : (isEN ? 'DPS' : 'DPS');
-                const typeColor = g.type === 'support' ? '#61afef' : g.type === 'sub' ? '#c678dd' : '#e06c75';
-                let out = `<div style="width:90px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 4px;text-align:center;position:relative;transition:transform 0.18s,background 0.18s;" onmouseover="this.style.transform='translateY(-3px)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.transform='none';this.style.background='rgba(255,255,255,0.02)'">`;
-                out += `<div style="position:absolute;top:-7px;right:-7px;font-size:0.65rem;background:#222;padding:2px 5px;border-radius:6px;font-weight:bold;border:1px solid ${colorClass};z-index:2;" class="${g.grad.c||''}">${g.grad.l||g.grad.label||''}</div>`;
-                out += `<div style="position:absolute;top:-7px;left:-7px;font-size:0.6rem;background:${typeColor}22;padding:2px 5px;border-radius:6px;font-weight:bold;border:1px solid ${typeColor};color:${typeColor};z-index:2;">${typeLabel}</div>`;
+                const chainDots = Array(6).fill(0).map((_, i) => `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i < g.chainCount ? '#7fc' : '#333'};"></span>`).join('');
+                const tc = GRAD_TYPE_COLOR[g.type]||'#aaa';
+                const tl = GRAD_TYPE_LABEL(g.type, isEN);
+                let out = `<div style="width:88px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 4px 8px;text-align:center;position:relative;transition:transform 0.15s,box-shadow 0.15s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,0.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">`;
+                out += `<div style="position:absolute;top:-8px;right:-8px;font-size:0.62rem;background:#1a1a1e;padding:2px 6px;border-radius:6px;font-weight:bold;border:1px solid ${colorClass};z-index:2;" class="${g.grad.c||''}">${g.grad.l||g.grad.label||''}</div>`;
+                out += `<div style="position:absolute;top:-8px;left:-8px;font-size:0.58rem;background:${tc}22;padding:1px 5px;border-radius:6px;font-weight:bold;border:1px solid ${tc};color:${tc};z-index:2;">${tl}</div>`;
                 out += iconHtml;
-                out += `<div style="font-size:0.82rem;font-weight:bold;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${g.role}">${escapeHtml(cardName)}</div>`;
-                out += `<div style="color:#aaa;font-size:0.78rem;font-family:'JetBrains Mono';margin-top:1px;">${safeFixed(g.score, 1)}%</div>`;
-                out += `<div style="margin-top:3px;">${chainDots}</div>`;
-                if (g.weapon) out += `<div style="font-size:0.65rem;color:#777;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(g.weapon)}">🗡 ${escapeHtml(g.weapon.substring(0,5))}${g.weapon.length>5?'…':''}</div>`;
-                if (g.totalCV > 0) out += `<div style="font-size:0.65rem;color:#aaa;margin-top:1px;">CV: ${g.totalCV}</div>`;
+                out += `<div style="font-size:0.8rem;font-weight:bold;color:#e8e8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${g.role}">${escapeHtml(cardName)}</div>`;
+                out += `<div style="color:#61afef;font-size:0.8rem;font-family:'JetBrains Mono';font-weight:bold;margin-top:2px;">${safeFixed(g.score,1)}%</div>`;
+                out += `<div style="margin-top:4px;">${chainDots}</div>`;
+                if (g.weapon) out += `<div style="font-size:0.62rem;color:#666;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(g.weapon)}">🗡 ${escapeHtml(g.weapon.substring(0,5))}${g.weapon.length>5?'…':''}</div>`;
+                if (g.totalCV > 0) out += `<div style="font-size:0.62rem;color:#888;margin-top:1px;">CV ${g.totalCV}</div>`;
                 out += `</div>`;
                 return out;
             };
 
-            const renderCardList = (arr, title, colorClass, emptyText, borderCol) => {
-                arr.sort((a, b) => b.score - a.score);
-                let out = `<div style="background:#1e1e24;border:1px solid ${borderCol};border-radius:8px;padding:15px;box-shadow:0 4px 15px rgba(0,0,0,0.2);">`;
-                out += `<h3 style="color:${colorClass};margin-top:0;border-bottom:1px solid #333;padding-bottom:10px;display:flex;justify-content:center;align-items:center;gap:10px;"><span>${title}</span><span style="font-size:0.85rem;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:10px;color:#ddd;">${arr.length}</span></h3>`;
-                out += `<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;">`;
-                if (arr.length === 0) out += `<div style="color:#666;width:100%;text-align:center;padding:20px;">${emptyText}</div>`;
+            const renderTierSection = (arr, title, colorClass, emptyText, borderCol) => {
+                let out = `<div style="background:#1e1e24;border:1px solid ${borderCol};border-radius:10px;padding:14px;">`;
+                out += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;border-bottom:1px solid #2a2a30;padding-bottom:10px;">`;
+                out += `<span style="font-size:0.95rem;font-weight:bold;color:${colorClass};">${title}</span>`;
+                out += `<span style="font-size:0.78rem;background:rgba(255,255,255,0.08);padding:1px 8px;border-radius:10px;color:#bbb;">${arr.length}</span>`;
+                out += `</div><div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start;">`;
+                if (arr.length === 0) out += `<div style="color:#555;width:100%;text-align:center;padding:16px 0;font-size:0.82rem;">${emptyText}</div>`;
                 arr.forEach(g => { out += buildRoleCard(g, colorClass); });
                 out += `</div></div>`;
                 return out;
             };
 
-            // Team pairing logic
-            const buildTeamCards = () => {
-                const scored = allCards.slice().sort((a,b) => b.score - a.score);
-                const dpsPool = scored.filter(c => c.type === 'dps');
-                const subPool = scored.filter(c => c.type === 'sub');
-                const supPool = scored.filter(c => c.type === 'support');
+            // Team pairing logic — WW meta: 主輸出 + 副輸出/增幅 + 奶媽
+            const buildTeamContent = () => {
+                const scored = allCards.slice().sort((a,b)=>b.score-a.score);
+                const dpsPool    = scored.filter(c=>c.type==='dps');
+                const subPool    = scored.filter(c=>c.type==='sub');
+                const healerPool = scored.filter(c=>c.type==='healer');
+                const noHealer = healerPool.length === 0;
+
                 const teams = [];
                 const used = new Set();
-                const pick = (pool) => pool.find(c => !used.has(c.role));
-                const addTeam = (a, b, c) => { if (!a || !b || !c) return false; teams.push([a,b,c]); used.add(a.role); used.add(b.role); used.add(c.role); return true; };
-                // Priority: DPS + Sub + Support
-                while (true) {
-                    const d = pick(dpsPool), s = pick(subPool), u = pick(supPool);
-                    if (!addTeam(d, s, u)) break;
-                    if (teams.length >= 5) break;
+                const pick = pool => pool.find(c=>!used.has(c.role));
+                const commit = (...members) => { members.forEach(m=>used.add(m.role)); teams.push(members); };
+
+                // Round 1: DPS + Sub + Healer (ideal meta comp)
+                while (teams.length < 6) {
+                    const d = pick(dpsPool), s = pick(subPool), h = pick(healerPool);
+                    if (d && s && h) { commit(d, s, h); continue; }
+                    // If no healer left but have DPS+Sub, use 2nd DPS or 2nd Sub as 3rd slot
+                    if (d && s) { const x = pick(scored.filter(c=>c.type!=='healer'&&c.role!==d.role&&c.role!==s.role)); if(x){commit(d,s,x);continue;} }
+                    break;
                 }
-                // Fill remaining with any combination
-                const remaining = scored.filter(c => !used.has(c.role));
-                for (let i = 0; i + 2 < remaining.length && teams.length < 5; i += 3) {
-                    teams.push([remaining[i], remaining[i+1], remaining[i+2]]);
+                // Fill remaining chars into extra teams
+                const rem = scored.filter(c=>!used.has(c.role));
+                for (let i = 0; i+2 < rem.length && teams.length < 6; i += 3) {
+                    commit(rem[i], rem[i+1], rem[i+2]);
                 }
+
                 if (teams.length === 0) {
-                    return `<div style="color:#666;text-align:center;padding:40px;">${isEN ? 'Need at least 3 characters with records' : '需要至少3個角色的歷史紀錄才能生成配對'}</div>`;
+                    return `<div style="color:#666;text-align:center;padding:40px;font-size:0.9rem;">${isEN?'Need at least 3 characters with records':'需要至少 3 個角色的歷史紀錄才能生成配對'}</div>`;
                 }
-                const typeColor = t => t==='support'?'#61afef':t==='sub'?'#c678dd':'#e06c75';
-                const typeLabel = t => t==='support'?(isEN?'Support':'輔助'):t==='sub'?(isEN?'Sub DPS':'副輸出'):(isEN?'Main DPS':'主輸出');
-                let out = `<div style="display:flex;flex-direction:column;gap:16px;">`;
+
+                const teamMember = c => {
+                    let roleKey = c.role.replace(/[^\u4e00-\u9fa5]/g,'').substring(0,4);
+                    const iconUrl = RESONATORS_PROFILE_PICTURE[roleKey]||'';
+                    const enName = lookupRoleEN(c.role)||'';
+                    const name = (isEN&&enName)?enName:c.role;
+                    const tc = GRAD_TYPE_COLOR[c.type]||'#aaa';
+                    const tl = GRAD_TYPE_LABEL(c.type, isEN);
+                    const chainDots = Array(6).fill(0).map((_,i)=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i<c.chainCount?'#7fc':'#333'};"></span>`).join('');
+                    let m = `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 8px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid ${tc}33;min-width:88px;max-width:100px;flex:1;">`;
+                    m += iconUrl ? `<img src="${iconUrl}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid ${tc};">`
+                                 : `<div style="width:52px;height:52px;border-radius:50%;background:#333;border:2px solid ${tc};display:flex;align-items:center;justify-content:center;font-size:1.1rem;">?</div>`;
+                    m += `<div style="font-size:0.79rem;font-weight:bold;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:82px;text-align:center;" title="${escapeHtml(c.role)}">${escapeHtml(name)}</div>`;
+                    m += `<div style="font-size:0.62rem;color:${tc};border:1px solid ${tc};border-radius:6px;padding:0 5px;font-weight:bold;">${tl}</div>`;
+                    m += `<div style="font-size:0.76rem;color:#61afef;font-family:'JetBrains Mono';font-weight:bold;">${safeFixed(c.score,1)}%</div>`;
+                    m += `<div style="margin-top:1px;">${chainDots}</div>`;
+                    if (c.weapon) m += `<div style="font-size:0.6rem;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:82px;text-align:center;">🗡 ${escapeHtml(c.weapon.substring(0,7))}${c.weapon.length>7?'…':''}</div>`;
+                    m += `</div>`;
+                    return m;
+                };
+
+                let out = '';
+                if (noHealer) {
+                    out += `<div style="background:#e5c07b22;border:1px solid #e5c07b55;border-radius:8px;padding:10px 14px;font-size:0.8rem;color:#e5c07b;margin-bottom:12px;">⚠️ ${isEN?'No healers found — teams may lack sustain. Consider leveling a healer (Verina, Baizhi, Shorekeeper…)':'未偵測到奶媽角色，建議培養奶媽（維里奈、白芷、守岸人…）以組成穩定隊伍'}</div>`;
+                }
+
                 teams.forEach((team, ti) => {
-                    const avgScore = safeFixed(team.reduce((s,c)=>s+c.score,0)/3, 1);
-                    const hasSupport = team.some(c=>c.type==='support');
-                    const badge = hasSupport ? (isEN?'✅ Balanced':'✅ 均衡隊伍') : (isEN?'⚡ Attack':'⚡ 攻擊隊伍');
-                    const badgeColor = hasSupport ? '#78e08f' : '#e5c07b';
-                    out += `<div style="background:#1e1e24;border:1px solid #333;border-radius:10px;padding:14px;">`;
-                    out += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">`;
+                    const avgScore = safeFixed(team.reduce((s,c)=>s+c.score,0)/team.length,1);
+                    const hasHealer = team.some(c=>c.type==='healer');
+                    const hasSub    = team.some(c=>c.type==='sub');
+                    const hasDps    = team.some(c=>c.type==='dps');
+                    let compTag = '';
+                    if (hasDps && hasSub && hasHealer) compTag = isEN ? '✅ Meta Comp' : '✅ 標準鳴潮配隊';
+                    else if (hasHealer && hasDps)      compTag = isEN ? '💚 Has Healer' : '💚 含奶媽';
+                    else if (hasDps && hasSub)          compTag = isEN ? '⚡ High DMG' : '⚡ 純輸出';
+                    else                                compTag = isEN ? '🔧 Mixed' : '🔧 混合';
+                    const tagColor = (hasDps&&hasSub&&hasHealer)?'#78e08f':hasHealer?'#56b6c2':'#e5c07b';
+
+                    // Synergy score: meta bonus + avg score
+                    const synergy = Math.min(100, parseFloat(avgScore) + (hasDps&&hasSub&&hasHealer?8:0) + (hasHealer?3:0));
+
+                    out += `<div style="background:#1e1e24;border:1px solid #2a2a30;border-radius:12px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.3);">`;
+                    out += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">`;
                     out += `<span style="font-size:0.9rem;font-weight:bold;color:#ddd;">${isEN?`Team ${ti+1}`:`第 ${ti+1} 隊`}</span>`;
-                    out += `<div style="display:flex;gap:8px;align-items:center;"><span style="font-size:0.75rem;color:${badgeColor};border:1px solid ${badgeColor};border-radius:10px;padding:1px 8px;">${badge}</span><span style="font-size:0.75rem;color:#888;">${isEN?'Avg':'均分'}: <b style="color:#ccc;">${avgScore}%</b></span></div>`;
-                    out += `</div><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">`;
-                    team.forEach(c => {
-                        let roleKey = c.role.replace(/[^\u4e00-\u9fa5]/g,'').substring(0,4);
-                        const iconUrl = RESONATORS_PROFILE_PICTURE[roleKey]||'';
-                        const enName = lookupRoleEN(c.role)||'';
-                        const displayName = (isEN && enName) ? enName : c.role;
-                        const tc = typeColor(c.type); const tl = typeLabel(c.type);
-                        const chainDots = Array(6).fill(0).map((_,i)=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i<c.chainCount?'var(--chain-on,#7fc)':'var(--chain-off,#444)'};"></span>`).join('');
-                        out += `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.06);min-width:90px;">`;
-                        out += iconUrl ? `<img src="${iconUrl}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid ${tc};">`
-                                       : `<div style="width:48px;height:48px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.1rem;border:2px solid ${tc};">?</div>`;
-                        out += `<div style="font-size:0.8rem;font-weight:bold;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;" title="${escapeHtml(c.role)}">${escapeHtml(displayName)}</div>`;
-                        out += `<div style="font-size:0.65rem;color:${tc};border:1px solid ${tc};border-radius:8px;padding:0 5px;">${tl}</div>`;
-                        out += `<div style="font-size:0.75rem;color:#aaa;font-family:'JetBrains Mono';">${safeFixed(c.score,1)}%</div>`;
-                        out += `<div>${chainDots}</div>`;
-                        if (c.weapon) out += `<div style="font-size:0.62rem;color:#777;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;" title="${escapeHtml(c.weapon)}">🗡 ${escapeHtml(c.weapon.substring(0,6))}${c.weapon.length>6?'…':''}</div>`;
-                        out += `</div>`;
-                    });
+                    out += `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">`;
+                    out += `<span style="font-size:0.72rem;color:${tagColor};border:1px solid ${tagColor};border-radius:10px;padding:1px 9px;">${compTag}</span>`;
+                    out += `<span style="font-size:0.72rem;color:#888;">均分 <b style="color:#61afef;">${avgScore}%</b></span>`;
+                    out += `<span style="font-size:0.72rem;color:#888;">綜效 <b style="color:#e5c07b;">${safeFixed(synergy,0)}</b></span>`;
+                    out += `</div></div>`;
+                    out += `<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">`;
+                    team.forEach(c => { out += teamMember(c); });
                     out += `</div></div>`;
                 });
-                out += `</div>`;
                 return out;
             };
 
-            let html = `<div class="db-container" style="max-width:960px;padding:20px;display:flex;flex-direction:column;background:#1a1a1e;">`;
-            html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #333;padding-bottom:12px;flex-shrink:0;">`;
-            html += `<div style="display:flex;align-items:center;gap:12px;">`;
-            html += `<h2 style="color:var(--accent);margin:0;">🎓 ${isEN ? 'Personal Score Summary' : '個人角色評分總表'}</h2>`;
-            html += `<span style="font-size:0.85rem;color:#888;font-family:'JetBrains Mono';background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;">UID: ${g_currentUserUid || 'N/A'}</span>`;
-            html += `<span style="font-size:0.8rem;color:#666;">${isEN?`${allCards.length} chars`:`共 ${allCards.length} 角色`}</span>`;
+            // Stats bar data
+            const gradPct = totalCount > 0 ? Math.round(gradCount/totalCount*100) : 0;
+
+            let html = `<div class="db-container" style="max-width:1060px;padding:20px;display:flex;flex-direction:column;background:#1a1a1e;">`;
+
+            // Header
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid #2a2a30;padding-bottom:12px;flex-shrink:0;">`;
+            html += `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">`;
+            html += `<h2 style="color:var(--accent);margin:0;font-size:1.15rem;">🎓 ${isEN?'Personal Score Summary':'個人角色評分總表'}</h2>`;
+            html += `<span style="font-size:0.82rem;color:#888;font-family:'JetBrains Mono';background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;">UID: ${g_currentUserUid||'N/A'}</span>`;
             html += `</div>`;
-            html += `<div style="display:flex;gap:10px;align-items:center;">`;
-            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px;font-size:0.75rem;">📷 ${isEN ? 'Generate Image' : '生成圖片'}</button>`;
-            html += `<button class="db-close-btn" onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>`;
+            html += `<div style="display:flex;gap:8px;align-items:center;">`;
+            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px;font-size:0.75rem;">📷 ${isEN?'Image':'生成圖片'}</button>`;
+            html += `<button onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;line-height:1;">×</button>`;
+            html += `</div></div>`;
+
+            // Stats bar
+            html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;flex-shrink:0;">`;
+            html += `<div style="flex:1;min-width:110px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 12px;text-align:center;">`;
+            html += `<div style="font-size:1.4rem;font-weight:bold;color:#61afef;">${totalCount}</div><div style="font-size:0.72rem;color:#666;">${isEN?'Characters':'角色數'}</div></div>`;
+            html += `<div style="flex:1;min-width:110px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 12px;text-align:center;">`;
+            html += `<div style="font-size:1.4rem;font-weight:bold;color:#78e08f;">${gradPct}%</div><div style="font-size:0.72rem;color:#666;">${isEN?'Grad Rate':'畢業率'}</div></div>`;
+            html += `<div style="flex:1;min-width:110px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 12px;text-align:center;">`;
+            html += `<div style="font-size:1.4rem;font-weight:bold;color:#ffca28;">${avgAll}%</div><div style="font-size:0.72rem;color:#666;">${isEN?'Avg Score':'平均分'}</div></div>`;
+            html += `<div style="flex:2;min-width:180px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">`;
+            html += `<span style="font-size:0.72rem;color:#e06c75;border:1px solid #e06c7566;border-radius:6px;padding:2px 8px;">🗡 ${isEN?'DPS':'主輸'} ×${dpsCount}</span>`;
+            html += `<span style="font-size:0.72rem;color:#c678dd;border:1px solid #c678dd66;border-radius:6px;padding:2px 8px;">⚡ ${isEN?'Sub':'副輸'} ×${subCount}</span>`;
+            html += `<span style="font-size:0.72rem;color:#56b6c2;border:1px solid #56b6c266;border-radius:6px;padding:2px 8px;">💚 ${isEN?'Healer':'奶媽'} ×${healCount}</span>`;
             html += `</div></div>`;
 
             // Tabs
-            html += `<div style="display:flex;gap:4px;margin-bottom:14px;flex-shrink:0;">`;
-            html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:6px 18px;border-radius:6px 6px 0 0;border:1px solid #444;border-bottom:none;background:rgba(97,175,254,0.15);color:#61afef;font-size:0.85rem;cursor:pointer;font-weight:bold;">${isEN ? '🎓 Score Overview' : '🎓 評分總覽'}</button>`;
-            html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:6px 18px;border-radius:6px 6px 0 0;border:1px solid #333;border-bottom:none;background:rgba(255,255,255,0.03);color:#888;font-size:0.85rem;cursor:pointer;">${isEN ? '👥 Team Pairing' : '👥 個性化配對'}</button>`;
+            html += `<div style="display:flex;gap:4px;margin-bottom:0;flex-shrink:0;">`;
+            html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:7px 20px;border-radius:7px 7px 0 0;border:1px solid #444;border-bottom:none;background:rgba(97,175,254,0.15);color:#61afef;font-size:0.85rem;cursor:pointer;font-weight:bold;">${isEN?'🎓 Score Overview':'🎓 評分總覽'}</button>`;
+            html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:7px 20px;border-radius:7px 7px 0 0;border:1px solid #2a2a30;border-bottom:none;background:rgba(255,255,255,0.02);color:#666;font-size:0.85rem;cursor:pointer;">${isEN?'👥 Team Pairing':'👥 個性化配對'}</button>`;
             html += `</div>`;
+            html += `<div style="border-top:1px solid #444;margin-bottom:14px;"></div>`;
 
-            html += `<style>.grad-card-container{display:flex;flex-direction:column;gap:20px;overflow-y:auto;max-height:70vh;padding-right:5px;}.grad-card-container::-webkit-scrollbar{width:6px;}.grad-card-container::-webkit-scrollbar-thumb{background:#555;border-radius:3px;}</style>`;
+            html += `<style>
+.grad-scroll{overflow-y:auto;max-height:62vh;padding-right:4px;}
+.grad-scroll::-webkit-scrollbar{width:5px;}
+.grad-scroll::-webkit-scrollbar-thumb{background:#444;border-radius:3px;}
+.grad-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:640px){.grad-2col{grid-template-columns:1fr;}}
+.grad-team-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:700px){.grad-team-grid{grid-template-columns:1fr;}}
+</style>`;
 
-            // Overview tab
-            html += `<div id="grad-panel-overview" class="grad-card-container">`;
-            html += renderCardList([...buckets.heirloom, ...buckets.grand], isEN ? "🏆 Highly Sufficient (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", isEN ? "No highly sufficient characters yet" : "尚無極品畢業角色", "rgba(255,202,40,0.2)");
-            html += renderCardList(buckets.med, isEN ? "🏅 Sufficient (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", isEN ? "No sufficient characters yet" : "尚無標準畢業角色", "rgba(120,224,143,0.2)");
-            html += renderCardList(buckets.none, isEN ? "❌ Insufficient (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", isEN ? "No insufficient characters" : "無未畢業角色", "rgba(255,85,85,0.2)");
+            // Overview tab — 2-col desktop layout
+            html += `<div id="grad-panel-overview" class="grad-scroll">`;
+            html += `<div class="grad-2col">`;
+            html += renderTierSection(buckets.top, isEN?"🏆 Elite (≥80%)":"🏆 極品畢業 (≥80%)", "#ffca28", isEN?"None yet":"尚無", "rgba(255,202,40,0.2)");
+            html += renderTierSection(buckets.mid, isEN?"🏅 Graduated (≥50%)":"🏅 標準畢業 (≥50%)", "#78e08f", isEN?"None yet":"尚無", "rgba(120,224,143,0.2)");
+            html += `</div>`;
+            if (buckets.low.length > 0) {
+                html += `<div style="margin-top:14px;">`;
+                html += renderTierSection(buckets.low, isEN?"❌ Not Graduated (<50%)":"❌ 未畢業 (<50%)", "#ff5555", isEN?"None":"無", "rgba(255,85,85,0.15)");
+                html += `</div>`;
+            }
             html += `</div>`;
 
             // Team pairing tab
-            html += `<div id="grad-panel-team" class="grad-card-container" style="display:none;">`;
-            html += `<div style="background:#1e1e24;border:1px solid #333;border-radius:8px;padding:12px 15px;font-size:0.8rem;color:#888;line-height:1.6;">`;
+            html += `<div id="grad-panel-team" class="grad-scroll" style="display:none;">`;
+            html += `<div style="background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:11px 14px;font-size:0.78rem;color:#777;line-height:1.7;margin-bottom:12px;">`;
             html += isEN
-                ? `<b style="color:#ccc;">How pairing works:</b> Characters are split into <span style="color:#e06c75;">Main DPS</span>, <span style="color:#c678dd;">Sub DPS</span>, and <span style="color:#61afef;">Support</span> roles. Each team is composed of one from each category, sorted by score. Remaining characters fill additional teams.`
-                : `<b style="color:#ccc;">配對說明：</b>系統會根據角色定位分為 <span style="color:#e06c75;">主輸出</span>、<span style="color:#c678dd;">副輸出</span>、<span style="color:#61afef;">輔助</span> 三類，優先組成每類各一人的均衡隊伍，依評分排序。剩餘角色補充額外隊伍。`;
+                ? `<b style="color:#bbb;">Meta Comp (WW):</b> <span style="color:#e06c75;">Main DPS</span> + <span style="color:#c678dd;">Sub DPS/Amplifier</span> + <span style="color:#56b6c2;">Healer (奶媽)</span>. Teams are generated by scoring and assigning each role slot optimally.`
+                : `<b style="color:#bbb;">鳴潮主流配隊：</b><span style="color:#e06c75;">主輸出</span> + <span style="color:#c678dd;">副輸出 / 增幅</span> + <span style="color:#56b6c2;">奶媽</span>。系統依評分排序自動分配最佳組合。綜效分 = 均分 + 配隊加成。`;
             html += `</div>`;
-            html += buildTeamCards();
+            html += `<div class="grad-team-grid">${buildTeamContent()}</div>`;
             html += `</div>`;
 
             html += `</div>`;
@@ -13113,12 +13183,12 @@
                 overviewPanel.style.display = '';
                 teamPanel.style.display = 'none';
                 if (overviewBtn) { overviewBtn.style.background='rgba(97,175,254,0.15)'; overviewBtn.style.color='#61afef'; overviewBtn.style.borderColor='#444'; }
-                if (teamBtn) { teamBtn.style.background='rgba(255,255,255,0.03)'; teamBtn.style.color='#888'; teamBtn.style.borderColor='#333'; }
+                if (teamBtn) { teamBtn.style.background='rgba(255,255,255,0.02)'; teamBtn.style.color='#666'; teamBtn.style.borderColor='#2a2a30'; }
             } else {
                 overviewPanel.style.display = 'none';
                 teamPanel.style.display = '';
                 if (teamBtn) { teamBtn.style.background='rgba(97,175,254,0.15)'; teamBtn.style.color='#61afef'; teamBtn.style.borderColor='#444'; }
-                if (overviewBtn) { overviewBtn.style.background='rgba(255,255,255,0.03)'; overviewBtn.style.color='#888'; overviewBtn.style.borderColor='#333'; }
+                if (overviewBtn) { overviewBtn.style.background='rgba(255,255,255,0.02)'; overviewBtn.style.color='#666'; overviewBtn.style.borderColor='#2a2a30'; }
             }
         }
         function cleanupHistory() { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let beforeCount = history.length; history = history.filter(h => h.uploadStatus !== 'duplicate' && h.uploadStatus !== 'error'); localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; g_currentEntryId = null; unlockPreview(); renderHistoryList(); showMsg(`已整理歷史紀錄！\n移除項目: ${beforeCount - history.length} 筆`) }
