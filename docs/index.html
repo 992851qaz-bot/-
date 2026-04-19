@@ -12911,6 +12911,37 @@
             const key = role.replace(/[^\u4e00-\u9fa5]/g,'').substring(0,4);
             return GRAD_ROLE_TYPE[key] || GRAD_ROLE_TYPE[role] || 'dps';
         }
+
+        // WW meta: known best-pair synergies (Main DPS → preferred Sub partners)
+        // Based on rotation compatibility, element resonance, and buff/enable kit
+        const GRAD_SYNERGY = {
+            '今汐': ['散華'],                // Camellya + Sanhua (Havoc res. — Sanhua's quick rotation frees Camellya)
+            '吟霖': ['折枝', '贊妮'],        // Jinhsi + Zhezhi/Zani (Spectro resonance + CA buff)
+            '相里要': ['淵武', '尤諾'],      // Xiangli Yao + Yuanwu/Youno (Electro res. — Yuanwu enables skill loop)
+            '忌炎': ['莫特斐'],              // Jiyan + Mortefi (Aero res. — Mortefi amplifies concerto)
+            '長離': ['丹瑾', '夏空'],        // Changli + Danjin/Xia-Kong (Fusion — Danjin provides forte for Changli)
+            '卡卡羅': ['贊妮'],              // Calcharo + Zani (Electro — Zani buffs attack chains)
+            '椿': ['陸赫斯', '尤諾'],        // Tsubaki + Luchors/Youno (Electro synergy)
+            '珂萊塔': ['尤諾', '露帕'],      // Carlotta + Youno/Lupa (Glacio resonance)
+            '凌陽': ['秋水', '露帕'],        // Lingyang + Qiushui/Lupa (Glacio)
+            '安可': ['莫特斐', '丹瑾'],      // Encore + Mortefi/Danjin (Fusion/Havoc)
+            '菲比': ['夏空', '釉瑚'],        // Phoebe + Shaxia/Youhu (Spectro)
+            '坎特雷拉': ['弗洛洛'],          // Cantarella + Fleuroly
+            '熾霞': ['丹瑾'],               // Chixia + Danjin (Fusion)
+            '洛可可': ['折枝'],             // Rococo + Zhezhi
+            '漂泊者熱熔': ['丹瑾', '夏空'], // Rover Fusion + Danjin
+            '漂泊者暗': ['散華'],           // Rover Havoc + Sanhua
+            '漂泊者光': ['折枝', '贊妮'],   // Rover Spectro + Zhezhi
+        };
+        // Return preferred sub names for a given DPS role name (full match first, then prefix)
+        function grad_getSynergy(dpsRole) {
+            const cleaned = dpsRole.replace(/[^\u4e00-\u9fa5]/g,'');
+            if (GRAD_SYNERGY[cleaned]) return GRAD_SYNERGY[cleaned];
+            for (const key of Object.keys(GRAD_SYNERGY)) {
+                if (cleaned.startsWith(key) || key.startsWith(cleaned.substring(0,2))) return GRAD_SYNERGY[key];
+            }
+            return [];
+        }
         const GRAD_TYPE_COLOR = { dps:'#e06c75', sub:'#c678dd', healer:'#56b6c2' };
         const GRAD_TYPE_LABEL = (t, isEN) => t==='healer'?(isEN?'Healer':'奶媽'):t==='sub'?(isEN?'Sub':'副輸'):(isEN?'DPS':'主輸');
 
@@ -13002,7 +13033,7 @@
                 return out;
             };
 
-            // Team pairing logic — WW meta: 主輸出 + 副輸出/增幅 + 奶媽
+            // Team pairing logic — WW meta: 主輸出 + 副輸出/增幅 + 奶媽 (synergy-first)
             const buildTeamContent = () => {
                 const scored = allCards.slice().sort((a,b)=>b.score-a.score);
                 const dpsPool    = scored.filter(c=>c.type==='dps');
@@ -13010,24 +13041,49 @@
                 const healerPool = scored.filter(c=>c.type==='healer');
                 const noHealer = healerPool.length === 0;
 
-                const teams = [];
+                const teams = [];        // each entry: { members:[], synergyPair: bool, synergyLabel: str }
                 const used = new Set();
                 const pick = pool => pool.find(c=>!used.has(c.role));
-                const commit = (...members) => { members.forEach(m=>used.add(m.role)); teams.push(members); };
+                const commit = (members, synergyPair, synergyLabel) => {
+                    members.forEach(m=>used.add(m.role));
+                    teams.push({ members, synergyPair: !!synergyPair, synergyLabel: synergyLabel||'' });
+                };
 
-                // Round 1: DPS + Sub + Healer (ideal meta comp)
-                while (teams.length < 6) {
-                    const d = pick(dpsPool), s = pick(subPool), h = pick(healerPool);
-                    if (d && s && h) { commit(d, s, h); continue; }
-                    // If no healer left but have DPS+Sub, use 2nd DPS or 2nd Sub as 3rd slot
-                    if (d && s) { const x = pick(scored.filter(c=>c.type!=='healer'&&c.role!==d.role&&c.role!==s.role)); if(x){commit(d,s,x);continue;} }
-                    break;
+                // Synergy-first pass: for each DPS, try to find its preferred sub first
+                for (const d of dpsPool) {
+                    if (used.has(d.role) || teams.length >= 6) continue;
+                    const prefNames = grad_getSynergy(d.role);
+                    let bestSub = null, synergyLabel = '';
+                    for (const pn of prefNames) {
+                        bestSub = subPool.find(s => !used.has(s.role) && s.role.replace(/[^\u4e00-\u9fa5]/g,'').includes(pn));
+                        if (bestSub) { synergyLabel = pn; break; }
+                    }
+                    // Fallback: best available sub by score
+                    if (!bestSub) bestSub = pick(subPool);
+                    const h = pick(healerPool);
+                    if (bestSub && h) {
+                        commit([d, bestSub, h], !!synergyLabel, synergyLabel);
+                    } else if (bestSub) {
+                        // No healer available — fill with any remaining char (DPS or sub)
+                        const x = pick(scored.filter(c=>!used.has(c.role)&&c.role!==d.role&&c.role!==bestSub.role));
+                        if (x) commit([d, bestSub, x], !!synergyLabel, synergyLabel);
+                        else commit([d, bestSub], false, '');
+                    } else if (h) {
+                        // Has healer but no sub — fill with best remaining
+                        const x = pick(scored.filter(c=>!used.has(c.role)&&c.role!==d.role&&c.role!==h.role));
+                        if (x) commit([d, h, x], false, '');
+                        else commit([d, h], false, '');
+                    }
                 }
-                // Fill remaining chars into extra teams
+
+                // Fill remaining chars into extra teams (3 per team)
                 const rem = scored.filter(c=>!used.has(c.role));
                 for (let i = 0; i+2 < rem.length && teams.length < 6; i += 3) {
-                    commit(rem[i], rem[i+1], rem[i+2]);
+                    commit([rem[i], rem[i+1], rem[i+2]], false, '');
                 }
+                // If there are leftover 1–2 chars, append to last team or make small team
+                const rem2 = scored.filter(c=>!used.has(c.role));
+                if (rem2.length > 0 && teams.length < 6) commit(rem2, false, '');
 
                 if (teams.length === 0) {
                     return `<div style="color:#666;text-align:center;padding:40px;font-size:0.9rem;">${isEN?'Need at least 3 characters with records':'需要至少 3 個角色的歷史紀錄才能生成配對'}</div>`;
@@ -13058,7 +13114,10 @@
                     out += `<div style="background:#e5c07b22;border:1px solid #e5c07b55;border-radius:8px;padding:10px 14px;font-size:0.8rem;color:#e5c07b;margin-bottom:12px;">⚠️ ${isEN?'No healers found — teams may lack sustain. Consider leveling a healer (Verina, Baizhi, Shorekeeper…)':'未偵測到奶媽角色，建議培養奶媽（維里奈、白芷、守岸人…）以組成穩定隊伍'}</div>`;
                 }
 
-                teams.forEach((team, ti) => {
+                teams.forEach((teamObj, ti) => {
+                    const team = teamObj.members;
+                    const hasSynergy = teamObj.synergyPair;
+                    const synLabel   = teamObj.synergyLabel;
                     const avgScore = safeFixed(team.reduce((s,c)=>s+c.score,0)/team.length,1);
                     const hasHealer = team.some(c=>c.type==='healer');
                     const hasSub    = team.some(c=>c.type==='sub');
@@ -13071,13 +13130,14 @@
                     const tagColor = (hasDps&&hasSub&&hasHealer)?'#78e08f':hasHealer?'#56b6c2':'#e5c07b';
 
                     // Synergy score: meta bonus + avg score
-                    const synergy = Math.min(100, parseFloat(avgScore) + (hasDps&&hasSub&&hasHealer?8:0) + (hasHealer?3:0));
+                    const synergy = Math.min(100, parseFloat(avgScore) + (hasDps&&hasSub&&hasHealer?8:0) + (hasHealer?3:0) + (hasSynergy?5:0));
 
-                    out += `<div style="background:#1e1e24;border:1px solid #2a2a30;border-radius:12px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.3);">`;
+                    out += `<div style="background:#1e1e24;border:1px solid ${hasSynergy?'#e5c07b44':'#2a2a30'};border-radius:12px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.3);">`;
                     out += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">`;
                     out += `<span style="font-size:0.9rem;font-weight:bold;color:#ddd;">${isEN?`Team ${ti+1}`:`第 ${ti+1} 隊`}</span>`;
                     out += `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">`;
                     out += `<span style="font-size:0.72rem;color:${tagColor};border:1px solid ${tagColor};border-radius:10px;padding:1px 9px;">${compTag}</span>`;
+                    if (hasSynergy) out += `<span style="font-size:0.72rem;color:#e5c07b;border:1px solid #e5c07b66;border-radius:10px;padding:1px 9px;" title="${escapeHtml(synLabel)}">💎 ${isEN?'Best Partner':'最佳拍檔'}</span>`;
                     out += `<span style="font-size:0.72rem;color:#888;">均分 <b style="color:#61afef;">${avgScore}%</b></span>`;
                     out += `<span style="font-size:0.72rem;color:#888;">綜效 <b style="color:#e5c07b;">${safeFixed(synergy,0)}</b></span>`;
                     out += `</div></div>`;
