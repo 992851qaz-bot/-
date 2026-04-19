@@ -8837,11 +8837,10 @@
             <div class="history-panel">
                 <div class="history-header">
                     <div style="display:flex;gap:10px;align-items:center">
-                        <span style="font-size:0.9rem;font-weight:bold;color:#ccc;letter-spacing:0.01em;" data-lang-zh="📋 歷史紀錄" data-lang-en="📋 History">📋 歷史紀錄</span>
                         <button onclick="openGraduationPanel()"
-                            style="background:linear-gradient(135deg,rgba(229,192,123,0.18) 0%,rgba(229,192,123,0.08) 100%); border:1px solid rgba(229,192,123,0.45); border-radius:6px; color:var(--accent); font-size:0.82rem; font-family:inherit; padding:4px 12px; cursor:pointer; font-weight:700; display:flex; align-items:center; gap:4px; transition:all 0.2s; box-shadow:0 2px 8px rgba(229,192,123,0.1);"
-                            onmouseover="this.style.background='rgba(229,192,123,0.28)';this.style.boxShadow='0 4px 14px rgba(229,192,123,0.25)';" onmouseout="this.style.background='linear-gradient(135deg,rgba(229,192,123,0.18) 0%,rgba(229,192,123,0.08) 100%)';this.style.boxShadow='0 2px 8px rgba(229,192,123,0.1)';"
-                            title="點擊查看畢業面板"><span data-lang-zh="🎓 畢業面板" data-lang-en="🎓 Graduation">🎓 畢業面板</span></button>
+                            style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-radius:6px; color:inherit; font-size:0.9rem; font-family:inherit; padding:4px 10px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:5px; transition:all 0.2s;"
+                            onmouseover="this.style.background='rgba(229,192,123,0.15)';this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.18)';this.style.color='inherit'"
+                            title="點擊查看畢業面板"><span data-lang-zh="📋 歷史紀錄" data-lang-en="📋 History">📋 歷史紀錄</span></button>
                         <span id="history-count" style="font-size:0.75rem;color:#888;font-weight:normal;"></span>
                     </div>
                     <div class="toolbar-group">
@@ -9468,7 +9467,7 @@
     </div>
 
     <div id="uid-display-container" class="bottom-pill-container">
-        <button class="mobile-pill-toggle" onclick="toggleMobileInfoPill()" aria-label="切換 UID 與回報資訊">ℹ️</button>
+        <button class="mobile-pill-toggle" onclick="openFeedbackModal()" aria-label="錯誤回報 / 意見回饋">ℹ️</button>
         <div class="bottom-pill">
             <button onclick="openFeedbackModal()" class="pill-btn feedback-btn" title="錯誤回報 / 意見回饋" data-title-zh="錯誤回報 / 意見回饋" data-title-en="Bug Report / Feedback">
                 <span class="pill-icon">💬</span>
@@ -12328,7 +12327,7 @@
             "✨ 各系增傷/副C特化 — 衍射": {
                 color: "#e5c07b",
                 bg: "rgba(229,192,123,0.1)",
-                chars: ["折枝", "菲比", "卜靈", "漂泊者(光)"]
+                chars: ["折枝", "菲比", "卜靈", "琳奈", "漂泊者(光)"]
             },
             "🔥 各系增傷/副C特化 — 熱熔": {
                 color: "#e06c75",
@@ -13033,7 +13032,7 @@
                 const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
                 const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" class="history-role-icon" onerror="this.style.display='none'">` : '<span class="history-role-icon-placeholder">?</span>';
 
-                const rolePositionTagHtml = getCharRoleTagHtml(roleName);
+                const rolePositionTagHtml = '';
                 div.innerHTML = `<div class="history-main">${iconHtml}<div style="flex:1;min-width:0;"><div class="h-info">${gradeHtml}${escapeHtml(displayRoleName)}${rolePositionTagHtml} ${statusTag} ${actionBtnHtml}</div><div class="h-time" style="font-size:0.7rem;line-height:1;">${escapeHtml(item.ts)}</div><div style="font-size:0.75rem;color:#888;">UID: ${escapeHtml(item.global.uid) || '?'}</div></div></div><button class="history-mobile-arrow" onclick="openHistoryItemFromMobile(${i}, event)" title="${isEN ? 'Go to result' : '前往此筆結果'}">➜</button>`;
                 historyListEl.appendChild(div);
             }
@@ -13232,6 +13231,8 @@
                     out += iconHtml;
                     out += `<div style="font-size:0.85rem; font-weight:bold; color:#e0e0e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g.role}">${escapeHtml(cardPrimaryName)}</div>`;
                     out += cardSubName;
+                    const roleTag = getCharRoleTag(g.role);
+                    if (roleTag) out += `<div style="margin:2px 0;"><span style="display:inline-block;padding:1px 5px;border-radius:3px;font-size:0.65rem;font-weight:700;background:${roleTag.bg};color:${roleTag.color};border:1px solid ${roleTag.color}55;">${roleTag.emoji} ${roleTag.label}</span></div>`;
                     out += `<div style="color:#aaa; font-size:0.8rem; font-family:'JetBrains Mono'; margin-top:2px;">${safeFixed(g.score, 1)}%</div>`;
                     out += `</div>`;
                 });
