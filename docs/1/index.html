@@ -775,6 +775,9 @@
                 background: var(--bg);
                 z-index: 100;
                 margin-bottom: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
 
             .db-header h2 {
@@ -783,6 +786,23 @@
 
             .db-header .db-title-group>div {
                 font-size: 0.8rem !important;
+            }
+
+            /* Header action buttons — wrap into 2 rows, icon+short text on mobile */
+            .db-header > div:last-child {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .db-header .btn-weights-mini {
+                font-size: 0.72rem !important;
+                padding: 4px 8px !important;
+                flex: 0 0 auto;
+            }
+
+            .db-close-btn {
+                margin-left: auto;
             }
 
             .db-card {
@@ -1480,6 +1500,12 @@
 
         #custom-echo-modal {
             z-index: 3100;
+        }
+
+        /* Example-team and role-position modals must appear above the grad modal (z-index 19000) */
+        #example-team-modal,
+        #role-position-modal {
+            z-index: 20000;
         }
 
         #custom-echo-modal .startup-box {
