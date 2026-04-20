@@ -1079,7 +1079,64 @@
             }
 
             .feature-list-scroll {
-                max-height: calc(100vh - 190px);
+                max-height: calc(100vh - 220px);
+            }
+
+            /* Mobile feature-list-modal header override (inline style has higher priority) */
+            #feature-list-modal .db-header {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 8px !important;
+                position: relative;
+            }
+            #feature-list-modal .db-header .db-title-group h2 {
+                font-size: 1.1rem !important;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            #feature-list-modal .db-header .db-title-group h2 .quick-btn {
+                font-size: 0.7rem !important;
+                padding: 2px 8px !important;
+            }
+            #feature-list-modal #feature-modal-lang-group {
+                margin: 0 !important;
+                justify-content: flex-start;
+            }
+            #feature-list-modal .feature-zoom-ctrl {
+                align-self: flex-start;
+            }
+            #feature-list-modal .db-header .db-close-btn {
+                position: absolute !important;
+                top: 0 !important;
+                right: 0 !important;
+                margin-left: 0 !important;
+            }
+            /* Feature section tabs: full-width scroll on mobile */
+            .feature-section-tabs {
+                gap: 4px !important;
+                padding: 4px !important;
+            }
+            .fst-btn {
+                padding: 6px 10px !important;
+                font-size: 0.72rem !important;
+                white-space: nowrap;
+            }
+            /* Feature cards: compact on mobile */
+            #feature-list-modal .feature-card {
+                padding: 10px 12px !important;
+                gap: 10px !important;
+            }
+            #feature-list-modal .feature-card-icon-box {
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 1.1rem !important;
+            }
+            #feature-list-modal .feature-card-title {
+                font-size: 0.85rem !important;
+            }
+            #feature-list-modal .feature-card-action .quick-btn {
+                padding: 4px 10px !important;
+                font-size: 0.72rem !important;
             }
 
             .comparison-main-card {
@@ -13308,39 +13365,60 @@
             const subCount  = allCards.filter(c=>c.type==='sub').length;
             const healCount = allCards.filter(c=>c.type==='healer').length;
 
-            const buildRoleCard = (g, colorClass) => {
+            const buildRoleCard = (g, colorClass, animDelay) => {
                 let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                 const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
-                const iconHtml = roleIconUrl
-                    ? `<img src="${roleIconUrl}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid ${colorClass};display:block;margin:0 auto 4px;">`
-                    : `<div style="width:52px;height:52px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 4px;border:2px solid ${colorClass};">?</div>`;
                 const enName = lookupRoleEN(g.role) || '';
                 const cardName = (isEN && enName) ? enName : g.role;
-                const chainDots = Array(6).fill(0).map((_, i) => `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i < g.chainCount ? '#7fc' : '#333'};"></span>`).join('');
                 const tc = GRAD_TYPE_COLOR[g.type]||'#aaa';
                 const tl = GRAD_TYPE_LABEL(g.type, isEN);
-                let out = `<div style="width:88px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 4px 8px;text-align:center;position:relative;transition:transform 0.15s,box-shadow 0.15s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,0.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">`;
-                out += `<div style="position:absolute;top:-8px;right:-8px;font-size:0.62rem;background:#1a1a1e;padding:2px 6px;border-radius:6px;font-weight:bold;border:1px solid ${colorClass};z-index:2;" class="${g.grad.c||''}">${g.grad.l||g.grad.label||''}</div>`;
-                out += `<div style="position:absolute;top:-8px;left:-8px;font-size:0.58rem;background:${tc}22;padding:1px 5px;border-radius:6px;font-weight:bold;border:1px solid ${tc};color:${tc};z-index:2;">${tl}</div>`;
-                out += iconHtml;
-                out += `<div style="font-size:0.8rem;font-weight:bold;color:#e8e8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${g.role}">${escapeHtml(cardName)}</div>`;
-                out += `<div style="color:#61afef;font-size:0.8rem;font-family:'JetBrains Mono';font-weight:bold;margin-top:2px;">${safeFixed(g.score,1)}%</div>`;
-                out += `<div style="margin-top:4px;">${chainDots}</div>`;
-                if (g.weapon) out += `<div style="font-size:0.62rem;color:#666;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(g.weapon)}">🗡 ${escapeHtml(g.weapon.substring(0,5))}${g.weapon.length>5?'…':''}</div>`;
-                if (g.totalCV > 0) out += `<div style="font-size:0.62rem;color:#888;margin-top:1px;">CV ${g.totalCV}</div>`;
+                const chainDots = Array(6).fill(0).map((_, i) => `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${i < g.chainCount ? tc : '#2a2a30'};box-shadow:${i<g.chainCount?`0 0 4px ${tc}`:'none'};transition:background 0.2s;"></span>`).join('');
+                const scorePct = Math.min(100, g.score);
+                const delay = (animDelay||0) * 60;
+                const gradLabel = g.grad.l||g.grad.label||'';
+                let out = `<div class="grad-role-card" style="animation-delay:${delay}ms;--card-color:${colorClass};">`;
+                // Top badges
+                out += `<div style="position:absolute;top:6px;right:6px;font-size:0.58rem;background:${colorClass}22;padding:2px 7px;border-radius:8px;font-weight:bold;border:1px solid ${colorClass};color:${colorClass};z-index:3;letter-spacing:0.5px;">${gradLabel}</div>`;
+                out += `<div style="position:absolute;top:6px;left:6px;font-size:0.56rem;background:${tc}22;padding:2px 6px;border-radius:8px;font-weight:bold;border:1px solid ${tc};color:${tc};z-index:3;">${tl}</div>`;
+                // Image
+                if (roleIconUrl) {
+                    out += `<div style="position:relative;width:80px;height:80px;margin:22px auto 8px;z-index:1;">`;
+                    out += `<div style="position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(${colorClass},${colorClass}88,${colorClass}22,${colorClass});animation:grad-spin 4s linear infinite;"></div>`;
+                    out += `<img src="${roleIconUrl}" style="position:relative;width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid ${colorClass};z-index:2;display:block;" onerror="this.parentElement.innerHTML='<div style=\\'width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.05);border:3px solid ${colorClass};display:flex;align-items:center;justify-content:center;font-size:2rem;\\'>?</div>'">`;
+                    out += `</div>`;
+                } else {
+                    out += `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));border:3px solid ${colorClass};display:flex;align-items:center;justify-content:center;font-size:2rem;margin:22px auto 8px;">?</div>`;
+                }
+                // Name
+                out += `<div style="font-size:0.82rem;font-weight:800;color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px;text-align:center;letter-spacing:0.3px;" title="${g.role}">${escapeHtml(cardName)}</div>`;
+                // Score
+                out += `<div style="font-size:1.1rem;color:${colorClass};font-family:'JetBrains Mono';font-weight:900;margin-top:2px;text-shadow:0 0 10px ${colorClass}88;">${safeFixed(g.score,1)}<span style="font-size:0.65rem;opacity:0.8;">%</span></div>`;
+                // Score bar
+                out += `<div style="margin:6px 8px 4px;height:4px;border-radius:2px;background:rgba(255,255,255,0.06);overflow:hidden;">`;
+                out += `<div style="height:100%;width:${scorePct}%;background:linear-gradient(90deg,${colorClass}99,${colorClass});border-radius:2px;transition:width 1s ease;"></div>`;
+                out += `</div>`;
+                // Chain dots
+                out += `<div style="display:flex;justify-content:center;gap:3px;margin-top:3px;">${chainDots}</div>`;
+                // Weapon
+                if (g.weapon) out += `<div style="font-size:0.6rem;color:#666;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px;text-align:center;" title="${escapeHtml(g.weapon)}">🗡 ${escapeHtml(g.weapon.substring(0,6))}${g.weapon.length>6?'…':''}</div>`;
                 out += `</div>`;
                 return out;
             };
 
-            const renderTierSection = (arr, title, colorClass, emptyText, borderCol) => {
-                let out = `<div style="background:#1e1e24;border:1px solid ${borderCol};border-radius:10px;padding:14px;">`;
-                out += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;border-bottom:1px solid #2a2a30;padding-bottom:10px;">`;
-                out += `<span style="font-size:0.95rem;font-weight:bold;color:${colorClass};">${title}</span>`;
-                out += `<span style="font-size:0.78rem;background:rgba(255,255,255,0.08);padding:1px 8px;border-radius:10px;color:#bbb;">${arr.length}</span>`;
-                out += `</div><div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start;">`;
-                if (arr.length === 0) out += `<div style="color:#555;width:100%;text-align:center;padding:16px 0;font-size:0.82rem;">${emptyText}</div>`;
-                arr.forEach(g => { out += buildRoleCard(g, colorClass); });
-                out += `</div></div>`;
+            const renderTierSection = (arr, title, colorClass, emptyText, borderCol, tierBg) => {
+                let out = `<div style="background:linear-gradient(160deg,${tierBg||borderCol} 0%,#1a1a1e 100%);border:1px solid ${borderCol};border-radius:14px;padding:16px;overflow:hidden;">`;
+                out += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">`;
+                out += `<span style="font-size:1rem;font-weight:900;color:${colorClass};letter-spacing:0.5px;text-shadow:0 0 12px ${colorClass}88;">${title}</span>`;
+                out += `<span style="font-size:0.75rem;background:${colorClass}22;border:1px solid ${colorClass}66;padding:1px 10px;border-radius:10px;color:${colorClass};font-weight:700;">${arr.length}</span>`;
+                out += `</div>`;
+                if (arr.length === 0) {
+                    out += `<div style="color:#444;width:100%;text-align:center;padding:20px 0;font-size:0.85rem;">${emptyText}</div>`;
+                } else {
+                    out += `<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;">`;
+                    arr.forEach((g, i) => { out += buildRoleCard(g, colorClass, i); });
+                    out += `</div>`;
+                }
+                out += `</div>`;
                 return out;
             };
 
@@ -13407,15 +13485,15 @@
                     const name = (isEN&&enName)?enName:c.role;
                     const tc = GRAD_TYPE_COLOR[c.type]||'#aaa';
                     const tl = GRAD_TYPE_LABEL(c.type, isEN);
-                    const chainDots = Array(6).fill(0).map((_,i)=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i<c.chainCount?'#7fc':'#333'};"></span>`).join('');
-                    let m = `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 8px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid ${tc}33;min-width:88px;max-width:100px;flex:1;">`;
-                    m += iconUrl ? `<img src="${iconUrl}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid ${tc};">`
-                                 : `<div style="width:52px;height:52px;border-radius:50%;background:#333;border:2px solid ${tc};display:flex;align-items:center;justify-content:center;font-size:1.1rem;">?</div>`;
-                    m += `<div style="font-size:0.79rem;font-weight:bold;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:82px;text-align:center;" title="${escapeHtml(c.role)}">${escapeHtml(name)}</div>`;
-                    m += `<div style="font-size:0.62rem;color:${tc};border:1px solid ${tc};border-radius:6px;padding:0 5px;font-weight:bold;">${tl}</div>`;
-                    m += `<div style="font-size:0.76rem;color:#61afef;font-family:'JetBrains Mono';font-weight:bold;">${safeFixed(c.score,1)}%</div>`;
-                    m += `<div style="margin-top:1px;">${chainDots}</div>`;
-                    if (c.weapon) m += `<div style="font-size:0.6rem;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:82px;text-align:center;">🗡 ${escapeHtml(c.weapon.substring(0,7))}${c.weapon.length>7?'…':''}</div>`;
+                    const chainDots = Array(6).fill(0).map((_,i)=>`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${i<c.chainCount?tc:'#2a2a30'};box-shadow:${i<c.chainCount?`0 0 4px ${tc}`:'none'};"></span>`).join('');
+                    let m = `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px 10px;background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border-radius:12px;border:1px solid ${tc}44;min-width:88px;max-width:110px;flex:1;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">`;
+                    m += iconUrl ? `<img src="${iconUrl}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid ${tc};box-shadow:0 0 10px ${tc}44;">`
+                                 : `<div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.05);border:2px solid ${tc};display:flex;align-items:center;justify-content:center;font-size:1.4rem;">?</div>`;
+                    m += `<div style="font-size:0.79rem;font-weight:800;color:#e8e8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:88px;text-align:center;" title="${escapeHtml(c.role)}">${escapeHtml(name)}</div>`;
+                    m += `<div style="font-size:0.6rem;color:${tc};border:1px solid ${tc};border-radius:8px;padding:1px 7px;font-weight:700;letter-spacing:0.3px;">${tl}</div>`;
+                    m += `<div style="font-size:0.8rem;color:#61afef;font-family:'JetBrains Mono';font-weight:900;">${safeFixed(c.score,1)}%</div>`;
+                    m += `<div style="display:flex;gap:3px;margin-top:1px;">${chainDots}</div>`;
+                    if (c.weapon) m += `<div style="font-size:0.6rem;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:88px;text-align:center;">🗡 ${escapeHtml(c.weapon.substring(0,7))}${c.weapon.length>7?'…':''}</div>`;
                     m += `</div>`;
                     return m;
                 };
@@ -13440,7 +13518,7 @@
                     else                                compTag = isEN ? '🔧 Mixed' : '🔧 混合';
                     const tagColor = (hasDps&&hasSub&&hasHealer)?'#78e08f':hasHealer?'#56b6c2':'#e5c07b';
                     const synergy = Math.min(100, parseFloat(avgScore) + (hasDps&&hasSub&&hasHealer?8:0) + (hasHealer?3:0) + (hasSynergy?5:0));
-                    let r = `<div style="background:#1e1e24;border:1px solid ${hasSynergy?'#e5c07b44':'#2a2a30'};border-radius:12px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,0.3);">`;
+                    let r = `<div style="background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid ${hasSynergy?'rgba(229,192,123,0.4)':'rgba(255,255,255,0.08)'};border-radius:14px;padding:14px;box-shadow:${hasSynergy?'0 0 20px rgba(229,192,123,0.08)':'0 2px 10px rgba(0,0,0,0.3)'};">`;
                     r += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">`;
                     r += `<span style="font-size:0.9rem;font-weight:bold;color:#ddd;">${isEN?`Team ${ti+1}`:`第 ${ti+1} 隊`}</span>`;
                     r += `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">`;
@@ -13478,78 +13556,98 @@
             // Stats bar data
             const gradPct = totalCount > 0 ? Math.round(gradCount/totalCount*100) : 0;
 
-            let html = `<div class="db-container" style="max-width:1060px;padding:20px;display:flex;flex-direction:column;background:#1a1a1e;">`;
+            let html = `<div class="db-container" style="max-width:1060px;padding:0;display:flex;flex-direction:column;background:#111115;overflow:hidden;">`;
 
-            // Header
-            html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid #2a2a30;padding-bottom:12px;flex-shrink:0;">`;
-            html += `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">`;
-            html += `<h2 style="color:var(--accent);margin:0;font-size:1.15rem;">🎓 ${isEN?'Personal Score Summary':'個人角色評分總表'}</h2>`;
-            html += `<span style="font-size:0.82rem;color:#888;font-family:'JetBrains Mono';background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;">UID: ${g_currentUserUid||'N/A'}</span>`;
+            // Animated header banner
+            html += `<div style="position:relative;padding:18px 20px 14px;background:linear-gradient(135deg,#1a0a30 0%,#0d1a2e 40%,#102014 100%);border-bottom:1px solid rgba(229,192,123,0.18);overflow:hidden;flex-shrink:0;">`;
+            html += `<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(229,192,123,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 50%,rgba(97,175,239,0.06) 0%,transparent 60%);pointer-events:none;"></div>`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;">`;
+            html += `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">`;
+            html += `<h2 style="background:linear-gradient(90deg,#e5c07b,#ffeca0,#e5c07b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0;font-size:1.25rem;font-weight:900;letter-spacing:0.5px;">🎓 ${isEN?'Personal Score Summary':'個人角色評分總表'}</h2>`;
+            html += `<span style="font-size:0.78rem;color:#666;font-family:'JetBrains Mono';background:rgba(255,255,255,0.05);padding:2px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);">UID: ${g_currentUserUid||'N/A'}</span>`;
             html += `</div>`;
-            html += `<div style="display:flex;gap:8px;align-items:center;">`;
-            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px;font-size:0.75rem;">📷 ${isEN?'Image':'生成圖片'}</button>`;
-            html += `<button onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;line-height:1;">×</button>`;
+            html += `<div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">`;
+            html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:5px 14px;font-size:0.76rem;background:linear-gradient(90deg,rgba(229,192,123,0.2),rgba(229,192,123,0.12));border-color:rgba(229,192,123,0.4);color:var(--accent);">📷 ${isEN?'Image':'生成圖片'}</button>`;
+            html += `<button onclick="document.getElementById('graduation-modal').style.display='none'" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#aaa;font-size:1.3rem;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>`;
             html += `</div></div>`;
-
-            // Discord notice + disclaimer banner
-            html += `<div style="background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.28);border-radius:8px;padding:9px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;flex-shrink:0;">`;
-            html += `<div style="font-size:0.8rem;line-height:1.6;">`;
-            html += `<div style="color:#b8bff5;font-weight:bold;font-size:0.83rem;margin-bottom:1px;">💬 ${isEN?'Contribute your character guide to Discord!':'歡迎投稿角色攻略至 Discord！'}</div>`;
-            html += `<div style="color:#888;">${isEN?'Currently in guide collection phase — team pairing suggestions are for reference only.':'目前為攻略蒐集階段，配對建議僅供參考。'}</div>`;
-            html += `</div>`;
-            html += `<a href="https://discord.gg/9RrbRbQXdD" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:rgba(88,101,242,0.22);border:1px solid rgba(88,101,242,0.45);color:#b8bff5;text-decoration:none;font-size:0.8rem;font-weight:bold;white-space:nowrap;flex-shrink:0;transition:background 0.2s;" onmouseover="this.style.background='rgba(88,101,242,0.38)'" onmouseout="this.style.background='rgba(88,101,242,0.22)'">👾 ${isEN?'Go to Discord':'前往 Discord'}</a>`;
             html += `</div>`;
 
-            // Stats bar
-            html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;flex-shrink:0;">`;
-            html += `<div style="flex:1;min-width:110px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 12px;text-align:center;">`;
-            html += `<div style="font-size:1.4rem;font-weight:bold;color:#61afef;">${totalCount}</div><div style="font-size:0.72rem;color:#666;">${isEN?'Characters':'角色數'}</div></div>`;
-            html += `<div style="flex:1;min-width:110px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 12px;text-align:center;">`;
-            html += `<div style="font-size:1.4rem;font-weight:bold;color:#78e08f;">${gradPct}%</div><div style="font-size:0.72rem;color:#666;">${isEN?'Grad Rate':'畢業率'}</div></div>`;
-            html += `<div style="flex:1;min-width:110px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 12px;text-align:center;">`;
-            html += `<div style="font-size:1.4rem;font-weight:bold;color:#ffca28;">${avgAll}%</div><div style="font-size:0.72rem;color:#666;">${isEN?'Avg Score':'平均分'}</div></div>`;
-            html += `<div style="flex:2;min-width:180px;background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">`;
-            html += `<span style="font-size:0.72rem;color:#e06c75;border:1px solid #e06c7566;border-radius:6px;padding:2px 8px;">🗡 ${isEN?'DPS':'主輸'} ×${dpsCount}</span>`;
-            html += `<span style="font-size:0.72rem;color:#c678dd;border:1px solid #c678dd66;border-radius:6px;padding:2px 8px;">⚡ ${isEN?'Sub':'副輸'} ×${subCount}</span>`;
-            html += `<span style="font-size:0.72rem;color:#56b6c2;border:1px solid #56b6c266;border-radius:6px;padding:2px 8px;">💚 ${isEN?'Healer':'奶媽'} ×${healCount}</span>`;
-            html += `</div></div>`;
+            // Stats row
+            html += `<div style="display:flex;gap:0;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.06);">`;
+            const statItems = [
+                { val: totalCount, label: isEN?'Characters':'角色數', color:'#61afef', icon:'👤' },
+                { val: gradCount, label: isEN?'Graduated':'已畢業', color:'#78e08f', icon:'🎓' },
+                { val: gradPct+'%', label: isEN?'Grad Rate':'畢業率', color:'#e5c07b', icon:'📈' },
+                { val: avgAll+'%', label: isEN?'Avg Score':'平均分', color:'#c678dd', icon:'⭐' },
+            ];
+            statItems.forEach((s, i) => {
+                html += `<div style="flex:1;padding:12px 8px;text-align:center;border-right:${i<statItems.length-1?'1px solid rgba(255,255,255,0.06)':'none'};">`;
+                html += `<div style="font-size:1.35rem;font-weight:900;color:${s.color};font-family:'JetBrains Mono';">${s.val}</div>`;
+                html += `<div style="font-size:0.66rem;color:#555;margin-top:1px;">${s.icon} ${s.label}</div>`;
+                html += `</div>`;
+            });
+            html += `</div>`;
+
+            // Role type pills
+            html += `<div style="padding:8px 14px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;background:rgba(0,0,0,0.2);">`;
+            html += `<span style="font-size:0.72rem;color:#e06c75;border:1px solid #e06c7544;border-radius:20px;padding:2px 10px;background:rgba(224,108,117,0.08);">🗡 ${isEN?'DPS':'主輸'} <b>${dpsCount}</b></span>`;
+            html += `<span style="font-size:0.72rem;color:#c678dd;border:1px solid #c678dd44;border-radius:20px;padding:2px 10px;background:rgba(198,120,221,0.08);">⚡ ${isEN?'Sub':'副輸'} <b>${subCount}</b></span>`;
+            html += `<span style="font-size:0.72rem;color:#56b6c2;border:1px solid #56b6c244;border-radius:20px;padding:2px 10px;background:rgba(86,182,194,0.08);">💚 ${isEN?'Healer':'奶媽'} <b>${healCount}</b></span>`;
+            // Graduation progress bar
+            html += `<div style="flex:1;min-width:120px;display:flex;align-items:center;gap:6px;margin-left:4px;">`;
+            html += `<div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,0.07);overflow:hidden;">`;
+            html += `<div style="height:100%;width:${gradPct}%;background:linear-gradient(90deg,#56b6c2,#78e08f);border-radius:3px;transition:width 1.2s ease;"></div>`;
+            html += `</div>`;
+            html += `<span style="font-size:0.68rem;color:#78e08f;font-weight:700;white-space:nowrap;">${gradPct}%</span>`;
+            html += `</div>`;
+            html += `</div>`;
+
+            // Discord banner (compact)
+            html += `<div style="padding:8px 14px;background:rgba(88,101,242,0.07);border-bottom:1px solid rgba(88,101,242,0.18);display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0;">`;
+            html += `<div style="flex:1;min-width:180px;font-size:0.76rem;color:#7a84d0;">💬 ${isEN?'Contribute your character guide to Discord!':'歡迎投稿角色攻略至 Discord！'} <span style="color:#555;">${isEN?'Guide collection phase — pairings for reference.':'攻略蒐集階段，配對僅供參考。'}</span></div>`;
+            html += `<a href="https://discord.gg/9RrbRbQXdD" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:8px;background:rgba(88,101,242,0.2);border:1px solid rgba(88,101,242,0.4);color:#b8bff5;text-decoration:none;font-size:0.76rem;font-weight:bold;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='rgba(88,101,242,0.35)'" onmouseout="this.style.background='rgba(88,101,242,0.2)'">👾 Discord</a>`;
+            html += `</div>`;
 
             // Tabs
-            html += `<div style="display:flex;gap:4px;margin-bottom:0;flex-shrink:0;flex-wrap:wrap;align-items:flex-end;">`;
-            html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:7px 20px;border-radius:7px 7px 0 0;border:1px solid #444;border-bottom:none;background:rgba(97,175,254,0.15);color:#61afef;font-size:0.85rem;cursor:pointer;font-weight:bold;">${isEN?'🎓 Score Overview':'🎓 評分總覽'}</button>`;
-            html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:7px 20px;border-radius:7px 7px 0 0;border:1px solid #2a2a30;border-bottom:none;background:rgba(255,255,255,0.02);color:#666;font-size:0.85rem;cursor:pointer;">${isEN?'👥 Team Pairing':'👥 個性化配對'}</button>`;
+            html += `<div style="display:flex;gap:0;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.15);padding:0 14px;">`;
+            html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:10px 18px;border:none;border-bottom:2px solid #e5c07b;background:transparent;color:#e5c07b;font-size:0.85rem;cursor:pointer;font-weight:700;transition:all 0.2s;">${isEN?'🎓 Overview':'🎓 評分總覽'}</button>`;
+            html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:10px 18px;border:none;border-bottom:2px solid transparent;background:transparent;color:#555;font-size:0.85rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN?'👥 Teams':'👥 配對'}</button>`;
             html += `<div style="flex:1;"></div>`;
-            html += `<button onclick="openExampleTeamModal()" style="padding:5px 12px;border-radius:8px;border:1px solid #5c7cfa;background:rgba(92,124,250,0.1);color:#5c7cfa;font-size:0.8rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN?'👥 Example Teams':'👥 範例隊伍'}</button>`;
-            html += `<button onclick="openRolePositionModal()" style="padding:5px 12px;border-radius:8px;border:1px solid #78e08f;background:rgba(120,224,143,0.1);color:#78e08f;font-size:0.8rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN?'📋 Role Types':'📋 角色定位'}</button>`;
+            html += `<button onclick="openExampleTeamModal()" style="padding:8px 12px;border:none;background:transparent;color:#5c7cfa;font-size:0.78rem;cursor:pointer;font-weight:600;transition:color 0.2s;" onmouseover="this.style.color='#8099fb'" onmouseout="this.style.color='#5c7cfa'">${isEN?'👥 Templates':'👥 範例'}</button>`;
+            html += `<button onclick="openRolePositionModal()" style="padding:8px 12px;border:none;background:transparent;color:#78e08f;font-size:0.78rem;cursor:pointer;font-weight:600;transition:color 0.2s;" onmouseover="this.style.color='#a0f0b0'" onmouseout="this.style.color='#78e08f'">${isEN?'📋 Roles':'📋 定位'}</button>`;
             html += `</div>`;
-            html += `<div style="border-top:1px solid #444;margin-bottom:14px;"></div>`;
 
             html += `<style>
-.grad-scroll{overflow-y:auto;max-height:62vh;padding-right:4px;}
-.grad-scroll::-webkit-scrollbar{width:5px;}
-.grad-scroll::-webkit-scrollbar-thumb{background:#444;border-radius:3px;}
+@keyframes grad-spin{to{transform:rotate(360deg)}}
+@keyframes grad-fade-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.grad-role-card{position:relative;min-width:100px;max-width:120px;flex:1 1 100px;background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:8px 6px 10px;text-align:center;cursor:default;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;animation:grad-fade-in 0.4s ease both;overflow:hidden;}
+.grad-role-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 50% 30%,rgba(var(--card-rgb),0.08),transparent 70%);pointer-events:none;}
+.grad-role-card:hover{transform:translateY(-6px) scale(1.04);box-shadow:0 12px 30px rgba(0,0,0,0.5),0 0 0 1px var(--card-color);border-color:var(--card-color);}
+.grad-scroll{overflow-y:auto;padding:16px;flex:1;}
+.grad-scroll::-webkit-scrollbar{width:4px;}
+.grad-scroll::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 .grad-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:640px){.grad-2col{grid-template-columns:1fr;}}
+@media(max-width:640px){.grad-2col{grid-template-columns:1fr;}.grad-role-card{max-width:none;flex:1 1 80px;}}
 .grad-team-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:700px){.grad-team-grid{grid-template-columns:1fr;}}
 </style>`;
 
-            // Overview tab — 2-col desktop layout
+            // Overview tab
             html += `<div id="grad-panel-overview" class="grad-scroll">`;
             html += `<div class="grad-2col">`;
-            html += renderTierSection(buckets.top, isEN?"🏆 Elite (≥80%)":"🏆 極品畢業 (≥80%)", "#ffca28", isEN?"None yet":"尚無", "rgba(255,202,40,0.2)");
-            html += renderTierSection(buckets.mid, isEN?"🏅 Graduated (≥50%)":"🏅 標準畢業 (≥50%)", "#78e08f", isEN?"None yet":"尚無", "rgba(120,224,143,0.2)");
+            html += renderTierSection(buckets.top, isEN?"🏆 Elite (≥80%)":"🏆 極品畢業 (≥80%)", "#ffca28", isEN?"None yet":"尚無", "rgba(255,202,40,0.35)", "rgba(255,202,40,0.04)");
+            html += renderTierSection(buckets.mid, isEN?"🏅 Graduated (≥50%)":"🏅 標準畢業 (≥50%)", "#78e08f", isEN?"None yet":"尚無", "rgba(120,224,143,0.35)", "rgba(120,224,143,0.04)");
             html += `</div>`;
             if (buckets.low.length > 0) {
                 html += `<div style="margin-top:14px;">`;
-                html += renderTierSection(buckets.low, isEN?"❌ Not Graduated (<50%)":"❌ 未畢業 (<50%)", "#ff5555", isEN?"None":"無", "rgba(255,85,85,0.15)");
+                html += renderTierSection(buckets.low, isEN?"❌ Not Graduated (<50%)":"❌ 未畢業 (<50%)", "#ff5555", isEN?"None":"無", "rgba(255,85,85,0.3)", "rgba(255,85,85,0.03)");
                 html += `</div>`;
             }
             html += `</div>`;
 
             // Team pairing tab
             html += `<div id="grad-panel-team" class="grad-scroll" style="display:none;">`;
-            html += `<div style="background:#1e1e24;border:1px solid #2a2a30;border-radius:8px;padding:11px 14px;font-size:0.78rem;color:#777;line-height:1.7;margin-bottom:12px;">`;
+            html += `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:11px 14px;font-size:0.78rem;color:#666;line-height:1.7;margin-bottom:12px;">`;
             html += isEN
                 ? `<b style="color:#bbb;">Meta Comp (WW):</b> <span style="color:#e06c75;">Main DPS</span> + <span style="color:#c678dd;">Sub DPS/Amplifier</span> + <span style="color:#56b6c2;">Healer (奶媽)</span>. Teams are generated by scoring and assigning each role slot optimally.`
                 : `<b style="color:#bbb;">鳴潮主流配隊：</b><span style="color:#e06c75;">主輸出</span> + <span style="color:#c678dd;">副輸出 / 增幅</span> + <span style="color:#56b6c2;">奶媽</span>。系統依評分排序自動分配最佳組合。綜效分 = 均分 + 配隊加成。`;
@@ -13581,13 +13679,13 @@
             if (tab === 'overview') {
                 overviewPanel.style.display = '';
                 teamPanel.style.display = 'none';
-                if (overviewBtn) { overviewBtn.style.background='rgba(97,175,254,0.15)'; overviewBtn.style.color='#61afef'; overviewBtn.style.borderColor='#444'; }
-                if (teamBtn) { teamBtn.style.background='rgba(255,255,255,0.02)'; teamBtn.style.color='#666'; teamBtn.style.borderColor='#2a2a30'; }
+                if (overviewBtn) { overviewBtn.style.borderBottomColor='#e5c07b'; overviewBtn.style.color='#e5c07b'; overviewBtn.style.fontWeight='700'; }
+                if (teamBtn) { teamBtn.style.borderBottomColor='transparent'; teamBtn.style.color='#555'; teamBtn.style.fontWeight='600'; }
             } else {
                 overviewPanel.style.display = 'none';
                 teamPanel.style.display = '';
-                if (teamBtn) { teamBtn.style.background='rgba(97,175,254,0.15)'; teamBtn.style.color='#61afef'; teamBtn.style.borderColor='#444'; }
-                if (overviewBtn) { overviewBtn.style.background='rgba(255,255,255,0.02)'; overviewBtn.style.color='#666'; overviewBtn.style.borderColor='#2a2a30'; }
+                if (teamBtn) { teamBtn.style.borderBottomColor='#e5c07b'; teamBtn.style.color='#e5c07b'; teamBtn.style.fontWeight='700'; }
+                if (overviewBtn) { overviewBtn.style.borderBottomColor='transparent'; overviewBtn.style.color='#555'; overviewBtn.style.fontWeight='600'; }
             }
         }
         function cleanupHistory() { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let beforeCount = history.length; history = history.filter(h => h.uploadStatus !== 'duplicate' && h.uploadStatus !== 'error'); localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; g_currentEntryId = null; unlockPreview(); renderHistoryList(); showMsg(`已整理歷史紀錄！\n移除項目: ${beforeCount - history.length} 筆`) }
@@ -14538,6 +14636,8 @@
             const uidContainer = document.getElementById('uid-display-container');
             if (uidContainer) uidContainer.classList.remove('expanded');
             closeAllModals();
+            const welcomeEl = document.getElementById('welcome-panels');
+            if (welcomeEl) { welcomeEl.style.display = 'none'; welcomeEl.classList.remove('active'); }
             updateMobilePillAnchor();
 
             if (section === 'history') {
@@ -20138,7 +20238,7 @@
                 'custom-weight-modal', 'smart-weight-modal', 'feature-list-modal',
                 'upload-url-modal', 'buff-info-modal', 'sub-stat-modal', 'msg-modal',
                 'confirm-prompt-modal', 'points-modal', 'data-management-modal',
-                'example-team-modal', 'role-position-modal'
+                'example-team-modal', 'role-position-modal', 'graduation-modal'
             ];
             modals.forEach(id => {
                 const el = document.getElementById(id);
@@ -23496,7 +23596,7 @@
             try {
                 const canvas = await html2canvas(target, {
                     useCORS: true,
-                    backgroundColor: '#1a1a1e',
+                    backgroundColor: '#111115',
                     scale: 2.5
                 });
                 const link = document.createElement('a');
@@ -23591,7 +23691,7 @@
             if (mainContainer) mainContainer.style.display = 'none';
             if (bottomPill) bottomPill.style.display = 'none';
 
-            switchTutorial('video');
+            switchTutorial(g_lang === 'zh' ? 'text' : 'video');
             refreshMobileNavigation();
         }
 
