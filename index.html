@@ -9529,7 +9529,7 @@
             <span class="mobile-nav-icon">📚</span>
             <span class="mobile-nav-label" data-lang-zh="聲骸庫" data-lang-en="Library">聲骸庫</span>
         </button>
-        <button class="mobile-nav-btn" data-section="menu" onclick="openFeatureList()">
+        <button class="mobile-nav-btn" data-section="menu" onclick="setMobileNavSection('menu')">
             <span class="mobile-nav-icon">☰</span>
             <span class="mobile-nav-label" data-lang-zh="選單" data-lang-en="Menu">選單</span>
         </button>
@@ -9956,6 +9956,47 @@
             .feature-card-action .quick-btn {
                 white-space: nowrap;
                 min-width: 52px;
+            }
+
+            /* Feature navigator header: compact 2-row layout on mobile */
+            #feature-list-modal .db-header {
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                row-gap: 8px !important;
+                padding-bottom: 10px !important;
+            }
+
+            #feature-list-modal .db-header .db-title-group {
+                flex: 1 1 0 !important;
+                min-width: 0 !important;
+                order: 0 !important;
+            }
+
+            #feature-list-modal .db-header .db-title-group h2 {
+                font-size: 1.1rem !important;
+                flex-wrap: nowrap !important;
+                gap: 6px !important;
+            }
+
+            #feature-list-modal .db-header .db-close-btn {
+                order: 1 !important;
+                flex-shrink: 0 !important;
+                align-self: center !important;
+            }
+
+            #feature-modal-lang-group {
+                order: 2 !important;
+                margin: 0 auto 0 0 !important;
+            }
+
+            #feature-zoom-ctrl {
+                order: 3 !important;
+            }
+
+            /* Section tabs: taller touch targets on mobile */
+            .fst-btn {
+                padding: 8px 14px !important;
+                font-size: 0.8rem !important;
             }
         }
     </style>
@@ -19758,12 +19799,25 @@
                 'custom-weight-modal', 'smart-weight-modal', 'feature-list-modal',
                 'upload-url-modal', 'buff-info-modal', 'sub-stat-modal', 'msg-modal',
                 'confirm-prompt-modal', 'points-modal', 'data-management-modal',
-                'example-team-modal', 'role-position-modal'
+                'example-team-modal', 'role-position-modal', 'graduation-modal'
             ];
             modals.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = 'none';
             });
+            // Also close tutorial/welcome panel if open
+            const welcomePanels = document.getElementById('welcome-panels');
+            if (welcomePanels && getComputedStyle(welcomePanels).display !== 'none') {
+                welcomePanels.style.display = 'none';
+                welcomePanels.classList.remove('active');
+                const mainContainer = document.querySelector('.container');
+                const bottomPill = document.getElementById('bottom-left-pill');
+                if (mainContainer) mainContainer.style.display = 'flex';
+                if (bottomPill) bottomPill.style.display = (g_currentUserUid ? 'block' : 'none');
+                if (typeof g_ytPlayer !== 'undefined' && g_ytPlayer && typeof g_ytPlayer.pauseVideo === 'function') {
+                    g_ytPlayer.pauseVideo();
+                }
+            }
             rank_unlockPreview();
             updateMobilePillAnchor();
         }
