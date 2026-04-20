@@ -10696,6 +10696,14 @@
             html += `<button class="db-close-btn" onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>`;
             html += `</div></div>`;
 
+            html += `<div style="background:rgba(88,166,255,0.08); border:1px solid rgba(88,166,255,0.3); border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">`;
+            html += `<div style="font-size:0.82rem; color:#b0c8f0; line-height:1.6;">`;
+            html += `<span style="font-weight:bold; color:#7eb8ff;">📢 ${g_lang === 'en' ? 'Contribute a character guide to Discord!' : '歡迎投稿角色攻略至 Discord！'}</span><br>`;
+            html += `<span style="color:#888;">${g_lang === 'en' ? '⚠️ Currently in guide collection phase — pairing suggestions are for reference only.' : '⚠️ 目前為攻略蒐集階段，配對建議僅供參考。'}</span>`;
+            html += `</div>`;
+            html += `<a href="https://discord.gg/9RrbRbQXdD" target="_blank" style="flex-shrink:0; background:linear-gradient(135deg,#5865f2,#7289da); color:#fff; border:none; padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:bold; text-decoration:none; cursor:pointer; box-shadow:0 2px 8px rgba(88,101,242,0.4); white-space:nowrap;">👾 ${g_lang === 'en' ? 'Go to Discord' : '前往 Discord'}</a>`;
+            html += `</div>`;
+
             const history = getCleanHistory();
             const roleBest = {};
             history.forEach(item => {
