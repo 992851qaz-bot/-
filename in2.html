@@ -9621,6 +9621,12 @@
                         btn.innerText = "功能列表";
                     }
                     return;
+                } else if (/^GAMEZH$/i.test(v)) {
+                    btn.innerText = '維修模式';
+                    btn.style.background = '#e5c07b';
+                    btn.style.color = '#121214';
+                    btn.style.borderColor = '#e5c07b';
+                    btn.disabled = false;
                 } else {
                     // Invalid Input
                     btn.disabled = false; // Allow click to show help
@@ -9642,6 +9648,9 @@
                         document.getElementById('welcome-panels').style.display = 'flex';
                         document.querySelector('.container').style.display = 'none';
                         document.getElementById('btn-close-welcome').style.display = 'block';
+                    } else if (/^GAMEZH$/i.test(v)) {
+                        urlInput.value = '';
+                        showDiagnosticPanel();
                     } else if (v.length > 0) {
                         try { if (await ensureWeightsLoaded()) startProcess(); } catch (err) { console.error(err); }
                     }
@@ -9660,6 +9669,9 @@
                     document.getElementById('btn-close-welcome').style.display = 'block';
                 } else if (/^\d{9}$/.test(v)) {
                     if (await ensureWeightsLoaded()) handleProfileSwitch(v);
+                } else if (/^GAMEZH$/i.test(v)) {
+                    urlInput.value = '';
+                    showDiagnosticPanel();
                 } else {
                     try { if (await ensureWeightsLoaded()) startProcess(); } catch (err) { console.error(err); }
                 }
@@ -9813,9 +9825,31 @@
                 bottomPill.style.display = (g_currentUserUid ? "block" : "none");
             }
         }
-        function showMaintenancePage() { var el = document.getElementById('_maint_overlay'); if (!el) { el = document.createElement('div'); el.id = '_maint_overlay'; el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#121214;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;'; el.innerHTML = '<div style="font-size:3rem;margin-bottom:16px;">🔧</div><div style="font-size:1.5rem;font-weight:bold;color:#e5c07b;margin-bottom:8px;">伺服器維護中</div><div style="color:#aaa;font-size:1rem;margin-bottom:8px;">預計隔天 20:00 修復完成</div><a href="https://discord.gg/9RrbRbQXdD" target="_blank" style="margin-top:16px;padding:10px 24px;background:rgba(88,101,242,0.3);border:1px solid rgba(88,101,242,0.6);border-radius:8px;color:#b8bff5;text-decoration:none;font-size:0.9rem;">👾 歡迎加入 Discord</a>'; document.body.appendChild(el); } else { el.style.display = 'flex'; } }
+        function showMaintenancePage() { var el = document.getElementById('_maint_overlay'); if (!el) { el = document.createElement('div'); el.id = '_maint_overlay'; el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#121214;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;'; el.innerHTML = '<div style="font-size:3rem;margin-bottom:16px;">🔧</div><div style="font-size:1.5rem;font-weight:bold;color:#e5c07b;margin-bottom:8px;">伺服器維護中</div><div style="color:#aaa;font-size:1rem;margin-bottom:8px;">預計隔天 20:00 修復完成</div><a href="https://discord.gg/9RrbRbQXdD" target="_blank" style="margin-top:16px;padding:10px 24px;background:rgba(88,101,242,0.3);border:1px solid rgba(88,101,242,0.6);border-radius:8px;color:#b8bff5;text-decoration:none;font-size:0.9rem;">👾 前往維修群</a>'; document.body.appendChild(el); } else { el.style.display = 'flex'; } }
+        async function showDiagnosticPanel() {
+            var overlay = document.getElementById('_diag_overlay');
+            if (!overlay) { overlay = document.createElement('div'); overlay.id = '_diag_overlay'; overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;'; document.body.appendChild(overlay); }
+            function _maskUrl(url) { if (!url) return '(未設定)'; var m = url.match(/\/s\/([^\/]+)\/exec/); if (m) { var id = m[1]; return '...' + id.slice(-5) + '/exec'; } return '...' + url.slice(-5); }
+            async function _testApi(url) { var t = Date.now(); try { var ctrl = new AbortController(); var tim = setTimeout(() => ctrl.abort(), 8000); var res = await fetch(url + '?action=ping', { signal: ctrl.signal }); clearTimeout(tim); return { ok: res.ok, ms: Date.now() - t }; } catch(e) { return { ok: false, ms: Date.now() - t }; } }
+            async function _testImg(url) { return new Promise(function(resolve) { var img = new Image(); var t = Date.now(); var tim = setTimeout(() => resolve({ ok: false, ms: Date.now() - t }), 10000); img.onload = function() { clearTimeout(tim); resolve({ ok: true, ms: Date.now() - t }); }; img.onerror = function() { clearTimeout(tim); resolve({ ok: false, ms: Date.now() - t }); }; img.src = url + '?_t=' + Date.now(); }); }
+            function _badge(ok, ms) { return (ok ? '✅ <span style="color:#98c379;font-weight:bold;">正常</span>' : '❌ <span style="color:#e06c75;font-weight:bold;">異常</span>') + (ms != null ? ' <span style="color:#666;font-size:0.8rem;">(' + ms + 'ms)</span>' : ''); }
+            var mainUrl = typeof getMainApiUrl === 'function' ? getMainApiUrl() : '';
+            var offlineUrl = typeof getOfflineApiUrl === 'function' ? getOfflineApiUrl() : '';
+            var imgUrl = typeof TEST_URL !== 'undefined' ? TEST_URL : '';
+            overlay.innerHTML = '<div style="background:#1a1a22;border:1px solid #444;border-radius:12px;padding:24px;max-width:480px;width:100%;position:relative;"><div style="position:absolute;top:12px;right:16px;cursor:pointer;color:#888;font-size:1.3rem;line-height:1;" onclick="document.getElementById(\'_diag_overlay\').style.display=\'none\'">✕</div><div style="font-size:1.2rem;font-weight:bold;color:#e5c07b;margin-bottom:16px;">🔧 維修診斷模式</div><div id="_diag_body" style="font-size:0.88rem;color:#ccc;line-height:2;">⏳ 檢測中...</div></div>';
+            overlay.style.display = 'flex';
+            var r = await Promise.all([ _testApi(mainUrl), offlineUrl ? _testApi(offlineUrl) : Promise.resolve(null), imgUrl ? _testImg(imgUrl) : Promise.resolve(null) ]);
+            var html = '<div style="margin-bottom:6px;"><span style="color:#888;">主要 API：</span><code style="color:#61afef;font-size:0.8rem;">' + _maskUrl(mainUrl) + '</code><br>' + _badge(r[0].ok, r[0].ms) + '</div>';
+            if (r[1]) { html += '<div style="margin-bottom:6px;"><span style="color:#888;">離線 API：</span><code style="color:#61afef;font-size:0.8rem;">' + _maskUrl(offlineUrl) + '</code><br>' + _badge(r[1].ok, r[1].ms) + '</div>'; }
+            if (r[2]) { html += '<div style="margin-bottom:6px;"><span style="color:#888;">圖片下載：</span>' + _badge(r[2].ok, r[2].ms) + '</div>'; }
+            html += '<div style="margin-top:10px;font-size:0.75rem;color:#555;">URL 僅顯示末5碼以保護資料安全</div>';
+            document.getElementById('_diag_body').innerHTML = html;
+        }
         const _WC_KEY = 'ww_wc'; const _WC_TTL = 1800000;
+        let _g_fetchingWeights = false;
         async function loadWeightsBackground(url) {
+            if (_g_fetchingWeights) return;
+            _g_fetchingWeights = true;
             try {
                 let json;
                 try { const _c = localStorage.getItem(_WC_KEY); if (_c) { const _p = JSON.parse(_c); if (Date.now() - _p.ts < _WC_TTL) { json = _p.d; } } } catch(e) {}
@@ -9840,6 +9874,8 @@
                 weightStatus.innerText = g_lang === 'en' ? 'Data load failed' : '資料載入失敗';
                 weightStatus.style.color = "var(--error)";
                 throw e; // Propagate for ensureWeightsLoaded
+            } finally {
+                _g_fetchingWeights = false;
             }
         }
         function processWeightsData(json) { g_weightNames = []; g_currentWeights = {}; const headers = json.headers; json.data.forEach(row => { let charName = row[1]; if (charName && charName !== '(N/A)') { if (!g_weightNames.includes(charName)) g_weightNames.push(charName); if (!g_currentWeights[charName]) g_currentWeights[charName] = []; let charWeights = {}; headers.forEach((h, idx) => { let mappedKey = WEIGHT_KEYS_MAPPING[h]; if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0 } }); let colA = row[0] ? String(row[0]).trim() : g_lang === 'en' ? 'General' : '通用'; let match = colA.match(/\d/); let req = match ? parseInt(match[0]) : 0; g_currentWeights[charName].push({ name: colA, minChain: req, weights: charWeights, desc: row[row.length - 1] }) } }) }
