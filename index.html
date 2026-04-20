@@ -7434,6 +7434,42 @@
             border-color: rgba(220,50,50,0.5);
             color: #fff;
         }
+        /* Feedback modal responsive layout */
+        .feedback-body-flex {
+            display: flex;
+            gap: 20px;
+            height: 60vh;
+        }
+        @media (max-width: 768px) {
+            .feedback-body-flex {
+                flex-direction: column;
+                height: auto;
+                max-height: 78vh;
+                overflow-y: auto;
+            }
+            .feedback-body-flex > .feedback-screenshot-col {
+                flex: none !important;
+                height: 180px;
+            }
+            .feedback-body-flex > .feedback-form-col {
+                flex: none !important;
+                border-left: none !important;
+                padding-left: 0 !important;
+                border-top: 1px solid rgba(255,255,255,0.05);
+                padding-top: 12px;
+            }
+        }
+        /* Mobile zoom ctrl global hint */
+        .feature-zoom-mobile-hint {
+            display: none;
+            font-size: 0.62rem;
+            color: #5c7cfa;
+            white-space: nowrap;
+        }
+        @media (max-width: 900px) {
+            .feature-zoom-mobile-hint { display: inline; }
+            .feature-zoom-ctrl { order: 1; }
+        }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
 </head>
@@ -7931,10 +7967,11 @@
                         🌐 EN
                     </button>
                 </div>
-                <div class="feature-zoom-ctrl" id="feature-zoom-ctrl" title="調整顯示縮放 / Adjust display zoom">
+                <div class="feature-zoom-ctrl" id="feature-zoom-ctrl" title="調整顯示縮放 / Adjust display zoom（手機為全域縮放）">
                     <button class="feature-zoom-btn" onclick="adjustFeatureMenuZoom(-1)">−</button>
                     <span class="feature-zoom-label" id="feature-zoom-label">100%</span>
                     <button class="feature-zoom-btn" onclick="adjustFeatureMenuZoom(1)">+</button>
+                    <span class="feature-zoom-mobile-hint">全域</span>
                 </div>
                 <button class="db-close-btn"
                     onclick="document.getElementById('feature-list-modal').style.display='none'">×</button>
@@ -13116,6 +13153,16 @@
             html += `<button onclick="generateGraduationImage()" class="quick-btn" style="padding:4px 12px; font-size:0.75rem;">📷 ${g_lang === 'en' ? 'Generate Image' : '生成圖片'}</button>`;
             html += `<button class="db-close-btn" onclick="document.getElementById('graduation-modal').style.display='none'" style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>`;
             html += `</div></div>`;
+
+            // Discord notice + disclaimer banner
+            const isEN_g = g_lang === 'en';
+            html += `<div style="background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.28);border-radius:8px;padding:9px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;flex-shrink:0;">`;
+            html += `<div style="font-size:0.8rem;line-height:1.6;">`;
+            html += `<div style="color:#b8bff5;font-weight:bold;font-size:0.83rem;margin-bottom:1px;">💬 ${isEN_g?'Contribute your character guide to Discord!':'歡迎投稿角色攻略至 Discord！'}</div>`;
+            html += `<div style="color:#888;">${isEN_g?'Currently in guide collection phase — team pairing suggestions are for reference only.':'目前為攻略蒐集階段，配對建議僅供參考。'}</div>`;
+            html += `</div>`;
+            html += `<a href="https://discord.gg/9RrbRbQXdD" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:rgba(88,101,242,0.22);border:1px solid rgba(88,101,242,0.45);color:#b8bff5;text-decoration:none;font-size:0.8rem;font-weight:bold;white-space:nowrap;flex-shrink:0;transition:background 0.2s;" onmouseover="this.style.background='rgba(88,101,242,0.38)'" onmouseout="this.style.background='rgba(88,101,242,0.22)'">👾 ${isEN_g?'Go to Discord':'前往 Discord'}</a>`;
+            html += `</div>`;
 
             const history = getCleanHistory();
             const roleBest = {};
@@ -19664,7 +19711,15 @@
             const label = document.getElementById('feature-zoom-label');
             const btnMinus = document.querySelector('#feature-zoom-ctrl .feature-zoom-btn:first-child');
             const btnPlus = document.querySelector('#feature-zoom-ctrl .feature-zoom-btn:last-child');
-            if (grid) grid.style.zoom = String(g_featureMenuZoom);
+            if (isMobileLayout()) {
+                // Mobile: global page zoom (user can't resize window)
+                document.documentElement.style.zoom = String(g_featureMenuZoom);
+                if (grid) grid.style.zoom = '';
+            } else {
+                // Desktop: apply zoom to feature grid only
+                document.documentElement.style.zoom = '';
+                if (grid) grid.style.zoom = String(g_featureMenuZoom);
+            }
             if (label) label.textContent = Math.round(g_featureMenuZoom * 100) + '%';
             if (btnMinus) btnMinus.disabled = g_featureMenuZoom <= FEATURE_ZOOM_STEPS[0];
             if (btnPlus) btnPlus.disabled = g_featureMenuZoom >= FEATURE_ZOOM_STEPS[FEATURE_ZOOM_STEPS.length - 1];
@@ -23527,8 +23582,8 @@
                 <button onclick="document.getElementById('feedback-modal').style.display='none'"
                     style="background:none; border:none; color:#888; font-size:1.5rem; cursor:pointer;">×</button>
             </h3>
-            <div style="display:flex; gap:20px; height:60vh;">
-                <div style="flex:1.2; display:flex; flex-direction:column; gap:10px;">
+            <div class="feedback-body-flex">
+                <div class="feedback-screenshot-col" style="flex:1.2; display:flex; flex-direction:column; gap:10px;">
                     <div style="font-size:0.85rem; color:#888;" data-lang-zh="問題發生時的畫面截圖：" data-lang-en="Screenshot when issue occurred:">問題發生時的畫面截圖：</div>
                     <div id="feedback-screenshot-container"
                         style="flex:1; background:#000; border:1px solid #333; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative;">
@@ -23538,7 +23593,7 @@
                             正在產生截圖...</div>
                     </div>
                 </div>
-                <div
+                <div class="feedback-form-col"
                     style="flex:1; display:flex; flex-direction:column; gap:15px; border-left:1px solid rgba(255,255,255,0.05); padding-left:20px;">
                     <div class="feedback-info-row"
                         style="font-size:0.82rem; color:#aaa; background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; line-height:1.6; border:1px solid rgba(255,255,255,0.05);">
