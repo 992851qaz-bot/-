@@ -10401,25 +10401,24 @@
 
     <!-- 跨角色評分總表 Modal -->
     <div id="cross-role-modal" class="modal-overlay" style="z-index:18000;">
-        <div class="startup-box" style="max-width:1050px;width:95%;text-align:left;max-height:85vh;overflow-y:auto;">
-            <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span data-lang-zh="🎓 個人角色評分總表" data-lang-en="🎓 Personal Score Summary">🎓 個人角色評分總表</span>
+        <div class="startup-box" id="cross-role-modal-box" style="max-width:min(1400px,97vw);width:97%;text-align:left;max-height:90vh;overflow-y:auto;padding:24px 20px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span style="color:var(--accent);font-size:1.1rem;font-weight:bold;" data-lang-zh="🎓 個人角色評分總表" data-lang-en="🎓 Personal Score Summary">🎓 個人角色評分總表</span>
                     <span id="grad-uid-display"
-                        style="font-size:0.85rem; color:#888; font-family:'JetBrains Mono'; font-weight:normal; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID:
-                        -</span>
+                        style="font-size:0.8rem; color:#888; font-family:'JetBrains Mono'; font-weight:normal; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID: -</span>
                 </div>
-                <div style="display:flex; align-items:center; gap:10px;">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                     <button onclick="openExampleTeamModal()" class="quick-btn"
-                        style="padding:4px 10px; font-size:0.75rem; border-color:#5c7cfa; color:#5c7cfa; background:rgba(92,124,250,0.08);" data-lang-zh="👥 範例隊伍" data-lang-en="👥 Example Teams">👥 範例隊伍</button>
+                        style="padding:5px 11px; font-size:0.78rem; border-color:#5c7cfa; color:#5c7cfa; background:rgba(92,124,250,0.08);" data-lang-zh="👥 範例隊伍" data-lang-en="👥 Example Teams">👥 範例隊伍</button>
                     <button onclick="openRolePositionModal()" class="quick-btn"
-                        style="padding:4px 10px; font-size:0.75rem; border-color:#78e08f; color:#78e08f; background:rgba(120,224,143,0.08);" data-lang-zh="📋 角色定位" data-lang-en="📋 Role Types">📋 角色定位</button>
-                    <button onclick="generateGraduationImage()" class="quick-btn"
-                        style="padding:4px 12px; font-size:0.75rem;" data-lang-zh="📷 生成圖片" data-lang-en="📷 Generate Image">📷 生成圖片</button>
+                        style="padding:5px 11px; font-size:0.78rem; border-color:#78e08f; color:#78e08f; background:rgba(120,224,143,0.08);" data-lang-zh="📋 角色定位" data-lang-en="📋 Role Types">📋 角色定位</button>
+                    <button onclick="generateCrossRoleImage()" class="quick-btn"
+                        style="padding:5px 12px; font-size:0.78rem;" data-lang-zh="📷 生成圖片" data-lang-en="📷 Generate Image">📷 生成圖片</button>
                     <button onclick="document.getElementById('cross-role-modal').style.display='none'"
-                        style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>
+                        style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;line-height:1;">×</button>
                 </div>
-            </h3>
+            </div>
             <div id="cross-role-meta" style="font-size:0.85rem;color:#888;margin-bottom:12px;"></div>
             <div id="cross-role-table-wrap" style="overflow-x:auto;"></div>
         </div>
@@ -12490,34 +12489,72 @@
             const body = document.getElementById('example-team-body');
             if (!modal || !body) return;
             const isEN = g_lang === 'en';
-            let html = `<div style="color:#aaa;font-size:0.85rem;margin-bottom:16px;">`;
-            html += isEN
-                ? `Meta team compositions by core system. Sub-C and support alternatives are listed in priority order.`
-                : `各核心體系隊伍配置參考，副C與輔助下位替代按優先順序排列。`;
-            html += `</div>`;
-            html += `<div style="overflow-x:auto;"><table class="weights-table" style="min-width:900px;">`;
-            html += `<thead><tr>`;
-            html += `<th style="width:130px;">${isEN ? 'Core System' : '核心體系'}</th>`;
-            html += `<th>${isEN ? 'Main DPS' : '核心主 C (Main DPS)'}</th>`;
-            html += `<th>${isEN ? 'Best Sub-C / Synergy' : '最佳副 C / 協同'}</th>`;
-            html += `<th>${isEN ? 'Alt Sub-C (Priority)' : '副 C 下位替代 (按順序)'}</th>`;
-            html += `<th>${isEN ? 'Best Sustain / Support' : '最佳生存 / 輔助'}</th>`;
-            html += `<th>${isEN ? 'Alt Support (Priority)' : '輔助下位替代 (按順序)'}</th>`;
-            html += `<th>${isEN ? 'Rotation Logic' : '輪軸說明 (Rotation Logic)'}</th>`;
-            html += `</tr></thead><tbody>`;
+
+            // Helper: split priority string "A > B > C" into name array
+            function splitPriority(str) {
+                return str ? str.split(/\s*[>\/]\s*/).map(s => s.trim()).filter(Boolean) : [];
+            }
+            function charTag(name, color, bg, isBest) {
+                return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:0.8rem;font-weight:${isBest?'700':'500'};background:${bg};color:${color};border:1px solid ${color}44;white-space:nowrap;">${name}</span>`;
+            }
+            function mainTags(str) {
+                return splitPriority(str.replace(/\//g,'>')).map(n => charTag(n,'#ff8080','rgba(255,128,128,0.12)',true)).join('');
+            }
+            function subTags(best, alts) {
+                let out = charTag(best,'#61afef','rgba(97,175,239,0.14)',true);
+                splitPriority(alts).forEach((n,i) => {
+                    out += `<span style="color:#555;margin:0 1px;font-size:0.75rem;">›</span>` + charTag(n,'#8fbccc','rgba(97,175,239,0.07)',false);
+                });
+                return out;
+            }
+            function suppTags(best, alts) {
+                let out = charTag(best,'#78e08f','rgba(120,224,143,0.14)',true);
+                splitPriority(alts).forEach((n,i) => {
+                    out += `<span style="color:#555;margin:0 1px;font-size:0.75rem;">›</span>` + charTag(n,'#5ea06a','rgba(120,224,143,0.07)',false);
+                });
+                return out;
+            }
+
+            let html = `<style>
+.et-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:4px 0;}
+.et-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;transition:border-color .2s;}
+.et-card:hover{border-color:rgba(92,124,250,0.4);}
+.et-card-head{padding:13px 16px 11px;background:rgba(92,124,250,0.07);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.et-system{font-size:0.9rem;font-weight:700;color:#8fb4ff;line-height:1.3;}
+.et-num{font-size:0.72rem;color:#555;font-family:'JetBrains Mono';flex-shrink:0;}
+.et-card-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+.et-row{display:flex;align-items:flex-start;gap:8px;}
+.et-row-label{font-size:0.72rem;font-weight:700;min-width:40px;padding-top:5px;flex-shrink:0;}
+.et-tags{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.et-rotation{background:rgba(255,255,255,0.03);border-left:3px solid rgba(92,124,250,0.4);border-radius:0 8px 8px 0;padding:8px 12px;font-size:0.79rem;color:#999;line-height:1.5;}
+@media(max-width:600px){.et-grid{grid-template-columns:1fr;}}
+</style>`;
+            html += `<div style="color:#aaa;font-size:0.82rem;margin-bottom:16px;padding:0 2px;">${isEN ? 'Meta team compositions by core system. Best picks shown first; arrows indicate priority alternatives.' : '各核心體系隊伍配置，最佳選手優先顯示，箭頭為優先順序替代。'}</div>`;
+            html += `<div class="et-grid">`;
             EXAMPLE_TEAMS.forEach((team, idx) => {
-                const rowBg = idx % 2 === 0 ? '' : 'style="background:rgba(255,255,255,0.02)"';
-                html += `<tr ${rowBg}>`;
-                html += `<td style="font-weight:bold;color:var(--accent);">${team.system}</td>`;
-                html += `<td style="color:#ff7070;font-weight:bold;">${team.mainC}</td>`;
-                html += `<td style="color:#61afef;">${team.bestSub}</td>`;
-                html += `<td style="color:#999;font-size:0.82rem;">${team.altSubs}</td>`;
-                html += `<td style="color:#78e08f;">${team.bestSupport}</td>`;
-                html += `<td style="color:#999;font-size:0.82rem;">${team.altSupports}</td>`;
-                html += `<td style="color:#999;font-size:0.82rem;">${team.rotation}</td>`;
-                html += `</tr>`;
+                html += `<div class="et-card">
+  <div class="et-card-head">
+    <div class="et-system">${team.system}</div>
+    <div class="et-num">#${idx+1}</div>
+  </div>
+  <div class="et-card-body">
+    <div class="et-row">
+      <div class="et-row-label" style="color:#ff8080;">🗡 ${isEN?'Main':'主C'}</div>
+      <div class="et-tags">${mainTags(team.mainC)}</div>
+    </div>
+    <div class="et-row">
+      <div class="et-row-label" style="color:#61afef;">⚡ ${isEN?'Sub':'副C'}</div>
+      <div class="et-tags">${subTags(team.bestSub, team.altSubs)}</div>
+    </div>
+    <div class="et-row">
+      <div class="et-row-label" style="color:#78e08f;">💚 ${isEN?'Supp':'輔助'}</div>
+      <div class="et-tags">${suppTags(team.bestSupport, team.altSupports)}</div>
+    </div>
+    <div class="et-rotation">💡 ${team.rotation}</div>
+  </div>
+</div>`;
             });
-            html += `</tbody></table></div>`;
+            html += `</div>`;
             body.innerHTML = html;
             modal.style.display = 'flex';
         }
@@ -22005,14 +22042,20 @@
             const thHover = "onmouseover=\"this.style.background='rgba(255,255,255,0.05)'\" onmouseout=\"this.style.background='transparent'\"";
             const getSortIcon = (col) => g_crSortCol === col ? (g_crSortDesc ? ' <span style="color:var(--accent)">▼</span>' : ' <span style="color:var(--accent)">▲</span>') : ' <span style="color:#555;font-size:0.75rem;">↕</span>';
 
-            let html = `<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+            let html = `<style>
+@media(max-width:600px){
+  .cr-col-base,.cr-col-buff{display:none!important;}
+  .cr-col-valid{display:none!important;}
+}
+</style>
+<table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:460px;">
                 <thead><tr style="background:#252530;color:var(--accent);">
-                    <th style="padding:8px 12px;text-align:left;border-bottom:1px solid #333;">#</th>
-                    <th style="padding:8px 12px;text-align:left;border-bottom:1px solid #333;cursor:pointer;transition:background 0.2s;" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'role')">${crIsEN ? 'Character' : '角色'}${getSortIcon('role')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'baseScore')">${crIsEN ? 'Base Score' : '基礎得分'}${getSortIcon('baseScore')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'buff')">${crIsEN ? 'Bonus' : '補分'}${getSortIcon('buff')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'totalScore')">${crIsEN ? 'Total Score' : '最終得分'}${getSortIcon('totalScore')}</th>
-                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'sumValid')">${crIsEN ? 'Valid' : '有效值'}${getSortIcon('sumValid')}</th>
+                    <th style="padding:8px 10px;text-align:left;border-bottom:1px solid #333;">#</th>
+                    <th style="padding:8px 10px;text-align:left;border-bottom:1px solid #333;cursor:pointer;transition:background 0.2s;" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'role')">${crIsEN ? 'Character' : '角色'}${getSortIcon('role')}</th>
+                    <th class="cr-col-base" style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'baseScore')">${crIsEN ? 'Base' : '基礎'}${getSortIcon('baseScore')}</th>
+                    <th class="cr-col-buff" style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'buff')">${crIsEN ? 'Bonus' : '補分'}${getSortIcon('buff')}</th>
+                    <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'totalScore')">${crIsEN ? 'Total' : '最終得分'}${getSortIcon('totalScore')}</th>
+                    <th class="cr-col-valid" style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'sumValid')">${crIsEN ? 'Valid' : '有效值'}${getSortIcon('sumValid')}</th>
                     <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'avgPct')">${crIsEN ? 'Grade' : '評級'}${getSortIcon('avgPct')}</th>
                     <th style="${thStyle}" ${thHover} onclick="showCrossRoleScore(${g_crHistIdx}, 'avgPct')">${crIsEN ? 'Score %' : '評分 %'}${getSortIcon('avgPct')}</th>
                 </tr></thead><tbody>`;
@@ -22022,19 +22065,19 @@
                 const barColor = r.avgPct >= 80 ? '#ffca28' : r.avgPct >= 60 ? '#98c379' : '#555';
                 const rowStyle = isOrig ? 'background:rgba(229,192,123,0.07);border-left:3px solid var(--accent);' : (idx % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : '');
                 html += `<tr style="${rowStyle}">
-                    <td style="padding:7px 12px;color:#666;">${idx + 1}</td>
-                    <td style="padding:7px 12px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${crIsEN ? (lookupRoleEN(r.role) || r.role) : r.role}${isOrig ? ' ⭐' : ''}</td>
-                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#aaa;">${r.baseScore.toFixed(1)}</td>
-                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);">+${r.buff.toFixed(1)}</td>
-                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold;">${r.totalScore.toFixed(1)}</td>
-                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);font-size:0.8rem;">${r.sumValid}/${r.sumDenom}</td>
-                    <td style="padding:7px 12px;text-align:right;"><span class="score-grade ${r.grading.class}" style="font-size:0.75rem; padding:2px 6px;">${r.grading.label}</span></td>
-                    <td style="padding:7px 12px;text-align:right;">
-                        <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">
-                            <div style="width:70px;height:5px;background:#222;border-radius:3px;overflow:hidden;">
+                    <td style="padding:7px 10px;color:#666;">${idx + 1}</td>
+                    <td style="padding:7px 10px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${crIsEN ? (lookupRoleEN(r.role) || r.role) : r.role}${isOrig ? ' ⭐' : ''}</td>
+                    <td class="cr-col-base" style="padding:7px 10px;text-align:right;font-family:'JetBrains Mono';color:#aaa;">${r.baseScore.toFixed(1)}</td>
+                    <td class="cr-col-buff" style="padding:7px 10px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);">+${r.buff.toFixed(1)}</td>
+                    <td style="padding:7px 10px;text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold;">${r.totalScore.toFixed(1)}</td>
+                    <td class="cr-col-valid" style="padding:7px 10px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);font-size:0.8rem;">${r.sumValid}/${r.sumDenom}</td>
+                    <td style="padding:7px 10px;text-align:right;"><span class="score-grade ${r.grading.class}" style="font-size:0.75rem; padding:2px 6px;">${r.grading.label}</span></td>
+                    <td style="padding:7px 10px;text-align:right;">
+                        <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px;">
+                            <div style="width:60px;height:5px;background:#222;border-radius:3px;overflow:hidden;">
                                 <div style="width:${Math.min(100, r.avgPct)}%;height:100%;background:${barColor};border-radius:3px;"></div>
                             </div>
-                            <span style="color:${barColor};font-weight:bold;font-family:'JetBrains Mono';min-width:46px;text-align:right;">${r.avgPct.toFixed(1)}%</span>
+                            <span style="color:${barColor};font-weight:bold;font-family:'JetBrains Mono';min-width:44px;text-align:right;">${r.avgPct.toFixed(1)}%</span>
                         </div>
                     </td>
                 </tr>`;
@@ -23657,6 +23700,36 @@
                 showMsg("✅ 圖片已成功下載");
             } catch (e) {
                 showMsg("❌ 生成圖片失敗");
+            }
+        }
+
+        async function generateCrossRoleImage() {
+            const box = document.getElementById('cross-role-modal-box');
+            if (!box) { showMsg('❌ 找不到評分表'); return; }
+            showMsg("🚀 正在生成超清圖片...");
+            try {
+                const canvas = await html2canvas(box, {
+                    useCORS: true,
+                    backgroundColor: '#1a1a1a',
+                    scale: 2,
+                    onclone: (clonedDoc) => {
+                        const el = clonedDoc.getElementById('cross-role-modal-box');
+                        if (el) {
+                            el.style.maxHeight = 'none';
+                            el.style.overflow = 'visible';
+                            el.style.height = 'auto';
+                            el.style.width = box.scrollWidth + 'px';
+                        }
+                    }
+                });
+                const link = document.createElement('a');
+                link.download = `個人角色評分總表_${g_currentUserUid || '無UID'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showMsg("✅ 圖片已成功下載");
+            } catch (e) {
+                showMsg("❌ 生成圖片失敗");
+                console.error(e);
             }
         }
 
