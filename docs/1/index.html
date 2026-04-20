@@ -10370,7 +10370,7 @@
             { x: 0.60, y: 0.59, w: 0.187, h: 0.38 },
             { x: 0.795, y: 0.59, w: 0.187, h: 0.38 }
         ];
-        const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxzbZHtWKMFY5dv2Rb2Qg_kzzqf0IVwyhakI-Jq29s9wZhHAWNg7LIloTZX_OwFaLwP/exec"; const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbz5ZDfnE5KMcJoMmTFQNkZHe-6PB8Af4Ok_t8V69IakZKGG8OLFyy06MEjuqVDm42Br/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
+        const DEFAULT_GAS_URL = (function(){return 'https://script.google.com/macros/s/'+atob('QUtmeWNieUwzOS1CSmRCWDE3dEVObllpcDgxSjk1SkI4UENOZzhIREJxYkZkT0ItNUxXajBtOVQ3V2Z4cFRnQXNzdk1YT0gw')+'/exec';})(); const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbz5ZDfnE5KMcJoMmTFQNkZHe-6PB8Af4Ok_t8V69IakZKGG8OLFyy06MEjuqVDm42Br/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
         const SUB_ALIAS_MAP = { "生命": "生命", "生命值": "生命", "生命固定": "生命", "生命百分比": "生命百分比", "生命%": "生命百分比", "攻擊": "攻擊", "攻擊力": "攻擊", "攻擊固定": "攻擊", "攻擊百分比": "攻擊百分比", "攻擊%": "攻擊百分比", "防禦": "防禦", "防御": "防禦", "防禦力": "防禦", "防御力": "防禦", "防禦百分比": "防禦百分比", "防禦%": "防禦百分比", "防御百分比": "防禦百分比", "暴擊": "暴擊", "爆擊": "暴擊", "暴擎": "暴擊", "暴擊傷害": "暴擊傷害", "爆擊傷害": "暴擊傷害", "暴傷": "暴擊傷害", "爆擊率": "暴擊", "共鳴效率": "共鳴效率", "效率": "共鳴效率", "普攻傷害加成": "普攻傷害加成", "普攻": "普攻傷害加成", "重擊傷害加成": "重擊傷害加成", "重擊": "重擊傷害加成", "共鳴技能傷害加成": "共鳴技能傷害加成", "共鳴技能": "共鳴技能傷害加成", "技能": "共鳴技能傷害加成", "E技能": "共鳴技能傷害加成", "共鳴解放傷害加成": "共鳴解放傷害加成", "共鳴解放": "共鳴解放傷害加成", "大招": "共鳴解放傷害加成", "解放": "共鳴解放傷害加成" };
         const ROLE_EN_MAP = { "Jinhsi": "今汐", "Jiyan": "忌炎", "Changli": "長離", "Zhezhi": "折枝", "Yinlin": "吟霖", "Xiangli Yao": "相里要", "Camellya": "椿", "Shorekeeper": "守岸人", "Encore": "安可", "Calcharo": "卡卡羅", "Verina": "維里奈", "Lingyang": "凌陽", "Jianxin": "鑒心", "Rover": "漂泊者", "Rover (K)": "漂泊者暗", "Rover (M)": "漂泊者光", "Rover (F)": "漂泊者風", "Havoc Rover": "漂泊者(湮滅)", "Spectro Rover": "漂泊者(衍射)", "Sanhua": "散華", "Danjin": "丹瑾", "Mortefi": "莫特斐", "Baizhi": "白芷", "Chixia": "熾霞", "Yangyang": "秧秧", "Yuanwu": "淵武", "Taoqi": "桃祈", "Aalto": "秋水", "Brant": "布蘭特", "Youhu": "釉瑚", "Lumi": "燈燈", "Carlotta": "珂萊塔", "Roccia": "洛可可", "Phoebe": "菲比", "Cantarella": "坎特雷拉", "Zani": "贊妮", "Ciaccona": "夏空", "Cartethyia": "卡提希婭", "Lupa": "露帕", "Phrolova": "弗洛洛", "Augusta": "奧古斯塔", "Iuno": "尤諾", "Galbrena": "嘉貝莉娜", "Qiuyuan": "仇遠", "Chisa": "千咲", "Buling": "卜靈", "Lynae": "琳奈", "Mornye": "莫寧", "Aemeath": "愛彌斯", "Luuk Herssen": "陸赫斯", "Sigrika": "西格莉卡", "Hiyuki": "緋雪", "Denia": "達妮婭" };
         // Reverse map: Chinese name → English name
@@ -11219,7 +11219,7 @@
                 return true;
             } catch (e) {
                 console.error(e);
-                showMsg("系統數據載入失敗，請檢查網路或重整頁面。");
+                showMaintenancePage();
                 inlineLoader.classList.remove('active');
                 inputGroup.style.display = 'flex';
                 return false;
@@ -11252,7 +11252,6 @@
 
             let url = getMainApiUrl();
             if (url) {
-                localStorage.setItem('ww_gas_url', url);
                 // Start background load
                 g_weightsPromise = loadWeightsBackground(url);
             }
@@ -11459,10 +11458,17 @@
             }
             refreshMobileNavigation(g_currentUserUid ? 'results' : undefined);
         }
+        function showMaintenancePage() { var el = document.getElementById('_maint_overlay'); if (!el) { el = document.createElement('div'); el.id = '_maint_overlay'; el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#121214;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;'; el.innerHTML = '<div style="font-size:3rem;margin-bottom:16px;">🔧</div><div style="font-size:1.5rem;font-weight:bold;color:#e5c07b;margin-bottom:8px;">伺服器維護中</div><div style="color:#aaa;font-size:1rem;margin-bottom:8px;">預計隔天 20:00 修復完成</div><a href="https://discord.gg/9RrbRbQXdD" target="_blank" style="margin-top:16px;padding:10px 24px;background:rgba(88,101,242,0.3);border:1px solid rgba(88,101,242,0.6);border-radius:8px;color:#b8bff5;text-decoration:none;font-size:0.9rem;">👾 歡迎加入 Discord</a>'; document.body.appendChild(el); } else { el.style.display = 'flex'; } }
+        const _WC_KEY = 'ww_wc'; const _WC_TTL = 1800000;
         async function loadWeightsBackground(url) {
             try {
-                const res = await fetch(url + "?action=getWeights");
-                const json = await res.json();
+                let json;
+                try { const _c = localStorage.getItem(_WC_KEY); if (_c) { const _p = JSON.parse(_c); if (Date.now() - _p.ts < _WC_TTL) { json = _p.d; } } } catch(e) {}
+                if (!json) {
+                    const res = await fetch(url + "?action=getWeights");
+                    json = await res.json();
+                    if (json.result === 'success') { try { localStorage.setItem(_WC_KEY, JSON.stringify({ts:Date.now(),d:json})); } catch(e) {} }
+                }
                 if (json.result === 'success') {
                     g_weightsRawData = json;
                     processWeightsData(json);
@@ -11773,7 +11779,7 @@
             return raw;
         }
         function getMainApiUrl() {
-            const raw = (localStorage.getItem('ww_gas_url') || DEFAULT_GAS_URL || '').trim();
+            const raw = (localStorage.getItem('ww_gas_url') || '').trim();
             if (!raw) return DEFAULT_GAS_URL;
             const offlineUrl = getOfflineApiUrl();
             if (raw === offlineUrl || raw === DEFAULT_OFFLINE_API_URL) return DEFAULT_GAS_URL;
@@ -11782,13 +11788,8 @@
         function ensureMainApiConfigured() {
             const mainUrl = (localStorage.getItem('ww_gas_url') || '').trim();
             const offlineUrl = getOfflineApiUrl();
-            if (!mainUrl) {
-                localStorage.setItem('ww_gas_url', DEFAULT_GAS_URL);
-                return;
-            }
             if (mainUrl === offlineUrl || mainUrl === DEFAULT_OFFLINE_API_URL) {
-                localStorage.setItem('ww_gas_url', DEFAULT_GAS_URL);
-                console.warn('已自動將主 API URL 從離線端點修正為 DEFAULT_GAS_URL。');
+                localStorage.removeItem('ww_gas_url');
             }
         }
         function isOfflineApiUrlUsable(url) {
@@ -12765,7 +12766,7 @@
             g_historyCache = null;
             renderHistoryList();
         }
-        async function uploadCurrentData(entryId) { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let entryIndex = history.findIndex(h => h.id === entryId); let entry = history[entryIndex]; if (!entry || entry.uploadStatus === 'demo') return; const isLocalOnly = !!(entry.isCustomRole || entry.uploadStatus === 'custom_local' || (entry.global && entry.global._localOnly)); if (isLocalOnly) { entry.isCustomRole = true; if (!entry.global) entry.global = {}; entry.global._localOnly = true; entry.uploadStatus = 'custom_local'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = '自訂角色僅本地保存，禁止上傳'; showMsg('自訂角色為本地草稿，不提供上傳'); return; } if (hasErrors(entry.echoes)) { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "錯誤: 請先修正紅字"; return } let roleClean = (entry.global.role || '').replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4); let matched = g_weightNames.find(n => roleClean.includes(n)); if (!matched && g_weightNames.length > 0) { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "錯誤: 角色名不在加權清單"; return } if (matched) roleClean = matched; entry.uploadStatus = 'uploading'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "上傳中..."; const url = localStorage.getItem('ww_gas_url'); let chainCount = entry.chains.filter(Boolean).length; let notesStr = entry.echoes.map(e => (e.note || '').replace(/,/g, ' ')).join(','); const payload = { oldId: entry.dbId || "", uid: entry.global.uid, player: entry.global.player, role: roleClean, weapon: entry.global.weapon, chain: chainCount, notes: notesStr, imageUrl: entry.url, ...entry.echoes.reduce((acc, e, idx) => { const i = idx + 1; acc[`e${i}c`] = e.cost; acc[`e${i}m`] = e.main2 ? (e.main1 + "," + e.main2) : e.main1; acc[`e${i}s`] = (e.subs || []).map(s => s.name + s.val).join(','); return acc }, {}) }; try { const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) }); const json = await res.json(); if (json.result === 'success' || json.result === 'duplicate') { if (json.dbId) entry.dbId = json.dbId; const wasSuccess = json.result === 'success'; entry.uploadStatus = wasSuccess ? 'success' : 'duplicate'; entry.hasUnsavedNote = false; _persistHistory(history); if (entryId === g_currentEntryId) { statusText.innerText = wasSuccess ? "上傳成功" : "備註已更新" } if (wasSuccess && json.dbId) { addPoints(json.dbId, roleClean); } } else { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "上傳錯誤" } } catch (e) { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "上傳失敗" } }
+        async function uploadCurrentData(entryId) { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let entryIndex = history.findIndex(h => h.id === entryId); let entry = history[entryIndex]; if (!entry || entry.uploadStatus === 'demo') return; const isLocalOnly = !!(entry.isCustomRole || entry.uploadStatus === 'custom_local' || (entry.global && entry.global._localOnly)); if (isLocalOnly) { entry.isCustomRole = true; if (!entry.global) entry.global = {}; entry.global._localOnly = true; entry.uploadStatus = 'custom_local'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = '自訂角色僅本地保存，禁止上傳'; showMsg('自訂角色為本地草稿，不提供上傳'); return; } if (hasErrors(entry.echoes)) { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "錯誤: 請先修正紅字"; return } let roleClean = (entry.global.role || '').replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4); let matched = g_weightNames.find(n => roleClean.includes(n)); if (!matched && g_weightNames.length > 0) { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "錯誤: 角色名不在加權清單"; return } if (matched) roleClean = matched; entry.uploadStatus = 'uploading'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "上傳中..."; const url = getMainApiUrl(); let chainCount = entry.chains.filter(Boolean).length; let notesStr = entry.echoes.map(e => (e.note || '').replace(/,/g, ' ')).join(','); const payload = { oldId: entry.dbId || "", uid: entry.global.uid, player: entry.global.player, role: roleClean, weapon: entry.global.weapon, chain: chainCount, notes: notesStr, imageUrl: entry.url, ...entry.echoes.reduce((acc, e, idx) => { const i = idx + 1; acc[`e${i}c`] = e.cost; acc[`e${i}m`] = e.main2 ? (e.main1 + "," + e.main2) : e.main1; acc[`e${i}s`] = (e.subs || []).map(s => s.name + s.val).join(','); return acc }, {}) }; try { const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) }); const json = await res.json(); if (json.result === 'success' || json.result === 'duplicate') { if (json.dbId) entry.dbId = json.dbId; const wasSuccess = json.result === 'success'; entry.uploadStatus = wasSuccess ? 'success' : 'duplicate'; entry.hasUnsavedNote = false; _persistHistory(history); if (entryId === g_currentEntryId) { statusText.innerText = wasSuccess ? "上傳成功" : "備註已更新" } if (wasSuccess && json.dbId) { addPoints(json.dbId, roleClean); } } else { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "上傳錯誤" } } catch (e) { entry.uploadStatus = 'error'; _persistHistory(history); if (entryId === g_currentEntryId) statusText.innerText = "上傳失敗" } }
         function saveToHistory(url, global, chains, echoes, isDemo) { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let initialStatus = isDemo ? 'demo' : 'pending'; if (!isDemo) { let currentFp = getFingerprint(echoes); let dup = history.find(h => getFingerprint(h.echoes) === currentFp); if (dup) { initialStatus = 'duplicate'; if (dup.dbId) g_currentEntryId = dup.id } } if (!isDemo && initialStatus !== 'duplicate' && hasErrors(echoes)) initialStatus = 'wait_fix'; const newEntry = { id: g_currentEntryId || Date.now(), dbId: null, ts: g_currentEntryId ? (history.find(h => h.id === g_currentEntryId)?.ts || new Date().toLocaleString()) : new Date().toLocaleString(), url: url, global: global, chains: chains, echoes: echoes, uploadStatus: initialStatus, hasUnsavedNote: false }; if (g_currentEntryId) { const idx = history.findIndex(h => h.id === g_currentEntryId); if (idx !== -1) { if (history[idx].uploadStatus === 'duplicate') newEntry.uploadStatus = 'duplicate'; newEntry.hasUnsavedNote = history[idx].hasUnsavedNote; newEntry.dbId = history[idx].dbId; history[idx] = newEntry } else { history.unshift(newEntry) } } else { let currentFp = getFingerprint(echoes); let dup = history.find(h => getFingerprint(h.echoes) === currentFp); if (dup && dup.dbId) newEntry.dbId = dup.dbId; g_currentEntryId = newEntry.id; history.unshift(newEntry) } _persistHistory(history); return g_currentEntryId }
         function updateEchoNote(index, text) { if (g_echoesData[index]) { g_echoesData[index].note = text; let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); const idx = history.findIndex(h => h.id === g_currentEntryId); if (idx !== -1) { history[idx].echoes = g_echoesData; history[idx].hasUnsavedNote = true; localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; renderHistoryList() } } }
         let g_dragContext = null;
