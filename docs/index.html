@@ -13446,7 +13446,7 @@
                     teams.push({ members, synergyPair: !!synergyPair, synergyLabel: synergyLabel||'' });
                 };
 
-                // Synergy-first pass: for each DPS, try to find its preferred sub first (no cap here)
+                // Pass 1: Synergy-first — form proper DPS + Sub + Healer teams only
                 for (const d of dpsPool) {
                     if (used.has(d.role)) continue;
                     const prefNames = grad_getSynergy(d.role);
@@ -13455,34 +13455,37 @@
                         bestSub = subPool.find(s => !used.has(s.role) && s.role.replace(/[^\u4e00-\u9fa5]/g,'').includes(pn));
                         if (bestSub) { synergyLabel = pn; break; }
                     }
-                    // Fallback: best available sub by score
                     if (!bestSub) bestSub = pick(subPool);
                     const h = pick(healerPool);
                     if (bestSub && h) {
                         commit([d, bestSub, h], !!synergyLabel, synergyLabel);
-                    } else if (bestSub) {
-                        // No healer available — fill with any remaining char (DPS or sub)
-                        const x = pick(scored.filter(c=>!used.has(c.role)&&c.role!==d.role&&c.role!==bestSub.role));
-                        if (x) commit([d, bestSub, x], !!synergyLabel, synergyLabel);
-                        else commit([d, bestSub], false, '');
+                    }
+                    // If can't form a full 3-person team, leave for pass 2 / available section
+                }
+
+                // Pass 2: For remaining DPS, try DPS + Sub (no healer) or DPS + Healer (no sub)
+                for (const d of dpsPool) {
+                    if (used.has(d.role)) continue;
+                    const bestSub = pick(subPool);
+                    const h = pick(healerPool);
+                    if (bestSub) {
+                        commit([d, bestSub], false, '');
                     } else if (h) {
-                        // Has healer but no sub — fill with best remaining
-                        const x = pick(scored.filter(c=>!used.has(c.role)&&c.role!==d.role&&c.role!==h.role));
-                        if (x) commit([d, h, x], false, '');
-                        else commit([d, h], false, '');
+                        commit([d, h], false, '');
                     }
                 }
 
-                // Fill remaining chars into extra teams (3 per team) — no hard cap
-                const rem = scored.filter(c=>!used.has(c.role));
-                for (let i = 0; i+2 < rem.length; i += 3) {
-                    commit([rem[i], rem[i+1], rem[i+2]], false, '');
+                // Pass 3: remaining sub+healer pairs (no DPS available)
+                const remSub = subPool.filter(c=>!used.has(c.role));
+                const remHeal = healerPool.filter(c=>!used.has(c.role));
+                if (remSub.length > 0 && remHeal.length > 0) {
+                    commit([remSub[0], remHeal[0]], false, '');
                 }
-                // If there are leftover 1–2 chars, make small team
-                const rem2 = scored.filter(c=>!used.has(c.role));
-                if (rem2.length > 0) commit(rem2, false, '');
 
-                if (teams.length === 0) {
+                // Collect truly leftover characters
+                const leftover = scored.filter(c=>!used.has(c.role));
+
+                if (teams.length === 0 && leftover.length === 0) {
                     return `<div style="color:#666;text-align:center;padding:40px;font-size:0.9rem;">${isEN?'Need at least 3 characters with records':'需要至少 3 個角色的歷史紀錄才能生成配對'}</div>`;
                 }
 
@@ -13519,25 +13522,40 @@
                     const hasHealer = team.some(c=>c.type==='healer');
                     const hasSub    = team.some(c=>c.type==='sub');
                     const hasDps    = team.some(c=>c.type==='dps');
+                    const isFullTeam = hasDps && hasSub && hasHealer;
                     let compTag = '';
-                    if (hasDps && hasSub && hasHealer) compTag = isEN ? '✅ Meta Comp' : '✅ 標準鳴潮配隊';
-                    else if (hasHealer && hasDps)      compTag = isEN ? '💚 Has Healer' : '💚 含奶媽';
-                    else if (hasDps && hasSub)          compTag = isEN ? '⚡ High DMG' : '⚡ 純輸出';
-                    else                                compTag = isEN ? '🔧 Mixed' : '🔧 混合';
-                    const tagColor = (hasDps&&hasSub&&hasHealer)?'#78e08f':hasHealer?'#56b6c2':'#e5c07b';
-                    const synergy = Math.min(100, parseFloat(avgScore) + (hasDps&&hasSub&&hasHealer?8:0) + (hasHealer?3:0) + (hasSynergy?5:0));
-                    let r = `<div style="background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid ${hasSynergy?'rgba(229,192,123,0.4)':'rgba(255,255,255,0.08)'};border-radius:14px;padding:14px;box-shadow:${hasSynergy?'0 0 20px rgba(229,192,123,0.08)':'0 2px 10px rgba(0,0,0,0.3)'};">`;
+                    if (isFullTeam) compTag = isEN ? '✅ Meta Comp' : '✅ 標準鳴潮配隊';
+                    else if (hasHealer && hasDps) compTag = isEN ? '💚 Has Healer' : '💚 含奶媽';
+                    else if (hasDps && hasSub)    compTag = isEN ? '⚡ High DMG' : '⚡ 純輸出';
+                    else                          compTag = isEN ? '🔧 Mixed' : '🔧 混合';
+                    const tagColor = isFullTeam?'#78e08f':hasHealer?'#56b6c2':'#e5c07b';
+                    const synergy = Math.min(100, parseFloat(avgScore) + (isFullTeam?8:0) + (hasHealer?3:0) + (hasSynergy?5:0));
+
+                    // Missing role hint
+                    const missingParts = [];
+                    if (!hasDps)    missingParts.push(isEN?'Main DPS':'主輸出');
+                    if (!hasSub)    missingParts.push(isEN?'Sub DPS':'副輸出');
+                    if (!hasHealer) missingParts.push(isEN?'Healer':'奶媽');
+
+                    let r = `<div style="background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid ${hasSynergy?'rgba(229,192,123,0.4)':isFullTeam?'rgba(120,224,143,0.2)':'rgba(255,255,255,0.08)'};border-radius:14px;padding:14px;box-shadow:${hasSynergy?'0 0 20px rgba(229,192,123,0.08)':'0 2px 10px rgba(0,0,0,0.3)'};">`;
                     r += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">`;
                     r += `<span style="font-size:0.9rem;font-weight:bold;color:#ddd;">${isEN?`Team ${ti+1}`:`第 ${ti+1} 隊`}</span>`;
                     r += `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">`;
                     r += `<span style="font-size:0.72rem;color:${tagColor};border:1px solid ${tagColor};border-radius:10px;padding:1px 9px;">${compTag}</span>`;
                     if (hasSynergy) r += `<span style="font-size:0.72rem;color:#e5c07b;border:1px solid #e5c07b66;border-radius:10px;padding:1px 9px;" title="${escapeHtml(synLabel)}">💎 ${isEN?'Best Partner':'最佳拍檔'}</span>`;
-                    r += `<span style="font-size:0.72rem;color:#888;">均分 <b style="color:#61afef;">${avgScore}%</b></span>`;
-                    r += `<span style="font-size:0.72rem;color:#888;">綜效 <b style="color:#e5c07b;">${safeFixed(synergy,0)}</b></span>`;
+                    r += `<span style="font-size:0.72rem;color:#888;">${isEN?'Avg':'均分'} <b style="color:#61afef;">${avgScore}%</b></span>`;
+                    r += `<span style="font-size:0.72rem;color:#888;">${isEN?'Synergy':'綜效'} <b style="color:#e5c07b;">${safeFixed(synergy,0)}</b></span>`;
                     r += `</div></div>`;
                     r += `<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">`;
                     team.forEach(c => { r += teamMember(c); });
-                    r += `</div></div>`;
+                    r += `</div>`;
+                    if (missingParts.length > 0) {
+                        r += `<div style="margin-top:10px;padding:6px 10px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:0.72rem;color:#666;">`;
+                        r += `⚠️ ${isEN?'Missing':'缺少'}: <span style="color:#e5c07b;">${missingParts.join(' + ')}</span>`;
+                        r += ` &nbsp;·&nbsp; ${isEN?'Level up more characters to complete this team.':'培養更多角色以補全配隊。'}`;
+                        r += `</div>`;
+                    }
+                    r += `</div>`;
                     return r;
                 };
 
@@ -13558,13 +13576,38 @@
                     hiddenTeams.forEach((t, i) => { out += renderTeamCard(t, i + FIRST_N); });
                     out += `</div>`;
                 }
+
+                // Show leftover characters that couldn't be placed in any team
+                if (leftover.length > 0) {
+                    const leftDps    = leftover.filter(c=>c.type==='dps');
+                    const leftSub    = leftover.filter(c=>c.type==='sub');
+                    const leftHeal   = leftover.filter(c=>c.type==='healer');
+                    out += `<div style="margin-top:16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;">`;
+                    out += `<div style="font-size:0.85rem;font-weight:bold;color:#888;margin-bottom:10px;">`;
+                    out += `📋 ${isEN?'Available Characters (not yet paired)':'可用角色（尚未配對）'} <span style="font-size:0.72rem;font-weight:normal;color:#555;margin-left:6px;">${isEN?'Level up more of each role to form complete teams.':'培養不同定位角色以湊成完整配隊。'}</span>`;
+                    out += `</div>`;
+                    const renderLeftoverGroup = (arr, label, color) => {
+                        if (arr.length === 0) return '';
+                        let g = `<div style="margin-bottom:10px;">`;
+                        g += `<div style="font-size:0.7rem;color:${color};margin-bottom:6px;font-weight:700;">${label} (${arr.length})</div>`;
+                        g += `<div style="display:flex;flex-wrap:wrap;gap:8px;">`;
+                        arr.forEach(c => { g += teamMember(c); });
+                        g += `</div></div>`;
+                        return g;
+                    };
+                    out += renderLeftoverGroup(leftDps,  isEN?'🗡 Main DPS — needs Sub + Healer':'🗡 主輸出 — 需要副輸出 + 奶媽', '#e06c75');
+                    out += renderLeftoverGroup(leftSub,  isEN?'⚡ Sub DPS — needs Main DPS + Healer':'⚡ 副輸出 — 需要主輸出 + 奶媽', '#c678dd');
+                    out += renderLeftoverGroup(leftHeal, isEN?'💚 Healer — needs Main DPS + Sub DPS':'💚 奶媽 — 需要主輸出 + 副輸出', '#56b6c2');
+                    out += `</div>`;
+                }
+
                 return out;
             };
 
             // Stats bar data
             const gradPct = totalCount > 0 ? Math.round(gradCount/totalCount*100) : 0;
 
-            let html = `<div class="db-container" style="max-width:1060px;padding:0;display:flex;flex-direction:column;background:#111115;overflow:hidden;">`;
+            let html = `<div class="db-container" style="max-width:1450px;width:96vw;padding:0;display:flex;flex-direction:column;background:#111115;overflow:hidden;">`;
 
             // Animated header banner
             html += `<div style="position:relative;padding:18px 20px 14px;background:linear-gradient(135deg,#1a0a30 0%,#0d1a2e 40%,#102014 100%);border-bottom:1px solid rgba(229,192,123,0.18);overflow:hidden;flex-shrink:0;">`;
@@ -13628,7 +13671,7 @@
             html += `<style>
 @keyframes grad-spin{to{transform:rotate(360deg)}}
 @keyframes grad-fade-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.grad-role-card{position:relative;min-width:100px;max-width:120px;flex:1 1 100px;background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:8px 6px 10px;text-align:center;cursor:default;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;animation:grad-fade-in 0.4s ease both;overflow:hidden;}
+.grad-role-card{position:relative;min-width:110px;max-width:140px;flex:1 1 110px;background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:8px 6px 10px;text-align:center;cursor:default;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;animation:grad-fade-in 0.4s ease both;overflow:hidden;}
 .grad-role-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 50% 30%,rgba(var(--card-rgb),0.08),transparent 70%);pointer-events:none;}
 .grad-role-card:hover{transform:translateY(-6px) scale(1.04);box-shadow:0 12px 30px rgba(0,0,0,0.5),0 0 0 1px var(--card-color);border-color:var(--card-color);}
 .grad-scroll{overflow-y:auto;padding:16px;flex:1;}
@@ -13636,8 +13679,10 @@
 .grad-scroll::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 .grad-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 @media(max-width:640px){.grad-2col{grid-template-columns:1fr;}.grad-role-card{max-width:none;flex:1 1 80px;}}
+@media(min-width:1100px){.grad-2col{grid-template-columns:1fr 1fr 1fr;}.grad-role-card{min-width:120px;max-width:160px;flex:1 1 120px;}}
 .grad-team-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:700px){.grad-team-grid{grid-template-columns:1fr;}}
+@media(min-width:1100px){.grad-team-grid{grid-template-columns:1fr 1fr 1fr;}}
 </style>`;
 
             // Overview tab
@@ -13645,12 +13690,10 @@
             html += `<div class="grad-2col">`;
             html += renderTierSection(buckets.top, isEN?"🏆 Elite (≥80%)":"🏆 極品畢業 (≥80%)", "#ffca28", isEN?"None yet":"尚無", "rgba(255,202,40,0.35)", "rgba(255,202,40,0.04)");
             html += renderTierSection(buckets.mid, isEN?"🏅 Graduated (≥50%)":"🏅 標準畢業 (≥50%)", "#78e08f", isEN?"None yet":"尚無", "rgba(120,224,143,0.35)", "rgba(120,224,143,0.04)");
-            html += `</div>`;
             if (buckets.low.length > 0) {
-                html += `<div style="margin-top:14px;">`;
                 html += renderTierSection(buckets.low, isEN?"❌ Not Graduated (<50%)":"❌ 未畢業 (<50%)", "#ff5555", isEN?"None":"無", "rgba(255,85,85,0.3)", "rgba(255,85,85,0.03)");
-                html += `</div>`;
             }
+            html += `</div>`;
             html += `</div>`;
 
             // Team pairing tab
