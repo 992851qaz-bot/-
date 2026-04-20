@@ -11827,6 +11827,9 @@
             if (mainUrl === offlineUrl || mainUrl === DEFAULT_OFFLINE_API_URL) {
                 localStorage.removeItem('ww_gas_url');
             }
+            if (mainUrl && mainUrl.includes('AKfycbxzbZHtWKMFY5dv2Rb2Qg_kzzqf0IVwyhakI')) {
+                localStorage.removeItem('ww_gas_url');
+            }
         }
         function isOfflineApiUrlUsable(url) {
             return /^https?:\/\//i.test(String(url || '').trim());
