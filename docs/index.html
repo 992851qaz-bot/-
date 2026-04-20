@@ -1147,6 +1147,20 @@
                 font-size: 0.72rem !important;
             }
 
+            @media (max-width: 700px) {
+                /* Hide 補分 (4th col) and 有效值 (6th col) on mobile */
+                #cross-role-table-wrap table thead tr th:nth-child(4),
+                #cross-role-table-wrap table tbody tr td:nth-child(4),
+                #cross-role-table-wrap table thead tr th:nth-child(6),
+                #cross-role-table-wrap table tbody tr td:nth-child(6) {
+                    display: none;
+                }
+                /* Make bar narrower on mobile */
+                #cross-role-table-wrap table td:last-child > div > div:first-child {
+                    width: 40px !important;
+                }
+            }
+
             .comparison-main-card {
                 grid-template-columns: 1fr !important;
             }
@@ -1200,6 +1214,12 @@
 
             .db-badge-icon {
                 font-size: 2rem !important;
+            }
+
+            #feature-list-modal .db-container {
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
             }
         }
 
@@ -10402,19 +10422,19 @@
     <!-- 跨角色評分總表 Modal -->
     <div id="cross-role-modal" class="modal-overlay" style="z-index:18000;">
         <div class="startup-box" style="max-width:1050px;width:95%;text-align:left;max-height:85vh;overflow-y:auto;">
-            <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="color:var(--accent);margin-top:0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <span data-lang-zh="🎓 個人角色評分總表" data-lang-en="🎓 Personal Score Summary">🎓 個人角色評分總表</span>
                     <span id="grad-uid-display"
                         style="font-size:0.85rem; color:#888; font-family:'JetBrains Mono'; font-weight:normal; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">UID:
                         -</span>
                 </div>
-                <div style="display:flex; align-items:center; gap:10px;">
+                <div style="display:flex; align-items:center; gap:10px;flex-wrap:wrap;gap:6px;">
                     <button onclick="openExampleTeamModal()" class="quick-btn"
                         style="padding:4px 10px; font-size:0.75rem; border-color:#5c7cfa; color:#5c7cfa; background:rgba(92,124,250,0.08);" data-lang-zh="👥 範例隊伍" data-lang-en="👥 Example Teams">👥 範例隊伍</button>
                     <button onclick="openRolePositionModal()" class="quick-btn"
                         style="padding:4px 10px; font-size:0.75rem; border-color:#78e08f; color:#78e08f; background:rgba(120,224,143,0.08);" data-lang-zh="📋 角色定位" data-lang-en="📋 Role Types">📋 角色定位</button>
-                    <button onclick="generateGraduationImage()" class="quick-btn"
+                    <button onclick="generateCrossRoleImage()" class="quick-btn"
                         style="padding:4px 12px; font-size:0.75rem;" data-lang-zh="📷 生成圖片" data-lang-en="📷 Generate Image">📷 生成圖片</button>
                     <button onclick="document.getElementById('cross-role-modal').style.display='none'"
                         style="background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer;">×</button>
@@ -12495,29 +12515,45 @@
                 ? `Meta team compositions by core system. Sub-C and support alternatives are listed in priority order.`
                 : `各核心體系隊伍配置參考，副C與輔助下位替代按優先順序排列。`;
             html += `</div>`;
-            html += `<div style="overflow-x:auto;"><table class="weights-table" style="min-width:900px;">`;
-            html += `<thead><tr>`;
-            html += `<th style="width:130px;">${isEN ? 'Core System' : '核心體系'}</th>`;
-            html += `<th>${isEN ? 'Main DPS' : '核心主 C (Main DPS)'}</th>`;
-            html += `<th>${isEN ? 'Best Sub-C / Synergy' : '最佳副 C / 協同'}</th>`;
-            html += `<th>${isEN ? 'Alt Sub-C (Priority)' : '副 C 下位替代 (按順序)'}</th>`;
-            html += `<th>${isEN ? 'Best Sustain / Support' : '最佳生存 / 輔助'}</th>`;
-            html += `<th>${isEN ? 'Alt Support (Priority)' : '輔助下位替代 (按順序)'}</th>`;
-            html += `<th>${isEN ? 'Rotation Logic' : '輪軸說明 (Rotation Logic)'}</th>`;
-            html += `</tr></thead><tbody>`;
+            html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;">`;
             EXAMPLE_TEAMS.forEach((team, idx) => {
-                const rowBg = idx % 2 === 0 ? '' : 'style="background:rgba(255,255,255,0.02)"';
-                html += `<tr ${rowBg}>`;
-                html += `<td style="font-weight:bold;color:var(--accent);">${team.system}</td>`;
-                html += `<td style="color:#ff7070;font-weight:bold;">${team.mainC}</td>`;
-                html += `<td style="color:#61afef;">${team.bestSub}</td>`;
-                html += `<td style="color:#999;font-size:0.82rem;">${team.altSubs}</td>`;
-                html += `<td style="color:#78e08f;">${team.bestSupport}</td>`;
-                html += `<td style="color:#999;font-size:0.82rem;">${team.altSupports}</td>`;
-                html += `<td style="color:#999;font-size:0.82rem;">${team.rotation}</td>`;
-                html += `</tr>`;
+                html += `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(92,124,250,0.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">`;
+                // System header
+                html += `<div style="display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:10px;">`;
+                html += `<div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;"></div>`;
+                html += `<span style="font-size:1rem;font-weight:800;color:var(--accent);">${team.system}</span>`;
+                html += `</div>`;
+                // Role row: Main DPS + Sub C
+                html += `<div style="display:flex;gap:8px;flex-wrap:wrap;">`;
+                html += `<div style="flex:1;min-width:120px;background:rgba(224,108,117,0.08);border:1px solid rgba(224,108,117,0.2);border-radius:10px;padding:8px 12px;">`;
+                html += `<div style="font-size:0.65rem;color:#e06c75;font-weight:700;letter-spacing:0.5px;margin-bottom:3px;">${isEN ? '⚔️ MAIN DPS' : '⚔️ 核心主C'}</div>`;
+                html += `<div style="font-size:0.9rem;font-weight:700;color:#ff9090;">${team.mainC}</div>`;
+                html += `</div>`;
+                html += `<div style="flex:1;min-width:120px;background:rgba(98,141,246,0.08);border:1px solid rgba(98,141,246,0.2);border-radius:10px;padding:8px 12px;">`;
+                html += `<div style="font-size:0.65rem;color:#61afef;font-weight:700;letter-spacing:0.5px;margin-bottom:3px;">${isEN ? '⚡ SUB DPS' : '⚡ 最佳副C'}</div>`;
+                html += `<div style="font-size:0.88rem;color:#8ec8f5;">${team.bestSub}</div>`;
+                html += `</div>`;
+                html += `</div>`;
+                // Alt Sub C
+                if (team.altSubs) {
+                    html += `<div style="font-size:0.75rem;color:#777;line-height:1.5;">`;
+                    html += `<span style="color:#555;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${isEN ? 'Alt Sub' : '副C替代'}: </span>`;
+                    html += `<span>${team.altSubs}</span></div>`;
+                }
+                // Support
+                html += `<div style="background:rgba(86,182,194,0.07);border:1px solid rgba(86,182,194,0.18);border-radius:10px;padding:8px 12px;">`;
+                html += `<div style="font-size:0.65rem;color:#56b6c2;font-weight:700;letter-spacing:0.5px;margin-bottom:3px;">${isEN ? '💚 SUSTAIN' : '💚 最佳輔助'}</div>`;
+                html += `<div style="font-size:0.88rem;color:#7fd5dc;">${team.bestSupport}`;
+                if (team.altSupports) html += ` <span style="color:#555;font-size:0.75rem;">/ ${team.altSupports}</span>`;
+                html += `</div></div>`;
+                // Rotation
+                html += `<div style="font-size:0.75rem;color:#666;line-height:1.6;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">`;
+                html += `<span style="color:#555;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${isEN ? 'Rotation' : '輪軸說明'}: </span>`;
+                html += team.rotation;
+                html += `</div>`;
+                html += `</div>`; // end card
             });
-            html += `</tbody></table></div>`;
+            html += `</div>`; // end grid
             body.innerHTML = html;
             modal.style.display = 'flex';
         }
@@ -23637,6 +23673,33 @@
             } finally {
                 btn.disabled = false;
                 btn.innerText = originalText;
+            }
+        }
+
+        async function generateCrossRoleImage() {
+            const target = document.querySelector('#cross-role-modal .startup-box');
+            if (!target) return;
+            showMsg("🚀 正在生成圖片...");
+            try {
+                const canvas = await html2canvas(target, {
+                    useCORS: true,
+                    backgroundColor: '#0f0f14',
+                    scale: 2.5,
+                    onclone: (doc) => {
+                        const el = doc.querySelector('#cross-role-modal .startup-box');
+                        if (el) {
+                            el.style.overflow = 'visible';
+                            el.style.maxHeight = 'none';
+                        }
+                    }
+                });
+                const link = document.createElement('a');
+                link.download = `角色適配評分_${g_currentUserUid || '無UID'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showMsg("✅ 圖片已下載");
+            } catch (e) {
+                showMsg("❌ 生成失敗");
             }
         }
 
