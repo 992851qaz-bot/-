@@ -478,6 +478,17 @@ https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC/1
 <button id="guest-mode-btn" class="action-btn btn-secondary">訪客模式</button>
 <button id="confirm-setup-btn" class="action-btn btn-primary">確認並開始</button>
 </div>
+<div style="margin-top:12px;padding:10px 12px;background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.3);border-radius:10px;font-size:0.75rem;line-height:1.6;color:#aaa;">
+<div style="color:#4caf50;font-weight:700;margin-bottom:4px;">🔒 安全聲明</div>
+<div>本工具 <b style="color:#ddd;">僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。所有分析資料僅用於聲骸評分顯示，不會竊取或濫用您的帳號資訊。</div>
+<div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+<a href="javascript:void(0)" onclick="document.getElementById('security-policy-overlay').style.display='flex'" style="color:#61afef;text-decoration:underline;font-size:0.72rem;">隱私政策</a>
+<span style="color:#555;">|</span>
+<a href="javascript:void(0)" onclick="document.getElementById('security-policy-overlay').style.display='flex'" style="color:#61afef;text-decoration:underline;font-size:0.72rem;">安全政策</a>
+<span style="color:#555;">|</span>
+<a href="javascript:void(0)" onclick="document.getElementById('security-policy-overlay').style.display='flex'" style="color:#61afef;text-decoration:underline;font-size:0.72rem;">使用條款</a>
+</div>
+</div>
 </div>
 </div>
 <div id="error-overlay" class="fullscreen-overlay">
@@ -495,6 +506,38 @@ https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC/1
 <div class="modal-actions">
 <button id="guide-close-btn" class="action-btn btn-secondary">稍後再說</button>
 <a href="https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze/OUT" target="_blank" id="go-to-rating-btn" class="action-btn btn-primary">前往評分網站</a>
+</div>
+</div>
+</div>
+<div id="security-policy-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:20000;justify-content:center;align-items:center;padding:1rem;">
+<div class="modal-box" style="max-width:600px;max-height:85vh;overflow-y:auto;">
+<button onclick="document.getElementById('security-policy-overlay').style.display='none'" class="modal-close-btn">&times;</button>
+<h2 style="color:#4caf50;margin:0 0 6px;font-size:1.3rem;">🔒 安全聲明 · 隱私政策 · 使用條款</h2>
+<div style="font-size:0.82rem;line-height:1.7;color:#bbb;">
+<div style="color:#4caf50;font-weight:700;margin-bottom:8px;font-size:0.95rem;">🛡️ 安全聲明</div>
+<ul style="padding-left:18px;margin:0 0 12px;">
+<li>本工具 <b style="color:#ddd;">僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。</li>
+<li>本工具 <b style="color:#ddd;">不會</b> 以任何形式竊取、出售或濫用您的帳號資訊。</li>
+<li>所有圖片辨識與聲骸分析均在您的瀏覽器本地執行，不會上傳您的截圖至任何第三方伺服器。</li>
+<li>若您選擇上傳評分資料，僅儲存 UID 與聲骸分析數值，不包含任何帳號憑證。</li>
+</ul>
+<div style="color:#61afef;font-weight:700;margin-bottom:8px;font-size:0.95rem;">🔐 隱私政策</div>
+<ul style="padding-left:18px;margin:0 0 12px;">
+<li>本工具可選擇性收集您的遊戲 UID 及聲骸評分資料，用於排行與統計顯示。</li>
+<li>我們不收集任何可識別您個人身份的資料（如姓名、電子郵件、IP 位址等）。</li>
+<li>您可隨時以訪客模式使用，不留存任何資料。</li>
+<li>收集的評分資料僅用於本工具功能展示，不會轉售或提供給任何第三方。</li>
+</ul>
+<div style="color:var(--accent-primary);font-weight:700;margin-bottom:8px;font-size:0.95rem;">📋 使用條款</div>
+<ul style="padding-left:18px;margin:0 0 12px;">
+<li>使用本工具即表示您同意本使用條款及隱私政策。</li>
+<li>本工具僅供個人娛樂與參考用途，評分結果不代表官方數值。</li>
+<li>請勿將本工具用於任何違反遊戲服務條款的行為。</li>
+<li>本工具保留隨時修改或終止服務的權利，恕不另行通知。</li>
+</ul>
+</div>
+<div class="modal-actions" style="margin-top:4px;">
+<button onclick="document.getElementById('security-policy-overlay').style.display='none'" class="action-btn btn-primary">我已了解，關閉</button>
 </div>
 </div>
 </div>
