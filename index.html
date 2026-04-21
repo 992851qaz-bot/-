@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<!--
+  © 2024-2025 GAME ZH (992851qaz). All Rights Reserved.
+  鳴潮聲骸分析儀 | Wuthering Waves Echo Analyzer
+  ─────────────────────────────────────────────────────
+  本程式碼受著作權法保護。未經著作權人書面授權，
+  嚴禁以任何形式複製、改作、散布、公開傳輸或商業利用本網站之原始碼及相關資源。
+  This source code is protected by copyright law.
+  Unauthorized copying, modification, distribution, public transmission
+  or commercial use of this website's source code and resources is strictly prohibited.
+  Contact / 聯絡: https://discord.com/invite/WWewHKwMwa
+-->
 <html lang="zh-TW">
 
 <head>
@@ -22,6 +33,10 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="鳴潮聲骸分析儀 | Wuthering Waves Echo Analyzer">
     <meta name="twitter:description" content="免費鳴潮聲骸分析工具，自動辨識聲骸詞條並計算 CV 評分，提供各角色聲骸 Build 推薦與畢業標準攻略。">
+    <!-- Security -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -8796,6 +8811,7 @@
             <a href="https://discord.com/invite/WWewHKwMwa" target="_blank" class="btn-discord-join">
                 <span style="font-size:1.2rem">👾</span> <span data-lang-zh="加入 Discord (GAME ZH)" data-lang-en="Join Discord (GAME ZH)">加入 Discord (GAME ZH)</span>
             </a>
+            <button onclick="openSecurityPolicyModal()" style="margin-top:8px;width:100%;padding:8px 12px;background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.35);border-radius:8px;color:#4caf50;cursor:pointer;font-size:0.78rem;font-weight:600;text-align:center;transition:background 0.2s;" onmouseover="this.style.background='rgba(76,175,80,0.18)'" onmouseout="this.style.background='rgba(76,175,80,0.08)'"><span data-lang-zh="📋 使用前請詳閱（安全聲明・隱私政策・使用條款）" data-lang-en="📋 Please Read Before Use (Security · Privacy · Terms)">📋 使用前請詳閱（安全聲明・隱私政策・使用條款）</span></button>
         </div>
         <div class="welcome-panel" style="flex:2;">
             <!-- 語言切換區塊 -->
@@ -23816,6 +23832,16 @@
                 setTimeout(function () { btn.textContent = origLabel; }, 2000);
             });
         }
+        // ─── 智慧財產權保護 | IP Protection ───────────────────────────────────
+        (function () {
+            var w = '\n%c⚠️  版權警告 | COPYRIGHT WARNING\n';
+            var m1 = '%c本網站原始碼受中華民國著作權法及國際著作權公約保護。\n未經 GAME ZH (992851qaz) 書面授權，嚴禁複製、改作、散布或商業利用。\nThis website\'s source code is protected by copyright law.\nUnauthorized copying, modification, distribution or commercial use is strictly prohibited.\n© 2024-2025 GAME ZH (992851qaz). All Rights Reserved.\n';
+            var m2 = '%c聯絡 / Contact: https://discord.com/invite/WWewHKwMwa\n';
+            console.log(w, 'color:#e5372b;font-size:22px;font-weight:bold;');
+            console.log(m1, 'color:#e5c07b;font-size:13px;');
+            console.log(m2, 'color:#61afef;font-size:12px;');
+        })();
+        // ──────────────────────────────────────────────────────────────────────
     </script>
     <!-- Security Policy Modal -->
     <div id="security-policy-modal" class="modal-overlay" style="display:none;z-index:30000;">
