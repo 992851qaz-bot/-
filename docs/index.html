@@ -7622,6 +7622,17 @@
             <p id="login-warning" data-lang-zh="輸入即視同同意本網站使用規範" data-lang-en="By entering, you agree to the site's Terms of Use">輸入即視同同意本網站使用規範</p><button id="btn-login" onclick="handleLogin()" data-lang-zh="不載入歷史資料 - 繼續使用" data-lang-en="Continue Without Loading History">不載入歷史資料 -
                 繼續使用</button>
             <div id="weight-status" style="margin-top:10px;font-size:0.8rem;color:#666;" data-lang-zh="權重表載入中..." data-lang-en="Loading weight table...">權重表載入中...</div>
+            <div style="margin-top:14px;padding:10px 12px;background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.3);border-radius:10px;font-size:0.75rem;line-height:1.6;color:#aaa;">
+                <div style="color:#4caf50;font-weight:700;margin-bottom:4px;" data-lang-zh="🔒 安全聲明" data-lang-en="🔒 Security Statement">🔒 安全聲明</div>
+                <div data-lang-zh="本工具 <b style='color:#ddd;'>僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。所有分析資料僅用於聲骸評分顯示，不會竊取或濫用您的帳號資訊。" data-lang-en="This tool <b style='color:#ddd;'>only requires your in-game UID (numbers only)</b>. We never ask for passwords, tokens, or personal data. All analysis data is used solely for echo scoring display and will never steal or misuse your account.">本工具 <b style="color:#ddd;">僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。所有分析資料僅用於聲骸評分顯示，不會竊取或濫用您的帳號資訊。</div>
+                <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()" style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="隱私政策" data-lang-en="Privacy Policy">隱私政策</a>
+                    <span style="color:#555;">|</span>
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()" style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="安全政策" data-lang-en="Security Policy">安全政策</a>
+                    <span style="color:#555;">|</span>
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()" style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="使用條款" data-lang-en="Terms of Use">使用條款</a>
+                </div>
+            </div>
             <div id="pwa-install-area">
                 <div class="pwa-guide-text" id="pwa-ios-guide">📲 <b>安裝為 APP (體驗更佳)</b><br>iOS / Safari: 點擊分享 <span
                         style="font-size:1.2em;">⎋</span> → 加入主畫面<br>Android: 點擊瀏覽器選單 → 安裝應用程式</div><button
@@ -8071,6 +8082,7 @@
                     <button class="fst-btn" data-section="fs-system" onclick="scrollToFeatureSection('fs-system')" data-lang-zh="🛠️ 系統功能" data-lang-en="🛠️ System">🛠️ 系統功能</button>
                     <button class="fst-btn" data-section="fs-feedback" onclick="scrollToFeatureSection('fs-feedback')" data-lang-zh="💬 回饋支援" data-lang-en="💬 Feedback">💬 回饋支援</button>
                     <button class="fst-btn" data-section="fs-lang" onclick="scrollToFeatureSection('fs-lang')" data-lang-zh="🌐 語言" data-lang-en="🌐 Lang">🌐 語言</button>
+                    <button class="fst-btn" data-section="fs-security" onclick="scrollToFeatureSection('fs-security')" data-lang-zh="🔒 安全" data-lang-en="🔒 Security">🔒 安全</button>
                 </div>
                 <div class="feature-grid" onscroll="updateFSTabOnScroll(this)">
                     <div id="fs-events" class="feature-section" data-lang-zh="🎯 活動與獎勵" data-lang-en="🎯 Events &amp; Rewards">🎯 活動與獎勵</div>
@@ -8233,6 +8245,16 @@
                             <div class="feature-card-desc" data-lang-zh="切換介面語言。⚠️ 僅支援辨識繁體中文截圖" data-lang-en="Toggle display language. ⚠️ OCR supports Traditional Chinese (繁體中文) only">切換介面語言。⚠️ 僅支援辨識繁體中文截圖</div>
                         </div>
                         <div class="feature-card-action"><button class="quick-btn lang-toggle-btn" onclick="event.stopPropagation();toggleLanguage()" style="background:rgba(97,175,239,0.2);color:#61afef;border-color:rgba(97,175,239,0.4);">🌐 English</button></div>
+                    </div>
+
+                    <div id="fs-security" class="feature-section" data-lang-zh="🔒 安全與隱私" data-lang-en="🔒 Security &amp; Privacy">🔒 安全與隱私</div>
+                    <div class="feature-card" onclick="openSecurityPolicyModal()" style="grid-column:1/-1;background:linear-gradient(135deg,rgba(76,175,80,0.08),rgba(20,20,25,0.8));border-color:rgba(76,175,80,0.25);">
+                        <div class="feature-card-icon-box" style="background:rgba(76,175,80,0.15);">🔒</div>
+                        <div class="feature-card-main">
+                            <div class="feature-card-title" data-lang-zh="安全聲明 · 隱私政策 · 使用條款" data-lang-en="Security Statement · Privacy Policy · Terms of Use">安全聲明 · 隱私政策 · 使用條款</div>
+                            <div class="feature-card-desc" data-lang-zh="本工具僅需 UID，不索取帳號密碼。點擊查看完整安全聲明、隱私政策與使用條款。" data-lang-en="This tool only requires your UID. No passwords or tokens ever collected. Click to view full security statement, privacy policy and terms of use.">本工具僅需 UID，不索取帳號密碼。點擊查看完整安全聲明、隱私政策與使用條款。</div>
+                        </div>
+                        <div class="feature-card-action"><button class="quick-btn" style="background:rgba(76,175,80,0.25);color:#4caf50;border-color:rgba(76,175,80,0.5);" data-lang-zh="查看" data-lang-en="View">查看</button></div>
                     </div>
                 </div>
             </div>

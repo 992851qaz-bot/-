@@ -7192,6 +7192,17 @@
                 onkeydown="if(event.key==='Enter') handleLogin()">
             <p id="login-warning"><span data-lang-zh="輸入即視同同意本網站使用規範" data-lang-en="By entering, you agree to the site Terms of Use">輸入即視同同意本網站使用規範</span></p><button id="btn-login" onclick="handleLogin()"><span data-lang-zh="不載入歷史資料 - 繼續使用" data-lang-en="Continue Without Loading History">不載入歷史資料 - 繼續使用</span>    <span data-lang-zh="繼續使用" data-lang-en="Continue">繼續使用</span></button>
             <div id="weight-status" style="margin-top:10px;font-size:0.8rem;color:#666;"><span data-lang-zh="權重表載入中..." data-lang-en="Loading weight table...">權重表載入中...</span></div>
+            <div style="margin-top:14px;padding:10px 12px;background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.3);border-radius:10px;font-size:0.75rem;line-height:1.6;color:#aaa;">
+                <div style="color:#4caf50;font-weight:700;margin-bottom:4px;"><span data-lang-zh="🔒 安全聲明" data-lang-en="🔒 Security Statement">🔒 安全聲明</span></div>
+                <div><span data-lang-zh="本工具 <b style='color:#ddd;'>僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。所有分析資料僅用於聲骸評分顯示，不會竊取或濫用您的帳號資訊。" data-lang-en="This tool <b style='color:#ddd;'>only requires your in-game UID (numbers only)</b>. We never ask for passwords, tokens, or personal data. All analysis data is used solely for echo scoring display and will never steal or misuse your account.">本工具 <b style="color:#ddd;">僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。所有分析資料僅用於聲骸評分顯示，不會竊取或濫用您的帳號資訊。</span></div>
+                <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()" style="color:#61afef;text-decoration:underline;font-size:0.72rem;"><span data-lang-zh="隱私政策" data-lang-en="Privacy Policy">隱私政策</span></a>
+                    <span style="color:#555;">|</span>
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()" style="color:#61afef;text-decoration:underline;font-size:0.72rem;"><span data-lang-zh="安全政策" data-lang-en="Security Policy">安全政策</span></a>
+                    <span style="color:#555;">|</span>
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()" style="color:#61afef;text-decoration:underline;font-size:0.72rem;"><span data-lang-zh="使用條款" data-lang-en="Terms of Use">使用條款</span></a>
+                </div>
+            </div>
             <div id="pwa-install-area">
                 <div class="pwa-guide-text" id="pwa-ios-guide"><span class="lang-zh-only">📲 <b>安裝為 APP (體驗更佳)</b><br>iOS / Safari: 點擊分享 <span style="font-size:1.2em;">⎋</span> → 加入主畫面<br>Android: 點擊瀏覽器選單 → 安裝應用程式</span><span class="lang-en-only">📲 <b>Install as App (better experience)</b><br>iOS / Safari: Tap Share <span style="font-size:1.2em;">⎋</span> → Add to Home Screen<br>Android: Browser menu → Install App</span></div><button
                     id="btn-pwa-install" class="pwa-btn" onclick="triggerInstall()"><span data-lang-zh="📲 點擊安裝 App" data-lang-en="📲 Install App">📲 點擊安裝 App</span></button>
@@ -7669,6 +7680,16 @@
                         </div>
                         <div class="feature-card-action"><button class="quick-btn"
                                 style="background:#f44336;color:#fff;"><span data-lang-zh="重置" data-lang-en="Reset">重置</span></button></div>
+                    </div>
+
+                    <div class="feature-section" data-lang-zh="🔒 安全與隱私" data-lang-en="🔒 Security &amp; Privacy">🔒 安全與隱私</div>
+                    <div class="feature-card" onclick="openSecurityPolicyModal()" style="grid-column:1/-1;background:linear-gradient(135deg,rgba(76,175,80,0.08),rgba(20,20,25,0.8));border-color:rgba(76,175,80,0.25);">
+                        <div class="feature-card-icon-box" style="background:rgba(76,175,80,0.15);">🔒</div>
+                        <div class="feature-card-main">
+                            <div class="feature-card-title"><span data-lang-zh="安全聲明 · 隱私政策 · 使用條款" data-lang-en="Security Statement · Privacy Policy · Terms of Use">安全聲明 · 隱私政策 · 使用條款</span></div>
+                            <div class="feature-card-desc"><span data-lang-zh="本工具僅需 UID，不索取帳號密碼。點擊查看完整安全聲明、隱私政策與使用條款。" data-lang-en="This tool only requires your UID. No passwords or tokens ever collected. Click to view full security statement, privacy policy and terms of use.">本工具僅需 UID，不索取帳號密碼。點擊查看完整安全聲明、隱私政策與使用條款。</span></div>
+                        </div>
+                        <div class="feature-card-action"><button class="quick-btn" style="background:rgba(76,175,80,0.25);color:#4caf50;border-color:rgba(76,175,80,0.5);"><span data-lang-zh="查看" data-lang-en="View">查看</span></button></div>
                     </div>
                 </div>
             </div>
@@ -16498,13 +16519,25 @@
             if (el) el.style.display = 'none';
         }
 
+        function openSecurityPolicyModal() {
+            closeAllModals();
+            const modal = document.getElementById('security-policy-modal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeSecurityPolicyModal() {
+            const modal = document.getElementById('security-policy-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
         function closeAllModals() {
             const modals = [
                 'dashboard-modal-overlay', 'rank-modal', 'db-detail-modal',
                 'comparison-modal', 'heatmap-modal', 'imitate-modal', 'refresh-modal',
                 'custom-weight-modal', 'feature-list-modal',
                 'upload-url-modal', 'buff-info-modal', 'sub-stat-modal', 'msg-modal',
-                'confirm-prompt-modal', 'points-modal', 'data-management-modal'
+                'confirm-prompt-modal', 'points-modal', 'data-management-modal',
+                'security-policy-modal'
             ];
             modals.forEach(id => {
                 const el = document.getElementById(id);
@@ -19682,6 +19715,50 @@
             });
         }
     </script>
+    <!-- Security Policy Modal -->
+    <div id="security-policy-modal" class="modal-overlay" style="display:none;z-index:30000;">
+        <div style="max-width:600px;width:94%;background:#1a1a1f;border:1px solid rgba(76,175,80,0.35);border-radius:16px;padding:28px 28px 24px;position:relative;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.8);">
+            <button onclick="closeSecurityPolicyModal()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.05);border:none;color:#888;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(255,0,0,0.2)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#888'">×</button>
+            <h2 style="color:#4caf50;margin:0 0 6px;font-size:1.3rem;"><span data-lang-zh="🔒 安全聲明 · 隱私政策 · 使用條款" data-lang-en="🔒 Security Statement · Privacy Policy · Terms of Use">🔒 安全聲明 · 隱私政策 · 使用條款</span></h2>
+            <div style="color:#888;font-size:0.78rem;margin-bottom:18px;"><span data-lang-zh="最後更新：2025 年" data-lang-en="Last updated: 2025">最後更新：2025 年</span></div>
+
+            <!-- Security Statement -->
+            <div style="margin-bottom:18px;padding:14px;background:rgba(76,175,80,0.07);border:1px solid rgba(76,175,80,0.2);border-radius:10px;">
+                <div style="color:#4caf50;font-weight:700;margin-bottom:8px;font-size:0.95rem;"><span data-lang-zh="🛡️ 安全聲明" data-lang-en="🛡️ Security Statement">🛡️ 安全聲明</span></div>
+                <ul style="color:#ccc;font-size:0.82rem;line-height:1.8;margin:0;padding-left:18px;">
+                    <li><span data-lang-zh="本工具 <b>僅需輸入遊戲內 UID（9 位純數字）</b>，絕不索取帳號密碼、登入 Token、電子郵件或任何個人敏感資訊。" data-lang-en="This tool <b>only requires your in-game UID (9-digit number)</b>. We never request passwords, login tokens, email addresses, or any sensitive personal data.">本工具 <b>僅需輸入遊戲內 UID（9 位純數字）</b>，絕不索取帳號密碼、登入 Token、電子郵件或任何個人敏感資訊。</span></li>
+                    <li><span data-lang-zh="本網站不會以任何方式存取、竊取或轉移您的遊戲帳號。" data-lang-en="This website does not access, steal, or transfer your game account in any way.">本網站不會以任何方式存取、竊取或轉移您的遊戲帳號。</span></li>
+                    <li><span data-lang-zh="所有聲骸評分計算均在您的瀏覽器本地完成，或僅透過公開 API 讀取遊戲數據。" data-lang-en="All echo score calculations are performed locally in your browser, or read only via public game APIs.">所有聲骸評分計算均在您的瀏覽器本地完成，或僅透過公開 API 讀取遊戲數據。</span></li>
+                    <li><span data-lang-zh="如有疑慮，歡迎透過意見回饋表單與我們聯絡。" data-lang-en="If you have any concerns, feel free to contact us via the feedback form.">如有疑慮，歡迎透過意見回饋表單與我們聯絡。</span></li>
+                </ul>
+            </div>
+
+            <!-- Privacy Policy -->
+            <div style="margin-bottom:18px;padding:14px;background:rgba(97,175,239,0.06);border:1px solid rgba(97,175,239,0.2);border-radius:10px;">
+                <div style="color:#61afef;font-weight:700;margin-bottom:8px;font-size:0.95rem;"><span data-lang-zh="🔐 隱私政策" data-lang-en="🔐 Privacy Policy">🔐 隱私政策</span></div>
+                <ul style="color:#ccc;font-size:0.82rem;line-height:1.8;margin:0;padding-left:18px;">
+                    <li><span data-lang-zh="我們收集的資料僅限於：遊戲 UID、上傳的聲骸評分數據（用於排行榜功能）。" data-lang-en="The only data we collect is: your game UID, and uploaded echo score data (used for leaderboard features).">我們收集的資料僅限於：遊戲 UID、上傳的聲骸評分數據（用於排行榜功能）。</span></li>
+                    <li><span data-lang-zh="本地操作記錄（歷史紀錄、設定）儲存於您瀏覽器的 localStorage，僅存在您的裝置上。" data-lang-en="Local operation history and settings are stored in your browser's localStorage, residing only on your device.">本地操作記錄（歷史紀錄、設定）儲存於您瀏覽器的 localStorage，僅存在您的裝置上。</span></li>
+                    <li><span data-lang-zh="我們不會將您的個人資料出售、出租或分享給第三方。" data-lang-en="We do not sell, rent, or share your personal data with third parties.">我們不會將您的個人資料出售、出租或分享給第三方。</span></li>
+                    <li><span data-lang-zh="您可隨時透過「重置網站並登出」功能刪除所有本地資料。" data-lang-en="You can delete all local data at any time via the 'Reset & Logout' function.">您可隨時透過「重置網站並登出」功能刪除所有本地資料。</span></li>
+                </ul>
+            </div>
+
+            <!-- Terms of Use -->
+            <div style="margin-bottom:18px;padding:14px;background:rgba(229,192,123,0.06);border:1px solid rgba(229,192,123,0.2);border-radius:10px;">
+                <div style="color:var(--accent);font-weight:700;margin-bottom:8px;font-size:0.95rem;"><span data-lang-zh="📋 使用條款" data-lang-en="📋 Terms of Use">📋 使用條款</span></div>
+                <ul style="color:#ccc;font-size:0.82rem;line-height:1.8;margin:0;padding-left:18px;">
+                    <li><span data-lang-zh="本工具為非官方第三方工具，與鳴潮官方無任何關聯。" data-lang-en="This is an unofficial third-party tool with no affiliation to Wuthering Waves official.">本工具為非官方第三方工具，與鳴潮官方無任何關聯。</span></li>
+                    <li><span data-lang-zh="使用本工具即表示您同意本使用條款及隱私政策。" data-lang-en="By using this tool, you agree to these Terms of Use and Privacy Policy.">使用本工具即表示您同意本使用條款及隱私政策。</span></li>
+                    <li><span data-lang-zh="評分結果僅供參考，不代表官方數值標準。" data-lang-en="Score results are for reference only and do not represent official standards.">評分結果僅供參考，不代表官方數值標準。</span></li>
+                    <li><span data-lang-zh="請勿將本工具用於任何違反遊戲服務條款的行為。" data-lang-en="Do not use this tool for any activity that violates the game's Terms of Service.">請勿將本工具用於任何違反遊戲服務條款的行為。</span></li>
+                </ul>
+            </div>
+
+            <button onclick="closeSecurityPolicyModal()" style="width:100%;padding:10px;background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.4);color:#4caf50;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:600;"><span data-lang-zh="我了解了，關閉" data-lang-en="Understood, Close">我了解了，關閉</span></button>
+        </div>
+    </div>
+
 </body>
 
 </html>
