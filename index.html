@@ -7493,24 +7493,14 @@
     <!-- ── Anniversary Redemption Code Notice ── -->
     <div id="anniversary-notice" style="display:none;">
         <div class="notice-header">
-            <span class="notice-title" data-lang-zh="🎉 二週年兌換碼" data-lang-en="🎉 2nd Anniversary Codes">🎉 二週年兌換碼</span>
-            <button class="notice-close" onclick="document.getElementById('anniversary-notice').style.display='none'" data-title-zh="關閉" data-title-en="Close" title="關閉">✕</button>
+            <span class="notice-title">🎉 潮聲慶典</span>
+            <button class="notice-close" onclick="document.getElementById('anniversary-notice').style.display='none'" title="關閉">✕</button>
         </div>
-        <div class="notice-codes">
-            <div class="code-pill">
-                <span>EVERSHINE</span>
-                <button class="code-copy-btn" onclick="copyCode('EVERSHINE', this)" data-lang-zh="複製" data-lang-en="Copy">複製</button>
-            </div>
-            <div class="code-pill">
-                <span>2NDANNIVERSARY</span>
-                <button class="code-copy-btn" onclick="copyCode('2NDANNIVERSARY', this)" data-lang-zh="複製" data-lang-en="Copy">複製</button>
-            </div>
-            <div class="code-pill">
-                <span>FACEALEPH1</span>
-                <button class="code-copy-btn" onclick="copyCode('FACEALEPH1', this)" data-lang-zh="複製" data-lang-en="Copy">複製</button>
-            </div>
+        <div style="font-size:0.8rem; color:#ccc; line-height:1.6;">
+            《鳴潮》潮聲慶典4月30日開啟，新版本免費領取40抽！參與網頁應援活動，可獲得星聲等獎勵！
         </div>
-        <div class="notice-deadline" data-lang-zh="⏰ 限時至 4/19 23:59" data-lang-en="⏰ Expires 4/19 23:59">⏰ 限時至 4/19 23:59</div>
+        <a href="https://2nd-anniversary.kurogames-global.com/?lang=zh-tw&amp;mid=67989&amp;mname=%E7%81%B0&amp;source=copylink" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:2px;padding:6px 10px;background:rgba(229,192,123,0.18);border:1px solid rgba(229,192,123,0.45);color:var(--accent);border-radius:8px;font-size:0.78rem;text-decoration:none;">前往活動頁面 →</a>
+        <div class="notice-deadline">⏰ 限時至 4/30 00:00</div>
     </div>
     <header>
         <div class="header-title-group" onclick="dashboard_open()">
@@ -23800,9 +23790,9 @@
     <!-- Mobile Quote Box -->
     <div id="quote-mobile" class="quote-box mobile-quote" style="display: none !important;"></div>
     <script>
-        // ── Anniversary Notice: show only before 2026-04-19 23:59 CST (UTC+8) ──
+        // ── Anniversary Notice: show only before 2026-04-30 00:00 CST (UTC+8) ──
         (function () {
-            var deadline = new Date('2026-04-19T15:59:00Z'); // 23:59 UTC+8
+            var deadline = new Date('2026-04-29T16:00:00Z'); // 4/30 00:00 UTC+8
             if (new Date() < deadline) {
                 document.getElementById('anniversary-notice').style.display = 'flex';
             }
