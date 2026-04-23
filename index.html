@@ -14230,7 +14230,6 @@
             const container = document.getElementById('uid-display-container');
             const mainContainer = document.querySelector('.container');
             const shouldShow = isMobileLayout()
-                && !!g_currentUserUid
                 && !!mainContainer
                 && getComputedStyle(mainContainer).display !== 'none';
 
@@ -14287,7 +14286,6 @@
         }
 
         function setMobileNavSection(section) {
-            if (!g_currentUserUid) return;
             if (!isMobileLayout()) {
                 if (section === 'results') switchTab('tab-analysis');
                 else if (section === 'rank') switchTab('tab-rank');
