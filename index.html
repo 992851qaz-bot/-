@@ -23830,6 +23830,65 @@
             console.log(w, 'color:#e5372b;font-size:22px;font-weight:bold;');
             console.log(m1, 'color:#e5c07b;font-size:13px;');
             console.log(m2, 'color:#61afef;font-size:12px;');
+
+            // ── 網域驗證 | Domain Verification ──────────────────────────────
+            var AUTHORIZED_HOSTS = [
+                '992851qaz-bot.github.io',
+                'localhost',
+                '127.0.0.1'
+            ];
+            var currentHost = (location.hostname || '').toLowerCase();
+            var isAuthorized = AUTHORIZED_HOSTS.some(function(h){ return currentHost === h || currentHost.endsWith('.' + h); });
+
+            if (!isAuthorized) {
+                // Build blocking overlay
+                var overlay = document.createElement('div');
+                overlay.id = '_domain_block_overlay';
+                overlay.style.cssText = [
+                    'position:fixed','top:0','left:0','width:100%','height:100%',
+                    'background:rgba(10,10,12,0.97)','z-index:2147483647',
+                    'display:flex','flex-direction:column','align-items:center','justify-content:center',
+                    'text-align:center','padding:24px','box-sizing:border-box','font-family:sans-serif'
+                ].join(';');
+                overlay.innerHTML = [
+                    '<div style="font-size:3.5rem;margin-bottom:12px;">🚫</div>',
+                    '<div style="font-size:1.6rem;font-weight:bold;color:#e5372b;margin-bottom:10px;">未授權存取 | Unauthorized Access</div>',
+                    '<div style="color:#e5c07b;font-size:0.95rem;max-width:520px;line-height:1.8;margin-bottom:6px;">',
+                        '本網站原始碼受著作權法保護。<br>',
+                        '未經 <b>GAME ZH (992851qaz)</b> 書面授權，嚴禁複製、改作或架設於其他網域。<br><br>',
+                        '<span style="color:#aaa;font-size:0.82rem;">',
+                            'This site is protected by copyright law.<br>',
+                            'Unauthorized copying or re-hosting on other domains is strictly prohibited.',
+                        '</span>',
+                    '</div>',
+                    '<div style="color:#888;font-size:0.78rem;margin-top:10px;margin-bottom:20px;">',
+                        '目前網域 / Current host: <span style="color:#e5372b;">',
+                        (location.hostname || location.href),
+                        '</span>',
+                    '</div>',
+                    '<a href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener" ',
+                        'style="padding:10px 28px;background:rgba(88,101,242,0.25);border:1px solid rgba(88,101,242,0.6);',
+                        'border-radius:10px;color:#b8bff5;text-decoration:none;font-size:0.92rem;font-weight:bold;margin-bottom:12px;">',
+                        '👾 前往官方網站 | Go to Official Site',
+                    '</a><br>',
+                    '<a href="https://discord.com/invite/WWewHKwMwa" target="_blank" rel="noopener" ',
+                        'style="margin-top:8px;padding:7px 20px;background:rgba(229,192,123,0.1);border:1px solid rgba(229,192,123,0.3);',
+                        'border-radius:8px;color:#e5c07b;text-decoration:none;font-size:0.8rem;">',
+                        '💬 聯絡作者回報侵權 | Contact Author',
+                    '</a>'
+                ].join('');
+
+                // Append when DOM is ready
+                if (document.body) {
+                    document.body.appendChild(overlay);
+                } else {
+                    document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(overlay); });
+                }
+
+                // Prevent scrolling behind overlay
+                document.documentElement.style.overflow = 'hidden';
+            }
+            // ── 網域驗證結束 ─────────────────────────────────────────────────
         })();
         // ──────────────────────────────────────────────────────────────────────
     </script>
