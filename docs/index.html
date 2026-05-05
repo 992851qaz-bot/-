@@ -16213,6 +16213,10 @@
                 let [r1, r2] = await Promise.all([fetch(url + "?action=getWeights"), fetch(url + "?action=getAllData")]);
                 rank_processWeights(await r1.json());
                 rank_data = (await r2.json()).data;
+                // Deduplicate: keep only the latest entry per uid+role (last row wins)
+                const _deduped = {};
+                rank_data.forEach(d => { _deduped[(d.uid||'') + '|' + (d.role||'')] = d; });
+                rank_data = Object.values(_deduped);
                 rank_renderSidebar();
                 if (g_globalData.role) {
                     if (rank_viewMode !== 'role') rank_toggleViewMode('role');
