@@ -13785,7 +13785,12 @@
 .grad-custom-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.16);border-radius:8px;padding:4px 7px;font-size:0.74rem;cursor:grab;}
 .grad-custom-chip button{background:none;border:none;color:#ff7878;cursor:pointer;font-size:0.82rem;line-height:1;}
 .grad-custom-drop-over{border-color:#61afef !important;background:rgba(97,175,239,0.1) !important;}
+.grad-custom-icon{width:18px;height:18px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.22);flex-shrink:0;}
+.grad-custom-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:260px;overflow:auto;padding-right:4px;}
+.grad-custom-picker-item{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;background:rgba(255,255,255,0.03);font-size:0.75rem;}
+.grad-custom-picker-item.dim{filter:grayscale(1);opacity:0.5;}
 @media(max-width:900px){.grad-custom-layout{grid-template-columns:1fr;}}
+@media(max-width:700px){.grad-custom-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 </style>`;
 
             // Overview tab
@@ -13817,13 +13822,29 @@
                 : `將右側角色拖曳到左側隊伍。每隊最多 3 人。非奶媽僅可出現在 1 隊，奶媽最多可在 2 隊。`;
             html += `</div>`;
             html += `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">`;
-            html += `<input id="grad-custom-new-name" type="text" placeholder="${isEN?'New role name':'新增角色名稱'}" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:8px;padding:6px 10px;min-width:170px;flex:1;">`;
-            html += `<label style="font-size:0.78rem;color:#999;display:flex;align-items:center;gap:4px;"><input type="radio" name="grad-custom-type" value="dps" checked> ${isEN?'DPS':'主輸'}</label>`;
-            html += `<label style="font-size:0.78rem;color:#999;display:flex;align-items:center;gap:4px;"><input type="radio" name="grad-custom-type" value="sub"> ${isEN?'Sub':'副輸'}</label>`;
-            html += `<label style="font-size:0.78rem;color:#999;display:flex;align-items:center;gap:4px;"><input type="radio" name="grad-custom-type" value="healer"> ${isEN?'Healer':'奶媽'}</label>`;
-            html += `<button onclick="grad_addCustomRoleFromForm()" style="padding:6px 12px;border-radius:8px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.78rem;">${isEN?'＋ Add Custom Role':'＋ 新增自訂角色'}</button>`;
+            html += `<button onclick="grad_toggleRolePicker()" style="padding:6px 12px;border-radius:8px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.78rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button>`;
+            html += `<button onclick="grad_toggleSmartPanel()" style="padding:6px 12px;border-radius:8px;background:rgba(97,175,239,0.2);border:1px solid rgba(97,175,239,0.5);color:#8ec7ff;cursor:pointer;font-size:0.78rem;">${isEN?'✨ Smart Pairing':'✨ 智能配對'}</button>`;
+            html += `<button onclick="grad_saveCustomPairingLocal()" style="padding:6px 12px;border-radius:8px;background:rgba(198,120,221,0.18);border:1px solid rgba(198,120,221,0.45);color:#d8a8e8;cursor:pointer;font-size:0.78rem;">${isEN?'💾 Save Local':'💾 存本地'}</button>`;
+            html += `<button onclick="grad_loadCustomPairingLocal()" style="padding:6px 12px;border-radius:8px;background:rgba(229,192,123,0.14);border:1px solid rgba(229,192,123,0.45);color:#e9cc86;cursor:pointer;font-size:0.78rem;">${isEN?'📂 Load Local':'📂 讀取本地'}</button>`;
+            html += `<button onclick="grad_exportCustomPairing()" style="padding:6px 12px;border-radius:8px;background:rgba(86,182,194,0.16);border:1px solid rgba(86,182,194,0.45);color:#7cd6df;cursor:pointer;font-size:0.78rem;">${isEN?'📤 Export':'📤 匯出'}</button>`;
             html += `<button onclick="grad_resetCustomPairing()" style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#aaa;cursor:pointer;font-size:0.78rem;">${isEN?'Reset':'重置'}</button>`;
             html += `</div>`;
+            html += `<div id="grad-custom-role-picker" style="display:none;margin-bottom:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;">`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">`;
+            html += `<div style="font-size:0.78rem;color:#bbb;">${isEN?'Select from full role table (unchecked = gray)':'從全角色表勾選（未勾選為灰色）'}</div>`;
+            html += `<div style="display:flex;gap:6px;flex-wrap:wrap;">`;
+            html += `<button onclick="grad_selectAllRolePicker(true)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'All':'全選'}</button>`;
+            html += `<button onclick="grad_selectAllRolePicker(false)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'None':'清空'}</button>`;
+            html += `<button onclick="grad_applyRolePickerSelection()" style="padding:4px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.45);color:#9be8ac;font-size:0.72rem;cursor:pointer;">${isEN?'Apply':'套用'}</button>`;
+            html += `</div></div><div id="grad-custom-picker-list" class="grad-custom-picker-grid"></div></div>`;
+            html += `<div id="grad-custom-smart-panel" style="display:none;margin-bottom:10px;background:rgba(97,175,239,0.07);border:1px solid rgba(97,175,239,0.25);border-radius:10px;padding:10px;">`;
+            html += `<div style="font-size:0.78rem;color:#9ecbf8;margin-bottom:8px;">${isEN?'Smart pairing strategy & logic':'智能配對方案與邏輯'}</div>`;
+            html += `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">`;
+            html += `<select id="grad-smart-mode" onchange="grad_updateSmartPanelHint()" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:8px;padding:5px 8px;font-size:0.76rem;"><option value="fillN">${isEN?'Fill N Teams Priority':'隊伍湊滿優先'}</option><option value="fullTeam">${isEN?'Full Team Priority':'完整隊伍優先'}</option><option value="auto">${isEN?'Full Auto':'全自動'}</option></select>`;
+            html += `<label style="font-size:0.74rem;color:#a7b8c7;">${isEN?'N teams':'隊數'} <input id="grad-smart-fill-count" type="number" min="1" max="3" value="2" style="width:60px;margin-left:4px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:4px 6px;"></label>`;
+            html += `<select id="grad-smart-logic" onchange="grad_updateSmartPanelHint()" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:8px;padding:5px 8px;font-size:0.76rem;"><option value="synergy">${isEN?'Example-team logic':'範例隊伍邏輯'}</option><option value="score">${isEN?'High score first':'高分優先'}</option><option value="balanced">${isEN?'Balanced distribution':'平均分配'}</option></select>`;
+            html += `<button onclick="grad_runSmartPairing()" style="padding:5px 10px;border-radius:7px;background:rgba(97,175,239,0.25);border:1px solid rgba(97,175,239,0.55);color:#9dd1ff;cursor:pointer;font-size:0.75rem;">${isEN?'Run':'執行'}</button>`;
+            html += `</div><div id="grad-smart-hint" style="font-size:0.73rem;color:#7da4ca;"></div></div>`;
             html += `<div class="grad-custom-layout">`;
             html += `<div class="grad-custom-pane"><div style="font-size:0.83rem;color:#ddd;font-weight:700;margin-bottom:8px;">${isEN?'Teams':'隊伍列表'}</div><div id="grad-custom-team-list"></div></div>`;
             html += `<div class="grad-custom-pane"><div style="font-size:0.83rem;color:#ddd;font-weight:700;margin-bottom:8px;">${isEN?'Roles':'角色表'}</div><div id="grad-custom-role-list"></div></div>`;
@@ -13846,6 +13867,7 @@
             window.__gradCustomCards = allCards.map(c => ({ role: c.role, score: c.score, type: c.type, chainCount: c.chainCount || 0, weapon: c.weapon || '' }));
             window.__gradCustomLangEN = isEN;
             grad_resetCustomPairing();
+            grad_updateSmartPanelHint();
         }
 
         function grad_switchTab(tab) {
@@ -13900,32 +13922,77 @@
                 nextId: roles.length + 1
             };
             grad_renderCustomPairing();
+            grad_renderRolePicker();
         }
-        function grad_addCustomRoleFromForm() {
+        const GRAD_DOUBLE_HEALERS = new Set(['維里奈', '白芷', '守岸人', '卜靈', '莫寧']);
+        const GRAD_ROLE_POOL = Array.from(new Set(Object.keys(GRAD_ROLE_TYPE))).sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+        function grad_getRoleIconUrl(roleName) {
+            const key = String(roleName || '').replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
+            return RESONATORS_PROFILE_PICTURE[key] || '';
+        }
+        function grad_isDoubleHealer(roleName) {
+            const clean = String(roleName || '').replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
+            return GRAD_DOUBLE_HEALERS.has(clean);
+        }
+        function grad_getRoleMaxUse(roleObj) {
+            return grad_isDoubleHealer(roleObj && roleObj.role) ? 2 : 1;
+        }
+        function grad_toggleRolePicker() {
+            const el = document.getElementById('grad-custom-role-picker');
+            if (!el) return;
+            const visible = el.style.display !== 'none';
+            el.style.display = visible ? 'none' : '';
+            if (!visible) grad_renderRolePicker();
+        }
+        function grad_toggleSmartPanel() {
+            const el = document.getElementById('grad-custom-smart-panel');
+            if (!el) return;
+            el.style.display = el.style.display === 'none' ? '' : 'none';
+            grad_updateSmartPanelHint();
+        }
+        function grad_renderRolePicker() {
+            const state = window.__gradCustomState;
+            const listEl = document.getElementById('grad-custom-picker-list');
+            if (!state || !listEl) return;
+            listEl.innerHTML = '';
+            const selected = new Set(state.roles.map(r => r.role));
+            GRAD_ROLE_POOL.forEach((name, idx) => {
+                const checked = selected.has(name);
+                const iconUrl = grad_getRoleIconUrl(name);
+                const item = document.createElement('label');
+                item.className = `grad-custom-picker-item${checked ? '' : ' dim'}`;
+                item.innerHTML = `<input type="checkbox" class="grad-picker-checkbox" data-role="${escapeHtml(name)}" ${checked ? 'checked' : ''} onchange="this.parentElement.classList.toggle('dim', !this.checked)">`
+                    + `${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}`
+                    + `<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(name)}</span>`;
+                item.dataset.order = String(idx);
+                listEl.appendChild(item);
+            });
+        }
+        function grad_selectAllRolePicker(flag) {
+            document.querySelectorAll('.grad-picker-checkbox').forEach(chk => {
+                chk.checked = !!flag;
+                if (chk.parentElement) chk.parentElement.classList.toggle('dim', !chk.checked);
+            });
+        }
+        function grad_applyRolePickerSelection() {
             const state = window.__gradCustomState;
             if (!state) return;
-            const input = document.getElementById('grad-custom-new-name');
-            if (!input) return;
-            const name = String(input.value || '').trim();
-            if (!name) {
-                showMsg('請輸入角色名稱');
-                return;
-            }
-            if (state.roles.some(r => r.role === name)) {
-                showMsg('角色已存在');
-                return;
-            }
-            const typeEl = document.querySelector('input[name="grad-custom-type"]:checked');
-            const type = typeEl ? typeEl.value : 'dps';
-            state.roles.push({
-                id: `r${state.nextId++}`,
-                role: name,
-                score: 0,
-                type,
-                custom: true
+            const selected = new Set();
+            document.querySelectorAll('.grad-picker-checkbox').forEach(chk => {
+                if (chk.checked) selected.add(chk.dataset.role || '');
             });
-            input.value = '';
+            selected.forEach(name => {
+                if (!name || state.roles.some(r => r.role === name)) return;
+                state.roles.push({
+                    id: `r${state.nextId++}`,
+                    role: name,
+                    score: 0,
+                    type: grad_getRoleType(name),
+                    custom: true
+                });
+            });
             grad_renderCustomPairing();
+            grad_renderRolePicker();
         }
         function grad_getCustomRoleById(roleId) {
             const state = window.__gradCustomState;
@@ -13964,13 +14031,150 @@
                 state.teams[fromTeamIdx] = state.teams[fromTeamIdx].filter(id => id !== roleId);
             }
             const usedCount = grad_getRoleUseCount(roleId);
-            const maxUse = role.type === 'healer' ? 2 : 1;
+            const maxUse = grad_getRoleMaxUse(role);
             if (usedCount >= maxUse) {
-                showMsg(role.type === 'healer' ? '奶媽最多可在 2 隊' : '此角色僅可在 1 隊');
+                showMsg(maxUse > 1 ? '指定奶媽最多可在 2 隊' : '此角色僅可在 1 隊');
                 return;
             }
             target.push(roleId);
             grad_renderCustomPairing();
+        }
+        function grad_updateSmartPanelHint() {
+            const hintEl = document.getElementById('grad-smart-hint');
+            if (!hintEl) return;
+            const isEN = !!window.__gradCustomLangEN;
+            const mode = (document.getElementById('grad-smart-mode') || {}).value || 'fillN';
+            const logic = (document.getElementById('grad-smart-logic') || {}).value || 'synergy';
+            const modeText = mode === 'fillN' ? (isEN ? 'Fill N teams first.' : '優先湊滿指定隊數。')
+                : mode === 'fullTeam' ? (isEN ? 'Prioritize complete DPS+Sub+Healer teams.' : '優先組成完整 主輸+副輸+奶媽。')
+                : (isEN ? 'Auto strategy by roster status.' : '依角色狀態全自動分配。');
+            const logicText = logic === 'synergy' ? (isEN ? 'Use example-team style synergy.' : '使用範例隊伍式綜效邏輯。')
+                : logic === 'balanced' ? (isEN ? 'Spread strength across teams.' : '平均分配隊伍強度。')
+                : (isEN ? 'Highest score priority.' : '高分角色優先。');
+            hintEl.textContent = `${modeText} ${logicText}`;
+        }
+        function grad_pickByLogic(candidates, logic, preferNames) {
+            if (!candidates || candidates.length === 0) return null;
+            if (logic === 'synergy' && Array.isArray(preferNames) && preferNames.length > 0) {
+                for (const pn of preferNames) {
+                    const hit = candidates.find(c => c.role.includes(pn));
+                    if (hit) return hit;
+                }
+            }
+            if (logic === 'balanced') return candidates[0];
+            return candidates.slice().sort((a, b) => b.score - a.score)[0];
+        }
+        function grad_runSmartPairing() {
+            const state = window.__gradCustomState;
+            if (!state) return;
+            const mode = (document.getElementById('grad-smart-mode') || {}).value || 'fillN';
+            const logic = (document.getElementById('grad-smart-logic') || {}).value || 'synergy';
+            const fillCountInput = parseInt((document.getElementById('grad-smart-fill-count') || {}).value || '1', 10);
+            const usage = new Map();
+            const canUse = r => (usage.get(r.id) || 0) < grad_getRoleMaxUse(r);
+            const markUse = r => usage.set(r.id, (usage.get(r.id) || 0) + 1);
+            const available = state.roles.slice().sort((a, b) => b.score - a.score);
+            const teams = [[], [], []];
+            const maxTeamsByPeople = Math.max(1, Math.min(3, Math.ceil(available.length / 3)));
+            const targetTeams = mode === 'fillN' ? Math.min(maxTeamsByPeople, Math.max(1, fillCountInput || 1)) : 3;
+
+            const addRoleToTeam = (teamIdx, roleObj) => {
+                if (!roleObj || !canUse(roleObj)) return false;
+                if (teams[teamIdx].length >= 3) return false;
+                if (teams[teamIdx].some(id => {
+                    const rr = state.roles.find(x => x.id === id);
+                    return rr && rr.role === roleObj.role;
+                })) return false;
+                teams[teamIdx].push(roleObj.id);
+                markUse(roleObj);
+                return true;
+            };
+            const getAvailByType = t => available.filter(r => r.type === t && canUse(r));
+            const buildCompleteTeams = () => {
+                for (let ti = 0; ti < targetTeams; ti++) {
+                    const dps = grad_pickByLogic(getAvailByType('dps'), logic);
+                    if (!dps) continue;
+                    const subs = getAvailByType('sub');
+                    const prefer = logic === 'synergy' ? grad_getSynergy(dps.role) : [];
+                    const sub = grad_pickByLogic(subs, logic, prefer);
+                    const heal = grad_pickByLogic(getAvailByType('healer'), logic);
+                    if (!sub || !heal) continue;
+                    addRoleToTeam(ti, dps);
+                    addRoleToTeam(ti, sub);
+                    addRoleToTeam(ti, heal);
+                }
+            };
+            if (mode === 'fullTeam' || mode === 'auto') buildCompleteTeams();
+            const rest = available.filter(canUse);
+            if (logic === 'balanced') {
+                let idx = 0;
+                rest.forEach(r => {
+                    for (let tries = 0; tries < targetTeams; tries++) {
+                        const t = (idx + tries) % targetTeams;
+                        if (addRoleToTeam(t, r)) { idx = (t + 1) % targetTeams; break; }
+                    }
+                });
+            } else {
+                rest.forEach(r => {
+                    for (let t = 0; t < targetTeams; t++) {
+                        if (addRoleToTeam(t, r)) break;
+                    }
+                });
+            }
+            state.teams = teams;
+            grad_renderCustomPairing();
+        }
+        function grad_collectCustomPairingData() {
+            const state = window.__gradCustomState;
+            if (!state) return null;
+            return {
+                version: 1,
+                ts: new Date().toISOString(),
+                roles: state.roles,
+                teams: state.teams
+            };
+        }
+        function grad_saveCustomPairingLocal() {
+            const data = grad_collectCustomPairingData();
+            if (!data) return;
+            localStorage.setItem('ww_grad_custom_pairing_v1', JSON.stringify(data));
+            showMsg('已儲存自訂配對到本地');
+        }
+        function grad_loadCustomPairingLocal() {
+            const raw = localStorage.getItem('ww_grad_custom_pairing_v1');
+            if (!raw) { showMsg('找不到本地配對資料'); return; }
+            try {
+                const parsed = JSON.parse(raw);
+                if (!parsed || !Array.isArray(parsed.roles) || !Array.isArray(parsed.teams)) throw new Error('invalid');
+                const nextId = parsed.roles.reduce((n, r) => {
+                    const m = String((r && r.id) || '').match(/^r(\d+)$/);
+                    return m ? Math.max(n, parseInt(m[1], 10) + 1) : n;
+                }, 1);
+                window.__gradCustomState = {
+                    roles: parsed.roles,
+                    teams: [parsed.teams[0] || [], parsed.teams[1] || [], parsed.teams[2] || []],
+                    nextId
+                };
+                grad_renderCustomPairing();
+                grad_renderRolePicker();
+                showMsg('已讀取本地自訂配對');
+            } catch (e) {
+                showMsg('本地配對資料格式錯誤');
+            }
+        }
+        function grad_exportCustomPairing() {
+            const data = grad_collectCustomPairingData();
+            if (!data) return;
+            const text = JSON.stringify(data, null, 2);
+            const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ww-custom-pairing-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
         function grad_renderCustomPairing() {
             const state = window.__gradCustomState;
@@ -14014,11 +14218,12 @@
                         chip.draggable = true;
                         chip.style.borderColor = `${typeColor(role.type)}66`;
                         chip.style.color = typeColor(role.type);
+                        const iconUrl = grad_getRoleIconUrl(role.role);
                         chip.addEventListener('dragstart', (e) => {
                             e.dataTransfer.setData('text/roleId', role.id);
                             e.dataTransfer.setData('text/fromTeam', String(teamIdx));
                         });
-                        chip.innerHTML = `<span>${escapeHtml(role.role)}</span><button onclick="event.stopPropagation();grad_removeRoleFromTeam(${teamIdx},'${role.id}')">✕</button>`;
+                        chip.innerHTML = `${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<span>${escapeHtml(role.role)}</span><button onclick="event.stopPropagation();grad_removeRoleFromTeam(${teamIdx},'${role.id}')">✕</button>`;
                         body.appendChild(chip);
                     });
                 }
@@ -14028,17 +14233,18 @@
             const sortedRoles = state.roles.slice().sort((a, b) => b.score - a.score);
             sortedRoles.forEach(role => {
                 const useCount = grad_getRoleUseCount(role.id);
-                const maxUse = role.type === 'healer' ? 2 : 1;
+                const maxUse = grad_getRoleMaxUse(role);
                 const row = document.createElement('div');
                 row.className = 'grad-custom-role';
                 row.draggable = true;
                 row.style.opacity = useCount >= maxUse ? '0.55' : '1';
                 row.style.borderColor = `${typeColor(role.type)}66`;
+                const iconUrl = grad_getRoleIconUrl(role.role);
                 row.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/roleId', role.id);
                     e.dataTransfer.setData('text/fromTeam', '');
                 });
-                row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;"><span style="font-size:0.7rem;color:${typeColor(role.type)};">${typeLabel(role.type)}</span><span style="color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(role.role)}</span></div><div style="font-size:0.72rem;color:${useCount>=maxUse?'#e5c07b':'#666'};">${useCount}/${maxUse}</div>`;
+                row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;">${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<span style="font-size:0.7rem;color:${typeColor(role.type)};">${typeLabel(role.type)}</span><span style="color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(role.role)}</span></div><div style="font-size:0.72rem;color:${useCount>=maxUse?'#e5c07b':'#666'};">${useCount}/${maxUse}</div>`;
                 roleListEl.appendChild(row);
             });
         }
