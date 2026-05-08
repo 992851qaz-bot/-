@@ -8620,9 +8620,24 @@
         <div class="modal-full" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h3 style="margin:0;color:#5c7cfa;" data-lang-zh="👥 範例隊伍配置表" data-lang-en="👥 Example Team Compositions">👥 範例隊伍配置表</h3>
-                <button onclick="closeExampleTeamModal()" data-lang-zh="關閉" data-lang-en="Close">關閉</button>
+                <div style="display:flex;gap:8px;">
+                    <button onclick="openExampleTeamEditor()" data-lang-zh="編輯" data-lang-en="Edit">編輯</button>
+                    <button onclick="closeExampleTeamModal()" data-lang-zh="關閉" data-lang-en="Close">關閉</button>
+                </div>
             </div>
             <div class="modal-body" id="example-team-body" style="padding:16px;"></div>
+        </div>
+    </div>
+    <div id="example-team-edit-modal" class="modal-overlay" onclick="if(event.target===this)closeExampleTeamEditor()">
+        <div class="modal-full" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 style="margin:0;color:#5c7cfa;">✏️ 編輯範例隊伍配置</h3>
+                <div style="display:flex;gap:8px;">
+                    <button onclick="saveExampleTeamEditor()">儲存</button>
+                    <button onclick="closeExampleTeamEditor()">關閉</button>
+                </div>
+            </div>
+            <div class="modal-body" id="example-team-edit-body" style="padding:16px;"></div>
         </div>
     </div>
 
@@ -12490,6 +12505,26 @@
             { system: "物理重擊 (Pure Phys)", mainC: "陸赫斯", bestSub: "布蘭特", altSubs: "卡提希婭(3鏈) > 桃祈", bestSupport: "卜靈", altSupports: "鑒心 > 桃祈 > 夏空", rotation: "捨棄屬性反應，利用陸赫斯極致的物理倍率，配合布蘭特的物理穿透硬灌傷害。" },
             { system: "新手/平民戰神 (F2P Core)", mainC: "卡提希婭", bestSub: "夏空", altSubs: "熾霞 > 秧秧 > 秋水", bestSupport: "燈燈", altSupports: "釉瑚 > 白芷 > 漂泊者(風)", rotation: "卡提希婭在高連段下有質變，夏空提供生存，燈燈作為副手補充熱熔傷害。" },
         ];
+        const EXAMPLE_TEAMS_DEFAULT = EXAMPLE_TEAMS.map(t => ({ ...t }));
+        function getExampleTeamsData() {
+            try {
+                const raw = localStorage.getItem('ww_example_teams_v1');
+                if (!raw) return EXAMPLE_TEAMS_DEFAULT.map(t => ({ ...t }));
+                const parsed = JSON.parse(raw);
+                if (!Array.isArray(parsed) || parsed.length === 0) return EXAMPLE_TEAMS_DEFAULT.map(t => ({ ...t }));
+                return parsed.map((item, idx) => ({
+                    system: String(item.system || EXAMPLE_TEAMS_DEFAULT[idx]?.system || ''),
+                    mainC: String(item.mainC || ''),
+                    bestSub: String(item.bestSub || ''),
+                    altSubs: String(item.altSubs || ''),
+                    bestSupport: String(item.bestSupport || ''),
+                    altSupports: String(item.altSupports || ''),
+                    rotation: String(item.rotation || '')
+                }));
+            } catch (e) {
+                return EXAMPLE_TEAMS_DEFAULT.map(t => ({ ...t }));
+            }
+        }
 
         const ROLE_POSITIONS = {
             "🌟 全域 T0 輔助奶媽 (必帶隨插即用)": {
@@ -12567,13 +12602,14 @@
             const body = document.getElementById('example-team-body');
             if (!modal || !body) return;
             const isEN = g_lang === 'en';
+            const teams = getExampleTeamsData();
             let html = `<div style="color:#aaa;font-size:0.85rem;margin-bottom:16px;">`;
             html += isEN
                 ? `Meta team compositions by core system. Sub-C and support alternatives are listed in priority order.`
                 : `各核心體系隊伍配置參考，副C與輔助下位替代按優先順序排列。`;
             html += `</div>`;
             html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;">`;
-            EXAMPLE_TEAMS.forEach((team, idx) => {
+            teams.forEach((team, idx) => {
                 html += `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(92,124,250,0.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">`;
                 // System header
                 html += `<div style="display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:10px;">`;
@@ -12619,10 +12655,61 @@
             const modal = document.getElementById('example-team-modal');
             if (modal) modal.style.display = 'none';
         }
+        function openExampleTeamEditor() {
+            const modal = document.getElementById('example-team-edit-modal');
+            const body = document.getElementById('example-team-edit-body');
+            if (!modal || !body) return;
+            const teams = getExampleTeamsData();
+            let html = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"><button onclick="resetExampleTeamEditor()">還原預設</button></div>`;
+            html += `<div style="display:flex;flex-direction:column;gap:10px;">`;
+            teams.forEach((team, idx) => {
+                html += `<div style="border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px;background:rgba(255,255,255,0.03);">`;
+                html += `<div style="font-size:0.82rem;color:#9aa4b5;margin-bottom:8px;">#${idx + 1}</div>`;
+                html += `<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">`;
+                html += `<input id="ete-system-${idx}" placeholder="體系" value="${escapeHtml(team.system)}" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+                html += `<input id="ete-main-${idx}" placeholder="主C" value="${escapeHtml(team.mainC)}" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+                html += `<input id="ete-bestsub-${idx}" placeholder="最佳副C" value="${escapeHtml(team.bestSub)}" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+                html += `<input id="ete-altsub-${idx}" placeholder="副C替代" value="${escapeHtml(team.altSubs || '')}" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+                html += `<input id="ete-bestsup-${idx}" placeholder="最佳輔助" value="${escapeHtml(team.bestSupport)}" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+                html += `<input id="ete-altsup-${idx}" placeholder="輔助替代" value="${escapeHtml(team.altSupports || '')}" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+                html += `</div>`;
+                html += `<textarea id="ete-rot-${idx}" placeholder="輪軸說明" style="margin-top:8px;width:100%;min-height:56px;resize:vertical;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">${escapeHtml(team.rotation || '')}</textarea>`;
+                html += `</div>`;
+            });
+            html += `</div>`;
+            body.innerHTML = html;
+            modal.style.display = 'flex';
+        }
+        function closeExampleTeamEditor() {
+            const modal = document.getElementById('example-team-edit-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        function resetExampleTeamEditor() {
+            localStorage.removeItem('ww_example_teams_v1');
+            openExampleTeamEditor();
+            openExampleTeamModal();
+            showMsg('已還原範例隊伍預設值');
+        }
+        function saveExampleTeamEditor() {
+            const teams = getExampleTeamsData().map((team, idx) => ({
+                system: String((document.getElementById(`ete-system-${idx}`) || {}).value || '').trim(),
+                mainC: String((document.getElementById(`ete-main-${idx}`) || {}).value || '').trim(),
+                bestSub: String((document.getElementById(`ete-bestsub-${idx}`) || {}).value || '').trim(),
+                altSubs: String((document.getElementById(`ete-altsub-${idx}`) || {}).value || '').trim(),
+                bestSupport: String((document.getElementById(`ete-bestsup-${idx}`) || {}).value || '').trim(),
+                altSupports: String((document.getElementById(`ete-altsup-${idx}`) || {}).value || '').trim(),
+                rotation: String((document.getElementById(`ete-rot-${idx}`) || {}).value || '').trim(),
+            }));
+            localStorage.setItem('ww_example_teams_v1', JSON.stringify(teams));
+            openExampleTeamModal();
+            closeExampleTeamEditor();
+            showMsg('已儲存範例隊伍配置');
+        }
 
         function getExampleTeamBanner(role, isEN) {
-            if (!role || !EXAMPLE_TEAMS || !EXAMPLE_TEAMS.length) return '';
-            const matches = EXAMPLE_TEAMS.filter(t => {
+            const teams = getExampleTeamsData();
+            if (!role || !teams || !teams.length) return '';
+            const matches = teams.filter(t => {
                 const allText = [t.mainC, t.bestSub, t.altSubs, t.bestSupport, t.altSupports].join('|');
                 return allText.includes(role);
             });
@@ -13789,6 +13876,8 @@
 .grad-custom-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:260px;overflow:auto;padding-right:4px;}
 .grad-custom-picker-item{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;background:rgba(255,255,255,0.03);font-size:0.75rem;}
 .grad-custom-picker-item.dim{filter:grayscale(1);opacity:0.5;}
+.grad-custom-pop{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:21000;display:none;align-items:center;justify-content:center;padding:18px;}
+.grad-custom-pop-card{width:min(920px,95vw);max-height:88vh;overflow:auto;background:#1a1a1f;border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;}
 @media(max-width:900px){.grad-custom-layout{grid-template-columns:1fr;}}
 @media(max-width:700px){.grad-custom-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 </style>`;
@@ -13829,22 +13918,30 @@
             html += `<button onclick="grad_exportCustomPairing()" style="padding:6px 12px;border-radius:8px;background:rgba(86,182,194,0.16);border:1px solid rgba(86,182,194,0.45);color:#7cd6df;cursor:pointer;font-size:0.78rem;">${isEN?'📤 Export':'📤 匯出'}</button>`;
             html += `<button onclick="grad_resetCustomPairing()" style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#aaa;cursor:pointer;font-size:0.78rem;">${isEN?'Reset':'重置'}</button>`;
             html += `</div>`;
-            html += `<div id="grad-custom-role-picker" style="display:none;margin-bottom:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;">`;
+            html += `<div id="grad-custom-role-picker-modal" class="grad-custom-pop" onclick="if(event.target===this)grad_toggleRolePicker(false)">`;
+            html += `<div class="grad-custom-pop-card" onclick="event.stopPropagation()">`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="font-size:0.86rem;color:#d6dce5;font-weight:700;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</div><button onclick="grad_toggleRolePicker(false)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Close':'關閉'}</button></div>`;
             html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">`;
             html += `<div style="font-size:0.78rem;color:#bbb;">${isEN?'Select from full role table (unchecked = gray)':'從全角色表勾選（未勾選為灰色）'}</div>`;
             html += `<div style="display:flex;gap:6px;flex-wrap:wrap;">`;
             html += `<button onclick="grad_selectAllRolePicker(true)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'All':'全選'}</button>`;
             html += `<button onclick="grad_selectAllRolePicker(false)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'None':'清空'}</button>`;
             html += `<button onclick="grad_applyRolePickerSelection()" style="padding:4px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.45);color:#9be8ac;font-size:0.72rem;cursor:pointer;">${isEN?'Apply':'套用'}</button>`;
-            html += `</div></div><div id="grad-custom-picker-list" class="grad-custom-picker-grid"></div></div>`;
-            html += `<div id="grad-custom-smart-panel" style="display:none;margin-bottom:10px;background:rgba(97,175,239,0.07);border:1px solid rgba(97,175,239,0.25);border-radius:10px;padding:10px;">`;
-            html += `<div style="font-size:0.78rem;color:#9ecbf8;margin-bottom:8px;">${isEN?'Smart pairing strategy & logic':'智能配對方案與邏輯'}</div>`;
+            html += `</div></div><div id="grad-custom-picker-list" class="grad-custom-picker-grid"></div>`;
+            html += `</div></div>`;
+            html += `<div id="grad-custom-smart-modal" class="grad-custom-pop" onclick="if(event.target===this)grad_toggleSmartPanel(false)">`;
+            html += `<div class="grad-custom-pop-card" onclick="event.stopPropagation()">`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="font-size:0.86rem;color:#9ecbf8;font-weight:700;">${isEN?'✨ Smart pairing strategy & logic':'✨ 智能配對方案與邏輯'}</div><button onclick="grad_toggleSmartPanel(false)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Close':'關閉'}</button></div>`;
             html += `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">`;
             html += `<select id="grad-smart-mode" onchange="grad_updateSmartPanelHint()" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:8px;padding:5px 8px;font-size:0.76rem;"><option value="fillN">${isEN?'Fill N Teams Priority':'隊伍湊滿優先'}</option><option value="fullTeam">${isEN?'Full Team Priority':'完整隊伍優先'}</option><option value="auto">${isEN?'Full Auto':'全自動'}</option></select>`;
-            html += `<label style="font-size:0.74rem;color:#a7b8c7;">${isEN?'N teams':'隊數'} <input id="grad-smart-fill-count" type="number" min="1" max="3" value="2" style="width:60px;margin-left:4px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:4px 6px;"></label>`;
+            html += `<label style="font-size:0.74rem;color:#a7b8c7;">${isEN?'N teams':'隊數'} <input id="grad-smart-fill-count" type="number" min="1" max="3" value="2" onchange="grad_updateSmartPanelHint()" style="width:60px;margin-left:4px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:4px 6px;"></label>`;
             html += `<select id="grad-smart-logic" onchange="grad_updateSmartPanelHint()" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:8px;padding:5px 8px;font-size:0.76rem;"><option value="synergy">${isEN?'Example-team logic':'範例隊伍邏輯'}</option><option value="score">${isEN?'High score first':'高分優先'}</option><option value="balanced">${isEN?'Balanced distribution':'平均分配'}</option></select>`;
+            html += `<label style="font-size:0.74rem;color:#a7b8c7;display:flex;align-items:center;gap:5px;"><input id="grad-smart-relax-roles" type="checkbox" checked onchange="grad_updateSmartPanelHint()"> ${isEN?'No strict DPS/Sub/Healer':'不強制主副奶'}</label>`;
+            html += `<label style="font-size:0.74rem;color:#a7b8c7;display:flex;align-items:center;gap:5px;"><input id="grad-smart-allow-small" type="checkbox" checked onchange="grad_updateSmartPanelHint()"> ${isEN?'Allow 1~2 member teams':'隊伍可1或2人'}</label>`;
+            html += `<button onclick="openExampleTeamModal()" style="padding:5px 10px;border-radius:7px;background:rgba(92,124,250,0.2);border:1px solid rgba(92,124,250,0.5);color:#a7b8ff;cursor:pointer;font-size:0.75rem;">${isEN?'👥 View Templates':'👥 查看範例隊伍'}</button>`;
             html += `<button onclick="grad_runSmartPairing()" style="padding:5px 10px;border-radius:7px;background:rgba(97,175,239,0.25);border:1px solid rgba(97,175,239,0.55);color:#9dd1ff;cursor:pointer;font-size:0.75rem;">${isEN?'Run':'執行'}</button>`;
-            html += `</div><div id="grad-smart-hint" style="font-size:0.73rem;color:#7da4ca;"></div></div>`;
+            html += `</div><div id="grad-smart-hint" style="font-size:0.73rem;color:#7da4ca;"></div>`;
+            html += `</div></div>`;
             html += `<div class="grad-custom-layout">`;
             html += `<div class="grad-custom-pane"><div style="font-size:0.83rem;color:#ddd;font-weight:700;margin-bottom:8px;">${isEN?'Teams':'隊伍列表'}</div><div id="grad-custom-team-list"></div></div>`;
             html += `<div class="grad-custom-pane"><div style="font-size:0.83rem;color:#ddd;font-weight:700;margin-bottom:8px;">${isEN?'Roles':'角色表'}</div><div id="grad-custom-role-list"></div></div>`;
@@ -13937,18 +14034,36 @@
         function grad_getRoleMaxUse(roleObj) {
             return grad_isDoubleHealer(roleObj && roleObj.role) ? 2 : 1;
         }
-        function grad_toggleRolePicker() {
-            const el = document.getElementById('grad-custom-role-picker');
+        function grad_toggleRolePicker(forceOpen = null) {
+            const el = document.getElementById('grad-custom-role-picker-modal');
             if (!el) return;
-            const visible = el.style.display !== 'none';
-            el.style.display = visible ? 'none' : '';
-            if (!visible) grad_renderRolePicker();
+            const visible = el.style.display === 'flex';
+            const open = forceOpen === null ? !visible : !!forceOpen;
+            el.style.display = open ? 'flex' : 'none';
+            if (open) grad_renderRolePicker();
         }
-        function grad_toggleSmartPanel() {
-            const el = document.getElementById('grad-custom-smart-panel');
+        function grad_toggleSmartPanel(forceOpen = null) {
+            const el = document.getElementById('grad-custom-smart-modal');
             if (!el) return;
-            el.style.display = el.style.display === 'none' ? '' : 'none';
+            const visible = el.style.display === 'flex';
+            const open = forceOpen === null ? !visible : !!forceOpen;
+            el.style.display = open ? 'flex' : 'none';
             grad_updateSmartPanelHint();
+        }
+        function grad_getSmartConfig(state) {
+            const mode = (document.getElementById('grad-smart-mode') || {}).value || 'fillN';
+            const logic = (document.getElementById('grad-smart-logic') || {}).value || 'synergy';
+            const fillCountInput = parseInt((document.getElementById('grad-smart-fill-count') || {}).value || '1', 10);
+            const relaxRoles = !!((document.getElementById('grad-smart-relax-roles') || {}).checked);
+            const allowSmall = !!((document.getElementById('grad-smart-allow-small') || {}).checked);
+            const roleCount = (state && Array.isArray(state.roles)) ? state.roles.length : 0;
+            const byType = { dps: 0, sub: 0, healer: 0 };
+            (state?.roles || []).forEach(r => { byType[r.type] = (byType[r.type] || 0) + 1; });
+            const teamCapByPeople = allowSmall && relaxRoles ? Math.min(3, roleCount) : Math.min(3, Math.floor(roleCount / 3));
+            const teamCapByTypes = relaxRoles ? 3 : Math.min(byType.dps || 0, byType.sub || 0, byType.healer || 0);
+            const maxTeamCount = Math.max(1, Math.min(3, teamCapByPeople, teamCapByTypes || 0));
+            const fillCount = Math.min(maxTeamCount, Math.max(1, fillCountInput || 1));
+            return { mode, logic, fillCountInput, fillCount, relaxRoles, allowSmall, maxTeamCount };
         }
         function grad_renderRolePicker() {
             const state = window.__gradCustomState;
@@ -14043,15 +14158,28 @@
             const hintEl = document.getElementById('grad-smart-hint');
             if (!hintEl) return;
             const isEN = !!window.__gradCustomLangEN;
-            const mode = (document.getElementById('grad-smart-mode') || {}).value || 'fillN';
-            const logic = (document.getElementById('grad-smart-logic') || {}).value || 'synergy';
+            const state = window.__gradCustomState;
+            const cfg = grad_getSmartConfig(state);
+            const mode = cfg.mode;
+            const logic = cfg.logic;
+            const fillInput = document.getElementById('grad-smart-fill-count');
+            if (fillInput) {
+                fillInput.max = String(cfg.maxTeamCount);
+                fillInput.value = String(cfg.fillCount);
+            }
             const modeText = mode === 'fillN' ? (isEN ? 'Fill N teams first.' : '優先湊滿指定隊數。')
                 : mode === 'fullTeam' ? (isEN ? 'Prioritize complete DPS+Sub+Healer teams.' : '優先組成完整 主輸+副輸+奶媽。')
                 : (isEN ? 'Auto strategy by roster status.' : '依角色狀態全自動分配。');
             const logicText = logic === 'synergy' ? (isEN ? 'Use example-team style synergy.' : '使用範例隊伍式綜效邏輯。')
                 : logic === 'balanced' ? (isEN ? 'Spread strength across teams.' : '平均分配隊伍強度。')
                 : (isEN ? 'Highest score priority.' : '高分角色優先。');
-            hintEl.textContent = `${modeText} ${logicText}`;
+            const ruleText = cfg.relaxRoles
+                ? (isEN ? 'No strict DPS/Sub/Healer enforcement.' : '不強制主副奶。')
+                : (isEN ? 'Enforce DPS+Sub+Healer for each target team.' : '每隊強制主副奶。');
+            const sizeText = cfg.allowSmall
+                ? (isEN ? 'Teams may have 1-2 members.' : '隊伍可為 1-2 人。')
+                : (isEN ? 'Teams require 3 members.' : '隊伍強制 3 人。');
+            hintEl.textContent = `${modeText} ${logicText} ${ruleText} ${sizeText} ${(isEN ? 'Max teams:' : '隊數上限：')}${cfg.maxTeamCount}`;
         }
         function grad_pickByLogic(candidates, logic, preferNames) {
             if (!candidates || candidates.length === 0) return null;
@@ -14067,16 +14195,17 @@
         function grad_runSmartPairing() {
             const state = window.__gradCustomState;
             if (!state) return;
-            const mode = (document.getElementById('grad-smart-mode') || {}).value || 'fillN';
-            const logic = (document.getElementById('grad-smart-logic') || {}).value || 'synergy';
-            const fillCountInput = parseInt((document.getElementById('grad-smart-fill-count') || {}).value || '1', 10);
+            const cfg = grad_getSmartConfig(state);
+            const mode = cfg.mode;
+            const logic = cfg.logic;
+            const relaxRoles = cfg.relaxRoles;
+            const allowSmall = cfg.allowSmall;
             const usage = new Map();
             const canUse = r => (usage.get(r.id) || 0) < grad_getRoleMaxUse(r);
             const markUse = r => usage.set(r.id, (usage.get(r.id) || 0) + 1);
             const available = state.roles.slice().sort((a, b) => b.score - a.score);
             const teams = [[], [], []];
-            const maxTeamsByPeople = Math.max(1, Math.min(3, Math.ceil(available.length / 3)));
-            const targetTeams = mode === 'fillN' ? Math.min(maxTeamsByPeople, Math.max(1, fillCountInput || 1)) : 3;
+            const targetTeams = mode === 'fillN' ? cfg.fillCount : cfg.maxTeamCount;
 
             const addRoleToTeam = (teamIdx, roleObj) => {
                 if (!roleObj || !canUse(roleObj)) return false;
@@ -14104,7 +14233,7 @@
                     addRoleToTeam(ti, heal);
                 }
             };
-            if (mode === 'fullTeam' || mode === 'auto') buildCompleteTeams();
+            if (!relaxRoles || mode === 'fullTeam' || mode === 'auto') buildCompleteTeams();
             const rest = available.filter(canUse);
             if (logic === 'balanced') {
                 let idx = 0;
@@ -14120,6 +14249,11 @@
                         if (addRoleToTeam(t, r)) break;
                     }
                 });
+            }
+            if (!allowSmall || !relaxRoles) {
+                for (let i = 0; i < targetTeams; i++) {
+                    if (teams[i].length < 3) teams[i] = [];
+                }
             }
             state.teams = teams;
             grad_renderCustomPairing();
@@ -20802,7 +20936,7 @@
                 'custom-weight-modal', 'smart-weight-modal', 'feature-list-modal',
                 'upload-url-modal', 'buff-info-modal', 'sub-stat-modal', 'msg-modal',
                 'confirm-prompt-modal', 'points-modal', 'data-management-modal',
-                'example-team-modal', 'role-position-modal', 'graduation-modal'
+                'example-team-modal', 'example-team-edit-modal', 'role-position-modal', 'graduation-modal'
             ];
             modals.forEach(id => {
                 const el = document.getElementById(id);
