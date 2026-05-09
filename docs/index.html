@@ -12535,6 +12535,7 @@
                     bestSupport: String(item.bestSupport || ''),
                     altSupports: String(item.altSupports || ''),
                     rotation: String(item.rotation || ''),
+                    notes: String(item.notes || ''),
                     power: Number.isFinite(Number(item.power)) ? Number(item.power) : Number(EXAMPLE_TEAMS_DEFAULT[idx]?.power || 0)
                 }));
             } catch (e) {
@@ -12663,6 +12664,10 @@
                 html += `<span style="color:#555;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${isEN ? 'Rotation' : '輪軸說明'}: </span>`;
                 html += team.rotation;
                 html += `</div>`;
+                if (team.notes) {
+                    html += `<div style="font-size:0.74rem;color:#777;line-height:1.5;border-top:1px dashed rgba(255,255,255,0.06);padding-top:7px;">`;
+                    html += `<span style="color:#555;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${isEN ? 'Notes' : '備註'}: </span>${team.notes}</div>`;
+                }
                 html += `</div>`; // end card
             });
             html += `</div>`; // end grid
@@ -12690,6 +12695,7 @@
                     subList: Array.from(new Set(subList)),
                     supportList: Array.from(new Set(supportList)),
                     rotation: String(team.rotation || ''),
+                    notes: String(team.notes || ''),
                     power: Number.isFinite(Number(team.power)) ? Number(team.power) : 0
                 };
             });
@@ -12742,6 +12748,7 @@
                 html += `</div>`;
                 html += `</div>`;
                 html += `<textarea oninput="updateExampleTeamField(${idx},'rotation',this.value)" placeholder="輪軸說明" style="margin-top:10px;width:100%;min-height:56px;resize:vertical;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">${escapeHtml(team.rotation || '')}</textarea>`;
+                html += `<textarea oninput="updateExampleTeamField(${idx},'notes',this.value)" placeholder="備註（可選）" style="margin-top:8px;width:100%;min-height:44px;resize:vertical;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">${escapeHtml(team.notes || '')}</textarea>`;
                 html += `</div>`;
             });
             html += `</div>`;
@@ -12854,6 +12861,7 @@
                 bestSupport: String((team.supportList || [])[0] || '').trim(),
                 altSupports: (team.supportList || []).slice(1).join(' > ').trim(),
                 rotation: String(team.rotation || '').trim(),
+                notes: String(team.notes || '').trim(),
                 power: Number.isFinite(Number(team.power)) ? Number(team.power) : 0
             }));
             localStorage.setItem('ww_example_teams_v1', JSON.stringify(teams));
@@ -14025,7 +14033,8 @@
 .grad-custom-pane{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;min-height:360px;}
 .grad-custom-team{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;margin-bottom:10px;}
 .grad-custom-team-body{min-height:98px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
-.grad-custom-role{display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 8px;font-size:0.78rem;cursor:grab;}
+.grad-custom-role-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;}
+.grad-custom-role{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 8px;font-size:0.74rem;cursor:grab;min-height:62px;}
 .grad-custom-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.16);border-radius:8px;padding:4px 7px;font-size:0.74rem;cursor:grab;}
 .grad-custom-chip button{background:none;border:none;color:#ff7878;cursor:pointer;font-size:0.82rem;line-height:1;}
 .grad-custom-drop-over{border-color:#61afef !important;background:rgba(97,175,239,0.1) !important;}
@@ -14036,6 +14045,9 @@
 .grad-custom-pop{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:21000;display:none;align-items:center;justify-content:center;padding:18px;}
 .grad-custom-pop-card{width:min(920px,95vw);max-height:88vh;overflow:auto;background:#1a1a1f;border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;}
 @media(max-width:900px){.grad-custom-layout{grid-template-columns:1fr;}}
+@media(max-width:1400px){.grad-custom-role-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
+@media(max-width:1100px){.grad-custom-role-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:900px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:700px){.grad-custom-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 </style>`;
 
@@ -14064,11 +14076,12 @@
             html += `<div id="grad-panel-custom" class="grad-scroll" style="display:none;">`;
             html += `<div style="background:rgba(97,175,239,0.08);border:1px solid rgba(97,175,239,0.25);border-radius:10px;padding:10px 12px;font-size:0.78rem;color:#8eb9e6;line-height:1.7;margin-bottom:12px;">`;
             html += isEN
-                ? `Drag roles from the right into teams on the left. Each team supports up to 3 members. Non-healers can appear in only 1 team, healers up to 2 teams.`
-                : `將右側角色拖曳到左側隊伍。每隊最多 3 人。非奶媽僅可出現在 1 隊，奶媽最多可在 2 隊。`;
+                ? `Drag roles from the right into teams on the left. Each team supports up to 3 members. Non-healers can appear in only 1 team, healers up to 2 teams. Mobile players can use Quick Teaming without drag.`
+                : `將右側角色拖曳到左側隊伍。每隊最多 3 人。非奶媽僅可出現在 1 隊，奶媽最多可在 2 隊。手機可用「快速編隊」免拖曳分配。`;
             html += `</div>`;
             html += `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">`;
             html += `<button onclick="grad_toggleRolePicker()" style="padding:6px 12px;border-radius:8px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.78rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button>`;
+            html += `<button onclick="grad_toggleQuickAssign()" style="padding:6px 12px;border-radius:8px;background:rgba(255,148,77,0.18);border:1px solid rgba(255,148,77,0.45);color:#ffb37d;cursor:pointer;font-size:0.78rem;">${isEN?'⚡ Quick Teaming':'⚡ 快速編隊'}</button>`;
             html += `<button onclick="grad_toggleSmartPanel()" style="padding:6px 12px;border-radius:8px;background:rgba(97,175,239,0.2);border:1px solid rgba(97,175,239,0.5);color:#8ec7ff;cursor:pointer;font-size:0.78rem;">${isEN?'✨ Smart Pairing':'✨ 智能配對'}</button>`;
             html += `<button onclick="grad_saveCustomPairingLocal()" style="padding:6px 12px;border-radius:8px;background:rgba(198,120,221,0.18);border:1px solid rgba(198,120,221,0.45);color:#d8a8e8;cursor:pointer;font-size:0.78rem;">${isEN?'💾 Save Local':'💾 存本地'}</button>`;
             html += `<button onclick="grad_loadCustomPairingLocal()" style="padding:6px 12px;border-radius:8px;background:rgba(229,192,123,0.14);border:1px solid rgba(229,192,123,0.45);color:#e9cc86;cursor:pointer;font-size:0.78rem;">${isEN?'📂 Load Local':'📂 讀取本地'}</button>`;
@@ -14078,6 +14091,7 @@
             html += `<div id="grad-custom-role-picker-modal" class="grad-custom-pop" onclick="if(event.target===this)grad_toggleRolePicker(false)">`;
             html += `<div class="grad-custom-pop-card" onclick="event.stopPropagation()">`;
             html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="font-size:0.86rem;color:#d6dce5;font-weight:700;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</div><button onclick="grad_toggleRolePicker(false)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Close':'關閉'}</button></div>`;
+            html += `<div id="grad-quick-assign-controls" style="display:none;margin-bottom:8px;padding:8px;border-radius:8px;border:1px solid rgba(255,148,77,0.38);background:rgba(255,148,77,0.08);"></div>`;
             html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">`;
             html += `<div style="font-size:0.78rem;color:#bbb;">${isEN?'Select from full role table (unchecked = gray)':'從全角色表勾選（未勾選為灰色）'}</div>`;
             html += `<div style="display:flex;gap:6px;flex-wrap:wrap;">`;
@@ -14175,6 +14189,8 @@
                 teams: [[], [], []],
                 nextId: roles.length + 1
             };
+            window.__gradQuickAssignEnabled = false;
+            window.__gradQuickAssignTeamIdx = 0;
             grad_renderCustomPairing();
             grad_renderRolePicker();
         }
@@ -14197,7 +14213,83 @@
             const visible = el.style.display === 'flex';
             const open = forceOpen === null ? !visible : !!forceOpen;
             el.style.display = open ? 'flex' : 'none';
-            if (open) grad_renderRolePicker();
+            if (open) {
+                grad_renderRolePicker();
+                grad_renderQuickAssignControls();
+            }
+        }
+        function grad_toggleQuickAssign() {
+            window.__gradQuickAssignEnabled = !window.__gradQuickAssignEnabled;
+            if (window.__gradQuickAssignEnabled) {
+                if (!Array.isArray(window.__gradCustomState?.teams) || !window.__gradCustomState.teams.length) {
+                    grad_resetCustomPairing();
+                }
+                if (!Number.isInteger(window.__gradQuickAssignTeamIdx)) window.__gradQuickAssignTeamIdx = 0;
+                grad_toggleRolePicker(true);
+                showMsg('快速編隊：點角色即可自動分配到指定隊伍');
+            } else {
+                grad_renderQuickAssignControls();
+            }
+            grad_renderCustomPairing();
+        }
+        function grad_setQuickAssignTeam(idx) {
+            const state = window.__gradCustomState;
+            if (!state || !Array.isArray(state.teams) || !state.teams.length) return;
+            const max = state.teams.length - 1;
+            const safe = Math.max(0, Math.min(max, Number(idx) || 0));
+            window.__gradQuickAssignTeamIdx = safe;
+            grad_renderQuickAssignControls();
+        }
+        function grad_renderQuickAssignControls() {
+            const box = document.getElementById('grad-quick-assign-controls');
+            const state = window.__gradCustomState;
+            if (!box || !state || !Array.isArray(state.teams) || !state.teams.length) return;
+            const isEN = !!window.__gradCustomLangEN;
+            const enabled = !!window.__gradQuickAssignEnabled;
+            if (!enabled) {
+                box.style.display = 'none';
+                return;
+            }
+            box.style.display = '';
+            const teamIdx = Math.max(0, Math.min(state.teams.length - 1, Number(window.__gradQuickAssignTeamIdx) || 0));
+            window.__gradQuickAssignTeamIdx = teamIdx;
+            box.innerHTML = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="font-size:0.75rem;color:#ffbe90;font-weight:700;">${isEN ? '⚡ Quick Teaming' : '⚡ 快速編隊'}</span>
+                <button onclick="grad_setQuickAssignTeam(${teamIdx - 1})" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#ccc;cursor:pointer;">◀</button>
+                <span style="font-size:0.74rem;color:#ffd6b0;">${isEN ? 'Team' : '隊伍'} ${teamIdx + 1}</span>
+                <button onclick="grad_setQuickAssignTeam(${teamIdx + 1})" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#ccc;cursor:pointer;">▶</button>
+                <input type="number" min="1" max="${state.teams.length}" value="${teamIdx + 1}" onchange="grad_setQuickAssignTeam((this.value||1)-1)" style="width:72px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:4px 6px;font-size:0.72rem;">
+                <span style="font-size:0.72rem;color:#d7aa87;">${isEN ? 'Tap a role to assign. Auto-rotates team.' : '點角色直接分配，會輪流切換隊伍。'}</span>
+            </div>`;
+        }
+        function grad_quickAssignRole(roleId) {
+            const state = window.__gradCustomState;
+            if (!state || !Array.isArray(state.teams) || !state.teams.length) return false;
+            const teamIdx = Math.max(0, Math.min(state.teams.length - 1, Number(window.__gradQuickAssignTeamIdx) || 0));
+            let fromTeam = null;
+            state.teams.forEach((team, idx) => { if (team.includes(roleId)) fromTeam = idx; });
+            const ok = grad_handleDropToTeam(teamIdx, roleId, fromTeam);
+            if (!ok) return false;
+            window.__gradQuickAssignTeamIdx = (teamIdx + 1) % state.teams.length;
+            grad_renderQuickAssignControls();
+            return true;
+        }
+        function grad_quickAssignRoleByName(roleName) {
+            const state = window.__gradCustomState;
+            if (!state) return;
+            let role = state.roles.find(r => r.role === roleName);
+            if (!role) {
+                role = {
+                    id: `r${state.nextId++}`,
+                    role: roleName,
+                    score: 0,
+                    type: grad_getRoleType(roleName),
+                    custom: true
+                };
+                state.roles.push(role);
+                grad_renderCustomPairing();
+            }
+            grad_quickAssignRole(role.id);
         }
         function grad_toggleSmartPanel(forceOpen = null) {
             const el = document.getElementById('grad-custom-smart-modal');
@@ -14252,9 +14344,16 @@
                 item.innerHTML = `<input type="checkbox" class="grad-picker-checkbox" data-role="${escapeHtml(name)}" ${checked ? 'checked' : ''} onchange="this.parentElement.classList.toggle('dim', !this.checked)">`
                     + `${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}`
                     + `<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(name)}</span>`;
+                item.addEventListener('click', (ev) => {
+                    if (ev.target && ev.target.tagName === 'INPUT') return;
+                    if (!window.__gradQuickAssignEnabled) return;
+                    ev.preventDefault();
+                    grad_quickAssignRoleByName(name);
+                });
                 item.dataset.order = String(idx);
                 listEl.appendChild(item);
             });
+            grad_renderQuickAssignControls();
         }
         function grad_selectAllRolePicker(flag) {
             document.querySelectorAll('.grad-picker-checkbox').forEach(chk => {
@@ -14299,21 +14398,21 @@
         }
         function grad_handleDropToTeam(targetTeamIdx, roleId, fromTeamIdx) {
             const state = window.__gradCustomState;
-            if (!state || !state.teams[targetTeamIdx]) return;
+            if (!state || !state.teams[targetTeamIdx]) return false;
             const role = grad_getCustomRoleById(roleId);
-            if (!role) return;
+            if (!role) return false;
             const target = state.teams[targetTeamIdx];
-            if (target.includes(roleId)) return;
+            if (target.includes(roleId)) return false;
             if (target.length >= 3) {
                 showMsg('每隊最多 3 人');
-                return;
+                return false;
             }
             if (target.some(id => {
                 const r = grad_getCustomRoleById(id);
                 return r && r.role === role.role;
             })) {
                 showMsg('同一隊不可重複角色');
-                return;
+                return false;
             }
             if (typeof fromTeamIdx === 'number' && state.teams[fromTeamIdx]) {
                 state.teams[fromTeamIdx] = state.teams[fromTeamIdx].filter(id => id !== roleId);
@@ -14322,10 +14421,11 @@
             const maxUse = grad_getRoleMaxUse(role);
             if (usedCount >= maxUse) {
                 showMsg(maxUse > 1 ? '指定奶媽最多可在 2 隊' : '此角色僅可在 1 隊');
-                return;
+                return false;
             }
             target.push(roleId);
             grad_renderCustomPairing();
+            return true;
         }
         function grad_updateSmartPanelHint() {
             const hintEl = document.getElementById('grad-smart-hint');
@@ -14494,6 +14594,7 @@
             const typeColor = t => t === 'healer' ? '#56b6c2' : (t === 'sub' ? '#c678dd' : '#e06c75');
             teamListEl.innerHTML = '';
             roleListEl.innerHTML = '';
+            roleListEl.className = 'grad-custom-role-grid';
             state.teams.forEach((team, teamIdx) => {
                 const wrap = document.createElement('div');
                 wrap.className = 'grad-custom-team';
@@ -14552,9 +14653,16 @@
                     e.dataTransfer.setData('text/roleId', role.id);
                     e.dataTransfer.setData('text/fromTeam', '');
                 });
+                row.addEventListener('click', () => {
+                    if (!window.__gradQuickAssignEnabled && !window.matchMedia('(max-width:900px)').matches) return;
+                    if (!window.__gradQuickAssignEnabled) window.__gradQuickAssignEnabled = true;
+                    grad_quickAssignRole(role.id);
+                    grad_renderQuickAssignControls();
+                });
                 row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;">${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<span style="font-size:0.7rem;color:${typeColor(role.type)};">${typeLabel(role.type)}</span><span style="color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(role.role)}</span></div><div style="font-size:0.72rem;color:${useCount>=maxUse?'#e5c07b':'#666'};">${useCount}/${maxUse}</div>`;
                 roleListEl.appendChild(row);
             });
+            grad_renderQuickAssignControls();
         }
         function cleanupHistory() { let history = JSON.parse(localStorage.getItem('ww_history') || '[]'); let beforeCount = history.length; history = history.filter(h => h.uploadStatus !== 'duplicate' && h.uploadStatus !== 'error'); localStorage.setItem('ww_history', JSON.stringify(history)); g_historyDirty = true; g_historyCache = null; g_currentEntryId = null; unlockPreview(); renderHistoryList(); showMsg(`已整理歷史紀錄！\n移除項目: ${beforeCount - history.length} 筆`) }
         function changeBuild(idx) { g_selectedBuildIdx = parseInt(idx); renderTable(g_globalData, g_chains, g_echoesData) }
