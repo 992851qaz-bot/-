@@ -12509,18 +12509,49 @@
         function closeWeightsModal() { document.getElementById('weights-modal').style.display = 'none' }
 
         // ── 範例隊伍表格 & 角色定位表 ─────────────────────────────────────
-        const EXAMPLE_TEAMS = [
-            { system: "共鳴連鎖 (Tune Rupture)", mainC: "愛彌斯", bestSub: "琳奈", altSubs: "露帕 > 仇遠 > 嘉貝莉娜", bestSupport: "莫寧", altSupports: "守岸人 > 維里奈 > 卜靈", rotation: "琳奈鋪設連鎖場域後，愛彌斯透過高頻共鳴刷新機制達成「雙大招」爆發。" },
-            { system: "時停導電 (Time Stop)", mainC: "奧古斯塔", bestSub: "尤諾", altSubs: "吟霖 > 淵武 > 散華", bestSupport: "守岸人", altSupports: "維里奈 > 鑒心 > 釉瑚", rotation: "奧古斯塔時停期間，尤諾的後台協同傷害會被鎖定並在結束時一次性瞬間結算。" },
-            { system: "氣動重擊 (Aero Heavy)", mainC: "西格莉卡 / 忌炎", bestSub: "莫特斐", altSubs: "仇遠 > 秋水 > 秧秧", bestSupport: "守岸人", altSupports: "維里奈 > 秧秧 > 白芷", rotation: "莫特斐提供重擊增傷，西格莉卡與忌炎利用變奏進場進行大規模聚怪與重擊收割。" },
-            { system: "衍射共奏 (Spectro Sync)", mainC: "今汐 / 贊妮", bestSub: "折枝", altSubs: "菲比 > 淵武 > 漂泊者(光)", bestSupport: "維里奈", altSupports: "守岸人 > 卜靈 > 白芷", rotation: "依賴副C的協同攻擊快速疊加「韶光/衍射碎裂」層數，由主C施放高倍率技能結算。" },
-            { system: "熱熔合軸 (Fusion Swap)", mainC: "長離 / 漂泊者(熱)", bestSub: "安可", altSubs: "緋雪 > 熾霞 > 莫特斐", bestSupport: "達妮婭", altSupports: "維里奈 > 守岸人 > 燈燈", rotation: "雙熱熔C位進行頻繁合軸換人，取消後搖。達妮婭提供熱熔專屬減抗。" },
-            { system: "湮滅血祭 (Havoc Sacrifice)", mainC: "椿 / 弗洛洛", bestSub: "坎特雷拉", altSubs: "丹瑾 > 漂泊者(暗) > 散華", bestSupport: "守岸人", altSupports: "維里奈 > 白芷 > 桃祈", rotation: "丹瑾或坎特雷拉扣血換取全隊湮滅增傷，椿切換空中型態進行大範圍裁決打擊。" },
-            { system: "冷凝碎裂 (Glacio Shatter)", mainC: "珂萊塔 / 凌陽", bestSub: "千咲", altSubs: "散華 > 洛可可 > 釉瑚", bestSupport: "莫寧", altSupports: "維里奈 > 守岸人 > 釉瑚", rotation: "千咲施加寒冷標記，珂萊塔利用重擊觸發「碎裂」機制，莫寧則負責拉高全隊攻速。" },
-            { system: "物理重擊 (Pure Phys)", mainC: "陸赫斯", bestSub: "布蘭特", altSubs: "卡提希婭(3鏈) > 桃祈", bestSupport: "卜靈", altSupports: "鑒心 > 桃祈 > 夏空", rotation: "捨棄屬性反應，利用陸赫斯極致的物理倍率，配合布蘭特的物理穿透硬灌傷害。" },
-            { system: "新手/平民戰神 (F2P Core)", mainC: "卡提希婭", bestSub: "夏空", altSubs: "熾霞 > 秧秧 > 秋水", bestSupport: "燈燈", altSupports: "釉瑚 > 白芷 > 漂泊者(風)", rotation: "卡提希婭在高連段下有質變，夏空提供生存，燈燈作為副手補充熱熔傷害。" },
+        const TEAM_DB_DEFAULT = [
+            { mainDPS: "弗洛洛", subDPS: "坎特蕾拉 > 嘉貝莉娜 > 仇遠 > 卜靈 > 燈燈", support: "莫寧 > 仇遠 > 守岸人 > 洛可可", teamName: "暗隊", dps: 8, rotation: "", notes: "" },
+            { mainDPS: "坎特蕾拉", subDPS: "散華", support: "守岸人", teamName: "暗隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "千咲", subDPS: "琳奈 > 洛可可", support: "守岸人", teamName: "暗隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "暗主", subDPS: "琳奈 > 洛可可 > 散華", support: "守岸人", teamName: "暗隊", dps: 7, rotation: "", notes: "" },
+            { mainDPS: "椿", subDPS: "洛可可 > 散華", support: "守岸人", teamName: "暗隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "陸·赫斯", subDPS: "洛可可 > 琳奈 > 散華", support: "莫寧 > 守岸人 > 維里奈", teamName: "光隊", dps: 9, rotation: "", notes: "" },
+            { mainDPS: "贊妮", subDPS: "菲比 > 光主", support: "光主 > 千咲 > 守岸人", teamName: "光隊", dps: 9, rotation: "", notes: "" },
+            { mainDPS: "菲比", subDPS: "光主", support: "琳奈 > 守岸人", teamName: "光隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "今汐", subDPS: "吟霖 > 折枝 > 坎特蕾拉", support: "守岸人 > 卜靈", teamName: "光隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "愛彌斯", subDPS: "琳奈 > 露帕 > 弗洛洛 > 千咲 > 長離 > 散華 > 鑒心", support: "莫寧 > 嘉貝莉娜 > 布蘭特 > 守岸人 > 千咲 > 長離", teamName: "火隊", dps: 10, rotation: "", notes: "" },
+            { mainDPS: "嘉貝莉娜", subDPS: "露帕 > 琳奈 > 仇遠 > 莫特斐", support: "布蘭特 > 莫寧 > 守岸人 > 長離 > 露帕", teamName: "火隊", dps: 9, rotation: "", notes: "" },
+            { mainDPS: "布蘭特", subDPS: "露帕 > 散華", support: "莫寧 > 長離 > 守岸人", teamName: "火隊", dps: 8, rotation: "", notes: "" },
+            { mainDPS: "露帕", subDPS: "琳奈", support: "守岸人", teamName: "火隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "長離", subDPS: "露帕 > 散華", support: "莫寧 > 守岸人", teamName: "火隊", dps: 7, rotation: "", notes: "" },
+            { mainDPS: "安可", subDPS: "露帕 > 散華", support: "莫寧 > 守岸人", teamName: "火隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "卡提希婭", subDPS: "夏空 > 散華 > 風主", support: "千咲 > 風主 > 卜靈", teamName: "風隊", dps: 11, rotation: "", notes: "" },
+            { mainDPS: "西格莉卡", subDPS: "仇遠 > 琳奈 > 夏空 > 坎特蕾拉 > 弗洛洛 > 散華", support: "夏空 > 守岸人 > 弗洛洛 > 莫寧", teamName: "風隊", dps: 10, rotation: "", notes: "" },
+            { mainDPS: "尤諾", subDPS: "琳奈 > 夏空", support: "守岸人 > 夏空 > 莫寧", teamName: "風隊", dps: 9, rotation: "", notes: "" },
+            { mainDPS: "夏空", subDPS: "千咲 > 散華", support: "守岸人", teamName: "風隊", dps: 8, rotation: "", notes: "" },
+            { mainDPS: "仇遠", subDPS: "弗洛洛 > 夏空 > 莫特斐", support: "守岸人", teamName: "風隊", dps: 8, rotation: "", notes: "" },
+            { mainDPS: "忌炎", subDPS: "夏空 > 莫特斐", support: "守岸人 > 尤諾", teamName: "風隊", dps: 8, rotation: "", notes: "" },
+            { mainDPS: "奧古斯塔", subDPS: "尤諾 > 莫特斐", support: "守岸人 > 琳奈", teamName: "雷隊", dps: 9, rotation: "", notes: "" },
+            { mainDPS: "卡卡羅", subDPS: "琳奈 > 吟霖 > 散華", support: "守岸人", teamName: "雷隊", dps: 8, rotation: "", notes: "" },
+            { mainDPS: "相里要", subDPS: "琳奈 > 吟霖 > 散華", support: "守岸人", teamName: "雷隊", dps: 6, rotation: "", notes: "" },
+            { mainDPS: "珂萊塔", subDPS: "琳奈 > 布蘭特 > 折枝 > 燈燈 > 卜靈 > 散華", support: "守岸人 > 莫寧", teamName: "冰隊", dps: 7, rotation: "", notes: "" },
+            { mainDPS: "凌陽", subDPS: "琳奈 > 折枝", support: "守岸人", teamName: "冰隊", dps: 5, rotation: "", notes: "" }
         ];
-        const EXAMPLE_TEAMS_DEFAULT = EXAMPLE_TEAMS.map((t, idx) => ({ ...t, power: Number(t.power || Math.max(1, 100 - idx * 5)) }));
+        const EXAMPLE_TEAMS_DEFAULT = TEAM_DB_DEFAULT.map((t) => {
+            const subList = parsePriorityNames(t.subDPS || '');
+            const supportList = parsePriorityNames(t.support || '');
+            return {
+                system: String(t.teamName || ''),
+                mainC: String(t.mainDPS || ''),
+                bestSub: subList[0] || '',
+                altSubs: subList.slice(1).join(' > '),
+                bestSupport: supportList[0] || '',
+                altSupports: supportList.slice(1).join(' > '),
+                rotation: String(t.rotation || ''),
+                notes: String(t.notes || ''),
+                power: Number.isFinite(Number(t.dps)) ? Number(t.dps) : 0
+            };
+        });
         function getExampleTeamsData() {
             try {
                 const raw = localStorage.getItem('ww_example_teams_v1');
@@ -12707,16 +12738,54 @@
             if (!list.length) return `<div style="font-size:0.72rem;color:#777;">尚未設定</div>`;
             let html = `<div style="display:flex;flex-direction:column;gap:6px;">`;
             list.forEach((name, idx) => {
-                html += `<div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:5px 8px;">`;
+                html += `<div draggable="true"
+                    ondragstart="startExampleTeamPriorityDrag(${teamIdx},'${kind}',${idx})"
+                    ondragover="setExampleTeamPriorityDrop(event,${teamIdx},'${kind}',${idx},this)"
+                    ondrop="dropExampleTeamPriority(event,${teamIdx},'${kind}',${idx})"
+                    ondragleave="clearExampleTeamPriorityDrop(this)"
+                    ondragend="endExampleTeamPriorityDrag()"
+                    style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:5px 8px;cursor:grab;">`;
                 html += `<span style="font-size:0.72rem;color:#9aa4b5;min-width:20px;">#${idx + 1}</span>`;
                 html += `<span style="flex:1;color:#ddd;">${escapeHtml(name)}</span>`;
-                html += `<button onclick="moveExampleTeamPriority(${teamIdx},'${kind}',${idx},-1)" style="padding:2px 6px;">↑</button>`;
-                html += `<button onclick="moveExampleTeamPriority(${teamIdx},'${kind}',${idx},1)" style="padding:2px 6px;">↓</button>`;
+                html += `<span style="font-size:0.68rem;color:#7f8aa0;">↕ 拖移</span>`;
                 html += `<button onclick="removeExampleTeamPriority(${teamIdx},'${kind}',${idx})" style="padding:2px 6px;">✕</button>`;
                 html += `</div>`;
             });
             html += `</div>`;
             return html;
+        }
+        function startExampleTeamPriorityDrag(teamIdx, kind, idx) {
+            window.__exampleTeamPriorityDrag = { teamIdx, kind, idx };
+        }
+        function setExampleTeamPriorityDrop(ev, teamIdx, kind, idx, el) {
+            ev.preventDefault();
+            const drag = window.__exampleTeamPriorityDrag;
+            if (!drag || drag.teamIdx !== teamIdx || drag.kind !== kind || drag.idx === idx) return;
+            el.style.borderColor = 'rgba(92,124,250,0.7)';
+            el.style.background = 'rgba(92,124,250,0.16)';
+        }
+        function clearExampleTeamPriorityDrop(el) {
+            if (!el) return;
+            el.style.borderColor = 'rgba(255,255,255,0.12)';
+            el.style.background = 'rgba(255,255,255,0.03)';
+        }
+        function dropExampleTeamPriority(ev, teamIdx, kind, toIdx) {
+            ev.preventDefault();
+            const drag = window.__exampleTeamPriorityDrag;
+            if (!drag || drag.teamIdx !== teamIdx || drag.kind !== kind) return;
+            const fromIdx = drag.idx;
+            if (fromIdx === toIdx) return;
+            const team = (window.__exampleTeamEditorState || [])[teamIdx];
+            if (!team) return;
+            const list = kind === 'sub' ? team.subList : team.supportList;
+            if (!Array.isArray(list) || fromIdx < 0 || fromIdx >= list.length || toIdx < 0 || toIdx >= list.length) return;
+            const [moved] = list.splice(fromIdx, 1);
+            list.splice(toIdx, 0, moved);
+            window.__exampleTeamPriorityDrag = null;
+            renderExampleTeamEditor();
+        }
+        function endExampleTeamPriorityDrag() {
+            window.__exampleTeamPriorityDrag = null;
         }
         function renderExampleTeamEditor() {
             const body = document.getElementById('example-team-edit-body');
@@ -12806,7 +12875,8 @@
             html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">`;
             allRoles.forEach(name => {
                 const selected = picker.kind === 'main' ? team.mainC === name : ((picker.kind === 'sub' ? team.subList : team.supportList).includes(name));
-                html += `<button onclick="applyExampleTeamRolePick('${escapeHtml(name)}')" style="text-align:left;padding:6px 8px;border-radius:8px;border:1px solid ${selected ? 'rgba(92,124,250,0.8)' : 'rgba(255,255,255,0.2)'};background:${selected ? 'rgba(92,124,250,0.2)' : 'rgba(255,255,255,0.04)'};color:${selected ? '#b8c8ff' : '#ddd'};cursor:pointer;">${escapeHtml(name)}</button>`;
+                const num = allRoles.indexOf(name) + 1;
+                html += `<button onclick="applyExampleTeamRolePick('${escapeHtml(name)}')" style="text-align:left;padding:6px 8px;border-radius:8px;border:1px solid ${selected ? 'rgba(92,124,250,0.8)' : 'rgba(255,255,255,0.2)'};background:${selected ? 'rgba(92,124,250,0.2)' : 'rgba(255,255,255,0.04)'};color:${selected ? '#b8c8ff' : '#ddd'};cursor:pointer;display:flex;align-items:center;gap:6px;"><span style="display:inline-flex;min-width:22px;height:18px;align-items:center;justify-content:center;font-size:0.66rem;border-radius:9px;border:1px solid ${selected ? 'rgba(92,124,250,0.7)' : 'rgba(255,255,255,0.25)'};color:${selected ? '#b8c8ff' : '#9aa4b5'};">#${num}</span><span style="flex:1;">${escapeHtml(name)}</span></button>`;
             });
             html += `</div>`;
             body.innerHTML = html;
@@ -13445,7 +13515,7 @@
 
                 // Add Compare Button to all items
                 actionBtnHtml += `<button class="btn-compare-mini" onclick="setCompare(${i})" title="${isEN ? 'Add to comparison' : '加入數據對比'}">⚖️</button>`;
-                actionBtnHtml += `<button class="btn-compare-mini" onclick="showCrossRoleScore(${i})" title="${isEN ? 'View compatibility table' : '查看其他角色適配度表'}" style="background:#2a2a4a;border-color:#555;font-size:0.85rem;">📊</button>`;
+                actionBtnHtml += `<button class="btn-compare-mini" onclick="showCrossRoleScore(${i})" title="${isEN ? 'Matrix analysis' : '矩陣解析'}" style="background:#2a2a4a;border-color:#555;font-size:0.85rem;">🧩</button>`;
 
                 let avgScore = 0;
                 let echoCount = 0;
@@ -14191,6 +14261,7 @@
             };
             window.__gradQuickAssignEnabled = false;
             window.__gradQuickAssignTeamIdx = 0;
+            window.__gradQuickAssignAutoRotate = true;
             grad_renderCustomPairing();
             grad_renderRolePicker();
         }
@@ -14225,6 +14296,7 @@
                     grad_resetCustomPairing();
                 }
                 if (!Number.isInteger(window.__gradQuickAssignTeamIdx)) window.__gradQuickAssignTeamIdx = 0;
+                if (typeof window.__gradQuickAssignAutoRotate === 'undefined') window.__gradQuickAssignAutoRotate = true;
                 grad_toggleRolePicker(true);
                 showMsg('快速編隊：點角色即可自動分配到指定隊伍');
             } else {
@@ -14255,12 +14327,14 @@
             window.__gradQuickAssignTeamIdx = teamIdx;
             box.innerHTML = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <span style="font-size:0.75rem;color:#ffbe90;font-weight:700;">${isEN ? '⚡ Quick Teaming' : '⚡ 快速編隊'}</span>
-                <button onclick="grad_setQuickAssignTeam(${teamIdx - 1})" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#ccc;cursor:pointer;">◀</button>
-                <span style="font-size:0.74rem;color:#ffd6b0;">${isEN ? 'Team' : '隊伍'} ${teamIdx + 1}</span>
-                <button onclick="grad_setQuickAssignTeam(${teamIdx + 1})" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#ccc;cursor:pointer;">▶</button>
-                <input type="number" min="1" max="${state.teams.length}" value="${teamIdx + 1}" onchange="grad_setQuickAssignTeam((this.value||1)-1)" style="width:72px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:4px 6px;font-size:0.72rem;">
-                <span style="font-size:0.72rem;color:#d7aa87;">${isEN ? 'Tap a role to assign. Auto-rotates team.' : '點角色直接分配，會輪流切換隊伍。'}</span>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;">${state.teams.map((_, idx) => `<button onclick="grad_setQuickAssignTeam(${idx})" style="padding:3px 7px;border-radius:999px;background:${idx === teamIdx ? 'rgba(255,148,77,0.32)' : 'rgba(255,255,255,0.08)'};border:1px solid ${idx === teamIdx ? 'rgba(255,148,77,0.72)' : 'rgba(255,255,255,0.2)'};color:${idx === teamIdx ? '#ffd2ae' : '#ccc'};cursor:pointer;font-size:0.7rem;">${isEN ? 'Team' : '隊'} ${idx + 1}</button>`).join('')}</div>
+                <button onclick="grad_toggleQuickAssignAutoRotate()" style="padding:3px 8px;border-radius:7px;background:${window.__gradQuickAssignAutoRotate ? 'rgba(97,175,239,0.3)' : 'rgba(255,255,255,0.08)'};border:1px solid ${window.__gradQuickAssignAutoRotate ? 'rgba(97,175,239,0.6)' : 'rgba(255,255,255,0.2)'};color:${window.__gradQuickAssignAutoRotate ? '#a9d4ff' : '#bbb'};cursor:pointer;font-size:0.72rem;">${window.__gradQuickAssignAutoRotate ? (isEN ? 'Auto Rotate: ON' : '自動輪轉：開') : (isEN ? 'Auto Rotate: OFF' : '自動輪轉：關')}</button>
+                <span style="font-size:0.72rem;color:#d7aa87;">${window.__gradQuickAssignAutoRotate ? (isEN ? 'Tap role to assign and rotate to next team.' : '點角色分配後會自動切到下一隊。') : (isEN ? 'Tap role to assign to selected team only.' : '點角色只會分配到目前選中隊伍。')}</span>
             </div>`;
+        }
+        function grad_toggleQuickAssignAutoRotate() {
+            window.__gradQuickAssignAutoRotate = !window.__gradQuickAssignAutoRotate;
+            grad_renderQuickAssignControls();
         }
         function grad_quickAssignRole(roleId) {
             const state = window.__gradCustomState;
@@ -14270,7 +14344,9 @@
             state.teams.forEach((team, idx) => { if (team.includes(roleId)) fromTeam = idx; });
             const ok = grad_handleDropToTeam(teamIdx, roleId, fromTeam);
             if (!ok) return false;
-            window.__gradQuickAssignTeamIdx = (teamIdx + 1) % state.teams.length;
+            if (window.__gradQuickAssignAutoRotate !== false) {
+                window.__gradQuickAssignTeamIdx = (teamIdx + 1) % state.teams.length;
+            }
             grad_renderQuickAssignControls();
             return true;
         }
