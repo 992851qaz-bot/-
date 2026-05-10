@@ -8649,7 +8649,7 @@
     <div id="example-team-role-picker-modal" class="modal-overlay" onclick="if(event.target===this)closeExampleTeamRolePicker()">
         <div class="modal-full" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 style="margin:0;color:#5c7cfa;">🎯 快速選角面板</h3>
+                <h3 style="margin:0;color:#5c7cfa;">🎯 快速選角面板（優先順序）</h3>
                 <button onclick="closeExampleTeamRolePicker()">關閉</button>
             </div>
             <div class="modal-body" id="example-team-role-picker-body" style="padding:16px;"></div>
@@ -9005,7 +9005,7 @@
                         <button onclick="openGraduationPanel()"
                             style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-radius:6px; color:inherit; font-size:0.9rem; font-family:inherit; padding:4px 10px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:5px; transition:all 0.2s;"
                             onmouseover="this.style.background='rgba(229,192,123,0.15)';this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.18)';this.style.color='inherit'"
-                            title="點擊查看畢業面板"><span data-lang-zh="📋 歷史紀錄" data-lang-en="📋 History">📋 歷史紀錄</span></button>
+                            title="點擊查看矩陣解析"><span data-lang-zh="🧩 矩陣解析" data-lang-en="🧩 Matrix">🧩 矩陣解析</span></button>
                         <span id="history-count" style="font-size:0.75rem;color:#888;font-weight:normal;"></span>
                     </div>
                     <div class="toolbar-group">
@@ -12808,11 +12808,11 @@
                 html += `</div></div>`;
                 html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">`;
                 html += `<div style="padding:8px;border:1px solid rgba(97,175,239,0.28);border-radius:8px;background:rgba(97,175,239,0.06);">`;
-                html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:0.72rem;color:#61afef;font-weight:700;">⚡ 副C優先順序（不重複）</span><button onclick="openExampleTeamRolePicker(${idx},'sub')">選擇副C</button></div>`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:0.72rem;color:#61afef;font-weight:700;">⚡ 副C優先順序（不重複，越前面越優先）</span><button onclick="openExampleTeamRolePicker(${idx},'sub')">選擇副C</button></div>`;
                 html += renderExampleTeamPriorityList(idx, 'sub');
                 html += `</div>`;
                 html += `<div style="padding:8px;border:1px solid rgba(86,182,194,0.28);border-radius:8px;background:rgba(86,182,194,0.06);">`;
-                html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:0.72rem;color:#56b6c2;font-weight:700;">💚 奶媽優先順序（不重複）</span><button onclick="openExampleTeamRolePicker(${idx},'support')">選擇奶媽</button></div>`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:0.72rem;color:#56b6c2;font-weight:700;">💚 奶媽優先順序（不重複，越前面越優先）</span><button onclick="openExampleTeamRolePicker(${idx},'support')">選擇奶媽</button></div>`;
                 html += renderExampleTeamPriorityList(idx, 'support');
                 html += `</div>`;
                 html += `</div>`;
@@ -12866,6 +12866,7 @@
             const body = document.getElementById('example-team-role-picker-body');
             const picker = window.__exampleTeamRolePicker;
             if (!body || !picker) return;
+            const isEN = g_lang === 'en';
             const allRoles = GRAD_ROLE_POOL || [];
             const team = (window.__exampleTeamEditorState || [])[picker.teamIdx];
             if (!team) return;
@@ -12873,14 +12874,16 @@
             html += picker.kind === 'main'
                 ? '請選擇 1 位核心主C'
                 : (picker.kind === 'sub'
-                    ? '點擊加入副C優先順序（先點＝更高優先）'
-                    : '點擊加入奶媽優先順序（先點＝更高優先）');
+                    ? '點擊加入副C優先順序（先點＝優先 1，越前面越優先）'
+                    : '點擊加入奶媽優先順序（先點＝優先 1，越前面越優先）');
             html += `</div>`;
             html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">`;
             allRoles.forEach(name => {
                 const selected = picker.kind === 'main' ? team.mainC === name : ((picker.kind === 'sub' ? team.subList : team.supportList).includes(name));
-                const num = allRoles.indexOf(name) + 1;
-                html += `<button onclick="applyExampleTeamRolePick('${escapeHtml(name)}')" style="text-align:left;padding:6px 8px;border-radius:8px;border:1px solid ${selected ? 'rgba(92,124,250,0.8)' : 'rgba(255,255,255,0.2)'};background:${selected ? 'rgba(92,124,250,0.2)' : 'rgba(255,255,255,0.04)'};color:${selected ? '#b8c8ff' : '#ddd'};cursor:pointer;display:flex;align-items:center;gap:6px;"><span style="display:inline-flex;min-width:22px;height:18px;align-items:center;justify-content:center;font-size:0.66rem;border-radius:9px;border:1px solid ${selected ? 'rgba(92,124,250,0.7)' : 'rgba(255,255,255,0.25)'};color:${selected ? '#b8c8ff' : '#9aa4b5'};">#${num}</span><span style="flex:1;">${escapeHtml(name)}</span></button>`;
+                const selectedOrder = picker.kind === 'main'
+                    ? (selected ? (isEN ? 'Main' : '主C') : '＋')
+                    : (selected ? (isEN ? `P${(picker.kind === 'sub' ? team.subList : team.supportList).indexOf(name) + 1}` : `優先${(picker.kind === 'sub' ? team.subList : team.supportList).indexOf(name) + 1}`) : '＋');
+                html += `<button onclick="applyExampleTeamRolePick('${escapeHtml(name)}')" style="text-align:left;padding:6px 8px;border-radius:8px;border:1px solid ${selected ? 'rgba(92,124,250,0.8)' : 'rgba(255,255,255,0.2)'};background:${selected ? 'rgba(92,124,250,0.2)' : 'rgba(255,255,255,0.04)'};color:${selected ? '#b8c8ff' : '#ddd'};cursor:pointer;display:flex;align-items:center;gap:6px;"><span style="display:inline-flex;min-width:34px;height:18px;align-items:center;justify-content:center;font-size:0.64rem;border-radius:9px;border:1px solid ${selected ? 'rgba(92,124,250,0.7)' : 'rgba(255,255,255,0.25)'};color:${selected ? '#b8c8ff' : '#9aa4b5'};">${selectedOrder}</span><span style="flex:1;">${escapeHtml(name)}</span></button>`;
             });
             html += `</div>`;
             body.innerHTML = html;
@@ -14170,7 +14173,7 @@
             html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="font-size:0.86rem;color:#d6dce5;font-weight:700;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</div><button onclick="grad_toggleRolePicker(false)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Close':'關閉'}</button></div>`;
             html += `<div id="grad-quick-assign-controls" style="display:none;margin-bottom:8px;padding:8px;border-radius:8px;border:1px solid rgba(255,148,77,0.38);background:rgba(255,148,77,0.08);"></div>`;
             html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">`;
-            html += `<div style="font-size:0.78rem;color:#bbb;">${isEN?'Select from full role table (unchecked = gray)':'從全角色表勾選（未勾選為灰色）'}</div>`;
+            html += `<div style="font-size:0.78rem;color:#bbb;">${isEN?'Default checked · instant update (unchecked = gray)':'預設全選、勾選即時調整（未勾選為灰色）'}</div>`;
             html += `<div style="display:flex;gap:6px;flex-wrap:wrap;">`;
             html += `<button onclick="grad_selectAllRolePicker(true)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'All':'全選'}</button>`;
             html += `<button onclick="grad_selectAllRolePicker(false)" style="padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'None':'清空'}</button>`;
@@ -14190,8 +14193,8 @@
             html += `</div><div id="grad-smart-hint" style="font-size:0.73rem;color:#7da4ca;"></div>`;
             html += `</div></div>`;
             html += `<div class="grad-custom-layout">`;
-            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Teams':'隊伍列表'}</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><button onclick="grad_toggleQuickAssign()" style="padding:3px 8px;border-radius:6px;background:rgba(255,148,77,0.18);border:1px solid rgba(255,148,77,0.45);color:#ffb37d;cursor:pointer;font-size:0.72rem;">${isEN?'⚡ Quick Teaming':'⚡ 快速編隊'}</button><button onclick="grad_setTeamListLayout('bar')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Bar':'條'}</button><button onclick="grad_setTeamListLayout('col')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Column':'列'}</button><button onclick="grad_addCustomTeam()" style="padding:3px 8px;border-radius:6px;background:rgba(92,124,250,0.2);border:1px solid rgba(92,124,250,0.45);color:#b9c6ff;font-size:0.72rem;cursor:pointer;">${isEN?'+ Team':'+ 隊伍'}</button></div></div><div id="grad-custom-team-list" class="grad-team-list grad-team-list-bar"></div></div>`;
-            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Roles':'角色表'}</div><button onclick="grad_toggleRolePicker()" style="padding:3px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button></div><div id="grad-custom-role-list"></div></div>`;
+            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Teams':'隊伍列表'}</div><button onclick="grad_toggleQuickAssign()" style="padding:3px 8px;border-radius:6px;background:rgba(255,148,77,0.18);border:1px solid rgba(255,148,77,0.45);color:#ffb37d;cursor:pointer;font-size:0.72rem;">${isEN?'⚡ Quick Teaming':'⚡ 快速編隊'}</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><button onclick="grad_setTeamListLayout('bar')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Bar':'條'}</button><button onclick="grad_setTeamListLayout('col')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Column':'列'}</button><button onclick="grad_addCustomTeam()" style="padding:3px 8px;border-radius:6px;background:rgba(92,124,250,0.2);border:1px solid rgba(92,124,250,0.45);color:#b9c6ff;font-size:0.72rem;cursor:pointer;">${isEN?'+ Team':'+ 隊伍'}</button></div></div><div id="grad-custom-team-list" class="grad-team-list grad-team-list-bar"></div></div>`;
+            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Roles':'角色表'}</div><button onclick="grad_toggleRolePicker()" style="padding:3px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button></div><div style="font-size:0.72rem;color:#777;">${isEN?'Default checked · instant update':'預設打勾・即時調整'}</div></div><div id="grad-custom-role-list"></div></div>`;
             html += `</div>`;
             html += `</div>`;
 
@@ -14340,7 +14343,7 @@
                 if (!Number.isInteger(window.__gradQuickAssignTeamIdx)) window.__gradQuickAssignTeamIdx = 0;
                 if (typeof window.__gradQuickAssignAutoRotate === 'undefined') window.__gradQuickAssignAutoRotate = true;
                 grad_toggleRolePicker(true);
-                showMsg('快速編隊：點角色即可自動分配到指定隊伍');
+                showMsg('快速編隊已開啟：點角色會依隊號自動分配');
             } else {
                 grad_renderQuickAssignControls();
             }
@@ -14371,23 +14374,62 @@
                 <span style="font-size:0.75rem;color:#ffbe90;font-weight:700;">${isEN ? '⚡ Quick Teaming' : '⚡ 快速編隊'}</span>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;">${state.teams.map((_, idx) => `<button onclick="grad_setQuickAssignTeam(${idx})" style="padding:3px 7px;border-radius:999px;background:${idx === teamIdx ? 'rgba(255,148,77,0.32)' : 'rgba(255,255,255,0.08)'};border:1px solid ${idx === teamIdx ? 'rgba(255,148,77,0.72)' : 'rgba(255,255,255,0.2)'};color:${idx === teamIdx ? '#ffd2ae' : '#ccc'};cursor:pointer;font-size:0.7rem;">${isEN ? 'Team' : '隊'} ${idx + 1}</button>`).join('')}</div>
                 <button onclick="grad_toggleQuickAssignAutoRotate()" style="padding:3px 8px;border-radius:7px;background:${window.__gradQuickAssignAutoRotate ? 'rgba(97,175,239,0.3)' : 'rgba(255,255,255,0.08)'};border:1px solid ${window.__gradQuickAssignAutoRotate ? 'rgba(97,175,239,0.6)' : 'rgba(255,255,255,0.2)'};color:${window.__gradQuickAssignAutoRotate ? '#a9d4ff' : '#bbb'};cursor:pointer;font-size:0.72rem;">${window.__gradQuickAssignAutoRotate ? (isEN ? 'Auto Rotate: ON' : '自動輪轉：開') : (isEN ? 'Auto Rotate: OFF' : '自動輪轉：關')}</button>
-                <span style="font-size:0.72rem;color:#d7aa87;">${window.__gradQuickAssignAutoRotate ? (isEN ? 'Tap role to assign and rotate to next team.' : '點角色分配後會自動切到下一隊。') : (isEN ? 'Tap role to assign to selected team only.' : '點角色只會分配到目前選中隊伍。')}</span>
+                <span style="font-size:0.72rem;color:#d7aa87;">${window.__gradQuickAssignAutoRotate ? (isEN ? `Current: Team ${teamIdx + 1}. Tap a role to assign, then jump to the next available team.` : `目前：第 ${teamIdx + 1} 隊。點角色後會自動跳到下一個可分配隊伍。`) : (isEN ? `Current: Team ${teamIdx + 1}. Tap a role to assign only to this team.` : `目前：第 ${teamIdx + 1} 隊。點角色只會分配到這一隊。`)}</span>
             </div>`;
         }
         function grad_toggleQuickAssignAutoRotate() {
             window.__gradQuickAssignAutoRotate = !window.__gradQuickAssignAutoRotate;
             grad_renderQuickAssignControls();
         }
+        function grad_canAddRoleToTeam(teamIdx, roleId) {
+            const state = window.__gradCustomState;
+            const team = state && Array.isArray(state.teams) ? state.teams[teamIdx] : null;
+            const role = grad_getCustomRoleById(roleId);
+            if (!team || !role) return false;
+            if (team.includes(roleId)) return false;
+            if (team.length >= 3) return false;
+            if (team.some(id => {
+                const sameRole = grad_getCustomRoleById(id);
+                return sameRole && sameRole.role === role.role;
+            })) return false;
+            return grad_getRoleUseCount(roleId) < grad_getRoleMaxUse(role);
+        }
+        function grad_findNextTeamWithSpace(startIdx = 0) {
+            const state = window.__gradCustomState;
+            if (!state || !Array.isArray(state.teams) || !state.teams.length) return -1;
+            const total = state.teams.length;
+            for (let offset = 0; offset < total; offset++) {
+                const idx = (startIdx + offset) % total;
+                if ((state.teams[idx] || []).length < 3) return idx;
+            }
+            return -1;
+        }
+        function grad_findQuickAssignTeam(roleId, startIdx = 0) {
+            const state = window.__gradCustomState;
+            if (!state || !Array.isArray(state.teams) || !state.teams.length) return -1;
+            const total = state.teams.length;
+            for (let offset = 0; offset < total; offset++) {
+                const idx = (startIdx + offset) % total;
+                if (grad_canAddRoleToTeam(idx, roleId)) return idx;
+            }
+            return -1;
+        }
         function grad_quickAssignRole(roleId) {
             const state = window.__gradCustomState;
             if (!state || !Array.isArray(state.teams) || !state.teams.length) return false;
-            const teamIdx = Math.max(0, Math.min(state.teams.length - 1, Number(window.__gradQuickAssignTeamIdx) || 0));
+            const preferredTeamIdx = Math.max(0, Math.min(state.teams.length - 1, Number(window.__gradQuickAssignTeamIdx) || 0));
             let fromTeam = null;
             state.teams.forEach((team, idx) => { if (team.includes(roleId)) fromTeam = idx; });
+            const teamIdx = grad_findQuickAssignTeam(roleId, preferredTeamIdx);
+            if (teamIdx === -1) {
+                showMsg('沒有可分配的隊伍（可能已滿或超出上隊限制）');
+                return false;
+            }
             const ok = grad_handleDropToTeam(teamIdx, roleId, fromTeam);
             if (!ok) return false;
             if (window.__gradQuickAssignAutoRotate !== false) {
-                window.__gradQuickAssignTeamIdx = (teamIdx + 1) % state.teams.length;
+                const nextTeamIdx = grad_findNextTeamWithSpace((teamIdx + 1) % state.teams.length);
+                if (nextTeamIdx !== -1) window.__gradQuickAssignTeamIdx = nextTeamIdx;
             }
             grad_renderQuickAssignControls();
             return true;
