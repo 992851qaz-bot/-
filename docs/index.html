@@ -10585,7 +10585,7 @@
         const imgEl = document.getElementById('preview-img'), zoomCanvas = document.getElementById('zoom-canvas'), imgContainer = document.getElementById('img-container'), imgPlaceholder = document.getElementById('img-placeholder'), statusText = document.getElementById('status-text'), dimText = document.getElementById('dim-text'), loader = document.getElementById('loader'), tableBody = document.getElementById('table-body'), debugBtn = document.getElementById('debug-btn'), editModeBtn = document.getElementById('edit-mode-btn'), historyListEl = document.getElementById('history-list'), urlInput = document.getElementById('url-input'), analyzeBtn = document.getElementById('btn-analyze'), loginInput = document.getElementById('login-uid'), loginBtn = document.getElementById('btn-login'), weightStatus = document.getElementById('weight-status'), uidDisplay = document.getElementById('uid-display'), roleGrid = document.getElementById('role-grid'), roleCanvas = document.getElementById('role-correction-canvas'), ocrResultText = document.getElementById('ocr-result-text'), cvOverlay = document.getElementById('cv-overlay'), btnLoadAll = document.getElementById('btn-load-all');
         const subEditName = document.getElementById('sub-edit-name'), subEditVal = document.getElementById('sub-edit-val'), subEditValSelect = document.getElementById('sub-edit-val-select'), subEditCanvas = document.getElementById('sub-edit-canvas');
         const mobileContainer = document.getElementById('mobile-results'); // NEW
-        let g_globalData = {}, g_chains = [], g_echoesData = [], g_customEchoes = [], g_currentEntryId = null, g_debugMode = false, g_sourceImage = null, g_weightNames = [], g_currentWeights = {}, g_weightsLoaded = false, g_currentUserUid = "", g_lastRefreshTime = 0, g_roleResolve = null, g_rolePickerMode = 'ocr', g_lockedTarget = null, g_weightsRawData = null, g_showPotentialMode = false, g_selectedBuildIdx = 0, g_installPrompt = null, g_editingSub = { eIdx: -1, sIdx: -1 }, g_lastRankInfo = null, g_isLocalFile = false, g_canUploadLocal = false, g_suitTemplates = {}, g_echoLibViewMode = false, g_weightsPromise = null, g_historyScrollTop = 0;
+        let g_globalData = {}, g_chains = [], g_echoesData = [], g_customEchoes = [], g_currentEntryId = null, g_debugMode = false, g_sourceImage = null, g_weightNames = [], g_currentWeights = {}, g_weightsLoaded = false, g_currentUserUid = "", g_lastRefreshTime = 0, g_roleResolve = null, g_rolePickerMode = 'ocr', g_lockedTarget = null, g_weightsRawData = null, g_showPotentialMode = false, g_selectedBuildIdx = 0, g_installPrompt = null, g_editingSub = { eIdx: -1, sIdx: -1 }, g_lastRankInfo = null, g_isLocalFile = false, g_canUploadLocal = false, g_suitTemplates = {}, g_echoLibViewMode = false, g_weightsPromise = null, g_historyScrollTop = 0, g_rolePositionTagFromWeights = {};
         let g_offlineSyncTimers = {};
         let g_customEchoSyncTimers = {};
         let g_offlineApiWarned = false;
@@ -11661,6 +11661,84 @@
         }
         const _WC_KEY = 'ww_wc'; const _WC_TTL = 1800000;
         let _g_fetchingWeights = false;
+        function parseRolePositionTagFromDesc(descText) {
+            const firstLine = String(descText || '').split(/\r?\n/)[0] || '';
+            const m = firstLine.match(/\*\s*\[([^\]]+)\]\s*\*/);
+            if (!m || !m[1]) return null;
+            const note = String(m[1]).replace(/\s+/g, ' ').trim();
+            if (!note) return null;
+            let typeLabel = '副C';
+            let typeColor = '#61afef';
+            if (/主\s*C/i.test(note) || /主輸/.test(note)) {
+                typeLabel = '主C';
+                typeColor = '#ff5252';
+            } else if (/奶|治療|補/.test(note)) {
+                typeLabel = '奶媽';
+                typeColor = '#78e08f';
+            } else if (/輔/.test(note)) {
+                typeLabel = '輔助';
+                typeColor = '#56b6c2';
+            }
+            return { typeLabel, note, typeColor };
+        }
+        function getWeightPayloadTeamRows(json) {
+            if (!json || typeof json !== 'object') return [];
+            const getObjRows = (headers, rows) => {
+                if (!Array.isArray(headers) || !Array.isArray(rows)) return [];
+                return rows.map(r => {
+                    const obj = {};
+                    headers.forEach((h, i) => obj[h] = Array.isArray(r) ? r[i] : '');
+                    return obj;
+                });
+            };
+            if (Array.isArray(json.teams)) return json.teams.filter(Boolean);
+            if (Array.isArray(json.teamData) && Array.isArray(json.teamHeaders)) return getObjRows(json.teamHeaders, json.teamData);
+            if (Array.isArray(json.teamsData) && Array.isArray(json.teamsHeaders)) return getObjRows(json.teamsHeaders, json.teamsData);
+            return [];
+        }
+        function normalizeGuideTeamsFromWeightPayload(json) {
+            const rows = getWeightPayloadTeamRows(json);
+            if (!rows.length) return [];
+            const getVal = (row, keys) => {
+                for (const k of keys) {
+                    if (row && Object.prototype.hasOwnProperty.call(row, k) && row[k] != null) return String(row[k]).trim();
+                }
+                return '';
+            };
+            return rows.map(row => {
+                const system = getVal(row, ['體系', '系统', 'system', 'teamName']);
+                const mainC = getVal(row, ['主C', 'mainC']);
+                const c2 = getVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C']);
+                const c3 = getVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助']);
+                const dpsRaw = getVal(row, ['DPS', 'dps', '強度', 'power']);
+                const flow = getVal(row, ['流程', 'rotation']);
+                const difficulty = getVal(row, ['難度', 'difficulty']);
+                const notes = getVal(row, ['備註', '备注', 'notes']);
+                if (!system && !mainC && !c2 && !c3) return null;
+                const power = Number.isFinite(Number(dpsRaw)) ? Number(dpsRaw) : 0;
+                const rotation = [flow, difficulty ? `難度：${difficulty}` : ''].filter(Boolean).join(' ｜ ');
+                return {
+                    system,
+                    mainC,
+                    bestSub: c2,
+                    altSubs: '',
+                    bestSupport: c3,
+                    altSupports: '',
+                    rotation,
+                    notes,
+                    power
+                };
+            }).filter(Boolean);
+        }
+        function syncExampleTeamsFromWeightPayload(json) {
+            const teams = normalizeGuideTeamsFromWeightPayload(json);
+            if (!teams.length) return;
+            try {
+                localStorage.setItem('ww_example_teams_v1', JSON.stringify(teams));
+            } catch (e) { }
+            const teamModal = document.getElementById('example-team-modal');
+            if (teamModal && teamModal.style.display === 'flex') openExampleTeamModal();
+        }
         async function loadWeightsBackground(url) {
             if (_g_fetchingWeights) return;
             _g_fetchingWeights = true;
@@ -11675,6 +11753,7 @@
                 if (json.result === 'success') {
                     g_weightsRawData = json;
                     processWeightsData(json);
+                    syncExampleTeamsFromWeightPayload(json);
                     renderWeightsTable();
                     g_weightsLoaded = true;
                     weightStatus.innerText = "系統資料已就緒";
@@ -11692,7 +11771,7 @@
                 _g_fetchingWeights = false;
             }
         }
-        function processWeightsData(json) { g_weightNames = []; g_currentWeights = {}; const headers = json.headers; json.data.forEach(row => { let charName = row[1]; if (charName && charName !== '(N/A)') { if (!g_weightNames.includes(charName)) g_weightNames.push(charName); if (!g_currentWeights[charName]) g_currentWeights[charName] = []; let charWeights = {}; headers.forEach((h, idx) => { let mappedKey = WEIGHT_KEYS_MAPPING[h]; if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0 } }); let colA = row[0] ? String(row[0]).trim() : "通用"; let match = colA.match(/\d/); let req = match ? parseInt(match[0]) : 0; g_currentWeights[charName].push({ name: colA, minChain: req, weights: charWeights, desc: row[row.length - 1] }) } }) }
+        function processWeightsData(json) { g_weightNames = []; g_currentWeights = {}; g_rolePositionTagFromWeights = {}; const headers = json.headers; json.data.forEach(row => { let charName = row[1]; if (charName && charName !== '(N/A)') { if (!g_weightNames.includes(charName)) g_weightNames.push(charName); if (!g_currentWeights[charName]) g_currentWeights[charName] = []; let charWeights = {}; headers.forEach((h, idx) => { let mappedKey = WEIGHT_KEYS_MAPPING[h]; if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0 } }); let colA = row[0] ? String(row[0]).trim() : "通用"; let match = colA.match(/\d/); let req = match ? parseInt(match[0]) : 0; const desc = row[row.length - 1]; const parsedPos = parseRolePositionTagFromDesc(desc); if (parsedPos && !g_rolePositionTagFromWeights[charName]) g_rolePositionTagFromWeights[charName] = parsedPos; g_currentWeights[charName].push({ name: colA, minChain: req, weights: charWeights, desc: desc }) } }) }
         function toggleWeightMode() { g_showPotentialMode = !g_showPotentialMode; document.getElementById('btn-weight-toggle').innerText = g_showPotentialMode ? (g_lang === 'en' ? "Mode: Max Score (weight×max)" : "顯示模式: 最大分 (權重x最大值)") : (g_lang === 'en' ? "Mode: Weights" : "顯示模式: 權重"); renderWeightsTable() }
         const WEIGHT_TABLE_HEADER_EN = { '配置': 'Build', '方案': 'Build', '角色': 'Character', '說明': 'Notes', '備註': 'Notes' };
         function renderWeightsTable() { if (!g_weightsRawData) return; const json = g_weightsRawData; const headers = json.headers; let html = '<table class="weights-table"><thead><tr>'; headers.forEach(h => { let label = h; if (g_lang === 'en') { const mapped = WEIGHT_KEYS_MAPPING[h]; label = mapped ? (STAT_ZH_TO_EN[mapped] || mapped) : (WEIGHT_TABLE_HEADER_EN[h] || h); } html += `<th>${label}</th>`; }); html += '</tr></thead><tbody>'; json.data.forEach(row => { let charName = row[1]; html += '<tr>'; row.forEach((cell, cellIdx) => { let style = ''; let valText = cell; let headerName = headers[cellIdx]; let mappedKey = WEIGHT_KEYS_MAPPING[headerName]; if (mappedKey && charName && g_currentWeights[charName]) { let weightsObj = g_currentWeights[charName][0].weights; let weight = parseFloat(cell) || 0; let maxVal = SUB_STAT_MAX_VALUES[mappedKey] || 0; let potential = weight * maxVal; let color = getHeatmapColor(potential, weightsObj); if (color) style = `style="background:linear-gradient(to bottom, ${color} 0%, ${color} 100%);color:#000;font-weight:bold;"`; if (g_showPotentialMode && maxVal > 0) { valText = potential.toFixed(1) } } if (g_lang === 'en' && WEIGHT_TABLE_HEADER_EN[headerName] === 'Character') { valText = lookupRoleEN(valText) || valText; } html += `<td ${style}>${valText}</td>` }); html += '</tr>' }); html += '</tbody></table>'; document.getElementById('weights-body').innerHTML = html }
@@ -12640,19 +12719,12 @@
         };
 
         function getCharRoleTag(charName) {
-            if (!charName || !ROLE_POSITIONS) return '';
-            for (const [roleName, info] of Object.entries(ROLE_POSITIONS)) {
-                if (info.chars && info.chars.some(c => charName.includes(c) || c.includes(charName))) {
-                    if (roleName.includes('純輸出主C')) {
-                        return { emoji: '🗡', label: '主輸', color: '#ff5252', bg: 'rgba(255,82,82,0.15)' };
-                    } else if (roleName.includes('全域') || roleName.includes('奶媽') || roleName.includes('生存')) {
-                        return { emoji: '💚', label: '奶媽', color: '#78e08f', bg: 'rgba(120,224,143,0.15)' };
-                    } else if (roleName.includes('增傷') || roleName.includes('副C')) {
-                        return { emoji: '⚡', label: '副輸', color: '#61afef', bg: 'rgba(97,175,239,0.15)' };
-                    }
-                }
-            }
-            return null;
+            const pos = getCharPositionInfo(charName);
+            if (!pos) return null;
+            if (pos.typeLabel === '主C') return { emoji: '🗡', label: '主輸', color: '#ff5252', bg: 'rgba(255,82,82,0.15)' };
+            if (pos.typeLabel === '奶媽') return { emoji: '💚', label: '奶媽', color: '#78e08f', bg: 'rgba(120,224,143,0.15)' };
+            if (pos.typeLabel === '輔助') return { emoji: '🛡', label: '輔助', color: '#56b6c2', bg: 'rgba(86,182,194,0.15)' };
+            return { emoji: '⚡', label: '副輸', color: '#61afef', bg: 'rgba(97,175,239,0.15)' };
         }
 
         function getCharRoleTagHtml(charName) {
@@ -12665,7 +12737,14 @@
         // typeLabel: 主C / 副C / 奶媽 / 輔助
         // note: per-character note or category shortTag (e.g. "共解冷凝", "泛用奶媽")
         function getCharPositionInfo(charName) {
-            if (!charName || !ROLE_POSITIONS) return null;
+            if (!charName) return null;
+            if (g_rolePositionTagFromWeights && typeof g_rolePositionTagFromWeights === 'object') {
+                if (g_rolePositionTagFromWeights[charName]) return { ...g_rolePositionTagFromWeights[charName] };
+                for (const [name, info] of Object.entries(g_rolePositionTagFromWeights)) {
+                    if (charName.includes(name) || name.includes(charName)) return { ...info };
+                }
+            }
+            if (!ROLE_POSITIONS) return null;
             for (const [catName, info] of Object.entries(ROLE_POSITIONS)) {
                 if (!info.chars) continue;
                 const idx = info.chars.findIndex(c => charName.includes(c) || c.includes(charName));
@@ -14307,6 +14386,7 @@
             window.__gradQuickAssignEnabled = false;
             window.__gradQuickAssignTeamIdx = 0;
             window.__gradQuickAssignAutoRotate = true;
+            window.__gradQuickAssignRotateMode = 'round';
             window.__gradTeamListLayout = 'bar';
             window.__gradRolePickerDefaultCheckedApplied = false;
             grad_renderCustomPairing();
@@ -14378,6 +14458,7 @@
                 }
                 if (!Number.isInteger(window.__gradQuickAssignTeamIdx)) window.__gradQuickAssignTeamIdx = 0;
                 if (typeof window.__gradQuickAssignAutoRotate === 'undefined') window.__gradQuickAssignAutoRotate = true;
+                if (typeof window.__gradQuickAssignRotateMode === 'undefined') window.__gradQuickAssignRotateMode = (window.__gradQuickAssignAutoRotate === false ? 'off' : 'round');
                 grad_toggleRolePicker(true);
                 showMsg('快速編隊已開啟：點角色會依隊號自動分配');
             } else {
@@ -14406,15 +14487,38 @@
             box.style.display = '';
             const teamIdx = Math.max(0, Math.min(state.teams.length - 1, Number(window.__gradQuickAssignTeamIdx) || 0));
             window.__gradQuickAssignTeamIdx = teamIdx;
+            const mode = window.__gradQuickAssignRotateMode || (window.__gradQuickAssignAutoRotate === false ? 'off' : 'round');
+            window.__gradQuickAssignRotateMode = mode;
+            const modeText = mode === 'round'
+                ? (isEN ? '輪轉模式：每次換下一隊' : '輪轉模式：每次換下一隊')
+                : mode === 'fill'
+                    ? (isEN ? '填滿模式：先填滿當前隊伍' : '填滿模式：先填滿當前隊伍')
+                    : (isEN ? '固定模式：維持當前隊伍' : '固定模式：維持當前隊伍');
+            const detailText = mode === 'round'
+                ? (isEN ? `Current: Team ${teamIdx + 1}. Assign then rotate to next available team.` : `目前：第 ${teamIdx + 1} 隊。分配後輪轉到下一可用隊伍。`)
+                : mode === 'fill'
+                    ? (isEN ? `Current: Team ${teamIdx + 1}. Keep assigning until team is full, then switch.` : `目前：第 ${teamIdx + 1} 隊。先分配到隊滿再換下一隊。`)
+                    : (isEN ? `Current: Team ${teamIdx + 1}. Assign only to this team.` : `目前：第 ${teamIdx + 1} 隊。分配時固定在此隊。`);
             box.innerHTML = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <span style="font-size:0.75rem;color:#ffbe90;font-weight:700;">${isEN ? '⚡ Quick Teaming' : '⚡ 快速編隊'}</span>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;">${state.teams.map((_, idx) => `<button onclick="grad_setQuickAssignTeam(${idx})" style="padding:3px 7px;border-radius:999px;background:${idx === teamIdx ? 'rgba(255,148,77,0.32)' : 'rgba(255,255,255,0.08)'};border:1px solid ${idx === teamIdx ? 'rgba(255,148,77,0.72)' : 'rgba(255,255,255,0.2)'};color:${idx === teamIdx ? '#ffd2ae' : '#ccc'};cursor:pointer;font-size:0.7rem;">${isEN ? 'Team' : '隊'} ${idx + 1}</button>`).join('')}</div>
-                <button onclick="grad_toggleQuickAssignAutoRotate()" style="padding:3px 8px;border-radius:7px;background:${window.__gradQuickAssignAutoRotate ? 'rgba(97,175,239,0.3)' : 'rgba(255,255,255,0.08)'};border:1px solid ${window.__gradQuickAssignAutoRotate ? 'rgba(97,175,239,0.6)' : 'rgba(255,255,255,0.2)'};color:${window.__gradQuickAssignAutoRotate ? '#a9d4ff' : '#bbb'};cursor:pointer;font-size:0.72rem;">${window.__gradQuickAssignAutoRotate ? (isEN ? 'Auto Rotate: ON' : '自動輪轉：開') : (isEN ? 'Auto Rotate: OFF' : '自動輪轉：關')}</button>
-                <span style="font-size:0.72rem;color:#d7aa87;">${window.__gradQuickAssignAutoRotate ? (isEN ? `Current: Team ${teamIdx + 1}. Tap a role to assign, then jump to the next available team.` : `目前：第 ${teamIdx + 1} 隊。點角色後會自動跳到下一個可分配隊伍。`) : (isEN ? `Current: Team ${teamIdx + 1}. Tap a role to assign only to this team.` : `目前：第 ${teamIdx + 1} 隊。點角色只會分配到這一隊。`)}</span>
+                <button onclick="grad_cycleQuickAssignMode()" style="padding:3px 8px;border-radius:7px;background:${mode === 'off' ? 'rgba(255,255,255,0.08)' : 'rgba(97,175,239,0.3)'};border:1px solid ${mode === 'off' ? 'rgba(255,255,255,0.2)' : 'rgba(97,175,239,0.6)'};color:${mode === 'off' ? '#bbb' : '#a9d4ff'};cursor:pointer;font-size:0.72rem;">${modeText}</button>
+                <button onclick="grad_addCustomTeamAndFocus()" style="padding:3px 8px;border-radius:7px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.48);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN ? '+ Team' : '＋隊伍'}</button>
+                <span style="font-size:0.72rem;color:#d7aa87;">${detailText}</span>
             </div>`;
         }
-        function grad_toggleQuickAssignAutoRotate() {
-            window.__gradQuickAssignAutoRotate = !window.__gradQuickAssignAutoRotate;
+        function grad_cycleQuickAssignMode() {
+            const now = window.__gradQuickAssignRotateMode || (window.__gradQuickAssignAutoRotate === false ? 'off' : 'round');
+            window.__gradQuickAssignRotateMode = now === 'round' ? 'fill' : (now === 'fill' ? 'off' : 'round');
+            window.__gradQuickAssignAutoRotate = window.__gradQuickAssignRotateMode !== 'off';
+            grad_renderQuickAssignControls();
+        }
+        function grad_addCustomTeamAndFocus() {
+            const state = window.__gradCustomState;
+            if (!state || !Array.isArray(state.teams)) return;
+            state.teams.push([]);
+            window.__gradQuickAssignTeamIdx = state.teams.length - 1;
+            grad_renderCustomPairing();
             grad_renderQuickAssignControls();
         }
         function grad_canAddRoleToTeam(teamIdx, roleId) {
@@ -14463,9 +14567,27 @@
             }
             const ok = grad_handleDropToTeam(teamIdx, roleId, fromTeam);
             if (!ok) return false;
-            if (window.__gradQuickAssignAutoRotate !== false) {
+            const mode = window.__gradQuickAssignRotateMode || (window.__gradQuickAssignAutoRotate === false ? 'off' : 'round');
+            if (mode === 'round') {
                 const nextTeamIdx = grad_findNextTeamWithSpace((teamIdx + 1) % state.teams.length);
                 if (nextTeamIdx !== -1) window.__gradQuickAssignTeamIdx = nextTeamIdx;
+                else {
+                    state.teams.push([]);
+                    window.__gradQuickAssignTeamIdx = state.teams.length - 1;
+                    grad_renderCustomPairing();
+                }
+            } else if (mode === 'fill') {
+                if ((state.teams[teamIdx] || []).length >= 3) {
+                    const nextTeamIdx = grad_findNextTeamWithSpace((teamIdx + 1) % state.teams.length);
+                    if (nextTeamIdx !== -1) window.__gradQuickAssignTeamIdx = nextTeamIdx;
+                    else {
+                        state.teams.push([]);
+                        window.__gradQuickAssignTeamIdx = state.teams.length - 1;
+                        grad_renderCustomPairing();
+                    }
+                } else {
+                    window.__gradQuickAssignTeamIdx = teamIdx;
+                }
             }
             grad_renderQuickAssignControls();
             // Re-render picker if open so team tags update in real-time
@@ -14869,6 +14991,10 @@
                 row.style.opacity = useCount >= maxUse ? '0.55' : '1';
                 row.style.borderColor = `${typeColor(role.type)}66`;
                 const iconUrl = grad_getRoleIconUrl(role.role);
+                const posInfo = getCharPositionInfo(role.role);
+                const posTagHtml = posInfo
+                    ? `<span style="display:inline-block;padding:1px 5px;border-radius:4px;font-size:0.62rem;font-weight:700;background:${posInfo.typeColor}22;color:${posInfo.typeColor};border:1px solid ${posInfo.typeColor}44;white-space:nowrap;vertical-align:middle;">${posInfo.typeLabel}${posInfo.note ? `|${escapeHtml(posInfo.note)}` : ''}</span>`
+                    : '';
                 row.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/roleId', role.id);
                     e.dataTransfer.setData('text/fromTeam', '');
@@ -14879,7 +15005,7 @@
                     grad_quickAssignRole(role.id);
                     grad_renderQuickAssignControls();
                 });
-                row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;">${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<span style="font-size:0.7rem;color:${typeColor(role.type)};">${typeLabel(role.type)}</span><span style="color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(role.role)}</span></div><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;width:100%;"><span style="font-size:0.66rem;color:#ffbe90;">${teamIdxes.length ? `隊${teamIdxes.join(',')}` : '未上隊'}</span><span style="font-size:0.72rem;color:${useCount>=maxUse?'#e5c07b':'#666'};">${useCount}/${maxUse}</span></div>`;
+                row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;">${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<span style="font-size:0.7rem;color:${typeColor(role.type)};">${typeLabel(role.type)}</span><span style="color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(role.role)}</span>${posTagHtml}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;width:100%;"><span style="font-size:0.66rem;color:#ffbe90;">${teamIdxes.length ? `隊${teamIdxes.join(',')}` : '未上隊'}</span><span style="font-size:0.72rem;color:${useCount>=maxUse?'#e5c07b':'#666'};">${useCount}/${maxUse}</span></div>`;
                 roleListEl.appendChild(row);
             });
             grad_renderQuickAssignControls();
