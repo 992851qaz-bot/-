@@ -12578,47 +12578,63 @@
             "🌟 全域 T0 輔助奶媽 (必帶隨插即用)": {
                 color: "#ffd700",
                 bg: "rgba(255,215,0,0.1)",
+                shortTag: "泛用奶媽",
                 chars: ["守岸人", "維里奈", "莫寧"],
                 charNotes: ["屬性增傷/暴擊提升", "全域增傷/攻擊提升", "3.x 強力泛用輔助"]
             },
             "⚡ 各系增傷/副C特化 — 導電/時停": {
                 color: "#61afef",
                 bg: "rgba(97,175,239,0.1)",
-                chars: ["吟霖", "淵武", "尤諾", "嘉貝莉娜"]
+                shortTag: "導電/時停",
+                chars: ["吟霖", "淵武", "尤諾", "嘉貝莉娜"],
+                charNotes: ["共解導電", "共解導電", "共解時停", "導電增傷"]
             },
             "✨ 各系增傷/副C特化 — 衍射": {
                 color: "#e5c07b",
                 bg: "rgba(229,192,123,0.1)",
-                chars: ["折枝", "菲比", "卜靈", "琳奈", "漂泊者(光)"]
+                shortTag: "衍射",
+                chars: ["折枝", "菲比", "卜靈", "琳奈", "漂泊者(光)"],
+                charNotes: ["共解衍射", "衍射增傷", "奶媽/衍射", "衍射增傷", "衍射主C"]
             },
             "🔥 各系增傷/副C特化 — 熱熔": {
                 color: "#e06c75",
                 bg: "rgba(224,108,117,0.1)",
-                chars: ["莫特斐", "達妮婭", "緋雪", "燈燈", "漂泊者(熱)"]
+                shortTag: "熱熔",
+                chars: ["莫特斐", "達妮婭", "緋雪", "燈燈", "漂泊者(熱)"],
+                charNotes: ["普攻加深", "熱熔增傷", "熱熔增傷", "奶媽/熱熔", "熱熔主C"]
             },
             "🌑 各系增傷/副C特化 — 湮滅": {
                 color: "#c678dd",
                 bg: "rgba(198,120,221,0.1)",
-                chars: ["丹瑾", "坎特雷拉", "弗洛洛", "漂泊者(暗)"]
+                shortTag: "湮滅",
+                chars: ["丹瑾", "坎特雷拉", "弗洛洛", "漂泊者(暗)"],
+                charNotes: ["共解湮滅", "湮滅主C", "湮滅增傷", "湮滅主C"]
             },
             "💨 各系增傷/副C特化 — 氣動": {
                 color: "#56b6c2",
                 bg: "rgba(86,182,194,0.1)",
-                chars: ["秋水", "秧秧", "仇遠", "露帕", "漂泊者(風)"]
+                shortTag: "氣動",
+                chars: ["秋水", "秧秧", "仇遠", "露帕", "漂泊者(風)"],
+                charNotes: ["共解冷凝", "奶媽/氣動", "氣動增傷", "氣動增傷", "氣動主C"]
             },
             "❄️ 各系增傷/副C特化 — 冷凝/物理": {
                 color: "#98c379",
                 bg: "rgba(152,195,121,0.1)",
-                chars: ["散華", "洛可可", "千咲", "布蘭特"]
+                shortTag: "冷凝/物理",
+                chars: ["散華", "洛可可", "千咲", "布蘭特"],
+                charNotes: ["共解冷凝", "奶媽/冷凝", "物理增傷", "物理增傷"]
             },
             "🛡️ 生存與機制支援": {
                 color: "#78e08f",
                 bg: "rgba(120,224,143,0.1)",
-                chars: ["白芷", "桃祈", "鑒心", "釉瑚", "夏空"]
+                shortTag: "生存支援",
+                chars: ["白芷", "桃祈", "鑒心", "釉瑚", "夏空"],
+                charNotes: ["奶媽/護盾", "奶媽/回復", "奶媽/增傷", "普功加深", "湮滅支援"]
             },
             "⚔️ 純輸出主C": {
                 color: "#ff5252",
                 bg: "rgba(255,82,82,0.1)",
+                shortTag: "主C",
                 chars: ["今汐", "忌炎", "長離", "安可", "相里要", "卡卡羅", "椿", "珂萊塔", "贊妮", "奧古斯塔", "愛彌斯", "西格莉卡", "陸赫斯", "凌陽", "熾霞", "卡提希婭"]
             }
         };
@@ -12643,6 +12659,26 @@
             const tag = getCharRoleTag(charName);
             if (!tag) return '';
             return `<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:0.68rem;font-weight:700;background:${tag.bg};color:${tag.color};border:1px solid ${tag.color}55;margin-left:4px;vertical-align:middle;">${tag.emoji} ${tag.label}</span>`;
+        }
+
+        // Returns detailed position info from ROLE_POSITIONS: {typeLabel, note, typeColor}
+        // typeLabel: 主C / 副C / 奶媽 / 輔助
+        // note: per-character note or category shortTag (e.g. "共解冷凝", "泛用奶媽")
+        function getCharPositionInfo(charName) {
+            if (!charName || !ROLE_POSITIONS) return null;
+            for (const [catName, info] of Object.entries(ROLE_POSITIONS)) {
+                if (!info.chars) continue;
+                const idx = info.chars.findIndex(c => charName.includes(c) || c.includes(charName));
+                if (idx === -1) continue;
+                const note = (info.charNotes && info.charNotes[idx]) ? info.charNotes[idx] : (info.shortTag || '');
+                let typeLabel = '副C';
+                let typeColor = info.color;
+                if (catName.includes('純輸出主C')) { typeLabel = '主C'; typeColor = '#ff5252'; }
+                else if (catName.includes('全域') || catName.includes('奶媽')) { typeLabel = '奶媽'; typeColor = '#ffd700'; }
+                else if (catName.includes('生存')) { typeLabel = '輔助'; typeColor = '#78e08f'; }
+                return { typeLabel, note, typeColor };
+            }
+            return null;
         }
 
         function openExampleTeamModal() {
@@ -14432,6 +14468,9 @@
                 if (nextTeamIdx !== -1) window.__gradQuickAssignTeamIdx = nextTeamIdx;
             }
             grad_renderQuickAssignControls();
+            // Re-render picker if open so team tags update in real-time
+            const pickerEl = document.getElementById('grad-custom-role-picker-modal');
+            if (pickerEl && pickerEl.style.display === 'flex') grad_renderRolePicker();
             return true;
         }
         function grad_quickAssignRoleByName(roleName) {
@@ -23131,9 +23170,11 @@
                 const isOrig = r.role === g_crOrigRole;
                 const barColor = r.avgPct >= 80 ? '#ffca28' : r.avgPct >= 60 ? '#98c379' : '#555';
                 const rowStyle = isOrig ? 'background:rgba(229,192,123,0.07);border-left:3px solid var(--accent);' : (idx % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : '');
+                const posInfo = getCharPositionInfo(r.role);
+                const posTagHtml = posInfo ? `<span style="margin-left:5px;display:inline-block;padding:1px 5px;border-radius:4px;font-size:0.63rem;font-weight:700;background:${posInfo.typeColor}22;color:${posInfo.typeColor};border:1px solid ${posInfo.typeColor}44;white-space:nowrap;vertical-align:middle;">${posInfo.typeLabel}${posInfo.note ? `|${posInfo.note}` : ''}</span>` : '';
                 html += `<tr style="${rowStyle}">
                     <td style="padding:7px 12px;color:#666;">${idx + 1}</td>
-                    <td style="padding:7px 12px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${crIsEN ? (lookupRoleEN(r.role) || r.role) : r.role}${isOrig ? ' ⭐' : ''}</td>
+                    <td style="padding:7px 12px;color:${isOrig ? 'var(--accent)' : '#ddd'};font-weight:${isOrig ? 'bold' : 'normal'};">${crIsEN ? (lookupRoleEN(r.role) || r.role) : r.role}${isOrig ? ' ⭐' : ''}${posTagHtml}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#aaa;">${r.baseScore.toFixed(1)}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);">+${r.buff.toFixed(1)}</td>
                     <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold;">${r.totalScore.toFixed(1)}</td>
