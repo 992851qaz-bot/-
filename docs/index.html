@@ -8627,11 +8627,21 @@
             <div class="modal-header">
                 <h3 style="margin:0;color:#5c7cfa;" data-lang-zh="👥 範例隊伍配置表" data-lang-en="👥 Example Team Compositions">👥 範例隊伍配置表</h3>
                 <div style="display:flex;gap:8px;">
+                    <button onclick="openGamezhTeamModal()" data-lang-zh="gamezh隊伍推薦" data-lang-en="gamezh Teams">gamezh隊伍推薦</button>
                     <button onclick="openExampleTeamEditor()" data-lang-zh="編輯" data-lang-en="Edit">編輯</button>
                     <button onclick="closeExampleTeamModal()" data-lang-zh="關閉" data-lang-en="Close">關閉</button>
                 </div>
             </div>
             <div class="modal-body" id="example-team-body" style="padding:16px;"></div>
+        </div>
+    </div>
+    <div id="gamezh-team-modal" class="modal-overlay" onclick="if(event.target===this)closeGamezhTeamModal()">
+        <div class="modal-full" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 style="margin:0;color:#5c7cfa;" data-lang-zh="👥 gamezh隊伍推薦表" data-lang-en="👥 gamezh Team Recommendations">👥 gamezh隊伍推薦表</h3>
+                <button onclick="closeGamezhTeamModal()" data-lang-zh="關閉" data-lang-en="Close">關閉</button>
+            </div>
+            <div class="modal-body" id="gamezh-team-body" style="padding:16px;"></div>
         </div>
     </div>
     <div id="example-team-edit-modal" class="modal-overlay" onclick="if(event.target===this)closeExampleTeamEditor()">
@@ -10585,7 +10595,7 @@
         const imgEl = document.getElementById('preview-img'), zoomCanvas = document.getElementById('zoom-canvas'), imgContainer = document.getElementById('img-container'), imgPlaceholder = document.getElementById('img-placeholder'), statusText = document.getElementById('status-text'), dimText = document.getElementById('dim-text'), loader = document.getElementById('loader'), tableBody = document.getElementById('table-body'), debugBtn = document.getElementById('debug-btn'), editModeBtn = document.getElementById('edit-mode-btn'), historyListEl = document.getElementById('history-list'), urlInput = document.getElementById('url-input'), analyzeBtn = document.getElementById('btn-analyze'), loginInput = document.getElementById('login-uid'), loginBtn = document.getElementById('btn-login'), weightStatus = document.getElementById('weight-status'), uidDisplay = document.getElementById('uid-display'), roleGrid = document.getElementById('role-grid'), roleCanvas = document.getElementById('role-correction-canvas'), ocrResultText = document.getElementById('ocr-result-text'), cvOverlay = document.getElementById('cv-overlay'), btnLoadAll = document.getElementById('btn-load-all');
         const subEditName = document.getElementById('sub-edit-name'), subEditVal = document.getElementById('sub-edit-val'), subEditValSelect = document.getElementById('sub-edit-val-select'), subEditCanvas = document.getElementById('sub-edit-canvas');
         const mobileContainer = document.getElementById('mobile-results'); // NEW
-        let g_globalData = {}, g_chains = [], g_echoesData = [], g_customEchoes = [], g_currentEntryId = null, g_debugMode = false, g_sourceImage = null, g_weightNames = [], g_currentWeights = {}, g_weightsLoaded = false, g_currentUserUid = "", g_lastRefreshTime = 0, g_roleResolve = null, g_rolePickerMode = 'ocr', g_lockedTarget = null, g_weightsRawData = null, g_showPotentialMode = false, g_selectedBuildIdx = 0, g_installPrompt = null, g_editingSub = { eIdx: -1, sIdx: -1 }, g_lastRankInfo = null, g_isLocalFile = false, g_canUploadLocal = false, g_suitTemplates = {}, g_echoLibViewMode = false, g_weightsPromise = null, g_historyScrollTop = 0, g_rolePositionTagFromWeights = {};
+        let g_globalData = {}, g_chains = [], g_echoesData = [], g_customEchoes = [], g_currentEntryId = null, g_debugMode = false, g_sourceImage = null, g_weightNames = [], g_currentWeights = {}, g_weightsLoaded = false, g_currentUserUid = "", g_lastRefreshTime = 0, g_roleResolve = null, g_rolePickerMode = 'ocr', g_lockedTarget = null, g_weightsRawData = null, g_showPotentialMode = false, g_selectedBuildIdx = 0, g_installPrompt = null, g_editingSub = { eIdx: -1, sIdx: -1 }, g_lastRankInfo = null, g_isLocalFile = false, g_canUploadLocal = false, g_suitTemplates = {}, g_echoLibViewMode = false, g_weightsPromise = null, g_historyScrollTop = 0, g_rolePositionTagFromWeights = {}, g_rolePositionTableFromUrl = [], g_exampleTeamsFromUrl = [], g_gamezhTeamsFromUrl = [];
         let g_offlineSyncTimers = {};
         let g_customEchoSyncTimers = {};
         let g_offlineApiWarned = false;
@@ -11681,7 +11691,7 @@
             }
             return { typeLabel, note, typeColor };
         }
-        function getWeightPayloadTeamRows(json) {
+        function getWeightPayloadRowsByKeys(json, objKeys = [], dataKeys = []) {
             if (!json || typeof json !== 'object') return [];
             const getObjRows = (headers, rows) => {
                 if (!Array.isArray(headers) || !Array.isArray(rows)) return [];
@@ -11691,29 +11701,99 @@
                     return obj;
                 });
             };
-            if (Array.isArray(json.teams)) return json.teams.filter(Boolean);
-            if (Array.isArray(json.teamData) && Array.isArray(json.teamHeaders)) return getObjRows(json.teamHeaders, json.teamData);
-            if (Array.isArray(json.teamsData) && Array.isArray(json.teamsHeaders)) return getObjRows(json.teamsHeaders, json.teamsData);
+            for (const k of objKeys) {
+                if (Array.isArray(json[k])) return json[k].filter(Boolean);
+            }
+            for (const { headersKey, rowsKey } of dataKeys) {
+                if (Array.isArray(json[rowsKey]) && Array.isArray(json[headersKey])) return getObjRows(json[headersKey], json[rowsKey]);
+            }
             return [];
+        }
+        function getWeightPayloadTeamRows(json) {
+            return getWeightPayloadRowsByKeys(
+                json,
+                ['teams', 'teamGuide', 'team_guide', 'exampleTeams', 'example_teams'],
+                [
+                    { headersKey: 'teamHeaders', rowsKey: 'teamData' },
+                    { headersKey: 'teamsHeaders', rowsKey: 'teamsData' },
+                    { headersKey: 'teamGuideHeaders', rowsKey: 'teamGuideData' },
+                    { headersKey: 'exampleTeamsHeaders', rowsKey: 'exampleTeamsData' }
+                ]
+            );
+        }
+        function getWeightPayloadRoleRows(json) {
+            return getWeightPayloadRowsByKeys(
+                json,
+                ['rolePositions', 'rolePositionRows', 'role_position_rows', 'roleTags', 'role_tags'],
+                [
+                    { headersKey: 'rolePositionHeaders', rowsKey: 'rolePositionData' },
+                    { headersKey: 'roleTagsHeaders', rowsKey: 'roleTagsData' }
+                ]
+            );
+        }
+        function getWeightPayloadGamezhRows(json) {
+            return getWeightPayloadRowsByKeys(
+                json,
+                ['gamezhTeams', 'gamezhTeamGuide', 'gamezh_team_guide', 'teamGuideRaw', 'teamGuideTable'],
+                [
+                    { headersKey: 'gamezhTeamHeaders', rowsKey: 'gamezhTeamData' },
+                    { headersKey: 'gamezhHeaders', rowsKey: 'gamezhData' }
+                ]
+            );
+        }
+        function getFieldVal(row, keys) {
+            for (const k of keys) {
+                if (row && Object.prototype.hasOwnProperty.call(row, k) && row[k] != null) return String(row[k]).trim();
+            }
+            return '';
+        }
+        function normalizeRolePositionsFromWeightPayload(json) {
+            const rows = getWeightPayloadRoleRows(json);
+            const normalized = rows.map((row, idx) => {
+                const name = getFieldVal(row, ['角色', '角色名', 'role', 'name', 'charName']);
+                const typeLabel = getFieldVal(row, ['定位', '類型', 'typeLabel', 'type', 'roleType']) || '副C';
+                const note = getFieldVal(row, ['標籤', '說明', 'note', 'tag', 'roleTag']);
+                const typeColor = getFieldVal(row, ['顏色', 'color', 'typeColor']) || '#61afef';
+                if (!name) return null;
+                return { id: idx + 1, name, typeLabel, note, typeColor };
+            }).filter(Boolean);
+            if (normalized.length) return normalized;
+            return Object.entries(g_rolePositionTagFromWeights || {}).map(([name, info], idx) => ({
+                id: idx + 1,
+                name,
+                typeLabel: String(info?.typeLabel || '副C'),
+                note: String(info?.note || ''),
+                typeColor: String(info?.typeColor || '#61afef')
+            }));
+        }
+        function normalizeGamezhTeamsFromWeightPayload(json) {
+            const rows = getWeightPayloadGamezhRows(json);
+            if (!rows.length) return [];
+            return rows.map((row, idx) => {
+                const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName']);
+                const mainC = getFieldVal(row, ['主C', 'mainC']);
+                const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C']);
+                const c3 = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助']);
+                const dps = getFieldVal(row, ['DPS', 'dps', '強度', 'power']);
+                const flow = getFieldVal(row, ['流程', 'rotation']);
+                const difficulty = getFieldVal(row, ['難度', 'difficulty']);
+                const notes = getFieldVal(row, ['備註', '备注', 'notes']);
+                if (!system && !mainC && !c2 && !c3) return null;
+                return { id: idx + 1, system, mainC, c2, c3, dps, flow, difficulty, notes };
+            }).filter(Boolean);
         }
         function normalizeGuideTeamsFromWeightPayload(json) {
             const rows = getWeightPayloadTeamRows(json);
             if (!rows.length) return [];
-            const getVal = (row, keys) => {
-                for (const k of keys) {
-                    if (row && Object.prototype.hasOwnProperty.call(row, k) && row[k] != null) return String(row[k]).trim();
-                }
-                return '';
-            };
             return rows.map(row => {
-                const system = getVal(row, ['體系', '系统', 'system', 'teamName']);
-                const mainC = getVal(row, ['主C', 'mainC']);
-                const c2 = getVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C']);
-                const c3 = getVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助']);
-                const dpsRaw = getVal(row, ['DPS', 'dps', '強度', 'power']);
-                const flow = getVal(row, ['流程', 'rotation']);
-                const difficulty = getVal(row, ['難度', 'difficulty']);
-                const notes = getVal(row, ['備註', '备注', 'notes']);
+                const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName']);
+                const mainC = getFieldVal(row, ['主C', 'mainC']);
+                const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C']);
+                const c3 = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助']);
+                const dpsRaw = getFieldVal(row, ['DPS', 'dps', '強度', 'power']);
+                const flow = getFieldVal(row, ['流程', 'rotation']);
+                const difficulty = getFieldVal(row, ['難度', 'difficulty']);
+                const notes = getFieldVal(row, ['備註', '备注', 'notes']);
                 if (!system && !mainC && !c2 && !c3) return null;
                 const power = Number.isFinite(Number(dpsRaw)) ? Number(dpsRaw) : 0;
                 const rotation = [flow, difficulty ? `難度：${difficulty}` : ''].filter(Boolean).join(' ｜ ');
@@ -11732,12 +11812,19 @@
         }
         function syncExampleTeamsFromWeightPayload(json) {
             const teams = normalizeGuideTeamsFromWeightPayload(json);
-            if (!teams.length) return;
-            try {
-                localStorage.setItem('ww_example_teams_v1', JSON.stringify(teams));
-            } catch (e) { }
+            g_exampleTeamsFromUrl = teams.map(t => ({ ...t }));
             const teamModal = document.getElementById('example-team-modal');
             if (teamModal && teamModal.style.display === 'flex') openExampleTeamModal();
+        }
+        function syncRolePositionTableFromWeightPayload(json) {
+            g_rolePositionTableFromUrl = normalizeRolePositionsFromWeightPayload(json);
+            const modal = document.getElementById('role-position-modal');
+            if (modal && modal.style.display === 'flex') openRolePositionModal();
+        }
+        function syncGamezhTeamsFromWeightPayload(json) {
+            g_gamezhTeamsFromUrl = normalizeGamezhTeamsFromWeightPayload(json);
+            const modal = document.getElementById('gamezh-team-modal');
+            if (modal && modal.style.display === 'flex') openGamezhTeamModal();
         }
         async function loadWeightsBackground(url) {
             if (_g_fetchingWeights) return;
@@ -11754,6 +11841,8 @@
                     g_weightsRawData = json;
                     processWeightsData(json);
                     syncExampleTeamsFromWeightPayload(json);
+                    syncRolePositionTableFromWeightPayload(json);
+                    syncGamezhTeamsFromWeightPayload(json);
                     renderWeightsTable();
                     g_weightsLoaded = true;
                     weightStatus.innerText = "系統資料已就緒";
@@ -12632,25 +12721,20 @@
             };
         });
         function getExampleTeamsData() {
-            try {
-                const raw = localStorage.getItem('ww_example_teams_v1');
-                if (!raw) return EXAMPLE_TEAMS_DEFAULT.map(t => ({ ...t }));
-                const parsed = JSON.parse(raw);
-                if (!Array.isArray(parsed) || parsed.length === 0) return EXAMPLE_TEAMS_DEFAULT.map(t => ({ ...t }));
-                return parsed.map((item, idx) => ({
-                    system: String(item.system || EXAMPLE_TEAMS_DEFAULT[idx]?.system || ''),
-                    mainC: String(item.mainC || ''),
-                    bestSub: String(item.bestSub || ''),
-                    altSubs: String(item.altSubs || ''),
-                    bestSupport: String(item.bestSupport || ''),
-                    altSupports: String(item.altSupports || ''),
-                    rotation: String(item.rotation || ''),
-                    notes: String(item.notes || ''),
-                    power: Number.isFinite(Number(item.power)) ? Number(item.power) : Number(EXAMPLE_TEAMS_DEFAULT[idx]?.power || 0)
-                }));
-            } catch (e) {
-                return EXAMPLE_TEAMS_DEFAULT.map(t => ({ ...t }));
-            }
+            const src = (g_exampleTeamsFromUrl && g_exampleTeamsFromUrl.length)
+                ? g_exampleTeamsFromUrl
+                : normalizeGuideTeamsFromWeightPayload(g_weightsRawData || {});
+            return (src || []).map(item => ({
+                system: String(item.system || ''),
+                mainC: String(item.mainC || ''),
+                bestSub: String(item.bestSub || ''),
+                altSubs: String(item.altSubs || ''),
+                bestSupport: String(item.bestSupport || ''),
+                altSupports: String(item.altSupports || ''),
+                rotation: String(item.rotation || ''),
+                notes: String(item.notes || ''),
+                power: Number.isFinite(Number(item.power)) ? Number(item.power) : 0
+            }));
         }
 
         const ROLE_POSITIONS = {
@@ -12733,7 +12817,7 @@
             return `<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:0.68rem;font-weight:700;background:${tag.bg};color:${tag.color};border:1px solid ${tag.color}55;margin-left:4px;vertical-align:middle;">${tag.emoji} ${tag.label}</span>`;
         }
 
-        // Returns detailed position info from ROLE_POSITIONS: {typeLabel, note, typeColor}
+        // Returns detailed position info from URL payload: {typeLabel, note, typeColor}
         // typeLabel: 主C / 副C / 奶媽 / 輔助
         // note: per-character note or category shortTag (e.g. "共解冷凝", "泛用奶媽")
         function getCharPositionInfo(charName) {
@@ -12744,18 +12828,9 @@
                     if (charName.includes(name) || name.includes(charName)) return { ...info };
                 }
             }
-            if (!ROLE_POSITIONS) return null;
-            for (const [catName, info] of Object.entries(ROLE_POSITIONS)) {
-                if (!info.chars) continue;
-                const idx = info.chars.findIndex(c => charName.includes(c) || c.includes(charName));
-                if (idx === -1) continue;
-                const note = (info.charNotes && info.charNotes[idx]) ? info.charNotes[idx] : (info.shortTag || '');
-                let typeLabel = '副C';
-                let typeColor = info.color;
-                if (catName.includes('純輸出主C')) { typeLabel = '主C'; typeColor = '#ff5252'; }
-                else if (catName.includes('全域') || catName.includes('奶媽')) { typeLabel = '奶媽'; typeColor = '#ffd700'; }
-                else if (catName.includes('生存')) { typeLabel = '輔助'; typeColor = '#78e08f'; }
-                return { typeLabel, note, typeColor };
+            if (Array.isArray(g_rolePositionTableFromUrl) && g_rolePositionTableFromUrl.length) {
+                const found = g_rolePositionTableFromUrl.find(r => charName.includes(r.name) || r.name.includes(charName));
+                if (found) return { typeLabel: found.typeLabel || '副C', note: found.note || '', typeColor: found.typeColor || '#61afef' };
             }
             return null;
         }
@@ -12768,9 +12843,14 @@
             const teams = getExampleTeamsData();
             let html = `<div style="color:#aaa;font-size:0.85rem;margin-bottom:16px;">`;
             html += isEN
-                ? `Meta team compositions by core system. Sub-C and support alternatives are listed in priority order.`
-                : `各核心體系隊伍配置參考，副C與輔助下位替代按優先順序排列。`;
+                ? `Team compositions are loaded from URL data source.`
+                : `隊伍配置資料由 URL 資料來源載入。`;
             html += `</div>`;
+            if (!teams.length) {
+                body.innerHTML = html + `<div style="color:#888;padding:14px;border:1px dashed #444;border-radius:8px;">${isEN ? 'No example-team data from URL.' : '目前沒有可用的範例隊伍資料。'}</div>`;
+                modal.style.display = 'flex';
+                return;
+            }
             html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;">`;
             teams.forEach((team, idx) => {
                 html += `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(92,124,250,0.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">`;
@@ -12823,6 +12903,67 @@
 
         function closeExampleTeamModal() {
             const modal = document.getElementById('example-team-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        function openGamezhTeamModal() {
+            const modal = document.getElementById('gamezh-team-modal');
+            const body = document.getElementById('gamezh-team-body');
+            if (!modal || !body) return;
+            const isEN = g_lang === 'en';
+            const rowsRaw = Array.isArray(g_gamezhTeamsFromUrl) && g_gamezhTeamsFromUrl.length
+                ? g_gamezhTeamsFromUrl
+                : normalizeGamezhTeamsFromWeightPayload(g_weightsRawData || {});
+            const kw = (document.getElementById('gamezh-filter')?.value || '').trim();
+            const mainCFilter = document.getElementById('gamezh-mainc-filter')?.value || 'all';
+            const diffFilter = document.getElementById('gamezh-diff-filter')?.value || 'all';
+            const mainCOptions = Array.from(new Set(rowsRaw.map(r => String(r.mainC || '').trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+            const diffOptions = Array.from(new Set(rowsRaw.map(r => String(r.difficulty || '').trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+            const rows = rowsRaw.filter(r => {
+                if (mainCFilter !== 'all' && String(r.mainC || '') !== mainCFilter) return false;
+                if (diffFilter !== 'all' && String(r.difficulty || '') !== diffFilter) return false;
+                if (!kw) return true;
+                return [r.system, r.mainC, r.c2, r.c3, r.dps, r.flow, r.difficulty, r.notes].join('|').includes(kw);
+            });
+            let html = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">`;
+            html += `<input id="gamezh-filter" oninput="openGamezhTeamModal()" value="${escapeHtml(kw)}" placeholder="${isEN ? 'Search system/mainC/notes' : '搜尋體系/角色/備註'}" style="flex:1;min-width:220px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+            html += `<select id="gamezh-mainc-filter" onchange="openGamezhTeamModal()" style="min-width:130px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;"><option value="all">${isEN ? 'All MainC' : '全部主C'}</option>${mainCOptions.map(v => `<option value="${escapeHtml(v)}" ${mainCFilter === v ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('')}</select>`;
+            html += `<select id="gamezh-diff-filter" onchange="openGamezhTeamModal()" style="min-width:120px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;"><option value="all">${isEN ? 'All Difficulty' : '全部難度'}</option>${diffOptions.map(v => `<option value="${escapeHtml(v)}" ${diffFilter === v ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('')}</select>`;
+            html += `</div>`;
+            if (!rows.length) {
+                html += `<div style="color:#888;padding:14px;border:1px dashed #444;border-radius:8px;">${isEN ? 'No gamezh team-guide data from URL.' : '目前沒有可用的 gamezh 配隊資料。'}</div>`;
+                body.innerHTML = html;
+                modal.style.display = 'flex';
+                return;
+            }
+            html += `<div style="overflow:auto;border:1px solid rgba(255,255,255,0.1);border-radius:10px;">`;
+            html += `<table style="width:100%;border-collapse:collapse;font-size:0.84rem;"><thead><tr style="background:#252530;color:#aab6ff;">`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'System' : '體系'}</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'MainC' : '主C'}</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">隊員2 (C2)</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">隊員3 (C3)</th>`;
+            html += `<th style="text-align:right;padding:8px 10px;border-bottom:1px solid #333;">DPS</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'Flow' : '流程'}</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'Difficulty' : '難度'}</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'Notes' : '備註'}</th>`;
+            html += `</tr></thead><tbody>`;
+            rows.forEach(r => {
+                html += `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">`;
+                html += `<td style="padding:7px 10px;color:#ddd;">${escapeHtml(r.system || '')}</td>`;
+                html += `<td style="padding:7px 10px;color:#ff9090;font-weight:700;">${escapeHtml(r.mainC || '')}</td>`;
+                html += `<td style="padding:7px 10px;color:#8ec8f5;">${escapeHtml(r.c2 || '')}</td>`;
+                html += `<td style="padding:7px 10px;color:#7fd5dc;">${escapeHtml(r.c3 || '')}</td>`;
+                html += `<td style="padding:7px 10px;text-align:right;color:#e5c07b;font-family:'JetBrains Mono';">${escapeHtml(String(r.dps || ''))}</td>`;
+                html += `<td style="padding:7px 10px;color:#aaa;">${escapeHtml(r.flow || '')}</td>`;
+                html += `<td style="padding:7px 10px;color:#aaa;">${escapeHtml(r.difficulty || '')}</td>`;
+                html += `<td style="padding:7px 10px;color:#888;">${escapeHtml(r.notes || '')}</td>`;
+                html += `</tr>`;
+            });
+            html += `</tbody></table></div>`;
+            body.innerHTML = html;
+            modal.style.display = 'flex';
+        }
+        function closeGamezhTeamModal() {
+            const modal = document.getElementById('gamezh-team-modal');
             if (modal) modal.style.display = 'none';
         }
         function parsePriorityNames(text) {
@@ -13037,11 +13178,10 @@
             renderExampleTeamRolePicker();
         }
         function resetExampleTeamEditor() {
-            localStorage.removeItem('ww_example_teams_v1');
             window.__exampleTeamEditorState = buildExampleTeamEditorState();
             renderExampleTeamEditor();
             openExampleTeamModal();
-            showMsg('已還原範例隊伍預設值');
+            showMsg('已還原 URL 隊伍資料');
         }
         function saveExampleTeamEditor() {
             const src = window.__exampleTeamEditorState || [];
@@ -13056,11 +13196,11 @@
                 notes: String(team.notes || '').trim(),
                 power: Number.isFinite(Number(team.power)) ? Number(team.power) : 0
             }));
-            localStorage.setItem('ww_example_teams_v1', JSON.stringify(teams));
+            g_exampleTeamsFromUrl = teams.map(t => ({ ...t }));
             openExampleTeamModal();
             closeExampleTeamEditor();
             closeExampleTeamRolePicker();
-            showMsg('已儲存範例隊伍配置');
+            showMsg('已套用目前範例隊伍配置');
         }
 
         function getExampleTeamBanner(role, isEN) {
@@ -13104,32 +13244,45 @@
             const body = document.getElementById('role-position-body');
             if (!modal || !body) return;
             const isEN = g_lang === 'en';
-            let html = `<div style="color:#aaa;font-size:0.85rem;margin-bottom:16px;">`;
-            html += isEN
-                ? `Character role classification table. Roles are based on general meta playstyle.`
-                : `角色定位分類表，依據角色主流玩法分類，部分角色可兼任多種定位。`;
-            html += `</div>`;
-            html += `<div style="display:flex;flex-direction:column;gap:14px;">`;
-            Object.entries(ROLE_POSITIONS).forEach(([roleName, info]) => {
-                html += `<div style="background:${info.bg};border:1px solid ${info.color}44;border-radius:8px;padding:12px 16px;">`;
-                html += `<div style="font-size:1rem;font-weight:bold;color:${info.color};margin-bottom:10px;">${roleName}</div>`;
-                html += `<div style="display:flex;flex-wrap:wrap;gap:8px;">`;
-                info.chars.forEach((c, ci) => {
-                    const enName = lookupRoleEN(c) || c;
-                    const displayName = isEN ? (enName || c) : c;
-                    const note = info.charNotes ? info.charNotes[ci] : null;
-                    if (note) {
-                        html += `<div style="background:rgba(255,255,255,0.07);border:1px solid ${info.color}66;border-radius:4px;padding:4px 10px;font-size:0.88rem;color:#ddd;display:flex;flex-direction:column;gap:2px;">`;
-                        html += `<span>${displayName}</span>`;
-                        html += `<span style="font-size:0.75rem;color:${info.color}bb;">${note}</span>`;
-                        html += `</div>`;
-                    } else {
-                        html += `<span style="background:rgba(255,255,255,0.07);border:1px solid ${info.color}66;border-radius:4px;padding:3px 10px;font-size:0.88rem;color:#ddd;">${displayName}</span>`;
-                    }
-                });
-                html += `</div></div>`;
+            const rowsRaw = Array.isArray(g_rolePositionTableFromUrl) && g_rolePositionTableFromUrl.length
+                ? g_rolePositionTableFromUrl
+                : normalizeRolePositionsFromWeightPayload(g_weightsRawData || {});
+            const kw = (document.getElementById('role-position-filter')?.value || '').trim();
+            const typeFilter = document.getElementById('role-position-type-filter')?.value || 'all';
+            const rows = rowsRaw.filter(r => {
+                if (typeFilter !== 'all' && String(r.typeLabel || '') !== typeFilter) return false;
+                if (!kw) return true;
+                const bag = [r.name, r.typeLabel, r.note].join('|');
+                return bag.includes(kw);
             });
+            const typeOptions = ['all', '主C', '副C', '奶媽', '輔助'].map(type => {
+                const label = type === 'all' ? (isEN ? 'All Types' : '全部定位') : type;
+                return `<option value="${type}" ${typeFilter === type ? 'selected' : ''}>${label}</option>`;
+            }).join('');
+            let html = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">`;
+            html += `<input id="role-position-filter" oninput="openRolePositionModal()" value="${escapeHtml(kw)}" placeholder="${isEN ? 'Search role/name/tag' : '搜尋角色/定位/標籤'}" style="flex:1;min-width:220px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+            html += `<select id="role-position-type-filter" onchange="openRolePositionModal()" style="min-width:130px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">${typeOptions}</select>`;
             html += `</div>`;
+            if (!rows.length) {
+                html += `<div style="color:#888;padding:14px;border:1px dashed #444;border-radius:8px;">${isEN ? 'No role-position data from URL.' : '目前沒有可用的 URL 角色定位資料。'}</div>`;
+                body.innerHTML = html;
+                modal.style.display = 'flex';
+                return;
+            }
+            html += `<div style="overflow:auto;border:1px solid rgba(255,255,255,0.1);border-radius:10px;">`;
+            html += `<table style="width:100%;border-collapse:collapse;font-size:0.84rem;"><thead><tr style="background:#252530;color:#aab6ff;">`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'Character' : '角色'}</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'Type' : '定位'}</th>`;
+            html += `<th style="text-align:left;padding:8px 10px;border-bottom:1px solid #333;">${isEN ? 'Tag (URL)' : '標籤（URL）'}</th>`;
+            html += `</tr></thead><tbody>`;
+            rows.forEach(r => {
+                html += `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">`;
+                html += `<td style="padding:7px 10px;color:#ddd;">${escapeHtml(isEN ? (lookupRoleEN(r.name) || r.name) : r.name)}</td>`;
+                html += `<td style="padding:7px 10px;color:${escapeHtml(r.typeColor || '#61afef')};font-weight:700;">${escapeHtml(r.typeLabel || '')}</td>`;
+                html += `<td style="padding:7px 10px;color:#aaa;">${escapeHtml(r.note || '')}</td>`;
+                html += `</tr>`;
+            });
+            html += `</tbody></table></div>`;
             body.innerHTML = html;
             modal.style.display = 'flex';
         }
