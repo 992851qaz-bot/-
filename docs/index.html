@@ -11672,20 +11672,26 @@
         const _WC_KEY = 'ww_wc'; const _WC_TTL = 1800000;
         let _g_fetchingWeights = false;
         function parseRolePositionTagFromDesc(descText) {
-            const firstLine = String(descText || '').split(/\r?\n/)[0] || '';
-            const m = firstLine.match(/\*\s*\[([^\]]+)\]\s*\*/);
-            if (!m || !m[1]) return null;
-            const note = String(m[1]).replace(/\s+/g, ' ').trim();
+            const raw = String(descText || '');
+            const sample = raw.replace(/\r/g, '\n').slice(0, 220);
+            let note = '';
+            const bracketTag = sample.match(/\*\s*\[([^\]]+)\]\s*\*/);
+            if (bracketTag && bracketTag[1]) {
+                note = String(bracketTag[1]).replace(/\s+/g, ' ').trim();
+            } else {
+                const plainTag = sample.match(/\*\s*([^*\n]{1,80}?)\s*\*/);
+                if (plainTag && plainTag[1]) note = String(plainTag[1]).replace(/\s+/g, ' ').trim();
+            }
             if (!note) return null;
             let typeLabel = '副C';
             let typeColor = '#61afef';
-            if (/主\s*C/i.test(note) || /主輸/.test(note)) {
+            if (/主\s*C/i.test(note) || /主輸/.test(note) || /主力輸出/.test(note) || /主輸出/.test(note)) {
                 typeLabel = '主C';
                 typeColor = '#ff5252';
             } else if (/奶|治療|補/.test(note)) {
                 typeLabel = '奶媽';
                 typeColor = '#78e08f';
-            } else if (/輔/.test(note)) {
+            } else if (/輔|支援|增傷/.test(note)) {
                 typeLabel = '輔助';
                 typeColor = '#56b6c2';
             }
@@ -11712,22 +11718,25 @@
         function getWeightPayloadTeamRows(json) {
             return getWeightPayloadRowsByKeys(
                 json,
-                ['teams', 'teamGuide', 'team_guide', 'exampleTeams', 'example_teams'],
+                ['teams', 'teamGuide', 'team_guide', 'exampleTeams', 'example_teams', 'teamDB', 'teamDb', 'teamRows', 'team_rows', 'teamConfigs', 'team_configs'],
                 [
                     { headersKey: 'teamHeaders', rowsKey: 'teamData' },
                     { headersKey: 'teamsHeaders', rowsKey: 'teamsData' },
                     { headersKey: 'teamGuideHeaders', rowsKey: 'teamGuideData' },
-                    { headersKey: 'exampleTeamsHeaders', rowsKey: 'exampleTeamsData' }
+                    { headersKey: 'exampleTeamsHeaders', rowsKey: 'exampleTeamsData' },
+                    { headersKey: 'teamDBHeaders', rowsKey: 'teamDBData' },
+                    { headersKey: 'teamDbHeaders', rowsKey: 'teamDbData' }
                 ]
             );
         }
         function getWeightPayloadRoleRows(json) {
             return getWeightPayloadRowsByKeys(
                 json,
-                ['rolePositions', 'rolePositionRows', 'role_position_rows', 'roleTags', 'role_tags'],
+                ['rolePositions', 'rolePositionRows', 'role_position_rows', 'roleTags', 'role_tags', 'rolePositionTable', 'role_position_table', 'characterRoles', 'character_roles'],
                 [
                     { headersKey: 'rolePositionHeaders', rowsKey: 'rolePositionData' },
-                    { headersKey: 'roleTagsHeaders', rowsKey: 'roleTagsData' }
+                    { headersKey: 'roleTagsHeaders', rowsKey: 'roleTagsData' },
+                    { headersKey: 'rolePositionTableHeaders', rowsKey: 'rolePositionTableData' }
                 ]
             );
         }
@@ -11751,8 +11760,8 @@
             const rows = getWeightPayloadRoleRows(json);
             const normalized = rows.map((row, idx) => {
                 const name = getFieldVal(row, ['角色', '角色名', 'role', 'name', 'charName']);
-                const typeLabel = getFieldVal(row, ['定位', '類型', 'typeLabel', 'type', 'roleType']) || '副C';
-                const note = getFieldVal(row, ['標籤', '說明', 'note', 'tag', 'roleTag']);
+                const typeLabel = getFieldVal(row, ['定位', '類型', 'typeLabel', 'type', 'roleType', '角色定位']) || '副C';
+                const note = getFieldVal(row, ['標籤', '說明', '角色說明', 'note', 'tag', 'roleTag', 'desc', 'description']);
                 const typeColor = getFieldVal(row, ['顏色', 'color', 'typeColor']) || '#61afef';
                 if (!name) return null;
                 return { id: idx + 1, name, typeLabel, note, typeColor };
@@ -11786,24 +11795,26 @@
             const rows = getWeightPayloadTeamRows(json);
             if (!rows.length) return [];
             return rows.map(row => {
-                const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName']);
-                const mainC = getFieldVal(row, ['主C', 'mainC']);
-                const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C']);
-                const c3 = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助']);
-                const dpsRaw = getFieldVal(row, ['DPS', 'dps', '強度', 'power']);
+                const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName', '隊伍', 'team']);
+                const mainC = getFieldVal(row, ['主C', 'mainC', 'mainDPS', 'main_dps']);
+                const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C', 'subDPS', 'sub_dps']);
+                const c3 = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助', 'support', 'supporter']);
+                const dpsRaw = getFieldVal(row, ['DPS', 'dps', '強度', 'power', 'teamPower']);
                 const flow = getFieldVal(row, ['流程', 'rotation']);
                 const difficulty = getFieldVal(row, ['難度', 'difficulty']);
                 const notes = getFieldVal(row, ['備註', '备注', 'notes']);
                 if (!system && !mainC && !c2 && !c3) return null;
+                const subList = parsePriorityNames(c2 || '');
+                const supportList = parsePriorityNames(c3 || '');
                 const power = Number.isFinite(Number(dpsRaw)) ? Number(dpsRaw) : 0;
                 const rotation = [flow, difficulty ? `難度：${difficulty}` : ''].filter(Boolean).join(' ｜ ');
                 return {
                     system,
                     mainC,
-                    bestSub: c2,
-                    altSubs: '',
-                    bestSupport: c3,
-                    altSupports: '',
+                    bestSub: subList[0] || '',
+                    altSubs: subList.slice(1).join(' > '),
+                    bestSupport: supportList[0] || '',
+                    altSupports: supportList.slice(1).join(' > '),
                     rotation,
                     notes,
                     power
