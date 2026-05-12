@@ -11691,11 +11691,20 @@
             } else if (/奶|治療|補/.test(note)) {
                 typeLabel = '奶媽';
                 typeColor = '#78e08f';
-            } else if (/輔|支援|增傷/.test(note)) {
+            } else if (/輔|支援|增傷|快速協奏|協奏/.test(note)) {
                 typeLabel = '輔助';
                 typeColor = '#56b6c2';
             }
             return { typeLabel, note, typeColor };
+        }
+        function normalizeRoleTypeLabel(rawLabel = '') {
+            const txt = String(rawLabel || '').trim();
+            if (!txt) return '副C';
+            if (/主\s*C|主力輸出|主輸出|主輸|DPS|MAIN/i.test(txt)) return '主C';
+            if (/快速協奏|協奏|輔助|支援|SUPPORT/i.test(txt)) return '輔助';
+            if (/奶|治療|補|HEAL/i.test(txt)) return '奶媽';
+            if (/副|SUB/i.test(txt)) return '副C';
+            return txt;
         }
         function getWeightPayloadRowsByKeys(json, objKeys = [], dataKeys = []) {
             if (!json || typeof json !== 'object') return [];
@@ -11718,14 +11727,15 @@
         function getWeightPayloadTeamRows(json) {
             return getWeightPayloadRowsByKeys(
                 json,
-                ['teams', 'teamGuide', 'team_guide', 'exampleTeams', 'example_teams', 'teamDB', 'teamDb', 'teamRows', 'team_rows', 'teamConfigs', 'team_configs'],
+                ['teams', 'teamGuide', 'team_guide', 'exampleTeams', 'example_teams', 'teamDB', 'teamDb', 'teamRows', 'team_rows', 'teamConfigs', 'team_configs', 'cloudTeams', 'cloudTeamGuide', 'cloud_team_guide', 'cloudTeamRows', 'cloud_team_rows'],
                 [
                     { headersKey: 'teamHeaders', rowsKey: 'teamData' },
                     { headersKey: 'teamsHeaders', rowsKey: 'teamsData' },
                     { headersKey: 'teamGuideHeaders', rowsKey: 'teamGuideData' },
                     { headersKey: 'exampleTeamsHeaders', rowsKey: 'exampleTeamsData' },
                     { headersKey: 'teamDBHeaders', rowsKey: 'teamDBData' },
-                    { headersKey: 'teamDbHeaders', rowsKey: 'teamDbData' }
+                    { headersKey: 'teamDbHeaders', rowsKey: 'teamDbData' },
+                    { headersKey: 'cloudTeamHeaders', rowsKey: 'cloudTeamData' }
                 ]
             );
         }
@@ -11760,7 +11770,7 @@
             const rows = getWeightPayloadRoleRows(json);
             const normalized = rows.map((row, idx) => {
                 const name = getFieldVal(row, ['角色', '角色名', 'role', 'name', 'charName']);
-                const typeLabel = getFieldVal(row, ['定位', '類型', 'typeLabel', 'type', 'roleType', '角色定位']) || '副C';
+                const typeLabel = normalizeRoleTypeLabel(getFieldVal(row, ['定位', '類型', 'typeLabel', 'type', 'roleType', '角色定位']));
                 const note = getFieldVal(row, ['標籤', '說明', '角色說明', 'note', 'tag', 'roleTag', 'desc', 'description']);
                 const typeColor = getFieldVal(row, ['顏色', 'color', 'typeColor']) || '#61afef';
                 if (!name) return null;
@@ -11770,7 +11780,7 @@
             return Object.entries(g_rolePositionTagFromWeights || {}).map(([name, info], idx) => ({
                 id: idx + 1,
                 name,
-                typeLabel: String(info?.typeLabel || '副C'),
+                typeLabel: normalizeRoleTypeLabel(String(info?.typeLabel || '副C')),
                 note: String(info?.note || ''),
                 typeColor: String(info?.typeColor || '#61afef')
             }));
@@ -11796,13 +11806,16 @@
             if (!rows.length) return [];
             return rows.map(row => {
                 const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName', '隊伍', 'team']);
-                const mainC = getFieldVal(row, ['主C', 'mainC', 'mainDPS', 'main_dps']);
+                const mainC = getFieldVal(row, ['主力輸出', '主輸出', '主C', 'mainC', 'mainDPS', 'main_dps', 'main_output', 'mainOutput']);
                 const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C', 'subDPS', 'sub_dps']);
-                const c3 = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助', 'support', 'supporter']);
+                const quickSupport = getFieldVal(row, ['快速協奏', '快協', 'quickConcerto', 'quick_concerto', '輔助', 'support', 'supporter']);
+                const healer = getFieldVal(row, ['奶媽', '治療', '補師', 'healer', 'heal']);
+                const c3Legacy = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3']);
                 const dpsRaw = getFieldVal(row, ['DPS', 'dps', '強度', 'power', 'teamPower']);
                 const flow = getFieldVal(row, ['流程', 'rotation']);
                 const difficulty = getFieldVal(row, ['難度', 'difficulty']);
                 const notes = getFieldVal(row, ['備註', '备注', 'notes']);
+                const c3 = [quickSupport, healer, c3Legacy].filter(Boolean).join(' > ');
                 if (!system && !mainC && !c2 && !c3) return null;
                 const subList = parsePriorityNames(c2 || '');
                 const supportList = parsePriorityNames(c3 || '');
@@ -12688,49 +12701,6 @@
         function closeWeightsModal() { document.getElementById('weights-modal').style.display = 'none' }
 
         // ── 範例隊伍表格 & 角色定位表 ─────────────────────────────────────
-        const TEAM_DB_DEFAULT = [
-            { mainDPS: "弗洛洛", subDPS: "坎特蕾拉 > 嘉貝莉娜 > 仇遠 > 卜靈 > 燈燈", support: "莫寧 > 仇遠 > 守岸人 > 洛可可", teamName: "暗隊", dps: 8, rotation: "", notes: "" },
-            { mainDPS: "坎特蕾拉", subDPS: "散華", support: "守岸人", teamName: "暗隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "千咲", subDPS: "琳奈 > 洛可可", support: "守岸人", teamName: "暗隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "暗主", subDPS: "琳奈 > 洛可可 > 散華", support: "守岸人", teamName: "暗隊", dps: 7, rotation: "", notes: "" },
-            { mainDPS: "椿", subDPS: "洛可可 > 散華", support: "守岸人", teamName: "暗隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "陸·赫斯", subDPS: "洛可可 > 琳奈 > 散華", support: "莫寧 > 守岸人 > 維里奈", teamName: "光隊", dps: 9, rotation: "", notes: "" },
-            { mainDPS: "贊妮", subDPS: "菲比 > 光主", support: "光主 > 千咲 > 守岸人", teamName: "光隊", dps: 9, rotation: "", notes: "" },
-            { mainDPS: "菲比", subDPS: "光主", support: "琳奈 > 守岸人", teamName: "光隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "今汐", subDPS: "吟霖 > 折枝 > 坎特蕾拉", support: "守岸人 > 卜靈", teamName: "光隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "愛彌斯", subDPS: "琳奈 > 露帕 > 弗洛洛 > 千咲 > 長離 > 散華 > 鑒心", support: "莫寧 > 嘉貝莉娜 > 布蘭特 > 守岸人 > 千咲 > 長離", teamName: "火隊", dps: 10, rotation: "", notes: "" },
-            { mainDPS: "嘉貝莉娜", subDPS: "露帕 > 琳奈 > 仇遠 > 莫特斐", support: "布蘭特 > 莫寧 > 守岸人 > 長離 > 露帕", teamName: "火隊", dps: 9, rotation: "", notes: "" },
-            { mainDPS: "布蘭特", subDPS: "露帕 > 散華", support: "莫寧 > 長離 > 守岸人", teamName: "火隊", dps: 8, rotation: "", notes: "" },
-            { mainDPS: "露帕", subDPS: "琳奈", support: "守岸人", teamName: "火隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "長離", subDPS: "露帕 > 散華", support: "莫寧 > 守岸人", teamName: "火隊", dps: 7, rotation: "", notes: "" },
-            { mainDPS: "安可", subDPS: "露帕 > 散華", support: "莫寧 > 守岸人", teamName: "火隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "卡提希婭", subDPS: "夏空 > 散華 > 風主", support: "千咲 > 風主 > 卜靈", teamName: "風隊", dps: 11, rotation: "", notes: "" },
-            { mainDPS: "西格莉卡", subDPS: "仇遠 > 琳奈 > 夏空 > 坎特蕾拉 > 弗洛洛 > 散華", support: "夏空 > 守岸人 > 弗洛洛 > 莫寧", teamName: "風隊", dps: 10, rotation: "", notes: "" },
-            { mainDPS: "尤諾", subDPS: "琳奈 > 夏空", support: "守岸人 > 夏空 > 莫寧", teamName: "風隊", dps: 9, rotation: "", notes: "" },
-            { mainDPS: "夏空", subDPS: "千咲 > 散華", support: "守岸人", teamName: "風隊", dps: 8, rotation: "", notes: "" },
-            { mainDPS: "仇遠", subDPS: "弗洛洛 > 夏空 > 莫特斐", support: "守岸人", teamName: "風隊", dps: 8, rotation: "", notes: "" },
-            { mainDPS: "忌炎", subDPS: "夏空 > 莫特斐", support: "守岸人 > 尤諾", teamName: "風隊", dps: 8, rotation: "", notes: "" },
-            { mainDPS: "奧古斯塔", subDPS: "尤諾 > 莫特斐", support: "守岸人 > 琳奈", teamName: "雷隊", dps: 9, rotation: "", notes: "" },
-            { mainDPS: "卡卡羅", subDPS: "琳奈 > 吟霖 > 散華", support: "守岸人", teamName: "雷隊", dps: 8, rotation: "", notes: "" },
-            { mainDPS: "相里要", subDPS: "琳奈 > 吟霖 > 散華", support: "守岸人", teamName: "雷隊", dps: 6, rotation: "", notes: "" },
-            { mainDPS: "珂萊塔", subDPS: "琳奈 > 布蘭特 > 折枝 > 燈燈 > 卜靈 > 散華", support: "守岸人 > 莫寧", teamName: "冰隊", dps: 7, rotation: "", notes: "" },
-            { mainDPS: "凌陽", subDPS: "琳奈 > 折枝", support: "守岸人", teamName: "冰隊", dps: 5, rotation: "", notes: "" }
-        ];
-        const EXAMPLE_TEAMS_DEFAULT = TEAM_DB_DEFAULT.map((t) => {
-            const subList = parsePriorityNames(t.subDPS || '');
-            const supportList = parsePriorityNames(t.support || '');
-            return {
-                system: String(t.teamName || ''),
-                mainC: String(t.mainDPS || ''),
-                bestSub: subList[0] || '',
-                altSubs: subList.slice(1).join(' > '),
-                bestSupport: supportList[0] || '',
-                altSupports: supportList.slice(1).join(' > '),
-                rotation: String(t.rotation || ''),
-                notes: String(t.notes || ''),
-                power: Number.isFinite(Number(t.dps)) ? Number(t.dps) : 0
-            };
-        });
         function getExampleTeamsData() {
             const src = (g_exampleTeamsFromUrl && g_exampleTeamsFromUrl.length)
                 ? g_exampleTeamsFromUrl
@@ -12834,14 +12804,14 @@
         function getCharPositionInfo(charName) {
             if (!charName) return null;
             if (g_rolePositionTagFromWeights && typeof g_rolePositionTagFromWeights === 'object') {
-                if (g_rolePositionTagFromWeights[charName]) return { ...g_rolePositionTagFromWeights[charName] };
-                for (const [name, info] of Object.entries(g_rolePositionTagFromWeights)) {
-                    if (charName.includes(name) || name.includes(charName)) return { ...info };
+                    if (g_rolePositionTagFromWeights[charName]) return { ...g_rolePositionTagFromWeights[charName], typeLabel: normalizeRoleTypeLabel(g_rolePositionTagFromWeights[charName]?.typeLabel) };
+                    for (const [name, info] of Object.entries(g_rolePositionTagFromWeights)) {
+                    if (charName.includes(name) || name.includes(charName)) return { ...info, typeLabel: normalizeRoleTypeLabel(info?.typeLabel) };
                 }
             }
             if (Array.isArray(g_rolePositionTableFromUrl) && g_rolePositionTableFromUrl.length) {
                 const found = g_rolePositionTableFromUrl.find(r => charName.includes(r.name) || r.name.includes(charName));
-                if (found) return { typeLabel: found.typeLabel || '副C', note: found.note || '', typeColor: found.typeColor || '#61afef' };
+                if (found) return { typeLabel: normalizeRoleTypeLabel(found.typeLabel || '副C'), note: found.note || '', typeColor: found.typeColor || '#61afef' };
             }
             return null;
         }
@@ -13985,6 +13955,13 @@
             '陸赫斯':'sub','尤諾':'sub','露帕':'sub','弗洛洛':'sub','仇遠':'sub','琳奈':'sub'
         };
         function grad_getRoleType(role) {
+            const posInfo = getCharPositionInfo(role);
+            if (posInfo && posInfo.typeLabel) {
+                const t = normalizeRoleTypeLabel(posInfo.typeLabel);
+                if (t === '奶媽') return 'healer';
+                if (t === '輔助' || t === '副C') return 'sub';
+                if (t === '主C') return 'dps';
+            }
             const key = role.replace(/[^\u4e00-\u9fa5]/g,'').substring(0,4);
             return GRAD_ROLE_TYPE[key] || GRAD_ROLE_TYPE[role] || 'dps';
         }
