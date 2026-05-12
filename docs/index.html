@@ -11751,14 +11751,25 @@
             );
         }
         function getWeightPayloadGamezhRows(json) {
-            return getWeightPayloadRowsByKeys(
+            if (Array.isArray(json)) return json.filter(Boolean);
+            const rows = getWeightPayloadRowsByKeys(
                 json,
-                ['gamezhTeams', 'gamezhTeamGuide', 'gamezh_team_guide', 'teamGuideRaw', 'teamGuideTable'],
+                ['gamezhTeams', 'gamezhTeamGuide', 'gamezh_team_guide', 'teamGuideRaw', 'teamGuideTable', 'gamezh', 'gamezhGuide', 'gamezh_guide', '配隊攻略', '配隊', '隊伍攻略', '隊伍'],
                 [
                     { headersKey: 'gamezhTeamHeaders', rowsKey: 'gamezhTeamData' },
-                    { headersKey: 'gamezhHeaders', rowsKey: 'gamezhData' }
+                    { headersKey: 'gamezhHeaders', rowsKey: 'gamezhData' },
+                    { headersKey: 'gamezh_Headers', rowsKey: 'gamezh_Rows' },
+                    { headersKey: 'gamezhGuideHeaders', rowsKey: 'gamezhGuideData' },
+                    { headersKey: 'teamGuideHeaders', rowsKey: 'teamGuideData' }
                 ]
             );
+            if (rows.length) return rows;
+            if (!json || typeof json !== 'object') return [];
+            for (const [k, v] of Object.entries(json)) {
+                if (!Array.isArray(v) || !v.length) continue;
+                if (/(gamezh|配隊|攻略|teamguide)/i.test(String(k))) return v.filter(Boolean);
+            }
+            return [];
         }
         function getFieldVal(row, keys) {
             for (const k of keys) {
@@ -11857,7 +11868,7 @@
                 let json;
                 try { const _c = localStorage.getItem(_WC_KEY); if (_c) { const _p = JSON.parse(_c); if (Date.now() - _p.ts < _WC_TTL) { json = _p.d; } } } catch(e) {}
                 if (!json) {
-                    const res = await fetch(url + "?action=getWeights");
+                    const res = await fetch(buildApiActionUrl(url, 'getWeights'));
                     json = await res.json();
                     if (json.result === 'success') { try { localStorage.setItem(_WC_KEY, JSON.stringify({ts:Date.now(),d:json})); } catch(e) {} }
                 }
@@ -12181,6 +12192,11 @@
             const offlineUrl = getOfflineApiUrl();
             if (raw === offlineUrl || raw === DEFAULT_OFFLINE_API_URL) return DEFAULT_GAS_URL;
             return raw;
+        }
+        function buildApiActionUrl(baseUrl, action) {
+            const base = String(baseUrl || '').trim();
+            if (!base) return '';
+            return `${base}${base.includes('?') ? '&' : '?'}action=${encodeURIComponent(String(action || ''))}`;
         }
         function ensureMainApiConfigured() {
             const mainUrl = (localStorage.getItem('ww_gas_url') || '').trim();
@@ -14414,10 +14430,12 @@
             html += isEN
                 ? `Drag roles from the right into teams on the left. Each team supports up to 3 members. Non-healers can appear in only 1 team, healers up to 2 teams. Mobile players can use Quick Teaming without drag.`
                 : `將右側角色拖曳到左側隊伍。每隊最多 3 人。非奶媽僅可出現在 1 隊，奶媽最多可在 2 隊。手機可用「快速編隊」免拖曳分配。`;
+            html += `<br><span style="color:#9ecbf8;">${isEN ? '🧮 Matrix Team Analysis: use Smart Pairing, then adjust manually for final matrix setup.' : '🧮 矩陣編隊分析：先用「智能配對」快速產生，再手動微調成最終矩陣。'}</span>`;
             html += `</div>`;
             html += `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">`;
             html += `<button onclick="grad_toggleSmartPanel()" style="padding:6px 12px;border-radius:8px;background:rgba(97,175,239,0.2);border:1px solid rgba(97,175,239,0.5);color:#8ec7ff;cursor:pointer;font-size:0.78rem;">${isEN?'✨ Smart Pairing':'✨ 智能配對'}</button>`;
-            html += `<button onclick="grad_resetCustomPairing()" style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#aaa;cursor:pointer;font-size:0.78rem;">${isEN?'Reset':'重置'}</button>`;
+            html += `<button onclick="grad_resetTeamsOnly()" style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#aaa;cursor:pointer;font-size:0.78rem;">${isEN?'Reset Teams':'重置隊伍'}</button>`;
+            html += `<button onclick="grad_resetCustomPairing()" style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#aaa;cursor:pointer;font-size:0.78rem;">${isEN?'Reset All':'全部重置'}</button>`;
             html += `<span style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">`;
             html += `<button onclick="grad_saveCustomPairingLocal()" style="padding:6px 12px;border-radius:8px;background:rgba(198,120,221,0.18);border:1px solid rgba(198,120,221,0.45);color:#d8a8e8;cursor:pointer;font-size:0.78rem;">${isEN?'💾 Save Local':'💾 存本地'}</button>`;
             html += `<button onclick="grad_loadCustomPairingLocal()" style="padding:6px 12px;border-radius:8px;background:rgba(229,192,123,0.14);border:1px solid rgba(229,192,123,0.45);color:#e9cc86;cursor:pointer;font-size:0.78rem;">${isEN?'📂 Load Local':'📂 讀取本地'}</button>`;
@@ -14449,8 +14467,8 @@
             html += `</div><div id="grad-smart-hint" style="font-size:0.73rem;color:#7da4ca;"></div>`;
             html += `</div></div>`;
             html += `<div class="grad-custom-layout">`;
-            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Teams':'隊伍列表'}</div><button onclick="grad_toggleQuickAssign()" style="padding:3px 8px;border-radius:6px;background:rgba(255,148,77,0.18);border:1px solid rgba(255,148,77,0.45);color:#ffb37d;cursor:pointer;font-size:0.72rem;">${isEN?'⚡ Quick Teaming':'⚡ 快速編隊'}</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><button onclick="grad_setTeamListLayout('bar')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Bar':'條'}</button><button onclick="grad_setTeamListLayout('col')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Column':'列'}</button><button onclick="grad_addCustomTeam()" style="padding:3px 8px;border-radius:6px;background:rgba(92,124,250,0.2);border:1px solid rgba(92,124,250,0.45);color:#b9c6ff;font-size:0.72rem;cursor:pointer;">${isEN?'+ Team':'+ 隊伍'}</button></div></div><div id="grad-custom-team-list" class="grad-team-list grad-team-list-bar"></div></div>`;
-            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Roles':'角色表'}</div><button onclick="grad_toggleRolePicker()" style="padding:3px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button></div><div style="font-size:0.72rem;color:#777;">${isEN?'Default checked · instant update':'預設打勾・即時調整'}</div></div><div id="grad-custom-role-list"></div></div>`;
+            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Teams':'隊伍列表'}</div><button onclick="grad_toggleQuickAssign()" style="padding:3px 8px;border-radius:6px;background:rgba(255,148,77,0.18);border:1px solid rgba(255,148,77,0.45);color:#ffb37d;cursor:pointer;font-size:0.72rem;">${isEN?'⚡ Quick Teaming':'⚡ 快速編隊'}</button><button onclick="grad_resetTeamsOnly()" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Reset Teams':'重置隊伍'}</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><button onclick="grad_setTeamListLayout('bar')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Bar':'條'}</button><button onclick="grad_setTeamListLayout('col')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Column':'列'}</button><button onclick="grad_addCustomTeam()" style="padding:3px 8px;border-radius:6px;background:rgba(92,124,250,0.2);border:1px solid rgba(92,124,250,0.45);color:#b9c6ff;font-size:0.72rem;cursor:pointer;">${isEN?'+ Team':'+ 隊伍'}</button></div></div><div id="grad-custom-team-list" class="grad-team-list grad-team-list-bar"></div></div>`;
+            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Roles':'角色表'}</div><button onclick="grad_toggleRolePicker()" style="padding:3px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button><button onclick="grad_setRoleFilterType('all')" style="padding:2px 7px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#ccc;font-size:0.68rem;cursor:pointer;">${isEN?'All':'全部'}</button><button onclick="grad_setRoleFilterType('dps')" style="padding:2px 7px;border-radius:999px;background:rgba(224,108,117,0.12);border:1px solid rgba(224,108,117,0.4);color:#e06c75;font-size:0.68rem;cursor:pointer;">${isEN?'MainC':'主C'}</button><button onclick="grad_setRoleFilterType('sub')" style="padding:2px 7px;border-radius:999px;background:rgba(198,120,221,0.12);border:1px solid rgba(198,120,221,0.4);color:#c678dd;font-size:0.68rem;cursor:pointer;">${isEN?'Support(Sub)':'輔助(副C)'}</button><button onclick="grad_setRoleFilterType('healer')" style="padding:2px 7px;border-radius:999px;background:rgba(86,182,194,0.12);border:1px solid rgba(86,182,194,0.4);color:#56b6c2;font-size:0.68rem;cursor:pointer;">${isEN?'Healer':'奶媽'}</button></div><div style="font-size:0.72rem;color:#777;">${isEN?'Default checked · instant update':'預設打勾・即時調整'}</div></div><div id="grad-custom-role-list"></div></div>`;
             html += `</div>`;
             html += `</div>`;
 
@@ -14530,6 +14548,8 @@
             window.__gradQuickAssignRotateMode = 'round';
             window.__gradTeamListLayout = 'bar';
             window.__gradRolePickerDefaultCheckedApplied = false;
+            window.__gradRoleFilterType = 'all';
+            window.__gradTeamInfoOpen = {};
             grad_renderCustomPairing();
             grad_renderRolePicker();
         }
@@ -14544,7 +14564,59 @@
             return GRAD_DOUBLE_HEALERS.has(clean);
         }
         function grad_getRoleMaxUse(roleObj) {
+            if (roleObj && roleObj.type === 'healer') return 2;
             return grad_isDoubleHealer(roleObj && roleObj.role) ? 2 : 1;
+        }
+        function grad_compactRoleNote(noteText) {
+            const raw = String(noteText || '').trim();
+            if (!raw) return '';
+            const first = raw.split(/[。\.]/)[0] || raw;
+            return first.trim();
+        }
+        function grad_setRoleFilterType(type) {
+            const next = ['all', 'dps', 'sub', 'healer'].includes(type) ? type : 'all';
+            window.__gradRoleFilterType = next;
+            grad_renderCustomPairing();
+        }
+        function grad_resetTeamsOnly() {
+            const state = window.__gradCustomState;
+            if (!state || !Array.isArray(state.teams) || !state.teams.length) return;
+            state.teams = state.teams.map(() => []);
+            window.__gradQuickAssignTeamIdx = 0;
+            window.__gradTeamInfoOpen = {};
+            grad_renderCustomPairing();
+            grad_renderQuickAssignControls();
+            showMsg('已重置編隊（保留角色表）');
+        }
+        function grad_findExampleMatchForRoles(roleNames) {
+            const names = Array.from(new Set((roleNames || []).map(v => String(v || '').trim()).filter(Boolean)));
+            if (!names.length) return null;
+            const nameSet = new Set(names);
+            const rows = getExampleTeamsData();
+            for (const row of rows) {
+                const mainList = Array.from(new Set(parsePriorityNames(String(row.mainC || '').replace(/\//g, '>'))));
+                const subList = [row.bestSub, ...parsePriorityNames(row.altSubs)].map(v => String(v || '').trim()).filter(Boolean);
+                const supportList = [row.bestSupport, ...parsePriorityNames(row.altSupports)].map(v => String(v || '').trim()).filter(Boolean);
+                const hasMain = mainList.some(v => nameSet.has(v));
+                const hasSub = subList.some(v => nameSet.has(v));
+                const hasSupport = supportList.some(v => nameSet.has(v));
+                if (hasMain && hasSub && hasSupport) {
+                    return {
+                        system: String(row.system || ''),
+                        mainC: String(row.mainC || ''),
+                        power: Number.isFinite(Number(row.power)) ? Number(row.power) : 0,
+                        rotation: String(row.rotation || ''),
+                        notes: String(row.notes || '')
+                    };
+                }
+            }
+            return null;
+        }
+        function grad_toggleTeamInfo(teamIdx) {
+            const key = String(teamIdx);
+            if (!window.__gradTeamInfoOpen || typeof window.__gradTeamInfoOpen !== 'object') window.__gradTeamInfoOpen = {};
+            window.__gradTeamInfoOpen[key] = !window.__gradTeamInfoOpen[key];
+            grad_renderCustomPairing();
         }
         function grad_toggleRolePicker(forceOpen = null) {
             const el = document.getElementById('grad-custom-role-picker-modal');
@@ -14644,6 +14716,7 @@
                 <span style="font-size:0.75rem;color:#ffbe90;font-weight:700;">${isEN ? '⚡ Quick Teaming' : '⚡ 快速編隊'}</span>
                 <div style="display:flex;gap:4px;flex-wrap:wrap;">${state.teams.map((_, idx) => `<button onclick="grad_setQuickAssignTeam(${idx})" style="padding:3px 7px;border-radius:999px;background:${idx === teamIdx ? 'rgba(255,148,77,0.32)' : 'rgba(255,255,255,0.08)'};border:1px solid ${idx === teamIdx ? 'rgba(255,148,77,0.72)' : 'rgba(255,255,255,0.2)'};color:${idx === teamIdx ? '#ffd2ae' : '#ccc'};cursor:pointer;font-size:0.7rem;">${isEN ? 'Team' : '隊'} ${idx + 1}</button>`).join('')}</div>
                 <button onclick="grad_cycleQuickAssignMode()" style="padding:3px 8px;border-radius:7px;background:${mode === 'off' ? 'rgba(255,255,255,0.08)' : 'rgba(97,175,239,0.3)'};border:1px solid ${mode === 'off' ? 'rgba(255,255,255,0.2)' : 'rgba(97,175,239,0.6)'};color:${mode === 'off' ? '#bbb' : '#a9d4ff'};cursor:pointer;font-size:0.72rem;">${modeText}</button>
+                <button onclick="grad_resetTeamsOnly()" style="padding:3px 8px;border-radius:7px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#bbb;cursor:pointer;font-size:0.72rem;">${isEN ? 'Reset Teams' : '重置隊伍'}</button>
                 <button onclick="grad_addCustomTeamAndFocus()" style="padding:3px 8px;border-radius:7px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.48);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN ? '+ Team' : '＋隊伍'}</button>
                 <span style="font-size:0.72rem;color:#d7aa87;">${detailText}</span>
             </div>`;
@@ -14699,8 +14772,11 @@
             const state = window.__gradCustomState;
             if (!state || !Array.isArray(state.teams) || !state.teams.length) return false;
             const preferredTeamIdx = Math.max(0, Math.min(state.teams.length - 1, Number(window.__gradQuickAssignTeamIdx) || 0));
+            const role = grad_getCustomRoleById(roleId);
+            if (!role) return false;
             let fromTeam = null;
             state.teams.forEach((team, idx) => { if (team.includes(roleId)) fromTeam = idx; });
+            if (grad_getRoleMaxUse(role) > 1) fromTeam = null;
             const teamIdx = grad_findQuickAssignTeam(roleId, preferredTeamIdx);
             if (teamIdx === -1) {
                 showMsg('沒有可分配的隊伍（可能已滿或超出上隊限制）');
@@ -14895,14 +14971,15 @@
                 showMsg('同一隊不可重複角色');
                 return false;
             }
-            if (typeof fromTeamIdx === 'number' && state.teams[fromTeamIdx]) {
-                state.teams[fromTeamIdx] = state.teams[fromTeamIdx].filter(id => id !== roleId);
-            }
-            const usedCount = grad_getRoleUseCount(roleId);
+            const fromTeamValid = typeof fromTeamIdx === 'number' && state.teams[fromTeamIdx] && state.teams[fromTeamIdx].includes(roleId);
+            const usedCount = grad_getRoleUseCount(roleId) - (fromTeamValid ? 1 : 0);
             const maxUse = grad_getRoleMaxUse(role);
             if (usedCount >= maxUse) {
                 showMsg(maxUse > 1 ? '指定奶媽最多可在 2 隊' : '此角色僅可在 1 隊');
                 return false;
+            }
+            if (fromTeamValid) {
+                state.teams[fromTeamIdx] = state.teams[fromTeamIdx].filter(id => id !== roleId);
             }
             target.push(roleId);
             grad_renderCustomPairing();
@@ -15077,11 +15154,18 @@
             roleListEl.innerHTML = '';
             teamListEl.className = `grad-team-list ${window.__gradTeamListLayout === 'col' ? 'grad-team-list-col' : 'grad-team-list-bar'}`;
             roleListEl.className = 'grad-custom-role-grid';
+            const roleFilterType = window.__gradRoleFilterType || 'all';
+            const matchedTeamInfo = [];
             state.teams.forEach((team, teamIdx) => {
                 const wrap = document.createElement('div');
                 wrap.className = 'grad-custom-team';
                 const used = team.length;
-                wrap.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="font-size:0.8rem;color:#ddd;font-weight:700;">${isEN ? `Team ${teamIdx + 1}` : `第 ${teamIdx + 1} 隊`}</span><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:0.72rem;color:#777;">${used}/3</span>${state.teams.length > 1 && used === 0 ? `<button onclick="grad_removeCustomTeam(${teamIdx})" style="padding:1px 6px;border-radius:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#999;cursor:pointer;">✕</button>` : ''}</div></div>`;
+                const teamRoles = team.map(roleId => grad_getCustomRoleById(roleId)).filter(Boolean);
+                const match = grad_findExampleMatchForRoles(teamRoles.map(r => r.role));
+                if (match) matchedTeamInfo.push({ teamIdx, ...match });
+                const titleSuffix = match ? `（${escapeHtml(match.system || '-')}-${escapeHtml(match.mainC || '-')}-${escapeHtml(String(match.power || 0))}）` : '';
+                const infoOpen = !!(window.__gradTeamInfoOpen && window.__gradTeamInfoOpen[String(teamIdx)]);
+                wrap.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;"><span style="font-size:0.8rem;color:#ddd;font-weight:700;">${isEN ? `Team ${teamIdx + 1}` : `第 ${teamIdx + 1} 隊`}${titleSuffix}</span><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">${match ? `<button onclick="grad_toggleTeamInfo(${teamIdx})" title="${isEN ? 'Show flow & notes' : '顯示流程與備註'}" style="padding:1px 6px;border-radius:999px;background:rgba(97,175,239,0.2);border:1px solid rgba(97,175,239,0.5);color:#9fd5ff;cursor:pointer;font-size:0.72rem;">?</button>` : ''}<span style="font-size:0.72rem;color:#777;">${used}/3</span>${state.teams.length > 1 && used === 0 ? `<button onclick="grad_removeCustomTeam(${teamIdx})" style="padding:1px 6px;border-radius:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#999;cursor:pointer;">✕</button>` : ''}</div></div>${match && infoOpen ? `<div style="margin:-2px 0 8px;padding:7px 8px;border-radius:8px;background:rgba(97,175,239,0.1);border:1px solid rgba(97,175,239,0.25);font-size:0.72rem;color:#9ecbf8;line-height:1.6;"><div><b>${isEN ? 'Flow' : '流程'}：</b>${escapeHtml(match.rotation || '-')}</div><div><b>${isEN ? 'Notes' : '備註'}：</b>${escapeHtml(match.notes || '-')}</div></div>` : ''}`;
                 const body = document.createElement('div');
                 body.className = 'grad-custom-team-body';
                 body.dataset.teamIdx = String(teamIdx);
@@ -15121,7 +15205,17 @@
                 wrap.appendChild(body);
                 teamListEl.appendChild(wrap);
             });
-            const sortedRoles = state.roles.slice().sort((a, b) => b.score - a.score);
+            if (matchedTeamInfo.length) {
+                const banner = document.createElement('div');
+                banner.style.cssText = 'margin-bottom:10px;padding:8px 10px;border-radius:8px;background:rgba(120,224,143,0.1);border:1px solid rgba(120,224,143,0.3);font-size:0.72rem;color:#9be8ac;line-height:1.6;';
+                const detail = matchedTeamInfo.map(m => `${isEN ? 'Team' : '第'} ${m.teamIdx + 1} ${isEN ? '' : '隊'}：${m.system || '-'} / ${m.mainC || '-'} / ${Number.isFinite(Number(m.power)) ? Number(m.power) : 0}`).join(' ｜ ');
+                banner.innerHTML = `${isEN ? '✅ Template match found' : '✅ 已符合範例配對'} (${matchedTeamInfo.length})<br><span style="color:#7bc98d;">${escapeHtml(detail)}</span>`;
+                teamListEl.prepend(banner);
+            }
+            const sortedRoles = state.roles
+                .filter(r => roleFilterType === 'all' ? true : r.type === roleFilterType)
+                .slice()
+                .sort((a, b) => b.score - a.score);
             sortedRoles.forEach(role => {
                 const useCount = grad_getRoleUseCount(role.id);
                 const maxUse = grad_getRoleMaxUse(role);
@@ -15133,8 +15227,9 @@
                 row.style.borderColor = `${typeColor(role.type)}66`;
                 const iconUrl = grad_getRoleIconUrl(role.role);
                 const posInfo = getCharPositionInfo(role.role);
+                const compactNote = grad_compactRoleNote(posInfo ? posInfo.note : '');
                 const posTagHtml = posInfo
-                    ? `<span style="display:inline-block;padding:1px 5px;border-radius:4px;font-size:0.62rem;font-weight:700;background:${posInfo.typeColor}22;color:${posInfo.typeColor};border:1px solid ${posInfo.typeColor}44;white-space:nowrap;vertical-align:middle;">${posInfo.typeLabel}${posInfo.note ? `|${escapeHtml(posInfo.note)}` : ''}</span>`
+                    ? `<span style="display:inline-block;padding:1px 5px;border-radius:4px;font-size:0.62rem;font-weight:700;background:${posInfo.typeColor}22;color:${posInfo.typeColor};border:1px solid ${posInfo.typeColor}44;white-space:nowrap;vertical-align:middle;">${posInfo.typeLabel}${compactNote ? `|${escapeHtml(compactNote)}` : ''}</span>`
                     : '';
                 row.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/roleId', role.id);
@@ -17529,7 +17624,7 @@
             const loader = document.getElementById('db-loader');
             if (loader) loader.style.display = 'flex';
             try {
-                let [r1, r2] = await Promise.all([fetch(url + "?action=getWeights"), fetch(url + "?action=getAllData")]);
+                let [r1, r2] = await Promise.all([fetch(buildApiActionUrl(url, 'getWeights')), fetch(buildApiActionUrl(url, 'getAllData'))]);
                 rank_processWeights(await r1.json());
                 rank_data = (await r2.json()).data;
                 // Deduplicate: keep only the latest entry per uid+role (last row wins)
