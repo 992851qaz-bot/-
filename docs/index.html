@@ -12297,7 +12297,17 @@
         function buildApiActionUrl(baseUrl, action) {
             const base = String(baseUrl || '').trim();
             if (!base) return '';
-            return `${base}${base.includes('?') ? '&' : '?'}action=${encodeURIComponent(String(action || ''))}`;
+            const actionValue = String(action || '');
+            try {
+                const parsed = new URL(base);
+                parsed.searchParams.set('action', actionValue);
+                return parsed.toString();
+            } catch (e) {
+                const cleared = base
+                    .replace(/([?&])action=[^&#]*/i, '$1')
+                    .replace(/[?&]$/, '');
+                return `${cleared}${cleared.includes('?') ? '&' : '?'}action=${encodeURIComponent(actionValue)}`;
+            }
         }
         function ensureMainApiConfigured() {
             const mainUrl = (localStorage.getItem('ww_gas_url') || '').trim();
@@ -14488,13 +14498,15 @@
 .grad-custom-pane-body::-webkit-scrollbar{width:5px;}
 .grad-custom-pane-body::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
 .grad-custom-team{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;margin-bottom:0;}
-.grad-custom-team-body{min-height:98px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
+.grad-custom-team-body{min-height:98px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;touch-action:manipulation;}
 .grad-custom-role-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
 .grad-custom-role{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:9px 10px;font-size:0.74rem;cursor:grab;min-height:92px;}
 .grad-custom-role .grad-custom-icon{width:38px;height:38px;border:2px solid rgba(255,255,255,0.28);}
 .grad-custom-chip{display:flex;flex-direction:column;align-items:flex-start;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.16);border-radius:10px;padding:8px;font-size:0.74rem;cursor:grab;min-width:145px;max-width:185px;flex:1 1 150px;}
 .grad-custom-chip button{background:none;border:none;color:#ff7878;cursor:pointer;font-size:0.82rem;line-height:1;}
 .grad-custom-drop-over{border-color:#61afef !important;background:rgba(97,175,239,0.1) !important;}
+.grad-custom-touch-picked{border-color:#ff944d !important;box-shadow:0 0 0 1px rgba(255,148,77,0.55),0 0 16px rgba(255,148,77,0.2);}
+.grad-custom-touch-target{border-style:solid;border-color:rgba(255,148,77,0.5);background:rgba(255,148,77,0.08);}
 .grad-custom-icon{width:18px;height:18px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.22);flex-shrink:0;}
 .grad-custom-chip .grad-custom-icon{width:46px;height:46px;border:2px solid rgba(255,255,255,0.28);}
 .grad-custom-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:260px;overflow:auto;padding-right:4px;}
@@ -14506,6 +14518,7 @@
 .grad-custom-pop{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:21000;display:none;align-items:center;justify-content:center;padding:18px;}
 .grad-custom-pop-card{width:min(920px,95vw);max-height:88vh;overflow:auto;background:#1a1a1f;border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;}
 @media(max-width:900px){.grad-custom-layout{grid-template-columns:1fr;}}
+@media(max-width:900px){.grad-custom-layout{grid-template-columns:1fr;min-height:unset;max-height:none;}.grad-custom-pane{padding:10px;}.grad-custom-pane-body{max-height:none;}.grad-custom-chip{min-width:100%;max-width:none;flex:1 1 100%;}.grad-custom-team-body{min-height:84px;}}
 @media(max-width:1400px){.grad-custom-role-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media(max-width:1100px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:900px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
@@ -14539,14 +14552,12 @@
             html += `<div style="background:rgba(97,175,239,0.08);border:1px solid rgba(97,175,239,0.25);border-radius:10px;padding:10px 12px;font-size:0.78rem;color:#8eb9e6;line-height:1.7;margin-bottom:12px;">`;
             html += isEN
                 ? (isMobilePairingHint
-                    ? `Mobile: use "Quick Teaming" for no-drag assignment.`
+                    ? `Mobile: drag is touch-limited. Use tap-to-place or "Quick Teaming" for no-drag assignment.`
                     : `Drag roles from the right into teams on the left. Each team supports up to 3 members. Non-healers can appear in only 1 team, healers up to 2 teams. Mobile players can use Quick Teaming without drag.`)
                 : (isMobilePairingHint
-                    ? `手機版：可用「快速編隊」免拖曳分配。`
+                    ? `手機版：拖曳受觸控限制，請用「點選角色→點隊伍」或「快速編隊」免拖曳分配。`
                     : `將右側角色拖曳到左側隊伍。每隊最多 3 人。非奶媽僅可出現在 1 隊，奶媽最多可在 2 隊。手機可用「快速編隊」免拖曳分配。`);
-            if (!isMobilePairingHint) {
-                html += `<br><span style="color:#9ecbf8;">${isEN ? '🧮 Matrix Team Analysis: use Smart Pairing, then adjust manually for final matrix setup.' : '🧮 矩陣編隊分析：先用「智能配對」快速產生，再手動微調成最終矩陣。'}</span>`;
-            }
+            html += `<br><span style="color:#9ecbf8;">${isEN ? '🧮 Matrix Team Analysis: use Smart Pairing first, then manually fine-tune the final matrix.' : '🧮 矩陣編隊分析：先用「智能配對」快速產生，再手動微調成最終矩陣。'}</span>`;
             html += `</div>`;
             html += `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">`;
             html += `<button onclick="grad_toggleSmartPanel()" style="padding:6px 12px;border-radius:8px;background:rgba(97,175,239,0.2);border:1px solid rgba(97,175,239,0.5);color:#8ec7ff;cursor:pointer;font-size:0.78rem;">${isEN?'✨ Smart Pairing':'✨ 智能配對'}</button>`;
@@ -14664,6 +14675,8 @@
                 id: `r${i + 1}`,
                 role: r.role,
                 score: Number(r.score || 0),
+                chainCount: Number(r.chainCount || 0),
+                weapon: String(r.weapon || ''),
                 type: r.type || grad_getRoleType(r.role || ''),
                 custom: false
             }));
@@ -14680,6 +14693,7 @@
             window.__gradRolePickerDefaultCheckedApplied = false;
             window.__gradRoleFilterType = 'all';
             window.__gradTeamInfoOpen = {};
+            window.__gradTouchPick = null;
             grad_renderCustomPairing();
             grad_renderRolePicker();
         }
@@ -14708,12 +14722,29 @@
             window.__gradRoleFilterType = next;
             grad_renderCustomPairing();
         }
+        function grad_isTouchPairingMode() {
+            return window.matchMedia('(max-width:900px)').matches || ('ontouchstart' in window);
+        }
+        function grad_setTouchPick(roleId, fromTeamIdx = null) {
+            const role = grad_getCustomRoleById(roleId);
+            if (!role) return;
+            window.__gradTouchPick = {
+                roleId,
+                fromTeamIdx: (typeof fromTeamIdx === 'number' ? fromTeamIdx : null)
+            };
+            grad_renderCustomPairing();
+        }
+        function grad_clearTouchPick() {
+            window.__gradTouchPick = null;
+            grad_renderCustomPairing();
+        }
         function grad_resetTeamsOnly() {
             const state = window.__gradCustomState;
             if (!state || !Array.isArray(state.teams) || !state.teams.length) return;
             state.teams = state.teams.map(() => []);
             window.__gradQuickAssignTeamIdx = 0;
             window.__gradTeamInfoOpen = {};
+            window.__gradTouchPick = null;
             grad_renderCustomPairing();
             grad_renderQuickAssignControls();
             showMsg('已重置編隊（保留角色表）');
