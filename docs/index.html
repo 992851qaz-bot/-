@@ -11766,6 +11766,33 @@
             );
             if (rows.length) return rows;
             if (!json || typeof json !== 'object') return [];
+            const looksLikeGamezhRow = (row) => {
+                if (Array.isArray(row)) return row.length >= 3;
+                if (!row || typeof row !== 'object') return false;
+                const bag = Object.keys(row).join('|');
+                return /(主C|mainC|隊員2|C2|隊員3|C3|體系|system|rotation|流程|dps|強度|難度|difficulty)/i.test(bag);
+            };
+            const queue = [json];
+            const seen = new Set();
+            while (queue.length) {
+                const cur = queue.shift();
+                if (!cur || typeof cur !== 'object' || seen.has(cur)) continue;
+                seen.add(cur);
+                if (Array.isArray(cur)) {
+                    if (cur.length && cur.some(looksLikeGamezhRow)) return cur.filter(Boolean);
+                    cur.forEach(v => { if (v && typeof v === 'object') queue.push(v); });
+                    continue;
+                }
+                for (const [k, v] of Object.entries(cur)) {
+                    if (Array.isArray(v) && v.length) {
+                        if (/(gamezh|配隊|攻略|teamguide|隊伍)/i.test(String(k)) || v.some(looksLikeGamezhRow)) {
+                            return v.filter(Boolean);
+                        }
+                    } else if (v && typeof v === 'object') {
+                        queue.push(v);
+                    }
+                }
+            }
             for (const [k, v] of Object.entries(json)) {
                 if (!Array.isArray(v) || !v.length) continue;
                 if (/(gamezh|配隊|攻略|teamguide)/i.test(String(k))) return v.filter(Boolean);
@@ -11773,6 +11800,11 @@
             return [];
         }
         function getFieldVal(row, keys) {
+            if (Array.isArray(row)) {
+                for (const k of keys) {
+                    if (typeof k === 'number' && row[k] != null) return String(row[k]).trim();
+                }
+            }
             for (const k of keys) {
                 if (row && Object.prototype.hasOwnProperty.call(row, k) && row[k] != null) return String(row[k]).trim();
             }
@@ -11801,14 +11833,16 @@
             const rows = getWeightPayloadGamezhRows(json);
             if (!rows.length) return [];
             return rows.map((row, idx) => {
-                const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName']);
-                const mainC = getFieldVal(row, ['主C', 'mainC']);
-                const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C']);
-                const c3 = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助']);
-                const dps = getFieldVal(row, ['DPS', 'dps', '強度', 'power']);
-                const flow = getFieldVal(row, ['流程', 'rotation']);
-                const difficulty = getFieldVal(row, ['難度', 'difficulty']);
-                const notes = getFieldVal(row, ['備註', '备注', 'notes']);
+                const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName', '隊伍', 'team', 0]);
+                const mainC = getFieldVal(row, ['主C', 'mainC', 'main', 'C1', 1]);
+                const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C', 'sub', 2]);
+                const c3 = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', '輔助', 'support', 3]);
+                const dps = getFieldVal(row, ['DPS', 'dps', '強度', 'power', 'teamPower', 4]);
+                const flow = getFieldVal(row, ['流程', 'rotation', '循環', 5]);
+                const difficulty = getFieldVal(row, ['難度', 'difficulty', 6]);
+                const notes = getFieldVal(row, ['備註', '备注', 'notes', 'note', 7]);
+                const headerLike = /(體系|主C|隊員|DPS|流程|難度|備註|system|mainC|rotation|difficulty|notes)/i;
+                if (headerLike.test(system) && headerLike.test(mainC)) return null;
                 if (!system && !mainC && !c2 && !c3) return null;
                 return { id: idx + 1, system, mainC, c2, c3, dps, flow, difficulty, notes };
             }).filter(Boolean);
@@ -14305,7 +14339,7 @@
             let html = `<div class="db-container" style="max-width:1450px;width:96vw;padding:0;display:flex;flex-direction:column;background:#111115;overflow:hidden;">`;
 
             // Animated header banner
-            html += `<div style="position:relative;padding:18px 20px 14px;background:linear-gradient(135deg,#1a0a30 0%,#0d1a2e 40%,#102014 100%);border-bottom:1px solid rgba(229,192,123,0.18);overflow:hidden;flex-shrink:0;">`;
+            html += `<div id="grad-top-banner" style="position:relative;padding:18px 20px 14px;background:linear-gradient(135deg,#1a0a30 0%,#0d1a2e 40%,#102014 100%);border-bottom:1px solid rgba(229,192,123,0.18);overflow:hidden;flex-shrink:0;">`;
             html += `<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(229,192,123,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 50%,rgba(97,175,239,0.06) 0%,transparent 60%);pointer-events:none;"></div>`;
             html += `<div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;">`;
             html += `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">`;
@@ -14319,7 +14353,7 @@
             html += `</div>`;
 
             // Stats row
-            html += `<div style="display:flex;gap:0;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.06);">`;
+            html += `<div id="grad-top-stats" style="display:flex;gap:0;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.06);">`;
             const statItems = [
                 { val: totalCount, label: isEN?'Characters':'角色數', color:'#61afef', icon:'👤' },
                 { val: gradCount, label: isEN?'Graduated':'已畢業', color:'#78e08f', icon:'🎓' },
@@ -14335,7 +14369,7 @@
             html += `</div>`;
 
             // Role type pills
-            html += `<div style="padding:8px 14px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;background:rgba(0,0,0,0.2);">`;
+            html += `<div id="grad-top-role-summary" style="padding:8px 14px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;background:rgba(0,0,0,0.2);">`;
             html += `<span style="font-size:0.72rem;color:#e06c75;border:1px solid #e06c7544;border-radius:20px;padding:2px 10px;background:rgba(224,108,117,0.08);">🗡 ${isEN?'DPS':'主輸'} <b>${dpsCount}</b></span>`;
             html += `<span style="font-size:0.72rem;color:#c678dd;border:1px solid #c678dd44;border-radius:20px;padding:2px 10px;background:rgba(198,120,221,0.08);">⚡ ${isEN?'Sub':'副輸'} <b>${subCount}</b></span>`;
             html += `<span style="font-size:0.72rem;color:#56b6c2;border:1px solid #56b6c244;border-radius:20px;padding:2px 10px;background:rgba(86,182,194,0.08);">💚 ${isEN?'Healer':'奶媽'} <b>${healCount}</b></span>`;
@@ -14349,7 +14383,7 @@
             html += `</div>`;
 
             // Discord banner (compact)
-            html += `<div style="padding:8px 14px;background:rgba(88,101,242,0.07);border-bottom:1px solid rgba(88,101,242,0.18);display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0;">`;
+            html += `<div id="grad-top-guide-banner" style="padding:8px 14px;background:rgba(88,101,242,0.07);border-bottom:1px solid rgba(88,101,242,0.18);display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0;">`;
             html += `<div style="flex:1;min-width:180px;font-size:0.76rem;color:#7a84d0;">💬 ${isEN?'Contribute your character guide to Discord!':'歡迎投稿角色攻略至 Discord！'} <span style="color:#555;">${isEN?'Guide collection phase — pairings for reference.':'攻略蒐集階段，配對僅供參考。'}</span></div>`;
             html += `<a href="https://discord.com/invite/WWewHKwMwa" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:8px;background:rgba(88,101,242,0.2);border:1px solid rgba(88,101,242,0.4);color:#b8bff5;text-decoration:none;font-size:0.76rem;font-weight:bold;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='rgba(88,101,242,0.35)'" onmouseout="this.style.background='rgba(88,101,242,0.2)'">👾 Discord</a>`;
             html += `</div>`;
@@ -14379,16 +14413,20 @@
 .grad-team-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:700px){.grad-team-grid{grid-template-columns:1fr;}}
 @media(min-width:1100px){.grad-team-grid{grid-template-columns:1fr 1fr 1fr;}}
-.grad-custom-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;}
-.grad-custom-pane{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;min-height:360px;}
+.grad-custom-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;min-height:520px;max-height:calc(100vh - 330px);}
+.grad-custom-pane{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;display:flex;flex-direction:column;min-height:0;}
+.grad-custom-pane-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:4px;}
+.grad-custom-pane-body::-webkit-scrollbar{width:5px;}
+.grad-custom-pane-body::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
 .grad-custom-team{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;margin-bottom:0;}
 .grad-custom-team-body{min-height:98px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
 .grad-custom-role-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;}
 .grad-custom-role{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 8px;font-size:0.74rem;cursor:grab;min-height:62px;}
-.grad-custom-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.16);border-radius:8px;padding:4px 7px;font-size:0.74rem;cursor:grab;}
+.grad-custom-chip{display:flex;flex-direction:column;align-items:flex-start;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.16);border-radius:10px;padding:8px;font-size:0.74rem;cursor:grab;min-width:145px;max-width:185px;flex:1 1 150px;}
 .grad-custom-chip button{background:none;border:none;color:#ff7878;cursor:pointer;font-size:0.82rem;line-height:1;}
 .grad-custom-drop-over{border-color:#61afef !important;background:rgba(97,175,239,0.1) !important;}
 .grad-custom-icon{width:18px;height:18px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.22);flex-shrink:0;}
+.grad-custom-chip .grad-custom-icon{width:46px;height:46px;border:2px solid rgba(255,255,255,0.28);}
 .grad-custom-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:260px;overflow:auto;padding-right:4px;}
 .grad-custom-picker-item{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;background:rgba(255,255,255,0.03);font-size:0.75rem;}
 .grad-custom-picker-item.dim{filter:grayscale(1);opacity:0.5;}
@@ -14468,8 +14506,8 @@
             html += `</div><div id="grad-smart-hint" style="font-size:0.73rem;color:#7da4ca;"></div>`;
             html += `</div></div>`;
             html += `<div class="grad-custom-layout">`;
-            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Teams':'隊伍列表'}</div><button onclick="grad_toggleQuickAssign()" style="padding:3px 8px;border-radius:6px;background:rgba(255,148,77,0.18);border:1px solid rgba(255,148,77,0.45);color:#ffb37d;cursor:pointer;font-size:0.72rem;">${isEN?'⚡ Quick Teaming':'⚡ 快速編隊'}</button><button onclick="grad_resetTeamsOnly()" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Reset Teams':'重置隊伍'}</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><button onclick="grad_setTeamListLayout('bar')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Bar':'條'}</button><button onclick="grad_setTeamListLayout('col')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Column':'列'}</button><button onclick="grad_addCustomTeam()" style="padding:3px 8px;border-radius:6px;background:rgba(92,124,250,0.2);border:1px solid rgba(92,124,250,0.45);color:#b9c6ff;font-size:0.72rem;cursor:pointer;">${isEN?'+ Team':'+ 隊伍'}</button></div></div><div id="grad-custom-team-list" class="grad-team-list grad-team-list-bar"></div></div>`;
-            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Roles':'角色表'}</div><button onclick="grad_toggleRolePicker()" style="padding:3px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button><button onclick="grad_setRoleFilterType('all')" style="padding:2px 7px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#ccc;font-size:0.68rem;cursor:pointer;">${isEN?'All':'全部'}</button><button onclick="grad_setRoleFilterType('dps')" style="padding:2px 7px;border-radius:999px;background:rgba(224,108,117,0.12);border:1px solid rgba(224,108,117,0.4);color:#e06c75;font-size:0.68rem;cursor:pointer;">${isEN?'MainC':'主C'}</button><button onclick="grad_setRoleFilterType('sub')" style="padding:2px 7px;border-radius:999px;background:rgba(198,120,221,0.12);border:1px solid rgba(198,120,221,0.4);color:#c678dd;font-size:0.68rem;cursor:pointer;">${isEN?'Support(Sub)':'輔助(副C)'}</button><button onclick="grad_setRoleFilterType('healer')" style="padding:2px 7px;border-radius:999px;background:rgba(86,182,194,0.12);border:1px solid rgba(86,182,194,0.4);color:#56b6c2;font-size:0.68rem;cursor:pointer;">${isEN?'Healer':'奶媽'}</button></div><div style="font-size:0.72rem;color:#777;">${isEN?'Default checked · instant update':'預設打勾・即時調整'}</div></div><div id="grad-custom-role-list"></div></div>`;
+            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Teams':'隊伍列表'}</div><button onclick="grad_toggleQuickAssign()" style="padding:3px 8px;border-radius:6px;background:rgba(255,148,77,0.18);border:1px solid rgba(255,148,77,0.45);color:#ffb37d;cursor:pointer;font-size:0.72rem;">${isEN?'⚡ Quick Teaming':'⚡ 快速編隊'}</button><button onclick="grad_resetTeamsOnly()" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Reset Teams':'重置隊伍'}</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><button onclick="grad_setTeamListLayout('bar')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Bar':'條'}</button><button onclick="grad_setTeamListLayout('col')" style="padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#bbb;font-size:0.72rem;cursor:pointer;">${isEN?'Column':'列'}</button><button onclick="grad_addCustomTeam()" style="padding:3px 8px;border-radius:6px;background:rgba(92,124,250,0.2);border:1px solid rgba(92,124,250,0.45);color:#b9c6ff;font-size:0.72rem;cursor:pointer;">${isEN?'+ Team':'+ 隊伍'}</button></div></div><div id="grad-custom-team-wrap" class="grad-custom-pane-body"><div id="grad-custom-team-list" class="grad-team-list grad-team-list-bar"></div></div></div>`;
+            html += `<div class="grad-custom-pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><div style="font-size:0.83rem;color:#ddd;font-weight:700;">${isEN?'Roles':'角色表'}</div><button onclick="grad_toggleRolePicker()" style="padding:3px 8px;border-radius:6px;background:rgba(120,224,143,0.2);border:1px solid rgba(120,224,143,0.5);color:#9be8ac;cursor:pointer;font-size:0.72rem;">${isEN?'🆕 Custom Role List':'🆕 新增自訂角色列表'}</button><button onclick="grad_setRoleFilterType('all')" style="padding:2px 7px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.2);color:#ccc;font-size:0.68rem;cursor:pointer;">${isEN?'All':'全部'}</button><button onclick="grad_setRoleFilterType('dps')" style="padding:2px 7px;border-radius:999px;background:rgba(224,108,117,0.12);border:1px solid rgba(224,108,117,0.4);color:#e06c75;font-size:0.68rem;cursor:pointer;">${isEN?'MainC':'主C'}</button><button onclick="grad_setRoleFilterType('sub')" style="padding:2px 7px;border-radius:999px;background:rgba(198,120,221,0.12);border:1px solid rgba(198,120,221,0.4);color:#c678dd;font-size:0.68rem;cursor:pointer;">${isEN?'Support(Sub)':'輔助(副C)'}</button><button onclick="grad_setRoleFilterType('healer')" style="padding:2px 7px;border-radius:999px;background:rgba(86,182,194,0.12);border:1px solid rgba(86,182,194,0.4);color:#56b6c2;font-size:0.68rem;cursor:pointer;">${isEN?'Healer':'奶媽'}</button></div><div style="font-size:0.72rem;color:#777;">${isEN?'Default checked · instant update':'預設打勾・即時調整'}</div></div><div id="grad-custom-role-wrap" class="grad-custom-pane-body"><div id="grad-custom-role-list"></div></div></div>`;
             html += `</div>`;
             html += `</div>`;
 
@@ -14496,10 +14534,21 @@
             const overviewPanel = document.getElementById('grad-panel-overview');
             const teamPanel = document.getElementById('grad-panel-team');
             const customPanel = document.getElementById('grad-panel-custom');
+            const topBanner = document.getElementById('grad-top-banner');
+            const topStats = document.getElementById('grad-top-stats');
+            const topRoleSummary = document.getElementById('grad-top-role-summary');
+            const topGuideBanner = document.getElementById('grad-top-guide-banner');
             const overviewBtn = document.getElementById('grad-tab-overview');
             const teamBtn = document.getElementById('grad-tab-team');
             const customBtn = document.getElementById('grad-tab-custom');
             if (!overviewPanel || !teamPanel || !customPanel) return;
+            const setTopVisible = (visible) => {
+                const val = visible ? '' : 'none';
+                if (topBanner) topBanner.style.display = val;
+                if (topStats) topStats.style.display = val;
+                if (topRoleSummary) topRoleSummary.style.display = val;
+                if (topGuideBanner) topGuideBanner.style.display = val;
+            };
             const setBtnActive = (btn, active) => {
                 if (!btn) return;
                 btn.style.borderBottomColor = active ? '#e5c07b' : 'transparent';
@@ -14507,6 +14556,7 @@
                 btn.style.fontWeight = active ? '700' : '600';
             };
             if (tab === 'overview') {
+                setTopVisible(true);
                 overviewPanel.style.display = '';
                 teamPanel.style.display = 'none';
                 customPanel.style.display = 'none';
@@ -14514,6 +14564,7 @@
                 setBtnActive(teamBtn, false);
                 setBtnActive(customBtn, false);
             } else if (tab === 'team') {
+                setTopVisible(false);
                 overviewPanel.style.display = 'none';
                 teamPanel.style.display = '';
                 customPanel.style.display = 'none';
@@ -14521,6 +14572,7 @@
                 setBtnActive(teamBtn, true);
                 setBtnActive(customBtn, false);
             } else {
+                setTopVisible(false);
                 overviewPanel.style.display = 'none';
                 teamPanel.style.display = 'none';
                 customPanel.style.display = '';
