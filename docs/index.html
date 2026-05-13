@@ -11867,6 +11867,13 @@
             }
             return '';
         }
+        function normalizeTeamTextValue(val) {
+            const txt = String(val || '').trim();
+            if (!txt) return '';
+            if (/^(true|false|null|undefined|nan)$/i.test(txt)) return '';
+            if (/^[01](?:\.0+)?$/.test(txt)) return '';
+            return txt;
+        }
         function normalizeRolePositionsFromWeightPayload(json) {
             const rows = getWeightPayloadRoleRows(json);
             const normalized = rows.map((row, idx) => {
@@ -11908,17 +11915,19 @@
             const rows = getWeightPayloadTeamRows(json);
             if (!rows.length) return [];
             return rows.map(row => {
-                const system = getFieldVal(row, ['體系', '系统', 'system', 'teamName', '隊伍', 'team']);
-                const mainC = getFieldVal(row, ['主力輸出', '主輸出', '主C', 'mainC', 'mainDPS', 'main_dps', 'main_output', 'mainOutput']);
-                const c2 = getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C', 'subDPS', 'sub_dps']);
-                const quickSupport = getFieldVal(row, ['快速協奏', '快協', 'quickConcerto', 'quick_concerto', '輔助', 'support', 'supporter']);
-                const healer = getFieldVal(row, ['奶媽', '治療', '補師', 'healer', 'heal']);
-                const c3Legacy = getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3']);
-                const dpsRaw = getFieldVal(row, ['DPS', 'dps', '強度', 'power', 'teamPower']);
-                const flow = getFieldVal(row, ['流程', 'rotation']);
-                const difficulty = getFieldVal(row, ['難度', 'difficulty']);
-                const notes = getFieldVal(row, ['備註', '备注', 'notes']);
-                const c3 = [quickSupport, healer, c3Legacy].filter(Boolean).join(' > ');
+                const system = normalizeTeamTextValue(getFieldVal(row, ['體系', '系统', 'system', 'teamName', '隊伍', 'team', 'col_0', 0]));
+                const mainC = normalizeTeamTextValue(getFieldVal(row, ['主力輸出', '主輸出', '主C', 'mainC', 'mainDPS', 'main_dps', 'main_output', 'mainOutput', 'col_1', 1]));
+                const c2 = normalizeTeamTextValue(getFieldVal(row, ['隊員2 (C2)', '隊員2(C2)', '隊員2', 'C2', '副C', 'subDPS', 'sub_dps', 'col_2', 2]));
+                const quickSupport = normalizeTeamTextValue(getFieldVal(row, ['快速協奏', '快協', 'quickConcerto', 'quick_concerto', '輔助', 'support', 'supporter', 'col_3', 3]));
+                const healer = normalizeTeamTextValue(getFieldVal(row, ['奶媽', '治療', '補師', 'healer', 'heal', 'col_4', 4]));
+                const c3Legacy = normalizeTeamTextValue(getFieldVal(row, ['隊員3 (C3)', '隊員3(C3)', '隊員3', 'C3', 'col_3', 3]));
+                const dpsRaw = getFieldVal(row, ['DPS', 'dps', '強度', 'power', 'teamPower', 'col_5', 5, 'col_4', 4]);
+                const flow = getFieldVal(row, ['流程', 'rotation', 'col_6', 6, 'col_5', 5]);
+                const difficulty = getFieldVal(row, ['難度', 'difficulty', 'col_7', 7, 'col_6', 6]);
+                const notes = getFieldVal(row, ['備註', '备注', 'notes', 'note', 'col_8', 8, 'col_7', 7]);
+                const c3 = Array.from(new Set([quickSupport, healer, c3Legacy].filter(Boolean))).join(' > ');
+                const headerLike = /(體系|主力輸出|主輸出|主C|隊員|副C|快速協奏|奶媽|DPS|流程|難度|備註|system|main|support|healer|rotation|difficulty|notes)/i;
+                if (headerLike.test(system) && headerLike.test(mainC || c2 || c3 || String(dpsRaw || ''))) return null;
                 if (!system && !mainC && !c2 && !c3) return null;
                 const subList = parsePriorityNames(c2 || '');
                 const supportList = parsePriorityNames(c3 || '');
@@ -12814,11 +12823,11 @@
                 ? g_exampleTeamsFromUrl
                 : normalizeGuideTeamsFromWeightPayload(g_weightsRawData || {});
             return (src || []).map(item => ({
-                system: String(item.system || ''),
-                mainC: String(item.mainC || ''),
-                bestSub: String(item.bestSub || ''),
+                system: normalizeTeamTextValue(item.system),
+                mainC: normalizeTeamTextValue(item.mainC),
+                bestSub: normalizeTeamTextValue(item.bestSub),
                 altSubs: String(item.altSubs || ''),
-                bestSupport: String(item.bestSupport || ''),
+                bestSupport: normalizeTeamTextValue(item.bestSupport),
                 altSupports: String(item.altSupports || ''),
                 rotation: String(item.rotation || ''),
                 notes: String(item.notes || ''),
@@ -13060,6 +13069,7 @@
             return String(text || '')
                 .split(/>|\/|,|，|、|\||\n/g)
                 .map(s => s.trim())
+                .map(normalizeTeamTextValue)
                 .filter(Boolean);
         }
         function buildExampleTeamEditorState() {
@@ -14111,6 +14121,7 @@
         function openGraduationPanel() {
             closeAllModals();
             const isEN = g_lang === 'en';
+            const isMobilePairingHint = (typeof isMobileLayout === 'function') ? isMobileLayout() : (window.innerWidth <= 900);
 
             const history = getCleanHistory();
             const roleBest = {};
@@ -14527,9 +14538,15 @@
             html += `<div id="grad-panel-custom" class="grad-scroll" style="display:none;">`;
             html += `<div style="background:rgba(97,175,239,0.08);border:1px solid rgba(97,175,239,0.25);border-radius:10px;padding:10px 12px;font-size:0.78rem;color:#8eb9e6;line-height:1.7;margin-bottom:12px;">`;
             html += isEN
-                ? `Drag roles from the right into teams on the left. Each team supports up to 3 members. Non-healers can appear in only 1 team, healers up to 2 teams. Mobile players can use Quick Teaming without drag.`
-                : `將右側角色拖曳到左側隊伍。每隊最多 3 人。非奶媽僅可出現在 1 隊，奶媽最多可在 2 隊。手機可用「快速編隊」免拖曳分配。`;
-            html += `<br><span style="color:#9ecbf8;">${isEN ? '🧮 Matrix Team Analysis: use Smart Pairing, then adjust manually for final matrix setup.' : '🧮 矩陣編隊分析：先用「智能配對」快速產生，再手動微調成最終矩陣。'}</span>`;
+                ? (isMobilePairingHint
+                    ? `Mobile: use "Quick Teaming" for no-drag assignment.`
+                    : `Drag roles from the right into teams on the left. Each team supports up to 3 members. Non-healers can appear in only 1 team, healers up to 2 teams. Mobile players can use Quick Teaming without drag.`)
+                : (isMobilePairingHint
+                    ? `手機版：可用「快速編隊」免拖曳分配。`
+                    : `將右側角色拖曳到左側隊伍。每隊最多 3 人。非奶媽僅可出現在 1 隊，奶媽最多可在 2 隊。手機可用「快速編隊」免拖曳分配。`);
+            if (!isMobilePairingHint) {
+                html += `<br><span style="color:#9ecbf8;">${isEN ? '🧮 Matrix Team Analysis: use Smart Pairing, then adjust manually for final matrix setup.' : '🧮 矩陣編隊分析：先用「智能配對」快速產生，再手動微調成最終矩陣。'}</span>`;
+            }
             html += `</div>`;
             html += `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">`;
             html += `<button onclick="grad_toggleSmartPanel()" style="padding:6px 12px;border-radius:8px;background:rgba(97,175,239,0.2);border:1px solid rgba(97,175,239,0.5);color:#8ec7ff;cursor:pointer;font-size:0.78rem;">${isEN?'✨ Smart Pairing':'✨ 智能配對'}</button>`;
