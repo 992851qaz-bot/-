@@ -11752,7 +11752,44 @@
             );
         }
         function getWeightPayloadGamezhRows(json) {
-            if (Array.isArray(json)) return json.filter(Boolean);
+            const readSheetCell = (cell) => {
+                if (cell == null) return '';
+                if (typeof cell === 'object') {
+                    if (Object.prototype.hasOwnProperty.call(cell, 'v')) return String(cell.v ?? '').trim();
+                    if (Object.prototype.hasOwnProperty.call(cell, 'f')) return String(cell.f ?? '').trim();
+                }
+                return String(cell).trim();
+            };
+            const headerLikeText = /(體系|主C|隊員|DPS|流程|難度|備註|system|mainC|rotation|difficulty|notes)/i;
+            const normalizeRowsByHeader = (rows) => {
+                if (!Array.isArray(rows) || !rows.length) return [];
+                const first = rows[0];
+                if (!Array.isArray(first)) return rows.filter(Boolean);
+                const headers = first.map(v => String(v ?? '').trim());
+                const headersLooksValid = headers.some(h => headerLikeText.test(h));
+                if (!headersLooksValid) return rows.filter(Boolean);
+                return rows.slice(1).map(r => {
+                    const rowArr = Array.isArray(r) ? r : [];
+                    const obj = {};
+                    headers.forEach((h, i) => { obj[h || `col_${i}`] = rowArr[i] ?? ''; });
+                    return obj;
+                }).filter(Boolean);
+            };
+            const parseGoogleTableRows = (obj) => {
+                if (!obj || typeof obj !== 'object') return [];
+                const cols = Array.isArray(obj.cols) ? obj.cols : null;
+                const rows = Array.isArray(obj.rows) ? obj.rows : null;
+                if (!cols || !rows) return [];
+                const headers = cols.map((c, i) => String(c?.label || c?.id || c?.name || `col_${i}`).trim());
+                return rows.map(r => {
+                    const cells = Array.isArray(r?.c) ? r.c : (Array.isArray(r) ? r : []);
+                    const values = cells.map(readSheetCell);
+                    const objRow = {};
+                    headers.forEach((h, i) => { objRow[h] = values[i] ?? ''; });
+                    return objRow;
+                }).filter(Boolean);
+            };
+            if (Array.isArray(json)) return normalizeRowsByHeader(json.filter(Boolean));
             const rows = getWeightPayloadRowsByKeys(
                 json,
                 ['gamezhTeams', 'gamezhTeamGuide', 'gamezh_team_guide', 'teamGuideRaw', 'teamGuideTable', 'gamezh', 'gamezhGuide', 'gamezh_guide', '配隊攻略', '配隊', '隊伍攻略', '隊伍'],
@@ -11764,7 +11801,7 @@
                     { headersKey: 'teamGuideHeaders', rowsKey: 'teamGuideData' }
                 ]
             );
-            if (rows.length) return rows;
+            if (rows.length) return normalizeRowsByHeader(rows);
             if (!json || typeof json !== 'object') return [];
             const looksLikeGamezhRow = (row) => {
                 if (Array.isArray(row)) return row.length >= 3;
@@ -11778,15 +11815,27 @@
                 const cur = queue.shift();
                 if (!cur || typeof cur !== 'object' || seen.has(cur)) continue;
                 seen.add(cur);
+                const directTableRows = parseGoogleTableRows(cur);
+                if (directTableRows.length && directTableRows.some(looksLikeGamezhRow)) return directTableRows;
+                const nestedTableRows = parseGoogleTableRows(cur.table || cur.dataTable || cur.sheet || cur.grid || null);
+                if (nestedTableRows.length && nestedTableRows.some(looksLikeGamezhRow)) return nestedTableRows;
                 if (Array.isArray(cur)) {
-                    if (cur.length && cur.some(looksLikeGamezhRow)) return cur.filter(Boolean);
+                    if (cur.length && cur.some(looksLikeGamezhRow)) return normalizeRowsByHeader(cur.filter(Boolean));
                     cur.forEach(v => { if (v && typeof v === 'object') queue.push(v); });
                     continue;
                 }
                 for (const [k, v] of Object.entries(cur)) {
                     if (Array.isArray(v) && v.length) {
                         if (/(gamezh|配隊|攻略|teamguide|隊伍)/i.test(String(k)) || v.some(looksLikeGamezhRow)) {
-                            return v.filter(Boolean);
+                            return normalizeRowsByHeader(v.filter(Boolean));
+                        }
+                    } else if (typeof v === 'string') {
+                        const text = v.trim();
+                        if ((text.startsWith('{') || text.startsWith('[')) && text.length <= 600000) {
+                            try {
+                                const parsed = JSON.parse(text);
+                                if (parsed && typeof parsed === 'object') queue.push(parsed);
+                            } catch (_) {}
                         }
                     } else if (v && typeof v === 'object') {
                         queue.push(v);
@@ -11795,18 +11844,26 @@
             }
             for (const [k, v] of Object.entries(json)) {
                 if (!Array.isArray(v) || !v.length) continue;
-                if (/(gamezh|配隊|攻略|teamguide)/i.test(String(k))) return v.filter(Boolean);
+                if (/(gamezh|配隊|攻略|teamguide)/i.test(String(k))) return normalizeRowsByHeader(v.filter(Boolean));
             }
             return [];
         }
         function getFieldVal(row, keys) {
+            const normalizeCell = (val) => {
+                if (val == null) return '';
+                if (typeof val === 'object') {
+                    if (Object.prototype.hasOwnProperty.call(val, 'v')) return String(val.v ?? '').trim();
+                    if (Object.prototype.hasOwnProperty.call(val, 'f')) return String(val.f ?? '').trim();
+                }
+                return String(val).trim();
+            };
             if (Array.isArray(row)) {
                 for (const k of keys) {
-                    if (typeof k === 'number' && row[k] != null) return String(row[k]).trim();
+                    if (typeof k === 'number' && row[k] != null) return normalizeCell(row[k]);
                 }
             }
             for (const k of keys) {
-                if (row && Object.prototype.hasOwnProperty.call(row, k) && row[k] != null) return String(row[k]).trim();
+                if (row && Object.prototype.hasOwnProperty.call(row, k) && row[k] != null) return normalizeCell(row[k]);
             }
             return '';
         }
@@ -12945,7 +13002,8 @@
             const rowsRaw = Array.isArray(g_gamezhTeamsFromUrl) && g_gamezhTeamsFromUrl.length
                 ? g_gamezhTeamsFromUrl
                 : normalizeGamezhTeamsFromWeightPayload(g_weightsRawData || {});
-            const kw = (document.getElementById('gamezh-filter')?.value || '').trim();
+            const kwRaw = (document.getElementById('gamezh-filter')?.value || '').trim();
+            const kw = kwRaw.toLowerCase();
             const mainCFilter = document.getElementById('gamezh-mainc-filter')?.value || 'all';
             const diffFilter = document.getElementById('gamezh-diff-filter')?.value || 'all';
             const mainCOptions = Array.from(new Set(rowsRaw.map(r => String(r.mainC || '').trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b));
@@ -12954,10 +13012,10 @@
                 if (mainCFilter !== 'all' && String(r.mainC || '') !== mainCFilter) return false;
                 if (diffFilter !== 'all' && String(r.difficulty || '') !== diffFilter) return false;
                 if (!kw) return true;
-                return [r.system, r.mainC, r.c2, r.c3, r.dps, r.flow, r.difficulty, r.notes].join('|').includes(kw);
+                return [r.system, r.mainC, r.c2, r.c3, r.dps, r.flow, r.difficulty, r.notes].join('|').toLowerCase().includes(kw);
             });
             let html = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">`;
-            html += `<input id="gamezh-filter" oninput="openGamezhTeamModal()" value="${escapeHtml(kw)}" placeholder="${isEN ? 'Search system/mainC/notes' : '搜尋體系/角色/備註'}" style="flex:1;min-width:220px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
+            html += `<input id="gamezh-filter" oninput="openGamezhTeamModal()" value="${escapeHtml(kwRaw)}" placeholder="${isEN ? 'Search system/mainC/notes' : '搜尋體系/角色/備註'}" style="flex:1;min-width:220px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
             html += `<select id="gamezh-mainc-filter" onchange="openGamezhTeamModal()" style="min-width:130px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;"><option value="all">${isEN ? 'All MainC' : '全部主C'}</option>${mainCOptions.map(v => `<option value="${escapeHtml(v)}" ${mainCFilter === v ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('')}</select>`;
             html += `<select id="gamezh-diff-filter" onchange="openGamezhTeamModal()" style="min-width:120px;background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;"><option value="all">${isEN ? 'All Difficulty' : '全部難度'}</option>${diffOptions.map(v => `<option value="${escapeHtml(v)}" ${diffFilter === v ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('')}</select>`;
             html += `</div>`;
@@ -14415,13 +14473,14 @@
 @media(min-width:1100px){.grad-team-grid{grid-template-columns:1fr 1fr 1fr;}}
 .grad-custom-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;min-height:520px;max-height:calc(100vh - 330px);}
 .grad-custom-pane{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;display:flex;flex-direction:column;min-height:0;}
-.grad-custom-pane-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:4px;}
+.grad-custom-pane-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:4px;overscroll-behavior:contain;}
 .grad-custom-pane-body::-webkit-scrollbar{width:5px;}
 .grad-custom-pane-body::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
 .grad-custom-team{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;margin-bottom:0;}
 .grad-custom-team-body{min-height:98px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;}
-.grad-custom-role-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;}
-.grad-custom-role{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 8px;font-size:0.74rem;cursor:grab;min-height:62px;}
+.grad-custom-role-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.grad-custom-role{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:9px 10px;font-size:0.74rem;cursor:grab;min-height:92px;}
+.grad-custom-role .grad-custom-icon{width:38px;height:38px;border:2px solid rgba(255,255,255,0.28);}
 .grad-custom-chip{display:flex;flex-direction:column;align-items:flex-start;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.16);border-radius:10px;padding:8px;font-size:0.74rem;cursor:grab;min-width:145px;max-width:185px;flex:1 1 150px;}
 .grad-custom-chip button{background:none;border:none;color:#ff7878;cursor:pointer;font-size:0.82rem;line-height:1;}
 .grad-custom-drop-over{border-color:#61afef !important;background:rgba(97,175,239,0.1) !important;}
@@ -14436,9 +14495,10 @@
 .grad-custom-pop{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:21000;display:none;align-items:center;justify-content:center;padding:18px;}
 .grad-custom-pop-card{width:min(920px,95vw);max-height:88vh;overflow:auto;background:#1a1a1f;border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;}
 @media(max-width:900px){.grad-custom-layout{grid-template-columns:1fr;}}
-@media(max-width:1400px){.grad-custom-role-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
-@media(max-width:1100px){.grad-custom-role-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:1400px){.grad-custom-role-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:1100px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:900px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:560px){.grad-custom-role-grid{grid-template-columns:1fr;}}
 @media(max-width:700px){.grad-custom-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 </style>`;
 
@@ -15294,7 +15354,17 @@
                     grad_quickAssignRole(role.id);
                     grad_renderQuickAssignControls();
                 });
-                row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;">${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<span style="font-size:0.7rem;color:${typeColor(role.type)};">${typeLabel(role.type)}</span><span style="color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(role.role)}</span>${posTagHtml}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;width:100%;"><span style="font-size:0.66rem;color:#ffbe90;">${teamIdxes.length ? `隊${teamIdxes.join(',')}` : '未上隊'}</span><span style="font-size:0.72rem;color:${useCount>=maxUse?'#e5c07b':'#666'};">${useCount}/${maxUse}</span></div>`;
+                row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;width:100%;">
+                    ${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}
+                    <div style="display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;">
+                        <span style="color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.82rem;font-weight:700;">${escapeHtml(role.role)}</span>
+                        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                            <span style="font-size:0.66rem;color:${typeColor(role.type)};border:1px solid ${typeColor(role.type)}66;border-radius:999px;padding:1px 6px;">${typeLabel(role.type)}</span>
+                            ${posTagHtml}
+                        </div>
+                    </div>
+                    <span style="font-size:0.9rem;color:#61afef;font-family:'JetBrains Mono';font-weight:800;white-space:nowrap;">${safeFixed(role.score || 0,1)}%</span>
+                </div><div style="display:flex;justify-content:space-between;align-items:center;gap:6px;width:100%;"><span style="font-size:0.66rem;color:#ffbe90;">${teamIdxes.length ? `隊${teamIdxes.join(',')}` : '未上隊'}</span><span style="font-size:0.72rem;color:${useCount>=maxUse?'#e5c07b':'#666'};">${useCount}/${maxUse}</span></div>`;
                 roleListEl.appendChild(row);
             });
             grad_renderQuickAssignControls();
