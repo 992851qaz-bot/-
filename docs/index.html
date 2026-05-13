@@ -15343,8 +15343,18 @@
                     const fromTeamIdx = fromTeamVal === '' ? null : Number(fromTeamVal);
                     grad_handleDropToTeam(teamIdx, roleId, Number.isNaN(fromTeamIdx) ? null : fromTeamIdx);
                 });
+                body.addEventListener('click', (e) => {
+                    if (e.target.closest('button')) return;
+                    const tp = window.__gradTouchPick;
+                    if (!tp) return;
+                    e.stopPropagation();
+                    grad_handleDropToTeam(teamIdx, tp.roleId, tp.fromTeamIdx);
+                    window.__gradTouchPick = null;
+                    grad_renderCustomPairing();
+                });
+                if (window.__gradTouchPick) body.classList.add('grad-custom-touch-target');
                 if (team.length === 0) {
-                    body.innerHTML = `<div style="font-size:0.72rem;color:#555;">${isEN ? 'Drag roles here' : '拖曳角色到這裡'}</div>`;
+                    body.innerHTML = `<div style="font-size:0.72rem;color:#555;">${isEN ? 'Drag / tap to place' : '拖曳或點此放置'}</div>`;
                 } else {
                     team.forEach(roleId => {
                         const role = grad_getCustomRoleById(roleId);
@@ -15355,11 +15365,26 @@
                         chip.style.borderColor = `${typeColor(role.type)}66`;
                         chip.style.color = typeColor(role.type);
                         const iconUrl = grad_getRoleIconUrl(role.role);
+                        const tp = window.__gradTouchPick;
+                        if (tp && tp.roleId === role.id && tp.fromTeamIdx === teamIdx) {
+                            chip.classList.add('grad-custom-touch-picked');
+                        }
                         chip.addEventListener('dragstart', (e) => {
                             e.dataTransfer.setData('text/roleId', role.id);
                             e.dataTransfer.setData('text/fromTeam', String(teamIdx));
                         });
-                        chip.innerHTML = `${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<span>${escapeHtml(role.role)}</span><button onclick="event.stopPropagation();grad_removeRoleFromTeam(${teamIdx},'${role.id}')">✕</button>`;
+                        chip.addEventListener('click', (e) => {
+                            if (e.target.closest('button')) return;
+                            e.stopPropagation();
+                            const curTp = window.__gradTouchPick;
+                            if (curTp && curTp.roleId === role.id && curTp.fromTeamIdx === teamIdx) {
+                                grad_clearTouchPick();
+                            } else {
+                                grad_setTouchPick(role.id, teamIdx);
+                            }
+                        });
+                        const chainStr = role.chainCount > 0 ? `<span style="font-size:0.62rem;padding:1px 4px;border-radius:4px;background:rgba(229,192,123,0.18);color:#e5c07b;border:1px solid rgba(229,192,123,0.35);">S${role.chainCount}</span>` : '';
+                        chip.innerHTML = `<div style="display:flex;align-items:center;gap:6px;width:100%;">${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}<div style="flex:1;min-width:0;"><div style="font-size:0.78rem;font-weight:700;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(role.role)}</div><div style="display:flex;gap:3px;align-items:center;flex-wrap:wrap;margin-top:2px;"><span style="font-size:0.6rem;padding:1px 5px;border-radius:999px;border:1px solid ${typeColor(role.type)}66;color:${typeColor(role.type)};">${typeLabel(role.type)}</span>${chainStr}<span style="font-size:0.68rem;color:#61afef;font-weight:700;">${safeFixed(role.score||0,1)}%</span></div></div><button onclick="event.stopPropagation();grad_removeRoleFromTeam(${teamIdx},'${role.id}')" style="flex-shrink:0;">✕</button></div>`;
                         body.appendChild(chip);
                     });
                 }
@@ -15397,11 +15422,24 @@
                     e.dataTransfer.setData('text/fromTeam', '');
                 });
                 row.addEventListener('click', () => {
-                    if (!window.__gradQuickAssignEnabled && !window.matchMedia('(max-width:900px)').matches) return;
-                    if (!window.__gradQuickAssignEnabled) window.__gradQuickAssignEnabled = true;
-                    grad_quickAssignRole(role.id);
-                    grad_renderQuickAssignControls();
+                    const isMobile = grad_isTouchPairingMode();
+                    if (!window.__gradQuickAssignEnabled && !isMobile) return;
+                    if (window.__gradQuickAssignEnabled) {
+                        grad_quickAssignRole(role.id);
+                        grad_renderQuickAssignControls();
+                    } else {
+                        const curTp = window.__gradTouchPick;
+                        if (curTp && curTp.roleId === role.id && curTp.fromTeamIdx === null) {
+                            grad_clearTouchPick();
+                        } else {
+                            grad_setTouchPick(role.id, null);
+                        }
+                    }
                 });
+                const rowTp = window.__gradTouchPick;
+                if (rowTp && rowTp.roleId === role.id && rowTp.fromTeamIdx === null) {
+                    row.classList.add('grad-custom-touch-picked');
+                }
                 row.innerHTML = `<div style="display:flex;align-items:center;gap:8px;min-width:0;width:100%;">
                     ${iconUrl ? `<img class="grad-custom-icon" src="${iconUrl}">` : `<span class="grad-custom-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#2a2a30;color:#888;">?</span>`}
                     <div style="display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;">
