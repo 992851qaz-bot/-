@@ -8650,6 +8650,7 @@
             <div class="modal-header">
                 <h3 style="margin:0;color:#5c7cfa;">✏️ 編輯範例隊伍配置</h3>
                 <div style="display:flex;gap:8px;">
+                    <button onclick="addExampleTeamEditorTeam()">新增隊伍</button>
                     <button onclick="saveExampleTeamEditor()">儲存</button>
                     <button onclick="closeExampleTeamEditor()">關閉</button>
                 </div>
@@ -11792,13 +11793,15 @@
             if (Array.isArray(json)) return normalizeRowsByHeader(json.filter(Boolean));
             const rows = getWeightPayloadRowsByKeys(
                 json,
-                ['gamezhTeams', 'gamezhTeamGuide', 'gamezh_team_guide', 'teamGuideRaw', 'teamGuideTable', 'gamezh', 'gamezhGuide', 'gamezh_guide', '配隊攻略', '配隊', '隊伍攻略', '隊伍'],
+                ['gamezhTeams', 'gamezhTeamGuide', 'gamezh_team_guide', 'teamGuideRaw', 'teamGuideTable', 'gamezh', 'gamezhGuide', 'gamezh_guide', 'gamezhTeamRecommendations', 'gamezh_team_recommendations', 'gamezhRecommendations', 'teamRecommendations', 'team_recommendations', 'recommendTeams', 'gamezhRows', 'gamezh_rows', '配隊攻略', '配隊', '隊伍攻略', '隊伍'],
                 [
                     { headersKey: 'gamezhTeamHeaders', rowsKey: 'gamezhTeamData' },
                     { headersKey: 'gamezhHeaders', rowsKey: 'gamezhData' },
                     { headersKey: 'gamezh_Headers', rowsKey: 'gamezh_Rows' },
                     { headersKey: 'gamezhGuideHeaders', rowsKey: 'gamezhGuideData' },
-                    { headersKey: 'teamGuideHeaders', rowsKey: 'teamGuideData' }
+                    { headersKey: 'teamGuideHeaders', rowsKey: 'teamGuideData' },
+                    { headersKey: 'gamezhRecommendationHeaders', rowsKey: 'gamezhRecommendationData' },
+                    { headersKey: 'teamRecommendationHeaders', rowsKey: 'teamRecommendationData' }
                 ]
             );
             if (rows.length) return normalizeRowsByHeader(rows);
@@ -11864,6 +11867,15 @@
             }
             for (const k of keys) {
                 if (row && Object.prototype.hasOwnProperty.call(row, k) && row[k] != null) return normalizeCell(row[k]);
+            }
+            if (row && typeof row === 'object' && !Array.isArray(row)) {
+                const normalizeKey = (v) => String(v || '').replace(/[\s_\-\(\)（）:：/\\]/g, '').toLowerCase();
+                const rowEntries = Object.entries(row);
+                const rowMap = new Map(rowEntries.map(([rk, rv]) => [normalizeKey(rk), rv]));
+                for (const k of keys) {
+                    const nk = normalizeKey(k);
+                    if (rowMap.has(nk)) return normalizeCell(rowMap.get(nk));
+                }
             }
             return '';
         }
@@ -13157,11 +13169,11 @@
             const body = document.getElementById('example-team-edit-body');
             if (!body) return;
             const teams = window.__exampleTeamEditorState || [];
-            let html = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"><button onclick="resetExampleTeamEditor()">還原預設</button></div>`;
+            let html = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"><button onclick="addExampleTeamEditorTeam()">新增隊伍</button><button onclick="resetExampleTeamEditor()">還原預設</button></div>`;
             html += `<div style="display:flex;flex-direction:column;gap:12px;">`;
             teams.forEach((team, idx) => {
                 html += `<div style="border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px;background:rgba(255,255,255,0.03);">`;
-                html += `<div style="font-size:0.82rem;color:#9aa4b5;margin-bottom:8px;">#${idx + 1}</div>`;
+                html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.82rem;color:#9aa4b5;margin-bottom:8px;"><span>#${idx + 1}</span><button onclick="removeExampleTeamEditorTeam(${idx})" style="padding:2px 8px;background:rgba(255,120,120,0.16);border:1px solid rgba(255,120,120,0.4);color:#ff9b9b;border-radius:6px;">刪除隊伍</button></div>`;
                 html += `<div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;">`;
                 html += `<input value="${escapeHtml(team.system)}" oninput="updateExampleTeamField(${idx},'system',this.value)" placeholder="隊伍名稱 / 體系" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
                 html += `<input type="number" min="0" step="1" value="${Number(team.power || 0)}" oninput="updateExampleTeamField(${idx},'power',this.value)" placeholder="強度數值" style="background:#1f1f24;border:1px solid #3a3a42;color:#ddd;border-radius:6px;padding:6px 8px;">`;
@@ -13200,6 +13212,30 @@
             const modal = document.getElementById('example-team-edit-modal');
             if (modal) modal.style.display = 'none';
             closeExampleTeamRolePicker();
+        }
+        function addExampleTeamEditorTeam() {
+            const teams = window.__exampleTeamEditorState || [];
+            teams.push({
+                system: '',
+                mainC: '',
+                subList: [],
+                supportList: [],
+                rotation: '',
+                notes: '',
+                power: 0
+            });
+            window.__exampleTeamEditorState = teams;
+            renderExampleTeamEditor();
+        }
+        function removeExampleTeamEditorTeam(teamIdx) {
+            const teams = window.__exampleTeamEditorState || [];
+            if (!Array.isArray(teams) || teams.length <= 1) {
+                showMsg('至少保留 1 隊');
+                return;
+            }
+            teams.splice(teamIdx, 1);
+            window.__exampleTeamEditorState = teams;
+            renderExampleTeamEditor();
         }
         function updateExampleTeamField(teamIdx, field, value) {
             const team = (window.__exampleTeamEditorState || [])[teamIdx];
@@ -14522,7 +14558,8 @@
 @media(max-width:1400px){.grad-custom-role-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
 @media(max-width:1100px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:900px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:560px){.grad-custom-role-grid{grid-template-columns:1fr;}}
+@media(max-width:560px){.grad-custom-role-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:420px){.grad-custom-role-grid{grid-template-columns:1fr;}}
 @media(max-width:700px){.grad-custom-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 </style>`;
 
@@ -14667,6 +14704,22 @@
                 setBtnActive(overviewBtn, false);
                 setBtnActive(teamBtn, false);
                 setBtnActive(customBtn, true);
+                if (grad_isTouchPairingMode()) {
+                    if (!window.__gradQuickAssignEnabled) {
+                        window.__gradQuickAssignEnabled = true;
+                        if (!Number.isInteger(window.__gradQuickAssignTeamIdx)) window.__gradQuickAssignTeamIdx = 0;
+                        if (typeof window.__gradQuickAssignAutoRotate === 'undefined') window.__gradQuickAssignAutoRotate = true;
+                        if (typeof window.__gradQuickAssignRotateMode === 'undefined') window.__gradQuickAssignRotateMode = (window.__gradQuickAssignAutoRotate === false ? 'off' : 'round');
+                        grad_toggleRolePicker(true);
+                        grad_renderCustomPairing();
+                        if (!window.__gradMobileQuickAssignHinted) {
+                            showMsg('手機模式已自動開啟快速編隊');
+                            window.__gradMobileQuickAssignHinted = true;
+                        }
+                    } else {
+                        grad_renderQuickAssignControls();
+                    }
+                }
             }
         }
         function grad_resetCustomPairing() {
