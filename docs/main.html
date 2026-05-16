@@ -4,11 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' https: data: blob: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data: blob:; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content">
+    <meta http-equiv="Permissions-Policy"
+        content="accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="聲骸分析">
     <link rel="manifest" id="manifest-link">
     <title>鳴潮聲骸分析儀｜聲骸評分・Build攻略 | Wuthering Waves Echo Analyzer</title>
+    <script>
+        (function hardenClient() {
+            if (window.top !== window.self) {
+                try { window.top.location = window.self.location.href; }
+                catch (_) { window.self.location = window.self.location.href; }
+            }
+            window.addEventListener('keydown', function (e) {
+                const key = (e.key || '').toLowerCase();
+                const mod = e.ctrlKey || e.metaKey;
+                const devtoolsCombo = mod && e.shiftKey && (key === 'i' || key === 'j' || key === 'c');
+                const macDevtoolsCombo = mod && e.altKey && (key === 'i' || key === 'j' || key === 'c');
+                const sourceSaveCombo = mod && (key === 'u' || key === 's');
+                if (key === 'f12' || devtoolsCombo || macDevtoolsCombo || sourceSaveCombo) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }, true);
+        })();
+    </script>
     <!-- SEO -->
     <meta name="description"
         content="免費鳴潮聲骸分析工具，自動辨識聲骸詞條並計算 CV 評分，提供各角色聲骸 Build 推薦與畢業標準攻略。Wuthering Waves echo analyzer with CV scoring, echo build guide and tier ratings for all resonators.">
