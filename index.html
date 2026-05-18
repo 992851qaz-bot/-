@@ -6,11 +6,18 @@
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <title>Redirecting...</title>
-  <meta http-equiv="refresh" content="0; url=main.html">
-  <link rel="canonical" href="main.html">
-  <script>window.location.replace('main.html');</script>
+  <link rel="canonical" href="/-/main.html">
+  <script>
+    (function redirectToMain() {
+      var path = window.location.pathname || '/';
+      path = path.replace(/\/index\.html?$/i, '/');
+      if (!path.endsWith('/')) path += '/';
+      var target = path + 'main.html' + (window.location.search || '') + (window.location.hash || '');
+      window.location.replace(target);
+    })();
+  </script>
 </head>
 <body>
-  <p>Redirecting to <a href="main.html">main.html</a>...</p>
+  <p>Redirecting to <a href="/-/main.html">main.html</a>...</p>
 </body>
 </html>
