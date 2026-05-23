@@ -2,11 +2,22 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0;url=./0522.html">
     <title>重定向中...</title>
 </head>
 <body>
     <p>正在重定向到聲骸分析儀...</p>
+    <script>
+        (function() {
+            // Get the current pathname
+            var pathname = window.location.pathname;
+            
+            // Handle both trailing slash and no-slash URLs
+            // Normalize to just the filename without extra path depth
+            var targetUrl = './0522.html';
+            
+            window.location.href = targetUrl;
+        })();
+    </script>
     <p><a href="./0522.html">如果頁面沒有自動載入，請點擊這裡</a></p>
 </body>
 </html>
