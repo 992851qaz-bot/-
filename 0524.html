@@ -3712,19 +3712,82 @@
 
         /* Simulator Layout Optimization */
         #imitate-modal .db-container {
-            max-width: 950px !important;
+            max-width: 1600px !important;
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
         }
 
+        .imitate-main-col>.db-card {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+        }
+
         @media (min-width: 1000px) {
             #imitate-modal .db-container {
-                grid-template-columns: 1.2fr 0.8fr;
+                max-width: 95vw !important;
+                grid-template-columns: 1fr 350px;
+                gap: 30px;
             }
 
             .imitate-main-col {
                 grid-row: span 2;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .imitate-main-col>.db-card {
+                display: flex !important;
+                flex-direction: column !important;
+                width: 100% !important;
+                flex: 1;
+            }
+
+            .imitate-main-col>.db-card>div:first-child {
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+            }
+
+            .imitate-list-grid {
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 15px;
+            }
+
+            .imitate-item {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                grid-template-rows: 1fr auto;
+                text-align: center;
+                padding: 20px 15px !important;
+                gap: 15px !important;
+                min-height: 250px;
+            }
+
+            .imitate-item-header {
+                flex-direction: column;
+                justify-content: center;
+                gap: 6px !important;
+            }
+
+            .imitate-item-tier {
+                margin: 8px auto 0 !important;
+            }
+
+            .imitate-item-meta {
+                justify-content: center;
+                margin-top: 15px !important;
+            }
+
+            .imitate-item-score {
+                text-align: center !important;
+                border-top: 1px dashed rgba(255, 255, 255, 0.15) !important;
+                padding-top: 15px !important;
+                margin-top: auto;
+                display: block !important;
             }
         }
 
@@ -3732,6 +3795,13 @@
             max-height: 420px;
             overflow-y: auto;
             padding-right: 4px;
+        }
+
+        @media (min-width: 1000px) {
+            .imitate-list-scroll {
+                max-height: none;
+                overflow: visible;
+            }
         }
 
         .imitate-list-grid {
@@ -3744,10 +3814,9 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             padding: 12px 14px;
-            display: grid;
-            grid-template-columns: 1fr auto;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
-            align-items: center;
         }
 
         .imitate-item.is-effective {
@@ -3801,8 +3870,12 @@
         }
 
         .imitate-item-score {
-            text-align: right;
-            min-width: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-top: 8px;
+            width: 100%;
         }
 
         .imitate-item-score .score-val {
@@ -7672,16 +7745,25 @@
         </div>
         <div class="loader" id="loader"></div>
     </header>
-    <div id="quick-start-banner" style="display:none;padding:10px 14px;background:linear-gradient(90deg,rgba(229,192,123,0.04),rgba(97,175,239,0.03));border-bottom:1px solid rgba(255,255,255,0.03);">
-        <div style="max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+    <div id="quick-start-banner"
+        style="display:none;padding:10px 14px;background:linear-gradient(90deg,rgba(229,192,123,0.04),rgba(97,175,239,0.03));border-bottom:1px solid rgba(255,255,255,0.03);">
+        <div
+            style="max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-                <div style="color:var(--accent);font-size:0.95rem;font-weight:800;letter-spacing:0.4px;">免UID與分析快速開始</div>
-                <div id="quick-start-desc" style="color:#a8a8a8;font-size:0.78rem;">等待權重載入後即可使用常用工具；快速開啟僅提供全自訂配對。</div>
+                <div style="color:var(--accent);font-size:0.95rem;font-weight:800;letter-spacing:0.4px;">免UID與分析快速開始
+                </div>
+                <div id="quick-start-desc" style="color:#a8a8a8;font-size:0.78rem;">等待權重載入後即可使用常用工具；快速開啟僅提供矩陣編隊。</div>
             </div>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <button id="qs-custom-pair" onclick="openGraduationPanel('custom')" style="padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-weight:800;" disabled>🛠 全自訂配對</button>
-                <button id="qs-imitate" onclick="openImitateModal()" style="padding:8px 12px;border-radius:10px;border:none;background:rgba(97,175,239,0.12);color:#9fd5ff;font-weight:800;" disabled>⚒ 聲骸模擬開詞條</button>
-                <button id="qs-feedback" onclick="openFeedbackModal()" style="padding:8px 12px;border-radius:10px;border:none;background:rgba(120,224,143,0.12);color:#9be8ac;font-weight:800;">📝 問卷與回報</button>
+                <button id="qs-custom-pair" onclick="openGraduationPanel('custom')"
+                    style="padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-weight:800;"
+                    disabled>🧩 矩陣編隊</button>
+                <button id="qs-imitate" onclick="openImitateModal()"
+                    style="padding:8px 12px;border-radius:10px;border:none;background:rgba(97,175,239,0.12);color:#9fd5ff;font-weight:800;"
+                    disabled>⚒ 聲骸模擬開詞條</button>
+                <button id="qs-feedback" onclick="openFeedbackModal()"
+                    style="padding:8px 12px;border-radius:10px;border:none;background:rgba(120,224,143,0.12);color:#9be8ac;font-weight:800;">📝
+                    問卷與回報</button>
             </div>
         </div>
     </div>
@@ -7696,18 +7778,31 @@
             </div>
             <p style="font-size:0.75rem;color:#888;margin:-8px 0 12px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖"
                 data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
-            <div style="margin:0 0 12px;padding:12px 12px 10px;border:1px solid rgba(229,192,123,0.16);border-radius:14px;background:linear-gradient(135deg,rgba(229,192,123,0.08),rgba(97,175,239,0.06));box-shadow:0 10px 24px rgba(0,0,0,0.18);">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+            <div
+                style="margin:0 0 12px;padding:12px 12px 10px;border:1px solid rgba(229,192,123,0.16);border-radius:14px;background:linear-gradient(135deg,rgba(229,192,123,0.08),rgba(97,175,239,0.06));box-shadow:0 10px 24px rgba(0,0,0,0.18);">
+                <div
+                    style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
                     <div>
-                        <div style="color:var(--accent);font-size:0.9rem;font-weight:900;letter-spacing:0.4px;" data-lang-zh="免UID與分析快速開始" data-lang-en="Quick Start Without UID">免UID與分析快速開始</div>
-                        <div style="font-size:0.72rem;color:#a5a5a5;line-height:1.5;margin-top:3px;" data-lang-zh="等待權重載入後即可直接使用常用工具；快速開啟只提供：tools：全自訂配對。" data-lang-en="Once weights are loaded, you can open the most-used tools immediately; Quick Open only exposes :tools: Full Custom Pairing.">等待權重載入後即可直接使用常用工具；快速開啟只提供：tools：全自訂配對。</div>
+                        <div style="color:var(--accent);font-size:0.9rem;font-weight:900;letter-spacing:0.4px;"
+                            data-lang-zh="免UID與分析快速開始" data-lang-en="Quick Start Without UID">免UID與分析快速開始</div>
+                        <div style="font-size:0.72rem;color:#a5a5a5;line-height:1.5;margin-top:3px;"
+                            data-lang-zh="等待權重載入後即可直接使用常用工具；快速開啟只提供：矩陣編隊。"
+                            data-lang-en="Once weights are loaded, you can open the most-used tools immediately; Quick Open only exposes Matrix Formation.">
+                            等待權重載入後即可直接使用常用工具；快速開啟只提供：矩陣編隊。</div>
                     </div>
-                    <span style="font-size:0.66rem;color:#d9c08b;border:1px solid rgba(229,192,123,0.28);background:rgba(229,192,123,0.08);padding:3px 8px;border-radius:999px;font-weight:800;">:tools:</span>
+                    <span
+                        style="font-size:0.66rem;color:#d9c08b;border:1px solid rgba(229,192,123,0.28);background:rgba(229,192,123,0.08);padding:3px 8px;border-radius:999px;font-weight:800;">:tools:</span>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                    <button type="button" onclick="openGraduationPanel('custom')" style="padding:8px 12px;border:none;border-radius:10px;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-size:0.76rem;font-weight:900;cursor:pointer;">🛠 :tools: 全自訂配對</button>
-                    <button type="button" onclick="openImitateModal()" style="padding:8px 12px;border:none;border-radius:10px;background:rgba(97,175,239,0.12);color:#9fd5ff;font-size:0.76rem;font-weight:900;cursor:pointer;">⚒ 聲骸模擬開詞條</button>
-                    <button type="button" onclick="openFeedbackModal()" style="padding:8px 12px;border:none;border-radius:10px;background:rgba(120,224,143,0.12);color:#9be8ac;font-size:0.76rem;font-weight:900;cursor:pointer;">📝 問卷與回報</button>
+                    <button type="button" onclick="openGraduationPanel('custom')"
+                        style="padding:8px 12px;border:none;border-radius:10px;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-size:0.76rem;font-weight:900;cursor:pointer;">🧩
+                        矩陣編隊</button>
+                    <button type="button" onclick="openImitateModal()"
+                        style="padding:8px 12px;border:none;border-radius:10px;background:rgba(97,175,239,0.12);color:#9fd5ff;font-size:0.76rem;font-weight:900;cursor:pointer;">⚒
+                        聲骸模擬開詞條</button>
+                    <button type="button" onclick="openFeedbackModal()"
+                        style="padding:8px 12px;border:none;border-radius:10px;background:rgba(120,224,143,0.12);color:#9be8ac;font-size:0.76rem;font-weight:900;cursor:pointer;">📝
+                        問卷與回報</button>
                 </div>
             </div>
             <input type="text" id="login-uid" maxlength="9" placeholder="輸入 UID (9碼純數字)"
@@ -8560,6 +8655,11 @@
                             style="width:14px; height:14px; cursor:pointer;">
                         <label for="imitate-mute-toggle" style="cursor:pointer" data-lang-zh="⚒ 關閉彈窗提醒 (如重置確認)"
                             data-lang-en="⚒ Disable popup confirmations (e.g. reset)">⚒ 關閉彈窗提醒 (如重置確認)</label>
+                        <input type="checkbox" id="imitate-atmosphere-toggle"
+                            onchange="g_imitateAtmosphere = this.checked; localStorage.setItem('imitate_atmosphere', this.checked); if(!this.checked) imitate_render();"
+                            style="width:14px; height:14px; cursor:pointer; margin-left: 10px;">
+                        <label for="imitate-atmosphere-toggle" style="cursor:pointer" data-lang-zh="✨ 氣氛"
+                            data-lang-en="✨ Atmosphere">✨ 氣氛</label>
                     </div>
                 </div>
                 <button class="db-close-btn" onclick="closeImitateModal()">×</button>
@@ -8575,16 +8675,26 @@
             <!-- Left / Main Column -->
             <div class="imitate-main-col">
                 <div class="db-card" style="margin-bottom:15px; padding: 20px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold;" data-lang-zh="已開啟詞條"
-                            data-lang-en="Rolled Stats">已開啟詞條</div>
-                        <div style="display:flex; gap:10px;">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
+                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold; min-width: 100px;"
+                            data-lang-zh="已開啟詞條" data-lang-en="Rolled Stats">已開啟詞條</div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
                             <button class="btn-confirm-yes" onclick="imitate_start()"
                                 style="padding: 6px 16px; font-size: 0.9rem;" data-lang-zh="開啟詞條"
                                 data-lang-en="Roll Stats">開啟詞條</button>
+                            <button id="im-btn-auto5" class="btn-confirm-yes" onclick="imitate_auto5()"
+                                style="padding: 6px 16px; font-size: 0.9rem; background: var(--cv-val); color: #000;"
+                                data-lang-zh="連開5詞條" data-lang-en="Roll 5">連開5詞條</button>
+                            <button id="im-btn-autodc" class="btn-confirm-yes" onclick="imitate_auto_double_crit()"
+                                style="padding: 6px 16px; font-size: 0.9rem; background: #c678dd; color: #fff;"
+                                data-lang-zh="極速洗雙爆" data-lang-en="Auto Double Crit">極速洗雙爆</button>
                             <button class="btn-confirm-no" onclick="imitate_reset()"
                                 style="padding: 6px 16px; font-size: 0.9rem; background:#444;" data-lang-zh="全部重置"
                                 data-lang-en="Reset All">全部重置</button>
+                            <button class="btn-confirm-yes" onclick="imitate_showAllRolesScore()"
+                                style="padding: 6px 16px; font-size: 0.9rem; background:linear-gradient(135deg, #1e3c72, #2a5298); color:#fff; border-color:#2a5298;"
+                                data-lang-zh="🎓 評分總表" data-lang-en="🎓 Score Summary">🎓 評分總表</button>
                         </div>
                     </div>
 
@@ -8594,6 +8704,22 @@
                                 尚未開啟任何詞條</div>
                         </div>
                     </div>
+
+                    <!-- History Log -->
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-top:25px; margin-bottom:15px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
+                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold; min-width:100px;"
+                            data-lang-zh="📜 歷史紀錄" data-lang-en="📜 History Log">📜 歷史紀錄</div>
+                        <button onclick="imitate_clearHistory()"
+                            style="padding:4px 10px; background:rgba(255,0,0,0.1); color:#ff5c5c; border:1px solid rgba(255,0,0,0.3); border-radius:4px; font-size:0.8rem; cursor:pointer;"
+                            data-lang-zh="清除紀錄" data-lang-en="Clear">清除紀錄</button>
+                    </div>
+                    <div class="imitate-history-scroll" style="max-height: 250px; overflow-y: auto;">
+                        <div id="imitate-history-container" style="display:flex; flex-direction:column; gap:10px;">
+                            <div class="imitate-empty" data-lang-zh="暫無歷史紀錄" data-lang-en="No history">暫無歷史紀錄</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -8654,6 +8780,21 @@
                 <div id="imitate-chal-result" style="display:none; margin-top:15px;">
                     <!-- Result Badge will be here -->
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imitate-roles-score-modal" class="dashboard-modal" style="z-index: 6000;">
+        <div class="db-container" style="max-width: 1000px; padding-top: 40px;">
+            <div class="db-header">
+                <div class="db-title-group">
+                    <h2 style="font-size:1.8rem; color:var(--accent);">🎓 模擬結果 - 角色適配排行</h2>
+                </div>
+                <button class="db-close-btn"
+                    onclick="document.getElementById('imitate-roles-score-modal').style.display='none'">×</button>
+            </div>
+            <div id="imitate-roles-score-content"
+                style="margin-top: 10px; max-height: 70vh; overflow-y: auto; grid-column: 1 / -1;">
             </div>
         </div>
     </div>
@@ -15401,7 +15542,7 @@
             html += `<div style="display:flex;gap:0;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.15);padding:0 14px;">`;
             html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:10px 18px;border:none;border-bottom:2px solid #e5c07b;background:transparent;color:#e5c07b;font-size:0.85rem;cursor:pointer;font-weight:700;transition:all 0.2s;">${isEN ? '🎓 Overview' : '🎓 評分總覽'}</button>`;
             html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:10px 18px;border:none;border-bottom:2px solid transparent;background:transparent;color:#555;font-size:0.85rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN ? '👥 Teams' : '👥 配對'}</button>`;
-            html += `<button id="grad-tab-custom" onclick="grad_switchTab('custom')" style="padding:10px 18px;border:none;border-bottom:2px solid transparent;background:transparent;color:#555;font-size:0.85rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN ? '🛠 Custom Pairing' : '🛠 全自訂配對'}</button>`;
+            html += `<button id="grad-tab-custom" onclick="grad_switchTab('custom')" style="padding:10px 18px;border:none;border-bottom:2px solid transparent;background:transparent;color:#555;font-size:0.85rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN ? '🧩 Matrix Formation' : '🧩 矩陣編隊'}</button>`;
             html += `<div style="flex:1;"></div>`;
             html += `<button onclick="openExampleTeamModal()" style="padding:8px 12px;border:none;background:transparent;color:#5c7cfa;font-size:0.78rem;cursor:pointer;font-weight:600;transition:color 0.2s;" onmouseover="this.style.color='#8099fb'" onmouseout="this.style.color='#5c7cfa'">${isEN ? '👥 Templates' : '👥 範例'}</button>`;
             html += `<button onclick="openRolePositionModal()" style="padding:8px 12px;border:none;background:transparent;color:#78e08f;font-size:0.78rem;cursor:pointer;font-weight:600;transition:color 0.2s;" onmouseover="this.style.color='#a0f0b0'" onmouseout="this.style.color='#78e08f'">${isEN ? '📋 Roles' : '📋 定位'}</button>`;
@@ -15443,22 +15584,41 @@
 .team-card-new:hover{border-color:rgba(229,192,123,0.3);background:rgba(255,255,255,0.05);box-shadow:0 10px 30px rgba(0,0,0,0.4);}
 .team-card-new.layout-bar{display:flex;flex-direction:column;gap:12px;}
 .team-card-new.layout-col{display:flex;flex-direction:column;gap:12px;}
-.team-card-new.layout-expert{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:16px;min-height:132px;}
-.team-card-new.layout-expert .team-card-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.05);}
-.team-card-new.layout-expert .team-card-header > div:first-child{gap:6px;flex-wrap:wrap;}
+/* Expert layout: compact card with 3 images in horizontal row */
+.team-card-new.layout-expert{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:14px;}
+.team-card-new.layout-expert .team-card-header{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.team-card-new.layout-expert .team-card-header > div:first-child{gap:6px;flex-wrap:nowrap;}
 .team-card-new.layout-expert .team-card-index{font-size:0.7rem;padding:2px 7px;}
-.team-card-new.layout-expert .team-slots-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start;}
-.team-card-new.layout-expert .team-slot{aspect-ratio:auto;min-height:0;height:100%;padding:0;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.22);}
-.team-card-new.layout-expert .role-card-mini{padding:6px;gap:4px;}
-.team-card-new.layout-expert .role-card-mini img{width:90%;max-width:118px;aspect-ratio:1/1;border-width:3px;}
-.team-card-new.layout-expert .role-name-mini{font-size:0.86rem;margin-top:2px;}
+/* Expert: 3 slots horizontally in one row */
+.team-card-new.layout-expert .team-slots-grid{grid-template-columns:repeat(3,1fr);gap:6px;}
+.team-card-new.layout-expert .team-slot{aspect-ratio:1/1;padding:0;border:1.5px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.22);border-radius:50%;overflow:hidden;width:100%;}
+.team-card-new.layout-expert .role-card-mini{padding:0;gap:0;width:100%;height:100%;}
+/* 2x image size compared to normal (normal is 80%, expert is 100% of the round slot) */
+.team-card-new.layout-expert .role-card-mini img{width:100%;height:100%;aspect-ratio:1/1;border-radius:50%;border-width:2px;object-fit:cover;}
+.team-card-new.layout-expert .role-name-mini{display:none;}
 .team-card-new.layout-expert .role-score-mini{display:none;}
 .team-card-new.layout-expert .team-note-shell{display:none;}
-.team-card-new.layout-expert .team-mini-info{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;align-items:center;}
-.team-card-new.layout-expert .team-mini-info .team-mini-score{display:none;}
+.team-card-new.layout-expert .team-mini-info{display:none;}
 .team-card-new.layout-expert .team-chain-chip{background:rgba(229,192,123,0.14);color:var(--accent);border:1px solid rgba(229,192,123,0.35);font-weight:900;letter-spacing:0.6px;}
-.team-card-new.layout-expert .team-detail-btn{padding:6px 10px;font-size:0.72rem;}
-.team-card-new.layout-expert .team-slots-grid > .team-slot{aspect-ratio:1/1.08;}
+/* Detail btn hidden by default, visible on hover */
+.team-card-new.layout-expert .expert-actions{opacity:0;transition:opacity 0.18s ease;display:flex;gap:4px;align-items:center;}
+.team-card-new.layout-expert:hover .expert-actions{opacity:1;}
+/* Expert slot pill/circle sizing - bigger images */
+.expert-slots-row{display:flex;align-items:center;gap:8px;margin-top:4px;}
+.expert-slot-circle{width:68px;height:68px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.12);flex-shrink:0;cursor:pointer;transition:transform 0.18s cubic-bezier(0.23,1,0.32,1),border-color 0.18s ease,box-shadow 0.18s ease;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;position:relative;}
+.expert-slot-circle:hover{transform:scale(1.1) translateY(-2px);border-color:rgba(229,192,123,0.6);box-shadow:0 6px 20px rgba(0,0,0,0.5);}
+.expert-slot-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.expert-slot-circle .slot-plus-expert{color:rgba(255,255,255,0.2);font-size:1.4rem;transition:color 0.18s;}
+.expert-slot-circle:hover .slot-plus-expert{color:var(--accent);}
+.expert-slot-remove{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:rgba(255,85,85,0.85);border:1px solid #ff5555;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s;z-index:5;}
+.expert-slot-circle:hover .expert-slot-remove{opacity:1;}
+/* Drag snap micro-animations */
+.team-slot.drag-over,.expert-slot-circle.drag-over{animation:snap-pulse 0.35s cubic-bezier(0.23,1,0.32,1);border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(229,192,123,0.35)!important;}
+@keyframes snap-pulse{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+.team-card-new.drag-over-card{border-color:rgba(229,192,123,0.6)!important;background:rgba(229,192,123,0.04)!important;transition:border-color 0.12s,background 0.12s;}
+/* Smart fill btn per team */
+.team-smart-fill-btn{background:rgba(120,224,143,0.12);border:1px solid rgba(120,224,143,0.35);color:#78e08f;border-radius:6px;padding:3px 7px;font-size:0.66rem;font-weight:800;cursor:pointer;transition:0.18s ease;white-space:nowrap;}
+.team-smart-fill-btn:hover{background:rgba(120,224,143,0.22);transform:translateY(-1px);}
 .team-note-shell{margin-top:8px;padding:10px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;background:rgba(255,255,255,0.02);}
 .team-note-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
 .team-note-label{font-size:0.7rem;color:#777;display:flex;align-items:center;gap:6px;}
@@ -15637,6 +15797,7 @@
                         <span class="grad-pane-title">${isEN ? 'Combat Teams' : '出戰隊伍'}</span>
                         <div style="display:flex;gap:8px;align-items:center;">
                             <button onclick="grad_resetCustomPairing()" style="background:rgba(255,255,255,0.05);color:#aaa;border:1px solid #444;padding:4px 8px;border-radius:6px;font-size:0.7rem;cursor:pointer;">${isEN ? 'Reset' : '隊伍重置'}</button>
+                            <button onclick="grad_exportAllTeamCards()" style="background:rgba(229,192,123,0.12);color:var(--accent);border:1px solid rgba(229,192,123,0.35);padding:4px 8px;border-radius:6px;font-size:0.7rem;font-weight:800;cursor:pointer;" title="${isEN ? 'Export Team Card' : '匯出全陣容圖'}">🖼️ ${isEN ? 'Export' : '匯出陣容'}</button>
                             <button onclick="grad_addCustomTeam()" style="background:var(--accent);color:#000;border:none;padding:4px 10px;border-radius:6px;font-size:0.7rem;font-weight:800;cursor:pointer;">+ ${isEN ? 'ADD TEAM' : '新增隊伍'}</button>
                         </div>
                     </div>
@@ -16004,6 +16165,7 @@
             if (teamIdx < 0 || teamIdx >= scores.length) return;
             const raw = String(value || '').trim();
             scores[teamIdx] = raw;
+            grad_renderCustomPairing();
         }
         // Team personal notes storage
         function grad_getTeamNotes() {
@@ -17318,6 +17480,110 @@
             });
             grad_renderCustomPairing();
         }
+
+        // Smart fill for a single team slot (补位)
+        function grad_smartFillTeam(teamIdx) {
+            const state = window.__gradCustomState;
+            if (!state || !Array.isArray(state.teams) || !state.teams[teamIdx]) return;
+            const team = state.teams[teamIdx];
+            const filledCount = team.filter(id => id).length;
+            if (filledCount >= 3) { showMsg('此隊伍已滿'); return; }
+            // Build usage map excluding current team
+            const usage = new Map();
+            state.teams.forEach((t, ti) => {
+                if (ti === teamIdx) return;
+                (t || []).forEach(id => { if (id) { const r = grad_getCustomRoleById(id); if (r) usage.set(r.id, (usage.get(r.id) || 0) + 1); } });
+            });
+            // Also count current team usage
+            team.forEach(id => { if (id) { const r = grad_getCustomRoleById(id); if (r) usage.set(r.id, (usage.get(r.id) || 0) + 1); } });
+            const canUse = r => (usage.get(r.id) || 0) < grad_getRoleMaxUse(r);
+            const currentRoles = team.map(id => grad_getCustomRoleById(id)).filter(Boolean);
+            const currentNames = currentRoles.map(r => r.role);
+            const available = state.roles.filter(r => !team.includes(r.id) && canUse(r) && !currentRoles.some(cr => cr.role === r.role));
+            // Try synergy match first
+            const slotsNeeded = 3 - filledCount;
+            const rows = typeof getExampleTeamsData === 'function' ? getExampleTeamsData() : [];
+            let filled = 0;
+            // Try to find synergy candidates
+            const synergyCandidates = available.filter(r => grad_findExampleMatchForRoles([...currentNames, r.role]));
+            const nonSynergy = available.filter(r => !synergyCandidates.includes(r)).sort((a, b) => b.score - a.score);
+            const candidates = [...synergyCandidates.sort((a, b) => b.score - a.score), ...nonSynergy];
+            for (const r of candidates) {
+                if (filled >= slotsNeeded) break;
+                const emptySlot = team.findIndex(id => !id);
+                if (emptySlot === -1) break;
+                team[emptySlot] = r.id;
+                filled++;
+            }
+            if (filled === 0) { showMsg('沒有可補充的角色'); return; }
+            showMsg(`已智能補位 ${filled} 名角色`);
+            grad_renderCustomPairing();
+        }
+
+        // Export all team cards as image
+        async function grad_exportAllTeamCards() {
+            const el = document.getElementById('grad-custom-team-list');
+            if (!el) return;
+            const isEN = !!window.__gradCustomLangEN;
+            showMsg(isEN ? 'Generating team card image...' : '生成陣容圖中...');
+            try {
+                if (typeof html2canvas === 'undefined') { showMsg('需要 html2canvas 支援'); return; }
+                // Create a stylish snapshot container
+                const wrapper = document.createElement('div');
+                wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;background:linear-gradient(135deg, #16161a 0%, #1a151d 100%);padding:40px;border-radius:24px;min-width:640px;z-index:-1;box-shadow:inset 0 0 100px rgba(229,192,123,0.03);border:1px solid rgba(229,192,123,0.1);';
+
+                const headerBox = document.createElement('div');
+                headerBox.style.cssText = 'display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px; border-bottom:2px solid rgba(229,192,123,0.15); padding-bottom:20px;';
+
+                const title = document.createElement('div');
+                title.style.cssText = 'color:#e5c07b;font-size:2.2rem;font-weight:900;letter-spacing:2px;font-family:"Noto Sans TC", sans-serif; text-shadow:0 0 20px rgba(229,192,123,0.4); line-height:1;';
+                title.innerHTML = isEN ? '<span style="color:#fff">⚔ MY</span> LINEUP' : '<span style="color:#fff">⚔ 我的</span>出戰陣容';
+
+                const branding = document.createElement('div');
+                branding.style.cssText = 'color:#888; font-size:0.95rem; font-weight:700; letter-spacing:1px; text-align:right; line-height:1.4;';
+                branding.innerHTML = '鳴潮聲骸分析儀 | Wuthering Waves Echo Analyzer<br><span style="color:#e5c07b; font-size:0.85rem;">992851qaz-bot.github.io/-/</span>';
+
+                headerBox.appendChild(title);
+                headerBox.appendChild(branding);
+                wrapper.appendChild(headerBox);
+
+                const clone = el.cloneNode(true);
+                clone.style.maxHeight = 'none';
+                clone.style.overflow = 'visible';
+
+                // Hide interactive elements and enhance look for export
+                clone.querySelectorAll('button').forEach(b => b.style.display = 'none');
+                clone.querySelectorAll('.expert-actions').forEach(b => b.style.display = 'none');
+                clone.querySelectorAll('.expert-slot-remove').forEach(b => b.style.display = 'none');
+                clone.querySelectorAll('.slot-remove-btn').forEach(b => b.style.display = 'none');
+                clone.querySelectorAll('.team-card-header').forEach(h => { h.style.cursor = 'default'; });
+
+                // Enhance card styling for the export
+                clone.querySelectorAll('.team-card-new').forEach(c => {
+                    c.style.background = 'rgba(255,255,255,0.03)';
+                    c.style.border = '1px solid rgba(255,255,255,0.08)';
+                    c.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+                    c.style.transform = 'none'; // prevent hover transform bleeding
+                    c.style.transition = 'none';
+                });
+
+                wrapper.appendChild(clone);
+                document.body.appendChild(wrapper);
+                await new Promise(r => setTimeout(r, 150));
+                const canvas = await html2canvas(wrapper, { backgroundColor: '#121214', scale: 2, useCORS: true, logging: false });
+                document.body.removeChild(wrapper);
+                const url = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ww-team-lineup-${Date.now()}.png`;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                showMsg(isEN ? 'Team card exported!' : '陣容圖已匯出！');
+            } catch (e) {
+                console.error(e);
+                showMsg(isEN ? 'Export failed' : '匯出失敗');
+            }
+        }
+
         function grad_collectCustomPairingData() {
             const state = window.__gradCustomState;
             if (!state) return null;
@@ -17403,7 +17669,7 @@
             teamListEl.classList.toggle('layout-expert', isExpert);
             teamListEl.style.gridTemplateColumns = layoutMode === 'bar'
                 ? '1fr'
-                : (isExpert ? 'repeat(auto-fill, minmax(240px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))');
+                : (isExpert ? 'repeat(auto-fill, minmax(320px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))');
             teamListEl.style.gap = isExpert ? '10px' : '16px';
 
             const setLayoutBtn = (id, active) => {
@@ -17427,19 +17693,6 @@
                 const teamRoles = team.map(roleId => grad_getCustomRoleById(roleId)).filter(Boolean);
                 const match = grad_findExampleMatchForRoles(teamRoles.map(r => r.role));
 
-                let headerHtml = `<div class="team-card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:move;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span class="team-card-index" style="background:var(--accent); color:#000; padding:2px 8px; border-radius:4px; font-weight:800; font-size:0.75rem;">TEAM ${teamIdx + 1}</span>
-                        ${match ? `<span style="font-size:0.85rem; font-weight:bold; color:var(--accent);">${escapeHtml(match.system)}</span>` : `<span style="font-size:0.8rem; color:#666;">${isEN ? 'Custom Team' : '自訂編隊'}</span>`}
-                    </div>
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <button class="team-detail-btn" onclick="grad_openTeamDetailModal(${teamIdx})">${isEN ? 'Details' : '詳情'}</button>
-                        <button onclick="grad_moveTeamOrder(${teamIdx}, 'up')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▲</button>
-                        <button onclick="grad_moveTeamOrder(${teamIdx}, 'down')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▼</button>
-                        <button onclick="grad_removeCustomTeam(${teamIdx})" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#888; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:0.2s;" onmouseover="this.style.borderColor='#ff5c5c'; this.style.color='#ff5c5c'" onmouseout="this.style.borderColor='#444'; this.style.color='#888'">✕</button>
-                    </div>
-                </div>`;
-
                 let totalTeamScore = 0;
                 let validRoleCount = 0;
                 let extraDpsScore = 0;
@@ -17462,13 +17715,123 @@
                 const hasSynergy = !!match;
                 const isFullTeam = validRoleCount >= 3;
                 const synergyVal = Math.min(100, parseFloat(avgScore) + (isFullTeam ? 8 : 0) + (hasSynergy ? 5 : 0));
+                const manualScore = window.__gradTeamManualScores && window.__gradTeamManualScores[teamIdx] !== undefined ? window.__gradTeamManualScores[teamIdx] : null;
+                const finalScoreToDisplay = (manualScore !== null && manualScore !== "") ? manualScore : '-';
 
+                const tone = grad_getManualScoreTone(finalScoreToDisplay);
+                let scoreColor = 'var(--accent)';
+                if (tone === 'high') scoreColor = '#9ef0ad';
+                else if (tone === 'mid') scoreColor = '#ffd988';
+                else if (tone === 'low') scoreColor = '#ff8f8f';
+
+                let headerHtml = '';
                 if (!isExpert) {
+                    headerHtml = `<div class="team-card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:move;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span class="team-card-index" style="background:var(--accent); color:#000; padding:2px 8px; border-radius:4px; font-weight:800; font-size:0.75rem;">T${teamIdx + 1}</span>
+                            ${match ? `<span style="font-size:0.85rem; font-weight:bold; color:var(--accent);">${escapeHtml(match.system)}</span>` : `<span style="font-size:0.8rem; color:#666;">${isEN ? 'Custom Team' : '自訂編隊'}</span>`}
+                        </div>
+                        <div style="display:flex; gap:6px; align-items:center;">
+                            <button onclick="grad_smartFillTeam(${teamIdx})" class="team-smart-fill-btn" title="智能補位">✨ 補位</button>
+                            <button class="team-detail-btn" onclick="grad_openTeamDetailModal(${teamIdx})">${isEN ? '詳情' : '詳情'}</button>
+                            <button onclick="grad_moveTeamOrder(${teamIdx}, 'up')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▲</button>
+                            <button onclick="grad_moveTeamOrder(${teamIdx}, 'down')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▼</button>
+                            <button onclick="grad_removeCustomTeam(${teamIdx})" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#888; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:0.2s;" onmouseover="this.style.borderColor='#ff5c5c'; this.style.color='#ff5c5c'" onmouseout="this.style.borderColor='#444'; this.style.color='#888'">✕</button>
+                        </div>
+                    </div>`;
+
                     headerHtml += `<div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
                         <span style="font-size:0.72rem;color:#888;">${isEN ? 'Avg' : '均分'} <b style="color:#61afef;">${avgScore}%</b></span>
                         <span style="font-size:0.72rem;color:#888;">${isEN ? 'Synergy' : '綜效'} <b style="color:#e5c07b;">${safeFixed(synergyVal, 0)}</b></span>
                         ${extraDpsScore > 0 ? `<span style="font-size:0.72rem;color:#888;">替補輸出 <b style="color:#aaa;">+${safeFixed(extraDpsScore, 1)}</b></span>` : ''}
                     </div>`;
+                }
+
+                // Expert layout: render 3 circular image slots in a horizontal row
+                if (isExpert) {
+                    const expertRow = document.createElement('div');
+                    expertRow.className = 'expert-slots-row';
+                    expertRow.style.marginTop = '0';
+                    for (let i = 0; i < 3; i++) {
+                        const roleId = team[i];
+                        const role = roleId ? grad_getCustomRoleById(roleId) : null;
+                        const circle = document.createElement('div');
+                        circle.className = 'expert-slot-circle';
+                        circle.dataset.teamidx = teamIdx;
+                        circle.dataset.slotidx = i;
+                        if (role) {
+                            const iconUrl = grad_getRoleIconUrl(role.role);
+                            const rColor = typeColor(role.type);
+                            const rColorDim = typeColorDim(role.type);
+                            circle.style.setProperty('--role-color', rColor);
+                            circle.style.borderColor = rColor + '88';
+                            circle.innerHTML = iconUrl ? `<img src="${iconUrl}" title="${escapeHtml(role.role)}">` : `<span class="slot-plus-expert">?</span>`;
+                            const removeBtn = document.createElement('div');
+                            removeBtn.className = 'expert-slot-remove';
+                            removeBtn.textContent = '✕';
+                            removeBtn.addEventListener('click', (e) => { e.stopPropagation(); grad_removeRoleFromTeam(teamIdx, role.id); });
+                            circle.appendChild(removeBtn);
+                            circle.addEventListener('mouseenter', (e) => grad_showRoleTooltip(role, e.clientX, e.clientY));
+                            circle.addEventListener('mousemove', (e) => grad_showRoleTooltip(role, e.clientX, e.clientY));
+                            circle.addEventListener('mouseleave', grad_hideRoleTooltip);
+                            circle.addEventListener('click', (e) => { if (e.target.closest('.expert-slot-remove')) return; grad_openRoleActionModal(role.id, teamIdx); });
+                            circle.draggable = true;
+                            circle.addEventListener('dragstart', (e) => { e.stopPropagation(); e.dataTransfer.setData('text/roleId', role.id); e.dataTransfer.setData('text/fromTeam', String(teamIdx)); window.__gradNativeDragRole = { roleId: role.id, fromTeamIdx: teamIdx }; });
+                        } else {
+                            circle.innerHTML = `<span class="slot-plus-expert">+</span>`;
+                            circle.addEventListener('click', () => grad_openSlotPickerModal(teamIdx, i));
+                        }
+                        circle.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); circle.classList.add('drag-over'); });
+                        circle.addEventListener('dragleave', () => circle.classList.remove('drag-over'));
+                        circle.addEventListener('drop', (e) => { e.preventDefault(); e.stopPropagation(); circle.classList.remove('drag-over'); let droppedId = e.dataTransfer.getData('text/roleId'); let fromIdxVal = e.dataTransfer.getData('text/fromTeam'); if (!droppedId && window.__gradNativeDragRole) { droppedId = window.__gradNativeDragRole.roleId; fromIdxVal = String(window.__gradNativeDragRole.fromTeamIdx); } const fromIdx = (fromIdxVal === '' || fromIdxVal == null) ? null : Number(fromIdxVal); if (droppedId) { grad_handleDropToTeam(teamIdx, droppedId, fromIdx, i); } });
+                        expertRow.appendChild(circle);
+                    }
+
+                    teamCard.style.display = 'flex';
+                    teamCard.style.flexDirection = 'row';
+                    teamCard.style.alignItems = 'center';
+                    teamCard.style.justifyContent = 'space-between';
+                    teamCard.style.padding = '8px 12px';
+                    teamCard.style.gap = '10px';
+
+                    const leftPart = document.createElement('div');
+                    leftPart.style.display = 'flex';
+                    leftPart.style.alignItems = 'center';
+                    leftPart.style.gap = '16px';
+                    leftPart.innerHTML = `
+                        <div style="display:flex; align-items:center; gap:6px; min-width: 60px; cursor:move;" class="team-card-header-expert">
+                            <span class="team-card-index" style="background:var(--accent); color:#000; padding:2px 8px; border-radius:4px; font-weight:800; font-size:0.75rem;">T${teamIdx + 1}</span>
+                            <span style="font-size:0.88rem; font-family:'JetBrains Mono'; font-weight:bold; color:${scoreColor};">${finalScoreToDisplay !== '-' ? finalScoreToDisplay : ''}</span>
+                        </div>
+                    `;
+                    // attach drag listener to the drag handle
+                    const dragHandle = leftPart.querySelector('.team-card-header-expert');
+                    dragHandle.addEventListener('mousedown', () => teamCard.setAttribute('draggable', 'true'));
+                    dragHandle.addEventListener('mouseup', () => teamCard.removeAttribute('draggable'));
+                    dragHandle.addEventListener('mouseleave', () => teamCard.removeAttribute('draggable'));
+
+                    leftPart.appendChild(expertRow);
+
+                    const rightPart = document.createElement('div');
+                    rightPart.className = 'expert-actions';
+                    rightPart.style.display = 'flex';
+                    rightPart.style.gap = '6px';
+                    rightPart.style.alignItems = 'center';
+                    rightPart.innerHTML = `
+                        <button class="team-detail-btn" onclick="grad_openTeamDetailModal(${teamIdx})">${isEN ? '詳情' : '詳情'}</button>
+                        <button onclick="grad_removeCustomTeam(${teamIdx})" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#888; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:0.2s;" onmouseover="this.style.borderColor='#ff5c5c'; this.style.color='#ff5c5c'" onmouseout="this.style.borderColor='#444'; this.style.color='#888'">✕</button>
+                    `;
+
+                    teamCard.appendChild(leftPart);
+                    teamCard.appendChild(rightPart);
+
+                    // Expert drag support on card level
+                    teamCard.addEventListener('dragstart', e => { if (!e.target.closest('.expert-slot-circle')) e.dataTransfer.setData('text/teamIdx', teamIdx); });
+                    teamCard.addEventListener('dragover', e => { e.preventDefault(); teamCard.classList.add('drag-over-card'); });
+                    teamCard.addEventListener('dragleave', () => teamCard.classList.remove('drag-over-card'));
+                    teamCard.addEventListener('drop', e => { e.preventDefault(); teamCard.classList.remove('drag-over-card'); const fromIdx = e.dataTransfer.getData('text/teamIdx'); if (fromIdx && fromIdx !== String(teamIdx)) { const temp = state.teams[fromIdx]; state.teams.splice(fromIdx, 1); state.teams.splice(teamIdx, 0, temp); grad_renderCustomPairing(); } });
+                    teamListEl.appendChild(teamCard);
+                    return; // skip the rest of the normal rendering for expert
                 }
 
                 const slotsGrid = document.createElement('div');
@@ -17489,13 +17852,8 @@
                         slot.style.setProperty('--role-color', rColor);
                         slot.style.setProperty('--role-color-dim', rColorDim);
 
-                        const chainBadge = isExpert ? 'S' : `C${role.chainCount || 0}`;
-                        slot.innerHTML = isExpert ? `
-                            <div class="role-card-mini" style="position:relative;">
-                                ${iconUrl ? `<img src="${iconUrl}">` : '<div class="slot-plus">?</div>'}
-                            </div>
-                            <div class="slot-remove-btn" onclick="event.stopPropagation();grad_removeRoleFromTeam(${teamIdx},'${role.id}')">✕</div>
-                        ` : `
+                        const chainBadge = `S${role.chainCount || 0}`;
+                        slot.innerHTML = `
                             <div class="role-card-mini" style="position:relative;">
                                 ${iconUrl ? `<img src="${iconUrl}">` : '<div class="slot-plus">?</div>'}
                                 <div class="role-name-mini">${escapeHtml(role.role)}</div>
@@ -17607,20 +17965,20 @@
                     slot.dataset.teamidx = teamIdx;
                     slot.dataset.slotidx = i;
 
-                    // Drop logic
+                    // Drop logic with snap micro-animation
                     slot.addEventListener('dragover', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        slot.classList.add('active-target');
+                        slot.classList.add('active-target', 'drag-over');
                     });
                     slot.addEventListener('dragleave', (e) => {
                         e.stopPropagation();
-                        slot.classList.remove('active-target');
+                        slot.classList.remove('active-target', 'drag-over');
                     });
                     slot.addEventListener('drop', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        slot.classList.remove('active-target');
+                        slot.classList.remove('active-target', 'drag-over');
                         let droppedId = e.dataTransfer.getData('text/roleId');
                         let fromIdxVal = e.dataTransfer.getData('text/fromTeam');
                         if (!droppedId && window.__gradNativeDragRole) {
@@ -17675,12 +18033,12 @@
                 }
 
                 teamCard.draggable = true;
-                teamCard.addEventListener('dragstart', e => { e.dataTransfer.setData('text/teamIdx', teamIdx); });
-                teamCard.addEventListener('dragover', e => { e.preventDefault(); teamCard.style.border = '1px solid var(--accent)'; });
-                teamCard.addEventListener('dragleave', e => { teamCard.style.border = ''; });
+                teamCard.addEventListener('dragstart', e => { if (!e.target.closest('.team-slot[draggable="true"]')) e.dataTransfer.setData('text/teamIdx', teamIdx); });
+                teamCard.addEventListener('dragover', e => { e.preventDefault(); teamCard.classList.add('drag-over-card'); });
+                teamCard.addEventListener('dragleave', () => teamCard.classList.remove('drag-over-card'));
                 teamCard.addEventListener('drop', e => {
                     e.preventDefault();
-                    teamCard.style.border = '';
+                    teamCard.classList.remove('drag-over-card');
                     const fromIdx = e.dataTransfer.getData('text/teamIdx');
                     if (fromIdx && fromIdx !== String(teamIdx)) {
                         const temp = state.teams[fromIdx];
@@ -23761,8 +24119,214 @@
         // --- Imitate Logic ---
         let g_imitateMode = 'sim';
         let g_imitateMute = localStorage.getItem('imitate_mute') === 'true';
+        let g_imitateAtmosphere = localStorage.getItem('imitate_atmosphere') !== 'false';
         let g_imitateSelectedRole = '';
         let g_imitateSelectedBuildIdx = 0;
+
+        function imitateAtmosphereTick() {
+            if (!g_imitateAtmosphere || g_imitateCost.propertyList.length >= 5) return;
+            const slots = document.querySelectorAll('#imitate-list .imitate-empty-slot');
+            if (!slots.length) return;
+
+            slots.forEach(slot => {
+                let titleEl = slot.querySelector('.atmosphere-title');
+                let valEl = slot.querySelector('.atmosphere-val');
+                let tierEl = slot.querySelector('.atmosphere-tier');
+                if (titleEl && valEl && tierEl) {
+                    let sjs = Math.floor(Math.random() * IMITATE_MONICK.length);
+                    let candidate = IMITATE_MONICK[sjs];
+                    titleEl.innerText = candidate.property;
+                    titleEl.style.color = '#fff';
+
+                    const pool = fctValue[candidate.value].values;
+                    let valIdx = Math.floor(Math.random() * pool.length);
+                    valEl.innerText = pool[valIdx];
+                    valEl.style.color = 'var(--accent)';
+
+                    let rankNum = pool.length - valIdx;
+                    tierEl.innerText = `T${rankNum}`;
+                    tierEl.style.color = '#aaa';
+
+                    slot.style.boxShadow = Math.random() > 0.5 ? '0 0 10px rgba(229, 192, 123, 0.2) inset' : 'none';
+                }
+            });
+        }
+        setInterval(imitateAtmosphereTick, 80);
+
+        function imitate_showAllRolesScore(customStats = null) {
+            const stats = customStats || g_imitateCost.propertyList;
+            if (stats.length === 0) {
+                showMsg("請先開啟至少一個詞條");
+                return;
+            }
+            let results = [];
+            for (let role in g_currentWeights) {
+                g_currentWeights[role].forEach(build => {
+                    let score = 0;
+                    let maxScore = 0;
+                    let potentials = [];
+                    for (let k in build.weights) {
+                        if (SUB_STAT_MAX_VALUES[k]) {
+                            potentials.push(build.weights[k] * SUB_STAT_MAX_VALUES[k]);
+                        }
+                    }
+                    potentials.sort((a, b) => b - a);
+                    maxScore = potentials.slice(0, 5).reduce((a, b) => a + b, 0);
+
+                    let validCount = 0;
+                    stats.forEach(p => {
+                        let w = build.weights[p.property] || 0;
+                        let val = parseFloat(p.value) || 0;
+                        score += val * w;
+                        if (w > 0) validCount++;
+                    });
+
+                    if (maxScore > 0) {
+                        let pct = (score / maxScore) * 100;
+                        const buff = score * 0.25;
+                        const totalScore = score * 1.25;
+                        const finalPct = Math.min(100, pct * 1.25);
+                        results.push({
+                            role: role,
+                            buildName: build.name,
+                            score: score,
+                            pct: pct,
+                            validCount: validCount,
+                            buff: buff,
+                            totalScore: totalScore,
+                            finalPct: finalPct
+                        });
+                    }
+                });
+            }
+
+            window.__imitateAllRolesResults = results;
+            window.__imitateAllRolesSortBy = 'finalPct';
+            window.__imitateAllRolesSortDesc = true;
+            imitate_renderAllRolesTable();
+            document.getElementById('imitate-roles-score-modal').style.display = 'block';
+        }
+
+        function imitate_renderAllRolesTable(sortBy = null) {
+            let results = window.__imitateAllRolesResults || [];
+            if (sortBy) {
+                if (window.__imitateAllRolesSortBy === sortBy) {
+                    window.__imitateAllRolesSortDesc = !window.__imitateAllRolesSortDesc;
+                } else {
+                    window.__imitateAllRolesSortBy = sortBy;
+                    window.__imitateAllRolesSortDesc = true;
+                }
+            }
+            const currentSort = window.__imitateAllRolesSortBy;
+            const desc = window.__imitateAllRolesSortDesc;
+
+            results.sort((a, b) => {
+                let vA = a[currentSort];
+                let vB = b[currentSort];
+                if (typeof vA === 'string') return desc ? vB.localeCompare(vA) : vA.localeCompare(vB);
+                return desc ? (vB - vA) : (vA - vB);
+            });
+
+            const getSortIcon = (key) => currentSort === key ? (desc ? ' ▼' : ' ▲') : '';
+
+            let html = `<div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;text-align:left;">
+                <thead><tr style="background:#252530;color:var(--accent);cursor:pointer;user-select:none;">
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;">#</th>
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;" onclick="imitate_renderAllRolesTable('role')">角色 (配置)${getSortIcon('role')}</th>
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('score')">基礎得分${getSortIcon('score')}</th>
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('buff')">補分${getSortIcon('buff')}</th>
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('totalScore')">最終得分${getSortIcon('totalScore')}</th>
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('validCount')">有效值${getSortIcon('validCount')}</th>
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('finalPct')">評級${getSortIcon('finalPct')}</th>
+                    <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('finalPct')">評分 %${getSortIcon('finalPct')}</th>
+                </tr></thead><tbody>`;
+
+            const crIsEN = g_lang === 'en';
+            results.forEach((r, idx) => {
+                const grading = getGrading(r.finalPct);
+                const barColor = r.finalPct >= 80 ? '#ffca28' : r.finalPct >= 60 ? '#98c379' : '#555';
+                const rowStyle = idx % 2 === 0 ? 'background:rgba(255,255,255,0.02);' : '';
+                const posInfo = typeof getCharPositionInfo === 'function' ? getCharPositionInfo(r.role) : null;
+                const posTagHtml = posInfo ? `<span style="margin-left:5px;display:inline-block;padding:1px 5px;border-radius:4px;font-size:0.63rem;font-weight:700;background:${posInfo.typeColor}22;color:${posInfo.typeColor};border:1px solid ${posInfo.typeColor}44;white-space:nowrap;vertical-align:middle;">${posInfo.typeLabel}${posInfo.note ? `|${posInfo.note}` : ''}</span>` : '';
+                let buildTag = r.buildName && r.buildName !== '通用' ? `<span style="font-size:0.7rem; color:#888; margin-left:4px;">[${r.buildName}]</span>` : '';
+
+                html += `<tr style="${rowStyle}">
+                    <td style="padding:7px 12px;color:#666;">${idx + 1}</td>
+                    <td style="padding:7px 12px;color:#ddd;font-weight:normal;">${crIsEN ? (lookupRoleEN(r.role) || r.role) : r.role}${posTagHtml}${buildTag}</td>
+                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#aaa;">${r.score.toFixed(1)}</td>
+                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);">+${r.buff.toFixed(1)}</td>
+                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:#fff;font-weight:bold;">${r.totalScore.toFixed(1)}</td>
+                    <td style="padding:7px 12px;text-align:right;font-family:'JetBrains Mono';color:var(--accent);font-size:0.8rem;">${r.validCount}/5</td>
+                    <td style="padding:7px 12px;text-align:right;"><span class="score-grade ${grading.class}" style="font-size:0.75rem; padding:2px 6px;">${grading.label}</span></td>
+                    <td style="padding:7px 12px;text-align:right;">
+                        <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">
+                            <div style="width:70px;height:5px;background:#222;border-radius:3px;overflow:hidden;">
+                                <div style="width:${Math.min(100, r.finalPct)}%;height:100%;background:${barColor};border-radius:3px;"></div>
+                            </div>
+                            <span style="color:${barColor};font-weight:bold;font-family:'JetBrains Mono';min-width:46px;text-align:right;">${r.finalPct.toFixed(1)}%</span>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+            document.getElementById('imitate-roles-score-content').innerHTML = html;
+        }
+
+        function imitate_saveHistory() {
+            if (g_imitateCost.propertyList.length !== 5) return;
+            const sig = JSON.stringify(g_imitateCost.propertyList);
+            let history = JSON.parse(localStorage.getItem('ww_imitate_history') || '[]');
+            if (history.length > 0 && history[0].sig === sig) return;
+            history.unshift({
+                ts: Date.now(),
+                stats: JSON.parse(sig),
+                sig: sig
+            });
+            if (history.length > 30) history.pop();
+            localStorage.setItem('ww_imitate_history', JSON.stringify(history));
+            imitate_renderHistory();
+        }
+
+        function imitate_renderHistory() {
+            const container = document.getElementById('imitate-history-container');
+            if (!container) return;
+            let history = JSON.parse(localStorage.getItem('ww_imitate_history') || '[]');
+            if (history.length === 0) {
+                container.innerHTML = `<div class="imitate-empty" data-lang-zh="暫無歷史紀錄" data-lang-en="No history">暫無歷史紀錄</div>`;
+                return;
+            }
+            let html = '';
+            history.forEach((h, idx) => {
+                const dt = new Date(h.ts);
+                const timeStr = `${dt.getMonth() + 1}/${dt.getDate()} ${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`;
+
+                let statsHtml = h.stats.map(s => {
+                    return `<span style="display:inline-block; margin-right:8px; font-size:0.8rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);">
+                        <span style="color:#aaa;">${s.property}</span> <span style="color:var(--ok); font-family:'JetBrains Mono';">${s.value}</span>
+                    </span>`;
+                }).join('');
+
+                html += `<div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; position:relative; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="flex:1;">
+                        <div style="font-size:0.75rem; color:#666; margin-bottom:5px;">${timeStr}</div>
+                        <div>${statsHtml}</div>
+                    </div>
+                    <div>
+                        <button onclick='imitate_showAllRolesScore(${JSON.stringify(h.stats).replace(/'/g, "&apos;")})' style="padding:4px 10px; background:linear-gradient(135deg, #1e3c72, #2a5298); color:#fff; border:1px solid #2a5298; border-radius:4px; font-size:0.8rem; cursor:pointer;" data-lang-zh="🎓 評分總表" data-lang-en="🎓 Score Summary">🎓 評分總表</button>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function imitate_clearHistory() {
+            showConfirm("確定要清除所有紀錄嗎？", () => {
+                localStorage.removeItem('ww_imitate_history');
+                imitate_renderHistory();
+            });
+        }
+
         function openImitateModal() {
             closeAllModals();
             // 初始化默认角色
@@ -23772,7 +24336,10 @@
             }
             document.getElementById('imitate-modal').style.display = 'flex';
             document.getElementById('imitate-mute-toggle').checked = g_imitateMute;
+            let atToggle = document.getElementById('imitate-atmosphere-toggle');
+            if (atToggle) atToggle.checked = g_imitateAtmosphere;
             imitate_render();
+            imitate_renderHistory();
 
             // Add ENTER key listener
             document.addEventListener('keydown', imitate_handleEnter);
@@ -23858,6 +24425,86 @@
                 showConfirm("確定要重置嗎？", doReset);
             }
         }
+        function imitate_auto5() {
+            const toRoll = 5 - g_imitateCost.propertyList.length;
+            if (toRoll <= 0) {
+                if (!g_imitateMute) showMsg("詞條已滿5個");
+                return;
+            }
+            if (g_imitateMode === 'chal') {
+                if (g_isDeveloper) {
+                    g_devSavedPoints += toRoll;
+                } else {
+                    if (g_sessionPoints < toRoll) {
+                        if (!g_imitateMute) showMsg(g_lang === 'en' ? 'Not enough points' : "積分不足");
+                        return;
+                    }
+                    consumePoint(toRoll);
+                }
+            }
+            for (let k = 0; k < toRoll; k++) {
+                let sjs = Math.floor(Math.random() * IMITATE_MONICK.length);
+                for (let i = 0; i < 20; i++) {
+                    let candidate = IMITATE_MONICK[sjs];
+                    let exists = g_imitateCost.propertyList.some(p => p.property === candidate.property);
+                    if (!exists) {
+                        const fct = fctValue[candidate.value];
+                        let pool = fct.values;
+                        let valIdx = Math.floor(Math.random() * pool.length);
+                        let val = pool[valIdx];
+                        g_imitateCost.propertyList.push({
+                            property: candidate.property,
+                            value: val,
+                            idx: valIdx,
+                            max: pool.length,
+                            type: candidate.value
+                        });
+                        break;
+                    }
+                    sjs = (sjs + 1) % IMITATE_MONICK.length;
+                }
+            }
+            imitate_render();
+        }
+
+        function imitate_auto_double_crit() {
+            if (g_imitateMode === 'chal') {
+                showMsg("此功能僅限模擬模式使用");
+                return;
+            }
+            let attempts = 0;
+            const maxAttempts = 1000;
+            while (attempts < maxAttempts) {
+                attempts++;
+                g_imitateCost.propertyList = [];
+                for (let k = 0; k < 5; k++) {
+                    let sjs = Math.floor(Math.random() * IMITATE_MONICK.length);
+                    for (let i = 0; i < 20; i++) {
+                        let candidate = IMITATE_MONICK[sjs];
+                        if (!g_imitateCost.propertyList.some(p => p.property === candidate.property)) {
+                            const fct = fctValue[candidate.value];
+                            let pool = fct.values;
+                            let valIdx = Math.floor(Math.random() * pool.length);
+                            g_imitateCost.propertyList.push({
+                                property: candidate.property,
+                                value: pool[valIdx],
+                                idx: valIdx, max: pool.length, type: candidate.value
+                            });
+                            break;
+                        }
+                        sjs = (sjs + 1) % IMITATE_MONICK.length;
+                    }
+                }
+                const hasCritRate = g_imitateCost.propertyList.some(p => p.property === '暴擊');
+                const hasCritDmg = g_imitateCost.propertyList.some(p => p.property === '暴擊傷害');
+                if (hasCritRate && hasCritDmg) {
+                    break;
+                }
+            }
+            if (!g_imitateMute) showMsg(`自動連洗了 ${attempts} 件聲骸才出現雙爆`);
+            imitate_render();
+        }
+
         function imitate_start() {
             // 管理員模式滿五個自動重置
             if (g_imitateCost.propertyList.length >= 5) {
@@ -23866,7 +24513,13 @@
                     imitate_render();
                     return;
                 }
-                if (!g_imitateMute) showMsg("詞條已滿5個");
+                if (g_imitateMute) {
+                    imitate_reset();
+                    return;
+                }
+                showConfirmWithLabels("詞條已滿5個，是否要直接重置？", "重置", "確定", () => {
+                    imitate_reset();
+                });
                 return;
             }
 
@@ -23926,6 +24579,7 @@
                 chalHint.style.display = 'none';
                 chalResult.style.display = 'none';
                 roleSelector.style.display = 'block';
+                document.getElementById('im-btn-autodc').style.display = 'inline-block';
                 document.getElementById('imitate-modal').style.background = 'rgba(10, 10, 12, 0.95)';
                 imitate_initRoleSelector();
             } else {
@@ -23939,6 +24593,7 @@
                 chalHint.style.display = 'block';
                 chalResult.style.display = 'none';
                 roleSelector.style.display = 'none';
+                document.getElementById('im-btn-autodc').style.display = 'none';
 
                 // 特殊 UI 设计：背景微调，增加挑战感
                 document.getElementById('imitate-modal').style.background = 'radial-gradient(circle at center, rgba(30, 30, 36, 0.98) 0%, rgba(10, 10, 12, 0.95) 100%)';
@@ -24025,12 +24680,10 @@
                 maxTheoretical = potentials.slice(0, 5).reduce((a, b) => a + b, 0);
             }
 
-            if (g_imitateCost.propertyList.length === 0) {
-                list.innerHTML = '<div class="imitate-empty">尚未開啟任何詞條</div>';
-                totalScoreEl.innerText = "0.0";
-                maxPossibleEl.innerText = `理論最高分：${maxTheoretical.toFixed(1)}`;
-            } else {
-                list.innerHTML = g_imitateCost.propertyList.map((p, i) => {
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < g_imitateCost.propertyList.length) {
+                    let p = g_imitateCost.propertyList[i];
                     let rankNum = p.max - p.idx; // e.g. T1, T2
                     let tierHtml = `<div class="tier-bar">`;
                     for (let j = 0; j < p.max; j++) {
@@ -24063,7 +24716,7 @@
                         scoreHtml = `<div class="imitate-item-score"><div class="score-val">${itemScore.toFixed(1)}</div><div class="score-pct">${pct}%</div></div>`;
                     }
 
-                    return `
+                    html += `
  <div class="imitate-item ${isEffective ? 'is-effective' : ''}">
  <div>
  <div class="imitate-item-header">
@@ -24079,27 +24732,45 @@
  ${scoreHtml}
  </div>
  `;
-                }).join('');
-
-                totalScoreEl.innerText = currentTotalScore.toFixed(1);
-                const percentage = maxTheoretical > 0 ? (currentTotalScore / maxTheoretical * 100).toFixed(1) : '0.0';
-                const percentEl = document.getElementById('imitate-total-percent');
-                if (percentEl) percentEl.innerText = `(${percentage}%)`;
-                maxPossibleEl.innerText = `理論最高分：${maxTheoretical.toFixed(1)}`;
-
-                // Update button text for dev mode
-                if (g_isDeveloper && g_imitateCost.propertyList.length >= 5) {
-                    const startBtn = document.querySelector('.btn-confirm-yes[onclick="imitate_start()"]');
-                    if (startBtn) {
-                        startBtn.innerText = '重置詞條';
-                        startBtn.style.background = 'var(--error)';
-                    }
                 } else {
-                    const startBtn = document.querySelector('.btn-confirm-yes[onclick="imitate_start()"]');
-                    if (startBtn) {
-                        startBtn.innerText = '開啟詞條';
-                        startBtn.style.background = '';
-                    }
+                    html += `
+ <div class="imitate-item imitate-empty-slot" style="opacity: 0.6; border: 1px dashed #444; background: transparent; filter: grayscale(1);">
+ <div>
+ <div class="imitate-item-header">
+ <div class="imitate-item-index">#${(i + 1).toString().padStart(2, '0')}</div>
+ <div class="imitate-item-title atmosphere-title" style="color:#888; display:inline-block; width:130px; text-align:left;">尚未開啟</div>
+ <div class="imitate-item-tier atmosphere-tier" style="color:#555; display:inline-block; width:30px;">--</div>
+ </div>
+ <div class="imitate-item-meta">
+ <span style="color:#666;">實值 <span class="imitate-item-value atmosphere-val" style="display:inline-block; width:45px; text-align:left;">--</span></span>
+ </div>
+ <div class="tier-bar"><span class="tier-seg" style="background:#333;"></span><span class="tier-seg" style="background:#333;"></span><span class="tier-seg" style="background:#333;"></span></div>
+ </div>
+ <div class="imitate-item-score"><div class="score-val" style="color:#444;">-</div></div>
+ </div>
+ `;
+                }
+            }
+            list.innerHTML = html;
+
+            totalScoreEl.innerText = currentTotalScore.toFixed(1);
+            const percentage = maxTheoretical > 0 ? (currentTotalScore / maxTheoretical * 100).toFixed(1) : '0.0';
+            const percentEl = document.getElementById('imitate-total-percent');
+            if (percentEl) percentEl.innerText = `(${percentage}%)`;
+            maxPossibleEl.innerText = `理論最高分：${maxTheoretical.toFixed(1)}`;
+
+            // Update button text for dev mode
+            if (g_isDeveloper && g_imitateCost.propertyList.length >= 5) {
+                const startBtn = document.querySelector('.btn-confirm-yes[onclick="imitate_start()"]');
+                if (startBtn) {
+                    startBtn.innerText = '重置詞條';
+                    startBtn.style.background = 'var(--error)';
+                }
+            } else {
+                const startBtn = document.querySelector('.btn-confirm-yes[onclick="imitate_start()"]');
+                if (startBtn) {
+                    startBtn.innerText = '開啟詞條';
+                    startBtn.style.background = '';
                 }
             }
 
@@ -24114,6 +24785,9 @@
                     }
                 }
                 imitate_evalChallenge();
+            }
+            if (g_imitateCost.propertyList.length === 5) {
+                imitate_saveHistory();
             }
         }
         function imitate_evalChallenge() {
@@ -25640,7 +26314,38 @@
             const content = document.getElementById('confirm-prompt-text');
             const yesBtn = document.getElementById('confirm-prompt-yes');
             if (content) content.innerText = text;
-            if (yesBtn) yesBtn.onclick = () => { if (modal) modal.style.display = 'none'; if (onYes) onYes(); };
+            if (yesBtn) {
+                yesBtn.innerText = yesBtn.dataset.langZh || "確定";
+                yesBtn.onclick = () => { if (modal) modal.style.display = 'none'; if (onYes) onYes(); };
+            }
+            const noBtn = modal ? modal.querySelector('.btn-confirm-no') : null;
+            if (noBtn) {
+                noBtn.innerText = noBtn.dataset.langZh || "取消";
+                noBtn.onclick = () => { if (modal) modal.style.display = 'none'; };
+            }
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function showConfirmWithLabels(text, yesText, noText, onYes, onNo) {
+            const modal = document.getElementById('confirm-prompt-modal');
+            const content = document.getElementById('confirm-prompt-text');
+            const yesBtn = document.getElementById('confirm-prompt-yes');
+            const noBtn = modal ? modal.querySelector('.btn-confirm-no') : null;
+            if (content) content.innerText = text;
+            if (yesBtn) {
+                yesBtn.innerText = yesText;
+                yesBtn.onclick = () => {
+                    if (modal) modal.style.display = 'none';
+                    if (onYes) onYes();
+                };
+            }
+            if (noBtn) {
+                noBtn.innerText = noText;
+                noBtn.onclick = () => {
+                    if (modal) modal.style.display = 'none';
+                    if (onNo) onNo();
+                };
+            }
             if (modal) modal.style.display = 'flex';
         }
 
