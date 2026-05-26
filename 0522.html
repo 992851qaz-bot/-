@@ -3718,7 +3718,7 @@
             gap: 20px;
         }
 
-        .imitate-main-col>.db-card {
+        .imitate-main-col > .db-card {
             display: flex;
             flex-direction: column;
             align-items: stretch;
@@ -3738,14 +3738,14 @@
                 flex-direction: column;
             }
 
-            .imitate-main-col>.db-card {
+            .imitate-main-col > .db-card {
                 display: flex !important;
                 flex-direction: column !important;
                 width: 100% !important;
                 flex: 1;
             }
 
-            .imitate-main-col>.db-card>div:first-child {
+            .imitate-main-col > .db-card > div:first-child {
                 width: 100% !important;
                 display: flex !important;
                 justify-content: space-between !important;
@@ -3784,7 +3784,7 @@
 
             .imitate-item-score {
                 text-align: center !important;
-                border-top: 1px dashed rgba(255, 255, 255, 0.15) !important;
+                border-top: 1px dashed rgba(255,255,255,0.15) !important;
                 padding-top: 15px !important;
                 margin-top: auto;
                 display: block !important;
@@ -3873,7 +3873,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            border-top: 1px dashed rgba(255,255,255,0.1);
             padding-top: 8px;
             width: 100%;
         }
@@ -7745,25 +7745,16 @@
         </div>
         <div class="loader" id="loader"></div>
     </header>
-    <div id="quick-start-banner"
-        style="display:none;padding:10px 14px;background:linear-gradient(90deg,rgba(229,192,123,0.04),rgba(97,175,239,0.03));border-bottom:1px solid rgba(255,255,255,0.03);">
-        <div
-            style="max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+    <div id="quick-start-banner" style="display:none;padding:10px 14px;background:linear-gradient(90deg,rgba(229,192,123,0.04),rgba(97,175,239,0.03));border-bottom:1px solid rgba(255,255,255,0.03);">
+        <div style="max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-                <div style="color:var(--accent);font-size:0.95rem;font-weight:800;letter-spacing:0.4px;">免UID與分析快速開始
-                </div>
+                <div style="color:var(--accent);font-size:0.95rem;font-weight:800;letter-spacing:0.4px;">免UID與分析快速開始</div>
                 <div id="quick-start-desc" style="color:#a8a8a8;font-size:0.78rem;">等待權重載入後即可使用常用工具；快速開啟僅提供矩陣編隊。</div>
             </div>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <button id="qs-custom-pair" onclick="openGraduationPanel('custom')"
-                    style="padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-weight:800;"
-                    disabled>🧩 矩陣編隊</button>
-                <button id="qs-imitate" onclick="openImitateModal()"
-                    style="padding:8px 12px;border-radius:10px;border:none;background:rgba(97,175,239,0.12);color:#9fd5ff;font-weight:800;"
-                    disabled>⚒ 聲骸模擬開詞條</button>
-                <button id="qs-feedback" onclick="openFeedbackModal()"
-                    style="padding:8px 12px;border-radius:10px;border:none;background:rgba(120,224,143,0.12);color:#9be8ac;font-weight:800;">📝
-                    問卷與回報</button>
+                <button id="qs-custom-pair" onclick="openGraduationPanel('custom')" style="padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-weight:800;" disabled>🧩 矩陣編隊</button>
+                <button id="qs-imitate" onclick="openImitateModal()" style="padding:8px 12px;border-radius:10px;border:none;background:rgba(97,175,239,0.12);color:#9fd5ff;font-weight:800;" disabled>⚒ 聲骸模擬開詞條</button>
+                <button id="qs-feedback" onclick="openFeedbackModal()" style="padding:8px 12px;border-radius:10px;border:none;background:rgba(120,224,143,0.12);color:#9be8ac;font-weight:800;">📝 問卷與回報</button>
             </div>
         </div>
     </div>
@@ -7778,31 +7769,18 @@
             </div>
             <p style="font-size:0.75rem;color:#888;margin:-8px 0 12px;text-align:center;" data-lang-zh="⚠️ 僅支援辨識繁體中文截圖"
                 data-lang-en="⚠️ OCR supports Traditional Chinese (繁體中文) screenshots only">⚠️ 僅支援辨識繁體中文截圖</p>
-            <div
-                style="margin:0 0 12px;padding:12px 12px 10px;border:1px solid rgba(229,192,123,0.16);border-radius:14px;background:linear-gradient(135deg,rgba(229,192,123,0.08),rgba(97,175,239,0.06));box-shadow:0 10px 24px rgba(0,0,0,0.18);">
-                <div
-                    style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+            <div style="margin:0 0 12px;padding:12px 12px 10px;border:1px solid rgba(229,192,123,0.16);border-radius:14px;background:linear-gradient(135deg,rgba(229,192,123,0.08),rgba(97,175,239,0.06));box-shadow:0 10px 24px rgba(0,0,0,0.18);">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
                     <div>
-                        <div style="color:var(--accent);font-size:0.9rem;font-weight:900;letter-spacing:0.4px;"
-                            data-lang-zh="免UID與分析快速開始" data-lang-en="Quick Start Without UID">免UID與分析快速開始</div>
-                        <div style="font-size:0.72rem;color:#a5a5a5;line-height:1.5;margin-top:3px;"
-                            data-lang-zh="等待權重載入後即可直接使用常用工具；快速開啟只提供：矩陣編隊。"
-                            data-lang-en="Once weights are loaded, you can open the most-used tools immediately; Quick Open only exposes Matrix Formation.">
-                            等待權重載入後即可直接使用常用工具；快速開啟只提供：矩陣編隊。</div>
+                        <div style="color:var(--accent);font-size:0.9rem;font-weight:900;letter-spacing:0.4px;" data-lang-zh="免UID與分析快速開始" data-lang-en="Quick Start Without UID">免UID與分析快速開始</div>
+                        <div style="font-size:0.72rem;color:#a5a5a5;line-height:1.5;margin-top:3px;" data-lang-zh="等待權重載入後即可直接使用常用工具；快速開啟只提供：矩陣編隊。" data-lang-en="Once weights are loaded, you can open the most-used tools immediately; Quick Open only exposes Matrix Formation.">等待權重載入後即可直接使用常用工具；快速開啟只提供：矩陣編隊。</div>
                     </div>
-                    <span
-                        style="font-size:0.66rem;color:#d9c08b;border:1px solid rgba(229,192,123,0.28);background:rgba(229,192,123,0.08);padding:3px 8px;border-radius:999px;font-weight:800;">:tools:</span>
+                    <span style="font-size:0.66rem;color:#d9c08b;border:1px solid rgba(229,192,123,0.28);background:rgba(229,192,123,0.08);padding:3px 8px;border-radius:999px;font-weight:800;">:tools:</span>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                    <button type="button" onclick="openGraduationPanel('custom')"
-                        style="padding:8px 12px;border:none;border-radius:10px;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-size:0.76rem;font-weight:900;cursor:pointer;">🧩
-                        矩陣編隊</button>
-                    <button type="button" onclick="openImitateModal()"
-                        style="padding:8px 12px;border:none;border-radius:10px;background:rgba(97,175,239,0.12);color:#9fd5ff;font-size:0.76rem;font-weight:900;cursor:pointer;">⚒
-                        聲骸模擬開詞條</button>
-                    <button type="button" onclick="openFeedbackModal()"
-                        style="padding:8px 12px;border:none;border-radius:10px;background:rgba(120,224,143,0.12);color:#9be8ac;font-size:0.76rem;font-weight:900;cursor:pointer;">📝
-                        問卷與回報</button>
+                    <button type="button" onclick="openGraduationPanel('custom')" style="padding:8px 12px;border:none;border-radius:10px;background:linear-gradient(90deg,rgba(229,192,123,0.18),rgba(229,192,123,0.08));color:var(--accent);font-size:0.76rem;font-weight:900;cursor:pointer;">🧩 矩陣編隊</button>
+                    <button type="button" onclick="openImitateModal()" style="padding:8px 12px;border:none;border-radius:10px;background:rgba(97,175,239,0.12);color:#9fd5ff;font-size:0.76rem;font-weight:900;cursor:pointer;">⚒ 聲骸模擬開詞條</button>
+                    <button type="button" onclick="openFeedbackModal()" style="padding:8px 12px;border:none;border-radius:10px;background:rgba(120,224,143,0.12);color:#9be8ac;font-size:0.76rem;font-weight:900;cursor:pointer;">📝 問卷與回報</button>
                 </div>
             </div>
             <input type="text" id="login-uid" maxlength="9" placeholder="輸入 UID (9碼純數字)"
@@ -8675,26 +8653,25 @@
             <!-- Left / Main Column -->
             <div class="imitate-main-col">
                 <div class="db-card" style="margin-bottom:15px; padding: 20px;">
-                    <div
-                        style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
-                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold; min-width: 100px;"
-                            data-lang-zh="已開啟詞條" data-lang-en="Rolled Stats">已開啟詞條</div>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
+                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold; min-width: 100px;" data-lang-zh="已開啟詞條"
+                            data-lang-en="Rolled Stats">已開啟詞條</div>
                         <div style="display:flex; gap:10px; flex-wrap:wrap;">
                             <button class="btn-confirm-yes" onclick="imitate_start()"
                                 style="padding: 6px 16px; font-size: 0.9rem;" data-lang-zh="開啟詞條"
                                 data-lang-en="Roll Stats">開啟詞條</button>
                             <button id="im-btn-auto5" class="btn-confirm-yes" onclick="imitate_auto5()"
-                                style="padding: 6px 16px; font-size: 0.9rem; background: var(--cv-val); color: #000;"
-                                data-lang-zh="連開5詞條" data-lang-en="Roll 5">連開5詞條</button>
+                                style="padding: 6px 16px; font-size: 0.9rem; background: var(--cv-val); color: #000;" data-lang-zh="連開5詞條"
+                                data-lang-en="Roll 5">連開5詞條</button>
                             <button id="im-btn-autodc" class="btn-confirm-yes" onclick="imitate_auto_double_crit()"
-                                style="padding: 6px 16px; font-size: 0.9rem; background: #c678dd; color: #fff;"
-                                data-lang-zh="極速洗雙爆" data-lang-en="Auto Double Crit">極速洗雙爆</button>
+                                style="padding: 6px 16px; font-size: 0.9rem; background: #c678dd; color: #fff;" data-lang-zh="極速洗雙爆"
+                                data-lang-en="Auto Double Crit">極速洗雙爆</button>
                             <button class="btn-confirm-no" onclick="imitate_reset()"
                                 style="padding: 6px 16px; font-size: 0.9rem; background:#444;" data-lang-zh="全部重置"
                                 data-lang-en="Reset All">全部重置</button>
                             <button class="btn-confirm-yes" onclick="imitate_showAllRolesScore()"
-                                style="padding: 6px 16px; font-size: 0.9rem; background:linear-gradient(135deg, #1e3c72, #2a5298); color:#fff; border-color:#2a5298;"
-                                data-lang-zh="🎓 評分總表" data-lang-en="🎓 Score Summary">🎓 評分總表</button>
+                                style="padding: 6px 16px; font-size: 0.9rem; background:linear-gradient(135deg, #1e3c72, #2a5298); color:#fff; border-color:#2a5298;" data-lang-zh="🎓 評分總表"
+                                data-lang-en="🎓 Score Summary">🎓 評分總表</button>
                         </div>
                     </div>
 
@@ -8706,13 +8683,9 @@
                     </div>
 
                     <!-- History Log -->
-                    <div
-                        style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-top:25px; margin-bottom:15px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
-                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold; min-width:100px;"
-                            data-lang-zh="📜 歷史紀錄" data-lang-en="📜 History Log">📜 歷史紀錄</div>
-                        <button onclick="imitate_clearHistory()"
-                            style="padding:4px 10px; background:rgba(255,0,0,0.1); color:#ff5c5c; border:1px solid rgba(255,0,0,0.3); border-radius:4px; font-size:0.8rem; cursor:pointer;"
-                            data-lang-zh="清除紀錄" data-lang-en="Clear">清除紀錄</button>
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-top:25px; margin-bottom:15px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
+                        <div style="font-size:1.1rem; color:var(--accent); font-weight:bold; min-width:100px;" data-lang-zh="📜 歷史紀錄" data-lang-en="📜 History Log">📜 歷史紀錄</div>
+                        <button onclick="imitate_clearHistory()" style="padding:4px 10px; background:rgba(255,0,0,0.1); color:#ff5c5c; border:1px solid rgba(255,0,0,0.3); border-radius:4px; font-size:0.8rem; cursor:pointer;" data-lang-zh="清除紀錄" data-lang-en="Clear">清除紀錄</button>
                     </div>
                     <div class="imitate-history-scroll" style="max-height: 250px; overflow-y: auto;">
                         <div id="imitate-history-container" style="display:flex; flex-direction:column; gap:10px;">
@@ -8790,11 +8763,9 @@
                 <div class="db-title-group">
                     <h2 style="font-size:1.8rem; color:var(--accent);">🎓 模擬結果 - 角色適配排行</h2>
                 </div>
-                <button class="db-close-btn"
-                    onclick="document.getElementById('imitate-roles-score-modal').style.display='none'">×</button>
+                <button class="db-close-btn" onclick="document.getElementById('imitate-roles-score-modal').style.display='none'">×</button>
             </div>
-            <div id="imitate-roles-score-content"
-                style="margin-top: 10px; max-height: 70vh; overflow-y: auto; grid-column: 1 / -1;">
+            <div id="imitate-roles-score-content" style="margin-top: 10px; max-height: 70vh; overflow-y: auto; grid-column: 1 / -1;">
             </div>
         </div>
     </div>
@@ -15006,7 +14977,18 @@
                 const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" class="history-role-icon" onerror="this.style.display='none'">` : '<span class="history-role-icon-placeholder">?</span>';
 
                 const rolePositionTagHtml = '';
-                div.innerHTML = `<div class="history-main">${iconHtml}<div style="flex:1;min-width:0;"><div class="h-info">${gradeHtml}${escapeHtml(displayRoleName)}${rolePositionTagHtml} ${statusTag} ${actionBtnHtml}</div><div class="h-time" style="font-size:0.7rem;line-height:1;">${escapeHtml(item.ts)}</div><div style="font-size:0.75rem;color:#888;">UID: ${escapeHtml(item.global.uid) || '?'}</div></div></div><button class="history-mobile-arrow" onclick="openHistoryItemFromMobile(${i}, event)" title="${isEN ? 'Go to result' : '前往此筆結果'}">➜</button>`;
+                let rankText = '🏆 ?/? - ?%';
+                if (typeof calculateLocalRankInfo === 'function') {
+                    const localRank = calculateLocalRankInfo(item.global.role, item.global.uid, avgScore);
+                    if (localRank) {
+                        if (localRank.isLoading) {
+                            rankText = isEN ? '⏳ Loading...' : '⏳ 載入中...';
+                        } else {
+                            rankText = `🏆 ${localRank.rank}/${localRank.total} - ${localRank.prStr}`;
+                        }
+                    }
+                }
+                div.innerHTML = `<div class="history-main">${iconHtml}<div style="flex:1;min-width:0;"><div class="h-info">${gradeHtml}${escapeHtml(displayRoleName)}${rolePositionTagHtml} ${statusTag} ${actionBtnHtml}</div><div class="h-time" style="font-size:0.7rem;line-height:1;margin-bottom:2px;">${escapeHtml(item.ts)}</div><div style="font-size:0.75rem;color:#888;display:flex;justify-content:space-between;align-items:center;"><span>UID: ${escapeHtml(item.global.uid) || '?'}</span><span style="color:var(--accent);font-weight:bold;margin-left:8px;">${rankText}</span></div></div></div><button class="history-mobile-arrow" onclick="openHistoryItemFromMobile(${i}, event)" title="${isEN ? 'Go to result' : '前往此筆結果'}">➜</button>`;
                 historyListEl.appendChild(div);
             }
 
@@ -15296,6 +15278,19 @@
                 out += `<div style="font-size:0.82rem;font-weight:800;color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px;text-align:center;letter-spacing:0.3px;" title="${g.role}">${escapeHtml(cardName)}</div>`;
                 // Score
                 out += `<div style="font-size:1.1rem;color:${colorClass};font-family:'JetBrains Mono';font-weight:900;margin-top:2px;text-shadow:0 0 10px ${colorClass}88;">${safeFixed(g.score, 1)}<span style="font-size:0.65rem;opacity:0.8;">%</span></div>`;
+                // Rank Info
+                let cardRankHtml = `<div style="font-size:0.7rem;color:#666;margin-top:1px;">🏆 ?/? - ?%</div>`;
+                if (typeof calculateLocalRankInfo === 'function') {
+                    const cardRank = calculateLocalRankInfo(g.role, g.uid || g_currentUserUid, g.score);
+                    if (cardRank) {
+                        if (cardRank.isLoading) {
+                            cardRankHtml = `<div style="font-size:0.7rem;color:#888;margin-top:1px;">⏳ ${isEN ? 'Loading...' : '載入中...'}</div>`;
+                        } else {
+                            cardRankHtml = `<div style="font-size:0.7rem;color:#aaa;margin-top:1px;">🏆 ${cardRank.rank}/${cardRank.total} (${cardRank.prStr})</div>`;
+                        }
+                    }
+                }
+                out += cardRankHtml;
                 // Score bar
                 out += `<div style="margin:6px 8px 4px;height:4px;border-radius:2px;background:rgba(255,255,255,0.06);overflow:hidden;">`;
                 out += `<div style="height:100%;width:${scorePct}%;background:linear-gradient(90deg,${colorClass}99,${colorClass});border-radius:2px;transition:width 1s ease;"></div>`;
@@ -15551,6 +15546,15 @@
             html += `</div>`;
 
             html += `<style>
+.team-card-new, .picker-role-item, .role-card-mini, .team-note-shell, .team-slot, .grad-role-card {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -ms-user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+.role-card-mini img, .picker-role-item img {
+    pointer-events: none !important;
+}
 @keyframes grad-spin{to{transform:rotate(360deg)}}
 @keyframes grad-fade-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse-glow{0%{box-shadow:0 0 5px rgba(229,192,123,0.2)}50%{box-shadow:0 0 15px rgba(229,192,123,0.5)}100%{box-shadow:0 0 5px rgba(229,192,123,0.2)}}
@@ -15584,41 +15588,22 @@
 .team-card-new:hover{border-color:rgba(229,192,123,0.3);background:rgba(255,255,255,0.05);box-shadow:0 10px 30px rgba(0,0,0,0.4);}
 .team-card-new.layout-bar{display:flex;flex-direction:column;gap:12px;}
 .team-card-new.layout-col{display:flex;flex-direction:column;gap:12px;}
-/* Expert layout: compact card with 3 images in horizontal row */
-.team-card-new.layout-expert{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:14px;}
-.team-card-new.layout-expert .team-card-header{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:0;padding-bottom:0;border-bottom:none;}
-.team-card-new.layout-expert .team-card-header > div:first-child{gap:6px;flex-wrap:nowrap;}
+.team-card-new.layout-expert{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:16px;min-height:132px;}
+.team-card-new.layout-expert .team-card-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.team-card-new.layout-expert .team-card-header > div:first-child{gap:6px;flex-wrap:wrap;}
 .team-card-new.layout-expert .team-card-index{font-size:0.7rem;padding:2px 7px;}
-/* Expert: 3 slots horizontally in one row */
-.team-card-new.layout-expert .team-slots-grid{grid-template-columns:repeat(3,1fr);gap:6px;}
-.team-card-new.layout-expert .team-slot{aspect-ratio:1/1;padding:0;border:1.5px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.22);border-radius:50%;overflow:hidden;width:100%;}
-.team-card-new.layout-expert .role-card-mini{padding:0;gap:0;width:100%;height:100%;}
-/* 2x image size compared to normal (normal is 80%, expert is 100% of the round slot) */
-.team-card-new.layout-expert .role-card-mini img{width:100%;height:100%;aspect-ratio:1/1;border-radius:50%;border-width:2px;object-fit:cover;}
-.team-card-new.layout-expert .role-name-mini{display:none;}
+.team-card-new.layout-expert .team-slots-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start;}
+.team-card-new.layout-expert .team-slot{aspect-ratio:auto;min-height:0;height:100%;padding:0;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.22);}
+.team-card-new.layout-expert .role-card-mini{padding:6px;gap:4px;}
+.team-card-new.layout-expert .role-card-mini img{width:90%;max-width:118px;aspect-ratio:1/1;border-width:3px;}
+.team-card-new.layout-expert .role-name-mini{font-size:0.86rem;margin-top:2px;}
 .team-card-new.layout-expert .role-score-mini{display:none;}
 .team-card-new.layout-expert .team-note-shell{display:none;}
-.team-card-new.layout-expert .team-mini-info{display:none;}
+.team-card-new.layout-expert .team-mini-info{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;align-items:center;}
+.team-card-new.layout-expert .team-mini-info .team-mini-score{display:none;}
 .team-card-new.layout-expert .team-chain-chip{background:rgba(229,192,123,0.14);color:var(--accent);border:1px solid rgba(229,192,123,0.35);font-weight:900;letter-spacing:0.6px;}
-/* Detail btn hidden by default, visible on hover */
-.team-card-new.layout-expert .expert-actions{opacity:0;transition:opacity 0.18s ease;display:flex;gap:4px;align-items:center;}
-.team-card-new.layout-expert:hover .expert-actions{opacity:1;}
-/* Expert slot pill/circle sizing - bigger images */
-.expert-slots-row{display:flex;align-items:center;gap:8px;margin-top:4px;}
-.expert-slot-circle{width:68px;height:68px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.12);flex-shrink:0;cursor:pointer;transition:transform 0.18s cubic-bezier(0.23,1,0.32,1),border-color 0.18s ease,box-shadow 0.18s ease;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;position:relative;}
-.expert-slot-circle:hover{transform:scale(1.1) translateY(-2px);border-color:rgba(229,192,123,0.6);box-shadow:0 6px 20px rgba(0,0,0,0.5);}
-.expert-slot-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.expert-slot-circle .slot-plus-expert{color:rgba(255,255,255,0.2);font-size:1.4rem;transition:color 0.18s;}
-.expert-slot-circle:hover .slot-plus-expert{color:var(--accent);}
-.expert-slot-remove{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:rgba(255,85,85,0.85);border:1px solid #ff5555;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s;z-index:5;}
-.expert-slot-circle:hover .expert-slot-remove{opacity:1;}
-/* Drag snap micro-animations */
-.team-slot.drag-over,.expert-slot-circle.drag-over{animation:snap-pulse 0.35s cubic-bezier(0.23,1,0.32,1);border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(229,192,123,0.35)!important;}
-@keyframes snap-pulse{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
-.team-card-new.drag-over-card{border-color:rgba(229,192,123,0.6)!important;background:rgba(229,192,123,0.04)!important;transition:border-color 0.12s,background 0.12s;}
-/* Smart fill btn per team */
-.team-smart-fill-btn{background:rgba(120,224,143,0.12);border:1px solid rgba(120,224,143,0.35);color:#78e08f;border-radius:6px;padding:3px 7px;font-size:0.66rem;font-weight:800;cursor:pointer;transition:0.18s ease;white-space:nowrap;}
-.team-smart-fill-btn:hover{background:rgba(120,224,143,0.22);transform:translateY(-1px);}
+.team-card-new.layout-expert .team-detail-btn{padding:6px 10px;font-size:0.72rem;}
+.team-card-new.layout-expert .team-slots-grid > .team-slot{aspect-ratio:1/1.08;}
 .team-note-shell{margin-top:8px;padding:10px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;background:rgba(255,255,255,0.02);}
 .team-note-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
 .team-note-label{font-size:0.7rem;color:#777;display:flex;align-items:center;gap:6px;}
@@ -15797,7 +15782,6 @@
                         <span class="grad-pane-title">${isEN ? 'Combat Teams' : '出戰隊伍'}</span>
                         <div style="display:flex;gap:8px;align-items:center;">
                             <button onclick="grad_resetCustomPairing()" style="background:rgba(255,255,255,0.05);color:#aaa;border:1px solid #444;padding:4px 8px;border-radius:6px;font-size:0.7rem;cursor:pointer;">${isEN ? 'Reset' : '隊伍重置'}</button>
-                            <button onclick="grad_exportAllTeamCards()" style="background:rgba(229,192,123,0.12);color:var(--accent);border:1px solid rgba(229,192,123,0.35);padding:4px 8px;border-radius:6px;font-size:0.7rem;font-weight:800;cursor:pointer;" title="${isEN ? 'Export Team Card' : '匯出全陣容圖'}">🖼️ ${isEN ? 'Export' : '匯出陣容'}</button>
                             <button onclick="grad_addCustomTeam()" style="background:var(--accent);color:#000;border:none;padding:4px 10px;border-radius:6px;font-size:0.7rem;font-weight:800;cursor:pointer;">+ ${isEN ? 'ADD TEAM' : '新增隊伍'}</button>
                         </div>
                     </div>
@@ -16165,7 +16149,6 @@
             if (teamIdx < 0 || teamIdx >= scores.length) return;
             const raw = String(value || '').trim();
             scores[teamIdx] = raw;
-            grad_renderCustomPairing();
         }
         // Team personal notes storage
         function grad_getTeamNotes() {
@@ -16199,6 +16182,35 @@
             const scores = grad_getTeamManualScores();
             if (teamIdx < 0 || teamIdx >= scores.length) return;
             scores.splice(teamIdx, 1);
+        }
+        function grad_moveTeamNoteAndScore(fromIdx, toIdx) {
+            const scores = grad_getTeamManualScores();
+            if (fromIdx >= 0 && toIdx >= 0 && fromIdx < scores.length && toIdx < scores.length && fromIdx !== toIdx) {
+                const moved = scores.splice(fromIdx, 1)[0];
+                scores.splice(toIdx, 0, moved || '');
+            }
+            const notes = grad_getTeamNotes();
+            if (fromIdx >= 0 && toIdx >= 0 && fromIdx < notes.length && toIdx < notes.length && fromIdx !== toIdx) {
+                const movedNote = notes.splice(fromIdx, 1)[0];
+                notes.splice(toIdx, 0, movedNote || '');
+            }
+            if (window.__gradTeamNoteOpen && typeof window.__gradTeamNoteOpen === 'object') {
+                const newOpenState = {};
+                const state = window.__gradCustomState;
+                const teamCount = state && Array.isArray(state.teams) ? state.teams.length : 0;
+                const tempOpenArray = [];
+                for (let i = 0; i < teamCount; i++) {
+                    tempOpenArray.push(!!window.__gradTeamNoteOpen[String(i)]);
+                }
+                if (fromIdx >= 0 && toIdx >= 0 && fromIdx < tempOpenArray.length && toIdx < tempOpenArray.length && fromIdx !== toIdx) {
+                    const moved = tempOpenArray.splice(fromIdx, 1)[0];
+                    tempOpenArray.splice(toIdx, 0, moved);
+                }
+                tempOpenArray.forEach((val, idx) => {
+                    newOpenState[String(idx)] = val;
+                });
+                window.__gradTeamNoteOpen = newOpenState;
+            }
         }
         function grad_getRoleRecommendations(roleName, limit = 3) {
             const clean = grad_normalizeRoleKey(roleName);
@@ -17480,110 +17492,6 @@
             });
             grad_renderCustomPairing();
         }
-
-        // Smart fill for a single team slot (补位)
-        function grad_smartFillTeam(teamIdx) {
-            const state = window.__gradCustomState;
-            if (!state || !Array.isArray(state.teams) || !state.teams[teamIdx]) return;
-            const team = state.teams[teamIdx];
-            const filledCount = team.filter(id => id).length;
-            if (filledCount >= 3) { showMsg('此隊伍已滿'); return; }
-            // Build usage map excluding current team
-            const usage = new Map();
-            state.teams.forEach((t, ti) => {
-                if (ti === teamIdx) return;
-                (t || []).forEach(id => { if (id) { const r = grad_getCustomRoleById(id); if (r) usage.set(r.id, (usage.get(r.id) || 0) + 1); } });
-            });
-            // Also count current team usage
-            team.forEach(id => { if (id) { const r = grad_getCustomRoleById(id); if (r) usage.set(r.id, (usage.get(r.id) || 0) + 1); } });
-            const canUse = r => (usage.get(r.id) || 0) < grad_getRoleMaxUse(r);
-            const currentRoles = team.map(id => grad_getCustomRoleById(id)).filter(Boolean);
-            const currentNames = currentRoles.map(r => r.role);
-            const available = state.roles.filter(r => !team.includes(r.id) && canUse(r) && !currentRoles.some(cr => cr.role === r.role));
-            // Try synergy match first
-            const slotsNeeded = 3 - filledCount;
-            const rows = typeof getExampleTeamsData === 'function' ? getExampleTeamsData() : [];
-            let filled = 0;
-            // Try to find synergy candidates
-            const synergyCandidates = available.filter(r => grad_findExampleMatchForRoles([...currentNames, r.role]));
-            const nonSynergy = available.filter(r => !synergyCandidates.includes(r)).sort((a, b) => b.score - a.score);
-            const candidates = [...synergyCandidates.sort((a, b) => b.score - a.score), ...nonSynergy];
-            for (const r of candidates) {
-                if (filled >= slotsNeeded) break;
-                const emptySlot = team.findIndex(id => !id);
-                if (emptySlot === -1) break;
-                team[emptySlot] = r.id;
-                filled++;
-            }
-            if (filled === 0) { showMsg('沒有可補充的角色'); return; }
-            showMsg(`已智能補位 ${filled} 名角色`);
-            grad_renderCustomPairing();
-        }
-
-        // Export all team cards as image
-        async function grad_exportAllTeamCards() {
-            const el = document.getElementById('grad-custom-team-list');
-            if (!el) return;
-            const isEN = !!window.__gradCustomLangEN;
-            showMsg(isEN ? 'Generating team card image...' : '生成陣容圖中...');
-            try {
-                if (typeof html2canvas === 'undefined') { showMsg('需要 html2canvas 支援'); return; }
-                // Create a stylish snapshot container
-                const wrapper = document.createElement('div');
-                wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;background:linear-gradient(135deg, #16161a 0%, #1a151d 100%);padding:40px;border-radius:24px;min-width:640px;z-index:-1;box-shadow:inset 0 0 100px rgba(229,192,123,0.03);border:1px solid rgba(229,192,123,0.1);';
-
-                const headerBox = document.createElement('div');
-                headerBox.style.cssText = 'display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px; border-bottom:2px solid rgba(229,192,123,0.15); padding-bottom:20px;';
-
-                const title = document.createElement('div');
-                title.style.cssText = 'color:#e5c07b;font-size:2.2rem;font-weight:900;letter-spacing:2px;font-family:"Noto Sans TC", sans-serif; text-shadow:0 0 20px rgba(229,192,123,0.4); line-height:1;';
-                title.innerHTML = isEN ? '<span style="color:#fff">⚔ MY</span> LINEUP' : '<span style="color:#fff">⚔ 我的</span>出戰陣容';
-
-                const branding = document.createElement('div');
-                branding.style.cssText = 'color:#888; font-size:0.95rem; font-weight:700; letter-spacing:1px; text-align:right; line-height:1.4;';
-                branding.innerHTML = '鳴潮聲骸分析儀 | Wuthering Waves Echo Analyzer<br><span style="color:#e5c07b; font-size:0.85rem;">992851qaz-bot.github.io/-/</span>';
-
-                headerBox.appendChild(title);
-                headerBox.appendChild(branding);
-                wrapper.appendChild(headerBox);
-
-                const clone = el.cloneNode(true);
-                clone.style.maxHeight = 'none';
-                clone.style.overflow = 'visible';
-
-                // Hide interactive elements and enhance look for export
-                clone.querySelectorAll('button').forEach(b => b.style.display = 'none');
-                clone.querySelectorAll('.expert-actions').forEach(b => b.style.display = 'none');
-                clone.querySelectorAll('.expert-slot-remove').forEach(b => b.style.display = 'none');
-                clone.querySelectorAll('.slot-remove-btn').forEach(b => b.style.display = 'none');
-                clone.querySelectorAll('.team-card-header').forEach(h => { h.style.cursor = 'default'; });
-
-                // Enhance card styling for the export
-                clone.querySelectorAll('.team-card-new').forEach(c => {
-                    c.style.background = 'rgba(255,255,255,0.03)';
-                    c.style.border = '1px solid rgba(255,255,255,0.08)';
-                    c.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
-                    c.style.transform = 'none'; // prevent hover transform bleeding
-                    c.style.transition = 'none';
-                });
-
-                wrapper.appendChild(clone);
-                document.body.appendChild(wrapper);
-                await new Promise(r => setTimeout(r, 150));
-                const canvas = await html2canvas(wrapper, { backgroundColor: '#121214', scale: 2, useCORS: true, logging: false });
-                document.body.removeChild(wrapper);
-                const url = canvas.toDataURL('image/png');
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `ww-team-lineup-${Date.now()}.png`;
-                document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                showMsg(isEN ? 'Team card exported!' : '陣容圖已匯出！');
-            } catch (e) {
-                console.error(e);
-                showMsg(isEN ? 'Export failed' : '匯出失敗');
-            }
-        }
-
         function grad_collectCustomPairingData() {
             const state = window.__gradCustomState;
             if (!state) return null;
@@ -17669,7 +17577,7 @@
             teamListEl.classList.toggle('layout-expert', isExpert);
             teamListEl.style.gridTemplateColumns = layoutMode === 'bar'
                 ? '1fr'
-                : (isExpert ? 'repeat(auto-fill, minmax(320px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))');
+                : (isExpert ? 'repeat(auto-fill, minmax(240px, 1fr))' : 'repeat(auto-fill, minmax(300px, 1fr))');
             teamListEl.style.gap = isExpert ? '10px' : '16px';
 
             const setLayoutBtn = (id, active) => {
@@ -17717,121 +17625,32 @@
                 const synergyVal = Math.min(100, parseFloat(avgScore) + (isFullTeam ? 8 : 0) + (hasSynergy ? 5 : 0));
                 const manualScore = window.__gradTeamManualScores && window.__gradTeamManualScores[teamIdx] !== undefined ? window.__gradTeamManualScores[teamIdx] : null;
                 const finalScoreToDisplay = (manualScore !== null && manualScore !== "") ? manualScore : '-';
-
+                
                 const tone = grad_getManualScoreTone(finalScoreToDisplay);
                 let scoreColor = 'var(--accent)';
                 if (tone === 'high') scoreColor = '#9ef0ad';
                 else if (tone === 'mid') scoreColor = '#ffd988';
                 else if (tone === 'low') scoreColor = '#ff8f8f';
 
-                let headerHtml = '';
-                if (!isExpert) {
-                    headerHtml = `<div class="team-card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:move;">
-                        <div style="display:flex; align-items:center; gap:6px;">
-                            <span class="team-card-index" style="background:var(--accent); color:#000; padding:2px 8px; border-radius:4px; font-weight:800; font-size:0.75rem;">T${teamIdx + 1}</span>
-                            ${match ? `<span style="font-size:0.85rem; font-weight:bold; color:var(--accent);">${escapeHtml(match.system)}</span>` : `<span style="font-size:0.8rem; color:#666;">${isEN ? 'Custom Team' : '自訂編隊'}</span>`}
-                        </div>
-                        <div style="display:flex; gap:6px; align-items:center;">
-                            <button onclick="grad_smartFillTeam(${teamIdx})" class="team-smart-fill-btn" title="智能補位">✨ 補位</button>
-                            <button class="team-detail-btn" onclick="grad_openTeamDetailModal(${teamIdx})">${isEN ? '詳情' : '詳情'}</button>
-                            <button onclick="grad_moveTeamOrder(${teamIdx}, 'up')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▲</button>
-                            <button onclick="grad_moveTeamOrder(${teamIdx}, 'down')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▼</button>
-                            <button onclick="grad_removeCustomTeam(${teamIdx})" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#888; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:0.2s;" onmouseover="this.style.borderColor='#ff5c5c'; this.style.color='#ff5c5c'" onmouseout="this.style.borderColor='#444'; this.style.color='#888'">✕</button>
-                        </div>
-                    </div>`;
+                let headerHtml = `<div class="team-card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:move;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="team-card-index" style="background:var(--accent); color:#000; padding:2px 8px; border-radius:4px; font-weight:800; font-size:0.75rem;">T${teamIdx + 1}</span>
+                        ${isExpert ? `<span style="font-size:0.95rem; font-family:'JetBrains Mono'; font-weight:bold; color:${scoreColor};">${finalScoreToDisplay}</span>` : (match ? `<span style="font-size:0.85rem; font-weight:bold; color:var(--accent);">${escapeHtml(match.system)}</span>` : `<span style="font-size:0.8rem; color:#666;">${isEN ? 'Custom Team' : '自訂編隊'}</span>`)}
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button class="team-detail-btn" onclick="grad_openTeamDetailModal(${teamIdx})">${isEN ? 'Details' : '詳情'}</button>
+                        <button onclick="grad_moveTeamOrder(${teamIdx}, 'up')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▲</button>
+                        <button onclick="grad_moveTeamOrder(${teamIdx}, 'down')" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#aaa; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:12px; transition:0.2s;">▼</button>
+                        <button onclick="grad_removeCustomTeam(${teamIdx})" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#888; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:0.2s;" onmouseover="this.style.borderColor='#ff5c5c'; this.style.color='#ff5c5c'" onmouseout="this.style.borderColor='#444'; this.style.color='#888'">✕</button>
+                    </div>
+                </div>`;
 
+                if (!isExpert) {
                     headerHtml += `<div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
                         <span style="font-size:0.72rem;color:#888;">${isEN ? 'Avg' : '均分'} <b style="color:#61afef;">${avgScore}%</b></span>
                         <span style="font-size:0.72rem;color:#888;">${isEN ? 'Synergy' : '綜效'} <b style="color:#e5c07b;">${safeFixed(synergyVal, 0)}</b></span>
                         ${extraDpsScore > 0 ? `<span style="font-size:0.72rem;color:#888;">替補輸出 <b style="color:#aaa;">+${safeFixed(extraDpsScore, 1)}</b></span>` : ''}
                     </div>`;
-                }
-
-                // Expert layout: render 3 circular image slots in a horizontal row
-                if (isExpert) {
-                    const expertRow = document.createElement('div');
-                    expertRow.className = 'expert-slots-row';
-                    expertRow.style.marginTop = '0';
-                    for (let i = 0; i < 3; i++) {
-                        const roleId = team[i];
-                        const role = roleId ? grad_getCustomRoleById(roleId) : null;
-                        const circle = document.createElement('div');
-                        circle.className = 'expert-slot-circle';
-                        circle.dataset.teamidx = teamIdx;
-                        circle.dataset.slotidx = i;
-                        if (role) {
-                            const iconUrl = grad_getRoleIconUrl(role.role);
-                            const rColor = typeColor(role.type);
-                            const rColorDim = typeColorDim(role.type);
-                            circle.style.setProperty('--role-color', rColor);
-                            circle.style.borderColor = rColor + '88';
-                            circle.innerHTML = iconUrl ? `<img src="${iconUrl}" title="${escapeHtml(role.role)}">` : `<span class="slot-plus-expert">?</span>`;
-                            const removeBtn = document.createElement('div');
-                            removeBtn.className = 'expert-slot-remove';
-                            removeBtn.textContent = '✕';
-                            removeBtn.addEventListener('click', (e) => { e.stopPropagation(); grad_removeRoleFromTeam(teamIdx, role.id); });
-                            circle.appendChild(removeBtn);
-                            circle.addEventListener('mouseenter', (e) => grad_showRoleTooltip(role, e.clientX, e.clientY));
-                            circle.addEventListener('mousemove', (e) => grad_showRoleTooltip(role, e.clientX, e.clientY));
-                            circle.addEventListener('mouseleave', grad_hideRoleTooltip);
-                            circle.addEventListener('click', (e) => { if (e.target.closest('.expert-slot-remove')) return; grad_openRoleActionModal(role.id, teamIdx); });
-                            circle.draggable = true;
-                            circle.addEventListener('dragstart', (e) => { e.stopPropagation(); e.dataTransfer.setData('text/roleId', role.id); e.dataTransfer.setData('text/fromTeam', String(teamIdx)); window.__gradNativeDragRole = { roleId: role.id, fromTeamIdx: teamIdx }; });
-                        } else {
-                            circle.innerHTML = `<span class="slot-plus-expert">+</span>`;
-                            circle.addEventListener('click', () => grad_openSlotPickerModal(teamIdx, i));
-                        }
-                        circle.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); circle.classList.add('drag-over'); });
-                        circle.addEventListener('dragleave', () => circle.classList.remove('drag-over'));
-                        circle.addEventListener('drop', (e) => { e.preventDefault(); e.stopPropagation(); circle.classList.remove('drag-over'); let droppedId = e.dataTransfer.getData('text/roleId'); let fromIdxVal = e.dataTransfer.getData('text/fromTeam'); if (!droppedId && window.__gradNativeDragRole) { droppedId = window.__gradNativeDragRole.roleId; fromIdxVal = String(window.__gradNativeDragRole.fromTeamIdx); } const fromIdx = (fromIdxVal === '' || fromIdxVal == null) ? null : Number(fromIdxVal); if (droppedId) { grad_handleDropToTeam(teamIdx, droppedId, fromIdx, i); } });
-                        expertRow.appendChild(circle);
-                    }
-
-                    teamCard.style.display = 'flex';
-                    teamCard.style.flexDirection = 'row';
-                    teamCard.style.alignItems = 'center';
-                    teamCard.style.justifyContent = 'space-between';
-                    teamCard.style.padding = '8px 12px';
-                    teamCard.style.gap = '10px';
-
-                    const leftPart = document.createElement('div');
-                    leftPart.style.display = 'flex';
-                    leftPart.style.alignItems = 'center';
-                    leftPart.style.gap = '16px';
-                    leftPart.innerHTML = `
-                        <div style="display:flex; align-items:center; gap:6px; min-width: 60px; cursor:move;" class="team-card-header-expert">
-                            <span class="team-card-index" style="background:var(--accent); color:#000; padding:2px 8px; border-radius:4px; font-weight:800; font-size:0.75rem;">T${teamIdx + 1}</span>
-                            <span style="font-size:0.88rem; font-family:'JetBrains Mono'; font-weight:bold; color:${scoreColor};">${finalScoreToDisplay !== '-' ? finalScoreToDisplay : ''}</span>
-                        </div>
-                    `;
-                    // attach drag listener to the drag handle
-                    const dragHandle = leftPart.querySelector('.team-card-header-expert');
-                    dragHandle.addEventListener('mousedown', () => teamCard.setAttribute('draggable', 'true'));
-                    dragHandle.addEventListener('mouseup', () => teamCard.removeAttribute('draggable'));
-                    dragHandle.addEventListener('mouseleave', () => teamCard.removeAttribute('draggable'));
-
-                    leftPart.appendChild(expertRow);
-
-                    const rightPart = document.createElement('div');
-                    rightPart.className = 'expert-actions';
-                    rightPart.style.display = 'flex';
-                    rightPart.style.gap = '6px';
-                    rightPart.style.alignItems = 'center';
-                    rightPart.innerHTML = `
-                        <button class="team-detail-btn" onclick="grad_openTeamDetailModal(${teamIdx})">${isEN ? '詳情' : '詳情'}</button>
-                        <button onclick="grad_removeCustomTeam(${teamIdx})" style="background:rgba(255,255,255,0.05); border:1px solid #444; color:#888; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:0.2s;" onmouseover="this.style.borderColor='#ff5c5c'; this.style.color='#ff5c5c'" onmouseout="this.style.borderColor='#444'; this.style.color='#888'">✕</button>
-                    `;
-
-                    teamCard.appendChild(leftPart);
-                    teamCard.appendChild(rightPart);
-
-                    // Expert drag support on card level
-                    teamCard.addEventListener('dragstart', e => { if (!e.target.closest('.expert-slot-circle')) e.dataTransfer.setData('text/teamIdx', teamIdx); });
-                    teamCard.addEventListener('dragover', e => { e.preventDefault(); teamCard.classList.add('drag-over-card'); });
-                    teamCard.addEventListener('dragleave', () => teamCard.classList.remove('drag-over-card'));
-                    teamCard.addEventListener('drop', e => { e.preventDefault(); teamCard.classList.remove('drag-over-card'); const fromIdx = e.dataTransfer.getData('text/teamIdx'); if (fromIdx && fromIdx !== String(teamIdx)) { const temp = state.teams[fromIdx]; state.teams.splice(fromIdx, 1); state.teams.splice(teamIdx, 0, temp); grad_renderCustomPairing(); } });
-                    teamListEl.appendChild(teamCard);
-                    return; // skip the rest of the normal rendering for expert
                 }
 
                 const slotsGrid = document.createElement('div');
@@ -17852,8 +17671,13 @@
                         slot.style.setProperty('--role-color', rColor);
                         slot.style.setProperty('--role-color-dim', rColorDim);
 
-                        const chainBadge = `S${role.chainCount || 0}`;
-                        slot.innerHTML = `
+                        const chainBadge = isExpert ? 'S' : `S${role.chainCount || 0}`;
+                        slot.innerHTML = isExpert ? `
+                            <div class="role-card-mini" style="position:relative;">
+                                ${iconUrl ? `<img src="${iconUrl}">` : '<div class="slot-plus">?</div>'}
+                            </div>
+                            <div class="slot-remove-btn" onclick="event.stopPropagation();grad_removeRoleFromTeam(${teamIdx},'${role.id}')">✕</div>
+                        ` : `
                             <div class="role-card-mini" style="position:relative;">
                                 ${iconUrl ? `<img src="${iconUrl}">` : '<div class="slot-plus">?</div>'}
                                 <div class="role-name-mini">${escapeHtml(role.role)}</div>
@@ -17871,6 +17695,10 @@
 
                         // Drag out logic
                         slot.draggable = true;
+                        slot.addEventListener('contextmenu', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }, { passive: false });
                         slot.addEventListener('dragstart', (e) => {
                             e.stopPropagation();
                             e.dataTransfer.setData('text/roleId', role.id);
@@ -17965,20 +17793,20 @@
                     slot.dataset.teamidx = teamIdx;
                     slot.dataset.slotidx = i;
 
-                    // Drop logic with snap micro-animation
+                    // Drop logic
                     slot.addEventListener('dragover', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        slot.classList.add('active-target', 'drag-over');
+                        slot.classList.add('active-target');
                     });
                     slot.addEventListener('dragleave', (e) => {
                         e.stopPropagation();
-                        slot.classList.remove('active-target', 'drag-over');
+                        slot.classList.remove('active-target');
                     });
                     slot.addEventListener('drop', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        slot.classList.remove('active-target', 'drag-over');
+                        slot.classList.remove('active-target');
                         let droppedId = e.dataTransfer.getData('text/roleId');
                         let fromIdxVal = e.dataTransfer.getData('text/fromTeam');
                         if (!droppedId && window.__gradNativeDragRole) {
@@ -18033,17 +17861,21 @@
                 }
 
                 teamCard.draggable = true;
-                teamCard.addEventListener('dragstart', e => { if (!e.target.closest('.team-slot[draggable="true"]')) e.dataTransfer.setData('text/teamIdx', teamIdx); });
-                teamCard.addEventListener('dragover', e => { e.preventDefault(); teamCard.classList.add('drag-over-card'); });
-                teamCard.addEventListener('dragleave', () => teamCard.classList.remove('drag-over-card'));
+                teamCard.addEventListener('dragstart', e => { e.dataTransfer.setData('text/teamIdx', teamIdx); });
+                teamCard.addEventListener('dragover', e => { e.preventDefault(); teamCard.style.border = '1px solid var(--accent)'; });
+                teamCard.addEventListener('dragleave', e => { teamCard.style.border = ''; });
                 teamCard.addEventListener('drop', e => {
                     e.preventDefault();
-                    teamCard.classList.remove('drag-over-card');
-                    const fromIdx = e.dataTransfer.getData('text/teamIdx');
-                    if (fromIdx && fromIdx !== String(teamIdx)) {
+                    teamCard.style.border = '';
+                    const fromIdxVal = e.dataTransfer.getData('text/teamIdx');
+                    if (fromIdxVal && fromIdxVal !== String(teamIdx)) {
+                        const fromIdx = parseInt(fromIdxVal, 10);
                         const temp = state.teams[fromIdx];
                         state.teams.splice(fromIdx, 1);
                         state.teams.splice(teamIdx, 0, temp);
+                        if (typeof grad_moveTeamNoteAndScore === 'function') {
+                            grad_moveTeamNoteAndScore(fromIdx, teamIdx);
+                        }
                         grad_renderCustomPairing();
                     }
                 });
@@ -18145,6 +17977,10 @@
                 });
 
                 // Mobile Touch Dragging
+                item.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, { passive: false });
                 let touchTimer = null;
                 item.addEventListener('touchstart', (e) => {
                     if (e.touches.length > 1 || isUsedOut) return;
@@ -18932,13 +18768,40 @@
             const currentBuild = roleBuilds[safeIdx] || roleBuilds[0];
             const buildName = currentBuild && currentBuild.name ? currentBuild.name : "通用";
 
+            // Calculate currentScore based on UI loaded echoes
+            let currentScore = 0;
+            if (currentBuild && currentBuild.weights && Array.isArray(g_echoesData)) {
+                let totalScoreAchieved = 0;
+                g_echoesData.forEach(e => {
+                    if (e && e.subs) {
+                        const res = calculateEchoScore(e, currentBuild.weights);
+                        if (res) totalScoreAchieved += res.score;
+                    }
+                });
+                currentScore = totalScoreAchieved * 1.25;
+            }
+
+            // Try local calculation first
+            if (typeof calculateLocalRankInfo === 'function') {
+                const localRank = calculateLocalRankInfo(role, g_currentUserUid, currentScore);
+                if (localRank) {
+                    if (localRank.isLoading) return { isLoading: true };
+                    if (localRank.isExpected) {
+                        return { isExpected: true, rank: localRank.rank, total: localRank.total, pr: localRank.prStr, score: localRank.score };
+                    }
+                    g_lastRankInfo = { rank: localRank.rank, total: localRank.total, pr: localRank.prStr, score: localRank.score };
+                    return g_lastRankInfo;
+                }
+            }
+
             const url = getMainApiUrl();
             try {
                 const res = await fetch(`${url}?action=getRank&uid=${g_currentUserUid}&role=${encodeURIComponent(role)}&buildName=${encodeURIComponent(buildName)}`);
                 const json = await res.json();
                 if (json.result === 'success') {
-                    const pr = Math.floor((1 - (json.myRank - 1) / json.total) * 100);
-                    g_lastRankInfo = { rank: json.myRank, total: json.total, pr: pr, score: json.myScore };
+                    const topPct = (json.myRank / json.total) * 100;
+                    const prStr = topPct <= 50 ? `前${Math.max(1, Math.round(topPct))}%` : `後${Math.max(1, Math.round(100 - topPct))}%`;
+                    g_lastRankInfo = { rank: json.myRank, total: json.total, pr: prStr, score: json.myScore };
                     return g_lastRankInfo;
                 }
             } catch (e) {
@@ -18975,7 +18838,7 @@
             if (type === 'default') {
                 // --- Existing Table Layout ---
                 let rankHtml = '<span style="color:#666">暫無排名資料</span>';
-                if (rankData) { rankHtml = `<div class="share-rank-main">排名: ${rankData.rank} / ${rankData.total} <span style="font-size:1rem">(${rankData.pr}%)</span></div><div class="share-rank-sub">分數: ${rankData.score}</div>` }
+                if (rankData) { rankHtml = `<div class="share-rank-main">排名: ${rankData.rank} / ${rankData.total} <span style="font-size:1rem">(${rankData.pr})</span></div><div class="share-rank-sub">分數: ${rankData.score}</div>` }
                 captureArea.innerHTML = `<div class="share-header"><h2 class="share-title">GAME ZH 角色分析網</h2><div class="share-rank-info">${rankHtml}</div></div><div class="share-table-container">${document.getElementById('result-table').outerHTML}</div><div class="share-footer">https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC</div>`;
                 captureArea.querySelectorAll('.total-score-badge button').forEach(btn => btn.remove()); // Remove rank button
                 captureArea.querySelectorAll('td').forEach(td => { td.removeAttribute('onclick'); td.removeAttribute('onmouseenter'); td.removeAttribute('onmouseleave') });
@@ -18983,7 +18846,7 @@
                 // --- Social Card Layout ---
                 const roleName = g_globalData.role || 'Unknown';
                 const roleImg = RESONATORS_PROFILE_PICTURE[roleName] || '';
-                const rankBadge = rankData ? `<div class="social-rank-badge">#${rankData.rank} (Top ${rankData.pr}%)</div>` : '';
+                const rankBadge = rankData ? `<div class="social-rank-badge">#${rankData.rank} (${rankData.pr})</div>` : '';
 
                 // Calculate Totals again for display
                 let totalScore = 0, totalMax = 0;
@@ -19573,27 +19436,22 @@
 
         async function updateRankTab() {
             const content = document.getElementById('rank-tab-content');
-            if (!content) return;
+            if (content) content.style.display = 'none';
+
+            const dataArea = document.getElementById('db-data-area');
 
             if (!g_globalData.role || !g_currentUserUid) {
-                content.innerHTML = '<div class="empty-state" style="padding:40px;">請先登入並進行分析...</div>';
+                if (dataArea) dataArea.innerHTML = '<div class="empty-state" style="padding:40px;">請先登入並進行分析...</div>';
                 return;
             }
-            content.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">正在載入排名資料...</div>';
+            if (dataArea) dataArea.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">正在載入排名資料...</div>';
 
             const rankData = await ensureRankingData();
             if (rankData) {
-                // Remove redundant top5 fetching and display, only show the ranking table
-                content.innerHTML = `
-                    <div id="db-rank-main-container" style="border:1px solid #333;border-radius:10px;overflow:hidden;background:#18181b;">
-                        <!-- The main ranking table will be rendered here by rank_renderTable from rank_calcData -->
-                        <div id="db-data-area" style="min-height:200px;"></div>
-                    </div>
-                `;
                 // Trigger the data calculation and rendering
                 if (typeof rank_calcData === 'function') rank_calcData();
             } else {
-                content.innerHTML = '<div class="empty-state" style="padding:40px;">暫無排名資料</div>';
+                if (dataArea) dataArea.innerHTML = '<div class="empty-state" style="padding:40px;">暫無排名資料</div>';
             }
         }
 
@@ -19645,29 +19503,108 @@
             }
         }
 
+        function calculateLocalRankInfo(role, uid, currentScore) {
+            if (!rank_dataLoaded) return { isLoading: true };
+            if (!role) return null;
+            
+            const dbBuilds = rank_weights[role];
+            if (!dbBuilds || dbBuilds.length === 0) return null;
+            
+            const dbWObj = dbBuilds[0];
+            if (!dbWObj) return null;
+            
+            let otherScores = [];
+            let userExistInDb = false;
+            let dbUserScore = 0;
+            
+            if (rank_data && Array.isArray(rank_data)) {
+                rank_data.forEach(d => {
+                    if (d.role && String(d.role).trim() === role && d.echoes && Array.isArray(d.echoes) && d.echoes.length > 0) {
+                        try {
+                            let res = rank_calcSingleEntry(d, dbWObj);
+                            if (res) {
+                                if (uid && d.uid === uid) {
+                                    userExistInDb = true;
+                                    dbUserScore = res.score;
+                                } else {
+                                    otherScores.push(res.score);
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                });
+            }
+            
+            let scoreToUse = currentScore;
+            if (scoreToUse === undefined || scoreToUse === null || scoreToUse === 0) {
+                if (userExistInDb) {
+                    scoreToUse = dbUserScore;
+                } else {
+                    return null;
+                }
+            }
+            
+            let allScores = [...otherScores, scoreToUse];
+            allScores.sort((a, b) => b - a);
+            
+            const myRank = allScores.indexOf(scoreToUse) + 1;
+            const total = allScores.length;
+            
+            const topPct = (myRank / total) * 100;
+            let prStr = "";
+            if (topPct <= 50) {
+                prStr = "前" + Math.max(1, Math.round(topPct)) + "%";
+            } else {
+                prStr = "後" + Math.max(1, Math.round(100 - topPct)) + "%";
+            }
+            
+            return {
+                rank: myRank,
+                total: total,
+                prStr: prStr,
+                score: scoreToUse,
+                isExpected: !userExistInDb
+            };
+        }
+
         async function updateRankButtons() {
             const rankTextSimple = document.getElementById('rank-text-simple');
             if (!g_globalData.role || !g_currentUserUid) {
-                if (rankTextSimple) rankTextSimple.innerText = "";
+                if (rankTextSimple) {
+                    rankTextSimple.innerText = "";
+                    rankTextSimple.style.color = "";
+                }
                 return;
             }
 
-            // Only fetch if we don't have it (or maybe we want to refresh? let's stick to cache if valid)
-            // But renderTable clears g_lastRankInfo. So this will usually fetch.
-            // ensureRankingData returns promise.
-
-            // Show loading state if needed? Nah, just keep old text until loaded.
             const data = await ensureRankingData();
 
             if (data) {
-                const text = `#${data.rank}/${data.total} (${data.pr}%)`;
-                if (rankTextSimple) rankTextSimple.innerText = text;
-
-                // (Disabled) Also update the button inside the table if it exists
-                // const btnInside = document.querySelector('.rank-btn');
-                // if (btnInside) btnInside.innerText = "🏆 " + text;
+                if (data.isLoading) {
+                    if (rankTextSimple) {
+                        rankTextSimple.innerText = g_lang === 'en' ? "Loading..." : "載入中...";
+                        rankTextSimple.style.color = "#888";
+                    }
+                } else if (data.isExpected) {
+                    const prFormatted = data.pr.toString().includes('%') ? data.pr : `${data.pr}%`;
+                    const text = (g_lang === 'en' ? "Exp. " : "預期 ") + prFormatted;
+                    if (rankTextSimple) {
+                        rankTextSimple.innerText = text;
+                        rankTextSimple.style.color = "#61afef";
+                    }
+                } else {
+                    const prFormatted = data.pr.toString().includes('%') ? data.pr : `${data.pr}%`;
+                    const text = `#${data.rank}/${data.total} (${prFormatted})`;
+                    if (rankTextSimple) {
+                        rankTextSimple.innerText = text;
+                        rankTextSimple.style.color = "";
+                    }
+                }
             } else {
-                if (rankTextSimple) rankTextSimple.innerText = "?/?";
+                if (rankTextSimple) {
+                    rankTextSimple.innerText = "?/?";
+                    rankTextSimple.style.color = "";
+                }
             }
         }
 
@@ -20562,7 +20499,7 @@
         }
 
         // --- Ranking Module / Data Strategy Center Logic (Namespaced) ---
-        let rank_data = [], rank_weights = {}, rank_list = [], rank_lockedTarget = null;
+        let rank_data = [], rank_weights = {}, rank_list = [], rank_lockedTarget = null, rank_dataLoaded = false;
         let rank_faults = []; // 用於存儲異常數據記錄
         let rank_viewMode = 'role';
         let rank_currSelection = null; // 目前選中的角色或玩家 UID
@@ -20615,6 +20552,11 @@
                 const _deduped = {};
                 rank_data.forEach(d => { _deduped[(d.uid || '') + '|' + (d.role || '')] = d; });
                 rank_data = Object.values(_deduped);
+
+                // Immediately refresh history lists and header rank display since local ranking is now fully available!
+                if (typeof renderHistoryList === 'function') renderHistoryList();
+                if (typeof updateRankButtons === 'function') updateRankButtons();
+
                 rank_renderSidebar();
                 if (g_globalData.role) {
                     if (rank_viewMode !== 'role') rank_toggleViewMode('role');
@@ -20627,6 +20569,8 @@
                     document.getElementById('db-loading-txt').innerText = "連線失敗: " + e.message;
                     setTimeout(() => loader.style.display = 'none', 2000);
                 }
+            } finally {
+                rank_dataLoaded = true;
             }
         }
 
@@ -21631,6 +21575,31 @@
                 return;
             }
             const role = g_globalData.role;
+            if (typeof calculateLocalRankInfo === 'function') {
+                let currentScore = 0;
+                let echoCount = 0;
+                const builds = g_currentWeights[role] || [];
+                const weights = (builds[g_selectedBuildIdx] || builds[0]) ? (builds[g_selectedBuildIdx] || builds[0]).weights : {};
+                const safeEchoes = Array.isArray(g_echoesData) ? g_echoesData : [];
+                safeEchoes.forEach(e => {
+                    if (e && e.cost) {
+                        const scoreData = calculateEchoScoreSimple(e, weights);
+                        if (scoreData) { currentScore += scoreData.percentage; echoCount++; }
+                    }
+                });
+                currentScore = echoCount > 0 ? (currentScore / echoCount) : 0;
+
+                const localRank = calculateLocalRankInfo(role, g_currentUserUid, currentScore);
+                if (localRank) {
+                    if (localRank.isLoading) {
+                        document.getElementById('rank-text-simple').innerText = g_lang === 'en' ? "⏳ Loading..." : "⏳ 載入中...";
+                    } else {
+                        document.getElementById('rank-text-simple').innerText = `#${localRank.rank}/${localRank.total} (${localRank.prStr})`;
+                    }
+                    return;
+                }
+            }
+
             const currentBuild = g_currentWeights[role][g_selectedBuildIdx];
             const buildName = currentBuild ? currentBuild.name : "通用";
             const url = getMainApiUrl();
@@ -21639,8 +21608,9 @@
                 const res = await fetch(`${url}?action=getRank&uid=${g_currentUserUid}&role=${encodeURIComponent(role)}&buildName=${encodeURIComponent(buildName)}`);
                 const json = await res.json();
                 if (json.result === 'success') {
-                    const pr = Math.floor((1 - (json.myRank - 1) / json.total) * 100);
-                    document.getElementById('rank-text-simple').innerText = `#${json.myRank}/${json.total} (PR${pr}%)`;
+                    const topPct = (json.myRank / json.total) * 100;
+                    const prStr = topPct <= 50 ? `前${Math.max(1, Math.round(topPct))}%` : `後${Math.max(1, Math.round(100 - topPct))}%`;
+                    document.getElementById('rank-text-simple').innerText = `#${json.myRank}/${json.total} (${prStr})`;
                 } else {
                     document.getElementById('rank-text-simple').innerText = g_lang === 'en' ? "Not ranked" : "未入榜";
                 }
@@ -21696,11 +21666,86 @@
             // On mobile we might want full width
             div.style.minWidth = "280px";
 
+            let gearBtn = '';
+            let configUI = '';
+            if (type === 'graduation') {
+                gearBtn = `<button class="share-item-gear" onclick="toggleGraduationConfigUI(event)" style="background:none; border:none; color:var(--accent); font-size:1.2rem; cursor:pointer; padding:2px 8px; margin-right:4px; display:inline-flex; align-items:center; transition:transform 0.2s;" title="自訂風格設計">⚙️</button>`;
+                
+                // Initialize default config if not existing
+                if (!window.g_graduationConfig) {
+                    window.g_graduationConfig = {
+                        theme: 'dark', // 'dark' | 'light'
+                        rankDisplay: 'complete', // 'complete' | 'suite'
+                        bgType: 'default', // 'default' | 'custom'
+                        bgUrl: ''
+                    };
+                    try {
+                        const saved = localStorage.getItem('g_graduationConfig');
+                        if (saved) window.g_graduationConfig = JSON.parse(saved);
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+                
+                configUI = `
+                <div id="grad-config-panel" style="display:none; background:rgba(30,30,35,0.98); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px; margin:10px 0; font-size:0.85rem; color:#eee; box-shadow:0 10px 25px rgba(0,0,0,0.5); text-align:left;">
+                    <h4 style="margin:0 0 12px 0; color:var(--accent); display:flex; justify-content:space-between; align-items:center; font-size:0.9rem; font-weight:bold;">
+                        <span>🎨 自訂畢業總表風格</span>
+                        <button onclick="toggleGraduationConfigUI(event)" style="background:none; border:none; color:#aaa; cursor:pointer; font-size:1.1rem; padding:0 4px;">✕</button>
+                    </h4>
+                    
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <!-- Theme selection: White & Dark -->
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>主題風格</span>
+                            <div style="display:flex; gap:6px;">
+                                <button onclick="setGradConfig('theme', 'dark', this)" class="grad-config-btn ${window.g_graduationConfig.theme === 'dark' ? 'active' : ''}" style="padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; border:1px solid #555; background:${window.g_graduationConfig.theme === 'dark' ? 'var(--accent)' : '#222'}; color:${window.g_graduationConfig.theme === 'dark' ? '#111' : '#ccc'}; font-weight:bold;">暗色</button>
+                                <button onclick="setGradConfig('theme', 'light', this)" class="grad-config-btn ${window.g_graduationConfig.theme === 'light' ? 'active' : ''}" style="padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; border:1px solid #555; background:${window.g_graduationConfig.theme === 'light' ? 'var(--accent)' : '#222'}; color:${window.g_graduationConfig.theme === 'light' ? '#111' : '#ccc'}; font-weight:bold;">白色</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Rank display selection: Complete & Set Icons -->
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>排名顯示</span>
+                            <div style="display:flex; gap:6px;">
+                                <button onclick="setGradConfig('rankDisplay', 'complete', this)" class="grad-config-btn ${window.g_graduationConfig.rankDisplay === 'complete' ? 'active' : ''}" style="padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; border:1px solid #555; background:${window.g_graduationConfig.rankDisplay === 'complete' ? 'var(--accent)' : '#222'}; color:${window.g_graduationConfig.rankDisplay === 'complete' ? '#111' : '#ccc'}; font-weight:bold;">完整排名</button>
+                                <button onclick="setGradConfig('rankDisplay', 'suite', this)" class="grad-config-btn ${window.g_graduationConfig.rankDisplay === 'suite' ? 'active' : ''}" style="padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; border:1px solid #555; background:${window.g_graduationConfig.rankDisplay === 'suite' ? 'var(--accent)' : '#222'}; color:${window.g_graduationConfig.rankDisplay === 'suite' ? '#111' : '#ccc'}; font-weight:bold;">套裝圖示</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Custom Background selection -->
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <span>背景底圖</span>
+                                <div style="display:flex; gap:6px;">
+                                    <button onclick="setGradConfig('bgType', 'default', this)" class="grad-config-btn ${window.g_graduationConfig.bgType === 'default' ? 'active' : ''}" style="padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; border:1px solid #555; background:${window.g_graduationConfig.bgType === 'default' ? 'var(--accent)' : '#222'}; color:${window.g_graduationConfig.bgType === 'default' ? '#111' : '#ccc'}; font-weight:bold;">預設</button>
+                                    <button onclick="setGradConfig('bgType', 'custom', this)" class="grad-config-btn ${window.g_graduationConfig.bgType === 'custom' ? 'active' : ''}" style="padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; border:1px solid #555; background:${window.g_graduationConfig.bgType === 'custom' ? 'var(--accent)' : '#222'}; color:${window.g_graduationConfig.bgType === 'custom' ? '#111' : '#ccc'}; font-weight:bold;">自訂</button>
+                                </div>
+                            </div>
+                            
+                            <div id="grad-custom-bg-inputs" style="display:${window.g_graduationConfig.bgType === 'custom' ? 'block' : 'none'}; margin-top:8px;">
+                                <input type="text" id="grad-bg-url" placeholder="輸入圖片網址 (URL)..." value="${window.g_graduationConfig.bgUrl || ''}" onchange="handleGradBgUrlChange(this.value)" style="width:100%; background:#111; border:1px solid #444; border-radius:6px; padding:6px; color:#fff; font-size:0.75rem; margin-bottom:8px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <span style="font-size:0.7rem; color:#aaa; white-space:nowrap;">或上傳本地圖片：</span>
+                                    <input type="file" accept="image/*" onchange="handleGradBgUpload(event)" style="font-size:0.7rem; color:#ccc; width:150px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="applyGraduationConfig()" style="width:100%; margin-top:14px; background:var(--accent); border:none; color:#111; font-weight:bold; padding:8px; border-radius:6px; cursor:pointer; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">套用並重新生成</button>
+                </div>`;
+            }
+
             div.innerHTML = `
  <div class="share-item-header">
  <span class="share-item-title">${config.icon} ${config.name}</span>
+ <div style="display:flex; align-items:center;">
+ ${gearBtn}
  <button class="share-item-download" onclick="downloadShareLayout('${type}')">⬇️ 下載</button>
  </div>
+ </div>
+ ${configUI}
  <div class="share-item-preview" id="preview-${type}">
  ${getSkeletonHTML(type)}
  </div>
@@ -21708,6 +21753,75 @@
 
             return div;
         }
+
+        window.toggleGraduationConfigUI = function(e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            const panel = document.getElementById('grad-config-panel');
+            if (panel) {
+                const isHidden = panel.style.display === 'none';
+                panel.style.display = isHidden ? 'block' : 'none';
+            }
+        };
+
+        window.setGradConfig = function(key, value, btn) {
+            if (!window.g_graduationConfig) {
+                window.g_graduationConfig = {
+                    theme: 'dark',
+                    rankDisplay: 'complete',
+                    bgType: 'default',
+                    bgUrl: ''
+                };
+            }
+            window.g_graduationConfig[key] = value;
+            
+            // Update UI buttons styling in the same container/parent
+            if (btn && btn.parentElement) {
+                btn.parentElement.querySelectorAll('.grad-config-btn').forEach(b => {
+                    b.style.background = '#222';
+                    b.style.color = '#ccc';
+                });
+                btn.style.background = 'var(--accent)';
+                btn.style.color = '#111';
+            }
+
+            // Toggle URL/Upload fields when bgType changes
+            if (key === 'bgType') {
+                const inputs = document.getElementById('grad-custom-bg-inputs');
+                if (inputs) {
+                    inputs.style.display = value === 'custom' ? 'block' : 'none';
+                }
+            }
+        };
+
+        window.handleGradBgUrlChange = function(url) {
+            if (!window.g_graduationConfig) return;
+            window.g_graduationConfig.bgUrl = url;
+        };
+
+        window.handleGradBgUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (!window.g_graduationConfig) return;
+                window.g_graduationConfig.bgUrl = e.target.result; // Base64 DataURL
+                const urlInput = document.getElementById('grad-bg-url');
+                if (urlInput) {
+                    urlInput.value = "[本地上傳圖片]";
+                }
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.applyGraduationConfig = function() {
+            // Save configuration to localStorage
+            localStorage.setItem('g_graduationConfig', JSON.stringify(window.g_graduationConfig));
+            // Trigger graduation share layout generation again
+            renderShareLayout('graduation');
+        };
 
         function getSkeletonHTML(type) {
             const common = `
@@ -21785,7 +21899,7 @@
         function generateDefaultLayout(rankData) {
             let rankHtml = '<span style="color:#666">暫無排名資料</span>';
             if (rankData) {
-                rankHtml = `<div class="share-rank-main">排名: ${rankData.rank} / ${rankData.total} <span style="font-size:1rem">(${rankData.pr}%)</span></div><div class="share-rank-sub">分數: ${rankData.score}</div>`;
+                rankHtml = `<div class="share-rank-main">排名: ${rankData.rank} / ${rankData.total} <span style="font-size:1rem">(${rankData.pr})</span></div><div class="share-rank-sub">分數: ${rankData.score}</div>`;
             }
 
             const tableClone = document.getElementById('result-table').cloneNode(true);
@@ -21902,9 +22016,86 @@
         }
 
         function generateGraduationLayout() {
+            // Load configuration settings
+            if (!window.g_graduationConfig) {
+                window.g_graduationConfig = {
+                    theme: 'dark',
+                    rankDisplay: 'complete',
+                    bgType: 'default',
+                    bgUrl: ''
+                };
+                try {
+                    const saved = localStorage.getItem('g_graduationConfig');
+                    if (saved) {
+                        window.g_graduationConfig = JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error("Failed to load graduation config", e);
+                }
+            }
+
+            const config = window.g_graduationConfig;
+            const isLight = config.theme === 'light';
+            const textMain = isLight ? '#1e1e24' : '#ffffff';
+            const textSub = isLight ? '#4a5568' : '#aaaaaa';
+            const textMuted = isLight ? '#718096' : '#666666';
+            const borderCol = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)';
+            const cardBg = isLight ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)';
+            const blockBg = isLight ? 'rgba(255,255,255,0.85)' : 'rgba(255, 255, 255, 0.015)';
+            const blockBorder = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.05)';
+
+            // Background configuration
+            let customBgStyle = '';
+            if (config.bgType === 'custom' && config.bgUrl) {
+                customBgStyle = `background-image: url('${config.bgUrl}'); background-size: cover; background-position: center;`;
+            } else {
+                customBgStyle = isLight 
+                    ? `background: #f8f9fa;` 
+                    : `background: #0a0a0d;`;
+            }
+
+            function getGradTeamName(members) {
+                const names = members.map(m => m.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4));
+                if (names.includes("今汐")) {
+                    if (names.includes("折枝")) return "今汐折枝隊";
+                    if (names.includes("淵武")) return "今汐深淵隊";
+                    if (names.includes("吟霖")) return "今汐吟霖隊";
+                    return "今汐爆發隊";
+                }
+                if (names.includes("忌炎")) {
+                    if (names.includes("莫特斐")) return "忌炎航空隊";
+                    return "忌炎狂風隊";
+                }
+                if (names.includes("長離")) {
+                    if (names.includes("安可")) return "長安融羽隊";
+                    if (names.includes("赤霞")) return "長離赤霞隊";
+                    return "烈火雙核隊";
+                }
+                if (names.includes("相里要")) {
+                    if (names.includes("吟霖")) return "要霖雷鳴隊";
+                    return "極限萬象隊";
+                }
+                if (names.includes("卡卡羅") && names.includes("吟霖")) {
+                    return "卡卡羅極雷隊";
+                }
+                if (names.includes("安可") && names.includes("散華")) {
+                    return "安可散華隊";
+                }
+                if (names.includes("椿")) {
+                    return "椿意盎然隊";
+                }
+                const dps = members.find(m => m.type === 'dps') || members[0];
+                if (dps) {
+                    return `${dps.role.replace(/[^\u4e00-\u9fa5]/g, '')}主力隊`;
+                }
+                return "精選配隊";
+            }
+
             const history = getCleanHistory();
             const roleBest = {};
             history.forEach(item => {
+                // 自訂角色不要納入畢業總表
+                if (item.isCustomRole || item.uploadStatus === 'custom_local') return;
                 const role = item.global?.role;
                 if (!role) return;
                 let avgScore = 0, echoCount = 0;
@@ -21917,7 +22108,40 @@
                 });
                 avgScore = echoCount > 0 ? (avgScore / echoCount) : 0;
                 if (!roleBest[role] || avgScore > roleBest[role].score) {
-                    roleBest[role] = { score: avgScore, ts: item.ts, uid: item.global.uid };
+                    const chainCount = (item.chains || []).filter(Boolean).length;
+                    const localRank = (typeof calculateLocalRankInfo === 'function') ? calculateLocalRankInfo(role, item.global.uid, avgScore) : null;
+                    
+                    // Track equipped suites
+                    const suites = {};
+                    (item.echoes || []).forEach(e => {
+                        if (e && e.cost) {
+                            const parts = String(e.cost).split('-');
+                            if (parts.length > 1) {
+                                const suiteName = parts[1];
+                                if (suiteName) {
+                                    suites[suiteName] = (suites[suiteName] || 0) + 1;
+                                }
+                            }
+                        }
+                    });
+                    const activeSuites = [];
+                    Object.entries(suites).forEach(([name, count]) => {
+                        if (count >= 5) {
+                            activeSuites.push({ name, count: 5 });
+                        } else if (count >= 2) {
+                            activeSuites.push({ name, count: 2 });
+                        }
+                    });
+                    activeSuites.sort((a, b) => b.count - a.count);
+
+                    roleBest[role] = { 
+                        score: avgScore, 
+                        ts: item.ts, 
+                        uid: item.global.uid, 
+                        chain: chainCount, 
+                        rankInfo: localRank,
+                        activeSuites: activeSuites
+                    };
                 }
             });
 
@@ -21933,29 +22157,155 @@
                 buckets[group].push({ role, ...data, grad });
             });
 
-            const renderCardList = (arr, title, colorClass, emptyText, borderCol) => {
+            // Generate dynamic teams based on the characters in roleBest
+            const allCardsForTeaming = [];
+            Object.keys(roleBest).forEach(role => {
+                const data = roleBest[role];
+                allCardsForTeaming.push({
+                    role,
+                    score: data.score,
+                    chainCount: data.chain,
+                    type: grad_getRoleType(role),
+                    activeSuites: data.activeSuites
+                });
+            });
+
+            // Dynamic pairing teams solver
+            const dpsPool = allCardsForTeaming.filter(c => c.type === 'dps').sort((a, b) => b.score - a.score);
+            const subPool = allCardsForTeaming.filter(c => c.type === 'sub').sort((a, b) => b.score - a.score);
+            const healerPool = allCardsForTeaming.filter(c => c.type === 'healer').sort((a, b) => b.score - a.score);
+
+            const dynamicTeams = [];
+            const used = new Set();
+            const pick = pool => pool.find(c => !used.has(c.role));
+            const commit = (members, synergyPair, synergyLabel) => {
+                members.forEach(m => used.add(m.role));
+                dynamicTeams.push({ members, synergyPair: !!synergyPair, synergyLabel: synergyLabel || '' });
+            };
+
+            // Pass 1: Synergy-first (DPS + Sub + Healer)
+            for (const d of dpsPool) {
+                if (used.has(d.role)) continue;
+                const prefNames = typeof grad_getSynergy === 'function' ? grad_getSynergy(d.role) : [];
+                let bestSub = null, synergyLabel = '';
+                for (const pn of prefNames) {
+                    bestSub = subPool.find(s => !used.has(s.role) && s.role.replace(/[^\u4e00-\u9fa5]/g, '').includes(pn));
+                    if (bestSub) { synergyLabel = pn; break; }
+                }
+                if (!bestSub) bestSub = pick(subPool);
+                const h = pick(healerPool);
+                if (bestSub && h) {
+                    commit([d, bestSub, h], !!synergyLabel, synergyLabel);
+                }
+            }
+
+            // Pass 2: Remaining DPS
+            for (const d of dpsPool) {
+                if (used.has(d.role)) continue;
+                const bestSub = pick(subPool);
+                const h = pick(healerPool);
+                if (bestSub) {
+                    commit([d, bestSub], false, '');
+                } else if (h) {
+                    commit([d, h], false, '');
+                }
+            }
+
+            // Pass 3: Remaining sub + healer pairs
+            const remSub = subPool.filter(c => !used.has(c.role));
+            const remHeal = healerPool.filter(c => !used.has(c.role));
+            if (remSub.length > 0 && remHeal.length > 0) {
+                commit([remSub[0], remHeal[0]], false, '');
+            }
+
+            // Dynamic Scaling configurations based on character count
+            const totalChars = Object.keys(roleBest).length;
+            let cardWidth = 200;
+            let imgSize = 75;
+            let nameFontSize = '0.95rem';
+            let scoreFontSize = '1.05rem';
+            
+            if (totalChars <= 6) {
+                cardWidth = 260;
+                imgSize = 96;
+                nameFontSize = '1.1rem';
+                scoreFontSize = '1.25rem';
+            } else if (totalChars <= 12) {
+                cardWidth = 230;
+                imgSize = 86;
+                nameFontSize = '1.05rem';
+                scoreFontSize = '1.15rem';
+            }
+
+            const renderCardList = (arr, title, colorClass, emptyText, borderColVal) => {
                 const glIsEN = g_lang === 'en';
                 arr.sort((a, b) => b.score - a.score);
-                let out = `<div style="background:#1e1e24; border:1px solid ${borderCol}; border-radius:12px; padding:20px; margin-bottom:15px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
-                    <h3 style="color:${colorClass}; margin-top:0; border-bottom:1px solid #333; padding-bottom:10px; display:flex; justify-content:center; align-items:center; gap:10px;">
-                        <span>${title}</span>
-                        <span style="font-size:0.85rem; background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px; color:#ddd;">${arr.length}</span>
+                let out = `<div style="background: ${isLight ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.015)'}; border: 1px solid ${borderCol}; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,${isLight ? '0.08' : '0.4'}); backdrop-filter: blur(10px);">
+                    <h3 style="color:${textMain}; margin-top:0; border-bottom:1px solid ${borderCol}; padding-bottom:12px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size: 1.1rem; font-weight: 900; letter-spacing: 0.5px; display:flex; align-items:center; gap:8px;">${title}</span>
+                        <span style="font-size:0.8rem; background:${colorClass}18; border:1px solid ${colorClass}44; padding:2px 10px; border-radius:10px; color:${colorClass}; font-weight:900;">${arr.length}</span>
                     </h3>
-                    <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">`;
-                if (arr.length === 0) out += `<div style="color:#666; width:100%; text-align:center; padding:20px;">${emptyText}</div>`;
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(${cardWidth}px, 1fr)); gap: 14px; justify-content: center; width: 100%;">`;
+                if (arr.length === 0) out += `<div style="color:${textSub}; grid-column: 1 / -1; text-align:center; padding:20px 15px; font-size: 0.9rem;">${emptyText}</div>`;
                 arr.forEach(g => {
                     let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                     const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
-                    const iconHtml = roleIconUrl ? `<img src="${roleIconUrl}" style="width:55px; height:55px; border-radius:50%; object-fit:cover; border:2px solid ${colorClass}; margin-bottom:6px;">` : `<div style="width:55px;height:55px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 6px auto;border:2px solid ${colorClass};">?</div>`;
+                    const iconHtml = roleIconUrl 
+                        ? `<img src="${roleIconUrl}" style="width:${imgSize}px; height:${imgSize}px; border-radius:16px; object-fit:cover; border:2px solid ${colorClass}; box-shadow: 0 4px 15px ${colorClass}33; display: block;">` 
+                        : `<div style="width:${imgSize}px; height:${imgSize}px; border-radius:16px; background:#222; display:flex; align-items:center; justify-content:center; font-size:1.8rem; border:2px solid ${colorClass}; color:#555;">?</div>`;
+                    
                     const enName = lookupRoleEN(g.role) || '';
                     const primaryName = (glIsEN && enName) ? enName : g.role;
-                    const subName = (glIsEN && enName) ? `<div style="font-size:0.65rem; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;" title="${g.role}">${g.role}</div>` : '';
-                    out += `<div style="width:100px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:12px 6px; text-align:center;">`;
-                    out += `<div style="font-size:0.75rem; background:#222; padding:2px 6px; border-radius:6px; font-weight:bold; border:1px solid ${colorClass}; margin-bottom:5px;">${g.grad.l || g.grad.label || ''}</div>`;
+                    const subName = (glIsEN && enName) ? `<div style="font-size:0.7rem; color:${isLight ? '#718096' : '#777'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px;" title="${g.role}">${g.role}</div>` : '';
+                    
+                    out += `<div style="background:${isLight ? 'rgba(0,0,0,0.015)' : 'rgba(255,255,255,0.02)'}; border:1px solid ${isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.06)'}; border-radius:16px; padding:12px; display:flex; align-items:center; gap:14px; transition: transform 0.2s;">`;
+                    
+                    // Avatar Left Side
+                    out += `<div style="position:relative; flex-shrink:0;">`;
                     out += iconHtml;
-                    out += `<div style="font-size:0.9rem; font-weight:bold; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g.role}">${escapeHtml(primaryName)}</div>`;
-                    out += subName;
-                    out += `<div style="color:${colorClass}; font-size:0.85rem; font-family:'JetBrains Mono'; font-weight:bold; margin-top:4px;">${safeFixed(g.score, 1)}%</div>`;
+                    out += `<div style="position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); font-size: 0.65rem; background: rgba(0,0,0,0.8); padding: 2px 8px; border-radius:10px; font-weight:900; border:1px solid ${colorClass}66; color:${colorClass}; white-space:nowrap; z-index:2; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">${g.grad.l || g.grad.label || ''}</div>`;
+                    out += `</div>`;
+                    
+                    // Info Right Side
+                    out += `<div style="flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;">`;
+                    out += `<div style="font-size:${nameFontSize}; font-weight:900; color:${textMain}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; text-align:left;" title="${g.role}">${escapeHtml(primaryName)}</div>`;
+                    if (subName) out += `<div style="text-align:left; width:100%;">${subName}</div>`;
+                    
+                    out += `<div style="color:${colorClass}; font-size:${scoreFontSize}; font-family:'JetBrains Mono'; font-weight:900; margin-top:4px;">${safeFixed(g.score, 1)}%</div>`;
+                    
+                    out += `<div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; align-items:center;">`;
+                    // Chain Balls
+                    out += `<div style="display:flex; gap:3px; align-items:center;" title="${g.chain}鏈">`;
+                    out += Array.from({length: 6}).map((_, i) => `<div style="width:7px; height:7px; border-radius:50%; background:${i < (g.chain || 0) ? '#ffd700' : (isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.15)')}; ${i < (g.chain || 0) ? 'box-shadow: 0 0 5px rgba(255,215,0,0.6);' : ''}"></div>`).join('');
+                    out += `</div>`;
+                    
+                    // Suite Icons or Rank Info
+                    if (config.rankDisplay === 'suite') {
+                        if (g.activeSuites && g.activeSuites.length > 0) {
+                            out += `<div style="display:flex; gap:4px; align-items:center;">`;
+                            g.activeSuites.forEach(suiteObj => {
+                                const iconUrl = ATTRIBUTES_PROFILE_PICTURE[suiteObj.name];
+                                if (iconUrl) {
+                                    out += `<img src="${iconUrl}" style="width:18px; height:18px; border-radius:4px; object-fit:contain; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);" title="${suiteObj.name} (${suiteObj.count}件套)">`;
+                                }
+                            });
+                            out += `</div>`;
+                        } else {
+                            out += `<span style="font-size:0.6rem; color:${textMuted}; background:${isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.08)'}; padding:1px 5px; border-radius:4px;">無套裝</span>`;
+                        }
+                    } else {
+                        if (g.rankInfo) {
+                            if (g.rankInfo.isLoading) {
+                                out += `<span style="font-size:0.6rem; color:#aaa; background:rgba(255,255,255,0.08); padding:1px 5px; border-radius:4px;">${glIsEN ? 'Loading...' : '載入中'}</span>`;
+                            } else if (g.rankInfo.isExpected) {
+                                out += `<span style="font-size:0.6rem; color:#61afef; background:rgba(97,175,239,0.08); padding:1px 5px; border-radius:4px; border:1px solid rgba(97,175,239,0.25);">${glIsEN ? 'Exp. ' : '預期'}${g.rankInfo.prStr}</span>`;
+                            } else {
+                                out += `<span style="font-size:0.6rem; color:#00ffb4; background:rgba(0,255,180,0.08); padding:1px 5px; border-radius:4px; border:1px solid rgba(0,255,180,0.25);">${g.rankInfo.prStr}</span>`;
+                            }
+                        }
+                    }
+                    out += `</div>`;
+                    out += `</div>`;
                     out += `</div>`;
                 });
                 out += `</div></div>`;
@@ -21963,23 +22313,114 @@
             };
 
             const glIsEN = g_lang === 'en';
-            let out = `<div id="capture-graduation-summary" style="background:#121214; padding:35px; min-width:850px; font-family:var(--font); color:#fff; border-radius:1px;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px; border-bottom:1px solid #333; padding-bottom:15px;">
+            let out = `<div id="capture-graduation-summary" style="${customBgStyle} padding:30px; min-width:960px; font-family:'Inter', 'Outfit', var(--font); color:${textMain}; border-radius:4px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position:relative;">
+                <div style="position:absolute; inset:0; background:${isLight ? 'radial-gradient(circle at 10% 10%, rgba(229,192,123,0.1) 0%, transparent 60%)' : 'radial-gradient(circle at 10% 10%, rgba(229,192,123,0.04) 0%, transparent 60%), radial-gradient(circle at 90% 90%, rgba(97,175,239,0.03) 0%, transparent 60%)'}; pointer-events:none; border-radius:inherit;"></div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:28px; border-bottom:1px solid ${borderCol}; padding-bottom:16px; position:relative; z-index:1;">
                     <div>
-                        <h1 style="color:var(--accent); margin:0; font-size:2rem; letter-spacing:1px;">${glIsEN ? '🎓 Personal Score Summary' : '🎓 角色個人評分畢業總表'}</h1>
-                        <p style="color:#666; margin:5px 0 0 0; font-size:0.85rem;">${glIsEN ? 'GAME-ZH Echo Analyzer | Professional Analysis' : 'GAME-ZH 聲骸分析儀 | 提供專業分析服務'}</p>
+                        <h1 style="color:${isLight ? '#1a1a24' : 'var(--accent)'}; margin:0; font-size:2.2rem; letter-spacing:1px; font-weight:900; text-shadow:0 0 20px rgba(229,192,123,${isLight ? '0.05' : '0.15'});">${glIsEN ? '🎓 Personal Score Summary' : '🎓 角色個人評分畢業總表'}</h1>
+                        <p style="color:${textSub}; margin:6px 0 0 0; font-size:0.85rem; font-weight:500;">${glIsEN ? 'GAME-ZH Echo Analyzer | Professional Analysis' : 'GAME-ZH 聲骸分析儀 | 提供專業分析服務'}</p>
                     </div>
                     <div style="text-align:right;">
-                        <div style="background:rgba(255,255,255,0.05); padding:6px 15px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-bottom:5px;">
-                            <span style="color:#888; font-size:0.8rem; margin-right:8px;">${glIsEN ? 'UID' : '當前 UID'}</span>
-                            <span style="color:var(--accent); font-family:'JetBrains Mono'; font-weight:bold; font-size:1.1rem;">${g_currentUserUid || 'N/A'}</span>
+                        <div style="background:${isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.02)'}; padding:6px 16px; border-radius:10px; border:1px solid ${borderCol}; margin-bottom:6px; display:inline-block;">
+                            <span style="color:${textSub}; font-size:0.78rem; font-weight:700; margin-right:8px; text-transform:uppercase; letter-spacing:0.5px;">${glIsEN ? 'UID' : '當前 UID'}</span>
+                            <span style="color:${isLight ? '#2c5282' : 'var(--accent)'}; font-family:'JetBrains Mono'; font-weight:900; font-size:1.15rem;">${g_currentUserUid || 'N/A'}</span>
                         </div>
-                        <span style="color:#555; font-size:0.75rem;">📅 ${glIsEN ? 'Generated: ' : '生成時間: '}${new Date().toLocaleString()}</span>
+                        <br/>
+                        <span style="color:${textMuted}; font-size:0.75rem; font-weight:500;">📅 ${glIsEN ? 'Generated: ' : '生成時間: '}${new Date().toLocaleString()}</span>
                     </div>
                 </div>`;
-            out += renderCardList([...buckets.heirloom, ...buckets.grand], glIsEN ? "🏆 Highly Sufficient (≥80%)" : "🏆 極品畢業 (≥80%)", "#ffca28", glIsEN ? "No highly sufficient characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
-            out += renderCardList(buckets.med, glIsEN ? "🏅 Sufficient (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", glIsEN ? "No sufficient characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
-            out += renderCardList(buckets.none, glIsEN ? "❌ Insufficient (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", glIsEN ? "No insufficient characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
+            let leftColHtml = "";
+            let rightColHtml = "";
+
+            rightColHtml += renderCardList([...buckets.heirloom, ...buckets.grand], glIsEN ? "🏆 Elite Graduation (≥65%)" : "🏆 極品畢業 (≥65%)", "#ffca28", glIsEN ? "No elite characters yet" : "尚無極品畢業角色", "rgba(255, 202, 40, 0.2)");
+            rightColHtml += renderCardList(buckets.med, glIsEN ? "🏅 Standard Graduation (≥50%)" : "🏅 標準畢業 (≥50%)", "#78e08f", glIsEN ? "No graduated characters yet" : "尚無標準畢業角色", "rgba(120, 224, 143, 0.2)");
+            rightColHtml += renderCardList(buckets.none, glIsEN ? "❌ Insufficient (<50%)" : "❌ 未畢業 (<50%)", "#ff5555", glIsEN ? "No insufficient characters" : "無未畢業角色", "rgba(255, 85, 85, 0.2)");
+            
+            // Add Recommended Team Pairing Block from Dynamic Matrix Pairing
+            if (dynamicTeams && dynamicTeams.length > 0) {
+                leftColHtml += `<div style="background:${blockBg}; border:1px solid ${blockBorder}; border-radius:16px; padding:20px; box-shadow:0 8px 32px rgba(0,0,0,${isLight ? '0.06' : '0.4'}); height:calc(100% - 40px); backdrop-filter:blur(10px); display:flex; flex-direction:column; gap:16px;">`;
+                leftColHtml += `<h3 style="color:${isLight ? '#2c5282' : 'var(--accent)'}; margin:0; border-bottom:1px solid ${borderCol}; padding-bottom:12px; font-size:1.15rem; font-weight:900; letter-spacing:0.5px; display:flex; align-items:center; gap:8px;">`;
+                leftColHtml += `👥 ${glIsEN ? 'Recommended Meta Teams' : '戰略矩陣 · 推薦配對'}`;
+                leftColHtml += `</h3>`;
+                leftColHtml += `<div style="display:flex; flex-direction:column; gap:16px;">`;
+                
+                const getRoleIconHtml = (name, size = 38, typeColor = '#aaa') => {
+                    let roleKey = name.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
+                    let url = RESONATORS_PROFILE_PICTURE[roleKey];
+                    if (url) return `<img src="${url}" style="width:${size}px; height:${size}px; border-radius:50%; object-fit:cover; display:inline-block; border:2px solid ${typeColor}; box-shadow: 0 4px 12px ${typeColor}33;">`;
+                    return `<div style="width:${size}px; height:${size}px; border-radius:50%; background:#222; border:2px solid ${typeColor}; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; color:#555;">?</div>`;
+                };
+
+                dynamicTeams.slice(0, 5).forEach((teamObj, ti) => {
+                    const team = teamObj.members;
+                    const hasSynergy = teamObj.synergyPair;
+                    const synLabel = teamObj.synergyLabel;
+                    const avgScore = safeFixed(team.reduce((s, c) => s + c.score, 0) / team.length, 1);
+                    const hasHealer = team.some(c => c.type === 'healer');
+                    const hasSub = team.some(c => c.type === 'sub');
+                    const hasDps = team.some(c => c.type === 'dps');
+                    const isFullTeam = hasDps && hasSub && hasHealer;
+                    let compTag = '';
+                    if (isFullTeam) compTag = glIsEN ? 'Meta' : '標準配隊';
+                    else if (hasHealer && hasDps) compTag = glIsEN ? 'Sustain' : '含生存';
+                    else if (hasDps && hasSub) compTag = glIsEN ? 'Offensive' : '雙輸出';
+                    else compTag = glIsEN ? 'Mixed' : '編隊';
+                    const tagColor = isFullTeam ? '#78e08f' : hasHealer ? '#56b6c2' : '#e5c07b';
+                    const synergy = Math.min(100, parseFloat(avgScore) + (isFullTeam ? 8 : 0) + (hasHealer ? 3 : 0) + (hasSynergy ? 5 : 0));
+
+                    const teamName = getGradTeamName(team);
+
+                    leftColHtml += `<div style="background:${isLight ? 'rgba(0,0,0,0.015)' : 'rgba(255,255,255,0.03)'}; border:1px solid ${borderCol}; border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:14px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">`;
+                    
+                    leftColHtml += `<div style="display:flex; justify-content:space-between; align-items:center;">`;
+                    leftColHtml += `<span style="font-size:0.85rem; font-weight:900; color:${textMain}; letter-spacing:0.5px;">${teamName}</span>`;
+                    leftColHtml += `<div style="display:flex; gap:6px; align-items:center;">`;
+                    leftColHtml += `<span style="font-size:0.65rem; color:${tagColor}; border:1px solid ${tagColor}44; background:${tagColor}15; border-radius:6px; padding:2px 8px; font-weight:900;">${compTag}</span>`;
+                    if (hasSynergy) leftColHtml += `<span style="font-size:0.65rem; color:#e5c07b; border:1px solid #e5c07b44; background:rgba(229,192,123,0.1); border-radius:6px; padding:2px 8px; font-weight:900;">💎 ${synLabel}</span>`;
+                    leftColHtml += `</div>`;
+                    leftColHtml += `</div>`;
+
+                    leftColHtml += `<div style="display:flex; align-items:stretch; gap:10px;">`;
+                    team.forEach(c => {
+                        const tc = GRAD_TYPE_COLOR[c.type] || '#aaa';
+                        leftColHtml += `<div style="display:flex; flex-direction:column; align-items:center; gap:8px; background:${isLight ? 'rgba(0,0,0,0.02)' : 'rgba(0,0,0,0.25)'}; padding:12px 6px; border-radius:12px; border:1px solid ${isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.03)'}; flex:1; min-width:0;">`;
+                        leftColHtml += getRoleIconHtml(c.role, 46, tc);
+                        leftColHtml += `<div style="display:flex; flex-direction:column; align-items:center; width:100%;">`;
+                        leftColHtml += `<div style="font-size:0.8rem; font-weight:900; color:${textMain}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; text-align:center;">${c.role}</div>`;
+                        leftColHtml += `</div>`;
+                        leftColHtml += `</div>`;
+                    });
+                    leftColHtml += `</div>`;
+
+                    leftColHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:${textSub}; border-top:1px dashed ${borderCol}; padding-top:12px; margin-top:2px;">`;
+                    leftColHtml += `<span>均分 <b style="color:${textMain}; font-size:0.9rem;">${avgScore}%</b></span>`;
+                    leftColHtml += `<span>戰力綜效 <b style="color:${isLight ? '#2c5282' : 'var(--accent)'}; font-weight:900; font-size:1rem;">${safeFixed(synergy, 0)}</b></span>`;
+                    leftColHtml += `</div>`;
+
+                    leftColHtml += `</div>`;
+                });
+                leftColHtml += `</div></div>`;
+            }
+            
+            if (leftColHtml) {
+                out += `<div style="display:flex; gap:20px; align-items:stretch; position:relative; z-index:1;">`;
+                out += `<div style="flex:0 0 350px;">${leftColHtml}</div>`;
+                out += `<div style="flex:1; min-width:0;">${rightColHtml}</div>`;
+                out += `</div>`;
+            } else {
+                out += rightColHtml;
+            }
+
+            // Web App URL & Branding Footer
+            out += `<div style="margin-top:25px; border-top:1px solid ${borderCol}; padding-top:16px; display:flex; justify-content:space-between; align-items:center; color:${textMuted}; font-size:0.75rem; font-family:var(--font); position:relative; z-index:1;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="color:${isLight ? '#2c5282' : 'var(--accent)'}; font-weight:900; letter-spacing:0.5px;">🔗 聲骸分析儀</span>
+                    <span style="color:rgba(255,255,255,0.15);">|</span>
+                    <span style="color:${textSub}; font-family:'JetBrains Mono'; font-weight:700;">https://992851qaz-bot.github.io/-/</span>
+                </div>
+                <div style="color:${textMuted}; font-weight:500;">提供專業聲骸詞條評分 · 角色畢業總表 · 智能矩陣編隊</div>
+            </div>`;
+            
             out += `</div>`;
             return out;
         }
@@ -22011,7 +22452,7 @@
             const gradeInfo = getGrading(pctValue);
             const gradeClass = getGradeClass(pctValue);
             const rankMain = rankData ? `#${rankData.rank} / ${rankData.total}` : '未上榜';
-            const rankSub = rankData ? `前 ${rankData.pr}%` : '等待排名';
+            const rankSub = rankData ? `${rankData.pr}` : '等待排名';
             const displayScore = (totalScore * 1.25).toFixed(0);
             const displayMax = totalMax.toFixed(0);
 
@@ -24127,7 +24568,7 @@
             if (!g_imitateAtmosphere || g_imitateCost.propertyList.length >= 5) return;
             const slots = document.querySelectorAll('#imitate-list .imitate-empty-slot');
             if (!slots.length) return;
-
+            
             slots.forEach(slot => {
                 let titleEl = slot.querySelector('.atmosphere-title');
                 let valEl = slot.querySelector('.atmosphere-val');
@@ -24137,16 +24578,16 @@
                     let candidate = IMITATE_MONICK[sjs];
                     titleEl.innerText = candidate.property;
                     titleEl.style.color = '#fff';
-
+                    
                     const pool = fctValue[candidate.value].values;
                     let valIdx = Math.floor(Math.random() * pool.length);
                     valEl.innerText = pool[valIdx];
                     valEl.style.color = 'var(--accent)';
-
+                    
                     let rankNum = pool.length - valIdx;
                     tierEl.innerText = `T${rankNum}`;
                     tierEl.style.color = '#aaa';
-
+                    
                     slot.style.boxShadow = Math.random() > 0.5 ? '0 0 10px rgba(229, 192, 123, 0.2) inset' : 'none';
                 }
             });
@@ -24172,7 +24613,7 @@
                     }
                     potentials.sort((a, b) => b - a);
                     maxScore = potentials.slice(0, 5).reduce((a, b) => a + b, 0);
-
+                    
                     let validCount = 0;
                     stats.forEach(p => {
                         let w = build.weights[p.property] || 0;
@@ -24180,7 +24621,7 @@
                         score += val * w;
                         if (w > 0) validCount++;
                     });
-
+                    
                     if (maxScore > 0) {
                         let pct = (score / maxScore) * 100;
                         const buff = score * 0.25;
@@ -24199,7 +24640,7 @@
                     }
                 });
             }
-
+            
             window.__imitateAllRolesResults = results;
             window.__imitateAllRolesSortBy = 'finalPct';
             window.__imitateAllRolesSortDesc = true;
@@ -24226,7 +24667,7 @@
                 if (typeof vA === 'string') return desc ? vB.localeCompare(vA) : vA.localeCompare(vB);
                 return desc ? (vB - vA) : (vA - vB);
             });
-
+            
             const getSortIcon = (key) => currentSort === key ? (desc ? ' ▼' : ' ▲') : '';
 
             let html = `<div style="overflow-x:auto;">
@@ -24241,7 +24682,7 @@
                     <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('finalPct')">評級${getSortIcon('finalPct')}</th>
                     <th style="padding:8px 12px;border-bottom:1px solid #333;text-align:right;" onclick="imitate_renderAllRolesTable('finalPct')">評分 %${getSortIcon('finalPct')}</th>
                 </tr></thead><tbody>`;
-
+            
             const crIsEN = g_lang === 'en';
             results.forEach((r, idx) => {
                 const grading = getGrading(r.finalPct);
@@ -24299,8 +24740,8 @@
             let html = '';
             history.forEach((h, idx) => {
                 const dt = new Date(h.ts);
-                const timeStr = `${dt.getMonth() + 1}/${dt.getDate()} ${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`;
-
+                const timeStr = `${dt.getMonth()+1}/${dt.getDate()} ${dt.getHours().toString().padStart(2,'0')}:${dt.getMinutes().toString().padStart(2,'0')}`;
+                
                 let statsHtml = h.stats.map(s => {
                     return `<span style="display:inline-block; margin-right:8px; font-size:0.8rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);">
                         <span style="color:#aaa;">${s.property}</span> <span style="color:var(--ok); font-family:'JetBrains Mono';">${s.value}</span>
@@ -24337,7 +24778,7 @@
             document.getElementById('imitate-modal').style.display = 'flex';
             document.getElementById('imitate-mute-toggle').checked = g_imitateMute;
             let atToggle = document.getElementById('imitate-atmosphere-toggle');
-            if (atToggle) atToggle.checked = g_imitateAtmosphere;
+            if(atToggle) atToggle.checked = g_imitateAtmosphere;
             imitate_render();
             imitate_renderHistory();
 
@@ -24474,10 +24915,10 @@
             }
             let attempts = 0;
             const maxAttempts = 1000;
-            while (attempts < maxAttempts) {
+            while(attempts < maxAttempts) {
                 attempts++;
                 g_imitateCost.propertyList = [];
-                for (let k = 0; k < 5; k++) {
+                for(let k=0; k<5; k++) {
                     let sjs = Math.floor(Math.random() * IMITATE_MONICK.length);
                     for (let i = 0; i < 20; i++) {
                         let candidate = IMITATE_MONICK[sjs];
