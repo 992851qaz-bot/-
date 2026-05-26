@@ -5,17 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting...</title>
     <script>
-        // Handle pathname normalization and redirect to 0524.html
-        (function() {
-            const pathname = window.location.pathname;
-            // Remove trailing slash if present and not the root
-            const normalizedPath = pathname.replace(/\/$/, '') || '/';
-            // Check if we need to add trailing slash for consistency
-            if (pathname !== normalizedPath && pathname.endsWith('/')) {
-                window.location.replace(normalizedPath + '0524.html');
-            } else {
-                window.location.replace(normalizedPath + '/0524.html');
-            }
+        (function () {
+            const base = window.location.href.endsWith('/') ? window.location.href : window.location.href + '/';
+            window.location.replace(new URL('0524.html', base).toString());
         })();
     </script>
 </head>
