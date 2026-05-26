@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        // Handle pathname normalization and redirect to sibling 0524.html
+        (function() {
+            const pathname = window.location.pathname;
+            // Navigate to parent directory (replacing /docs with root) and load 0524.html
+            const normalizedPath = pathname.replace(/\/docs\/?$/, '') || '/';
+            window.location.replace(normalizedPath + '0524.html');
+        })();
+    </script>
+</head>
+<body>
+    <p>Redirecting to application...</p>
+</body>
+</html>
