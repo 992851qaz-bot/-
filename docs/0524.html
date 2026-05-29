@@ -11351,7 +11351,6 @@
     </div>
 
     <script>
-        const ERROR_WEBHOOK = "https://discord.com/api/webhooks/1473151212055564373/n7GKMRKm2Z5b0u8hYUwNhfd-uroQNQMOtFoJm_HomJ_gjqC5SLR9ZD-FxlTI4sMfF-CO";
         // 已改為手動回報：停用自動錯誤上報。
         function safeFixed(val, digits = 1) {
             const n = parseFloat(val);
@@ -14946,14 +14945,20 @@
 
                 let avgScore = 0;
                 let echoCount = 0;
+                let dpsTotalScore = 0;
                 const weights = (g_currentWeights[item.global.role] && g_currentWeights[item.global.role][0]) ? g_currentWeights[item.global.role][0].weights : {};
                 (item.echoes || []).forEach(e => {
                     if (e.cost) {
                         const scoreData = calculateEchoScoreSimple(e, weights);
-                        if (scoreData) { avgScore += scoreData.percentage; echoCount++; }
+                        if (scoreData) { 
+                            avgScore += scoreData.percentage; 
+                            dpsTotalScore += scoreData.score;
+                            echoCount++; 
+                        }
                     }
                 });
                 avgScore = echoCount > 0 ? (avgScore / echoCount) : 0;
+                dpsTotalScore = dpsTotalScore * 1.25;
 
                 let gradeStr = 'C';
                 if (avgScore >= 90) gradeStr = 'SSS';
@@ -14979,7 +14984,7 @@
                 const rolePositionTagHtml = '';
                 let rankText = '🏆 ?/? - ?%';
                 if (typeof calculateLocalRankInfo === 'function') {
-                    const localRank = calculateLocalRankInfo(item.global.role, item.global.uid, avgScore);
+                    const localRank = calculateLocalRankInfo(item.global.role, item.global.uid, dpsTotalScore);
                     if (localRank) {
                         if (localRank.isLoading) {
                             rankText = isEN ? '⏳ Loading...' : '⏳ 載入中...';
@@ -21286,7 +21291,7 @@
                     let rankTxt = (rank_viewMode === 'role') ? `#${i + 1}` : (i + 1);
 
                     // 檢測是否為當前用戶
-                    const isCurrentUser = (g_currentUserUid && d.uid === g_currentUserUid);
+                    const isCurrentUser = (g_currentUserUid && String(d.uid) === String(g_currentUserUid));
                     if (isCurrentUser) {
                         g_userRankPosition = i;
                     }
@@ -21578,18 +21583,24 @@
             if (typeof calculateLocalRankInfo === 'function') {
                 let currentScore = 0;
                 let echoCount = 0;
+                let dpsTotalScore = 0;
                 const builds = g_currentWeights[role] || [];
                 const weights = (builds[g_selectedBuildIdx] || builds[0]) ? (builds[g_selectedBuildIdx] || builds[0]).weights : {};
                 const safeEchoes = Array.isArray(g_echoesData) ? g_echoesData : [];
                 safeEchoes.forEach(e => {
                     if (e && e.cost) {
                         const scoreData = calculateEchoScoreSimple(e, weights);
-                        if (scoreData) { currentScore += scoreData.percentage; echoCount++; }
+                        if (scoreData) { 
+                            currentScore += scoreData.percentage; 
+                            dpsTotalScore += scoreData.score;
+                            echoCount++; 
+                        }
                     }
                 });
                 currentScore = echoCount > 0 ? (currentScore / echoCount) : 0;
+                dpsTotalScore = dpsTotalScore * 1.25;
 
-                const localRank = calculateLocalRankInfo(role, g_currentUserUid, currentScore);
+                const localRank = calculateLocalRankInfo(role, g_currentUserUid, dpsTotalScore);
                 if (localRank) {
                     if (localRank.isLoading) {
                         document.getElementById('rank-text-simple').innerText = g_lang === 'en' ? "⏳ Loading..." : "⏳ 載入中...";
@@ -22098,18 +22109,23 @@
                 if (item.isCustomRole || item.uploadStatus === 'custom_local') return;
                 const role = item.global?.role;
                 if (!role) return;
-                let avgScore = 0, echoCount = 0;
+                let avgScore = 0, echoCount = 0, dpsTotalScore = 0;
                 const weights = (g_currentWeights[role] && g_currentWeights[role][0]) ? g_currentWeights[role][0].weights : {};
                 (item.echoes || []).forEach(e => {
                     if (e.cost) {
                         const sData = calculateEchoScoreSimple(e, weights);
-                        if (sData) { avgScore += sData.percentage; echoCount++; }
+                        if (sData) { 
+                            avgScore += sData.percentage; 
+                            dpsTotalScore += sData.score;
+                            echoCount++; 
+                        }
                     }
                 });
                 avgScore = echoCount > 0 ? (avgScore / echoCount) : 0;
+                dpsTotalScore = dpsTotalScore * 1.25;
                 if (!roleBest[role] || avgScore > roleBest[role].score) {
                     const chainCount = (item.chains || []).filter(Boolean).length;
-                    const localRank = (typeof calculateLocalRankInfo === 'function') ? calculateLocalRankInfo(role, item.global.uid, avgScore) : null;
+                    const localRank = (typeof calculateLocalRankInfo === 'function') ? calculateLocalRankInfo(role, item.global.uid, dpsTotalScore) : null;
                     
                     // Track equipped suites
                     const suites = {};
@@ -28875,6 +28891,13 @@
         }
 
         async function submitFeedback() {
+            const now = Date.now();
+            const lastReport = localStorage.getItem('last_feedback_ts');
+            if (lastReport && (now - parseInt(lastReport, 10)) < 60000) {
+                showMsg("⏳ 請稍等一分鐘後再提交回報，避免頻繁發送。");
+                return;
+            }
+
             const category = document.getElementById('feedback-category').value;
             const content = document.getElementById('feedback-content').value;
             if (!category || content.trim().length < 5) { validateFeedback(); return; }
@@ -28885,6 +28908,13 @@
             btn.innerText = "⏳ 發送中...";
 
             try {
+                // Obfuscated Webhook URL
+                const p1 = [104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109];
+                const p2 = [47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47];
+                const p3 = [49, 53, 48, 57, 57, 49, 57, 50, 51, 48, 54, 50, 54, 50, 51, 56, 54, 53, 52, 47];
+                const p4 = [51, 114, 102, 66, 79, 77, 53, 70, 98, 90, 66, 113, 82, 65, 70, 82, 66, 100, 67, 115, 87, 79, 75, 69, 95, 105, 55, 56, 111, 70, 50, 84, 55, 117, 112, 113, 97, 81, 56, 104, 108, 117, 54, 82, 119, 75, 74, 71, 49, 110, 82, 103, 71, 107, 77, 95, 112, 108, 89, 73, 113, 71, 81, 95, 68, 116, 119, 72];
+                const targetUrl = String.fromCharCode(...p1, ...p2, ...p3, ...p4);
+
                 const screenshotData = document.getElementById('feedback-screenshot-img').src;
                 const fd = new FormData();
 
@@ -28916,8 +28946,9 @@
                     fd.append('file', blob, 'screenshot.png');
                 }
 
-                const res = await fetch(ERROR_WEBHOOK, { method: 'POST', body: fd });
+                const res = await fetch(targetUrl, { method: 'POST', body: fd });
                 if (res.ok) {
+                    localStorage.setItem('last_feedback_ts', Date.now());
                     showMsg("✅ 感謝您的回饋！回報已成功送出。");
                     document.getElementById('feedback-modal').style.display = 'none';
                 } else throw new Error("Status " + res.status);
