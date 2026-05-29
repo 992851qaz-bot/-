@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GAME-ZH_Discord_Wuthering-Waves — 聲骸辨識與評分 (v48.1 Fixed)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.2/dist/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+--bg-start: #1a1a1a; --bg-end: #100e0b; --accent-primary: #ffb84d;
+--accent-secondary: #ffe9bf;
+--text-primary: #f0f0f0; --text-secondary: #a0a0a0; --panel-bg: rgba(26,26, 26, 0.5);
+--panel-border: rgba(255, 184, 77, 0.15); --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+--danger: #ef4444; --danger-bg: rgba(239, 68, 68, 0.1); --success: #22c55e; --info: #3b82f6; --purple: #8b5cf6;
+--font-sans: 'Inter', sans-serif; --font-mono: 'Fira Mono', monospace;
+--muted:#b08a00;
+--sss-color: #ff4848; --ss-color: #ff8a48; --s-color: #ffb84d;
+--a-color: #a7f3d0; --b-color: #93c5fd; --c-color: #e5e7eb; --d-color: #6b7280;
+}
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html { height: 100%; scroll-behavior: smooth; }
+body { margin: 0; background: linear-gradient(170deg, var(--bg-start), var(--bg-end)); color: var(--text-primary); font-family: var(--font-sans); display: flex; flex-direction: column; min-height: 100vh; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 184, 77, 0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 184, 77, 0.4); }
+.fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(8px); z-index: 10000; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; padding: 1rem; }
+.fullscreen-overlay.visible { opacity: 1; pointer-events: auto; }
+.modal-box { background: rgba(18, 14, 11, 0.8); border: 1px solid var(--panel-border); border-radius: 12px; padding: 20px 24px; box-shadow: var(--panel-shadow); width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 14px; position: relative; transform: scale(0.95); opacity: 0; transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease; }
+.fullscreen-overlay.visible .modal-box { transform: scale(1); opacity: 1; }
+.modal-close-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--text-secondary); font-size: 20px; cursor: pointer; line-height: 1; transition: transform 0.2s ease, color 0.2s ease; padding: 4px; }
+.modal-close-btn:hover { transform: scale(1.2); color: var(--text-primary); }
+#welcome-overlay { background: rgba(10, 8, 5, 0.6); }
+#error-overlay { background: rgba(127, 29, 29, 0.6); }
+#success-guide-overlay { background: rgba(22, 101, 52, 0.6); }
+.modal-box h2 { margin: 0 0 4px; text-align: center; font-size: 1.3rem;}
+.modal-box .form-group { display: flex; flex-direction: column; gap: 6px; }
+.modal-box label { font-size: 0.9rem; color: var(--text-secondary); }
+.modal-box .checkbox-label { flex-direction: row; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text-primary); }
+.modal-box input[type="checkbox"] { accent-color: var(--accent-primary); width: 16px; height: 16px; }
+.modal-box .modal-actions { display: flex; gap: 10px; margin-top: 12px; }
+.btn-primary { background: var(--accent-primary); color: var(--bg-start); font-weight: 700; flex: 1; }
+.btn-secondary { background: rgba(255,255,255,0.1); color: var(--text-primary); flex: 1; }
+#modal-error { color: var(--danger); font-size: 0.85rem; text-align: center; display: none; margin-top: 8px; }
+#error-details { background: rgba(0,0,0,0.3); border-radius: 6px; padding: 10px; font-family: var(--font-mono); font-size: 0.85rem; white-space: pre-wrap; max-height: 200px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1); }
+#error-reason { color: var(--danger); font-size: 1.1rem; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(26, 26, 26, 0.4); backdrop-filter: blur(12px); border-bottom: 1px solid var(--panel-border); flex-shrink: 0; z-index: 10; position: sticky; top: 0; }
+.header-title { font-weight: 700; font-size: 1.1rem; color: var(--accent-primary); margin-right: auto; }
+#uid-input { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); color: var(--accent-secondary); border-radius: 8px; padding: 8px 12px; width: 120px; text-align: center; font-family: var(--font-mono); transition: border-color 0.2s ease; font-size: 0.9rem; }
+#uid-input:focus { outline: none; border-color: var(--accent-primary); }
+#uid-input[readonly] { background: rgba(0,0,0,0.1); cursor: default; }
+#uid-input::placeholder { color: var(--text-secondary); }
+.action-btn { background: rgba(255, 184, 77, 0.1); border: 1px solid rgba(255, 184, 77, 0.2); padding: 8px 12px; border-radius: 8px; color: var(--accent-secondary); cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; font-size: 0.9rem; line-height: 1.2; }
+.action-btn:hover:not(:disabled) { background: rgba(255, 184, 77, 0.2); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(255, 184, 77, 0.1); }
+.action-btn:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+.action-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+.action-btn.icon-only { padding: 8px; width: 34px; height: 34px;}
+.container { display: flex; flex: 1; padding: 12px; gap: 12px; min-height: 0; position: relative; overflow: hidden; }
+.main-panel, .analyzer-panel { display: flex; flex: 1; gap: 12px; width: 100%; height: 100%; transition: opacity 0.3s ease, transform 0.3s ease; position: absolute; top: 0; left: 0; padding: 12px; }
+.analyzer-panel { opacity: 0; pointer-events: none; transform: translateX(20px); }
+body.analyzer-mode .main-panel { opacity: 0; pointer-events: none; transform: translateX(-20px); }
+body.analyzer-mode .analyzer-panel { opacity: 1; pointer-events: auto; transform: translateX(0); }
+.left { flex: 1 1 300px; min-width: 280px; max-width: 450px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; height: 100%; }
+.main { flex: 2 1 600px; display: flex; flex-direction: column; gap: 12px; min-width: 0; overflow-y: auto; height: 100%; }
+.card { background: var(--panel-bg); backdrop-filter: blur(10px); border: 1px solid var(--panel-border); padding: 14px; border-radius: 12px; box-shadow: var(--panel-shadow); transition: border-color 0.3s ease; display: flex; flex-direction: column; }
+.card:hover { border-color: rgba(255, 184, 77, 0.25); }
+.input-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.input label { font-weight: 500; color: var(--text-secondary); font-size: 0.9rem; }
+.input .ai-toggle { font-size: 0.85rem; padding: 6px 10px; }
+.input input[type=file], .input input[type=text] { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(255, 184, 77, 0.2); background: rgba(0, 0, 0, 0.3); color: var(--accent-secondary); font-family: var(--font-mono); transition: border-color 0.2s ease, box-shadow 0.2s ease; font-size: 0.9rem;}
+.input input[type=file]:focus, .input input[type=text]:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 6px rgba(255, 184, 77, 0.2); }
+#preview { display: none; width: 100%; border-radius: 6px; margin-top: 10px; max-height: 200px; object-fit: contain; border: 1px solid rgba(255, 184, 77, 0.1); -webkit-user-drag: none; user-select: none; }
+.history { flex: 1; min-height: 150px; overflow-y: auto;}
+.history h3 { margin: 0 0 10px 0; font-size: 1rem; font-weight: 700; color: var(--text-secondary); }
+.history-header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 10px; }
+.history-tools { display:flex; flex-wrap:wrap; gap:6px; }
+.history-tool-btn { padding: 5px 8px; font-size: 0.75rem; border-radius: 999px; }
+#historyList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+#historyList li { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 6px; background: rgba(255, 255, 255, 0.03); border: 1px solid transparent; cursor: pointer; color: var(--accent-secondary); transition: all 0.2s ease; overflow: hidden; }
+#historyList li:hover { transform: translateX(3px); background: rgba(255, 184, 77, 0.08); border-color: rgba(255, 184, 77, 0.2); }
+.history-text { flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: 0.85rem; margin-right: 8px; }
+.history-controls { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.history-controls .action-btn { padding: 5px 7px; font-size: 0.8rem; }
+.history-duplicate { border-left: 3px solid var(--danger); background: var(--danger-bg); }
+.dup-badge { background: var(--danger); color: #fff; padding: 2px 5px; border-radius: 4px; font-size: 0.7rem; margin-left: 6px; }
+.history-insufficient { border-left: 3px solid var(--purple); background: rgba(139, 92, 246, 0.1); }
+.insuff-badge { background: var(--purple); color: #fff; padding: 2px 5px; border-radius: 4px; font-size: 0.7rem; margin-left: 6px; }
+.upload-status-badge { padding: 2px 6px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; margin-left: 6px; white-space: nowrap; }
+.sync-status-badge { padding: 2px 6px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; margin-left: 6px; white-space: nowrap; }
+.tabs { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.tab-btn { background: transparent; border: 1px solid rgba(255, 184, 77, 0.25); padding: 7px 14px; border-radius: 6px; color: var(--accent-secondary); cursor: pointer; font-weight: 500; transition: all 0.2s ease; font-size: 0.85rem;}
+.tab-btn:hover { background: rgba(255, 184, 77, 0.1); }
+.tab-btn.active { background: var(--accent-primary); color: var(--bg-start); border-color: var(--accent-primary); font-weight: 700; }
+#result { flex: 1; padding: 16px; overflow: auto; min-height: 200px; }
+.table-wrapper { overflow-x: auto; }
+.parsed-table, .lookup-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 500px; }
+.parsed-table th, .parsed-table td, .lookup-table th, .lookup-table td { padding: 10px 6px; border: 1px solid rgba(255, 184, 77, 0.1); text-align: center; vertical-align: middle; white-space: nowrap; }
+.parsed-table th, .lookup-table th { background: rgba(255, 184, 77, 0.1); color: var(--accent-primary); font-weight: 700; font-family: var(--font-sans); }
+.parsed-table tr:nth-child(even), .lookup-table tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+.parsed-table tr:hover, .lookup-table tr:hover { background: rgba(255, 184, 77, 0.05); }
+.select, .value-input, .styled-input { width: 100%; padding: 7px; border-radius: 5px; border: 1px solid rgba(255, 184, 77, 0.3); background: #000; color: var(--accent-secondary); font-weight: 600; font-family: var(--font-mono); font-size: 0.85rem; }
+.select:focus, .value-input:focus, .styled-input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 6px rgba(255, 184, 77, 0.2); }
+.select:disabled, .value-input:disabled { background: rgba(0,0,0,0.2); color: var(--text-secondary); cursor: not-allowed; }
+.highlight { background: linear-gradient(45deg, #ffb84d, #ffd580); color: #2b1a00; font-weight: 700; }
+.fab { position: fixed; right: 12px; bottom: 12px; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-primary), #ffc96f); color: #421f00; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; border: none; cursor: pointer; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 3px 8px rgba(255, 184, 77, 0.2); z-index: 100; transition: all 0.3s ease; }
+.fab:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 5px 12px rgba(255, 184, 77, 0.3); }
+.loader { display: none; margin: 10px auto; width: 30px; height: 30px; border-radius: 50%; border: 3px solid rgba(255, 184, 77, 0.2); border-top-color: var(--accent-primary); animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin-animation { animation: spin 1s linear infinite; }
+.unmatched-warning-icon { display: inline-block; margin-left: 6px; color: var(--danger); }
+.duplicate-cell { border-color: var(--danger) !important; color: var(--danger) !important; background: var(--danger-bg) !important; }
+.role-tag { padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-family: var(--font-sans); }
+.role-main { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+.role-sub { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+.role-extra { background: rgba(107, 114, 128, 0.2); color: #e5e7eb; border: 1px solid rgba(107, 114, 128, 0.3); }
+#notification-container { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column-reverse; gap: 8px; width: 90%; max-width: 400px; align-items: center; }
+.notification { padding: 12px 16px; width: 100%; border-radius: 8px; color: #fff; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); opacity: 0; transform: translateY(100%); animation: slideUp 0.4s forwards; background: rgba(26, 26, 26, 0.75); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; }
+.notification.success { border-left: 4px solid var(--success); }
+.notification.error { border-left: 4px solid var(--danger); }
+.notification.duplicate { border-left: 4px solid var(--info); }
+@keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+#image-tooltip { position: fixed; display: none; z-index: 2000; border: 1px solid var(--panel-border); background: rgba(18, 11, 4, 0.85); backdrop-filter: blur(8px); padding: 6px; border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); pointer-events: none; max-width: 280px; max-height: 210px; overflow: hidden; }
+#image-tooltip img { max-width: 100%; max-height: 100%; display: block; border-radius: 4px; }
+#drop-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); z-index: 9998; display: none; justify-content: center; align-items: center; color: #fff; font-size: 1.8rem; font-weight: bold; backdrop-filter: blur(8px); border: 3px dashed var(--accent-primary); opacity: 0; transition: opacity 0.3s ease; padding: 1rem; text-align: center; }
+body.dragover #drop-overlay { display: flex; opacity: 1; }
+.ai-badge { display: inline-flex; align-items: center; gap: 5px; color: #a7f3d0; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.25); padding: 3px 7px; border-radius: 6px; font-size: 0.75rem; margin-left: auto; }
+.corrected-tag { color: #34d399; margin-left: 5px; font-weight: 700; cursor: help; font-size: 0.8em; }
+.muted { color: var(--text-secondary); font-size: 0.85rem; }
+#analyzer-panel-content { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; overflow-y: auto; padding: 5px; align-content: flex-start; height:100%}
+.score-card { background: #241708cc; border: 1px solid #ffb84d22; padding: 10px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.score-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.score-card-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.score-card-title { font-weight: bold; font-size: 0.85rem; color: #ffdca6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; }
+.score-card-header .select { padding: 4px 6px; font-size: 0.75rem; max-width: 100px; }
+.score-card-header .action-btn { padding: 5px; font-size: 0.7rem; }
+.score-total-display { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; border-bottom: 1px solid #ffb84d1a; padding-bottom: 6px;}
+.score-grade { font-size: 2.5rem; font-weight: 800; line-height: 1; display: flex; align-items: flex-start; }
+.score-grade small { font-size: 0.5em; margin-top: 4px; margin-left: 2px; opacity: 0.9; font-weight: 700; letter-spacing: -1px; }
+.score-value-container { text-align: right; }
+.score-value { font-size: 1.3rem; font-weight: bold; color: var(--accent-primary); }
+.score-points-total { font-size: 0.75rem; color: var(--muted); }
+.score-details-grid { display: grid; grid-template-columns: 4fr 3fr 2fr; gap: 3px 6px; font-size: 0.8rem; align-items: center; }
+.score-details-grid > div { padding: 2px 0; }
+.score-details-grid > .grid-header { font-weight: bold; color: var(--muted); border-bottom: 1px solid #ffb84d1a; margin-bottom: 3px; font-size: 0.75rem; }
+.score-line-points { color: #a7f3d0; font-weight: bold;}
+#global-character-selector-container { display:flex; align-items:center; gap: 6px; margin: 0 8px 0 auto; font-size: 0.9rem;}
+#global-character-selector-container .select { padding: 4px 8px; font-size: 0.85rem;}
+.tier-progress-bar { display: flex; gap: 1px; }
+.tier-progress-bar .bar { flex: 1; height: 5px; background: #ffb84d1a; border-radius: 1px; }
+.tier-progress-bar .bar.lit { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.emotional-stats { border-top: 1px solid #ffb84d1a; margin-top: 8px; padding-top: 8px; display: flex; justify-content: space-around; font-size: 0.8rem; text-align: center; }
+.emotional-stats > div > .stat-label { color: var(--muted); font-weight: bold; font-size: 0.75rem; }
+.emotional-stats > div > .stat-value { font-size: 1rem; color: #ffdca6; font-weight: bold; }
+.ai-commentary { margin-top: 8px; padding: 6px; border-radius: 5px; background: rgba(176, 138, 0, 0.1); border: 1px solid rgba(176, 138, 0, 0.2); text-align: center; font-size: 0.8rem; color: #f7d98d; }
+.stat-highlight { padding: 1px 3px; border-radius: 3px; font-weight: bold; display: inline-block; font-size: 0.9em;}
+.stat-important { color: #ffb84d; background: rgba(255, 184, 77, 0.1); }
+.stat-secondary { color: #a7f3d0; background: rgba(167, 243, 208, 0.1); }
+.stat-useful { color: #93c5fd; background: rgba(147, 197, 253, 0.1); }
+.stat-useless { color: #6b7280; text-decoration: line-through; opacity: 0.7; }
+#stat-priority-container { margin-top: 8px; padding-top: 8px; border-top: 1px solid #ffb84d1a; }
+#stat-priority-container .grid-header { font-size: 0.75rem; }
+.stat-priority-list { font-size: 0.7rem; line-height: 1.5; color: var(--muted); }
+.stat-priority-list .stat-highlight { margin: 0 1px; }
+.help-btn { display: inline-flex; justify-content: center; align-items: center; width: 22px; height: 22px; border-radius: 50%; background: rgba(255, 184, 77, 0.2); border: 1px solid rgba(255, 184, 77, 0.3); color: var(--accent-primary); font-weight: bold; cursor: pointer; transition: background .2s; font-size: 0.8rem; }
+.help-btn:hover { background: rgba(255, 184, 77, 0.4); }
+#help-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; backdrop-filter: blur(5px); justify-content: center; align-items: center; padding: 1rem;}
+#help-modal-content { background: var(--bg-end); border: 1px solid #ffb84d22; padding: 16px; border-radius: 12px; width: 100%; max-width: 1100px; height: 100%; max-height: 90vh; display: flex; flex-direction: column; }
+#help-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+#help-modal-header h3 { font-size: 1.1rem; }
+#close-help-btn { font-size: 20px; cursor: pointer; color: var(--muted); padding: 5px; }
+#help-table-container { overflow: auto; flex-grow: 1; }
+#help-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; table-layout: fixed; min-width: 1000px;}
+#help-table th, #help-table td { padding: 6px; border: 1px solid #ffb84d22; text-align: center; white-space: nowrap; }
+#help-table th { background: #3a250a; font-size: 0.75rem; position: sticky; top: 0; z-index: 1;}
+#help-table input { width: 100%; padding: 3px; font-size: 0.8rem; text-align: center;}
+#help-table .char-name-col { width: 70px; }
+#help-table .base-score-col { width: 80px; }
+#help-table .weight-col { width: 60px; }
+#help-table .stat-important { color: #ffb84d; background: rgba(255, 184, 77, 0.1); }
+#help-table .stat-secondary { color: #a7f3d0; background: rgba(167, 243, 208, 0.1); }
+#help-table .stat-useful { color: #93c5fd; background: rgba(147, 197, 253, 0.1); }
+#help-table .stat-useless { color: #6b7280; opacity: 0.6; }
+.auto-detect-badge { font-size: 0.7rem; background-color: var(--success); color: var(--bg-start); padding: 1px 5px; border-radius: 6px; margin-left: 5px; font-weight: bold; display:inline-block; vertical-align: middle; }
+@media (max-width: 768px) {
+body { overflow-y: auto; font-size: 14px; }
+.container { flex-direction: column; padding: 8px; gap: 8px; overflow: visible; position: static;}
+.main-panel, .analyzer-panel { flex-direction: column; position: static; padding: 0; gap: 8px; transform: none !important; opacity: 1 !important; pointer-events: auto !important;}
+body:not(.analyzer-mode) .analyzer-panel { display: none; }
+body.analyzer-mode .main-panel { display: none; }
+.left, .main { min-width: 100%; max-width: 100%; flex: none; height: auto; overflow: visible;}
+header { padding: 8px 12px; gap: 6px; }
+.header-title { font-size: 1rem; }
+#uid-input { width: 100px; padding: 6px 10px; font-size: 0.8rem;}
+.action-btn { padding: 6px 10px; font-size: 0.8rem; }
+.action-btn.icon-only { padding: 6px; width: 30px; height: 30px;}
+.card { padding: 12px; border-radius: 10px; }
+.input label { font-size: 0.85rem;}
+.input input[type=file], .input input[type=text] { padding: 9px; font-size: 0.85rem;}
+#preview { max-height: 160px; }
+.history h3 { font-size: 0.9rem; margin-bottom: 8px; }
+#historyList li { padding: 7px 9px; }
+.history-text { font-size: 0.8rem; }
+.history-controls .action-btn { padding: 4px 6px; font-size: 0.75rem;}
+.tabs { margin-bottom: 8px; }
+.tab-btn { padding: 6px 12px; font-size: 0.8rem; }
+#result { padding: 12px; }
+.parsed-table, .lookup-table { font-size: 0.75rem; min-width: 450px; }
+.parsed-table th, .parsed-table td, .lookup-table th, .lookup-table td { padding: 8px 5px; }
+.select, .value-input, .styled-input { padding: 6px; font-size: 0.8rem;}
+.fab { width: 44px; height: 44px; font-size: 22px; right: 12px; bottom: 12px; }
+#analyzer-panel-content { grid-template-columns: 1fr; gap: 10px; }
+.score-card { padding: 9px; }
+.score-card-title { font-size: 0.8rem; }
+.score-card-header .select { font-size: 0.7rem; max-width: 90px;}
+.score-card-header .action-btn { padding: 4px; }
+.score-grade { font-size: 1.8rem; }
+.score-value { font-size: 1.2rem; }
+.score-points-total { font-size: 0.7rem; }
+.score-details-grid { font-size: 0.75rem; gap: 2px 5px; }
+.emotional-stats { font-size: 0.75rem; }
+.ai-commentary { font-size: 0.75rem; }
+#stat-priority-container .grid-header { font-size: 0.7rem; }
+.stat-priority-list { font-size: 0.7rem; }
+#global-character-selector-container { font-size: 0.85rem; margin-bottom: 10px; }
+#global-character-selector-container .select { font-size: 0.8rem; }
+.help-btn { width: 20px; height: 20px; font-size: 0.7rem;}
+#help-modal-content { padding: 12px; }
+#help-table { font-size: 0.7rem; min-width: 800px; }
+#help-table th, #help-table td { padding: 4px; }
+.modal-box { max-width: 95%; padding: 16px; }
+#share-modal { max-width: 95%; max-height: 90vh; }
+#all-scores-overlay .modal-box { max-width: 95%; }
+}
+@keyframes indeterminate-progress { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@media (min-width: 769px) { #preview-status { display: none !important; } }
+</style>
+</head>
+<body>
+<div id="welcome-overlay" class="fullscreen-overlay hidden">
+<div id="welcome-modal" class="modal-box">
+<h2>歡迎！請先完成設定</h2>
+<div style="margin-bottom: 15px; text-align: center; font-size: 0.9rem; line-height: 1.4; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px;">
+<span style="color: var(--text-secondary);">此為單一聲骸分析網如需使用排行功能&完整角色解析請至：</span><br>
+<a href="https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC/1" target="_blank" style="color: var(--accent-primary); word-break: break-all;">
+https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC/1
+</a>
+</div>
+<div class="form-group">
+<label for="modal-uid-input">請輸入您的遊戲 UID (9位數字)</label>
+<input id="modal-uid-input" class="value-input" type="text" placeholder="UID 將用於雲端儲存" maxlength="9">
+</div>
+<div class="form-group">
+<label class="checkbox-label">
+<input id="modal-autoupload-checkbox" type="checkbox">
+<span>開啟自動上傳 (分析完成後自動儲存至雲端)</span>
+</label>
+<label class="checkbox-label">
+<input id="modal-consent-checkbox" type="checkbox">
+<span>我聲明此 UID 為本人所有，並同意網站使用資料。</span>
+</label>
+</div>
+<p id="modal-error">請輸入有效的9位UID並同意聲明。</p>
+<div class="modal-actions">
+<button id="guest-mode-btn" class="action-btn btn-secondary">訪客模式</button>
+<button id="confirm-setup-btn" class="action-btn btn-primary">確認並開始</button>
+</div>
+</div>
+</div>
+<div id="error-overlay" class="fullscreen-overlay">
+<div class="modal-box">
+<button id="error-close-btn" class="modal-close-btn">&times;</button>
+<h2 id="error-reason">上傳失敗</h2>
+<p>詳細原因如下：</p>
+<div id="error-details"></div>
+</div>
+</div>
+<div id="success-guide-overlay" class="fullscreen-overlay">
+<div class="modal-box">
+<h2 style="color: var(--success);">🎉 恭喜！首次上傳成功！ 🎉</h2>
+<p>感謝您的貢獻！您的數據已成功儲存至雲端。</p>
+<div class="modal-actions">
+<button id="guide-close-btn" class="action-btn btn-secondary">稍後再說</button>
+<a href="https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze/OUT" target="_blank" id="go-to-rating-btn" class="action-btn btn-primary">前往評分網站</a>
+</div>
+</div>
+</div>
+<div id="drop-overlay">拖放到此處以上傳圖片</div>
+<header>
+<div class="header-title">✨ 聲骸辨識 v48.1 (Fixed)</div>
+<input id="uid-input" type="text" placeholder="訪客模式" maxlength="9">
+<button id="toggle-analyzer-btn" class="action-btn">📈 評分模式</button>
+<a href="https://sites.google.com/view/gamedada-ocr/Wuthering-Waves?authuser=0" target="_blank" class="action-btn icon-only" title="版本選擇">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/></svg>
+</a>
+<a href="https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze/OUT" target="_blank" class="action-btn icon-only" title="雲端評分" style="background-color: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4);">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3.19 1.832a1 1 0 0 1 .805-.03l5.22-2.438a1 1 0 0 1 1.141.66L12.94 8h2.56a.5.5 0 0 1 .4.8l-3.23 4.2a1.5 1.5 0 0 1-2.15.399l-2.45-1.838a1.5 1.5 0 0 1-.6-1.18V8.39l-1.35 1.93a.5.5 0 0 1-.85-.37V3.53a1 1 0 0 1 .28-.66zm.394 1.272V9.13l1.157-1.652a.5.5 0 0 1 .85.37v2.43l2.23 1.672a.5.5 0 0 0 .716-.133L12.4 8.5h-1.5a.5.5 0 0 1-.47-.334L8.35 3.42 4.38 5.36a.5.5 0 0 0-.796.444z"/></svg>
+</a>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSe_7ijAhpk4RIw7229Sds66wrCT4gvQKbOsf2J4ELOW7_b93g/viewform" target="_blank" class="action-btn icon-only" title="問題回饋" style="background-color: rgba(34, 197, 94, 0.2); border-color: rgba(34, 197, 94, 0.4);">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/></svg>
+</a>
+</header>
+<div class="container">
+<div id="main-panel" class="main-panel">
+<aside class="left card">
+<div class="input" style="margin-bottom: 12px;">
+<div class="input-header">
+<label for="fileInput">📂 上傳圖片 (可多選/拖放)</label>
+<label class="action-btn ai-toggle" title="整合 第二層輔助 + 重複屏蔽 + 主/副詞條约束">
+<input id="ai-boost-checkbox" type="checkbox" checked style="margin-right:4px;cursor:pointer; accent-color: var(--accent-primary);">
+⚡ AI
+</label>
+</div>
+<input id="fileInput" type="file" accept="image/*" multiple/>
+<label style="margin-top:10px" for="urlInput">🔗 貼上圖片 (支援網址)</label>
+<input id="urlInput" type="text" placeholder="請在此 Ctrl+V 貼上" />
+<div id="preview-status" style="display: none; flex-direction: column; gap: 4px; margin-top: 10px; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+<span id="preview-status-text" class="muted" style="font-size: 0.8rem;"></span>
+<div class="progress-bar-container" style="width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; overflow: hidden;">
+<div class="progress-bar-fill" style="width: 100%; height: 100%; background: var(--accent-primary); animation: indeterminate-progress 2s linear infinite;"></div>
+</div>
+</div>
+<img id="preview" alt="preview" draggable="false" />
+</div>
+<div class="history">
+<div class="history-header">
+<h3>📖 歷史紀錄 (雙擊改名)</h3>
+<div class="history-tools">
+<button id="btn-refresh-offline" class="action-btn history-tool-btn" type="button">↻ 離線重載</button>
+<button id="btn-sync-all-cloud" class="action-btn history-tool-btn" type="button">☁️ 批次同步</button>
+</div>
+</div>
+<ul id="historyList"></ul>
+</div>
+</aside>
+<section class="main card">
+<div class="tabs">
+<button id="cost-display" class="tab-btn disabled" style="display:none; cursor: default;"></button>
+<button id="btn_table_view" class="tab-btn active">結果表</button>
+<button id="btn_raw_view" class="tab-btn">顯示純文字</button>
+<button id="btn_lookup" class="tab-btn">對照表</button>
+<span class="ai-badge" id="ai-indicator" style="display:none">
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M15.064.936a1.2 1.2 0 0 1 .37.868v12.392a1.2 1.2 0 0 1-1.992.936L8.5 11.23V8.51l4.128-2.359.112-.064a1.2 1.2 0 0 0 .528-1.056c0-.48-.288-.936-.792-1.152L4.16 0c-.576-.256-1.224-.128-1.632.32L.936 1.912A1.2 1.2 0 0 0 .936 3.9L4.44 7.404l-2.48 4.248a1.2 1.2 0 0 0 .208 1.488l1.6 1.6a1.2 1.2 0 0 0 1.488.208l4.248-2.48L13.004 16a1.2 1.2 0 0 0 2.008-1.584L8.764 8.16l2.128-3.688l3.024-1.728a1.2 1.2 0 0 1 1.144.192z"/></svg>
+AI加強
+</span>
+</div>
+<div id="result" aria-live="polite">(尚無內容)</div>
+<div style="display:flex;gap:10px;align-items:center; padding: 8px 0 0; border-top: 1px solid var(--panel-border); margin-top: auto; flex-shrink: 0;">
+<div id="loader" class="loader" role="status"></div>
+<div id="progress" class="muted"></div>
+<div id="lookupStats" class="muted" style="margin-left:auto"></div>
+</div>
+</section>
+</div>
+<div id="analyzer-panel" class="analyzer-panel">
+<div class="card" style="width:100%; display:flex; flex-direction:column;">
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; margin-bottom: 10px;">
+<h2 style="margin: 0;">聲骸評分分析</h2>
+<div id="global-character-selector-container">
+<span>角色:</span>
+<select id="global-character-selector" class="select" disabled></select>
+<div id="help-btn" class="help-btn" title="查看與編輯積分算法">?</div>
+</div>
+</div>
+<div id="analyzer-panel-content">
+<div class="loader" style="display:block; margin: 40px auto;"></div>
+<p class="muted" style="text-align: center;">正在加載評分數據...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fab" id="fabAdd" title="新增屬性">+</div>
+<div id="notification-container"></div>
+<div id="image-tooltip"><img src="" alt="preview"></div>
+<div id="help-modal">
+<div id="help-modal-content">
+<div id="help-modal-header">
+<h3>角色積分計算方式</h3>
+<span id="close-help-btn" title="關閉">&times;</span>
+</div>
+<div id="help-table-container">
+<table id="help-table">
+<thead></thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="share-overlay" class="fullscreen-overlay">
+<div id="share-modal" class="modal-box">
+<button id="share-close-btn" class="modal-close-btn">&times;</button>
+<h2>產生分享圖</h2>
+<div id="share-controls" style="display: flex; gap: 10px; justify-content: center;">
+<button id="share-1-btn" class="action-btn btn-primary">分享 1 張</button>
+<button id="share-5-btn" class="action-btn btn-secondary">分享 5 張 (組合)</button>
+</div>
+<div id="share-loader" class="loader" style="margin-top: 12px;"></div>
+<div id="share-preview-container" style="margin-top: 12px; background: rgba(0,0,0,0.2); border-radius: 6px; padding: 8px; max-height: 60vh; overflow: auto; display: none;">
+<img id="share-preview-img" style="width: 100%; object-fit: contain; border-radius: 4px;">
+</div>
+<div id="share-download-container" style="margin-top: 12px; display: none;">
+<button id="share-download-btn" class="action-btn btn-primary" style="width: 100%;">下載圖片</button>
+</div>
+</div>
+</div>
+<div id="all-scores-overlay" class="fullscreen-overlay">
+<div class="modal-box" style="max-width: 90%; width: 500px; max-height: 85vh; padding: 20px 8px;">
+<button id="all-scores-close-btn" class="modal-close-btn">&times;</button>
+<h2 id="all-scores-title">全角色評分總覽</h2>
+<p id="all-scores-subtitle" style="text-align: center; color: var(--text-secondary); margin-top: -8px; font-size: 0.9rem;"></p>
+<div id="all-scores-table-container" style="overflow-y: auto; max-height: calc(85vh - 150px);">
+<div class="table-wrapper">
+<table id="all-scores-table" class="parsed-table" style="font-size: 0.85rem;">
+<thead><tr><th>角色</th><th>評分</th><th>等級</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<script>
+let SCORE_DATA = {};
+let isScoreDataLoaded = false;
+let isFetchingScoreData = false;
+const CROP_REGIONS=[{x:0.015,y:0.59,w:0.187,h:0.38},{x:0.21,y:0.59,w:0.187,h:0.38},{x:0.405,y:0.59,w:0.187,h:0.38},{x:0.60,y:0.59,w:0.187,h:0.38},{x:0.795,y:0.59,w:0.187,h:0.38}];
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbys-oKdBiUwXKsAxbdKPwK9wSNUW8yo33crsoLc9fXVkQ-wjMGnO6wz0XyK02cElmdu/exec';
+const KGS_OFFLINE_API_URL = 'https://script.google.com/macros/s/AKfycbz5ZDfnE5KMcJoMmTFQNkZHe-6PB8Af4Ok_t8V69IakZKGG8OLFyy06MEjuqVDm42Br/exec';
+const ADMIN_UID = '804358308';
+const NEW_GAS_URL = 'https://script.google.com/macros/s/AKfycbxzbZHtWKMFY5dv2Rb2Qg_kzzqf0IVwyhakI-Jq29s9wZhHAWNg7LIloTZX_OwFaLwP/exec';
+const SUB_STAT_MAX_VALUES = {"攻擊":60,"攻擊百分比":11.6,"生命":580,"生命百分比":11.6,"防禦":70,"防禦百分比":14.7,"爆擊率":10.5,"爆擊傷害":21.0,"共鳴效率":11.6,"普攻傷害加成":11.6,"重擊傷害加成":11.6,"共鳴技能傷害加成(E)":11.6,"共鳴解除傷害加成(大招)":12.4, "湮滅傷害加成":12, "冷凝傷害加成":12, "導電傷害加成":12, "熱熔傷害加成":12, "氣動傷害加成":12, "衍射傷害加成":12};
+const WEIGHT_KEYS_MAPPING = {"爆擊率":"爆擊率","爆擊傷害":"爆擊傷害","攻擊百分比":"攻擊百分比","攻擊":"攻擊","生命":"生命","生命百分比":"生命百分比","防禦百分比":"防禦百分比","防禦":"防禦","共鳴效率":"共鳴效率","普攻傷害加成":"普攻傷害加成","重擊傷害加成":"重擊傷害加成","共鳴技能傷害加成(E)":"共鳴技能傷害加成(E)","共鳴解放傷害加成(大招)":"共鳴解除傷害加成(大招)"};
+
+document.addEventListener('DOMContentLoaded',()=>{
+const D=document;
+const fileInput=D.getElementById('fileInput'),
+urlInput=D.getElementById('urlInput'),
+uidInput=D.getElementById('uid-input'),
+preview=D.getElementById('preview'),
+previewStatus=D.getElementById('preview-status'),
+previewStatusText=D.getElementById('preview-status-text'),
+loader=D.getElementById('loader'),
+progress=D.getElementById('progress'),
+resultDiv=D.getElementById('result'),
+lookupStatsDiv=D.getElementById('lookupStats'),
+historyList=D.getElementById('historyList'),
+btnTable=D.getElementById('btn_table_view'),
+btnRaw=D.getElementById('btn_raw_view'),
+btnLookup=D.getElementById('btn_lookup'),
+fabAdd=D.getElementById('fabAdd'),
+costDisplay=D.getElementById('cost-display'),
+notificationContainer=D.getElementById('notification-container'),
+imageTooltip=D.getElementById('image-tooltip'),
+aiBoostCheckbox=D.getElementById('ai-boost-checkbox'),
+aiIndicator=D.getElementById('ai-indicator'),
+toggleAnalyzerBtn=D.getElementById('toggle-analyzer-btn'),
+analyzerPanelContent=D.getElementById('analyzer-panel-content'),
+globalCharacterSelector=D.getElementById('global-character-selector'),
+helpBtn = D.getElementById('help-btn'),
+helpModal = D.getElementById('help-modal'),
+closeHelpBtn = D.getElementById('close-help-btn'),
+helpTableBody = helpModal.querySelector('tbody'),
+helpTableHeader = helpModal.querySelector('thead');
+const welcomeOverlay = D.getElementById('welcome-overlay'),
+modalUidInput = D.getElementById('modal-uid-input'),
+modalAutoUploadCheckbox = D.getElementById('modal-autoupload-checkbox'),
+modalConsentCheckbox = D.getElementById('modal-consent-checkbox'),
+modalError = D.getElementById('modal-error'),
+confirmSetupBtn = D.getElementById('confirm-setup-btn'),
+guestModeBtn = D.getElementById('guest-mode-btn'),
+errorOverlay = D.getElementById('error-overlay'),
+errorReason = D.getElementById('error-reason'),
+errorDetails = D.getElementById('error-details'),
+errorCloseBtn = D.getElementById('error-close-btn'),
+successGuideOverlay = D.getElementById('success-guide-overlay'),
+guideCloseBtn = D.getElementById('guide-close-btn'),
+goToRatingBtn = D.getElementById('go-to-rating-btn');
+const shareOverlay = D.getElementById('share-overlay'),
+shareModal = D.getElementById('share-modal'),
+shareCloseBtn = D.getElementById('share-close-btn'),
+share1Btn = D.getElementById('share-1-btn'),
+share5Btn = D.getElementById('share-5-btn'),
+shareLoader = D.getElementById('share-loader'),
+sharePreviewContainer = D.getElementById('share-preview-container'),
+sharePreviewImg = D.getElementById('share-preview-img'),
+shareDownloadContainer = D.getElementById('share-download-container'),
+shareDownloadBtn = D.getElementById('share-download-btn');
+const allScoresOverlay = D.getElementById('all-scores-overlay'),
+allScoresCloseBtn = D.getElementById('all-scores-close-btn'),
+allScoresTable = D.getElementById('all-scores-table').getElementsByTagName('tbody')[0],
+allScoresSubtitle = D.getElementById('all-scores-subtitle');
+
+let historyData=[],currentRawText='',currentParsedData=[],currentHistoryId=null,currentTab='table';
+let bigImages=[],bigImageCounter=0, userUID = '', autoUploadEnabled = false, hasSeenSuccessGuide = false;
+let isAnalyzerMode = false;
+let currentItemToShareId = null;
+let generatedImageCache = null;
+const STORAGE_KEY='wwaves_ocr_min_ui_ai_boost_v11';
+const keywordMap={"攻":"攻擊","攻擊":"攻擊","生命":"生命","防":"防禦","防禦":"防禦","爆擊率":"爆擊率","爆率":"爆擊率","爆擊傷害":"爆擊傷害","普攻":"普攻傷害加成","重擊":"重擊傷害加成","共鳴技能":"共鳴技能傷害加成(E)","共鳴解放":"共鳴解除傷害加成(大招)","共鳴效率":"共鳴效率", "湮滅": "湮滅傷害加成", "冷凝": "冷凝傷害加成", "導電": "導電傷害加成", "熱熔": "熱熔傷害加成", "氣動": "氣動傷害加成", "衍射": "衍射傷害加成"};
+const percentStats=['爆擊率','爆擊傷害','普攻傷害加成','重擊傷害加成','共鳴技能傷害加成(E)','共鳴解除傷害加成(大招)','共鳴效率','攻擊百分比','生命百分比','防禦百分比', '湮滅傷害加成', '冷凝傷害加成', '導電傷害加成', '熱熔傷害加成', '氣動傷害加成', '衍射傷害加成'];
+let lookupHeaders=["","攻擊","攻擊百分比","生命","生命百分比","防禦","防禦百分比","爆擊率","爆擊傷害","普攻傷害加成","重擊傷害加成","共鳴技能傷害加成(E)","共鳴解除傷害加成(大招)","共鳴效率", '湮滅傷害加成', '冷凝傷害加成', '導電傷害加成', '熱熔傷害加成', '氣動傷害加成', '衍射傷害加成'];
+let lookupRows=[
+["60","11.6%","580","11.6%","70","14.7%","10.5%","21.0%","11.6%","11.6%","11.6%","11.6%","12.4%"],
+["50","10.9%","540","10.9%","60","13.8%","9.9%","19.8%","10.9%","10.9%","10.9%","10.9%","11.6%"],
+["40","10.1%","510","10.1%","50","12.8%","9.3%","18.6%","10.1%","10.1%","10.1%","10.1%","10.8%"],
+["30","9.4%","470","9.4%","40","11.8%","8.7%","17.4%","9.4%","9.4%","9.4%","9.4%","10.0%"],
+["—","8.6%","430","8.6%","—","10.9%","8.1%","16.2%","8.6%","8.6%","8.6%","8.6%","9.2%"],
+["—","7.9%","390","7.9%","—","10.0%","7.5%","15.0%","7.9%","7.9%","7.9%","7.9%","8.4%"],
+["—","7.1%","360","7.1%","—","9.0%","6.9%","13.8%","7.1%","7.1%","7.1%","7.1%","7.6%"],
+["—","6.4%","320","6.4%","—","8.1%","6.3%","12.6%","6.4%","6.4%","6.4%","6.4%","6.8%"]
+];
+const MAX_CONCURRENCY = Math.max(2, Math.min(4, (navigator.hardwareConcurrency||4)));
+class ConcurrencyQueue{
+constructor(limit){ this.limit=limit; this.running=0; this.queue=[]; this.completed=0; this.onChange=()=>{}; }
+getRunning(){return this.running}
+getPending(){return this.queue.length}
+add(taskFn){
+return new Promise((resolve,reject)=>{
+const run=async ()=>{
+this.running++; this._notify();
+try{ const r=await taskFn(); resolve(r); }
+catch(e){ reject(e) }
+finally{ this.running--; this.completed++; this._notify(); this._next(); }
+};
+if(this.running<this.limit) run(); else this.queue.push(run);
+this._notify();
+});
+}
+_next(){ if(this.queue.length && this.running<this.limit){ const n=this.queue.shift(); n(); } }
+_notify(){ try{ this.onChange(this) }catch{} }
+}
+const jobQueue=new ConcurrencyQueue(MAX_CONCURRENCY);
+function updateStatus(text, showLoader) {
+if (showLoader) { loader.style.display = 'block'; previewStatus.style.display = 'flex'; previewStatusText.textContent = text; } else { loader.style.display = 'none'; previewStatus.style.display = 'none'; previewStatusText.textContent = ''; }
+progress.textContent = text;
+}
+function refreshQueueUI(){
+const running=jobQueue.getRunning(), pending=jobQueue.getPending();
+const show = (running > 0 || pending > 0);
+updateStatus(show ? `處理中: ${running}，佇列: ${pending}` : '準備就緒', show);
+updateAllUploadButtonsState();
+}
+jobQueue.onChange=refreshQueueUI;
+const WATERMARK_MAIN = 'GAME聯合會 鳴潮聲骸評分';
+const WATERMARK_URL = 'https://sites.google.com/view/gamedada-ocr';
+function loadImage(src){
+return new Promise((resolve, reject) => {
+const img = new Image(); img.crossOrigin = 'anonymous'; img.onload = () => resolve(img); img.onerror = (err) => reject(new Error(`Image load error`)); img.src = src;
+});
+}
+function scaleToWidth(imgOrCanvas, width) {
+if (!imgOrCanvas || !imgOrCanvas.width || !imgOrCanvas.height) return { canvas: document.createElement('canvas'), width: 0, height: 0 };
+const scale = width / imgOrCanvas.width;
+const height = imgOrCanvas.height * scale;
+const c = D.createElement('canvas'); c.width = width; c.height = height;
+c.getContext('2d').drawImage(imgOrCanvas, 0, 0, imgOrCanvas.width, imgOrCanvas.height, 0, 0, width, height);
+return { canvas: c, width, height };
+}
+function drawWatermark(ctx, text, canvasWidth, canvasHeight, isTop, yOffset = 15, fontSize = 24) {
+ctx.save(); ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'; ctx.font = `bold ${fontSize}px "Inter", sans-serif`; ctx.textAlign = 'center';
+const yPos = isTop ? yOffset : canvasHeight - yOffset; ctx.textBaseline = isTop ? 'top' : 'bottom';
+ctx.shadowColor = 'rgba(0, 0, 0, 0.8)'; ctx.shadowBlur = 5; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+ctx.fillText(text, canvasWidth / 2, yPos); ctx.restore();
+}
+async function generateShareImage(mode = 1) {
+shareLoader.style.display = 'block'; sharePreviewContainer.style.display = 'none'; shareDownloadContainer.style.display = 'none'; generatedImageCache = null;
+try {
+const item = historyData.find(h => h.id == currentItemToShareId);
+if (!item) throw new Error('找不到分享項目');
+const canvas = D.createElement('canvas'); const ctx = canvas.getContext('2d'); const PADDING = 10;
+if (mode === 1) {
+const scoreCardEl = D.getElementById('score-card-' + item.id); if (!scoreCardEl) throw new Error('找不到評分卡');
+const RENDER_WIDTH = 450; const scale = 2; const CONTENT_WIDTH = RENDER_WIDTH * scale;
+const originalWidth = scoreCardEl.style.width; scoreCardEl.style.width = `${RENDER_WIDTH}px`; scoreCardEl.style.boxShadow = 'none';
+const scoreCardCanvas = await html2canvas(scoreCardEl, { backgroundColor: '#241708', useCORS: true, scale: scale });
+scoreCardEl.style.width = originalWidth; scoreCardEl.style.boxShadow = '';
+const origImg = await loadImage(item.imageSrc); const origScaled = scaleToWidth(origImg, CONTENT_WIDTH);
+const CONTENT_HEIGHT = Math.max(origScaled.height, scoreCardCanvas.height);
+canvas.width = CONTENT_WIDTH * 2 + PADDING; canvas.height = CONTENT_HEIGHT;
+ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+const origY = (CONTENT_HEIGHT - origScaled.height) / 2; ctx.drawImage(origScaled.canvas, 0, origY);
+const scoreY = (CONTENT_HEIGHT - scoreCardCanvas.height) / 2; ctx.drawImage(scoreCardCanvas, CONTENT_WIDTH + PADDING, scoreY);
+drawWatermark(ctx, WATERMARK_MAIN, canvas.width, canvas.height, true, 15, 24); drawWatermark(ctx, WATERMARK_URL, canvas.width, canvas.height, true, 45, 20);
+const introText = "評分僅供參考 | Generated by GAME-DADA Tool";
+const timeText = new Date().toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+drawWatermark(ctx, introText, canvas.width, canvas.height, false, 40, 18); drawWatermark(ctx, `產生時間: ${timeText}`, canvas.width, canvas.height, false, 15, 18);
+} else if (mode === 5) {
+const parent = bigImages.find(b => b.id === item.parentBigId); if (!parent) throw new Error('找不到組合項目');
+const childItems = parent.childIds.map(id => historyData.find(h => h.id == id)).filter(Boolean); if (childItems.length === 0) throw new Error('找不到子項目');
+const RENDER_WIDTH = 360; const scale = 1.5; const ITEM_WIDTH = RENDER_WIDTH * scale;
+const origImgs = await Promise.all(childItems.map(c => loadImage(c.imageSrc)));
+const scoreCardCanvases = await Promise.all(childItems.map(async c => {
+const el = D.getElementById('score-card-' + c.id); if (!el) return null;
+const originalWidth = el.style.width; el.style.width = `${RENDER_WIDTH}px`; el.style.boxShadow = 'none';
+const can = await html2canvas(el, { backgroundColor: '#241708', useCORS: true, scale: scale });
+el.style.width = originalWidth; el.style.boxShadow = ''; return can;
+}));
+const origScaled = origImgs.map(img => scaleToWidth(img, ITEM_WIDTH));
+const scoreScaled = scoreCardCanvases.map(can => can ? scaleToWidth(can, ITEM_WIDTH) : { canvas: null, height: 0 });
+const maxOrigHeight = Math.max(0, ...origScaled.map(s => s.height)); const maxScoreHeight = Math.max(0, ...scoreScaled.map(s => s.height));
+canvas.width = ITEM_WIDTH * 5 + PADDING * 4; canvas.height = maxOrigHeight + maxScoreHeight + PADDING;
+ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+let currentX = 0;
+for (const scaled of origScaled) { const y = (maxOrigHeight - scaled.height) / 2; ctx.drawImage(scaled.canvas, currentX, y); currentX += ITEM_WIDTH + PADDING; }
+currentX = 0; const scoreRowY = maxOrigHeight + PADDING;
+for (const scaled of scoreScaled) { if (scaled.canvas) { const y = scoreRowY + (maxScoreHeight - scaled.height) / 2; ctx.drawImage(scaled.canvas, currentX, y); } currentX += ITEM_WIDTH + PADDING; }
+drawWatermark(ctx, WATERMARK_MAIN, canvas.width, canvas.height, true, 15, 24); drawWatermark(ctx, WATERMARK_URL, canvas.width, canvas.height, true, 45, 20);
+const introText = "評分僅供參考 | Generated by GAME-DADA Tool";
+const timeText = new Date().toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+drawWatermark(ctx, introText, canvas.width, canvas.height, false, 40, 18); drawWatermark(ctx, `產生時間: ${timeText}`, canvas.width, canvas.height, false, 15, 18);
+}
+generatedImageCache = canvas.toDataURL('image/png'); sharePreviewImg.src = generatedImageCache; sharePreviewContainer.style.display = 'block'; shareDownloadContainer.style.display = 'block';
+} catch (err) { showNotification('產生分享圖失敗: ' + err.message, 'error'); } finally { shareLoader.style.display = 'none'; }
+}
+function showNotification(m, t = 'success', timeout = 3000) {
+const n = D.createElement('div'); n.className = `notification ${t}`; n.textContent = m; notificationContainer.appendChild(n);
+const close = () => { n.style.opacity = '0'; n.style.transform = 'translateY(120%)'; setTimeout(() => n.remove(), 400); };
+let timer = timeout > 0 ? setTimeout(close, timeout) : null;
+n.onclick = () => { if (timer) clearTimeout(timer); close(); };
+n.close = () => { if (timer) clearTimeout(timer); close(); };
+return n;
+}
+function getUploadStatusMeta(status) {
+const map = {
+success: { text: '已上傳', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.12)' },
+duplicate: { text: '重複', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
+failed: { text: '失敗', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)' },
+uploading: { text: '上傳中', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
+default: { text: '待上傳', color: '#a0a0a0', bg: 'rgba(160, 160, 160, 0.12)' }
+};
+return map[status] || map.default;
+}
+function getCloudSyncMeta(status) {
+const map = {
+synced: { text: '雲同步完成', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.12)' },
+syncing: { text: '雲同步中', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
+error: { text: '雲同步失敗', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)' },
+pending: { text: '雲待同步', color: '#a0a0a0', bg: 'rgba(160, 160, 160, 0.12)' },
+deleted: { text: '已刪除雲端', color: '#9ca3af', bg: 'rgba(156, 163, 175, 0.12)' },
+default: { text: '雲未同步', color: '#a0a0a0', bg: 'rgba(160, 160, 160, 0.12)' }
+};
+return map[status] || map.default;
+}
+async function syncHistoryItemToKgs(item, action = 'offlineCreate') {
+if (!item || !userUID) return false;
+item.cloudSyncStatus = 'syncing';
+saveState();
+renderHistory();
+const syncAction = action === 'offlineDelete' ? 'offlineDelete' : (item.cloudSyncCreated === true ? 'offlineUpdate' : 'offlineCreate');
+const payload = {
+action: syncAction,
+id: String(item.id),
+uid: userUID,
+role: item.global?.role || '',
+source: 'upload-end',
+payload: {
+title: item.title || '',
+rawText: item.rawText || '',
+cost: item.cost || '',
+parsedData: Array.isArray(item.parsedData) ? item.parsedData : [],
+uploadStatus: item.uploadStatus || ''
+},
+meta: {
+title: item.title || '',
+ts: item.ts || Date.now(),
+imageSource: item.imageSrc ? 'local-image' : ''
+}
+};
+try {
+const response = await fetch(KGS_OFFLINE_API_URL, {
+method: 'POST',
+mode: 'cors',
+cache: 'no-cache',
+headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+body: JSON.stringify(payload),
+redirect: 'follow'
+});
+if (!response.ok) throw new Error(`K.gs HTTP ${response.status}`);
+const json = await response.json();
+if (json.result !== 'success') throw new Error(json.message || json.error || 'K.gs 同步失敗');
+item.cloudSyncStatus = action === 'offlineDelete' ? 'deleted' : 'synced';
+if (action !== 'offlineDelete') item.cloudSyncCreated = true;
+return true;
+} catch (error) {
+console.error('K.gs sync failed:', error);
+item.cloudSyncStatus = 'error';
+showNotification(`雲端同步失敗：${error.message}`, 'error');
+return false;
+} finally {
+saveState();
+renderHistory();
+}
+}
+
+async function loadOfflineHistoryFromKgs(uid) {
+if (!uid) return [];
+try {
+const response = await fetch(`${KGS_OFFLINE_API_URL}?action=offlineList&uid=${encodeURIComponent(uid)}&limit=200`, {
+method: 'GET',
+mode: 'cors',
+cache: 'no-cache',
+redirect: 'follow'
+});
+if (!response.ok) throw new Error(`K.gs HTTP ${response.status}`);
+const json = await response.json();
+if (json.result !== 'success' || !Array.isArray(json.data)) throw new Error(json.message || json.error || 'K.gs 離線資料載入失敗');
+return json.data;
+} catch (error) {
+console.error('loadOfflineHistoryFromKgs failed:', error);
+return [];
+}
+}
+
+function hydrateOfflineHistoryItems(items) {
+if (!Array.isArray(items) || items.length === 0) return 0;
+let merged = 0;
+items.forEach(entry => {
+let payload = entry.payload || {};
+if (typeof payload === 'string') {
+try { payload = JSON.parse(payload); } catch (_err) { payload = {}; }
+}
+const meta = entry.meta && typeof entry.meta === 'object' ? entry.meta : {};
+const parsedData = Array.isArray(payload.parsedData) ? payload.parsedData : [];
+const title = payload.title || meta.title || `離線紀錄 ${entry.id || ''}`.trim();
+if (!title && parsedData.length === 0) return;
+const normalized = {
+id: entry.id,
+title,
+imageSrc: '',
+rawText: payload.rawText || '',
+parsedData,
+cost: payload.cost || '',
+ts: entry.updatedAt || entry.createdAt || Date.now(),
+uploadStatus: payload.uploadStatus || 'success',
+cloudSyncStatus: entry.deleted ? 'deleted' : 'synced',
+cloudSyncCreated: true,
+source: entry.source || 'offline_local',
+global: { uid: entry.uid || userUID, role: entry.role || '' }
+};
+const idx = historyData.findIndex(h => String(h.id) === String(normalized.id));
+if (idx === -1) {
+historyData.unshift(normalized);
+merged++;
+} else {
+const prev = historyData[idx];
+const before = JSON.stringify(prev);
+historyData[idx] = { ...prev, ...normalized };
+if (before !== JSON.stringify(historyData[idx])) merged++;
+}
+});
+if (merged > 0) saveState();
+return merged;
+}
+function saveState(){
+try{
+let dataToSave = { history: historyData, bigImages, bigImageCounter, userUID, autoUploadEnabled, hasSeenSuccessGuide };
+if (isScoreDataLoaded && SCORE_DATA.characters && SCORE_DATA.characters['自定義']) { dataToSave.customCharacter = SCORE_DATA.characters['自定義']; }
+localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+}catch(e){ console.error("Failed to save state:", e); }
+}
+function updateUidInputPermissions() {
+if (userUID) { uidInput.value = userUID; uidInput.readOnly = (userUID !== ADMIN_UID); } else { uidInput.value = ''; uidInput.placeholder = '訪客模式'; uidInput.readOnly = true; }
+}
+function loadState(){
+const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return false;
+try{
+const obj=JSON.parse(raw);
+userUID = obj.userUID || ''; autoUploadEnabled = obj.autoUploadEnabled || false; hasSeenSuccessGuide = obj.hasSeenSuccessGuide || false;
+updateUidInputPermissions();
+if(Array.isArray(obj.history)) historyData=obj.history;
+if(Array.isArray(obj.bigImages)) bigImages=obj.bigImages;
+if(typeof obj.bigImageCounter==='number') bigImageCounter=obj.bigImageCounter;
+if(obj.customCharacter) { if (!SCORE_DATA.characters) SCORE_DATA.characters = {}; SCORE_DATA.characters['自定義'] = obj.customCharacter; }
+historyData.forEach((item,i)=>{ if(!item.id) item.id=(item.ts||Date.now())+i });
+return typeof obj.userUID === 'string';
+}catch{ return false; }
+}
+
+async function refreshOfflineHistoryFromKgs() {
+if (!userUID) return 0;
+const remoteItems = await loadOfflineHistoryFromKgs(userUID);
+return hydrateOfflineHistoryItems(remoteItems);
+}
+
+async function fetchScoreData() {
+if (isScoreDataLoaded || isFetchingScoreData) return isScoreDataLoaded;
+isFetchingScoreData = true;
+globalCharacterSelector.disabled = true;
+analyzerPanelContent.innerHTML = `<div class="loader" style="display:block; margin: 40px auto;"></div><p class="muted" style="text-align: center;">正在加載評分數據...</p>`;
+const loadingNotif = showNotification('正在加載角色權重資料...', 'info', 0);
+const URL = NEW_GAS_URL + '?action=getWeights';
+try {
+const response = await fetch(URL);
+if (!response.ok) throw new Error(`Network response: ${response.statusText}`);
+const json = await response.json();
+if (json.result !== 'success' || !json.data) throw new Error(json.message || '無法解析權重資料');
+
+SCORE_DATA.characters = {};
+const headers = json.headers;
+json.data.forEach(row => {
+let charName = row[1];
+if (charName && charName !== '(N/A)') {
+if (!SCORE_DATA.characters[charName]) {
+let charWeights = {};
+headers.forEach((h, idx) => {
+let mappedKey = WEIGHT_KEYS_MAPPING[h];
+if (mappedKey) { charWeights[mappedKey] = parseFloat(row[idx]) || 0; }
+});
+SCORE_DATA.characters[charName] = { n: charWeights };
+}
+}
+});
+const customDataRaw = localStorage.getItem(STORAGE_KEY);
+if (customDataRaw) {
+try { const obj = JSON.parse(customDataRaw); if (obj.customCharacter) SCORE_DATA.characters['自定義'] = obj.customCharacter; } catch (e) {}
+}
+if (!SCORE_DATA.characters['自定義']) SCORE_DATA.characters['自定義'] = { n: { '爆擊率': 1, '爆擊傷害': 1, '攻擊百分比': 1, '攻擊': 0.1, '共鳴效率': 0.5 } };
+
+const characterNames = Object.keys(SCORE_DATA.characters).sort((a,b) => {if (a==='自定義')return -1; if(b==='自定義')return 1; return a.localeCompare(b);});
+globalCharacterSelector.innerHTML = '<option value="auto">自動匹配</option>' + characterNames.map(name => `<option value="${name}">${name}</option>`).join('');
+isScoreDataLoaded = true;
+loadingNotif.close();
+showNotification('權重資料加載成功', 'success');
+if (isAnalyzerMode) renderAnalyzerPanel();
+return true;
+} catch (error) {
+loadingNotif.close();
+showNotification(`權重資料加載失敗: ${error.message}`, 'error', 4000);
+analyzerPanelContent.innerHTML = `<p class="muted" style="text-align: center; color: var(--danger);">加載評分數據失敗</p>`;
+return false;
+} finally {
+isFetchingScoreData = false;
+globalCharacterSelector.disabled = !isScoreDataLoaded;
+}
+}
+function hideWelcomeModal() { welcomeOverlay.classList.remove('visible'); }
+function showErrorOverlay(reason, details){ errorReason.textContent = reason; errorDetails.innerHTML = details; errorOverlay.classList.add('visible'); }
+function showSuccessGuide() { if (hasSeenSuccessGuide) return; successGuideOverlay.classList.add('visible'); }
+function escapeHtml(s){return s==null?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function valuesEqual(a,b){
+if(a==null||b==null) return false;
+const sa=String(a).trim(), sb=String(b).trim();
+const na=parseFloat(sa.replace('%','')), nb=parseFloat(sb.replace('%',''));
+if(!isNaN(na)&&!isNaN(nb)&&Math.abs(na-nb)<1e-9){return sa.includes('%')===sb.includes('%')}
+return sa===sb;
+}
+function getValuesForHeader(h){ const i=lookupHeaders.slice(1).indexOf(h); if(i===-1) return []; return Array.from(new Set(lookupRows.map(r=>r[i]).filter(v=>v!=null).map(String))); }
+function detectCost(t){ if(!t) return null; const m=t.replace(/O/g,'0').replace(/S/g,'5').match(/CO?ST\s*([134])/i); return m?m[1]:null; }
+function normalizeDigits(s){ if(!s) return s; return s.replace(/[Oo]/g,'0').replace(/[Il|]/g,'1').replace(/[Ss]/g,'5').replace(/B/g,'8').replace(/g/g,'9').replace(/，/g,'.').replace(/：/g,':').replace(/％/g,'%').replace(/·/g,'.'); }
+function levenshtein(a,b){ a=String(a||''); b=String(b||''); const m=a.length,n=b.length,dp=Array.from({length:m+1},()=>Array(n+1).fill(0)); for(let i=0;i<=m;i++) dp[i][0]=i; for(let j=0;j<=n;j++) dp[0][j]=j; for(let i=1;i<=m;i++){ for(let j=1;j<=n;j++){ const cost=a.charCodeAt(i-1)===b.charCodeAt(j-1)?0:1; dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+cost); }} return dp[m][n]; }
+function closestName(name){ if(!name) return name; if(lookupHeaders.includes(name)) return name; const cand=lookupHeaders.filter(Boolean); let best=name,bestD=1e9; for(const c of cand){ const d=levenshtein(name,c); if(d<bestD){bestD=d;best=c} } return bestD<=2?best:name; }
+function autoScreenDuplicates(parsed){ const seen=new Set(), out=[]; let hidden=0; for(const r of parsed||[]){ const key=`${r?.name||''}|${r?.value||''}`; if(seen.has(key)){ hidden++; continue; } seen.add(key); out.push(r); } return {rows:out, hiddenCount:hidden}; }
+function normalizeText(text){
+let c=(text||''); c=normalizeDigits(c); c=c.replace(/\s+|_|'|牙/g,'').replace(/暴|掰/g,'爆').replace(/96/g,'%'); c=c.replace(/(?<![爆重普])擊/g,'攻擊').replace(/爆擊(?!傷害)/g,'爆擊率').replace(/防御/g,'防禦').replace(/傷害加乘/g,'傷害加成').replace(/普通攻擊/g,'普攻').replace(/重攻擊/g,'重擊');
+const all=[]; const keys=Object.keys(keywordMap).sort((a,b)=>b.length-a.length);
+for(const k of keys){ const re=new RegExp(k+"[^\\d.]*([\\d\\.]+)\\s*%?","gi"); let m; while((m=re.exec(c))!==null){ if(all.some(i=>m.index>=i.index&&m.index<i.index+i.rawText.length)) continue; let v=m[1]; if(v.startsWith('.')) v='0'+v; const num=parseFloat(v); if(isNaN(num)) continue; const tV=Math.round(num*10)/10; let sName=keywordMap[k]; let hasP=/%/.test(m[0])||percentStats.includes(sName); if(hasP&&['攻擊','生命','防禦'].includes(sName)) sName+='百分比'; if(sName===keywordMap["共鳴技能"]&&c.substring(m.index,m.index+6).includes("解放")) sName=keywordMap["共鳴解放"]; all.push({index:m.index,rawText:m[0],name:sName,value:tV+(hasP?'%':'')}); } }
+all.sort((a,b)=>a.index-b.index); return all.map(x=>({name:x.name,value:x.value}));
+}
+const STAT_WHITELIST='0123456789.%COST共鳴技能解除普攻重擊爆擊率爆擊傷害攻擊生命防禦效率衍射湮滅冷凝導電熱熔氣動傷害加成百分比'; const OCR_LANG='chi_tra+eng';
+function getAllowedValuesByName(name){ const i=lookupHeaders.indexOf(name)-1; if(i<0) return []; const validRows = lookupRows.map(r => r[i]).filter(v => v != null && v !== '—'); if (validRows.length > 0) return validRows; if (percentStats.includes(name) && !lookupRows.some(row => row[i] != null && row[i] !== '—')) return []; return []; }
+function snapValueToClosest(name,val){ if(!name||!val) return {value:val,snapped:false}; const allowed=getAllowedValuesByName(name); if(allowed.length===0) return {value:val,snapped:false}; const isPercent=/%$/.test(val)||percentStats.includes(name); const nv=parseFloat(String(val).replace('%','')); if(isNaN(nv)) return {value:val,snapped:false}; let best=allowed[0], diff=1e9; for(const a of allowed){ const av=parseFloat(String(a).replace('%','')); if(isNaN(av)) continue; const d=Math.abs(av-nv); if(d<diff){diff=d;best=a} } if(diff<=0.8 || allowed.includes(val)) return {value:best, snapped:(best!==val)}; const normalized=(Math.round(nv*10)/10)+(isPercent?'%':''); return {value:normalized, snapped:false}; }
+function postFixParsed(parsed){ return parsed.map(item=>{ let name=item.name; let value=String(item.value||'').trim(); if(!lookupHeaders.includes(name)) name=closestName(name); if(percentStats.includes(name)&&!/%$/.test(value)){ const tryN=parseFloat(value); if(!isNaN(tryN)) value=(Math.round(tryN*10)/10)+'%'; } value=normalizeDigits(value); const {value:snappedVal,snapped}=snapValueToClosest(name,value); const corrected=(name!==item.name)||(snapped)||(value!==item.value); return {name,value:snappedVal,_auxFixed:corrected}; }); }
+function scoreParsedQuality(parsed){ let validName=0,validValue=0; for(const p of parsed){ if(!p||!p.name||!p.value) return; if(lookupHeaders.includes(p.name)) validName++; const vals=getAllowedValuesByName(p.name); if(vals.includes(p.value)) validValue++; } return validName*1 + validValue*1.5; }
+function getAvgConfidence(tsData){ try{ const words=tsData?.words||[]; if(!words.length) return 0; const sum=words.reduce((a,w)=>a+(w.confidence||0),0); return sum/words.length; }catch{return 0} }
+async function prepareCanvas(src){ const img=new Image(); img.crossOrigin='anonymous'; await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=src}); const c=D.createElement('canvas'); c.width=img.naturalWidth; c.height=img.naturalHeight; c.getContext('2d').drawImage(img,0,0); return c; }
+function toGray(ctx,w,h){ const d=ctx.getImageData(0,0,w,h), p=d.data; for(let i=0;i<p.length;i+=4){const g=0.299*p[i]+0.587*p[i+1]+0.114*p[i+2]; p[i]=p[i+1]=p[i+2]=g} ctx.putImageData(d,0,0); }
+function adjustContrast(ctx,w,h,contrast=1.25,brightness=10){ const d=ctx.getImageData(0,0,w,h), p=d.data; const factor=(259*(contrast*255+255))/(255*(259-contrast*255)); for(let i=0;i<p.length;i+=4){ p[i]=factor*(p[i]-128)+128+brightness; p[i+1]=factor*(p[i+1]-128)+128+brightness; p[i+2]=factor*(p[i+2]-128)+128+brightness; } ctx.putImageData(d,0,0); }
+function threshold(ctx,w,h,thr=160){ const d=ctx.getImageData(0,0,w,h), p=d.data; for(let i=0;i<p.length;i+=4){ const v=(p[i]+p[i+1]+p[i+2])/3, b=v>thr?255:0; p[i]=p[i+1]=p[i+2]=b; } ctx.putImageData(d,0,0); }
+function unsharp(ctx,w,h,amount=0.6){ const src=ctx.getImageData(0,0,w,h), blur=ctx.getImageData(0,0,w,h), p=blur.data, tmp=new Uint8ClampedArray(p.length); const kernel=[1,2,1,2,4,2,1,2,1], ksum=16; for(let y=1;y<h-1;y++){ for(let x=1;x<w-1;x++){ let r=0,g=0,b=0, idx=0; for(let ky=-1;ky<=1;ky++) for(let kx=-1;kx<=1;kx++){ const i=((y+ky)*w+(x+kx))*4, k=kernel[idx++]; r+=p[i]*k; g+=p[i+1]*k; b+=p[i+2]*k; } const o=(y*w+x)*4; tmp[o]=r/ksum; tmp[o+1]=g/ksum; tmp[o+2]=b/ksum; tmp[o+3]=255; } } const sp=src.data; for(let i=0;i<p.length;i+=4){ p[i]=Math.min(255,Math.max(0, sp[i]+(sp[i]-tmp[i])*amount)); p[i+1]=Math.min(255,Math.max(0, sp[i+1]+(sp[i+1]-tmp[i+1])*amount)); p[i+2]=Math.min(255,Math.max(0, sp[i+2]+(sp[i+2]-tmp[i+2])*amount)); } ctx.putImageData(blur,0,0); }
+function resizeCanvas(srcCanvas,scale=2){ const c=D.createElement('canvas'); c.width=Math.max(1,Math.round(srcCanvas.width*scale)); c.height=Math.max(1,Math.round(srcCanvas.height*scale)); const ctx=c.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high'; ctx.drawImage(srcCanvas,0,0,srcCanvas.width,srcCanvas.height,0,0,c.width,c.height); return c; }
+async function buildPreprocessVariants(src){ const base=await prepareCanvas(src); const v=[]; v.push({label:'原圖',canvas:base}); const up2=resizeCanvas(base,2); v.push({label:'放大2x',canvas:up2}); const g1=resizeCanvas(base,1.5); let ctx=g1.getContext('2d'); toGray(ctx,g1.width,g1.height); adjustContrast(ctx,g1.width,g1.height,1.3,12); unsharp(ctx,g1.width,g1.height,0.6); v.push({label:'灰階對比銳化',canvas:g1}); const g2=resizeCanvas(base,2); ctx=g2.getContext('2d'); toGray(ctx,g2.width,g2.height); threshold(ctx,g2.width,g2.height,160); v.push({label:'放大灰階二值',canvas:g2}); return v; }
+async function recognizeWithAssistant(src,useAssistant=true,onProgress=()=>{}){ if(!useAssistant){ onProgress('正在召喚 Tesseract 引擎...'); const worker=await Tesseract.createWorker(OCR_LANG,1,{logger:m=>{if(m.status==='recognizing text') onProgress(`辨識中... ${Math.round(m.progress*100)}%`) }}); const o=await worker.recognize(src,{}, {tessedit_char_whitelist:STAT_WHITELIST,preserve_interword_spaces:'1',psm:6,user_defined_dpi:'300'}); await worker.terminate(); const text=(o?.data?.text||'').trim(); const parsed=normalizeText(text); return {bestText:text,bestParsed:parsed,bestConfidence:getAvgConfidence(o?.data)||0,usedAssistant:false}; } const variants=await buildPreprocessVariants(src); const worker=await Tesseract.createWorker(OCR_LANG,1,{logger:m=>{if(m.status==='recognizing text') onProgress(`AI加強辨識中... ${Math.round(m.progress*100)}%`) }}); const tries=[]; for(const v of variants){ for(const psm of [6,7]){ const rec=await worker.recognize(v.canvas,{}, {tessedit_char_whitelist:STAT_WHITELIST,preserve_interword_spaces:'1',psm,user_defined_dpi:'300'}); const text=(rec?.data?.text||'').trim(); const p1=normalizeText(text), p2=postFixParsed(p1); const s1=scoreParsedQuality(p1), s2=scoreParsedQuality(p2), conf=getAvgConfidence(rec?.data)||0; tries.push({text,parsed:p2,score:Math.max(s1,s2),confidence:conf}); } } await worker.terminate(); tries.sort((a,b)=> b.score!==a.score? b.score-a.score : (b.confidence-a.confidence)); const best=tries[0]||{text:'',parsed:[]}; return {bestText:best.text,bestParsed:best.parsed,bestConfidence:best.confidence,usedAssistant:true}; }
+async function coarseAnalyze(src,onProgress=()=>{}){ onProgress('正在召喚 Tesseract 引擎...'); const worker=await Tesseract.createWorker(OCR_LANG,1,{logger:m=>{if(m.status==='recognizing text') onProgress(`初步檢查中... ${Math.round(m.progress*100)}%`) }}); const o=await worker.recognize(src,{}, {tessedit_char_whitelist:STAT_WHITELIST,preserve_interword_spaces:'1',psm:7,user_defined_dpi:'200'}); await worker.terminate(); const text=(o?.data?.text||'').trim(); const parsed=normalizeText(text); const pct=(text.match(/%/g)||[]).length; const isBig=parsed.length>10 || pct>12 || text.length>500; return {text,parsed,isBig}; }
+function isValidSubRow(row){ if(!row||!row.name||!row.value) return false; if(!lookupHeaders.includes(row.name)) return false; const headerIndex = lookupHeaders.indexOf(row.name) - 1; if (headerIndex < 0 || headerIndex >= lookupRows[0].length) return false; if (lookupRows.every(tier => tier[headerIndex] == null || tier[headerIndex] === '—')) return false; const allowed=getAllowedValuesByName(row.name); return allowed.includes(row.value); }
+function classifyMainSub(rows,enforce=true){ const cloned=rows.map(r=>({...r})); const valid=[], invalid=[]; cloned.forEach((r,i)=>{ (isValidSubRow(r)?valid:invalid).push(i) }); const subPick=enforce? valid.slice(0,5) : valid; const mainPick=enforce? invalid.slice(0,2) : invalid; cloned.forEach((r,i)=>{ if(subPick.includes(i)) r._role='sub'; else if(mainPick.includes(i)) r._role='main'; else r._role='extra'; }); const counts={ main: cloned.filter(r=>r._role==='main').length, sub: cloned.filter(r=>r._role==='sub').length, extra:cloned.filter(r=>r._role==='extra').length }; return {rows:cloned, counts}; }
+function computeHistoryFlags(){ historyData.forEach(h=>{ h.duplicateWarning=false; h.duplicateCount=0; h.subInsufficient=false; h.subCount=0; const parsed=h.parsedData||[]; for(const other of historyData){ if(other===h) continue; let c=0; for(const pa of parsed){ for(const pb of (other.parsedData||[])){ if(pa&&pb&&(pa.name||'')===(pb.name||'')&&valuesEqual(pa.value,pb.value)) c++; }} if(c>=4){ h.duplicateWarning=true; h.duplicateCount=Math.max(h.duplicateCount||0,c) } } const classified=classifyMainSub(parsed,true); h.subCount=classified.counts.sub||0; if(h.subCount<5) h.subInsufficient=true; }); }
+function getStatTierInfo(name,val){ const idx=lookupHeaders.indexOf(name); if(idx===-1) return null; if (idx - 1 >= lookupRows[0].length) return null; for(let i=0;i<lookupRows.length;i++){ if(valuesEqual(val,lookupRows[i][idx-1])) return {tier:i+1,total:lookupRows.length}; } return null; }
+function renderParsedTable(data){ if(!data||!data.length) return "(無匹配結果)"; const historyItem = historyData.find(h => h.id === currentHistoryId); const isUploaded = historyItem && (historyItem.uploadStatus === 'success' || historyItem.uploadStatus === 'duplicate'); const enforce=aiBoostCheckbox.checked; const { rows, counts } = classifyMainSub(data,enforce); const isEditable = userUID === ADMIN_UID; const needsFixing = !isUploaded && (rows.some(r => r._role === 'extra') || counts.sub < 5); const seen={}, dupes=new Set(); rows.forEach((r,i)=>{const k=`${r.name||''}|${r.value||''}`; if(seen[k]===undefined) seen[k]=i; else dupes.add(i)}); let h='<div class="table-wrapper"><table class="parsed-table"><thead><tr><th>類型</th><th>屬性</th><th>數值</th><th>匹配</th><th>操作</th></tr></thead><tbody>'; rows.forEach((r,i)=>{ const t=getStatTierInfo(r.name,r.value); const isNameValid=lookupHeaders.includes(r.name); const hasContent=r.name&&r.value; let s='-'; let w=''; if(hasContent){ if(isNameValid){ if(t) s=`T${t.tier}`; else { const allowedCount = getAllowedValuesByName(r.name).length; if (allowedCount > 0) { s=`无效`; w=' <span class="unmatched-warning-icon" title="此數值在對照表中不存在">⚠️</span>'; } else s = '主'; } }else{ s='无效'; w=' <span class="unmatched-warning-icon" title="此屬性名稱無效">❓</span>' } } const dId='valopts-'+i; const opts=r.name?getValuesForHeader(r.name):[]; const isDup=dupes.has(i); const auxTag=r._auxFixed?'<span class="corrected-tag" title="AI 已修正此列">✓</span>':''; const roleTag=r._role==='main' ? '<span class="role-tag role-main">主</span>' : r._role==='sub' ? '<span class="role-tag role-sub">副</span>' : '<span class="role-tag role-extra">餘</span>'; const canEditThisRow = isEditable || (needsFixing && r._role !== 'main'); const disabledAttr = canEditThisRow ? '' : 'disabled'; const actionButtons = `<button class="action-btn delete-row-btn" data-index="${i}" style="padding:4px; background:transparent; border:none; color:var(--danger)" ${isEditable ? '' : 'disabled'} title="删除">🗑️</button>`; h+=`<tr><td>${roleTag}</td><td><select data-index="${i}" class="select attr-select ${isDup?'duplicate-cell':''}" ${disabledAttr}>${lookupHeaders.map(o=>`<option value="${escapeHtml(o)}" ${o===r.name?'selected':''}>${escapeHtml(o)}</option>`).join('')}</select></td><td><input list="${dId}" data-index="${i}" class="value-input ${isDup?'duplicate-cell':''}" value="${escapeHtml(r.value||'')}" ${disabledAttr}/><datalist id="${dId}">${opts.map(o=>`<option value="${escapeHtml(o)}"></option>`).join('')}</datalist>${auxTag}</td><td class="muted">${s}${w}</td><td>${actionButtons}</td></tr>`; }); h+='</tbody></table></div>'; return h; }
+function renderLookupTableAndStats(){ const elementalStats = ['湮滅傷害加成', '冷凝傷害加成', '導電傷害加成', '熱熔傷害加成', '氣動傷害加成', '衍射傷害加成']; const headers=lookupHeaders.slice(1); let t='<div class="table-wrapper"><table class="lookup-table"><thead><tr>'; headers.forEach(h=> { if (!elementalStats.includes(h)) t+=`<th>${escapeHtml(h)}</th>` }); t+='</tr></thead><tbody>'; const headerHasHighlight=new Array(headers.length).fill(false); let cellHighlightedCount=0,totalMatchOccurrences=0; const { rows } = classifyMainSub(currentParsedData, aiBoostCheckbox.checked); for(let r=0;r<lookupRows.length;r++){ t+='<tr>'; for(let c=0;c<lookupHeaders.length -1;c++){ const header=headers[c]; if (elementalStats.includes(header)) continue; const cell = c < lookupRows[r].length ? lookupRows[r][c] : '—'; let matchCount=0; for(const p of rows){ if(p&&p._role==='sub'&&p.name===header&&valuesEqual(p.value||'',cell)) matchCount++; } if(matchCount>0){ headerHasHighlight[c]=true; cellHighlightedCount++; totalMatchOccurrences+=matchCount; const withCount=matchCount>1?`${escapeHtml(cell)} (${matchCount})`:escapeHtml(cell); t+=`<td class="highlight">${withCount}</td>`; }else t+=`<td>${escapeHtml(cell)}</td>`; } t+='</tr>'; } t+='</tbody></table></div>'; const X=headerHasHighlight.filter(Boolean).length, Y=cellHighlightedCount, Z=totalMatchOccurrences; return {table:t, statsText:`副詞條對照：已亮 ${X} 項（${Y} 個）相符總數 ${Z}`}; }
+function renderHistory(){
+computeHistoryFlags(); historyList.innerHTML='';
+const is_admin = userUID === ADMIN_UID;
+const isManagedHistoryItem = (item) => {
+const source = String(item && item.source ? item.source : '').trim();
+return source === 'upload-end' || source === 'custom_echo_library' || source === 'custom_echo' || (!source && !!(item && item.imageSrc));
+};
+const visibleHistory = historyData.filter(isManagedHistoryItem);
+if(visibleHistory.length===0){ const li=D.createElement('li'); li.style.color='var(--muted)'; li.textContent='目前沒有 upload-end / custom 紀錄'; historyList.appendChild(li); return; }
+visibleHistory.forEach(item=>{
+const li=D.createElement('li'); li.dataset.id = item.id; if(item.duplicateWarning) li.classList.add('history-duplicate'); if(item.subInsufficient) li.classList.add('history-insufficient');
+const left=D.createElement('div'); left.style.cssText='display:flex;align-items:center;gap:6px;flex-grow:1;min-width:0';
+const span=D.createElement('span'); span.className='history-text'; span.textContent=item.title||'未命名'; span.title=(item.parsedData||[]).map(p=>`${p.name}:${p.value}`).join(' | ');
+const uploadMeta = getUploadStatusMeta(item.uploadStatus);
+const uploadBadge = D.createElement('span'); uploadBadge.className='upload-status-badge'; uploadBadge.textContent=uploadMeta.text; uploadBadge.style.color=uploadMeta.color; uploadBadge.style.background=uploadMeta.bg;
+const syncMeta = getCloudSyncMeta(item.cloudSyncStatus);
+const syncBadge = D.createElement('span'); syncBadge.className='sync-status-badge'; syncBadge.textContent=syncMeta.text; syncBadge.style.color=syncMeta.color; syncBadge.style.background=syncMeta.bg;
+if(item.duplicateWarning) { const b=D.createElement('span'); b.className='dup-badge'; b.textContent=`重(${item.duplicateCount||0})`; span.appendChild(b); }
+if(item.subInsufficient) { const v=D.createElement('span'); v.className='insuff-badge'; v.textContent=`缺(${item.subCount||0}/5)`; span.appendChild(v); }
+span.appendChild(uploadBadge);
+span.appendChild(syncBadge);
+left.appendChild(span);
+const controls = D.createElement('div'); controls.className = 'history-controls';
+const source = String(item && item.source ? item.source : '').trim();
+const isUploadEndItem = source === 'upload-end' || (!source && !!item.imageSrc);
+const uploadBtn = isUploadEndItem ? D.createElement('button') : null;
+const delBtn=D.createElement('button'); delBtn.className='action-btn icon-only'; delBtn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>'; delBtn.title='刪除此聲骸（立即）'; delBtn.onclick=(e)=>{e.stopPropagation(); deleteHistoryById(item.id)};
+const { counts } = classifyMainSub(item.parsedData, true); const needsFixing = !is_admin && (item.parsedData.some(r => r._role === 'extra') || counts.sub < 5); const isUploaded = item.uploadStatus === 'success' || item.uploadStatus === 'duplicate';
+if (uploadBtn) { uploadBtn.className='action-btn upload-btn icon-only'; uploadBtn.dataset.id = item.id; uploadBtn.onclick = (e) => { e.stopPropagation(); handleUpload(item.id); }; controls.appendChild(uploadBtn); }
+if (needsFixing && !isUploaded) { const reanalyzeBtn = D.createElement('button'); reanalyzeBtn.className = 'action-btn icon-only'; reanalyzeBtn.innerHTML = '🔍'; reanalyzeBtn.title = '重新分析此圖'; reanalyzeBtn.onclick = (e) => { e.stopPropagation(); reAnalyzeItem(item.id); }; controls.appendChild(reanalyzeBtn); }
+controls.appendChild(delBtn);
+li.onclick=()=>{ if(isAnalyzerMode) return; preview.src=item.imageSrc||''; preview.style.display=item.imageSrc?'block':'none'; currentRawText=item.rawText||''; currentParsedData=Array.isArray(item.parsedData)?JSON.parse(JSON.stringify(item.parsedData)):normalizeText(currentRawText); currentHistoryId=item.id; costDisplay.style.display=item.cost?(costDisplay.textContent=`C${item.cost}`,'inline-block'):'none'; renderResult(); historyList.querySelectorAll('li').forEach(el => el.style.background = ''); li.style.background = 'rgba(255, 184, 77, 0.1)'; };
+li.ondblclick=(e)=>{ if (!is_admin) return; e.stopPropagation(); openRenameInput(li,item,span); };
+li.append(left, controls); historyList.appendChild(li);
+});
+updateAllUploadButtonsState();
+}
+function openRenameInput(li,item,span){ const curr=item.title||''; const inp=D.createElement('input'); inp.type='text'; inp.value=curr; inp.className='styled-input'; inp.style.width='100%'; li.querySelector('.history-text').replaceWith(inp); inp.focus(); inp.select(); const save=()=>{ const v=inp.value.trim(); if(v) item.title=v; saveState(); renderHistory(); }; inp.onblur=save; inp.onkeydown=e=>{ if(e.key==='Enter') inp.blur(); else if(e.key==='Escape'){inp.value=curr; inp.blur()} }; }
+function deleteHistoryById(id){ const target = historyData.find(h => h.id === id); bigImages.forEach(b=>{ if(Array.isArray(b.childIds)) b.childIds=b.childIds=b.childIds.filter(cid=>cid!==id) }); if(currentHistoryId===id){ currentHistoryId=null; currentParsedData=[]; currentRawText=''; preview.src=''; preview.style.display='none'; resultDiv.innerHTML='(尚無內容)'; } const before=historyData.length; historyData=historyData.filter(h=>h.id!==id); if (target && target.cloudSyncCreated) { target.cloudSyncStatus = 'deleted'; syncHistoryItemToKgs(target, 'offlineDelete').catch(err => console.error('Delete sync failed:', err)); } saveState(); renderHistory(); renderResult(); showNotification(before>historyData.length?'已刪除紀錄':'找不到該紀錄', 'info'); }
+function renderResult(){ lookupStatsDiv.style.display='none'; const historyItem = historyData.find(h => h.id === currentHistoryId); const isUploaded = historyItem && (historyItem.uploadStatus === 'success' || historyItem.uploadStatus === 'duplicate'); const { counts } = classifyMainSub(currentParsedData, true); const needsFixing = !isUploaded && (currentParsedData.some(r => r._role === 'extra') || counts.sub < 5); fabAdd.style.display=(currentTab==='table' && !isAnalyzerMode && (userUID === ADMIN_UID || needsFixing)) ?'flex':'none'; aiIndicator.style.display=currentParsedData?.some?.(x=>x&&x._auxFixed)?'inline-flex':'none'; if(currentTab==='raw'){ resultDiv.style.whiteSpace='pre-wrap'; resultDiv.innerText=currentRawText&&currentRawText.trim()?currentRawText.trim():'(無辨識文字)'; }else if(currentTab==='lookup'){ const r=renderLookupTableAndStats(); resultDiv.innerHTML=r.table; lookupStatsDiv.style.display='block'; lookupStatsDiv.textContent=r.statsText; }else{ resultDiv.style.whiteSpace='normal'; resultDiv.innerHTML=renderParsedTable(currentParsedData); } }
+function extractSecondLineSnippet(t){ if(!t) return '未知'; const lines=t.split(/\r?\n/).map(l=>l.trim()).filter(l=>l.length>0); if(lines.length<2) return (lines[0]||'').slice(0,7); const second=lines[1]; return second.slice(0,Math.max(2,Math.min(7,second.length))).replace(/\s+/g,''); }
+async function reAnalyzeItem(id) {
+const item = historyData.find(h => h.id === id); if (!item || !item.imageSrc) { showNotification('找不到圖片來源，無法重新分析', 'error'); return; }
+showNotification('正在重新分析...', 'info'); updateStatus('重新分析中...', true);
+try {
+const useAssistant = aiBoostCheckbox.checked; const { isBig } = await coarseAnalyze(item.imageSrc);
+if (isBig) {
+const results = await jobQueue.add(() => processImage(item.imageSrc)); const allNewItems = [results].flat().filter(Boolean);
+if (allNewItems.length > 0) { deleteHistoryById(id); insertHistoryItems(allNewItems); if (autoUploadEnabled) { for (const nItem of allNewItems) await handleUpload(nItem.id); } showNotification('檢測到大圖，已重新分割處理！', 'success'); } else { showNotification('重新分析大圖失敗', 'error'); }
+return;
+}
+const ocr = await recognizeWithAssistant(item.imageSrc, useAssistant, (msg) => { updateStatus(`重新分析中: ${msg}`, true); });
+let parsed = useAssistant ? ocr.bestParsed : postFixParsed(normalizeText(ocr.bestText));
+if (useAssistant) { const { rows, hiddenCount } = autoScreenDuplicates(parsed); if (hiddenCount > 0) showNotification(`AI自動屏蔽 ${hiddenCount} 個重複項`, 'info'); parsed = rows; }
+item.rawText = ocr.bestText; item.parsedData = classifyMainSub(parsed, useAssistant).rows; item.uploadStatus = 'pending';
+item.cloudSyncStatus = 'pending';
+if (item.id === currentHistoryId) { currentParsedData = item.parsedData; currentRawText = item.rawText; renderResult(); }
+saveState(); renderHistory(); showNotification('重新分析完成！', 'success');
+} catch (e) { console.error('重新分析失敗:', e); showNotification('重新分析時發生錯誤', 'error'); } finally { updateStatus('準備就緒', false); }
+}
+async function deepProcess(src,parentBigId=null,pieceIndex=null,bigNumber=null,bigSnippet=null){
+const useAssistant=aiBoostCheckbox.checked; const ocr=await recognizeWithAssistant(src,useAssistant,(msg)=>{updateStatus(msg, true)});
+let parsed=useAssistant? ocr.bestParsed : postFixParsed(normalizeText(ocr.bestText));
+aiIndicator.style.display=parsed?.some?.(x=>x&&x._auxFixed)?'inline-flex':'none';
+if(useAssistant){ const {rows,hiddenCount}=autoScreenDuplicates(parsed); if(hiddenCount>0) showNotification(`AI自動屏蔽 ${hiddenCount} 個重複項`, 'info'); parsed=rows; }
+parsed=classifyMainSub(parsed, useAssistant).rows; const cost=detectCost(ocr.bestText); let item;
+if(parentBigId){ const pieceNo=(pieceIndex!=null)?pieceIndex+1:1; const snippet=bigSnippet||extractSecondLineSnippet(ocr.bestText); const bigObj=bigImages.find(b=>b.id===parentBigId); const numberLabel=bigObj?('B'+bigObj.number):(bigNumber||('B'+(parentBigId%1000))); const title=`${numberLabel}-${pieceNo}-${snippet}`; item = createHistoryItem(src,ocr.bestText,parsed,cost,parentBigId,title); const b=bigImages.find(x=>x.id===parentBigId); if(b){ b.childIds=b.childIds||[]; if(!b.childIds.includes(item.id)) b.childIds.push(item.id); } }else{ item = createHistoryItem(src,ocr.bestText,parsed,cost,null,null); }
+return item;
+}
+async function splitAndDeepProcess(src,bigObj){
+const img=new Image(); img.crossOrigin='anonymous'; await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=src}); const w=img.width, h=img.height;
+const crops=await Promise.all(CROP_REGIONS.map((region,index)=>new Promise(resolve=>{ const sx=Math.round(w*region.x), sy=Math.round(h*region.y), sW=Math.round(w*region.w), sH=Math.round(h*region.h); const canvas=D.createElement('canvas'); canvas.width=sW||Math.max(1,w); canvas.height=sH||Math.max(1,h); canvas.getContext('2d').drawImage(img,sx,sy,sW,sH,0,0,canvas.width,canvas.height); resolve({dataUrl:canvas.toDataURL('image/png'), index}); })));
+const tasks=crops.map(c=>jobQueue.add(()=>deepProcess(c.dataUrl,bigObj.id,c.index,bigObj.number,bigObj.snippet)));
+const results = await Promise.all(tasks); if(crops[0]){ preview.src=crops[0].dataUrl; preview.style.display='block'; } saveState(); showNotification(`大圖已拆成 ${crops.length} 張並辨識`, 'info'); return results;
+}
+async function processImage(src){
+if(!src) return; preview.src=src; preview.style.display='block'; resultDiv.innerHTML=''; updateStatus('準備圖片...', true);
+try{ const coarse=await coarseAnalyze(src,(msg)=>{updateStatus(msg, true)}); if(coarse.isBig){ updateStatus('檢測到大圖，分割處理中...', true); const snippet=extractSecondLineSnippet(coarse.text); bigImageCounter=(typeof bigImageCounter==='number'?bigImageCounter:0)+1; const bigObj={id:Date.now()+Math.floor(Math.random()*999), number:bigImageCounter, snippet, childIds:[]}; bigImages.unshift(bigObj); saveState(); const results = await splitAndDeepProcess(src,bigObj); return results; }else{ const item = await deepProcess(src,null,null,null,null); return item; } }catch(e){ console.error(e); updateStatus('辨識錯誤', false); showNotification('圖片辨識失敗','error'); return null; }finally{ refreshQueueUI(); }
+}
+function createHistoryItem(imageSrc,rawText,parsedData,cost,parentBigId=null,titleOverride=null){ const cleaned=(rawText||'').replace(/\s/g,''); const five=cleaned.substring(0,5)||cleaned; const indexNumber=historyData.length+1; const costPart=cost?`C${cost}`:'C?'; let title=titleOverride||`${indexNumber}-${five}-${costPart}`; const newItemId = Date.now()+Math.floor(Math.random()*999); const item={id: newItemId, title, imageSrc, rawText, parsedData:JSON.parse(JSON.stringify(parsedData||[])), cost, ts:Date.now(), uploadStatus: 'pending', cloudSyncStatus: 'pending', cloudSyncCreated: false, source: 'upload-end'}; if(parentBigId) item.parentBigId=parentBigId; return item; }
+function insertHistoryItems(items) { if (!Array.isArray(items)) items = [items]; if (items.length === 0) return; for (let i = items.length - 1; i >= 0; i--) { historyData.unshift(items[i]); } if (historyData.length > 600) historyData.length = 600; const firstItem = items[0]; currentHistoryId = firstItem.id; currentParsedData = firstItem.parsedData; currentRawText = firstItem.rawText; costDisplay.style.display = firstItem.cost ? (costDisplay.textContent = `C${firstItem.cost}`, 'inline-block') : 'none'; saveState(); renderHistory(); renderResult(); const newItemElement = historyList.querySelector(`[data-id="${firstItem.id}"]`); if (newItemElement) { historyList.querySelectorAll('li').forEach(el => el.style.background = ''); newItemElement.style.background = 'rgba(255, 184, 77, 0.1)'; newItemElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } }
+function updateCurrentHistoryData(){ if(!currentHistoryId) return; const h=historyData.find(h=>h.id===currentHistoryId); if(h){ h.parsedData=JSON.parse(JSON.stringify(currentParsedData)); h.uploadStatus='pending'; h.cloudSyncStatus='pending'; saveState(); } }
+function fileToDataURL(file){ return new Promise((resolve,reject)=>{ const r=new FileReader(); r.onload=()=>resolve(r.result); r.onerror=reject; r.readAsDataURL(file); }); }
+function setAnalyzerMode(enable) {
+isAnalyzerMode = enable; D.body.classList.toggle('analyzer-mode', isAnalyzerMode);
+toggleAnalyzerBtn.textContent = isAnalyzerMode ? '回到辨識' : '📈 評分模式';
+toggleAnalyzerBtn.style.background = isAnalyzerMode ? 'var(--accent-primary)' : ''; toggleAnalyzerBtn.style.color = isAnalyzerMode ? 'var(--bg-start)' : '';
+const historyItem = historyData.find(h => h.id === currentHistoryId); const isUploaded = historyItem && (historyItem.uploadStatus === 'success' || historyItem.uploadStatus === 'duplicate'); const { counts } = classifyMainSub(currentParsedData, true); const needsFixing = !isUploaded && (currentParsedData.some(r => r._role === 'extra') || counts.sub < 5); fabAdd.style.display = (currentTab === 'table' && !isAnalyzerMode && (userUID === ADMIN_UID || needsFixing)) ? 'flex' : 'none';
+if (isAnalyzerMode) { if(isScoreDataLoaded) renderAnalyzerPanel(); } else { renderResult(); }
+}
+function getScoreGrade(score) {
+const tiers = [ { g: 'SSS', min: 90, max: 100, color: 'var(--sss-color)' }, { g: 'SS', min: 85, max: 90, color: 'var(--ss-color)' }, { g: 'S', min: 80, max: 85, color: 'var(--s-color)' }, { g: 'A', min: 70, max: 80, color: 'var(--a-color)' }, { g: 'B', min: 55, max: 70, color: 'var(--b-color)' }, { g: 'C', min: 35, max: 55, color: 'var(--c-color)' }, { g: 'D', min: 0, max: 35, color: 'var(--d-color)' } ];
+let tier = tiers.find(t => score >= t.min) || tiers[tiers.length - 1]; if (tier.g === 'D') return { grade: 'D', suffix: '', color: tier.color };
+const range = tier.max - tier.min; const excess = Math.min(score, tier.max - 0.01) - tier.min; const ratio = excess / range;
+let suffix = ''; if (ratio >= 0.8) suffix = '++'; else if (ratio >= 0.6) suffix = '+'; else if (ratio >= 0.4) suffix = ''; else if (ratio >= 0.2) suffix = '-'; else suffix = '--';
+return { grade: tier.g, suffix: suffix, color: tier.color };
+}
+function getScoreCommentary(grade) { const comments = { SSS: "未來已來！博物館鎮館之寶！", SS: "頂級極品！安心用到關服。", S: "畢業級！非常強大。", A: "優秀！很好的過渡選擇。", B: "還不錯，可以先用著。", C: "狗糧預備役，前期可用。", D: "嗯...至少它填了一個格子。" }; const baseGrade = grade.replace(/[+\-]/g, ''); return comments[baseGrade] || "......"; }
+function getCharacterStatPriority(characterName) {
+if (!isScoreDataLoaded || !SCORE_DATA.characters[characterName]) return [];
+const charData = SCORE_DATA.characters[characterName];
+const priorities = [];
+for (const statName in charData.n) {
+const charWeight = charData.n[statName] || 0;
+const maxVal = SUB_STAT_MAX_VALUES[statName] || 0;
+const points = charWeight * maxVal;
+if (points > 0.01) priorities.push({ name: statName, points, weight: charWeight });
+}
+priorities.sort((a, b) => b.points - a.points);
+return priorities;
+}
+function getStatImportanceClass(points, maxPoints) {
+if (maxPoints <= 0 || points <= 0.01) return 'stat-useless';
+const ratio = points / maxPoints;
+if (ratio >= 0.7) return 'stat-important';
+if (ratio >= 0.3) return 'stat-secondary';
+return 'stat-useful';
+}
+function calculateScore(echoItem, characterName) {
+if (!isScoreDataLoaded || !SCORE_DATA.characters || !SCORE_DATA.characters[characterName]) { return { finalScore: 0, totalPoints: 0, maxScoreBase: 1, subScores: [], mainStat: null, critValue: 0, effectiveStatCount: 0, grade: 'N/A', gradeColor: 'var(--muted)', commentary: '數據加載中...', priorities: [] }; }
+const charData = SCORE_DATA.characters[characterName];
+const classifiedData = classifyMainSub(JSON.parse(JSON.stringify(echoItem.parsedData || [])), aiBoostCheckbox.checked);
+const mainStat = classifiedData.rows.find(p => p._role === 'main');
+const subStatsToScore = classifiedData.rows.filter(p => p._role === 'sub').slice(0, 5);
+let totalPoints = 0; let critValue = 0; let effectiveStatCount = 0; const subScores = [];
+const priorities = getCharacterStatPriority(characterName);
+const maxPrioPoints = priorities.length > 0 ? priorities[0].points : 0;
+let potentials = [];
+for(const statName in charData.n){
+const w = charData.n[statName]; const m = SUB_STAT_MAX_VALUES[statName]||0; if(w>0 && m>0) potentials.push(w*m);
+}
+potentials.sort((a,b)=>b-a);
+const maxScoreBase = potentials.slice(0,5).reduce((a,b)=>a+b,0) || 1;
+
+for (const stat of subStatsToScore) {
+const val = parseFloat(String(stat.value).replace('%', ''));
+if (isNaN(val)) continue;
+const charWeight = charData.n[stat.name] || 0;
+const points = val * charWeight;
+const statPrioInfo = priorities.find(p => p.name === stat.name);
+const statPrioPoints = statPrioInfo ? statPrioInfo.points : 0;
+const importanceClass = getStatImportanceClass(statPrioPoints, maxPrioPoints);
+if (importanceClass !== 'stat-useless') effectiveStatCount++;
+totalPoints += points;
+subScores.push({ name: stat.name, value: stat.value, points: points, importanceClass });
+if (stat.name === '爆擊率') critValue += val * 2;
+if (stat.name === '爆擊傷害') critValue += val;
+}
+const finalScore = maxScoreBase > 0 ? (totalPoints / maxScoreBase) * 100 : 0;
+const gradeInfo = getScoreGrade(finalScore);
+const commentary = getScoreCommentary(gradeInfo.grade);
+return { finalScore, totalPoints, maxScoreBase, subScores, mainStat, critValue, effectiveStatCount, grade: gradeInfo.grade, suffix: gradeInfo.suffix, gradeColor: gradeInfo.color, commentary, priorities };
+}
+function findCharacterInTitle(title, characterList) { if (!title) return null; let bestMatch = null; let longestMatchLength = 0; for (const charName of characterList) { if (title.includes(charName) && charName.length > longestMatchLength) { bestMatch = charName; longestMatchLength = charName.length; } } if (bestMatch) return bestMatch; for (const charName of characterList) { if (charName.length >= 2) { const p = charName.substring(0, 2); if (title.includes(p)) return charName; } } return null; }
+function renderAnalyzerPanel() {
+analyzerPanelContent.innerHTML = '';
+if (!isScoreDataLoaded) { analyzerPanelContent.innerHTML = `<p class="muted" style="text-align: center;">評分數據加載中...</p>`; return; }
+if(historyData.length === 0) { analyzerPanelContent.innerHTML = '<div class="score-card" style="justify-content:center; align-items:center; color:var(--muted);">(尚無歷史紀錄可供評分)</div>'; return; }
+const globalMethod = globalCharacterSelector.value || 'auto'; const characterList = Object.keys(SCORE_DATA.characters);
+historyData.forEach(item => {
+const cardId = `score-card-${item.id}`; const card = D.createElement('div'); card.className = 'score-card'; card.id = cardId; analyzerPanelContent.appendChild(card);
+let charName = globalMethod; let isAutoMatch = false; if (charName === 'auto') { charName = findCharacterInTitle(item.title, characterList) || '自定義'; isAutoMatch = true; }
+updateScoreCard(cardId, item, charName, isAutoMatch);
+});
+}
+function showAllScores(item) {
+if (!isScoreDataLoaded) { showNotification('權重資料尚未載入', 'error'); return; }
+const allScores = [];
+for (const charName in SCORE_DATA.characters) { if (charName === '自定義') continue; const result = calculateScore(item, charName); allScores.push({ name: charName, score: result.finalScore, grade: result.grade + result.suffix, color: result.gradeColor }); }
+allScores.sort((a, b) => b.score - a.score); allScoresSubtitle.textContent = `聲骸: ${item.title}`; allScoresTable.innerHTML = '';
+allScores.forEach(s => { const row = allScoresTable.insertRow(); row.innerHTML = `<td>${escapeHtml(s.name)}</td><td>${s.score.toFixed(1)}%</td><td><span style="color:${s.color}; font-weight:bold;">${s.grade}</span></td>`; });
+allScoresOverlay.classList.add('visible');
+}
+function updateScoreCard(cardId, item, characterName, isAutoMatch = false) {
+const card = D.getElementById(cardId); if (!card) return;
+const scoreResult = calculateScore(item, characterName);
+const maxPrioPoints = scoreResult.priorities && scoreResult.priorities.length > 0 ? scoreResult.priorities[0].points : 0;
+const totalTiers = lookupRows.length;
+const generateProgressBar = (name, value) => {
+const tierInfo = getStatTierInfo(name, value); if (!tierInfo) return `<div class="tier-progress-bar" title="無效位階">${'<span class="bar"></span>'.repeat(totalTiers)}</div>`;
+const litBars = totalTiers - tierInfo.tier + 1; let bars = ''; for (let i = 0; i < totalTiers; i++) { bars += `<span class="bar ${i < litBars ? 'lit' : ''}"></span>`; } return `<div class="tier-progress-bar" title="位階: ${tierInfo.tier}/${totalTiers}">${bars}</div>`;
+};
+const priorityHtml = scoreResult.priorities ? scoreResult.priorities.map(p => {
+const importanceClass = getStatImportanceClass(p.points, maxPrioPoints);
+return `<span class="stat-highlight ${importanceClass}">${escapeHtml(p.name)}(${p.weight}/${p.points.toFixed(1)})</span>`;
+}).join(' > ') : (isScoreDataLoaded ? '無適用詞條' : '...');
+const autoBadge = isAutoMatch ? `<span class="auto-detect-badge" title="從標題自動識別">AUTO</span>` : '';
+const allCharOptions = ['auto', ...Object.keys(SCORE_DATA.characters).sort((a,b) => {if (a==='自定義')return -1; if(b==='自定義')return 1; return a.localeCompare(b);})];
+card.innerHTML = `<div class="score-card-header"><span class="score-card-title" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</span><div style="display: flex; align-items: center; gap: 5px;">${autoBadge}<select class="select character-selector" data-item-id="${item.id}" style="width:auto;padding:4px 8px;font-size:0.8rem; display:inline-block; max-width: 120px;">${isScoreDataLoaded ? allCharOptions.map(name => `<option value="${name}" ${name === characterName ? 'selected' : ''}>${name==='auto'?'自動匹配':name}</option>`).join('') : '<option>讀取中...</option>'}</select><button class="action-btn all-scores-btn icon-only" data-item-id="${item.id}" title="查看全角色評分" ${!isScoreDataLoaded ? 'disabled' : ''} style="background: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.4);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M11.5 8a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0z"/></svg></button><button class="action-btn share-btn icon-only" data-item-id="${item.id}" title="產生分享圖" ${!isScoreDataLoaded ? 'disabled' : ''} style="background: rgba(34, 197, 94, 0.2); border-color: rgba(34, 197, 94, 0.4);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 4.9A.5.5 0 0 1 11 7V2.5zM8.5 5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 8.5a2.5 2.5 0 1 1-2.5 2.5A2.5 2.5 0 0 1 11 8.5zm-4.5 0A1.5 1.5 0 1 0 2 10a1.5 1.5 0 0 0 4.5 0zM11 11a2.5 2.5 0 1 1 .603 4.9A.5.5 0 0 1 11 15.5V11z"></path></svg></button></div></div><div class="score-total-display"><span class="score-grade" style="color:${scoreResult.gradeColor}">${scoreResult.grade}<small>${scoreResult.suffix}</small></span><div class="score-value-container"><div class="score-value">${scoreResult.finalScore.toFixed(1)}%</div><div class="score-points-total">積點: ${scoreResult.totalPoints.toFixed(1)} / ${scoreResult.maxScoreBase.toFixed(1)}</div></div></div><div class="score-details-grid"><div class="grid-header" style="grid-column: span 3;">主詞條 (C${item.cost || '?'})</div>${scoreResult.mainStat ? `<div style="grid-column: span 2;">${escapeHtml(scoreResult.mainStat.name)}</div><div>${escapeHtml(scoreResult.mainStat.value)}</div>` : '<div style="grid-column: span 3;">-</div>'}<div class="grid-header" style="margin-top:6px; grid-column: span 3;">副詞條</div><div class="grid-header">詞條</div><div class="grid-header">檔位</div><div class="grid-header">積點</div>${(scoreResult.subScores || []).map(ss => `<div><span class="stat-highlight ${ss.importanceClass}">${escapeHtml(ss.name)}</span> (${escapeHtml(ss.value)})</div><div>${generateProgressBar(ss.name, ss.value)}</div><div class="score-line-points">${ss.points.toFixed(1)}</div>`).join('')}${(!scoreResult.subScores || scoreResult.subScores.length === 0) ? '<div style="grid-column: span 3;">(無有效副詞條)</div>' : ''}</div><div class="emotional-stats"><div><div class="stat-label">雙爆分</div><div class="stat-value">${scoreResult.critValue.toFixed(1)}</div></div><div><div class="stat-label">有效詞條</div><div class="stat-value">${scoreResult.effectiveStatCount}/${(scoreResult.subScores || []).length}</div></div></div><div class="ai-commentary">${scoreResult.commentary}</div><div id="stat-priority-container"><div class="grid-header">詞條權重排行 (權重/最大潛力)</div><div class="stat-priority-list">${priorityHtml}</div></div>`;
+const allScoresBtn = card.querySelector('.all-scores-btn'); if (allScoresBtn) allScoresBtn.onclick = () => showAllScores(item);
+}
+analyzerPanelContent.addEventListener('change', e => {
+if (e.target.classList.contains('character-selector')) {
+const itemId = e.target.dataset.itemId; let characterName = e.target.value; const item = historyData.find(h => h.id == itemId); let isAuto = false;
+if (item) { if (characterName === 'auto') { characterName = findCharacterInTitle(item.title, characterList) || '自定義'; isAuto = true; } updateScoreCard(`score-card-${itemId}`, item, characterName, isAuto); }
+}
+});
+analyzerPanelContent.addEventListener('click', e => {
+const shareBtn = e.target.closest('.share-btn');
+if (shareBtn) {
+currentItemToShareId = shareBtn.dataset.itemId; const item = historyData.find(h => h.id == currentItemToShareId);
+if (item) { share5Btn.style.display = item.parentBigId ? 'flex' : 'none'; sharePreviewContainer.style.display = 'none'; shareDownloadContainer.style.display = 'none'; shareLoader.style.display = 'none'; generatedImageCache = null; shareOverlay.classList.add('visible'); }
+}
+});
+globalCharacterSelector.addEventListener('change', e => { renderAnalyzerPanel(); });
+const helpPanelColumns = [
+{ name: '爆率', key: '爆擊率' }, { name: '爆傷', key: '爆擊傷害' }, { name: '攻擊%', key: '攻擊百分比' }, { name: '攻擊', key: '攻擊' }, { name: '生命%', key: '生命百分比' }, { name: '防禦%', key: '防禦百分比' }, { name: '防禦', key: '防禦' }, { name: '共鳴效率', key: '共鳴效率' }, { name: '普攻加成', key: '普攻傷害加成' }, { name: '重擊加成', key: '重擊傷害加成' }, { name: '技能加成', key: '共鳴技能傷害加成(E)' }, { name: '大招加成', key: '共鳴解除傷害加成(大招)' }
+];
+function renderHelpPanel() {
+if (!isScoreDataLoaded) { helpTableBody.innerHTML = '<tr><td colspan="14">權重數據加載中...</td></tr>'; return; }
+let headerHtml = '<tr><th class="char-name-col">角色</th><th class="base-score-col">滿分基數</th>'; helpPanelColumns.forEach(c => headerHtml += `<th class="weight-col">${c.name}</th>`); headerHtml += '</tr>'; helpTableHeader.innerHTML = headerHtml;
+let bodyHtml = '';
+Object.entries(SCORE_DATA.characters).forEach(([charName, charData]) => {
+const isCustom = charName === '自定義';
+let potentials = []; for(const k in charData.n){ const w=charData.n[k]; const m=SUB_STAT_MAX_VALUES[k]||0; if(w>0&&m>0)potentials.push(w*m); } potentials.sort((a,b)=>b-a);
+const maxScoreBase = potentials.slice(0,5).reduce((a,b)=>a+b,0) || 1;
+const maxPrioPoints = potentials[0] || 0;
+
+bodyHtml += '<tr>'; bodyHtml += `<td class="char-name-col">${charName}</td>`; bodyHtml += `<td class="base-score-col">${maxScoreBase.toFixed(1)}</td>`;
+helpPanelColumns.forEach(col => {
+const val = charData.n[col.key] || 0; const maxStatValue = (SUB_STAT_MAX_VALUES[col.key] || 0); const points = val * maxStatValue; const importanceClass = getStatImportanceClass(points, maxPrioPoints);
+const title = `權重${val} * 最大值${maxStatValue} = ${points.toFixed(1)}分`;
+if (isCustom) { bodyHtml += `<td class="weight-col ${importanceClass}" title="${title}"><input type="number" class="value-input" data-char="${charName}" data-key="${col.key}" value="${val}" step="0.01" min="0"></td>`; } else { bodyHtml += `<td class="weight-col ${importanceClass}" title="${title}">${val || '-'}</td>`; }
+});
+bodyHtml += '</tr>';
+});
+helpTableBody.innerHTML = bodyHtml;
+}
+helpBtn.onclick = async () => { helpModal.style.display = 'flex'; renderHelpPanel(); if (!isScoreDataLoaded) { const success = await fetchScoreData(); if (success) renderHelpPanel(); } };
+closeHelpBtn.onclick = () => { helpModal.style.display = 'none'; }; helpModal.onclick = (e) => { if(e.target === helpModal) helpModal.style.display = 'none'; };
+async function syncAllCloudHistory() {
+if (!userUID) { showNotification('請先登入 UID', 'error'); return; }
+const targets = historyData.filter(item => item && item.cloudSyncStatus !== 'deleted');
+if (targets.length === 0) { showNotification('目前沒有可同步的歷史紀錄', 'info'); return; }
+let syncedCount = 0;
+for (const item of targets) {
+const ok = await syncHistoryItemToKgs(item, item.cloudSyncCreated ? 'offlineUpdate' : 'offlineCreate');
+if (ok) syncedCount++;
+}
+renderHistory();
+showNotification(`已完成批次同步 ${syncedCount}/${targets.length} 筆`, syncedCount > 0 ? 'success' : 'error');
+}
+async function reloadOfflineHistory() {
+if (!userUID) { showNotification('請先登入 UID', 'error'); return; }
+const merged = await refreshOfflineHistoryFromKgs();
+renderHistory(); renderResult();
+showNotification(merged > 0 ? `已同步本地 ${merged} 筆離線資料` : '沒有可同步的離線資料', 'info');
+}
+helpTableBody.addEventListener('input', e => {
+const target = e.target; if (target.tagName !== 'INPUT') return;
+const charName = target.dataset.char; const key = target.dataset.key; let value = target.value;
+if (charName !== '自定義') return; const customChar = SCORE_DATA.characters['自定義'];
+if (target.type === 'number') value = parseFloat(value); if (!customChar.n) customChar.n = {}; customChar.n[key] = isNaN(value) ? 0 : value;
+saveState(); renderHelpPanel(); if(isAnalyzerMode) renderAnalyzerPanel();
+});
+document.getElementById('btn-refresh-offline').addEventListener('click', reloadOfflineHistory);
+document.getElementById('btn-sync-all-cloud').addEventListener('click', syncAllCloudHistory);
+function updateAllUploadButtonsState() {
+const isUidValid = userUID && userUID.length > 0; const isAnalyzing = jobQueue.getRunning() > 0 || jobQueue.getPending() > 0;
+document.querySelectorAll('.upload-btn').forEach(btn => {
+const itemId = parseInt(btn.dataset.id); const item = historyData.find(h => h.id === itemId); if (!item) return;
+let icon = '🔒'; let disabled = true; let title = '訪客模式'; const { counts } = classifyMainSub(item.parsedData, true);
+if (isUidValid) {
+if (isAnalyzing) { title = '分析中...'; disabled = true; } else if (counts.sub !== 5) { title = '副詞條需5個'; disabled = true; } else {
+switch (item.uploadStatus) { case 'success': icon = '✅'; title = '已上傳'; disabled = true; break; case 'duplicate': icon = '❗'; title = '重複'; disabled = true; break; case 'failed': icon = '❌'; title = '失敗'; disabled = false; break; case 'uploading': icon = '🔄'; btn.classList.add('spin-animation'); title = '上傳中...'; disabled = true; break; default: icon = '📤'; disabled = false; title = '上傳'; break; }
+}
+}
+btn.innerHTML = icon; btn.disabled = disabled; btn.title = title; if (item.uploadStatus !== 'uploading') btn.classList.remove('spin-animation');
+});
+}
+async function handleUpload(id) {
+if (!userUID) { showNotification('訪客模式無法上傳', 'error'); return; }
+const item = historyData.find(h => h.id === id); if (!item || item.uploadStatus === 'uploading' || item.uploadStatus === 'success' || item.uploadStatus === 'duplicate') return;
+const { counts } = classifyMainSub(item.parsedData, true); if (counts.sub !== 5) { showNotification('副詞條需為5個才能上傳！', 'error'); return; }
+item.uploadStatus = 'uploading'; updateAllUploadButtonsState();
+const mainStats = item.parsedData.filter(r => r._role === 'main').map(r => ({ name: r.name, value: r.value })); const subStats = item.parsedData.filter(r => r._role === 'sub').map(r => ({ name: r.name, value: r.value }));
+const payload = { uid: userUID, title: item.title, mainStats: mainStats.slice(0, 2), subStats: subStats.slice(0, 5) };
+try {
+const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8', }, body: JSON.stringify(payload), redirect: 'follow' });
+if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+const result = await response.json();
+if (result.status === 'success') { item.uploadStatus = 'success'; item.cloudSyncStatus = 'pending'; showNotification('上傳成功！', 'success'); showSuccessGuide(); await syncHistoryItemToKgs(item); } else if (result.status === 'duplicate') { item.uploadStatus = 'duplicate'; item.cloudSyncStatus = 'pending'; const details = `UID: ${userUID}\n重複副詞條:\n${payload.subStats.map(s => `- ${s.name}: ${s.value}`).join('\n')}`; showErrorOverlay('資料重複', details); await syncHistoryItemToKgs(item); } else { throw new Error(result.message || '未知錯誤'); }
+} catch (error) { console.error('Upload failed:', error); item.uploadStatus = 'failed'; item.cloudSyncStatus = 'error'; showErrorOverlay('上傳失敗', `錯誤:\n${error.message}`); } finally { saveState(); renderHistory(); }
+}
+fileInput.onchange=async e=>{
+if(!e.target.files||e.target.files.length===0) return;
+try{ const files=Array.from(e.target.files); const dataUrls=await Promise.all(files.map(f=>fileToDataURL(f))); const tasks = dataUrls.map(src => jobQueue.add(() => processImage(src))); const results = await Promise.all(tasks); const allNewItems = results.flat().filter(Boolean); if (allNewItems.length > 0) { insertHistoryItems(allNewItems); if (autoUploadEnabled) { for (const item of allNewItems) { await handleUpload(item.id); } } } }catch(err){ console.error('File processing error',err); showNotification('檔案處理失敗','error'); }finally{ fileInput.value=''; refreshQueueUI(); }
+};
+urlInput.onpaste=async e=>{
+const items=e.clipboardData.items; const filesToProcess = []; for(const it of items){ if(it.type.indexOf('image')!==-1){ e.preventDefault(); filesToProcess.push(it.getAsFile()); } }
+if (filesToProcess.length > 0) { try{ const urls = await Promise.all(filesToProcess.map(f => fileToDataURL(f))); const tasks = urls.map(src => jobQueue.add(() => processImage(src))); const results = await Promise.all(tasks); const allNewItems = results.flat().filter(Boolean); if (allNewItems.length > 0) { insertHistoryItems(allNewItems); if (autoUploadEnabled) { for (const item of allNewItems) await handleUpload(item.id); } } } catch(err){ console.error('Paste processing error',err); showNotification('貼上圖片處理失敗','error'); } }
+};
+urlInput.onchange = () => {
+    const val = urlInput.value.trim();
+    if (val) {
+        // 清空輸入框
+        urlInput.value = ''; 
+        
+        // 設定跳轉網址
+        const targetUrl = "https://sites.google.com/view/gamedada-ocr/Wuthering-Waves/analyze-DC?authuser=0";
+        
+        // 使用現有的 modal 顯示提示 (利用 innerHTML 支援超連結)
+        showErrorOverlay(
+            '不支援網址輸入', 
+            `此為圖片上傳版。\n如需使用網址或是排行請至：\n<br><a href="${targetUrl}" target="_blank" style="color: var(--accent-primary); word-break: break-all; text-decoration: underline; margin-top: 5px; display: inline-block;">${targetUrl}</a>`
+        );
+    }
+};
+uidInput.addEventListener('change', (e) => {
+if (userUID === ADMIN_UID) { const newUid = e.target.value.trim(); if (newUid.length === 9 && /^\d{9}$/.test(newUid)) { userUID = newUid; saveState(); renderResult(); renderHistory(); refreshOfflineHistoryFromKgs().then(added => { if (added > 0) { renderHistory(); renderResult(); } }); showNotification('管理員 UID 已更新', 'success'); } else { e.target.value = userUID; showNotification('請輸入有效的9位數字UID', 'error'); } }
+});
+resultDiv.addEventListener('change',e=>{
+const t=e.target, idx=parseInt(t.dataset.index,10); if(isNaN(idx)||!currentParsedData[idx]) return; if(t.classList.contains('attr-select')) currentParsedData[idx].name=t.value; else if(t.classList.contains('value-input')) currentParsedData[idx].value=t.value; if(currentParsedData[idx]) currentParsedData[idx]._auxFixed=false; const classified=classifyMainSub(currentParsedData, true); currentParsedData=classified.rows; updateCurrentHistoryData(); renderResult(); renderHistory();
+});
+resultDiv.addEventListener('click', async e => {
+const target = e.target;
+if (target.classList.contains('delete-row-btn')) { if (userUID !== ADMIN_UID) return; const idx = parseInt(target.dataset.index, 10); if (!isNaN(idx)) { currentParsedData.splice(idx, 1); const classified = classifyMainSub(currentParsedData, true); currentParsedData = classified.rows; updateCurrentHistoryData(); renderResult(); renderHistory(); } }
+});
+btnTable.onclick=()=>{currentTab='table';btnTable.classList.add('active');btnRaw.classList.remove('active');btnLookup.classList.remove('active');renderResult()};
+btnRaw.onclick=()=>{currentTab='raw';btnRaw.classList.add('active');btnTable.classList.remove('active');btnLookup.classList.remove('active');renderResult()};
+btnLookup.onclick=()=>{currentTab='lookup';btnLookup.classList.add('active');btnTable.classList.remove('active');btnRaw.classList.remove('active');renderResult()};
+toggleAnalyzerBtn.onclick = async () => { if (!isAnalyzerMode && !isScoreDataLoaded) { fetchScoreData(); } setAnalyzerMode(!isAnalyzerMode); };
+fabAdd.onclick=()=>{ if(isAnalyzerMode) return; currentParsedData.push({name:'',value:'',_role:'extra'}); const classified=classifyMainSub(currentParsedData, true); currentParsedData=classified.rows; updateCurrentHistoryData(); renderResult(); renderHistory(); const tableBody = resultDiv.querySelector('.parsed-table tbody'); if (tableBody) tableBody.parentElement.parentElement.scrollTop = tableBody.scrollHeight; };
+['dragenter','dragover','dragleave','drop'].forEach(n=>D.body.addEventListener(n,e=>{e.preventDefault();e.stopPropagation()},false));
+D.body.addEventListener('dragenter',()=>D.body.classList.add('dragover'));
+D.body.addEventListener('dragleave',e=>{ if(e.relatedTarget===null) D.body.classList.remove('dragover') });
+D.body.addEventListener('drop',async e=>{
+D.body.classList.remove('dragover');
+if(e.dataTransfer?.files?.length){ const files=Array.from(e.dataTransfer.files); try { const urls = await Promise.all(files.map(f=>fileToDataURL(f))); const tasks = urls.map(src => jobQueue.add(() => processImage(src))); const results = await Promise.all(tasks); const allNewItems = results.flat().filter(Boolean); if (allNewItems.length > 0) { insertHistoryItems(allNewItems); if (autoUploadEnabled) { for (const item of allNewItems) { await handleUpload(item.id); } } } } catch(err) { console.error('Drop processing error',err); showNotification('拖放圖片處理失敗','error'); } finally { refreshQueueUI(); } }
+});
+preview.addEventListener('dragstart',e=>e.preventDefault());
+D.addEventListener('mousemove',e=>{
+if(imageTooltip.style.display==='block'){ const pad=10, maxW=280, maxH=210, vw=window.innerWidth, vh=window.innerHeight; let left=e.clientX+pad, top=e.clientY+pad; if(left+maxW+pad>vw) left=e.clientX-maxW-pad; if(top+maxH+pad>vh) top=e.clientY-maxH-pad; imageTooltip.style.left=Math.max(pad, left)+'px'; imageTooltip.style.top=Math.max(pad, top)+'px'; }
+});
+confirmSetupBtn.addEventListener('click', () => {
+const uid = modalUidInput.value.trim(); const consent = modalConsentCheckbox.checked; modalError.style.display = 'none';
+if (uid.length !== 9 || !/^\d{9}$/.test(uid)) { modalError.textContent = '請輸入有效的9位數字UID。'; modalError.style.display = 'block'; return; }
+if (!consent) { modalError.textContent = '您必須同意聲明才能繼續。'; modalError.style.display = 'block'; return; }
+userUID = uid; autoUploadEnabled = modalAutoUploadCheckbox.checked; updateUidInputPermissions(); saveState(); hideWelcomeModal(); renderResult(); renderHistory(); refreshOfflineHistoryFromKgs().then(added => { if (added > 0) { renderHistory(); renderResult(); showNotification(`已載入 ${added} 筆離線資料`, 'info'); } });
+});
+guestModeBtn.addEventListener('click', () => { userUID = ''; autoUploadEnabled = false; updateUidInputPermissions(); saveState(); hideWelcomeModal(); });
+errorCloseBtn.addEventListener('click', () => errorOverlay.classList.remove('visible'));
+guideCloseBtn.addEventListener('click', () => successGuideOverlay.classList.remove('visible'));
+goToRatingBtn.addEventListener('click', () => { hasSeenSuccessGuide = true; saveState(); successGuideOverlay.classList.remove('visible'); });
+shareCloseBtn.onclick = () => shareOverlay.classList.remove('visible');
+share1Btn.onclick = () => generateShareImage(1);
+share5Btn.onclick = () => generateShareImage(5);
+shareDownloadBtn.onclick = () => { if (generatedImageCache) { const link = D.createElement('a'); link.download = `WutheringWaves_Echo_${currentItemToShareId}.png`; link.href = generatedImageCache; link.click(); } else { showNotification('尚未產生圖片', 'error'); } };
+allScoresCloseBtn.onclick = () => allScoresOverlay.classList.remove('visible');
+allScoresOverlay.addEventListener('click', e => { if (e.target === allScoresOverlay) allScoresOverlay.classList.remove('visible'); });
+
+const isSetupComplete = loadState();
+if (!isSetupComplete) { welcomeOverlay.classList.add('visible'); } else { welcomeOverlay.style.display = 'none'; }
+renderHistory(); renderResult(); refreshQueueUI();
+if (isSetupComplete && !isScoreDataLoaded) { fetchScoreData(); }
+if (isSetupComplete) {
+refreshOfflineHistoryFromKgs().then(added => {
+if (added > 0) {
+renderHistory();
+renderResult();
+showNotification(`已載入 ${added} 筆離線資料`, 'info');
+}
+});
+}
+});
+</script>
+</body>
+</html>
