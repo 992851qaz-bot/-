@@ -3,6 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.youtube.com https://s.ytimg.com; connect-src 'self' https://script.google.com https://script.googleapis.com https://www.google-analytics.com https://region1.google-analytics.com https://discord.com https://corsproxy.io https://noisy-voice-fdf7.992851qaz.workers.dev https://wutheringwaves-dc.kurogames-global.com; frame-src https://www.youtube.com; worker-src 'self' blob:; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11422,10 +11426,19 @@
         const PROXY = "https://corsproxy.io/?";
         const CF_WORKER = "https://noisy-voice-fdf7.992851qaz.workers.dev/";
         const CURRENT_VERSION = "v49.7";
-        const DISCORD_WEBHOOKS = [
-            "https://discord.com/api/webhooks/1473127435468931235/-jfk8IIWSZGBmDaVWD8Ne013bgWCsJKoD12yiDStleUaeHmzY4Aj40so0UHTC2g76SbX",
-            "https://discord.com/api/webhooks/1473127614171316419/hTE1DFVN_UTnJ530v1Zk9DIAUP4nzYGBm4OpKSHHQcDQ74fqL_OSrN3_etE1wn0czvuw"
-        ];
+        const TRUSTED_API_HOSTS = new Set(["script.google.com", "script.googleapis.com", "noisy-voice-fdf7.992851qaz.workers.dev"]);
+        const DISCORD_WEBHOOKS = (() => {
+            try {
+                const raw = localStorage.getItem('ww_discord_webhooks') || '[]';
+                const parsed = JSON.parse(raw);
+                if (!Array.isArray(parsed)) return [];
+                return parsed
+                    .map(v => String(v || '').trim())
+                    .filter(v => /^https:\/\/discord\.com\/api\/webhooks\/\d+\/[A-Za-z0-9._-]+$/.test(v));
+            } catch (e) {
+                return [];
+            }
+        })();
         const imgEl = document.getElementById('preview-img'), zoomCanvas = document.getElementById('zoom-canvas'), imgContainer = document.getElementById('img-container'), imgPlaceholder = document.getElementById('img-placeholder'), statusText = document.getElementById('status-text'), dimText = document.getElementById('dim-text'), loader = document.getElementById('loader'), tableBody = document.getElementById('table-body'), debugBtn = document.getElementById('debug-btn'), editModeBtn = document.getElementById('edit-mode-btn'), historyListEl = document.getElementById('history-list'), urlInput = document.getElementById('url-input'), analyzeBtn = document.getElementById('btn-analyze'), loginInput = document.getElementById('login-uid'), loginBtn = document.getElementById('btn-login'), weightStatus = document.getElementById('weight-status'), uidDisplay = document.getElementById('uid-display'), roleGrid = document.getElementById('role-grid'), roleCanvas = document.getElementById('role-correction-canvas'), ocrResultText = document.getElementById('ocr-result-text'), cvOverlay = document.getElementById('cv-overlay'), btnLoadAll = document.getElementById('btn-load-all');
         const subEditName = document.getElementById('sub-edit-name'), subEditVal = document.getElementById('sub-edit-val'), subEditValSelect = document.getElementById('sub-edit-val-select'), subEditCanvas = document.getElementById('sub-edit-canvas');
         const mobileContainer = document.getElementById('mobile-results'); // NEW
@@ -13232,17 +13245,32 @@
         }
         function getOfflineApiUrl() {
             const raw = (localStorage.getItem('ww_offline_gas_url') || DEFAULT_OFFLINE_API_URL || '').trim();
-            return raw;
+            return sanitizeApiUrl(raw, DEFAULT_OFFLINE_API_URL);
         }
         function getMainApiUrl() {
             const raw = (localStorage.getItem('ww_gas_url') || '').trim();
             if (!raw) return DEFAULT_GAS_URL;
             const offlineUrl = getOfflineApiUrl();
             if (raw === offlineUrl || raw === DEFAULT_OFFLINE_API_URL) return DEFAULT_GAS_URL;
-            return raw;
+            return sanitizeApiUrl(raw, DEFAULT_GAS_URL);
+        }
+        function sanitizeApiUrl(rawUrl, fallback = '') {
+            const raw = String(rawUrl || '').trim();
+            if (!raw) return String(fallback || '').trim();
+            try {
+                const parsed = new URL(raw);
+                if (parsed.protocol !== 'https:') return String(fallback || '').trim();
+                if (!TRUSTED_API_HOSTS.has(parsed.hostname)) return String(fallback || '').trim();
+                if (parsed.hostname === 'script.google.com' && (!parsed.pathname.includes('/macros/s/') || !parsed.pathname.includes('/exec'))) {
+                    return String(fallback || '').trim();
+                }
+                return parsed.toString();
+            } catch (e) {
+                return String(fallback || '').trim();
+            }
         }
         function buildApiActionUrl(baseUrl, action) {
-            const base = String(baseUrl || '').trim();
+            const base = sanitizeApiUrl(baseUrl, '');
             if (!base) return '';
             const actionValue = String(action || '');
             try {
@@ -13267,7 +13295,7 @@
             }
         }
         function isOfflineApiUrlUsable(url) {
-            return /^https?:\/\//i.test(String(url || '').trim());
+            return !!sanitizeApiUrl(url, '');
         }
         function ensureOfflineApiConfigured() {
             const current = (localStorage.getItem('ww_offline_gas_url') || '').trim();
@@ -26000,6 +26028,9 @@
 
         async function sendDiscordMessage(webhookUrl, message) {
             try {
+                if (!/^https:\/\/discord\.com\/api\/webhooks\/\d+\/[A-Za-z0-9._-]+$/.test(String(webhookUrl || '').trim())) {
+                    return false;
+                }
                 const data = {
                     content: message
                 };
@@ -26025,6 +26056,10 @@
         async function testDiscordSend() {
             if (!g_isDeveloper) {
                 showMsg('此功能需要開發者權限。');
+                return;
+            }
+            if (!DISCORD_WEBHOOKS.length) {
+                showMsg('未設定 Discord webhook（請改由伺服器端代送）。');
                 return;
             }
 
