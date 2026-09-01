@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Redirecting...</title>
-  <meta http-equiv="refresh" content="0; url=/-/20260828.html">
   <script>
     (function () {
+      var path = window.location.pathname || '';
+      if (path.endsWith('/bak.html')) return;
       var target = '/-/20260828.html' + window.location.search + window.location.hash;
       window.location.replace(target);
     })();
