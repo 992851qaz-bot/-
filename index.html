@@ -11,7 +11,7 @@
   <script>
     (function () {
       var current = window.location.pathname || '';
-      var allowLegacy = current.endsWith('/0628.html') || current.endsWith('/bak.html');
+      var allowLegacy = current.endsWith('/bak.html');
       if (allowLegacy) return;
       var target = 'https://992851qaz-bot.github.io/-/20260828.html' + window.location.search + window.location.hash;
       if (window.location.href !== target) window.location.replace(target);
