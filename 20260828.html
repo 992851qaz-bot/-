@@ -8017,32 +8017,318 @@
             color: #fff;
         }
 
-        /* Feedback modal responsive layout */
-        .feedback-body-flex {
-            display: flex;
-            gap: 20px;
-            height: 60vh;
+        /* ── Feedback Modal Responsive & Rich UI ── */
+        #feedback-modal {
+            z-index: 35000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(8, 8, 12, 0.86);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
-        @media (max-width: 768px) {
-            .feedback-body-flex {
+        #feedback-modal .feedback-modal-box {
+            width: 95vw;
+            max-width: 1280px;
+            height: 88vh;
+            max-height: 900px;
+            background: #15151c;
+            border: 1px solid rgba(229, 192, 123, 0.28);
+            border-radius: 16px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: feedbackFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes feedbackFadeIn {
+            from { opacity: 0; transform: scale(0.96) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .feedback-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: rgba(24, 24, 32, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+
+        .feedback-modal-title-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .feedback-modal-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .feedback-modal-subtitle {
+            font-size: 0.8rem;
+            color: #8e8ea0;
+            font-weight: normal;
+        }
+
+        .feedback-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-btn-submit-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #e5c07b, #d4a017);
+            color: #121214;
+            font-weight: 800;
+            font-size: 0.86rem;
+            padding: 7px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(229, 192, 123, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .feedback-btn-submit-top:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(229, 192, 123, 0.5);
+            filter: brightness(1.08);
+        }
+
+        .feedback-btn-submit-top:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .feedback-btn-close {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 1.25rem;
+            line-height: 1;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-btn-close:hover {
+            background: rgba(255, 77, 77, 0.25);
+            border-color: rgba(255, 77, 77, 0.5);
+            color: #fff;
+        }
+
+        .feedback-modal-body {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+            gap: 18px;
+            padding: 16px 20px;
+            background: #14141a;
+            overflow: hidden;
+        }
+
+        .feedback-col-left {
+            flex: 1.15;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 0;
+            height: 100%;
+        }
+
+        .feedback-col-right {
+            flex: 1.35;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 0;
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .feedback-card {
+            background: rgba(26, 26, 35, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .feedback-screenshot-container {
+            flex: 1;
+            min-height: 220px;
+            background: #09090d;
+            border: 1px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .feedback-screenshot-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.3s;
+        }
+
+        .feedback-sub-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ddd;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .feedback-sub-btn:hover {
+            background: rgba(229, 192, 123, 0.15);
+            border-color: rgba(229, 192, 123, 0.4);
+            color: var(--accent);
+        }
+
+        .feedback-pill-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            border-radius: 16px;
+            padding: 4px 11px;
+            font-size: 0.76rem;
+            cursor: pointer;
+            transition: all 0.18s;
+            white-space: nowrap;
+        }
+
+        .feedback-pill-btn:hover, .feedback-pill-btn.active {
+            background: rgba(229, 192, 123, 0.18);
+            border-color: rgba(229, 192, 123, 0.5);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .feedback-toolbox-card {
+            background: linear-gradient(145deg, rgba(30, 32, 44, 0.85), rgba(20, 22, 30, 0.85));
+            border: 1px solid rgba(229, 192, 123, 0.3);
+            border-radius: 10px;
+            padding: 12px 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .feedback-toolbox-subgrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .feedback-tool-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .feedback-danger-btn {
+            background: rgba(255, 85, 85, 0.12);
+            border: 1px solid rgba(255, 85, 85, 0.35);
+            color: #ff7b72;
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .feedback-danger-btn:hover {
+            background: rgba(255, 85, 85, 0.25);
+            border-color: rgba(255, 85, 85, 0.6);
+            color: #fff;
+        }
+
+        .feedback-modal-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(20, 20, 28, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+            gap: 12px;
+        }
+
+        @media (max-width: 900px) {
+            #feedback-modal {
+                padding: 6px;
+            }
+            #feedback-modal .feedback-modal-box {
+                width: 98vw;
+                height: 94vh;
+                max-height: 94vh;
+                border-radius: 12px;
+            }
+            .feedback-modal-body {
                 flex-direction: column;
-                height: auto;
-                max-height: 78vh;
                 overflow-y: auto;
+                padding: 10px;
+                gap: 10px;
             }
-
-            .feedback-body-flex>.feedback-screenshot-col {
-                flex: none !important;
-                height: 180px;
+            .feedback-col-left, .feedback-col-right {
+                flex: none;
+                height: auto;
+                overflow-y: visible;
             }
-
-            .feedback-body-flex>.feedback-form-col {
-                flex: none !important;
-                border-left: none !important;
-                padding-left: 0 !important;
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-                padding-top: 12px;
+            .feedback-screenshot-container {
+                height: 190px !important;
+                min-height: 190px;
+            }
+            .feedback-toolbox-subgrid {
+                grid-template-columns: 1fr;
+            }
+            .feedback-modal-header {
+                padding: 10px 14px;
+            }
+            .feedback-modal-footer {
+                padding: 10px 14px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .feedback-modal-footer > div:last-child {
+                display: flex;
+                justify-content: flex-end;
             }
         }
 
@@ -8887,6 +9173,10 @@
                     <button class="quick-btn" onclick="submitManualUid()" style="padding:8px 16px;font-size:0.9rem;"
                         data-lang-zh="確定" data-lang-en="Confirm">確定</button>
                 </div>
+                <div id="warning-login-uid-container" style="display:none; text-align:center; margin-top:4px; margin-bottom:8px;">
+                    <button class="quick-btn" onclick="applyLoginUidToWarning()" style="padding:6px 12px;font-size:0.8rem;background:var(--login-ok);border-color:var(--login-ok);color:#fff;"
+                        data-lang-zh="快速套用當前登入 UID" data-lang-en="Quick Apply Login UID">快速套用當前登入 UID</button>
+                </div>
                 <div style="font-size:0.75rem;color:#888;text-align:center;"
                     data-lang-zh="輸入 UID 後即視同確定為中文且輸入正確，將可直接存檔。"
                     data-lang-en="Entering UID confirms Chinese language and correct format for saving.">輸入 UID
@@ -9573,25 +9863,6 @@
                                 data-lang-en="View">查看</button></div>
                     </div>
 
-                    <!-- 進階設定 Section -->
-                    <div class="feature-section" data-lang-zh="⚙️ 系統進階設定" data-lang-en="⚙️ System Advanced Settings">⚙️
-                        系統進階設定</div>
-                    <div class="feature-card" style="cursor: default;" onclick="event.stopPropagation();">
-                        <div class="feature-card-icon-box" style="background:rgba(98,191,229,0.12); color:#62bfe5;">📜
-                        </div>
-                        <div class="feature-card-main">
-                            <div class="feature-card-title" data-lang-zh="顯示所有歷史紀錄"
-                                data-lang-en="Show All History Records">顯示所有歷史紀錄</div>
-                            <div class="feature-card-desc" data-lang-zh="預設僅顯示每個角色的最新一筆歷史紀錄。啟用此項可顯示全部歷史紀錄。"
-                                data-lang-en="By default, only the latest record for each character is shown. Enable to show all.">
-                                預設僅顯示每個角色的最新一筆歷史紀錄。啟用此項可顯示全部歷史紀錄。</div>
-                        </div>
-                        <div class="feature-card-action" onclick="event.stopPropagation();">
-                            <input type="checkbox" id="show-all-history-switch"
-                                onchange="toggleShowAllHistory(this.checked)"
-                                style="width:20px; height:20px; cursor:pointer;">
-                        </div>
-                    </div>
 
                     <!-- VIP Section -->
                     <div id="fs-vip" class="feature-section" data-lang-zh="👑 VIP 尊榮特權與設定"
@@ -9663,7 +9934,7 @@
                                 style="background:#f44336;color:#fff;">重置</button></div>
                     </div>
 
-                    <div id="fs-lang" class="feature-section">🌐 語言 / Language</div>
+                    <div id="fs-lang" class="feature-section" data-lang-zh="🌐 語言與顯示設定" data-lang-en="🌐 Language & Display">🌐 語言與顯示設定 / Language & Display</div>
                     <div class="feature-card" onclick="event.stopPropagation();toggleLanguage()">
                         <div class="feature-card-icon-box" style="background:rgba(97,175,239,0.12);">🌐</div>
                         <div class="feature-card-main">
@@ -9677,6 +9948,22 @@
                                 onclick="event.stopPropagation();toggleLanguage()"
                                 style="background:rgba(97,175,239,0.2);color:#61afef;border-color:rgba(97,175,239,0.4);">🌐
                                 English</button></div>
+                    </div>
+                    <div class="feature-card" style="cursor: default;" onclick="event.stopPropagation();">
+                        <div class="feature-card-icon-box" style="background:rgba(98,191,229,0.12); color:#62bfe5;">📜
+                        </div>
+                        <div class="feature-card-main">
+                            <div class="feature-card-title" data-lang-zh="顯示所有歷史紀錄"
+                                data-lang-en="Show All History Records">顯示所有歷史紀錄</div>
+                            <div class="feature-card-desc" data-lang-zh="預設僅顯示每個角色的最新一筆歷史紀錄。啟用此項可顯示全部歷史紀錄。"
+                                data-lang-en="By default, only the latest record for each character is shown. Enable to show all.">
+                                預設僅顯示每個角色的最新一筆歷史紀錄。啟用此項可顯示全部歷史紀錄。</div>
+                        </div>
+                        <div class="feature-card-action" onclick="event.stopPropagation();">
+                            <input type="checkbox" id="show-all-history-switch"
+                                onchange="toggleShowAllHistory(this.checked)"
+                                style="width:20px; height:20px; cursor:pointer;">
+                        </div>
                     </div>
 
                     <div id="fs-security" class="feature-section" data-lang-zh="🔒 安全與隱私"
@@ -10307,10 +10594,12 @@
                 </div>
             </div>
             <div class="modal-body" style="flex-direction: column; gap: 15px; padding: 20px;">
-                <div style="display:flex; gap:20px; align-items:center; background:rgba(0,0,0,0.2); padding:10px; border-radius:10px; width:100%; box-sizing:border-box;">
+                <div
+                    style="display:flex; gap:20px; align-items:center; background:rgba(0,0,0,0.2); padding:10px; border-radius:10px; width:100%; box-sizing:border-box;">
                     <div style="display:flex; flex-direction:column; align-items:center; gap:5px; flex-shrink:0;">
                         <div style="font-size:0.75rem; color:#888;">被分析圖片：</div>
-                        <canvas id="weapon-correction-canvas" style="border:1px solid #444; max-width:240px; max-height:80px; object-fit:contain; border-radius:6px; background:#121214;"></canvas>
+                        <canvas id="weapon-correction-canvas"
+                            style="border:1px solid #444; max-width:240px; max-height:80px; object-fit:contain; border-radius:6px; background:#121214;"></canvas>
                     </div>
                     <div style="color:#aaa; font-size:0.85rem; flex:1;">
                         OCR 辨識結果：<span id="weapon-ocr-ocrtext" style="color:var(--error); font-weight:bold;"></span>
@@ -10824,8 +11113,10 @@
                         <button class="btn-primary-action" onclick="showRefreshModal()"
                             style="background:#444;color:#ddd;" title="刷新" data-title-zh="刷新"
                             data-title-en="Refresh">🔄</button>
-                        <button id="btn-load-all" class="btn-icon-only" onclick="loadAllHistory()" style="display:none;"
-                            title="載入全部" data-title-zh="載入全部" data-title-en="Load All">⬇️</button>
+                        <button id="btn-load-all" style="display:none !important;"></button>
+                        <label class="btn-icon-only" title="顯示所有歷史紀錄" data-title-zh="顯示所有歷史紀錄" data-title-en="Show All History Records" style="margin:0; display:inline-flex; align-items:center; justify-content:center;">
+                            <input type="checkbox" id="show-all-history-switch-toolbar" onchange="toggleShowAllHistory(this.checked)" style="width:16px; height:16px; cursor:pointer; margin:0;">
+                        </label>
                         <button class="btn-icon-only" onclick="cleanupHistory()" title="整理重複項目" data-title-zh="整理重複項目"
                             data-title-en="Clean Up Duplicates">🧹</button>
                         <button id="debug-btn" class="btn-icon-only" onclick="toggleDebug()" title="排錯模式"
@@ -14203,7 +14494,7 @@
             { x: 0.795, y: 0.59, w: 0.187, h: 0.38 }
         ];
         const GAMEZH_TEAMS_API_URL = "https://script.google.com/macros/s/AKfycbzKul7LDO5_W6N3Lua6Uk5cA3BCOrMORNg2GzRON-_T2hWj0nvXlX77ICYSx3ikfCQ3/exec?action=getWeights";
-        const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbwbA-9CyeTG4y10_mNLtOW7_znZ7X8vJDMg2HsxujZgiddRJ1VhOq66jKLnGQlj-SHP/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026"; const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbw1wXrNC47znoLpGN6qBEATjlmE6UWgYtjs9KfU5MIpF9feqlsf3Z25bPkGJcLgzuZz/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
+        const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbxU33knCHQPlqThWyBkgO50ZO5E50yBvkqHev26FAKD_Yx1zQX1JK3wOXb2MciNAcJF/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026"; const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbw1wXrNC47znoLpGN6qBEATjlmE6UWgYtjs9KfU5MIpF9feqlsf3Z25bPkGJcLgzuZz/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
         const SUB_ALIAS_MAP = { "生命": "生命", "生命值": "生命", "生命固定": "生命", "生命百分比": "生命百分比", "生命%": "生命百分比", "攻擊": "攻擊", "攻擊力": "攻擊", "攻擊固定": "攻擊", "攻擊百分比": "攻擊百分比", "攻擊%": "攻擊百分比", "防禦": "防禦", "防御": "防禦", "防禦力": "防禦", "防御力": "防禦", "防禦百分比": "防禦百分比", "防禦%": "防禦百分比", "防御百分比": "防禦百分比", "暴擊": "暴擊", "爆擊": "暴擊", "暴擎": "暴擊", "暴擊傷害": "暴擊傷害", "爆擊傷害": "暴擊傷害", "暴傷": "暴擊傷害", "爆擊率": "暴擊", "共鳴效率": "共鳴效率", "效率": "共鳴效率", "普攻傷害加成": "普攻傷害加成", "普攻": "普攻傷害加成", "重擊傷害加成": "重擊傷害加成", "重擊": "重擊傷害加成", "共鳴技能傷害加成": "共鳴技能傷害加成", "共鳴技能": "共鳴技能傷害加成", "技能": "共鳴技能傷害加成", "E技能": "共鳴技能傷害加成", "共鳴解放傷害加成": "共鳴解放傷害加成", "共鳴解放": "共鳴解放傷害加成", "大招": "共鳴解放傷害加成", "解放": "共鳴解放傷害加成" };
         const ROLE_EN_MAP = { "Jinhsi": "今汐", "Jiyan": "忌炎", "Changli": "長離", "Zhezhi": "折枝", "Yinlin": "吟霖", "Xiangli Yao": "相里要", "Camellya": "椿", "Shorekeeper": "守岸人", "Encore": "安可", "Calcharo": "卡卡羅", "Verina": "維里奈", "Lingyang": "凌陽", "Jianxin": "鑒心", "Rover": "漂泊者", "Rover (K)": "漂泊者暗", "Rover (M)": "漂泊者光", "Rover (F)": "漂泊者風", "Havoc Rover": "漂泊者(湮滅)", "Spectro Rover": "漂泊者(衍射)", "Sanhua": "散華", "Danjin": "丹瑾", "Mortefi": "莫特斐", "Baizhi": "白芷", "Chixia": "熾霞", "Yangyang": "秧秧", "Yuanwu": "淵武", "Taoqi": "桃祈", "Aalto": "秋水", "Brant": "布蘭特", "Youhu": "釉瑚", "Lumi": "燈燈", "Carlotta": "珂萊塔", "Roccia": "洛可可", "Phoebe": "菲比", "Cantarella": "坎特雷拉", "Zani": "贊妮", "Ciaccona": "夏空", "Cartethyia": "卡提希婭", "Lupa": "露帕", "Phrolova": "弗洛洛", "Augusta": "奧古斯塔", "Iuno": "尤諾", "Galbrena": "嘉貝莉娜", "Qiuyuan": "仇遠", "Chisa": "千咲", "Buling": "卜靈", "Lynae": "琳奈", "Mornye": "莫寧", "Aemeath": "愛彌斯", "Luuk Herssen": "陸赫斯", "Sigrika": "西格莉卡", "Hiyuki": "緋雪", "Denia": "達妮婭" };
         // Reverse map: Chinese name → English name
@@ -14477,6 +14768,46 @@
             statusText.innerText = "正在初始化 OCR 引擎 (首次)...";
             g_tesseractWorker = await Tesseract.createWorker('chi_tra');
             return g_tesseractWorker;
+        }
+        function getRoleElementByName(roleName) {
+            if (!roleName) return 'Spectro';
+            
+            let queryName = roleName.trim();
+            // Normalize Rover variations to match database keys
+            if (queryName.includes('漂泊者')) {
+                if (queryName.includes('暗') || queryName.includes('湮滅')) {
+                    queryName = '漂泊者(湮滅)';
+                } else if (queryName.includes('光') || queryName.includes('衍射')) {
+                    queryName = '漂泊者(衍射)';
+                } else if (queryName.includes('風') || queryName.includes('氣動')) {
+                    queryName = '漂泊者(氣動)';
+                } else if (queryName.includes('熱') || queryName.includes('熱熔')) {
+                    queryName = '漂泊者(熱熔)';
+                } else if (queryName.includes('電') || queryName.includes('導電')) {
+                    queryName = '漂泊者(導電)';
+                }
+            }
+
+            const stats = typeof getCharacterBaseStats === 'function' ? getCharacterBaseStats(queryName) : null;
+            if (stats && stats.element) {
+                const ELEMENT_ZH_TO_EN = {
+                    '冷凝': 'Glacio', '熱熔': 'Fusion', '導電': 'Electro', '氣動': 'Aero', '衍射': 'Spectro', '湮滅': 'Havoc',
+                    'Glacio': 'Glacio', 'Fusion': 'Fusion', 'Electro': 'Electro', 'Aero': 'Aero', 'Spectro': 'Spectro', 'Havoc': 'Havoc'
+                };
+                return ELEMENT_ZH_TO_EN[stats.element] || stats.element;
+            }
+            return 'Spectro';
+        }
+        function getElementColor(element) {
+            const colors = {
+                'Glacio': '#62bfe5',
+                'Fusion': '#ff8f3d',
+                'Electro': '#b197fc',
+                'Aero': '#51cf66',
+                'Spectro': '#ffd43b',
+                'Havoc': '#e599f7'
+            };
+            return colors[element] || '#555';
         }
         let g_chalScoreHistory = JSON.parse(localStorage.getItem('chal_score_history') || '[]');
         const RESONATORS_PROFILE_PICTURE = {
@@ -15177,6 +15508,8 @@
             if (analyzeFixSwitch) analyzeFixSwitch.checked = g_analyzeFixMode;
             const showAllHistorySwitch = document.getElementById('show-all-history-switch');
             if (showAllHistorySwitch) showAllHistorySwitch.checked = g_showAllHistory;
+            const showAllHistorySwitchToolbar = document.getElementById('show-all-history-switch-toolbar');
+            if (showAllHistorySwitchToolbar) showAllHistorySwitchToolbar.checked = g_showAllHistory;
 
             inputGroup.style.display = 'flex';
             container.style.display = 'none';
@@ -15348,7 +15681,7 @@
                 historyListEl.innerHTML = '<div style="padding:20px;text-align:center;color:#aaa">☁️ ' + (zh ? '正在同步雲端資料...' : 'Syncing cloud data...') + '</div>';
 
                 updateDlm(15, '同步雲端歷史紀錄...', 'Syncing cloud history...');
-                await fetchCloudHistory(nextUid, 'latest');
+                await fetchCloudHistory(nextUid, 'all');
 
                 updateDlm(55, '讀取本地離線資料...', 'Loading offline data...');
                 await pullOfflineEntriesByUid(nextUid, { skipRender: true });
@@ -15357,9 +15690,7 @@
                 await pullCustomEchoesByUid(nextUid);
 
                 if (btnLoadAll) {
-                    btnLoadAll.style.display = 'inline-block';
-                    btnLoadAll.disabled = false;
-                    btnLoadAll.innerText = '⬇️';
+                    btnLoadAll.style.display = 'none';
                 }
 
                 updateDlm(95, '載入最新紀錄...', 'Loading latest record...');
@@ -16142,9 +16473,12 @@
                 }
 
                 const avatarUrl = getRoleAvatarUrl(name);
+                const elem = getRoleElementByName(name);
+                const color = getElementColor(elem);
+                const ringStyle = `border:2px solid ${color}; box-shadow: 0 0 6px ${color}88;`;
                 btn.innerHTML = `${avatarUrl
-                    ? `<img class="role-btn-avatar" src="${avatarUrl}" alt="${escapeHtml(name)}" onerror="this.style.display='none'">`
-                    : '<div class="role-btn-avatar" style="display:flex;align-items:center;justify-content:center;color:#aaa;font-weight:700;">?</div>'
+                    ? `<img class="role-btn-avatar" src="${avatarUrl}" alt="${escapeHtml(name)}" style="${ringStyle}" onerror="this.style.display='none'">`
+                    : `<div class="role-btn-avatar" style="display:flex;align-items:center;justify-content:center;color:#aaa;font-weight:700;${ringStyle}">?</div>`
                     }<div class="role-btn-name">${escapeHtml(name)}</div>`;
                 btn.onclick = () => resolveRoleCorrection(name);
                 roleGrid.appendChild(btn);
@@ -16164,11 +16498,25 @@
                 if (input && g_currentUserUid && g_currentUserUid.length === 9) {
                     input.value = g_currentUserUid;
                 }
+                const container = document.getElementById('warning-login-uid-container');
+                if (container) {
+                    const hasLogin = g_currentUserUid && g_currentUserUid.length === 9 && g_currentUserUid !== 'OFFLINE_LOCAL';
+                    container.style.display = hasLogin ? 'block' : 'none';
+                }
             }
         }
         function closeUidWarningModal() { document.getElementById('uid-warning-modal').style.display = 'none' }
-        function confirmRefresh() { closeRefreshModal(); const now = Date.now(); if (now - g_lastRefreshTime < 30000) { showMsg("請勿頻繁刷新，冷卻時間 30 秒。"); return } g_lastRefreshTime = now; g_echoesData = []; g_globalData = {}; g_chains = []; g_currentEntryId = null; imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#555;padding:50px;">正在重新下載資料...</td></tr>`; statusText.innerText = "重新整理中..."; fetchCloudHistory(g_currentUserUid, 'latest') }
-        function loadAllHistory() { if (!g_currentUserUid || g_currentUserUid.length !== 9) return; btnLoadAll.disabled = true; btnLoadAll.innerText = '...'; fetchCloudHistory(g_currentUserUid, 'all') }
+        function applyLoginUidToWarning() {
+            const input = document.getElementById('warning-uid-input');
+            const loginUid = g_currentUserUid || '';
+            if (input && loginUid && loginUid.length === 9 && loginUid !== 'OFFLINE_LOCAL') {
+                input.value = loginUid;
+                submitManualUid();
+            }
+        }
+        window.applyLoginUidToWarning = applyLoginUidToWarning;
+        function confirmRefresh() { closeRefreshModal(); const now = Date.now(); if (now - g_lastRefreshTime < 30000) { showMsg("請勿頻繁刷新，冷卻時間 30 秒。"); return } g_lastRefreshTime = now; g_echoesData = []; g_globalData = {}; g_chains = []; g_currentEntryId = null; imgEl.src = ""; imgEl.classList.remove('visible'); imgPlaceholder.style.display = 'flex'; tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#555;padding:50px;">正在重新下載資料...</td></tr>`; statusText.innerText = "重新整理中..."; fetchCloudHistory(g_currentUserUid, 'all') }
+        function loadAllHistory() { if (!g_currentUserUid || g_currentUserUid.length !== 9) return; btnLoadAll.disabled = true; btnLoadAll.style.display = 'none'; fetchCloudHistory(g_currentUserUid, 'all') }
         async function fetchCloudHistory(uid, mode) {
             if (uid && String(uid).trim() === "714034316") {
                 showMaintenancePage();
@@ -16304,7 +16652,7 @@
             } catch (e) {
                 window._isFirstLoginLoading = false;
                 historyListEl.innerHTML = `<div style="padding:10px;text-align:center;color:var(--error);">載入失敗: ${e.message}</div>`;
-                statusText.innerText = "同步失敗"; btnLoadAll.disabled = false; btnLoadAll.innerText = '⬇️'
+                statusText.innerText = "同步失敗"; if (btnLoadAll) btnLoadAll.style.display = 'none';
             }
         }
         function parseCloudSubs(str) { if (!str || typeof str !== 'string') return []; try { return str.split(',').map(s => { let match = s.match(/(.*?)([\d\.\%\+]+)$/); if (match) return { name: match[1], val: match[2], valid: true }; return { name: s, val: "?", valid: false } }) } catch (e) { console.warn('parseCloudSubs 異常:', e); return [] } }
@@ -16348,7 +16696,12 @@
                 item.echoes.forEach(e => {
                     if (e.main1) e.main1 = fixMainStatName(e.main1);
                 });
-                const fp = getFingerprint(item.echoes);
+                const role = (item.global && item.global.role) || '';
+                const uid = (item.global && item.global.uid) || '';
+                const weapon = (item.global && item.global.weapon) || '';
+                const echoesFp = getFingerprint(item.echoes);
+                const chainsStr = JSON.stringify(item.chains || []);
+                const fp = `${role}|${uid}|${weapon}|${chainsStr}|${echoesFp}`;
                 if (!seen.has(fp)) {
                     seen.add(fp);
                     clean.push(item);
@@ -18889,18 +19242,22 @@
                 const weaponName = item.global.weapon || '';
                 const weaponIconUrl = WEAPONS_PROFILE_PICTURE[weaponName] || '';
 
+                const elem = getRoleElementByName(roleName);
+                const elemColor = getElementColor(elem);
+                const ringStyle = `border:2px solid ${elemColor}; box-shadow: 0 0 6px ${elemColor}88;`;
+
                 let iconHtml = '';
                 if (roleIconUrl) {
                     iconHtml = `
                         <div style="position:relative; width:40px; height:40px; flex-shrink:0;">
-                            <img src="${roleIconUrl}" class="history-role-icon" onerror="this.style.display='none'">
+                            <img src="${roleIconUrl}" class="history-role-icon" style="${ringStyle}" onerror="this.style.display='none'">
                             ${weaponIconUrl ? `<img src="${weaponIconUrl}" style="position:absolute; bottom:-2px; right:-2px; width:16px; height:16px; border-radius:50%; border:1px solid #000; background:#121214; object-fit:contain;" title="${escapeHtml(weaponName)}" />` : ''}
                         </div>
                     `;
                 } else {
                     iconHtml = `
                         <div style="position:relative; width:40px; height:40px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); border-radius:6px;">
-                            <span class="history-role-icon-placeholder">?</span>
+                            <span class="history-role-icon-placeholder" style="${ringStyle}">?</span>
                             ${weaponIconUrl ? `<img src="${weaponIconUrl}" style="position:absolute; bottom:-2px; right:-2px; width:16px; height:16px; border-radius:50%; border:1px solid #000; background:#121214; object-fit:contain;" title="${escapeHtml(weaponName)}" />` : ''}
                         </div>
                     `;
@@ -19200,14 +19557,15 @@
                 // Top badges
                 out += `<div style="position:absolute;top:6px;right:6px;font-size:0.58rem;background:${colorClass}22;padding:2px 7px;border-radius:8px;font-weight:bold;border:1px solid ${colorClass};color:${colorClass};z-index:3;letter-spacing:0.5px;">${gradLabel}</div>`;
                 out += `<div style="position:absolute;top:6px;left:6px;font-size:0.56rem;background:${tc}22;padding:2px 6px;border-radius:8px;font-weight:bold;border:1px solid ${tc};color:${tc};z-index:3;">${tl}</div>`;
-                // Image
+                const elem = getRoleElementByName(g.role);
+                const elemColor = getElementColor(elem);
                 if (roleIconUrl) {
                     out += `<div style="position:relative;width:80px;height:80px;margin:22px auto 8px;z-index:1;">`;
-                    out += `<div style="position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(${colorClass},${colorClass}88,${colorClass}22,${colorClass});animation:grad-spin 4s linear infinite;"></div>`;
-                    out += `<img src="${roleIconUrl}" style="position:relative;width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid ${colorClass};z-index:2;display:block;" onerror="this.parentElement.innerHTML='<div style=\\'width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.05);border:3px solid ${colorClass};display:flex;align-items:center;justify-content:center;font-size:2rem;\\'>?</div>'">`;
+                    out += `<div style="position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(${elemColor},${elemColor}88,${elemColor}22,${elemColor});animation:grad-spin 4s linear infinite;"></div>`;
+                    out += `<img src="${roleIconUrl}" style="position:relative;width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid ${elemColor};z-index:2;display:block;" onerror="this.parentElement.innerHTML='<div style=\\'width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.05);border:3px solid ${elemColor};display:flex;align-items:center;justify-content:center;font-size:2rem;\\'>?</div>'">`;
                     out += `</div>`;
                 } else {
-                    out += `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));border:3px solid ${colorClass};display:flex;align-items:center;justify-content:center;font-size:2rem;margin:22px auto 8px;">?</div>`;
+                    out += `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));border:3px solid ${elemColor};display:flex;align-items:center;justify-content:center;font-size:2rem;margin:22px auto 8px;">?</div>`;
                 }
                 // Name
                 out += `<div style="font-size:0.82rem;font-weight:800;color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px;text-align:center;letter-spacing:0.3px;" title="${g.role}">${escapeHtml(cardName)}</div>`;
@@ -19326,9 +19684,11 @@
                     const tc = GRAD_TYPE_COLOR[c.type] || '#aaa';
                     const tl = GRAD_TYPE_LABEL(c.type, isEN);
                     const chainDots = Array(6).fill(0).map((_, i) => `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${i < c.chainCount ? tc : '#2a2a30'};box-shadow:${i < c.chainCount ? `0 0 4px ${tc}` : 'none'};"></span>`).join('');
+                    const elem = getRoleElementByName(c.role);
+                    const elemColor = getElementColor(elem);
                     let m = `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px 10px;background:linear-gradient(160deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border-radius:12px;border:1px solid ${tc}44;min-width:88px;max-width:110px;flex:1;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">`;
-                    m += iconUrl ? `<img src="${iconUrl}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid ${tc};box-shadow:0 0 10px ${tc}44;">`
-                        : `<div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.05);border:2px solid ${tc};display:flex;align-items:center;justify-content:center;font-size:1.4rem;">?</div>`;
+                    m += iconUrl ? `<img src="${iconUrl}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid ${elemColor};box-shadow:0 0 10px ${elemColor}44;">`
+                        : `<div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.05);border:2px solid ${elemColor};display:flex;align-items:center;justify-content:center;font-size:1.4rem;">?</div>`;
                     m += `<div style="font-size:0.79rem;font-weight:800;color:#e8e8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:88px;text-align:center;" title="${escapeHtml(c.role)}">${escapeHtml(name)}</div>`;
                     m += `<div style="font-size:0.6rem;color:${tc};border:1px solid ${tc};border-radius:8px;padding:1px 7px;font-weight:700;letter-spacing:0.3px;">${tl}</div>`;
                     m += `<div style="font-size:0.8rem;color:#61afef;font-family:'JetBrains Mono';font-weight:900;">${safeFixed(c.score, 1)}%</div>`;
@@ -20451,8 +20811,10 @@
                             const chainBadge = info.chainCount > 0
                                 ? `<span style="position:absolute;bottom:-3px;right:-3px;background:#ffd988;color:#000;font-weight:900;font-size:0.6rem;padding:0 3px;border-radius:4px;line-height:1;border:1px solid #000;" title="${info.chainCount}鏈">${info.chainCount}</span>`
                                 : '';
+                            const elem = getRoleElementByName(info.name);
+                            const elemColor = getElementColor(elem);
                             return info.iconUrl
-                                ? `<span style="position:relative;display:inline-block;vertical-align:middle;margin:0 1px;"><img src="${info.iconUrl}" title="${titleText}" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #e5c07b;object-fit:cover;display:block;">${chainBadge}</span>`
+                                ? `<span style="position:relative;display:inline-block;vertical-align:middle;margin:0 1px;"><img src="${info.iconUrl}" title="${titleText}" style="width:26px;height:26px;border-radius:50%;border:1.5px solid ${elemColor};box-shadow: 0 0 3px ${elemColor}44;object-fit:cover;display:block;">${chainBadge}</span>`
                                 : `<span style="font-size:0.75rem;background:#333;color:#fff;padding:2px 5px;border-radius:4px;">${escapeHtml(info.name)}${chainStr}</span>`;
                         }).join('');
 
@@ -20553,13 +20915,15 @@
                     if (!str) return '<span style="color:#555;">-</span>';
                     const roles = str.split(',').map(r => r.trim()).filter(Boolean);
                     return roles.map(r => {
+                        const elem = getRoleElementByName(r);
+                        const elemColor = getElementColor(elem);
                         if (useCycleAvatars) {
                             const iconUrl = grad_getRoleIconUrl(r);
                             if (iconUrl) {
-                                return `<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(229,192,123,0.12);color:#ffd988;border:1px solid rgba(229,192,123,0.25);border-radius:12px;padding:2px 8px;margin:2px;font-size:0.75rem;"><img src="${iconUrl}" title="${escapeHtml(r)}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;vertical-align:middle;"> <b>${escapeHtml(r)}</b></span>`;
+                                return `<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.04);color:#e8e8e8;border:1px solid ${elemColor}55;border-radius:12px;padding:2px 8px;margin:2px;font-size:0.75rem;"><img src="${iconUrl}" title="${escapeHtml(r)}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;vertical-align:middle;border:1px solid ${elemColor};"> <b>${escapeHtml(r)}</b></span>`;
                             }
                         }
-                        return `<span style="display:inline-block;background:rgba(229,192,123,0.12);color:#ffd988;border:1px solid rgba(229,192,123,0.25);border-radius:4px;padding:2px 6px;margin:2px;font-size:0.75rem;">${escapeHtml(r)}</span>`;
+                        return `<span style="display:inline-block;background:rgba(255,255,255,0.04);color:#fff;border:1px solid ${elemColor}55;border-radius:4px;padding:2px 6px;margin:2px;font-size:0.75rem;">${escapeHtml(r)}</span>`;
                     }).join('');
                 };
 
@@ -22152,7 +22516,9 @@
             const iconUrl = grad_getRoleIconUrl(roleName);
             const scoreValue = typeof roleLike === 'object' && roleLike && Number.isFinite(Number(roleLike.score)) ? safeFixed(Number(roleLike.score), 1) : '';
             const chainCount = typeof roleLike === 'object' && roleLike && Number.isFinite(Number(roleLike.chainCount)) ? Number(roleLike.chainCount) : null;
-            let html = `<div class="tip-title">${iconUrl ? `<img src="${iconUrl}" style="width:30px;height:30px;border-radius:50%;border:1px solid ${typeColor};object-fit:cover;">` : ''}<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(roleName || clean || (isEN ? 'Unknown' : '未辨識'))}</span>${scoreValue !== '' ? `<span style="margin-left:auto;color:#bbb;font-family:'JetBrains Mono';font-size:0.76rem;">${scoreValue}%</span>` : ''}</div>`;
+            const elem = getRoleElementByName(roleName);
+            const elemColor = getElementColor(elem);
+            let html = `<div class="tip-title">${iconUrl ? `<img src="${iconUrl}" style="width:30px;height:30px;border-radius:50%;border:1.5px solid ${elemColor};box-shadow: 0 0 4px ${elemColor}55;object-fit:cover;">` : ''}<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(roleName || clean || (isEN ? 'Unknown' : '未辨識'))}</span>${scoreValue !== '' ? `<span style="margin-left:auto;color:#bbb;font-family:'JetBrains Mono';font-size:0.76rem;">${scoreValue}%</span>` : ''}</div>`;
             html += `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">`;
             html += `<span class="tip-type" style="background:${typeColor}22;color:${typeColor};border:1px solid ${typeColor}44;">${typeLabel}</span>`;
             if (posInfo.note) html += `<span class="tip-type" style="background:rgba(255,255,255,0.04);color:#ddd;border:1px solid rgba(255,255,255,0.08);">${escapeHtml(posInfo.note)}</span>`;
@@ -22205,7 +22571,11 @@
                         teamIconsHtml = `<div style="display:flex;gap:4px;margin-left:auto;">`;
                         rec.members.forEach(m => {
                             const iconUrl = grad_getRoleIconUrl(m);
-                            if (iconUrl) teamIconsHtml += `<img src="${iconUrl}" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);object-fit:cover;" title="${m}">`;
+                            if (iconUrl) {
+                                const elem = getRoleElementByName(m);
+                                const elemColor = getElementColor(elem);
+                                teamIconsHtml += `<img src="${iconUrl}" style="width:22px;height:22px;border-radius:50%;border:1px solid ${elemColor};object-fit:cover;" title="${m}">`;
+                            }
                         });
                         teamIconsHtml += `</div>`;
                     }
@@ -22355,13 +22725,15 @@
             } else {
                 el.style.display = 'flex';
             }
-            const membersHtml = teamRoles.length ? teamRoles.map(role => `
-                <button onclick="grad_openRoleActionModal('${role.id}', ${teamIdx})" style="display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#ddd;cursor:pointer;text-align:left;">
-                    <img src="${grad_getRoleIconUrl(role.role)}" style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);object-fit:cover;flex-shrink:0;">
-                    <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(role.role)}</span>
-                    <span style="font-size:0.67rem;color:${GRAD_TYPE_COLOR[role.type] || '#aaa'};font-weight:800;">${GRAD_TYPE_LABEL(role.type, isEN)}</span>
-                </button>
-            `).join('') : `<div style="color:#666;font-size:0.8rem;">${isEN ? 'No members yet' : '尚無成員'}</div>`;
+             const membersHtml = teamRoles.length ? teamRoles.map(role => {
+                 const elemColor = getElementColor(getRoleElementByName(role.role));
+                 return `
+                 <button onclick="grad_openRoleActionModal('${role.id}', ${teamIdx})" style="display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#ddd;cursor:pointer;text-align:left;">
+                     <img src="${grad_getRoleIconUrl(role.role)}" style="width:34px;height:34px;border-radius:50%;border:1.5px solid ${elemColor};box-shadow:0 0 4px ${elemColor}55;object-fit:cover;flex-shrink:0;">
+                     <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(role.role)}</span>
+                     <span style="font-size:0.67rem;color:${GRAD_TYPE_COLOR[role.type] || '#aaa'};font-weight:800;">${GRAD_TYPE_LABEL(role.type, isEN)}</span>
+                 </button>
+             `; }).join('') : `<div style="color:#666;font-size:0.8rem;">${isEN ? 'No members yet' : '尚無成員'}</div>`;
             el.innerHTML = `
                 <div class="db-modal-content" style="background:#1a1a1f; border:1px solid var(--accent); width:92%; max-width:920px; padding:18px; border-radius:16px;">
                     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px;">
@@ -22695,18 +23067,20 @@
                 const type = grad_getRoleType(name);
                 if (!filters[type]) return; // Filter out by position
 
-                const checked = selected.has(name);
-                const iconUrl = grad_getRoleIconUrl(name);
-                const teamTag = teamIdxes.length ? `<span style="font-size:0.66rem;color:#ffbe90;border:1px solid rgba(255,190,144,0.35);border-radius:999px;padding:0 6px;">隊${teamIdxes.join(',')}</span>` : `<span style="font-size:0.64rem;color:#666;">未上隊</span>`;
-
-                const item = document.createElement('label');
-                item.className = `grad-custom-picker-item${checked ? '' : (itemObj.rank === 2 ? ' dim used' : ' dim')}`;
-                item.style.cssText = 'background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:0.2s; position:relative;';
-
-                item.innerHTML = `
-                    <input type="checkbox" class="grad-picker-checkbox" data-role="${escapeHtml(name)}" ${checked ? 'checked' : ''} onchange="grad_onRolePickerToggle(this)" style="position:absolute; top:8px; right:8px; width:16px; height:16px; cursor:pointer; z-index:2;">
-                    ${iconUrl ? `<img src="${iconUrl}" style="width:56px; height:56px; border-radius:50%; border:2px solid ${checked ? 'var(--accent)' : 'rgba(255,255,255,0.1)'}; background:rgba(0,0,0,0.2);">` : `<div style="width:56px; height:56px; border-radius:50%; background:#2a2a30; display:flex; align-items:center; justify-content:center; color:#888;">?</div>`}
-                    <div style="font-size:0.8rem; font-weight:700; color:#fff; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${escapeHtml(name)}</div>
+                 const checked = selected.has(name);
+                 const elem = getRoleElementByName(name);
+                 const elemColor = getElementColor(elem);
+                 const iconUrl = grad_getRoleIconUrl(name);
+                 const teamTag = teamIdxes.length ? `<span style="font-size:0.66rem;color:#ffbe90;border:1px solid rgba(255,190,144,0.35);border-radius:999px;padding:0 6px;">隊${teamIdxes.join(',')}</span>` : `<span style="font-size:0.64rem;color:#666;">未上隊</span>`;
+ 
+                 const item = document.createElement('label');
+                 item.className = `grad-custom-picker-item${checked ? '' : (itemObj.rank === 2 ? ' dim used' : ' dim')}`;
+                 item.style.cssText = 'background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:0.2s; position:relative;';
+ 
+                 item.innerHTML = `
+                     <input type="checkbox" class="grad-picker-checkbox" data-role="${escapeHtml(name)}" ${checked ? 'checked' : ''} onchange="grad_onRolePickerToggle(this)" style="position:absolute; top:8px; right:8px; width:16px; height:16px; cursor:pointer; z-index:2;">
+                     ${iconUrl ? `<img src="${iconUrl}" style="width:56px; height:56px; border-radius:50%; border:2.5px solid ${checked ? elemColor : elemColor + '55'}; box-shadow: 0 0 ${checked ? '8px' : '3px'} ${elemColor}77; background:rgba(0,0,0,0.2);">` : `<div style="width:56px; height:56px; border-radius:50%; background:#2a2a30; display:flex; align-items:center; justify-content:center; color:#888; border: 2px solid ${checked ? 'var(--accent)' : 'rgba(255,255,255,0.1)'};">?</div>`}
+                     <div style="font-size:0.8rem; font-weight:700; color:#fff; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${escapeHtml(name)}</div>
                     <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
                         <span style="font-size:0.64rem; color:${type === 'dps' ? '#e06c75' : (type === 'sub' ? '#c678dd' : '#56b6c2')}; font-weight:bold;">${type === 'dps' ? '主輸' : (type === 'sub' ? '副輸' : '奶媽')}</span>
                         ${teamTag}
@@ -22974,17 +23348,19 @@
                 buttonsHtml += `<button onclick="grad_removeRoleFromTeam(${fromTeamIdx}, '${role.id}'); document.getElementById('grad-role-action-modal').style.display='none';" style="grid-column: 1 / -1; padding:10px;background:rgba(255,85,85,0.15);border:1px solid #ff5555;color:#ff5555;border-radius:8px;cursor:pointer;margin-top:10px;font-size:0.9rem;font-weight:bold;">${isEN ? 'Return to Backup' : '移回備選共鳴者'}</button>`;
             }
 
+            const elem = getRoleElementByName(role.role);
+            const elemColor = getElementColor(elem);
             const synNames = grad_getSynergy(role.role);
             const synHtml = synNames.length ? synNames.join(', ') : (isEN ? 'None' : '無');
 
             el.innerHTML = `
-                <div class="db-modal-content" style="background:#1a1a1f; border:1px solid var(--accent); width:${isDesktop ? '92%' : '90%'}; max-width:${isDesktop ? '980px' : '400px'}; padding:18px; border-radius:16px;">
+                <div class="db-modal-content" style="background:#1a1a1f; border:1px solid ${elemColor}; box-shadow: 0 0 10px ${elemColor}55; width:${isDesktop ? '92%' : '90%'}; max-width:${isDesktop ? '980px' : '400px'}; padding:18px; border-radius:16px;">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; gap:10px;">
                         <div style="display:flex; align-items:center; gap:12px; min-width:0;">
-                            <img src="${grad_getRoleIconUrl(role.role)}" style="width:54px;height:54px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;flex-shrink:0;">
+                            <img src="${grad_getRoleIconUrl(role.role)}" style="width:54px;height:54px;border-radius:50%;border:2px solid ${elemColor};box-shadow: 0 0 6px ${elemColor}66;object-fit:cover;flex-shrink:0;">
                             <div style="min-width:0;">
                                 <h3 style="margin:0;color:#fff;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;">${escapeHtml(role.role)}</h3>
-                                <div style="font-size:0.8rem;color:var(--accent);font-family:'JetBrains Mono';">Score: ${safeFixed(role.score, 1)}%</div>
+                                <div style="font-size:0.8rem;color:${elemColor};font-family:'JetBrains Mono';">Score: ${safeFixed(role.score, 1)}%</div>
                             </div>
                         </div>
                         <button onclick="document.getElementById('grad-role-action-modal').style.display='none'" style="background:none; border:none; color:#888; font-size:1.5rem; cursor:pointer;flex-shrink:0;">&times;</button>
@@ -23115,6 +23491,11 @@
                 const bg = isSmart ? 'rgba(120,224,143,0.1)' : 'rgba(255,255,255,0.03)';
                 const border = isSmart ? '1px solid rgba(120,224,143,0.4)' : '1px solid rgba(255,255,255,0.08)';
 
+                const elem = getRoleElementByName(r.role);
+                const elemColor = getElementColor(elem);
+                const avatarBorder = isSmart ? `2px solid #78e08f` : `1.5px solid ${elemColor}`;
+                const avatarShadow = isSmart ? `box-shadow: 0 0 6px #78e08f, 0 0 3px ${elemColor};` : `box-shadow: 0 0 4px ${elemColor}44;`;
+
                 const teamIdxes = grad_getRoleTeamIndexesByName(r.role);
                 let tagHtml = '';
                 if (teamIdxes.length > 0) {
@@ -23130,7 +23511,7 @@
                 }
 
                 html += `<div onclick="grad_slotPickerSelectRole('${r.id}')" style="background:${bg}; border:${border}; border-radius:12px; padding:12px; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; transition:0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='${bg}'">
-                    <img src="${grad_getRoleIconUrl(r.role)}" style="width:50px;height:50px;border-radius:50%;border:2px solid ${isSmart ? '#78e08f' : '#444'};">
+                    <img src="${grad_getRoleIconUrl(r.role)}" style="width:50px;height:50px;border-radius:50%;border:${avatarBorder};${avatarShadow}object-fit:cover;">
                     <div style="font-size:0.8rem; color:#fff; font-weight:bold;text-align:center;">${escapeHtml(r.role)}</div>
                     <div style="font-size:0.65rem; color:#aaa;">${r.score > 0 ? safeFixed(r.score, 1) + '%' : '未分析'}</div>
                     ${tagHtml}
@@ -23200,12 +23581,16 @@
                     const bestSub = needSub ? mySubs.sort((a, b) => state.roles.find(r => r.role === b).score - state.roles.find(r => r.role === a).score)[0] : null;
                     const bestSup = needSupport ? mySupports.sort((a, b) => state.roles.find(r => r.role === b).score - state.roles.find(r => r.role === a).score)[0] : null;
                     const members = [bestM, bestSub, bestSup].filter(Boolean).map(name => state.roles.find(r => r.role === name));
-                    let membersHtml = members.map(m => `
-                        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);padding:6px 10px;border-radius:8px;">
-                            <img src="${grad_getRoleIconUrl(m.role)}" style="width:30px;height:30px;border-radius:50%;border:1px solid #444;">
-                            <span style="font-size:0.8rem;color:#ddd;">${escapeHtml(m.role)}</span>
-                        </div>
-                    `).join('');
+                    let membersHtml = members.map(m => {
+                        const elem = getRoleElementByName(m.role);
+                        const elemColor = getElementColor(elem);
+                        return `
+                            <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);padding:6px 10px;border-radius:8px;">
+                                <img src="${grad_getRoleIconUrl(m.role)}" style="width:30px;height:30px;border-radius:50%;border:1.5px solid ${elemColor};box-shadow: 0 0 3px ${elemColor}55;">
+                                <span style="font-size:0.8rem;color:#ddd;">${escapeHtml(m.role)}</span>
+                            </div>
+                        `;
+                    }).join('');
                     const roleIdsStr = members.map(m => m.id).join(',');
                     html += `
                         <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(120,224,143,0.2); border-radius:12px; padding:15px; display:flex; justify-content:space-between; align-items:center;">
@@ -23695,10 +24080,10 @@
 
                     if (role) {
                         const iconUrl = grad_getRoleIconUrl(role.role);
-                        const rColor = typeColor(role.type);
-                        const rColorDim = typeColorDim(role.type);
-                        slot.style.setProperty('--role-color', rColor);
-                        slot.style.setProperty('--role-color-dim', rColorDim);
+                        const elem = getRoleElementByName(role.role);
+                        const elemColor = getElementColor(elem);
+                        slot.style.setProperty('--role-color', elemColor);
+                        slot.style.setProperty('--role-color-dim', elemColor + '44');
 
                         const chainBadge = isExpert ? 'S' : `S${role.chainCount || 0}`;
                         slot.innerHTML = isExpert ? `
@@ -23956,8 +24341,11 @@
                 const tp = window.__gradTouchPick;
                 if (tp && tp.roleId === role.id) item.classList.add('selected');
 
+                const elem = getRoleElementByName(role.role);
+                const elemColor = getElementColor(elem);
+
                 item.innerHTML = `
-                    ${iconUrl ? `<img src="${iconUrl}">` : '<span>?</span>'}
+                    ${iconUrl ? `<img src="${iconUrl}" style="border: 1.5px solid ${elemColor}; box-shadow: 0 0 5px ${elemColor}55; object-fit: cover;">` : '<span>?</span>'}
                     <div style="font-size:0.65rem;font-weight:700;color:#ddd;margin-top:4px;text-align:center;width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(role.role)}</div>
                     <div style="font-size:0.6rem;color:#aaa;margin-top:2px;">${role.score > 0 ? safeFixed(role.score, 1) + '%' : '未聲骸分析'}</div>
                     <div class="role-usage-dot">${useCount}/${maxUse}</div>
@@ -24806,7 +25194,7 @@
                 const libDmg = getExpectedDmg(ratioLib, echoStats.libDmg);
 
                 summaryCardHtml = `
-                    <div style="margin-top:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 14px; text-align:center; font-family:'JetBrains Mono'; font-size:0.8rem; line-height:1.6; color:#ccc; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                    <div onclick="navigateToDamageSpreadsheet()" title="${g_lang === 'en' ? 'Click to navigate to ranking damage spreadsheet' : '點擊快速前往排行的傷害拉表'}" style="margin-top:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 14px; text-align:center; font-family:'JetBrains Mono'; font-size:0.8rem; line-height:1.6; color:#ccc; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor:pointer; transition:background 0.2s, border-color 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='var(--accent)';" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255,255,255,0.06)';">
                         <div style="display:flex; justify-content:center; gap:10px; border-bottom:1px dashed rgba(255,255,255,0.08); padding-bottom:6px; margin-bottom:6px; flex-wrap:wrap; font-weight:bold;">
                             <span style="color:#ffd700;">暴擊 ${finalCritRate.toFixed(1)}%</span>
                             <span style="color:rgba(255,255,255,0.15);">|</span>
@@ -26351,9 +26739,7 @@
             const quickMode = g_echoLibQuickMode || 'custom_role';
 
             if (hint) {
-                hint.style.display = isFullyLoaded ? 'none' : 'block';
-                hint.title = "點擊嘗試同步所有雲端紀錄";
-                hint.onclick = () => { if (btnLoadAll) btnLoadAll.click(); };
+                hint.style.display = 'none';
             }
 
             const filteredHistory = history.filter(h => {
@@ -28101,9 +28487,11 @@
             else { imgEl.style.display = 'none'; noImg.style.display = 'block'; }
 
             const charIconUrl = RESONATORS_PROFILE_PICTURE[d.role] || '';
+            const elem = getRoleElementByName(d.role);
+            const elemColor = getElementColor(elem);
             const titleHtml = `
                 <div style="display:flex; align-items:center; gap:8px;">
-                    ${charIconUrl ? `<img src="${charIconUrl}" style="width:32px; height:32px; border-radius:50%; border:1.5px solid var(--accent);" />` : ''}
+                    ${charIconUrl ? `<img src="${charIconUrl}" style="width:32px; height:32px; border-radius:50%; border:2px solid ${elemColor}; box-shadow: 0 0 6px ${elemColor}88;" />` : ''}
                     <span>${g_lang === 'en' ? `${ROLE_ZH_TO_EN[d.role] || d.role} Build Details` : `${d.role} 配置詳情`}</span>
                 </div>
             `;
@@ -28124,11 +28512,11 @@
             let html = `<table class="db-calc-table"><thead><tr><th style="width:160px">${g_lang === 'en' ? 'Echo & Set' : '聲骸與套裝'}</th><th style="width:80px">${g_lang === 'en' ? 'Score' : '評分'}</th><th style="width:120px">${g_lang === 'en' ? 'Main Stat' : '主詞條'}</th><th>${g_lang === 'en' ? 'Sub-stats (click to view)' : '副詞條 (點擊檢視)'}</th></tr></thead><tbody>`;
             d.detailEchoes.forEach((e, i) => {
                 let eGrad = rank_getGrading(e.pct);
-                
+
                 const costVal = getEchoCost(e.cost);
                 const parts = String(e.cost || "").split('-');
                 const suitVal = parts[1] ? parts[1].trim() : "";
-                
+
                 const echoDbRow = g_zhDbSheetsData && g_zhDbSheetsData['聲骸 Echoes'] && suitVal
                     ? g_zhDbSheetsData['聲骸 Echoes'].rows.find(r => String(r[2]).trim() === String(costVal) && r[3].includes(suitVal))
                     : null;
@@ -29010,9 +29398,11 @@
                 arr.forEach(g => {
                     let roleKey = g.role.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                     const roleIconUrl = RESONATORS_PROFILE_PICTURE[roleKey] || '';
+                    const elem = getRoleElementByName(g.role);
+                    const elemColor = getElementColor(elem);
                     const iconHtml = roleIconUrl
-                        ? `<img src="${roleIconUrl}" style="width:${imgSize}px; height:${imgSize}px; border-radius:16px; object-fit:cover; border:2px solid ${colorClass}; box-shadow: 0 4px 15px ${colorClass}33; display: block;">`
-                        : `<div style="width:${imgSize}px; height:${imgSize}px; border-radius:16px; background:#222; display:flex; align-items:center; justify-content:center; font-size:1.8rem; border:2px solid ${colorClass}; color:#555;">?</div>`;
+                        ? `<img src="${roleIconUrl}" style="width:${imgSize}px; height:${imgSize}px; border-radius:16px; object-fit:cover; border:2px solid ${elemColor}; box-shadow: 0 4px 15px ${elemColor}33; display: block;">`
+                        : `<div style="width:${imgSize}px; height:${imgSize}px; border-radius:16px; background:#222; display:flex; align-items:center; justify-content:center; font-size:1.8rem; border:2px solid ${elemColor}; color:#555;">?</div>`;
 
                     const enName = lookupRoleEN(g.role) || '';
                     const primaryName = (glIsEN && enName) ? enName : g.role;
@@ -29112,8 +29502,10 @@
                 const getRoleIconHtml = (name, size = 38, typeColor = '#aaa') => {
                     let roleKey = name.replace(/[^\u4e00-\u9fa5]/g, '').substring(0, 4);
                     let url = RESONATORS_PROFILE_PICTURE[roleKey];
-                    if (url) return `<img src="${url}" style="width:${size}px; height:${size}px; border-radius:50%; object-fit:cover; display:inline-block; border:2px solid ${typeColor}; box-shadow: 0 4px 12px ${typeColor}33;">`;
-                    return `<div style="width:${size}px; height:${size}px; border-radius:50%; background:#222; border:2px solid ${typeColor}; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; color:#555;">?</div>`;
+                    const elem = getRoleElementByName(name);
+                    const elemColor = getElementColor(elem);
+                    if (url) return `<img src="${url}" style="width:${size}px; height:${size}px; border-radius:50%; object-fit:cover; display:inline-block; border:2px solid ${elemColor}; box-shadow: 0 4px 12px ${elemColor}33;">`;
+                    return `<div style="width:${size}px; height:${size}px; border-radius:50%; background:#222; border:2px solid ${elemColor}; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; color:#555;">?</div>`;
                 };
 
                 dynamicTeams.slice(0, 5).forEach((teamObj, ti) => {
@@ -34206,6 +34598,10 @@
             g_historyDirty = true;
             g_historyCache = null;
             renderHistoryList();
+            const s1 = document.getElementById('show-all-history-switch');
+            if (s1) s1.checked = checked;
+            const s2 = document.getElementById('show-all-history-switch-toolbar');
+            if (s2) s2.checked = checked;
         }
 
         function triggerImport() {
@@ -35625,12 +36021,14 @@
             const currentRole = (g_globalData && g_globalData.role) || "未知";
             const isAll = (currentRole === "全角色" || currentRole === "所有角色" || currentRole === "未知" || rank_viewMode === 'all_roles');
             const iconUrl = isAll ? '' : (typeof grad_getRoleIconUrl === 'function' ? grad_getRoleIconUrl(currentRole) : '');
+            const elem = getRoleElementByName(currentRole);
+            const elemColor = getElementColor(elem);
 
             const headerLeft = document.getElementById('echo-stats-header-left');
             if (headerLeft) {
                 headerLeft.innerHTML = `
-                    ${iconUrl ? `<img src="${iconUrl}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:3px solid #78e08f; box-shadow:0 0 15px rgba(120, 224, 143, 0.4);" onerror="this.style.display='none'">` : `
-                        <div style="width:60px; height:60px; border-radius:50%; background:rgba(120,224,143,0.1); border:3px solid #78e08f; display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:#78e08f;">🌐</div>
+                    ${iconUrl ? `<img src="${iconUrl}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:3px solid ${elemColor}; box-shadow:0 0 15px ${elemColor}66;" onerror="this.style.display='none'">` : `
+                        <div style="width:60px; height:60px; border-radius:50%; background:${elemColor}15; border:3px solid ${elemColor}; display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:${elemColor};">🌐</div>
                     `}
                     <div>
                         <h2 style="margin:0; font-size:1.8rem; font-weight:800; background: linear-gradient(to right, #78e08f, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
@@ -37528,13 +37926,49 @@
             // Re-apply language so modal labels are correctly translated
             if (typeof setLanguage === 'function') setLanguage(g_lang);
 
+            // 若未選擇歷史資料但歷史列表有資料，自動選擇最新的歷史紀錄避免用戶覺得結果是空的
+            const hist = getCleanHistory();
+            if ((!g_echoesData || g_echoesData.length === 0 || !g_globalData || !g_globalData.role) && hist.length > 0) {
+                await loadFromHistory(hist[0]);
+            }
+
             document.getElementById('feedback-time').innerText = new Date().toLocaleString();
-            const url = (g_globalData && g_globalData._imageUrl) || (g_lang === 'en' ? "No URL" : "無網址");
-            document.getElementById('feedback-url').innerText = url;
+            
+            // Current Page URL & Referrer
+            const pageUrlEl = document.getElementById('feedback-page-url');
+            if (pageUrlEl) pageUrlEl.innerText = window.location.href;
+            const refEl = document.getElementById('feedback-page-referrer');
+            if (refEl) refEl.innerText = document.referrer || (g_lang === 'en' ? "Direct / None" : "直接造訪 / 無來源");
+
+            // Echo Image URL
+            const url = (g_globalData && g_globalData._imageUrl) || (g_lang === 'en' ? "No Echo Image" : "無聲骸圖片");
+            const echoUrlEl = document.getElementById('feedback-url');
+            if (echoUrlEl) echoUrlEl.innerText = url;
+
+            // Current UID & Role
+            const curUidEl = document.getElementById('feedback-current-uid');
+            if (curUidEl) curUidEl.innerText = g_currentUserUid ? `UID: ${g_currentUserUid}` : (g_lang === 'en' ? 'Not Logged In' : '未登入 (訪客)');
+            const fixUidInput = document.getElementById('feedback-fix-uid-input');
+            if (fixUidInput) fixUidInput.value = g_currentUserUid || '';
+            const curRoleEl = document.getElementById('feedback-current-role');
+            if (curRoleEl) curRoleEl.innerText = (g_globalData && g_globalData.role) || (g_lang === 'en' ? 'None' : '未選擇');
+
             document.getElementById('feedback-content').value = "";
             document.getElementById('feedback-category').value = "";
-            document.getElementById('feedback-screenshot-img').style.opacity = '0';
-            document.getElementById('screenshot-loader').style.display = 'block';
+            
+            // Reset quick category pill buttons
+            document.querySelectorAll('.feedback-pill-btn').forEach(b => b.classList.remove('active'));
+
+            const resetCheckbox = document.getElementById('feedback-reset-after-submit');
+            if (resetCheckbox) resetCheckbox.checked = false;
+
+            const img = document.getElementById('feedback-screenshot-img');
+            if (img) img.style.opacity = '0';
+            const loader = document.getElementById('screenshot-loader');
+            if (loader) {
+                loader.style.display = 'block';
+                loader.innerText = g_lang === 'en' ? "Generating screenshot..." : "正在產生截圖...";
+            }
 
             // Populate resolution / zoom info
             const dpr = window.devicePixelRatio || 1;
@@ -37561,15 +37995,152 @@
                         logging: false,
                         ignoreElements: (el) => el.id === 'feedback-modal' || el.classList.contains('modal-overlay')
                     });
-                    const img = document.getElementById('feedback-screenshot-img');
-                    img.src = canvas.toDataURL('image/png', 0.8);
-                    img.style.opacity = '1';
-                    document.getElementById('screenshot-loader').style.display = 'none';
+                    if (img) {
+                        img.src = canvas.toDataURL('image/png', 0.82);
+                        img.style.opacity = '1';
+                    }
+                    if (loader) loader.style.display = 'none';
                 } catch (e) {
                     console.error("截圖失敗:", e);
-                    document.getElementById('screenshot-loader').innerText = g_lang === 'en' ? "Screenshot failed, please describe the issue manually" : "截圖失敗，請手動描述問題";
+                    if (loader) loader.innerText = g_lang === 'en' ? "Screenshot failed, please describe the issue manually" : "截圖失敗，請手動描述問題";
                 }
             }, 300);
+        }
+
+        async function feedback_recaptureScreenshot() {
+            const loader = document.getElementById('screenshot-loader');
+            const img = document.getElementById('feedback-screenshot-img');
+            if (loader) {
+                loader.style.display = 'block';
+                loader.innerText = g_lang === 'en' ? "Re-capturing screenshot..." : "正在重新擷取畫面...";
+            }
+            if (img) img.style.opacity = '0';
+
+            setTimeout(async () => {
+                try {
+                    const canvas = await html2canvas(document.body, {
+                        useCORS: true,
+                        scale: 2.0,
+                        logging: false,
+                        ignoreElements: (el) => el.id === 'feedback-modal' || el.classList.contains('modal-overlay')
+                    });
+                    if (img) {
+                        img.src = canvas.toDataURL('image/png', 0.85);
+                        img.style.opacity = '1';
+                    }
+                    if (loader) loader.style.display = 'none';
+                    showMsg("📸 截圖擷取完成！");
+                } catch (e) {
+                    console.error("截圖失敗:", e);
+                    if (loader) loader.innerText = g_lang === 'en' ? "Screenshot failed" : "截圖失敗，請手動描述問題";
+                }
+            }, 100);
+        }
+
+        function feedback_selectCategory(catVal) {
+            const select = document.getElementById('feedback-category');
+            if (select) {
+                select.value = catVal;
+                validateFeedback();
+            }
+            document.querySelectorAll('.feedback-pill-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-cat') === catVal);
+            });
+        }
+
+        function feedback_fixUid() {
+            const input = document.getElementById('feedback-fix-uid-input');
+            if (!input) return;
+            const uid = input.value.trim();
+            if (!uid) {
+                showMsg("請輸入有效的 9 位數 UID");
+                return;
+            }
+            if (uid.length !== 9 || !/^\d+$/.test(uid)) {
+                showMsg("⚠️ UID 必須為 9 位純數字");
+                return;
+            }
+            showMsg(`正在修正並載入 UID: ${uid}...`);
+            handleProfileSwitch(uid);
+            const curUidEl = document.getElementById('feedback-current-uid');
+            if (curUidEl) curUidEl.innerText = `UID: ${uid}`;
+        }
+
+        async function feedback_recalcValues() {
+            // 若未選擇歷史資料但歷史列表有資料，自動選擇最新的歷史紀錄避免用戶覺得結果是空的
+            const hist = getCleanHistory();
+            if ((!g_echoesData || g_echoesData.length === 0 || !g_globalData || !g_globalData.role) && hist.length > 0) {
+                await loadFromHistory(hist[0]);
+            }
+
+            if (!g_echoesData || g_echoesData.length === 0) {
+                showMsg("⚠️ 目前尚無載入的聲骸資料");
+                return;
+            }
+            try {
+                let fixedCount = 0;
+                g_echoesData.forEach(echo => {
+                    if (!echo) return;
+                    if (echo.mainStat && echo.mainStat.value && isNaN(parseFloat(echo.mainStat.value))) {
+                        echo.mainStat.value = "0";
+                        fixedCount++;
+                    }
+                    if (Array.isArray(echo.subStats)) {
+                        echo.subStats.forEach(sub => {
+                            if (!sub) return;
+                            if (sub.value && isNaN(parseFloat(sub.value))) {
+                                sub.value = sub.value.replace(/[^0-9.]/g, '') || "0";
+                                fixedCount++;
+                            }
+                        });
+                    }
+                });
+
+                if (typeof renderTable === 'function' && g_globalData) {
+                    renderTable(g_globalData, g_chains, g_echoesData);
+                }
+                if (typeof updateCVAndSummary === 'function') {
+                    updateCVAndSummary();
+                }
+                showMsg(fixedCount > 0 ? `✅ 已修正 ${fixedCount} 處數值並重新計算評分！` : "✅ 聲骸評分與數值已完成重新計算！");
+            } catch (e) {
+                console.error("重新計算失敗:", e);
+                showMsg("❌ 數值修正失敗: " + e.message);
+            }
+        }
+
+        async function feedback_openManualEditor() {
+            document.getElementById('feedback-modal').style.display = 'none';
+            ensureAnalysisPanelVisible();
+
+            // 若未選擇歷史資料但歷史列表有資料，自動選擇最新的歷史紀錄避免用戶覺得結果是空的
+            const hist = getCleanHistory();
+            if ((!g_echoesData || g_echoesData.length === 0 || !g_globalData || !g_globalData.role) && hist.length > 0) {
+                await loadFromHistory(hist[0]);
+            }
+
+            // 開啟離線編輯模式
+            if (!g_offlineEditMode) {
+                toggleOfflineEdit({ silent: false });
+            }
+            // 啟用詞條編輯模式
+            if (!g_editMode && typeof toggleEditMode === 'function') {
+                toggleEditMode();
+            }
+            if (typeof updateEditModeButtonVisibility === 'function') {
+                updateEditModeButtonVisibility();
+            }
+            syncMobileResultToolbar();
+            showMsg("✏️ 已開啟離線編輯模式，可直接點擊詞條進行微調修改！");
+        }
+
+        function feedback_resetCache() {
+            showConfirm("⚠️ 警告：這將清除所有本地快取、自定聲骸、暫存數據並立即登出刷新頁面。確定要執行嗎？", () => {
+                localStorage.clear();
+                sessionStorage.clear();
+                showMsg("網站已重置。頁面即將刷新...");
+                setTimeout(() => { window.location.reload(); }, 1200);
+            });
         }
 
         function rank_populateWeaponOverrideDropdown(roleName) {
@@ -37640,25 +38211,54 @@
         function validateFeedback() {
             const category = document.getElementById('feedback-category').value;
             const content = document.getElementById('feedback-content').value;
-            const btn = document.getElementById('btn-submit-feedback');
+            const btnBottom = document.getElementById('btn-submit-feedback');
+            const btnTop = document.getElementById('btn-submit-feedback-top');
             const msgEl = document.getElementById('feedback-validation-msg');
             const ocrContainer = document.getElementById('ocr-upload-container');
 
             if (ocrContainer) ocrContainer.style.display = (category === 'OCR辨識') ? 'block' : 'none';
 
-            let errors = [];
-            if (!category) errors.push("未選擇分類");
-            if (content.trim().length < 5) errors.push("描述內容太短 (至少 5 字)");
+            // Sync category pills
+            document.querySelectorAll('.feedback-pill-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-cat') === category);
+            });
 
-            if (errors.length > 0) {
-                msgEl.innerText = "⚠️ " + errors.join(" 、 ");
-                btn.disabled = true;
-                btn.style.opacity = "0.5";
+            let errors = [];
+            if (!category) errors.push(g_lang === 'en' ? "Select category" : "未選擇分類");
+            if (content.trim().length < 5) errors.push(g_lang === 'en' ? "Description too short (≥ 5 chars)" : "描述內容太短 (至少 5 字)");
+
+            const isValid = errors.length === 0;
+
+            if (!isValid) {
+                if (msgEl) {
+                    msgEl.innerText = "⚠️ " + errors.join(" 、 ");
+                    msgEl.style.color = "#ff6b6b";
+                }
+                if (btnBottom) {
+                    btnBottom.disabled = true;
+                    btnBottom.style.opacity = "0.45";
+                    btnBottom.style.cursor = "not-allowed";
+                }
+                if (btnTop) {
+                    btnTop.disabled = true;
+                    btnTop.style.opacity = "0.45";
+                    btnTop.style.cursor = "not-allowed";
+                }
             } else {
-                msgEl.innerText = "✨ 填寫完畢，準備發送";
-                msgEl.style.color = "var(--accent)";
-                btn.disabled = false;
-                btn.style.opacity = "1";
+                if (msgEl) {
+                    msgEl.innerText = g_lang === 'en' ? "✨ Form complete, ready to submit" : "✨ 填寫完畢，準備發送";
+                    msgEl.style.color = "var(--accent)";
+                }
+                if (btnBottom) {
+                    btnBottom.disabled = false;
+                    btnBottom.style.opacity = "1";
+                    btnBottom.style.cursor = "pointer";
+                }
+                if (btnTop) {
+                    btnTop.disabled = false;
+                    btnTop.style.opacity = "1";
+                    btnTop.style.cursor = "pointer";
+                }
             }
         }
 
@@ -37666,7 +38266,7 @@
             const now = Date.now();
             const lastReport = localStorage.getItem('last_feedback_ts');
             if (lastReport && (now - parseInt(lastReport, 10)) < 60000) {
-                showMsg("⏳ 請稍等一分鐘後再提交回報，避免頻繁發送。");
+                showMsg(g_lang === 'en' ? "⏳ Please wait 1 minute before submitting again." : "⏳ 請稍等一分鐘後再提交回報，避免頻繁發送。");
                 return;
             }
 
@@ -37674,10 +38274,19 @@
             const content = document.getElementById('feedback-content').value;
             if (!category || content.trim().length < 5) { validateFeedback(); return; }
 
-            const btn = document.getElementById('btn-submit-feedback');
-            const originalText = btn.innerText;
-            btn.disabled = true;
-            btn.innerText = "⏳ 發送中...";
+            const btnBottom = document.getElementById('btn-submit-feedback');
+            const btnTop = document.getElementById('btn-submit-feedback-top');
+            const origBottomText = btnBottom ? btnBottom.innerText : "發送回報";
+            const origTopText = btnTop ? btnTop.innerText : "🚀 發送回報";
+
+            if (btnBottom) {
+                btnBottom.disabled = true;
+                btnBottom.innerText = g_lang === 'en' ? "⏳ Sending..." : "⏳ 發送中...";
+            }
+            if (btnTop) {
+                btnTop.disabled = true;
+                btnTop.innerText = g_lang === 'en' ? "⏳ Sending..." : "⏳ 發送中...";
+            }
 
             try {
                 // Obfuscated Webhook URL
@@ -37687,28 +38296,45 @@
                 const p4 = [51, 114, 102, 66, 79, 77, 53, 70, 98, 90, 66, 113, 82, 65, 70, 82, 66, 100, 67, 115, 87, 79, 75, 69, 95, 105, 55, 56, 111, 70, 50, 84, 55, 117, 112, 113, 97, 81, 56, 104, 108, 117, 54, 82, 119, 75, 74, 71, 49, 110, 82, 103, 71, 107, 77, 95, 112, 108, 89, 73, 113, 71, 81, 95, 68, 116, 119, 72];
                 const targetUrl = String.fromCharCode(...p1, ...p2, ...p3, ...p4);
 
-                const screenshotData = document.getElementById('feedback-screenshot-img').src;
+                const screenshotData = document.getElementById('feedback-screenshot-img') ? document.getElementById('feedback-screenshot-img').src : "";
                 const fd = new FormData();
 
                 let userMsg = content;
                 const ocrCheck = document.getElementById('feedback-ocr-upload');
                 if (ocrCheck && ocrCheck.checked && category === 'OCR辨識') {
-                    const rawOcr = g_lastCustomOcrDebugInfo.raw || "N/A";
+                    const rawOcr = (typeof g_lastCustomOcrDebugInfo !== 'undefined' && g_lastCustomOcrDebugInfo && g_lastCustomOcrDebugInfo.raw) || "N/A";
                     userMsg += "\n\n--- OCR Debug Info ---\n" + rawOcr;
                 }
+
+                const pageUrl = window.location.href;
+                const referrer = document.referrer || "Direct / 直接開啟";
+                const curRole = (g_globalData && g_globalData.role) || "未選擇";
+                const echoImgUrl = document.getElementById('feedback-url') ? document.getElementById('feedback-url').innerText : "N/A";
+                const timeStr = document.getElementById('feedback-time') ? document.getElementById('feedback-time').innerText : new Date().toLocaleString();
+
+                const categoryColors = {
+                    'OCR辨識': 0xff4d4d,
+                    '數值與UID': 0xffa500,
+                    'UI顯示': 0x61afef,
+                    '功能建議': 0xe5c07b,
+                    '其他': 0x98c379
+                };
 
                 const payload = {
                     embeds: [{
                         title: `💎 用戶回饋 [${category}]`,
-                        color: category === 'OCR辨識' ? 0xff4d4d : 0x61afef,
+                        color: categoryColors[category] || 0x61afef,
                         fields: [
-                            { name: "時間", value: document.getElementById('feedback-time').innerText, inline: true },
-                            { name: "UID", value: g_currentUserUid || "N/A", inline: true },
-                            { name: "類別", value: category, inline: true },
-                            { name: "圖片網址", value: document.getElementById('feedback-url').innerText },
-                            { name: "描述", value: userMsg.substring(0, 1024) }
+                            { name: "🌐 網頁來源 (Page URL)", value: pageUrl.substring(0, 1024) },
+                            { name: "📄 參照來源 (Referrer)", value: referrer.substring(0, 1024), inline: true },
+                            { name: "👤 玩家 UID", value: g_currentUserUid || "未登入 (Guest)", inline: true },
+                            { name: "🎭 當前角色", value: curRole, inline: true },
+                            { name: "🕙 回報時間", value: timeStr, inline: true },
+                            { name: "🏷️ 回報分類", value: category, inline: true },
+                            { name: "🔗 聲骸圖片網址", value: echoImgUrl.substring(0, 1024) },
+                            { name: "📝 問題描述", value: userMsg.substring(0, 1024) }
                         ],
-                        footer: { text: `Device: ${window.innerWidth}x${window.innerHeight}` }
+                        footer: { text: `螢幕: ${window.screen.width}x${window.screen.height} | 視窗: ${window.innerWidth}x${window.innerHeight} | DPR: ${(window.devicePixelRatio || 1).toFixed(2)}` }
                     }]
                 };
 
@@ -37721,14 +38347,30 @@
                 const res = await fetch(targetUrl, { method: 'POST', body: fd });
                 if (res.ok) {
                     localStorage.setItem('last_feedback_ts', Date.now());
-                    showMsg("✅ 感謝您的回饋！回報已成功送出。");
-                    document.getElementById('feedback-modal').style.display = 'none';
+                    
+                    const shouldReset = document.getElementById('feedback-reset-after-submit')?.checked;
+                    if (shouldReset) {
+                        showMsg("✅ 感謝您的回饋！即將自動重置網站快取並重新整理...");
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        setTimeout(() => { window.location.reload(); }, 1500);
+                    } else {
+                        showMsg("✅ 感謝您的回饋！回報已成功送出。");
+                        document.getElementById('feedback-modal').style.display = 'none';
+                    }
                 } else throw new Error("Status " + res.status);
             } catch (e) {
+                console.error("回報發送失敗:", e);
                 showMsg("❌ 發送失敗，請稍後再試。");
             } finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
+                if (btnBottom) {
+                    btnBottom.disabled = false;
+                    btnBottom.innerText = origBottomText;
+                }
+                if (btnTop) {
+                    btnTop.disabled = false;
+                    btnTop.innerText = origTopText;
+                }
             }
         }
 
@@ -37869,10 +38511,12 @@
                         const iconUrl = grad_getRoleIconUrl(role.role);
                         const rColor = typeColor(role.type);
                         const rColorDim = typeColorDim(role.type);
+                        const elem = getRoleElementByName(role.role);
+                        const elemColor = getElementColor(elem);
 
                         slotDiv.innerHTML = `
                             <div style="position: relative; width: 56px; height: 56px; flex-shrink: 0;">
-                                <img src="${iconUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid ${rColor}; box-shadow: 0 0 12px ${rColor}55;">
+                                <img src="${iconUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid ${elemColor}; box-shadow: 0 0 12px ${elemColor}55;">
                                 <div style="position: absolute; bottom: -3px; right: -3px; background: #ffd988; color: #000; font-size: 0.68rem; font-weight: bold; border-radius: 4px; padding: 1px 4px; font-family: 'JetBrains Mono'; border: 1px solid #111;">S${role.chainCount || 0}</div>
                             </div>
                             <div style="line-height: 1.4;">
@@ -38039,10 +38683,12 @@
                 const roles = str.split(',').map(r => r.trim()).filter(Boolean);
                 return roles.map(r => {
                     const iconUrl = grad_getRoleIconUrl(r);
+                    const elem = getRoleElementByName(r);
+                    const elemColor = getElementColor(elem);
                     if (iconUrl) {
-                        return `<span style="display:inline-flex;align-items:center;gap:5px;background:rgba(229,192,123,0.12);color:#ffd988;border:1px solid rgba(229,192,123,0.25);border-radius:12px;padding:2px 8px;margin:2px;font-size:0.75rem;"><img src="${iconUrl}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.1);"> <b>${escapeHtml(r)}</b></span>`;
+                        return `<span style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.04);color:#fff;border:1px solid ${elemColor}55;border-radius:12px;padding:2px 8px;margin:2px;font-size:0.75rem;"><img src="${iconUrl}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;border:1px solid ${elemColor};"> <b>${escapeHtml(r)}</b></span>`;
                     }
-                    return `<span style="display:inline-block;background:rgba(229,192,123,0.12);color:#ffd988;border:1px solid rgba(229,192,123,0.25);border-radius:4px;padding:2px 6px;margin:2px;font-size:0.75rem;">${escapeHtml(r)}</span>`;
+                    return `<span style="display:inline-block;background:rgba(255,255,255,0.04);color:#fff;border:1px solid ${elemColor}55;border-radius:4px;padding:2px 6px;margin:2px;font-size:0.75rem;">${escapeHtml(r)}</span>`;
                 }).join('');
             };
 
@@ -39477,6 +40123,25 @@
             }
         }
 
+        async function navigateToDamageSpreadsheet() {
+            let role = (g_globalData && g_globalData.role) || '';
+            switchTab('tab-rank');
+            if (rank_data.length === 0) {
+                try {
+                    await rank_initDataLoad();
+                } catch (e) {
+                    console.error('Failed to load ranking data for spreadsheet:', e);
+                    return;
+                }
+            }
+            if (role) {
+                rank_viewMode = 'role';
+                rank_selectItem(role);
+            }
+            rank_openDamageSpreadsheet();
+        }
+        window.navigateToDamageSpreadsheet = navigateToDamageSpreadsheet;
+
         // Helper to fetch character stats
         function getCharacterBaseStats(roleName) {
             const sheet = g_zhDbSheetsData && g_zhDbSheetsData['角色 Characters'];
@@ -40275,9 +40940,9 @@
                         <td>${item.chain}鏈</td>
                         <td style="color:var(--accent); font-weight:bold; white-space:nowrap;">
                             ${(() => {
-                                const grad = getSabcGrading(item.pct);
-                                return `<span class="score-grade ${grad.class}" style="font-size:0.72rem; padding:1px 4px; border-radius:3px; display:inline-block; font-weight:900; margin-right:4px;">${grad.label}</span>`;
-                            })()}${Math.round(item.score)}${baselineItem && !isBaseline ? formatDiffNum(item.score, baselineItem.score) : ''}
+                        const grad = getSabcGrading(item.pct);
+                        return `<span class="score-grade ${grad.class}" style="font-size:0.72rem; padding:1px 4px; border-radius:3px; display:inline-block; font-weight:900; margin-right:4px;">${grad.label}</span>`;
+                    })()}${Math.round(item.score)}${baselineItem && !isBaseline ? formatDiffNum(item.score, baselineItem.score) : ''}
                         </td>
                         <td>
                             ${item.pct.toFixed(1)}%${baselineItem && !isBaseline ? formatDiffNum(item.pct, baselineItem.pct, true, 1) : ''}
@@ -40535,9 +41200,9 @@
                             ${subStatsHtml}
                         </div>
                         ${suit ? (() => {
-                            const suitIcon = ATTRIBUTES_PROFILE_PICTURE[suit] || '';
-                            return `<div style="font-size:0.6rem; color:#c678dd; background:rgba(198,120,221,0.08); border:1px solid rgba(198,120,221,0.2); border-radius:4px; padding:2px 4px; display:inline-flex; align-items:center; justify-content:center; gap:3px; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; box-sizing:border-box;" title="${suit}">${suitIcon ? `<img src="${suitIcon}" style="width:12px; height:12px; object-fit:contain;" />` : ''}${suit}</div>`;
-                        })() : ''}
+                        const suitIcon = ATTRIBUTES_PROFILE_PICTURE[suit] || '';
+                        return `<div style="font-size:0.6rem; color:#c678dd; background:rgba(198,120,221,0.08); border:1px solid rgba(198,120,221,0.2); border-radius:4px; padding:2px 4px; display:inline-flex; align-items:center; justify-content:center; gap:3px; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; box-sizing:border-box;" title="${suit}">${suitIcon ? `<img src="${suitIcon}" style="width:12px; height:12px; object-fit:contain;" />` : ''}${suit}</div>`;
+                    })() : ''}
                     </div>
                 `;
             });
@@ -41290,99 +41955,237 @@
         window.openGradingIntroModal = openGradingIntroModal;
     </script>
     <!-- 意見回饋 Modal -->
-    <div id="feedback-modal" class="modal-overlay"
-        style="z-index:35000; display:none; align-items: flex-start; padding-top: 5vh;">
-        <div class="startup-box" style="max-width:1100px; width:95%; text-align:left; background:var(--panel);">
-            <h3
-                style="color:var(--accent); margin-top:0; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
-                <span data-lang-zh="🚨 錯誤回報 / 意見回饋" data-lang-en="🚨 Bug Report / Feedback">🚨 錯誤回報 / 意見回饋</span>
-                <button onclick="document.getElementById('feedback-modal').style.display='none'"
-                    style="background:none; border:none; color:#888; font-size:1.5rem; cursor:pointer;">×</button>
-            </h3>
-            <div class="feedback-body-flex">
-                <div class="feedback-screenshot-col" style="flex:1.2; display:flex; flex-direction:column; gap:10px;">
-                    <div style="font-size:0.85rem; color:#888;" data-lang-zh="問題發生時的畫面截圖："
-                        data-lang-en="Screenshot when issue occurred:">問題發生時的畫面截圖：</div>
-                    <div id="feedback-screenshot-container"
-                        style="flex:1; background:#000; border:1px solid #333; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative;">
-                        <img id="feedback-screenshot-img" style="max-width:100%; max-height:100%; object-fit:contain;">
-                        <div id="screenshot-loader"
-                            style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#aaa;"
-                            data-lang-zh="正在產生截圖..." data-lang-en="Generating screenshot...">
-                            正在產生截圖...</div>
+    <div id="feedback-modal" class="modal-overlay">
+        <div class="feedback-modal-box">
+            <div class="feedback-modal-header">
+                <div class="feedback-modal-title-wrap">
+                    <div class="feedback-modal-title">
+                        <span>🚨</span>
+                        <span data-lang-zh="錯誤回報 / 意見回饋" data-lang-en="Bug Report / Feedback">錯誤回報 / 意見回饋</span>
+                    </div>
+                    <div class="feedback-modal-subtitle"
+                        data-lang-zh="提供即時問題回報、診斷資訊傳送與快捷修復工具箱"
+                        data-lang-en="Instant bug reporting, diagnostic telemetry and quick recovery toolbox">
+                        提供即時問題回報、診斷資訊傳送與快捷修復工具箱
                     </div>
                 </div>
-                <div class="feedback-form-col"
-                    style="flex:1; display:flex; flex-direction:column; gap:15px; border-left:1px solid rgba(255,255,255,0.05); padding-left:20px;">
-                    <div class="feedback-info-row"
-                        style="font-size:0.82rem; color:#aaa; background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; line-height:1.6; border:1px solid rgba(255,255,255,0.05);">
-                        <div><span data-lang-zh="🕙 時間：" data-lang-en="🕙 Time:">🕙 時間：</span><span id="feedback-time"
-                                style="color:#eee;"></span></div>
-                        <div><span data-lang-zh="🔗 圖片：" data-lang-en="🔗 Image:">🔗 圖片：</span><span id="feedback-url"
-                                style="color:var(--accent); word-break:break-all; font-family:'JetBrains Mono';">N/A</span>
+                <div class="feedback-header-actions">
+                    <button id="btn-submit-feedback-top" onclick="submitFeedback()" class="feedback-btn-submit-top" disabled>
+                        <span data-lang-zh="🚀 發送回報" data-lang-en="🚀 Send Report">🚀 發送回報</span>
+                    </button>
+                    <button onclick="document.getElementById('feedback-modal').style.display='none'" class="feedback-btn-close" aria-label="Close">✕</button>
+                </div>
+            </div>
+
+            <div class="feedback-modal-body">
+                <!-- Left Column: Screenshot & System Diagnostic Info -->
+                <div class="feedback-col-left">
+                    <!-- Screenshot Container -->
+                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; min-height:0;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:0.82rem; font-weight:700; color:#ddd; display:flex; align-items:center; gap:5px;">
+                                <span>📸</span>
+                                <span data-lang-zh="問題發生時的畫面截圖" data-lang-en="Issue Screenshot">問題發生時的畫面截圖</span>
+                            </span>
+                            <button type="button" onclick="feedback_recaptureScreenshot()" class="feedback-sub-btn">
+                                <span>🔄</span>
+                                <span data-lang-zh="重新擷取" data-lang-en="Re-capture">重新擷取</span>
+                            </button>
                         </div>
-                        <div style="margin-top:4px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.06);">
-                            <span data-lang-zh="🖥️ 解析度：" data-lang-en="🖥️ Resolution:">🖥️ 解析度：</span><span
-                                id="feedback-screen-res" style="color:#eee; font-family:'JetBrains Mono';">-</span>
-                            <span style="color:#555; margin:0 4px;">·</span>
-                            <span data-lang-zh="視窗：" data-lang-en="Window:">視窗：</span><span id="feedback-window-size"
-                                style="color:#eee; font-family:'JetBrains Mono';">-</span>
-                        </div>
-                        <div>
-                            📐 DPR：<span id="feedback-dpr" style="color:#eee; font-family:'JetBrains Mono';">-</span>
-                            <span style="color:#555; margin:0 4px;">·</span>
-                            <span data-lang-zh="縮放：" data-lang-en="Zoom:">縮放：</span><span id="feedback-zoom-info"
-                                style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                        <div id="feedback-screenshot-container" class="feedback-screenshot-container">
+                            <img id="feedback-screenshot-img" alt="Screenshot preview">
+                            <div id="screenshot-loader"
+                                style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#aaa; font-size:0.85rem;"
+                                data-lang-zh="正在產生截圖..." data-lang-en="Generating screenshot...">
+                                正在產生截圖...
+                            </div>
                         </div>
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:8px;">
-                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;" data-lang-zh="回報分類："
-                            data-lang-en="Report Category:">回報分類：</label>
+
+                    <!-- Diagnostic & Source Info Card -->
+                    <div class="feedback-card" style="display:flex; flex-direction:column; gap:6px; font-size:0.78rem;">
+                        <div style="font-weight:700; color:var(--accent); margin-bottom:2px; display:flex; align-items:center; gap:5px;">
+                            <span>ℹ️</span>
+                            <span data-lang-zh="系統診斷與來源資訊" data-lang-en="System &amp; Source Diagnostics">系統診斷與來源資訊</span>
+                        </div>
+
+                        <!-- Current Page URL -->
+                        <div style="display:flex; align-items:flex-start; gap:6px; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
+                            <span style="color:#888; white-space:nowrap;" data-lang-zh="🌐 網頁來源：" data-lang-en="🌐 Page URL:">🌐 網頁來源：</span>
+                            <span id="feedback-page-url" style="color:var(--accent); word-break:break-all; font-family:'JetBrains Mono'; flex:1;">-</span>
+                            <button type="button" onclick="navigator.clipboard.writeText(window.location.href); showMsg('網址已複製！');" class="feedback-sub-btn" style="padding:2px 6px; font-size:0.7rem;" title="複製網址">📋</button>
+                        </div>
+
+                        <!-- Referrer & Time -->
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                            <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:6px;">
+                                <span style="color:#888;" data-lang-zh="📄 參照來源：" data-lang-en="📄 Referrer:">📄 參照來源：</span>
+                                <span id="feedback-page-referrer" style="color:#eee; font-family:'JetBrains Mono'; word-break:break-all;">-</span>
+                            </div>
+                            <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:6px;">
+                                <span style="color:#888;" data-lang-zh="🕙 時間：" data-lang-en="🕙 Time:">🕙 時間：</span>
+                                <span id="feedback-time" style="color:#eee;">-</span>
+                            </div>
+                        </div>
+
+                        <!-- UID & Role -->
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                            <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:6px;">
+                                <span style="color:#888;" data-lang-zh="👤 玩家 UID：" data-lang-en="👤 UID:">👤 玩家 UID：</span>
+                                <span id="feedback-current-uid" style="color:#74c0fc; font-weight:bold; font-family:'JetBrains Mono';">-</span>
+                            </div>
+                            <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:6px;">
+                                <span style="color:#888;" data-lang-zh="🎭 當前角色：" data-lang-en="🎭 Character:">🎭 當前角色：</span>
+                                <span id="feedback-current-role" style="color:#e5c07b; font-weight:bold;">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Resolution, DPR, Zoom -->
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                            <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:6px;">
+                                <span style="color:#888;" data-lang-zh="🖥️ 解析度 / 視窗：" data-lang-en="🖥️ Res / Window:">🖥️ 解析度 / 視窗：</span>
+                                <span id="feedback-screen-res" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                                <span style="color:#666;"> / </span>
+                                <span id="feedback-window-size" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                            </div>
+                            <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:6px;">
+                                <span style="color:#888;">📐 DPR / 縮放：</span>
+                                <span id="feedback-dpr" style="color:#eee; font-family:'JetBrains Mono';">-</span>
+                                <span style="color:#666;"> (</span><span id="feedback-zoom-info" style="color:#eee; font-family:'JetBrains Mono';">-</span><span style="color:#666;">)</span>
+                            </div>
+                        </div>
+
+                        <!-- Echo Image URL -->
+                        <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:6px; overflow:hidden;">
+                            <span style="color:#888;" data-lang-zh="🔗 聲骸圖片：" data-lang-en="🔗 Echo Image:">🔗 聲骸圖片：</span>
+                            <span id="feedback-url" style="color:#aaa; word-break:break-all; font-family:'JetBrains Mono'; font-size:0.74rem;">N/A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Form Inputs & Recovery Toolbox -->
+                <div class="feedback-col-right">
+                    <!-- Category Selector Card -->
+                    <div class="feedback-card" style="display:flex; flex-direction:column; gap:8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <label style="font-size:0.86rem; color:#eee; font-weight:bold; display:flex; align-items:center; gap:5px;"
+                                data-lang-zh="🏷️ 回報分類：" data-lang-en="🏷️ Category:">
+                                <span>🏷️</span>
+                                <span data-lang-zh="回報分類：" data-lang-en="Report Category:">回報分類：</span>
+                            </label>
+                            <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                                <button type="button" class="feedback-pill-btn" data-cat="OCR辨識" onclick="feedback_selectCategory('OCR辨識')">🔍 OCR 辨識</button>
+                                <button type="button" class="feedback-pill-btn" data-cat="數值與UID" onclick="feedback_selectCategory('數值與UID')">🔢 數值/UID</button>
+                                <button type="button" class="feedback-pill-btn" data-cat="UI顯示" onclick="feedback_selectCategory('UI顯示')">🖼️ 介面顯示</button>
+                                <button type="button" class="feedback-pill-btn" data-cat="功能建議" onclick="feedback_selectCategory('功能建議')">💡 功能建議</button>
+                                <button type="button" class="feedback-pill-btn" data-cat="其他" onclick="feedback_selectCategory('其他')">❓ 其他</button>
+                            </div>
+                        </div>
+
                         <select id="feedback-category" onchange="validateFeedback()"
-                            style="width:100%; background:#111; border:1px solid #444; color:#fff; padding:8px 12px; border-radius:8px; font-size:0.92rem; transition:border-color 0.2s; outline:none;"
+                            style="width:100%; background:#101016; border:1px solid #444; color:#fff; padding:7px 12px; border-radius:8px; font-size:0.88rem; outline:none; transition:border-color 0.2s;"
                             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#444'">
-                            <option value="" disabled selected data-lang-zh="-- 請選擇分類 --"
-                                data-lang-en="-- Select Category --">-- 請選擇分類 --</option>
-                            <option value="OCR辨識" data-lang-zh="OCR 辨識錯誤 (詞條、數值)"
-                                data-lang-en="OCR Recognition Error (stats/values)">OCR 辨識錯誤 (詞條、數值)</option>
-                            <option value="UI顯示" data-lang-zh="介面顯示問題 (錯位、模糊)"
-                                data-lang-en="UI Display Issue (misalignment, blur)">介面顯示問題 (錯位、模糊)</option>
-                            <option value="功能建議" data-lang-zh="功能建議與優化"
-                                data-lang-en="Feature Suggestion &amp; Improvement">功能建議與優化</option>
-                            <option value="其他" data-lang-zh="其他問題" data-lang-en="Other Issues">其他問題</option>
+                            <option value="" disabled selected data-lang-zh="-- 請選擇問題分類 --" data-lang-en="-- Select Category --">-- 請選擇問題分類 --</option>
+                            <option value="OCR辨識" data-lang-zh="🔍 OCR 辨識錯誤 (詞條、數值、角色辨識)" data-lang-en="🔍 OCR Recognition Error (stats/values/role)">🔍 OCR 辨識錯誤 (詞條、數值、角色辨識)</option>
+                            <option value="數值與UID" data-lang-zh="🔢 數值評分計算異常 / UID 資料同步錯誤" data-lang-en="🔢 Value/CV Calculation / UID Sync Error">🔢 數值評分計算異常 / UID 資料同步錯誤</option>
+                            <option value="UI顯示" data-lang-zh="🖼️ 介面顯示問題 (錯位、破圖、模糊、字體)" data-lang-en="🖼️ UI Display Issue (misalignment, blur, layout)">🖼️ 介面顯示問題 (錯位、破圖、模糊、字體)</option>
+                            <option value="功能建議" data-lang-zh="💡 功能建議與操作體驗優化" data-lang-en="💡 Feature Suggestion &amp; UX Improvement">💡 功能建議與操作體驗優化</option>
+                            <option value="其他" data-lang-zh="❓ 其他異常問題 / 當機崩潰" data-lang-en="❓ Other Issues / Crashes">❓ 其他異常問題 / 當機崩潰</option>
                         </select>
+
                         <div id="ocr-upload-container" style="display:none; margin-top:2px;">
-                            <label
-                                style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.8rem; color:var(--accent); background:rgba(255,255,255,0.03); padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
-                                <input type="checkbox" id="feedback-ocr-upload" checked style="cursor:pointer;"> <span
-                                    data-lang-zh="附帶當次 OCR 辨識結果 (推薦，協助優化)"
-                                    data-lang-en="Attach OCR result (recommended)">附帶當次
-                                    OCR 辨識結果 (推薦，協助優化)</span>
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.78rem; color:var(--accent); background:rgba(229,192,123,0.06); padding:6px 10px; border-radius:6px; border:1px solid rgba(229,192,123,0.2);">
+                                <input type="checkbox" id="feedback-ocr-upload" checked style="cursor:pointer;">
+                                <span data-lang-zh="附帶當次 OCR 原始辨識數據 (推薦，協助開發者精準修正模型)"
+                                    data-lang-en="Attach raw OCR debug data (recommended for model tuning)">
+                                    附帶當次 OCR 原始辨識數據 (推薦，協助開發者精準修正模型)
+                                </span>
                             </label>
                         </div>
                     </div>
-                    <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
-                        <label style="font-size:0.9rem; color:#eee; font-weight:bold;" data-lang-zh="問題描述與回饋內容："
-                            data-lang-en="Description &amp; Feedback:">問題描述與回饋內容：</label>
+
+                    <!-- Problem Description Card -->
+                    <div class="feedback-card" style="display:flex; flex-direction:column; gap:6px; flex:1; min-height:140px;">
+                        <label style="font-size:0.86rem; color:#eee; font-weight:bold;"
+                            data-lang-zh="📝 問題描述與回饋內容：" data-lang-en="📝 Description &amp; Feedback:">
+                            📝 問題描述與回饋內容：
+                        </label>
                         <textarea id="feedback-content"
-                            placeholder="請詳細描述問題發生的情境...&#10;&#10;💡 引導建議：&#10;1. 哪個詞條或數值辨識錯誤？(正確應為何)&#10;2. 在哪個操作步驟下發生問題？&#10;3. 您希望如何改進此功能？"
-                            data-placeholder-zh="請詳細描述問題發生的情境..." data-placeholder-en="Describe the issue in detail..."
-                            style="flex:1; background:#111; border:1px solid #444; color:#fff; padding:12px; border-radius:8px; resize:none; font-family:inherit; font-size:0.92rem; transition:border-color 0.2s;"
+                            placeholder="請詳細描述問題發生的情境...&#10;&#10;💡 引導範例：&#10;1. 哪個詞條或數值辨識錯誤？正確應為何？&#10;2. 執行什麼動作時發生問題？&#10;3. 您期望的修復或優化方式？"
+                            data-placeholder-zh="請詳細描述問題發生的情境...&#10;&#10;💡 引導範例：&#10;1. 哪個詞條或數值辨識錯誤？正確應為何？&#10;2. 執行什麼動作時發生問題？&#10;3. 您期望的修復或優化方式？"
+                            data-placeholder-en="Describe the issue in detail...&#10;&#10;💡 Hints:&#10;1. Which stat/value is incorrect and what should it be?&#10;2. What action triggered the issue?&#10;3. What improvement do you suggest?"
+                            style="flex:1; width:100%; min-height:100px; background:#101016; border:1px solid #444; color:#fff; padding:10px 12px; border-radius:8px; resize:vertical; font-family:inherit; font-size:0.88rem; line-height:1.5; outline:none; transition:border-color 0.2s;"
                             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#444'"
                             oninput="validateFeedback()"></textarea>
                     </div>
-                    <div id="feedback-validation-msg"
-                        style="font-size:0.78rem; color:#ff4d4d; text-align:right; font-weight:bold; min-height:1rem;">
+
+                    <!-- Bug Recovery & Quick Fix Toolbox -->
+                    <div class="feedback-toolbox-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                            <span style="font-size:0.86rem; font-weight:800; color:var(--accent); display:flex; align-items:center; gap:6px;">
+                                <span>🧰</span>
+                                <span data-lang-zh="快捷故障排除與修復工具箱" data-lang-en="Quick Recovery &amp; Repair Toolbox">快捷故障排除與修復工具箱</span>
+                            </span>
+                            <span style="font-size:0.72rem; color:#888;" data-lang-zh="即時自助排查與修復" data-lang-en="Instant Self-Repair">即時自助排查與修復</span>
+                        </div>
+
+                        <div class="feedback-toolbox-subgrid">
+                            <!-- Tool Item 1: UID Fix & Switch -->
+                            <div class="feedback-tool-item">
+                                <span style="font-size:0.76rem; font-weight:700; color:#74c0fc;" data-lang-zh="🆔 UID 錯誤修正與切換" data-lang-en="🆔 UID Fix &amp; Switch">🆔 UID 錯誤修正與切換</span>
+                                <div style="display:flex; gap:6px;">
+                                    <input type="text" id="feedback-fix-uid-input" maxlength="9" placeholder="輸入 9 碼 UID"
+                                        style="flex:1; width:100%; background:#111; border:1px solid #444; color:#fff; padding:5px 8px; border-radius:6px; font-size:0.78rem; font-family:'JetBrains Mono'; outline:none;">
+                                    <button type="button" onclick="feedback_fixUid()" class="feedback-sub-btn" style="background:rgba(92,124,250,0.2); border-color:rgba(92,124,250,0.5); color:#74c0fc; white-space:nowrap; padding:5px 12px; font-weight:700;">
+                                        <span data-lang-zh="切換" data-lang-en="Switch">切換</span>
+                                    </button>
+                                </div>
+                                <div style="font-size:0.72rem; color:#888; margin-top:2px;" data-lang-zh="輸入 9 碼 UID 即可即時修正並切換玩家資料" data-lang-en="Enter 9-digit UID to switch and load player data">
+                                    輸入 9 碼 UID 即可即時修正並切換玩家資料
+                                </div>
+                            </div>
+
+                            <!-- Tool Item 2: Echo Stats & Calculation Fix -->
+                            <div class="feedback-tool-item">
+                                <span style="font-size:0.76rem; font-weight:700; color:#e5c07b;" data-lang-zh="⚡ 聲骸數值與評分修正" data-lang-en="⚡ Echo Stats &amp; Recalc">⚡ 聲骸數值與評分修正</span>
+                                <button type="button" onclick="feedback_recalcValues()" class="feedback-sub-btn" style="background:rgba(229,192,123,0.15); border-color:rgba(229,192,123,0.4); color:var(--accent); justify-content:center;">
+                                    <span data-lang-zh="🔄 強制重新計算聲骸評分" data-lang-en="🔄 Recalculate Echo Score">🔄 強制重新計算聲骸評分</span>
+                                </button>
+                                <button type="button" onclick="feedback_openManualEditor()" class="feedback-sub-btn" style="justify-content:center; margin-top:2px;">
+                                    <span data-lang-zh="✏️ 開啟詞條手動編輯模式" data-lang-en="✏️ Open Substat Editor">✏️ 開啟詞條手動編輯模式</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Auto-Reset & Hard-Reset Option -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06);">
+                            <label style="display:flex; align-items:center; gap:7px; cursor:pointer; font-size:0.78rem; color:#ffb86c;">
+                                <input type="checkbox" id="feedback-reset-after-submit" style="cursor:pointer;">
+                                <span data-lang-zh="📤 發送回報成功後，自動重置網站快取並重新載入"
+                                    data-lang-en="📤 Auto reset cache &amp; reload page after report is sent">
+                                    📤 發送回報成功後，自動重置網站快取並重新載入
+                                </span>
+                            </label>
+                            <button type="button" onclick="feedback_resetCache()" class="feedback-danger-btn">
+                                <span data-lang-zh="⚠️ 立即重置網站" data-lang-en="⚠️ Reset Website Now">⚠️ 立即重置網站</span>
+                            </button>
+                        </div>
                     </div>
-                    <div
-                        style="display:flex; gap:10px; justify-content:flex-end; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
-                        <button onclick="document.getElementById('feedback-modal').style.display='none'"
-                            class="btn-confirm-no" style="background:#444; padding:8px 20px;" data-lang-zh="取消"
-                            data-lang-en="Cancel">取消</button>
-                        <button onclick="submitFeedback()" class="btn-confirm-yes" id="btn-submit-feedback"
-                            style="padding:8px 30px; font-weight:800; opacity:0.5;" disabled data-lang-zh="發送回報"
-                            data-lang-en="Submit Report">發送回報</button>
-                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="feedback-modal-footer">
+                <div id="feedback-validation-msg"
+                    style="font-size:0.8rem; color:#ff6b6b; font-weight:bold; min-height:1.2rem; display:flex; align-items:center;">
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <button onclick="document.getElementById('feedback-modal').style.display='none'"
+                        class="btn-confirm-no" style="background:#3a3a46; padding:7px 18px; border-radius:8px; font-size:0.88rem;"
+                        data-lang-zh="取消" data-lang-en="Cancel">取消</button>
+                    <button onclick="submitFeedback()" class="btn-confirm-yes" id="btn-submit-feedback"
+                        style="padding:7px 28px; font-weight:800; border-radius:8px; font-size:0.88rem; opacity:0.45;" disabled
+                        data-lang-zh="發送回報" data-lang-en="Submit Report">發送回報</button>
                 </div>
             </div>
         </div>
