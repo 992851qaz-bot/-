@@ -29,6 +29,8 @@
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
   -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -143,12 +145,15 @@ header {
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--text-sub);
-  user-select: none;
+  text-decoration: none;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
+  transition: color 0.2s;
 }
 .header-marquee-item:hover {
-  color: var(--text-main);
+  color: #38bdf8;
+  text-decoration: underline;
 }
 @keyframes marqueeScroll {
   0% { transform: translateX(0); }
@@ -326,6 +331,8 @@ header {
   text-align: center;
   padding: 6px;
   outline: none;
+  -webkit-user-select: auto;
+  user-select: auto;
 }
 .init-input:focus {
   border-color: var(--theme-color);
@@ -1414,13 +1421,91 @@ header {
   color: var(--text-sub);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   text-align: center;
 }
 .team-credits-footer strong {
   color: var(--theme-color);
 }
+.sonance-hub-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  margin: 4px auto 0;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.78rem;
+  transition: all 0.2s;
+}
+.sonance-hub-link:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #fff;
+  transform: translateY(-1px);
+}
 </style>
+<script>
+(function() {
+  const disableMethods = ['log', 'debug', 'info', 'warn', 'error', 'table', 'clear'];
+  for (let i = 0; i < disableMethods.length; i++) {
+    try {
+      window.console[disableMethods[i]] = function() {};
+    } catch (e) {}
+  }
+
+  window.addEventListener('keydown', function(e) {
+    if (
+      e.key === 'F12' ||
+      e.keyCode === 123 ||
+      ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+      ((e.ctrlKey || e.metaKey) && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's' || e.keyCode === 85 || e.keyCode === 83))
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }, true);
+
+  document.addEventListener('selectstart', function(e) {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+  });
+
+  setInterval(function() {
+    (function() {
+      return false;
+    }['constructor']('debugger')['call']());
+  }, 50);
+
+  setInterval(function() {
+    const t0 = performance.now();
+    debugger;
+    if (performance.now() - t0 > 100) {
+      document.body.innerHTML = '';
+      window.location.reload();
+    }
+  }, 400);
+
+  const checkDevTools = function() {
+    if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+      document.body.innerHTML = '';
+      window.location.reload();
+    }
+  };
+  window.addEventListener('resize', checkDevTools);
+})();
+</script>
 </head>
 <body>
 
@@ -1434,12 +1519,12 @@ header {
 
   <div class="header-marquee-wrap">
     <div class="header-marquee-track">
-      <span class="header-marquee-item">📊 聲骸不知道怎麼選？交給 GAME ZH 聲骸分析工具，快速看詞條、評分與配裝方向！</span>
-      <span class="header-marquee-item">← 🔥 GAME ZH 聲骸分析工具｜截圖一丟，快速看懂你的聲骸！ →</span>
-      <span class="header-marquee-item">🎁 3.7 版本期間｜使用聲骸分析工具並完成指定條件，即可抽月相！</span>
-      <span class="header-marquee-item">📊 聲骸不知道怎麼選？交給 GAME ZH 聲骸分析工具，快速看詞條、評分與配裝方向！</span>
-      <span class="header-marquee-item">← 🔥 GAME ZH 聲骸分析工具｜截圖一丟，快速看懂你的聲骸！ →</span>
-      <span class="header-marquee-item">🎁 3.7 版本期間｜使用聲骸分析工具並完成指定條件，即可抽月相！</span>
+      <a class="header-marquee-item" href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener noreferrer">📊 聲骸不知道怎麼選？交給 GAME ZH 聲骸分析工具，快速看詞條、評分與配裝方向！ ↗</a>
+      <a class="header-marquee-item" href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener noreferrer">← 🔥 GAME ZH 聲骸分析工具｜截圖一丟，快速看懂你的聲骸！ → ↗</a>
+      <a class="header-marquee-item" href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener noreferrer">🎁 3.7 版本期間｜使用聲骸分析工具並完成指定條件，即可抽月相！ ↗</a>
+      <a class="header-marquee-item" href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener noreferrer">📊 聲骸不知道怎麼選？交給 GAME ZH 聲骸分析工具，快速看詞條、評分與配裝方向！ ↗</a>
+      <a class="header-marquee-item" href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener noreferrer">← 🔥 GAME ZH 聲骸分析工具｜截圖一丟，快速看懂你的聲骸！ → ↗</a>
+      <a class="header-marquee-item" href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener noreferrer">🎁 3.7 版本期間｜使用聲骸分析工具並完成指定條件，即可抽月相！ ↗</a>
     </div>
   </div>
 
@@ -1528,6 +1613,11 @@ header {
 
     <div class="team-credits-footer">
       <div id="ui-team-credit">開發團隊：GAME ZH 研發小組 ｜ 打造目前最強、最直覺的遊戲演算與分析工具。</div>
+      <div>
+        <a class="sonance-hub-link" href="https://992851qaz-bot.github.io/-/" target="_blank" rel="noopener noreferrer">
+          🔍 前往 GAME ZH 聲骸分析與配裝工具 ↗
+        </a>
+      </div>
       <div style="opacity:0.7; font-size:0.7rem;" id="ui-team-credit-en">Development Team: GAME ZH Lab ｜ Building the ultimate game resource & calculation utilities.</div>
     </div>
   </div>
@@ -2060,7 +2150,7 @@ const ITEMS = [
     desc_en: '6480 Lunites + 6480 bonus (Total 12,960 Lunites / 81 pulls). Core tier milestone pillar.',
     limit_zh: '限購 1 次 (首次雙倍)', limit_en: '1 purchase (First time 2x)',
     tier_rank: 'S', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p10', name_zh: '3280 凝刻月相 (首儲雙倍)', name_en: '3280 Lunites (2x Bonus)',
@@ -2069,7 +2159,7 @@ const ITEMS = [
     desc_en: '3280 Lunites + 3280 bonus (Total 6,560 Lunites / 41 pulls). Key for 450 weapon box.',
     limit_zh: '限購 1 次 (首次雙倍)', limit_en: '1 purchase (First time 2x)',
     tier_rank: 'S', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p11', name_zh: '1980 凝刻月相 (首儲雙倍)', name_en: '1980 Lunites (2x Bonus)',
@@ -2078,7 +2168,7 @@ const ITEMS = [
     desc_en: '1980 Lunites + 1980 bonus (Total 3,960 Lunites / 24.75 pulls). Perfect 198 pt fit.',
     limit_zh: '限購 1 次 (首次雙倍)', limit_en: '1 purchase (First time 2x)',
     tier_rank: 'S', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p12', name_zh: '980 凝刻月相 (首儲雙倍)', name_en: '980 Lunites (2x Bonus)',
@@ -2087,7 +2177,7 @@ const ITEMS = [
     desc_en: '980 Lunites + 980 bonus (Total 1,960 Lunites / 12.25 pulls). Precise mid-tier fill.',
     limit_zh: '限購 1 次 (首次雙倍)', limit_en: '1 purchase (First time 2x)',
     tier_rank: 'S', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p13', name_zh: '300 凝刻月相 (首儲雙倍)', name_en: '300 Lunites (2x Bonus)',
@@ -2096,7 +2186,7 @@ const ITEMS = [
     desc_en: '300 Lunites + 300 bonus (Total 600 Lunites / 3.75 pulls). Low-cost filler.',
     limit_zh: '限購 1 次 (首次雙倍)', limit_en: '1 purchase (First time 2x)',
     tier_rank: 'A', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p14', name_zh: '60 凝刻月相 (首儲雙倍)', name_en: '60 Lunites (2x Bonus)',
@@ -2105,7 +2195,7 @@ const ITEMS = [
     desc_en: '60 Lunites + 60 bonus (Total 120 Lunites / 0.75 pulls). Micro filler for 6 pt remainder.',
     limit_zh: '限購 1 次 (首次雙倍)', limit_en: '1 purchase (First time 2x)',
     tier_rank: 'A', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p15', name_zh: '6480 凝刻月相 (常規額度)', name_en: '6480 Lunites (Standard)',
@@ -2114,7 +2204,7 @@ const ITEMS = [
     desc_en: '6480 Lunites + 1600 standard bonus (Total 8,080 Lunites / 50.5 pulls).',
     limit_zh: '無購買次數上限', limit_en: 'No purchase limit',
     tier_rank: 'B', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p16', name_zh: '3280 凝刻月相 (常規額度)', name_en: '3280 Lunites (Standard)',
@@ -2123,7 +2213,7 @@ const ITEMS = [
     desc_en: '3280 Lunites + 600 standard bonus (Total 3,880 Lunites / 24.25 pulls).',
     limit_zh: '無購買次數上限', limit_en: 'No purchase limit',
     tier_rank: 'C+', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p17', name_zh: '1980 凝刻月相 (常規額度)', name_en: '1980 Lunites (Standard)',
@@ -2132,7 +2222,7 @@ const ITEMS = [
     desc_en: '1980 Lunites + 260 standard bonus (Total 2,240 Lunites / 14.0 pulls).',
     limit_zh: '無購買次數上限', limit_en: 'No purchase limit',
     tier_rank: 'C+', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p18', name_zh: '980 凝刻月相 (常規額度)', name_en: '980 Lunites (Standard)',
@@ -2141,7 +2231,7 @@ const ITEMS = [
     desc_en: '980 Lunites + 110 standard bonus (Total 1,090 Lunites / 6.81 pulls).',
     limit_zh: '無購買次數上限', limit_en: 'No purchase limit',
     tier_rank: 'C', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p19', name_zh: '300 凝刻月相 (常規額度)', name_en: '300 Lunites (Standard)',
@@ -2150,7 +2240,7 @@ const ITEMS = [
     desc_en: '300 Lunites + 30 standard bonus (Total 330 Lunites / 2.06 pulls).',
     limit_zh: '無購買次數上限', limit_en: 'No purchase limit',
     tier_rank: 'C', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   },
   {
     id: 'p20', name_zh: '60 凝刻月相 (常規額度)', name_en: '60 Lunites (Standard)',
@@ -2159,7 +2249,7 @@ const ITEMS = [
     desc_en: '60 Lunites (No bonus / 0.38 pulls).',
     limit_zh: '無購買次數上限', limit_en: 'No purchase limit',
     tier_rank: 'C-', isMat: false, isCos: false,
-    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/0fa1d8ac70243089b9b2f27025fa375c.WEBP?w=1000'
+    img: 'https://truth.bahamut.com.tw/s01/202609/forum/74934/b7c730bc3287d578039518adeb2b66d4.PNG?w=1000'
   }
 ];
 
@@ -3891,6 +3981,7 @@ function showContextMenu(x, y) {
     <div class="ctx-item" onclick="undoAction(); hideContextMenu();"><span>↶ ${L.undo}</span> <small style="color:var(--text-sub)">Ctrl+Z</small></div>
     <div class="ctx-item" onclick="redoAction(); hideContextMenu();"><span>↷ ${L.redo}</span> <small style="color:var(--text-sub)">Ctrl+Y</small></div>
     <div class="ctx-divider"></div>
+    <div class="ctx-item" onclick="window.open('https://992851qaz-bot.github.io/-/', '_blank'); hideContextMenu();"><span>🔍 前往聲骸分析網站</span></div>
     <div class="ctx-item" onclick="downloadPlanImage(); hideContextMenu();"><span>🖼️ ${getLang() === 'en' ? 'Save Image' : '下載清單圖'}</span></div>
     <div class="ctx-item" onclick="openFortuneModal(); hideContextMenu();"><span>🥠 ${L.fortune}</span></div>
     <div class="ctx-item" onclick="showToast(pick(T[getLang()].cheers)); hideContextMenu();"><span>💖 ${L.cheerMe}</span></div>
@@ -3901,7 +3992,7 @@ function showContextMenu(x, y) {
   menu.style.display = 'flex';
 
   const menuWidth = 190;
-  const menuHeight = menu.offsetHeight || 280;
+  const menuHeight = menu.offsetHeight || 310;
   const px = (x + menuWidth > window.innerWidth) ? (window.innerWidth - menuWidth - 10) : x;
   const py = (y + menuHeight > window.innerHeight) ? (window.innerHeight - menuHeight - 10) : y;
 
