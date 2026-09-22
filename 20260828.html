@@ -22,9 +22,11 @@
         content="免費鳴潮聲骸分析工具，自動辨識聲骸詞條並計算 CV 評分，提供各角色聲骸 Build 推薦與畢業標準攻略。Wuthering Waves echo analyzer with CV scoring and build guides.">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:locale:alternate" content="en_US">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="鳴潮聲骸分析儀 | Wuthering Waves Echo Analyzer">
     <meta name="twitter:description" content="免費鳴潮聲骸分析工具，自動辨識聲骸詞條並計算 CV 評分，提供各角色聲骸 Build 推薦與畢業標準攻略。">
+    <meta name="twitter:image" content="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000">
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LD4742Y6ZF"></script>
     <script>
@@ -100,7 +102,26 @@
         }
 
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
+        }
+
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input, textarea, [contenteditable="true"] {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            user-drag: none;
         }
 
         body.theme-custom {
@@ -10829,6 +10850,13 @@
                 <button id="qs-feedback" onclick="openFeedbackModal()"
                     style="padding:8px 12px;border-radius:10px;border:none;background:rgba(255,255,255,0.05);color:#fff;font-weight:800;cursor:pointer;transition:all 0.2s;">📝
                     <span data-lang-zh="問卷與回報" data-lang-en="Feedback">問卷與回報</span></button>
+                <a id="qs-calculator-link" href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
+                    style="padding:8px 12px;border-radius:10px;border:1px solid rgba(56,189,248,0.4);background:linear-gradient(90deg,rgba(56,189,248,0.18),rgba(56,189,248,0.08));color:#38bdf8;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s;"
+                    onmouseover="this.style.background='rgba(56,189,248,0.28)'"
+                    onmouseout="this.style.background='linear-gradient(90deg,rgba(56,189,248,0.18),rgba(56,189,248,0.08))'">💎
+                    <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
+                        data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
+                </a>
             </div>
         </div>
     </div>
@@ -10892,18 +10920,29 @@
                     data-lang-en="This tool <b style='color:#ddd;'>only requires your in-game UID (numbers only)</b>. We never ask for passwords, tokens, or personal data. All analysis data is used solely for echo scoring display and will never steal or misuse your account.">
                     本工具 <b style="color:#ddd;">僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。所有分析資料僅用於聲骸評分顯示，不會竊取或濫用您的帳號資訊。
                 </div>
-                <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
-                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
-                        style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="隱私政策"
-                        data-lang-en="Privacy Policy">隱私政策</a>
-                    <span style="color:#555;">|</span>
-                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
-                        style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="安全政策"
-                        data-lang-en="Security Policy">安全政策</a>
-                    <span style="color:#555;">|</span>
-                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
-                        style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="使用條款"
-                        data-lang-en="Terms of Use">使用條款</a>
+                <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                        <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
+                            style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="隱私政策"
+                            data-lang-en="Privacy Policy">隱私政策</a>
+                        <span style="color:#555;">|</span>
+                        <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
+                            style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="安全政策"
+                            data-lang-en="Security Policy">安全政策</a>
+                        <span style="color:#555;">|</span>
+                        <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
+                            style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="使用條款"
+                            data-lang-en="Terms of Use">使用條款</a>
+                    </div>
+                    <a href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
+                        style="color:#38bdf8;text-decoration:none;font-size:0.72rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:rgba(56,189,248,0.12);padding:2px 8px;border-radius:6px;border:1px solid rgba(56,189,248,0.35);transition:all 0.2s;"
+                        onmouseover="this.style.background='rgba(56,189,248,0.22)'"
+                        onmouseout="this.style.background='rgba(56,189,248,0.12)'">
+                        <span>💎</span>
+                        <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
+                            data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
+                        <span>➔</span>
+                    </a>
                 </div>
             </div>
             <div id="pwa-install-area">
@@ -12303,6 +12342,23 @@
                                 style="background:rgba(76,175,80,0.25);color:#4caf50;border-color:rgba(76,175,80,0.5);"
                                 data-lang-zh="查看" data-lang-en="View">查看</button></div>
                     </div>
+
+                    <a class="feature-card" href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
+                        style="grid-column:1/-1;background:linear-gradient(135deg,rgba(56,189,248,0.12),rgba(20,20,25,0.85));border-color:rgba(56,189,248,0.35);text-decoration:none;display:flex;align-items:center;">
+                        <div class="feature-card-icon-box" style="background:rgba(56,189,248,0.2);color:#38bdf8;font-size:1.4rem;">💎</div>
+                        <div class="feature-card-main">
+                            <div class="feature-card-title" style="color:#38bdf8;"
+                                data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
+                                data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</div>
+                            <div class="feature-card-desc"
+                                data-lang-zh="3.7 月影溯尋全品項性價比 CP 值排行懶人包、防溢出智慧補足演算、限定禮匣與雙倍月相最佳規劃！"
+                                data-lang-en="WuWa 3.7 top-up value ranking, smart milestone planner & gacha pity simulator.">
+                                3.7 月影溯尋全品項性價比 CP 值排行懶人包、防溢出智慧補足演算、限定禮匣與雙倍月相最佳規劃！</div>
+                        </div>
+                        <div class="feature-card-action"><button class="quick-btn"
+                                style="background:rgba(56,189,248,0.25);color:#38bdf8;border-color:rgba(56,189,248,0.5);pointer-events:none;"
+                                data-lang-zh="前往 ➔" data-lang-en="Visit ➔">前往 ➔</button></div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -13531,9 +13587,20 @@
                 </div>
 
                 <!-- Footer: Security & Skip -->
-                <div class="ios-entry-footer">
-                    <button type="button" class="ios-link-btn" onclick="openSecurityPolicyModal()"
-                        data-lang-zh="🔒 安全聲明・隱私政策・使用條款" data-lang-en="🔒 Security & Terms">🔒 安全聲明・隱私政策・使用條款</button>
+                <div class="ios-entry-footer" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <button type="button" class="ios-link-btn" onclick="openSecurityPolicyModal()"
+                            data-lang-zh="🔒 安全聲明・隱私政策・使用條款" data-lang-en="🔒 Security & Terms">🔒 安全聲明・隱私政策・使用條款</button>
+                        <a href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
+                            style="color:#38bdf8;text-decoration:none;font-size:0.72rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:rgba(56,189,248,0.12);padding:2px 8px;border-radius:6px;border:1px solid rgba(56,189,248,0.35);transition:all 0.2s;"
+                            onmouseover="this.style.background='rgba(56,189,248,0.22)'"
+                            onmouseout="this.style.background='rgba(56,189,248,0.12)'">
+                            <span>💎</span>
+                            <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
+                                data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
                     <button id="btn-close-welcome" class="ios-skip-btn" onclick="closeWelcomePanel()"
                         style="display:none;" data-lang-zh="✕ 關閉教學" data-lang-en="✕ Close Tutorial">✕ 關閉教學</button>
                 </div>
@@ -13653,9 +13720,15 @@
                     <div class="scan-radar"></div>
                 </div>
                 <div id="img-placeholder" class="empty-state">
-                    <div>等待影像輸入...</div>
-                    <div style="font-size:0.8rem;color:#666;">或 <a href="#" onclick="triggerFileUpload();return false;"
-                            style="color:var(--accent)">選擇本地圖片</a></div>
+                    <div data-lang-zh="等待影像輸入..." data-lang-en="Waiting for image input...">等待影像輸入...</div>
+                    <div style="font-size:0.8rem;color:#666;display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap;">
+                        <span><span data-lang-zh="或" data-lang-en="or">或</span> <a href="#" onclick="triggerFileUpload();return false;"
+                            style="color:var(--accent)" data-lang-zh="選擇本地圖片" data-lang-en="Select Local Image">選擇本地圖片</a></span>
+                        <span style="color:#555">·</span>
+                        <a href="javascript:void(0)" onclick="openPreviewImageLightbox()"
+                            style="color:#61afef;cursor:pointer;text-decoration:underline;"
+                            data-lang-zh="🖼️ 查看範例預覽圖" data-lang-en="🖼️ View Sample Preview">🖼️ 查看範例預覽圖</a>
+                    </div>
                 </div>
             </div>
             <div class="status-bar"><span id="status-text" data-lang-zh="就緒" data-lang-en="Ready">就緒</span><span
@@ -46794,8 +46867,19 @@
                 style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.05);border:none;color:#888;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;"
                 onmouseover="this.style.background='rgba(255,0,0,0.2)';this.style.color='#fff'"
                 onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#888'">×</button>
-            <h2 style="color:#4caf50;margin:0 0 6px;font-size:1.3rem;" data-lang-zh="🔒 安全聲明 · 隱私政策 · 使用條款"
-                data-lang-en="🔒 Security Statement · Privacy Policy · Terms of Use">🔒 安全聲明 · 隱私政策 · 使用條款</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 8px;padding-right:32px;">
+                <h2 style="color:#4caf50;margin:0;font-size:1.25rem;" data-lang-zh="🔒 安全聲明 · 隱私政策 · 使用條款"
+                    data-lang-en="🔒 Security Statement · Privacy Policy · Terms of Use">🔒 安全聲明 · 隱私政策 · 使用條款</h2>
+                <a href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
+                    style="color:#38bdf8;text-decoration:none;font-size:0.75rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:rgba(56,189,248,0.12);padding:3px 10px;border-radius:6px;border:1px solid rgba(56,189,248,0.35);transition:all 0.2s;"
+                    onmouseover="this.style.background='rgba(56,189,248,0.22)'"
+                    onmouseout="this.style.background='rgba(56,189,248,0.12)'">
+                    <span>💎</span>
+                    <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
+                        data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
+                    <span>➔</span>
+                </a>
+            </div>
             <div style="color:#888;font-size:0.78rem;margin-bottom:18px;" data-lang-zh="最後更新：2025 年"
                 data-lang-en="Last updated: 2025">最後更新：2025 年</div>
             <div
@@ -46976,6 +47060,140 @@
 
             driverObj.drive();
         }
+    </script>
+    <!-- Image Preview Lightbox Modal -->
+    <div id="image-preview-lightbox" class="modal-overlay" onclick="if(event.target===this) closePreviewImageLightbox()"
+        style="display:none;z-index:35000;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;position:fixed;inset:0;">
+        <div style="position:relative;max-width:92vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;background:#15161b;border:1px solid rgba(97,175,239,0.35);border-radius:14px;padding:16px;box-shadow:0 25px 60px rgba(0,0,0,0.95);box-sizing:border-box;">
+            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;">
+                <div style="display:flex;align-items:center;gap:8px;color:#61afef;font-weight:700;font-size:0.95rem;">
+                    <span>🖼️</span>
+                    <span data-lang-zh="聲骸分析範例圖預覽" data-lang-en="Echo Analysis Sample Preview">聲骸分析範例圖預覽</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <a id="lightbox-open-external" href="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000" target="_blank"
+                        style="color:#38bdf8;text-decoration:none;font-size:0.8rem;padding:4px 10px;border-radius:6px;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);transition:all 0.2s;"
+                        onmouseover="this.style.background='rgba(56,189,248,0.25)'"
+                        onmouseout="this.style.background='rgba(56,189,248,0.12)'"
+                        data-lang-zh="另開原圖 ↗" data-lang-en="Open Full Image ↗">另開原圖 ↗</a>
+                    <button onclick="closePreviewImageLightbox()"
+                        style="background:rgba(255,255,255,0.08);border:none;color:#aaa;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;"
+                        onmouseover="this.style.background='rgba(255,0,0,0.3)';this.style.color='#fff'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#aaa'">×</button>
+                </div>
+            </div>
+            <div style="overflow:auto;max-height:calc(92vh - 85px);display:flex;justify-content:center;align-items:center;border-radius:8px;background:#0d0e12;border:1px solid rgba(255,255,255,0.05);padding:8px;">
+                <img id="lightbox-img" src="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000" alt="範例預覽圖"
+                    style="max-width:100%;max-height:calc(85vh - 95px);object-fit:contain;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+            </div>
+            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:0.75rem;color:#888;">
+                <span data-lang-zh="提示：點擊背景或按 ESC 鍵可關閉預覽" data-lang-en="Tip: Click backdrop or press ESC to close">提示：點擊背景或按 ESC 鍵可關閉預覽</span>
+                <button onclick="closePreviewImageLightbox()"
+                    style="padding:5px 16px;border-radius:6px;border:none;background:var(--accent);color:#000;font-weight:700;cursor:pointer;"
+                    data-lang-zh="關閉" data-lang-en="Close">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lightbox Handler
+        function openPreviewImageLightbox(url) {
+            var box = document.getElementById('image-preview-lightbox');
+            var img = document.getElementById('lightbox-img');
+            var ext = document.getElementById('lightbox-open-external');
+            var targetUrl = url || 'https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000';
+            if (img) img.src = targetUrl;
+            if (ext) ext.href = targetUrl;
+            if (box) {
+                box.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closePreviewImageLightbox() {
+            var box = document.getElementById('image-preview-lightbox');
+            if (box) {
+                box.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Anti-theft, anti-scraping and keyboard protection
+        (function initAntiTheftProtection() {
+            // Prevent right-click context menu (exempt input/textarea)
+            document.addEventListener('contextmenu', function (e) {
+                var tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) {
+                    return;
+                }
+                e.preventDefault();
+                return false;
+            }, { capture: true });
+
+            // Keyboard shortcut prevention (F12, Ctrl+U, Ctrl+S, DevTools shortcuts) + ESC Modal Close
+            document.addEventListener('keydown', function (e) {
+                // ESC key handler for all active overlays
+                if (e.key === 'Escape' || e.keyCode === 27) {
+                    closePreviewImageLightbox();
+                    if (typeof closeSecurityPolicyModal === 'function') closeSecurityPolicyModal();
+                    var fModal = document.getElementById('feature-list-modal');
+                    if (fModal && fModal.style.display !== 'none') fModal.style.display = 'none';
+                    var fbModal = document.getElementById('feedback-modal');
+                    if (fbModal && fbModal.style.display !== 'none') fbModal.style.display = 'none';
+                    var pModal = document.getElementById('official-prob-modal');
+                    if (pModal && pModal.style.display !== 'none') pModal.style.display = 'none';
+                    var iModal = document.getElementById('imitate-modal');
+                    if (iModal && iModal.style.display !== 'none') iModal.style.display = 'none';
+                    return;
+                }
+
+                var key = e.key ? e.key.toLowerCase() : '';
+                var isCtrl = e.ctrlKey || e.metaKey;
+
+                // Disable F12
+                if (e.key === 'F12' || e.keyCode === 123) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+                // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+                if (isCtrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+                // Disable Ctrl+U (view source)
+                if (isCtrl && (key === 'u' || e.keyCode === 85)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+                // Disable Ctrl+S (save page)
+                if (isCtrl && (key === 's' || e.keyCode === 83)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            }, { capture: true });
+
+            // Prevent image dragging
+            document.addEventListener('dragstart', function (e) {
+                if (e.target && e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                    return false;
+                }
+            }, { capture: true });
+
+            // DevTools Console Watermark Notice
+            try {
+                console.log(
+                    '%c鳴潮聲骸分析儀 %cSecurity Protected\n%c本工具由社群維護，嚴禁未經許可進行惡意爬蟲、盜取代碼或商業轉載！\n精確計算器支援：%chttps://992851qaz-bot.github.io/-/3.7.html',
+                    'font-size:18px;font-weight:900;color:#e5c07b;background:#1a151d;padding:4px 8px;border-radius:4px;',
+                    'font-size:12px;color:#38bdf8;font-weight:700;',
+                    'font-size:13px;color:#ff6b6b;font-weight:600;line-height:1.8;',
+                    'font-size:12px;color:#61afef;text-decoration:underline;'
+                );
+            } catch (err) {}
+        })();
     </script>
 </body>
 
