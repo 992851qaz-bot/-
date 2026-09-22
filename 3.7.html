@@ -2577,7 +2577,9 @@
             border-radius: 12px;
             padding: 6px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            min-width: 180px;
+            min-width: 195px;
+            max-height: calc(100vh - 24px);
+            overflow-y: auto;
             display: none;
             flex-direction: column;
             gap: 2px;
@@ -7126,6 +7128,8 @@
             document.getElementById('drawer-mobile').classList.remove('open');
             const decisionModal = document.getElementById('modal-milestone-decision');
             if (decisionModal) decisionModal.classList.remove('open');
+            const fbModal = document.getElementById('fb-modal-backdrop');
+            if (fbModal) fbModal.classList.remove('open');
         }
 
         function showToast(msg) {
@@ -7440,22 +7444,29 @@
                 if (contextTargetItemId) {
                     const it = ITEMS.find(i => i.id === contextTargetItemId);
                     if (it) {
+                        const itName = (lang === 'en' ? (it.name_en || it.name_zh) : (it.name_zh || it.name_en)).replace(/'/g, "\\'");
+                        const reportItemText = lang === 'en' ? '🐞 Report Item Data / Issue' : '🐞 回報此項目數值/問題';
                         itemsHtml += `
         <div class="ctx-item" onclick="modifyQty('${it.id}', 1); hideContextMenu();"><span>➕ ${L.add1}</span></div>
         <div class="ctx-item" onclick="modifyQty('${it.id}', -1); hideContextMenu();"><span>➖ ${L.sub1}</span></div>
         <div class="ctx-item" onclick="delete cart['${it.id}']; renderCatalog(); updateCalculation(); hideContextMenu();"><span>🗑️ ${L.zero}</span></div>
         <div class="ctx-item" onclick="openItemInfo('${it.id}'); hideContextMenu();"><span>ℹ️ ${L.detail}</span></div>
         <div class="ctx-item" onclick="setCatalogCat('${it.cat}', $('cat-btn-${it.cat}')); hideContextMenu();"><span>🔍 ${L.onlyCat}</span></div>
+        <div class="ctx-item" onclick="openFeedbackModal(); if(typeof switchFbCategory==='function') switchFbCategory('data'); const fbT=document.getElementById('fb-target-item'); if(fbT) fbT.value='${itName}'; hideContextMenu();"><span>${reportItemText}</span></div>
         <div class="ctx-divider"></div>
       `;
                     }
                 } else if (contextTargetMilestone) {
+                    const reportMilestoneText = lang === 'en' ? '🐞 Report Milestone Issue' : '🐞 回報此階段問題';
                     itemsHtml += `
       <div class="ctx-item" onclick="setMilestoneTarget(${contextTargetMilestone}); hideContextMenu();"><span>🎯 ${L.setTarget} (${contextTargetMilestone} pt)</span></div>
       <div class="ctx-item" onclick="setMilestoneTarget(${contextTargetMilestone}); openSolverModal(); hideContextMenu();"><span>⚡ ${L.fillTo}</span></div>
+      <div class="ctx-item" onclick="openFeedbackModal(); if(typeof switchFbCategory==='function') switchFbCategory('data'); const fbT=document.getElementById('fb-target-item'); if(fbT) fbT.value='階段目標 ${contextTargetMilestone} pt'; hideContextMenu();"><span>${reportMilestoneText}</span></div>
       <div class="ctx-divider"></div>
     `;
                 }
+
+                const feedbackText = lang === 'en' ? '💬 Feedback & Bug Report' : '💬 意見反饋與問題回報';
 
                 itemsHtml += `
     <div class="ctx-item" onclick="undoAction(); hideContextMenu();"><span>↶ ${L.undo}</span> <small style="color:var(--text-sub)">Ctrl+Z</small></div>
@@ -7467,14 +7478,15 @@
     <div class="ctx-item" onclick="showToast(pick(T[getLang()].cheers)); hideContextMenu();"><span>💖 ${L.cheerMe}</span></div>
     <div class="ctx-item" onclick="toggleSound(); hideContextMenu();"><span>${soundEnabled ? '🔕 ' + L.mute : '🔔 ' + L.unmute}</span></div>
     <div class="ctx-divider"></div>
+    <div class="ctx-item" onclick="openFeedbackModal(); hideContextMenu();"><span>${feedbackText}</span></div>
     <div class="ctx-item" style="color:#f87171;" onclick="resetWholeWebsite(); hideContextMenu();"><span>🔄 ${L.resetSite || '一鍵重設網站'}</span></div>
   `;
 
                 menu.innerHTML = itemsHtml;
                 menu.style.display = 'flex';
 
-                const menuWidth = 190;
-                const menuHeight = menu.offsetHeight || 350;
+                const menuWidth = 200;
+                const menuHeight = menu.offsetHeight || 380;
                 const px = (x + menuWidth > window.innerWidth) ? (window.innerWidth - menuWidth - 10) : x;
                 const py = (y + menuHeight > window.innerHeight) ? (window.innerHeight - menuHeight - 10) : y;
 
@@ -7494,6 +7506,9 @@
             });
 
             window.addEventListener('contextmenu', e => {
+                if (e.target.closest('#fb-modal-backdrop') || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
                 const card = e.target.closest('[data-item-id]');
                 const node = e.target.closest('.node-chip');
                 if (card) {
