@@ -18110,16 +18110,42 @@
                     }
                 }
             });
-            urlInput.addEventListener('keydown', async (e) => {
+        function handleInvalidInputFeedback(val) {
+            const v = (val || '').trim();
+            const input = document.getElementById('url-input');
+            if (input) {
+                input.style.transition = 'all 0.2s ease';
+                input.style.borderColor = '#ff5555';
+                input.style.boxShadow = '0 0 12px rgba(255, 85, 85, 0.45)';
+                setTimeout(() => {
+                    if (input) {
+                        input.style.borderColor = '';
+                        input.style.boxShadow = '';
+                    }
+                }, 1600);
+                input.focus();
+            }
+
+            if (/^\d+$/.test(v)) {
+                if (v === "714034316") {
+                    showMsg("⚠️ 此 UID (714034316) 為舊版教學測試帳號，已停止服務。\n請輸入您個人的 9 碼遊戲 UID！");
+                } else {
+                    showMsg(`⚠️ UID 格式不正確（目前為 ${v.length} 碼）\n鳴潮遊戲 UID 必須為 9 位純數字（例如：900123456）。`);
+                }
+            } else if (v.startsWith('http://') || v.startsWith('https://')) {
+                showMsg("⚠️ 圖片連結格式不符合要求！\n請貼上 Discord 或支援圖床的聲骸截圖直鏈 (JPG/PNG)。");
+            } else {
+                showMsg("⚠️ 輸入格式不符：\n• 切換/載入：請輸入 9 碼遊戲 UID\n• 分析圖片：請貼上聲骸圖片直鏈\n• 若需指引請點擊下方「💡 新手教學指南」");
+            }
+        }
+
+        urlInput.addEventListener('keydown', async (e) => {
                 if (e.key === 'Enter') {
                     const v = urlInput.value.trim();
                     if (/^\d{9}$/.test(v)) {
                         if (await ensureWeightsLoaded()) handleProfileSwitch(v);
                     } else if (analyzeBtn.classList.contains('invalid')) {
-                        // Show tutorial if invalid
-                        document.getElementById('welcome-panels').style.display = 'flex';
-                        document.querySelector('.container').style.display = 'none';
-                        document.getElementById('btn-close-welcome').style.display = 'block';
+                        handleInvalidInputFeedback(v);
                     } else if (/^GAMEZH$/i.test(v)) {
                         urlInput.value = '';
                         showDiagnosticPanel();
@@ -18144,9 +18170,7 @@
                     return;
                 }
                 if (analyzeBtn.classList.contains('invalid')) {
-                    document.getElementById('welcome-panels').style.display = 'flex';
-                    document.querySelector('.container').style.display = 'none';
-                    document.getElementById('btn-close-welcome').style.display = 'block';
+                    handleInvalidInputFeedback(v);
                 } else if (/^\d{9}$/.test(v)) {
                     if (await ensureWeightsLoaded()) handleProfileSwitch(v);
                 } else if (/^GAMEZH$/i.test(v)) {
@@ -18192,8 +18216,7 @@
             const params = new URLSearchParams(window.location.search);
             const queryUid = params.get('uid');
             if (queryUid === "714034316" || localStorage.getItem('ww_current_uid') === "714034316") {
-                showMaintenancePage();
-                return;
+                localStorage.removeItem('ww_current_uid');
             }
             ensureOfflineApiConfigured();
             ensureMainApiConfigured();
@@ -18205,9 +18228,11 @@
 
             const checkBlacklistInput = (el) => {
                 if (el) {
-                    el.addEventListener('input', () => {
+                    el.addEventListener('change', () => {
                         if (el.value.trim().includes("714034316")) {
-                            showMaintenancePage();
+                            showMsg("⚠️ 714034316 為舊版教學測試帳號，已停止服務。\n請輸入您個人的 9 碼遊戲 UID！");
+                            el.value = '';
+                            el.dispatchEvent(new Event('input'));
                         }
                     });
                 }
@@ -18372,7 +18397,7 @@
             if (window._g_profileSwitching) return;
             const nextUid = (uid || '').trim();
             if (nextUid === "714034316") {
-                showMaintenancePage();
+                showMsg("⚠️ 714034316 為舊版教學示範帳號，無法載入。請輸入您個人的 9 碼遊戲 UID！");
                 return;
             }
             window._g_profileSwitching = true;
@@ -18482,11 +18507,11 @@
             refreshMobileNavigation(g_currentUserUid ? 'results' : undefined);
             if (typeof grad_renderQuickStartBanner === 'function') grad_renderQuickStartBanner();
         }
-        function showMaintenancePage() { var el = document.getElementById('_maint_overlay'); if (!el) { el = document.createElement('div'); el.id = '_maint_overlay'; el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#121214;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;'; el.innerHTML = '<div style="font-size:3rem;margin-bottom:16px;">🔧</div><div style="font-size:1.5rem;font-weight:bold;color:#e5c07b;margin-bottom:8px;">伺服器維護中</div><div style="color:#aaa;font-size:1rem;margin-bottom:8px;">預計隔天 20:00 修復完成</div><a href="https://discord.com/invite/WWewHKwMwa" target="_blank" style="margin-top:16px;padding:10px 24px;background:rgba(88,101,242,0.3);border:1px solid rgba(88,101,242,0.6);border-radius:8px;color:#b8bff5;text-decoration:none;font-size:0.9rem;">👾 前往維修群</a>'; document.body.appendChild(el); } else { el.style.display = 'flex'; } }
+        function showMaintenancePage() { var el = document.getElementById('_maint_overlay'); if (!el) { el = document.createElement('div'); el.id = '_maint_overlay'; el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#121214;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;'; el.innerHTML = '<div style="position:absolute;top:20px;right:20px;"><button onclick="document.getElementById(\'_maint_overlay\').style.display=\'none\';localStorage.removeItem(\'ww_current_uid\');" style="background:rgba(255,255,255,0.1);border:1px solid #555;color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;">✕ 關閉並重設</button></div><div style="font-size:3rem;margin-bottom:16px;">🔧</div><div style="font-size:1.5rem;font-weight:bold;color:#e5c07b;margin-bottom:8px;">伺服器維護中</div><div style="color:#aaa;font-size:1rem;margin-bottom:8px;">預計隔天 20:00 修復完成</div><a href="https://discord.com/invite/WWewHKwMwa" target="_blank" style="margin-top:16px;padding:10px 24px;background:rgba(88,101,242,0.3);border:1px solid rgba(88,101,242,0.6);border-radius:8px;color:#b8bff5;text-decoration:none;font-size:0.9rem;">👾 前往維修群</a>'; document.body.appendChild(el); } else { el.style.display = 'flex'; } }
         function checkUidBlacklist(uid) {
             const blockedUid = "714034316";
             if (uid && String(uid).trim() === blockedUid) {
-                showMaintenancePage();
+                showMsg("⚠️ 714034316 為舊版教學測試帳號，請改用您的個人 9 碼遊戲 UID。");
                 return true;
             }
             return false;
@@ -19279,7 +19304,7 @@
         function loadAllHistory() { if (!g_currentUserUid || g_currentUserUid.length !== 9) return; btnLoadAll.disabled = true; btnLoadAll.style.display = 'none'; fetchCloudHistory(g_currentUserUid, 'all') }
         async function fetchCloudHistory(uid, mode) {
             if (uid && String(uid).trim() === "714034316") {
-                showMaintenancePage();
+                showMsg("⚠️ 714034316 為舊版教學測試帳號，無法同步雲端資料。");
                 return;
             }
             const CACHE_TTL = 300000; // 5分鐘快取
@@ -22157,7 +22182,7 @@
         async function loadFromHistory(item) {
             if (!item) return;
             if (item.global && String(item.global.uid).trim() === "714034316") {
-                showMaintenancePage();
+                showMsg("⚠️ 此紀錄屬於舊版教學測試帳號，無法載入。");
                 return;
             }
             const loadId = ++g_loadFromHistoryId;
@@ -27387,7 +27412,8 @@
             let uidRaw = g_globalData.uid || "";
             let uidClean = uidRaw.replace(/\D/g, '');
             if (uidClean === "714034316") {
-                showMaintenancePage();
+                showMsg("⚠️ 辨識到的 UID 為舊版教學示範帳號，請手動更正為您的遊戲 UID。");
+                openUidWarningModal();
                 return;
             }
 
@@ -35497,14 +35523,6 @@
         }
 
         function openDataManagementModal() {
-            if (typeof isUserVIP === 'function' && !isUserVIP()) {
-                if (typeof showVipClueModal === 'function') {
-                    showVipClueModal();
-                } else {
-                    showMsg("🔒 尊榮 VIP 特權\n\n【線索】：須成為乾爹才可以獲取成為VIP線索");
-                }
-                return;
-            }
             closeAllModals();
             updateDevStatus(); // 確保開發者狀態是最新的
             document.getElementById('data-management-modal').style.display = 'flex';
@@ -37062,12 +37080,7 @@
             if (!matched) {
                 g_codeErrorCount++;
                 input.value = '';
-
-                if (g_codeErrorCount >= 3) {
-                    if (inputContainer) {
-                        inputContainer.style.display = 'none';
-                    }
-                }
+                showMsg('❌ 序號無效或未在開放時段內');
             }
         }
 
@@ -45396,7 +45409,6 @@
             const searchInput = document.getElementById('ds-search-input');
             const txt = searchInput ? searchInput.value.toLowerCase().trim() : '';
             if (txt.includes("714034316")) {
-                showMaintenancePage();
                 return;
             }
 
