@@ -7563,7 +7563,8 @@
             gap: 2px;
             height: 3px;
             margin-top: 3px;
-            opacity: 0.8
+            opacity: 0.45;
+            transition: opacity 0.2s ease;
         }
 
         .db-tier-seg {
@@ -7574,7 +7575,7 @@
 
         .db-tier-seg.on {
             background: #e5c07b;
-            box-shadow: 0 0 4px #e5c07b
+            box-shadow: 0 0 2px rgba(229,192,123,0.3);
         }
 
         .db-loader {
@@ -8758,16 +8759,27 @@
         }
 
         @media screen and (max-width: 900px) {
+            .share-modal-content {
+                padding: 14px 10px !important;
+                max-height: 96vh !important;
+                width: 98vw !important;
+            }
             .share-studio-body {
                 flex-direction: column !important;
                 overflow-y: auto !important;
+                gap: 10px !important;
             }
             .share-control-deck {
                 max-width: 100% !important;
                 min-width: 100% !important;
             }
+            .share-stage-viewport {
+                min-height: 290px !important;
+                max-height: 46vh !important;
+                padding: 10px !important;
+            }
             .share-viewport-inner img {
-                max-height: 48vh !important;
+                max-height: 44vh !important;
             }
         }
 
@@ -8875,6 +8887,49 @@
             flex-direction: column;
             gap: 12px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9), 0 0 100px rgba(229, 192, 123, 0.05) inset;
+            transition: width 0.25s ease;
+        }
+
+        /* 📱 手機版專用排版 (直式長圖限動，防破圖、文字清晰大方) */
+        .social-card.layout-mobile {
+            width: 580px !important;
+            padding: 16px 14px;
+            gap: 12px;
+        }
+        .social-card.layout-mobile .social-top {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        .social-card.layout-mobile .social-role-panel {
+            min-height: 135px !important;
+        }
+        .social-card.layout-mobile .social-mid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 8px !important;
+        }
+        .social-card.layout-mobile .social-mid .social-info-card:last-child {
+            grid-column: 1 / -1 !important;
+            flex-direction: row !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 8px 16px !important;
+        }
+        .social-card.layout-mobile .social-mid .social-info-card:last-child .social-info-header {
+            margin-bottom: 0 !important;
+        }
+        .social-card.layout-mobile .social-echo-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 8px !important;
+        }
+        .social-card.layout-mobile .social-echo-grid .social-echo-card:last-child {
+            grid-column: 1 / -1 !important;
+        }
+        .social-card.layout-mobile .social-echo-grid .social-echo-card:last-child .social-echo-subs {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 6px !important;
         }
 
         .social-card::before {
@@ -9486,18 +9541,18 @@
         .social-echo-subs {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-top: 5px;
+            gap: 7px;
+            margin-top: 6px;
         }
 
         .social-echo-sub {
             display: flex;
             flex-direction: column;
             gap: 2px;
-            padding: 4px 6px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.01);
-            opacity: 0.4;
+            padding: 5px 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.015);
+            opacity: 0.45;
         }
 
         .social-echo-sub.social-sub-highlight {
@@ -9565,12 +9620,14 @@
             gap: 2px;
             height: 3px;
             width: 100%;
-            margin-top: 2px;
+            margin-top: 3px;
+            opacity: 0.4;
+            transition: opacity 0.2s ease;
         }
 
         .social-tier-seg {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 1px;
         }
 
@@ -9581,22 +9638,22 @@
 
         .social-sub-grade-s .social-tier-seg.on {
             background: #ffca28;
-            box-shadow: 0 0 5px #ffca28;
+            box-shadow: none;
         }
 
         .social-sub-grade-a .social-tier-seg.on {
             background: #d4a017;
-            box-shadow: 0 0 4px #d4a017;
+            box-shadow: none;
         }
 
         .social-sub-grade-b .social-tier-seg.on {
             background: #8f6b0e;
-            box-shadow: 0 0 3px #8f6b0e;
+            box-shadow: none;
         }
 
         .social-sub-highlight .social-tier-seg.on {
             background: var(--accent);
-            box-shadow: 0 0 5px var(--accent);
+            box-shadow: none;
         }
 
         .social-footer {
@@ -17589,6 +17646,49 @@
             <!-- Overview Grid (Shown when 'all' tab is active) -->
             <div id="share-preview-grid" class="share-preview-grid" style="display:none;margin:12px 0 0 0;flex:1;overflow-y:auto;">
                 <!-- Grid items will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 武器庫選擇彈窗 (專為社群分享卡片量身打造) -->
+    <div id="share-weapon-picker-modal" class="modal-overlay" style="display:none; position:fixed; inset:0; z-index:100005; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;" onclick="if(event.target===this)closeShareWeaponArmoryModal()">
+        <div class="modal-full" onclick="event.stopPropagation()" style="max-width:880px; width:95%; max-height:88vh; background:linear-gradient(180deg,#1c1c24 0%,#131318 100%); border:1px solid rgba(229,192,123,0.4); border-radius:18px; box-shadow:0 24px 60px rgba(0,0,0,0.85); display:flex; flex-direction:column; overflow:hidden;">
+            <!-- Header -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.3);">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:1.6rem;">🗡️</span>
+                    <div>
+                        <div style="font-size:1.15rem; font-weight:900; color:var(--accent); letter-spacing:0.5px;">鳴潮武器庫 (點選立即套用)</div>
+                        <div style="font-size:0.75rem; color:#aaa; margin-top:2px;">點選任意武器即可自動載入名稱與官方高畫質透明圖示</div>
+                    </div>
+                </div>
+                <button type="button" onclick="closeShareWeaponArmoryModal()" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; width:34px; height:34px; border-radius:50%; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.2s;">✕</button>
+            </div>
+            <!-- Body -->
+            <div style="padding:16px 22px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; flex:1;">
+                <!-- Type Filter Chips -->
+                <div id="share-weapon-type-chips" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+                <!-- Search & Rarity Filters -->
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                    <div style="position:relative; flex:1; min-width:200px;">
+                        <input type="text" id="share-weapon-search-input" placeholder="🔍 搜尋武器名稱 (例如：千古、蒼鱗、浩境)..." oninput="filterAndRenderShareWeaponArmory()" style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); color:#fff; padding:9px 14px; border-radius:8px; font-size:0.82rem;">
+                    </div>
+                    <div id="share-weapon-rarity-chips" style="display:flex; gap:6px;">
+                        <button type="button" class="deck-pill-btn active" onclick="setShareWeaponRarityFilter('all', this)" style="padding:6px 12px; font-size:0.75rem;">全部星級</button>
+                        <button type="button" class="deck-pill-btn" onclick="setShareWeaponRarityFilter(5, this)" style="padding:6px 12px; font-size:0.75rem; color:#ffd700;">★5 專屬/金色</button>
+                        <button type="button" class="deck-pill-btn" onclick="setShareWeaponRarityFilter(4, this)" style="padding:6px 12px; font-size:0.75rem; color:#c678dd;">★4 紫色</button>
+                        <button type="button" class="deck-pill-btn" onclick="setShareWeaponRarityFilter(3, this)" style="padding:6px 12px; font-size:0.75rem; color:#61afef;">★3 藍色</button>
+                    </div>
+                </div>
+                <!-- Weapon Cards Grid -->
+                <div id="share-weapon-armory-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:10px; max-height:480px; overflow-y:auto; padding:4px;">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+            <!-- Footer -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 22px; border-top:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.3); font-size:0.75rem; color:#888;">
+                <span id="share-weapon-count-info">共 0 把武器可選</span>
+                <button type="button" onclick="closeShareWeaponArmoryModal()" style="background:#333; color:#eee; border:none; padding:6px 18px; border-radius:6px; cursor:pointer; font-weight:bold;">關閉</button>
             </div>
         </div>
     </div>
@@ -31815,19 +31915,21 @@
                 } else {
                     e.subs.forEach(s => {
                         let tierInfo = rank_getTierInfo(s.name, s.val);
-                        let tierHtml = tierInfo ? `<div class="db-tier-bar" style="margin-top:2px; height:2px;">${Array(tierInfo.max).fill(0).map((_, t) => `<span class="db-tier-seg ${t < tierInfo.current ? 'on' : ''}"></span>`).join('')}</div>` : '';
+                        const showTierMain = (window.g_showTierBar !== false && (!window.g_socialConfig || window.g_socialConfig.showTierBar !== false));
+                        const tierOpMain = (window.g_socialConfig && window.g_socialConfig.tierBarOpacity !== undefined) ? window.g_socialConfig.tierBarOpacity : (window.g_tierBarOpacity !== undefined ? window.g_tierBarOpacity : 0.4);
+                        let tierHtml = (showTierMain && tierInfo) ? `<div class="db-tier-bar" style="margin-top:3px; height:2px; opacity:${tierOpMain};">${Array(tierInfo.max).fill(0).map((_, t) => `<span class="db-tier-seg ${t < tierInfo.current ? 'on' : ''}"></span>`).join('')}</div>` : '';
                         let style = s.weight > 0 ? `border-left:2px solid var(--accent);background:rgba(229,192,123,0.06);` : `border-left:2px solid #444;background:rgba(255,255,255,0.01);`;
                         subHtml += `
-                            <div class="db-sub-stat-container" style="${style} padding:4px 6px; margin:0; border-radius:4px; border:1px solid rgba(255,255,255,0.03); box-sizing:border-box;">
-                                <div style="display:flex; justify-content:space-between; align-items:center; line-height:1.2;">
-                                    <div style="color:#bbb; font-size:0.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${statLabel(s.name)}</div>
-                                    <div style="font-family:'JetBrains Mono'; font-weight:bold; color:#fff; font-size:0.75rem;">${s.val}</div>
+                            <div class="db-sub-stat-container" style="${style} padding:5px 8px; margin:1px 0; border-radius:5px; border:1px solid rgba(255,255,255,0.04); box-sizing:border-box;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; line-height:1.25;">
+                                    <div style="color:#bbb; font-size:0.74rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${statLabel(s.name)}</div>
+                                    <div style="font-family:'JetBrains Mono'; font-weight:bold; color:#fff; font-size:0.78rem;">${s.val}</div>
                                 </div>
                                 ${tierHtml}
                             </div>`;
                     });
                 }
-                let subGridHtml = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; width:100%; box-sizing:border-box;">${subHtml}</div>`;
+                let subGridHtml = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; width:100%; box-sizing:border-box;">${subHtml}</div>`;
 
                 html += `<tr>
                     <td style="vertical-align:middle;" onclick="rank_handleLock(this, 'cost', ${i})" onmouseenter="rank_handleFocus('cost', ${i})" onmouseleave="rank_handleBlur()">${echoInfoHtml}</td>
@@ -32062,6 +32164,273 @@
         let g_shareBlobs = {};
         let g_shareFilter = 'all';
 
+        // ── 武器庫選擇器邏輯 (支援社群卡片) ──────────────────────────────────
+        const SHARE_FALLBACK_WEAPONS = [
+            // 迅刀 (Sword)
+            { zhName: "千古洑流", enName: "Emerald of Genesis", type: "Sword", rarity: 5 },
+            { zhName: "赫奕流明", enName: "Blazing Brilliance", type: "Sword", rarity: 5 },
+            { zhName: "裁春", enName: "Spring's Bloom", type: "Sword", rarity: 5 },
+            { zhName: "時光裁決", enName: "Red Spring", type: "Sword", rarity: 5 },
+            { zhName: "行進序曲", enName: "Commando Rectifier", type: "Sword", rarity: 4 },
+            { zhName: "飛景", enName: "Luminglide", type: "Sword", rarity: 4 },
+            { zhName: "不歸孤軍", enName: "Lunar Cutter", type: "Sword", rarity: 4 },
+            { zhName: "瞬斬刀", enName: "Defiled Stream", type: "Sword", rarity: 4 },
+            { zhName: "夜歸迅刀", enName: "Night Return Sword", type: "Sword", rarity: 3 },
+            { zhName: "鍛造迅刀", enName: "Crafted Sword", type: "Sword", rarity: 3 },
+            // 長刃 (Broadblade)
+            { zhName: "蒼鱗千嶂", enName: "Verdant Summit", type: "Broadblade", rarity: 5 },
+            { zhName: "浩境粼光", enName: "Ages of Harvest", type: "Broadblade", rarity: 5 },
+            { zhName: "紋秋", enName: "Autumn Trace", type: "Broadblade", rarity: 4 },
+            { zhName: "東落", enName: "Helios Cleaver", type: "Broadblade", rarity: 4 },
+            { zhName: "重鋒", enName: "Broadblade#41", type: "Broadblade", rarity: 4 },
+            { zhName: "永夜長刃", enName: "Evernight Broadblade", type: "Broadblade", rarity: 4 },
+            { zhName: "守護長刃", enName: "Guardian Broadblade", type: "Broadblade", rarity: 3 },
+            // 手套 (Gauntlets)
+            { zhName: "諸方玄樞", enName: "Abyss Surges", type: "Gauntlets", rarity: 5 },
+            { zhName: "相和之禮", enName: "Harmonic Gift", type: "Gauntlets", rarity: 5 },
+            { zhName: "金掌", enName: "Stonard", type: "Gauntlets", rarity: 4 },
+            { zhName: "駭峰", enName: "Marcato", type: "Gauntlets", rarity: 4 },
+            { zhName: "鋼鋒", enName: "Amity Accord", type: "Gauntlets", rarity: 4 },
+            { zhName: "金剛手套", enName: "Diamond Gauntlets", type: "Gauntlets", rarity: 3 },
+            // 配槍 (Pistols)
+            { zhName: "停駐之煙", enName: "Static Mist", type: "Pistols", rarity: 5 },
+            { zhName: "死生流轉", enName: "Samsara Reversal", type: "Pistols", rarity: 5 },
+            { zhName: "奔雷", enName: "Thunderbolt", type: "Pistols", rarity: 4 },
+            { zhName: "穿擊槍", enName: "Novaburst", type: "Pistols", rarity: 4 },
+            { zhName: "不歸配槍", enName: "Relentless Pistols", type: "Pistols", rarity: 4 },
+            { zhName: "密令配槍", enName: "Cadence Pistols", type: "Pistols", rarity: 3 },
+            // 音感儀 (Rectifier)
+            { zhName: "掣落狂響", enName: "Stringmaster", type: "Rectifier", rarity: 5 },
+            { zhName: "漪瀾浮錄", enName: "Cosmic Ripples", type: "Rectifier", rarity: 5 },
+            { zhName: "芳華如韶", enName: "Spring's Elegance", type: "Rectifier", rarity: 5 },
+            { zhName: "奇幻變奏", enName: "Variation", type: "Rectifier", rarity: 4 },
+            { zhName: "清音", enName: "Augment", type: "Rectifier", rarity: 4 },
+            { zhName: "鳴動音感儀", enName: "Resonance Rectifier", type: "Rectifier", rarity: 4 },
+            { zhName: "探險音感儀", enName: "Voyager Rectifier", type: "Rectifier", rarity: 3 }
+        ];
+
+        let g_shareWeaponSelectedType = 'All';
+        let g_shareWeaponSelectedRarity = 'all';
+
+        function getAllShareWeapons() {
+            const list = [];
+            const seen = new Set();
+            // 1. From database sheet if loaded
+            const wSheet = (typeof g_zhDbSheetsData !== 'undefined' && g_zhDbSheetsData && g_zhDbSheetsData['武器 Weapons']) ? g_zhDbSheetsData['武器 Weapons'] : null;
+            if (wSheet && Array.isArray(wSheet.rows)) {
+                wSheet.rows.forEach(r => {
+                    const zhName = String(r[1] || '').trim();
+                    if (!zhName || seen.has(zhName)) return;
+                    seen.add(zhName);
+                    const enName = String(r[0] || '').trim();
+                    const rarity = parseInt(r[3]) || 1;
+                    const type = String(r[4] || '').trim();
+                    const iconUrl = (typeof WEAPONS_PROFILE_PICTURE !== 'undefined' && WEAPONS_PROFILE_PICTURE[zhName]) || (r[10] ? String(r[10]).trim() : '');
+                    list.push({ zhName, enName, rarity, type, iconUrl });
+                });
+            }
+            // 2. From fallback database
+            SHARE_FALLBACK_WEAPONS.forEach(w => {
+                if (!seen.has(w.zhName)) {
+                    seen.add(w.zhName);
+                    const iconUrl = (typeof WEAPONS_PROFILE_PICTURE !== 'undefined' && WEAPONS_PROFILE_PICTURE[w.zhName]) || '';
+                    list.push({ ...w, iconUrl });
+                }
+            });
+            // 3. From any keys in WEAPONS_PROFILE_PICTURE
+            if (typeof WEAPONS_PROFILE_PICTURE !== 'undefined') {
+                Object.keys(WEAPONS_PROFILE_PICTURE).forEach(k => {
+                    if (k && !seen.has(k) && k.length <= 12) {
+                        seen.add(k);
+                        list.push({ zhName: k, enName: k, rarity: 4, type: 'All', iconUrl: WEAPONS_PROFILE_PICTURE[k] });
+                    }
+                });
+            }
+            return list;
+        }
+
+        function getShareQuickWeaponOptionsHtml(currentWeapon) {
+            const all = getAllShareWeapons();
+            const typeLabels = { Sword: '迅刀', Broadblade: '長刃', Gauntlets: '手套', Pistols: '配槍', Rectifier: '音感儀' };
+            const groups = {};
+            all.forEach(w => {
+                const grp = typeLabels[w.type] || '其他武器';
+                if (!groups[grp]) groups[grp] = [];
+                groups[grp].push(w);
+            });
+            let html = '';
+            for (const [grpName, weapons] of Object.entries(groups)) {
+                html += `<optgroup label="── ${grpName} ──">`;
+                weapons.sort((a,b) => b.rarity - a.rarity).forEach(w => {
+                    const stars = '★'.repeat(w.rarity);
+                    const selected = (w.zhName === currentWeapon) ? 'selected' : '';
+                    const icon = w.iconUrl || (typeof WEAPONS_PROFILE_PICTURE !== 'undefined' ? WEAPONS_PROFILE_PICTURE[w.zhName] || '' : '');
+                    html += `<option value="${escapeHtml(w.zhName)}" data-icon="${escapeHtml(icon)}" ${selected}>${stars} ${escapeHtml(w.zhName)}</option>`;
+                });
+                html += `</optgroup>`;
+            }
+            return html;
+        }
+
+        window.openShareWeaponArmoryModal = function() {
+            const modal = document.getElementById('share-weapon-picker-modal');
+            if (!modal) return;
+
+            // Guess character's weapon type to auto-focus
+            let charWeaponType = '';
+            const roleName = (window.g_socialConfig && window.g_socialConfig.roleName) || (g_globalData && g_globalData.role) || '';
+            if (roleName && typeof getCharacterBaseStats === 'function') {
+                const base = getCharacterBaseStats(roleName);
+                if (base && base.weaponType) charWeaponType = base.weaponType;
+            }
+            g_shareWeaponSelectedType = charWeaponType || 'All';
+            g_shareWeaponSelectedRarity = 'all';
+
+            const searchInput = document.getElementById('share-weapon-search-input');
+            if (searchInput) searchInput.value = '';
+
+            renderShareWeaponTypeChips(charWeaponType);
+            filterAndRenderShareWeaponArmory();
+            modal.style.display = 'flex';
+        };
+
+        window.closeShareWeaponArmoryModal = function() {
+            const modal = document.getElementById('share-weapon-picker-modal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        function renderShareWeaponTypeChips(charWeaponType) {
+            const container = document.getElementById('share-weapon-type-chips');
+            if (!container) return;
+            const typeMap = {
+                'All': '全部武器',
+                'Sword': '迅刀 Sword',
+                'Broadblade': '長刃 Broadblade',
+                'Gauntlets': '手套 Gauntlets',
+                'Pistols': '配槍 Pistols',
+                'Rectifier': '音感儀 Rectifier'
+            };
+            let html = '';
+            Object.entries(typeMap).forEach(([key, name]) => {
+                let label = name;
+                if (key !== 'All' && key === charWeaponType) {
+                    label += ' (當前角色)';
+                }
+                const active = g_shareWeaponSelectedType === key;
+                const bg = active ? 'var(--accent)' : 'rgba(255,255,255,0.06)';
+                const color = active ? '#111' : '#ccc';
+                const border = active ? '1px solid var(--accent)' : '1px solid rgba(255,255,255,0.1)';
+                html += `<button type="button" onclick="setShareWeaponTypeFilter('${key}')" style="background:${bg}; color:${color}; border:${border}; padding:5px 12px; border-radius:14px; font-size:0.75rem; font-weight:bold; cursor:pointer; transition:0.2s;">${label}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        window.setShareWeaponTypeFilter = function(type) {
+            g_shareWeaponSelectedType = type;
+            let charWeaponType = '';
+            const roleName = (window.g_socialConfig && window.g_socialConfig.roleName) || (g_globalData && g_globalData.role) || '';
+            if (roleName && typeof getCharacterBaseStats === 'function') {
+                const base = getCharacterBaseStats(roleName);
+                if (base && base.weaponType) charWeaponType = base.weaponType;
+            }
+            renderShareWeaponTypeChips(charWeaponType);
+            filterAndRenderShareWeaponArmory();
+        };
+
+        window.setShareWeaponRarityFilter = function(rarity, btn) {
+            g_shareWeaponSelectedRarity = rarity;
+            if (btn && btn.parentElement) {
+                btn.parentElement.querySelectorAll('.deck-pill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            filterAndRenderShareWeaponArmory();
+        };
+
+        window.filterAndRenderShareWeaponArmory = function() {
+            const grid = document.getElementById('share-weapon-armory-grid');
+            const countInfo = document.getElementById('share-weapon-count-info');
+            if (!grid) return;
+
+            const searchInput = document.getElementById('share-weapon-search-input');
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+            let list = getAllShareWeapons();
+
+            // Filter type
+            if (g_shareWeaponSelectedType !== 'All') {
+                list = list.filter(w => w.type === g_shareWeaponSelectedType);
+            }
+            // Filter rarity
+            if (g_shareWeaponSelectedRarity !== 'all') {
+                const rNum = parseInt(g_shareWeaponSelectedRarity, 10);
+                list = list.filter(w => w.rarity === rNum);
+            }
+            // Filter search
+            if (query) {
+                list = list.filter(w =>
+                    w.zhName.toLowerCase().includes(query) ||
+                    w.enName.toLowerCase().includes(query)
+                );
+            }
+
+            // Sort: 5 stars first, then 4, then 3
+            list.sort((a, b) => b.rarity - a.rarity);
+
+            if (countInfo) countInfo.textContent = `顯示 ${list.length} 把符合的武器`;
+
+            if (list.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#888;font-size:0.85rem;">未找到符合的武器，請嘗試其他關鍵字或星級</div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(w => {
+                let rarityColor = '#888';
+                let rarityBg = 'rgba(255,255,255,0.02)';
+                let borderCol = 'rgba(255,255,255,0.08)';
+                if (w.rarity === 5) {
+                    rarityColor = '#ffd700';
+                    rarityBg = 'rgba(255,215,0,0.06)';
+                    borderCol = 'rgba(255,215,0,0.35)';
+                } else if (w.rarity === 4) {
+                    rarityColor = '#c678dd';
+                    rarityBg = 'rgba(198,120,221,0.06)';
+                    borderCol = 'rgba(198,120,221,0.35)';
+                } else if (w.rarity === 3) {
+                    rarityColor = '#61afef';
+                    rarityBg = 'rgba(97,175,239,0.06)';
+                    borderCol = 'rgba(97,175,239,0.35)';
+                }
+                const icon = w.iconUrl || (typeof WEAPONS_PROFILE_PICTURE !== 'undefined' ? WEAPONS_PROFILE_PICTURE[w.zhName] || '' : '');
+                const stars = '★'.repeat(w.rarity);
+
+                return `
+                <div class="share-weapon-card" onclick="selectShareWeapon('${escapeHtml(w.zhName)}', '${escapeHtml(icon)}')" style="background:${rarityBg}; border:1px solid ${borderCol}; border-radius:10px; padding:10px; text-align:center; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; align-items:center; justify-content:space-between; min-height:120px;" onmouseenter="this.style.transform='translateY(-3px)';this.style.boxShadow='0 6px 16px ${rarityColor}33';" onmouseleave="this.style.transform='none';this.style.boxShadow='none';">
+                    <div style="width:56px; height:56px; display:flex; align-items:center; justify-content:center; margin-bottom:6px; border-radius:8px; background:rgba(0,0,0,0.25); overflow:hidden;">
+                        ${icon ? `<img src="${icon}" style="width:100%; height:100%; object-fit:contain;" crossorigin="anonymous">` : `<span style="font-size:1.6rem;">⚔️</span>`}
+                    </div>
+                    <div style="font-size:0.8rem; font-weight:bold; color:#fff; line-height:1.2; margin-bottom:4px; word-break:break-all;">${escapeHtml(w.zhName)}</div>
+                    <div style="font-size:0.68rem; color:${rarityColor}; font-weight:bold; letter-spacing:1px;">${stars}</div>
+                </div>`;
+            }).join('');
+        };
+
+        window.selectShareWeapon = function(weaponName, weaponImgUrl) {
+            if (!window.g_socialConfig) window.g_socialConfig = {};
+            window.g_socialConfig.weaponName = weaponName;
+            const finalIcon = weaponImgUrl || (typeof WEAPONS_PROFILE_PICTURE !== 'undefined' ? WEAPONS_PROFILE_PICTURE[weaponName] || '' : '');
+            window.g_socialConfig.weaponImgUrl = finalIcon;
+            try {
+                localStorage.setItem('g_socialConfig', JSON.stringify(window.g_socialConfig));
+            } catch(e){}
+            delete g_shareBlobs['social'];
+            renderLiveStudioCard('social');
+            renderStudioControlDeck('social');
+            closeShareWeaponArmoryModal();
+            if (typeof showMsg === 'function') {
+                showMsg(`⚔️ 已成功套用武器：${weaponName}`);
+            }
+        };
+
         window.g_activeShareTab = 'social';
         let g_shareRerenderTimer = null;
 
@@ -32103,8 +32472,19 @@
             const stage = document.getElementById('share-current-preview');
             if (!stage) return;
 
+            // 修正排名變數: 使用全域 g_lastRankInfo，若尚未載入則非同步呼叫 ensureRankingData
+            let rankData = (typeof g_lastRankInfo !== 'undefined' && g_lastRankInfo) ? g_lastRankInfo : null;
+
+            if (!rankData && typeof ensureRankingData === 'function') {
+                ensureRankingData().then(rd => {
+                    if (rd && stage.querySelector('#studio-live-wrapper')) {
+                        // 排名載入完成後自動重繪，杜絕「未上榜」假象
+                        renderLiveStudioCard(type);
+                    }
+                }).catch(e => console.warn('ensureRankingData async error:', e));
+            }
+
             let html = '';
-            const rankData = (typeof g_lastRankData !== 'undefined') ? g_lastRankData : null;
             if (type === 'social') html = generateSocialLayout(rankData);
             else if (type === 'default') html = generateDefaultLayout(rankData);
             else if (type === 'graduation') html = generateGraduationLayout();
@@ -32143,16 +32523,28 @@
         window.updateLiveBgOpacity = function(type, val) {
             const num = parseFloat(val);
             if (type === 'social') {
+                if (!window.g_socialConfig) window.g_socialConfig = {};
+                window.g_socialConfig.bgOpacity = num;
+                try { localStorage.setItem('g_socialConfig', JSON.stringify(window.g_socialConfig)); } catch(e){}
+                delete g_shareBlobs['social'];
                 const ov = document.getElementById('social-live-bg-overlay');
                 if (ov) ov.style.background = `rgba(10, 10, 14, ${num})`;
                 const lbl = document.getElementById('deck-social-bg-opacity-val');
                 if (lbl) lbl.textContent = `${Math.round(num * 100)}%`;
             } else if (type === 'default') {
+                if (!window.g_defaultConfig) window.g_defaultConfig = {};
+                window.g_defaultConfig.bgOpacity = num;
+                try { localStorage.setItem('g_defaultConfig', JSON.stringify(window.g_defaultConfig)); } catch(e){}
+                delete g_shareBlobs['default'];
                 const ov = document.getElementById('default-live-bg-overlay');
                 if (ov) ov.style.background = `rgba(10, 10, 14, ${num})`;
                 const lbl = document.getElementById('deck-default-bg-opacity-val');
                 if (lbl) lbl.textContent = `${Math.round(num * 100)}%`;
             } else if (type === 'graduation') {
+                if (!window.g_graduationConfig) window.g_graduationConfig = {};
+                window.g_graduationConfig.bgOpacity = num;
+                try { localStorage.setItem('g_graduationConfig', JSON.stringify(window.g_graduationConfig)); } catch(e){}
+                delete g_shareBlobs['graduation'];
                 const layer = document.getElementById('grad-live-bg-layer');
                 if (layer) layer.style.opacity = num;
                 const lbl = document.getElementById('deck-grad-opacity-val');
@@ -32220,6 +32612,43 @@
             delete g_shareBlobs['social'];
         };
 
+        window.updateLiveRoleScale = function(val) {
+            const num = parseFloat(val) || 1.0;
+            if (!window.g_socialConfig) window.g_socialConfig = {};
+            window.g_socialConfig.roleScale = num;
+            try { localStorage.setItem('g_socialConfig', JSON.stringify(window.g_socialConfig)); } catch(e){}
+            delete g_shareBlobs['social'];
+            const art = document.getElementById('social-live-role-art');
+            if (art) {
+                art.style.transform = `scale(${num})`;
+                art.style.transformOrigin = 'right top';
+            }
+            const lbl = document.getElementById('deck-role-scale-val');
+            if (lbl) lbl.textContent = `${Math.round(num * 100)}%`;
+        };
+
+        window.toggleLiveHideProgress = function(hide) {
+            if (!window.g_socialConfig) window.g_socialConfig = {};
+            window.g_socialConfig.hideProgress = hide;
+            try { localStorage.setItem('g_socialConfig', JSON.stringify(window.g_socialConfig)); } catch(e){}
+            delete g_shareBlobs['social'];
+            renderLiveStudioCard('social');
+            renderStudioControlDeck('social');
+        };
+
+        window.updateLiveTierBarOpacity = function(val) {
+            const num = parseFloat(val) || 0.4;
+            if (!window.g_socialConfig) window.g_socialConfig = {};
+            window.g_socialConfig.tierBarOpacity = num;
+            try { localStorage.setItem('g_socialConfig', JSON.stringify(window.g_socialConfig)); } catch(e){}
+            delete g_shareBlobs['social'];
+            document.querySelectorAll('#studio-live-wrapper .social-sub-tier, #studio-live-wrapper .db-tier-bar').forEach(el => {
+                el.style.opacity = num;
+            });
+            const lbl = document.getElementById('deck-tier-bar-opacity-val');
+            if (lbl) lbl.textContent = `${Math.round(num * 100)}%`;
+        };
+
         window.toggleLiveHideUid = function(hide) {
             if (!window.g_socialConfig) window.g_socialConfig = {};
             window.g_socialConfig.hideUid = hide;
@@ -32263,8 +32692,13 @@
                     for (const [type, config] of Object.entries(SHARE_LAYOUTS)) {
                         const item = createShareGridItem(type, config);
                         previewGrid.appendChild(item);
-                        renderShareLayout(type);
                     }
+                    // 依序非同步渲染三張卡片，避免同時搶佔 DOM 與 GPU 資源導致自訂圖片或排版損毀
+                    (async () => {
+                        for (const type of Object.keys(SHARE_LAYOUTS)) {
+                            await renderShareLayout(type);
+                        }
+                    })();
                 }
                 return;
             }
@@ -32287,10 +32721,14 @@
 
         function refreshActiveShareLayout() {
             const tab = window.g_activeShareTab || 'social';
+            delete g_shareBlobs[tab];
             if (tab === 'all') {
                 for (const t of ['social', 'default', 'graduation']) renderShareLayout(t);
             } else {
-                renderShareLayout(tab);
+                // 單圖工坊模式下保持即時互動 DOM，絕不覆蓋成靜態圖，確保所有滑桿與設定 100% 0ms 正常響應
+                renderLiveStudioCard(tab);
+                adjustStudioScale();
+                if (typeof showMsg === 'function') showMsg('🔄 已重新整理即時卡片預覽');
             }
         }
 
@@ -32302,7 +32740,8 @@
         }
 
         function updateStudioPreview(type, blobUrl) {
-            if (window.g_activeShareTab !== type) return;
+            // 工坊模式下始終保留具備即時互動與調色的 DOM，僅在全部預覽檢視 (all) 時更新快照
+            if (window.g_activeShareTab !== 'all') return;
             const stage = document.getElementById('share-current-preview');
             if (!stage) return;
             stage.innerHTML = '';
@@ -32315,27 +32754,50 @@
 
         async function getOrBakeShareBlob(type) {
             if (g_shareBlobs[type]) return g_shareBlobs[type];
-            const captureArea = document.getElementById('share-capture-area');
-            if (!captureArea) return null;
+
+            const captureArea = document.createElement('div');
+            captureArea.style.position = 'fixed';
+            captureArea.style.left = '-9999px';
+            captureArea.style.top = '0';
+            captureArea.style.pointerEvents = 'none';
+            captureArea.style.zIndex = '-9999';
+
+            if (type === 'default' || type === 'graduation') {
+                captureArea.className = 'share-capture-container';
+            }
 
             let html = '';
-            const rankData = (typeof g_lastRankData !== 'undefined') ? g_lastRankData : null;
+            const rankData = (typeof g_lastRankInfo !== 'undefined' && g_lastRankInfo) ? g_lastRankInfo : null;
             if (type === 'social') html = generateSocialLayout(rankData);
             else if (type === 'default') html = generateDefaultLayout(rankData);
             else if (type === 'graduation') html = generateGraduationLayout();
 
             captureArea.innerHTML = html;
+            document.body.appendChild(captureArea);
+
+            // 等待圖片完全解碼後再截圖
+            const imgs = Array.from(captureArea.querySelectorAll('img'));
+            if (imgs.length > 0) {
+                await Promise.all(imgs.map(img => {
+                    if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = () => resolve();
+                        img.onerror = () => resolve();
+                        setTimeout(resolve, 3500);
+                    });
+                }));
+            }
+
             const captureOptions = {
                 backgroundColor: (type === 'social') ? null : '#121214',
                 scale: 2.0, // High-DPI 2x ultra crisp export
                 useCORS: true,
                 logging: false,
-                allowTaint: true,
+                allowTaint: false,
                 imageTimeout: 6000
             };
             try {
                 const canvas = await html2canvas(captureArea, captureOptions);
-                captureArea.innerHTML = '';
                 return new Promise(resolve => {
                     canvas.toBlob(blob => {
                         g_shareBlobs[type] = blob;
@@ -32344,8 +32806,9 @@
                 });
             } catch (err) {
                 console.error('Bake error:', err);
-                captureArea.innerHTML = '';
                 throw err;
+            } finally {
+                captureArea.remove();
             }
         }
 
@@ -32422,7 +32885,7 @@
             if (!deck) return;
 
             if (type === 'social') {
-                if (!window.g_socialConfig) window.g_socialConfig = { bgType: 'default', bgUrl: '', weaponImgUrl: '', roleImgUrl: '', weaponName: '', roleName: '', stickerUrl: '', bgOpacity: 0.72, weaponSize: 48, stickerSize: 62, artOpacity: 0.75, hideUid: false };
+                if (!window.g_socialConfig) window.g_socialConfig = { bgType: 'default', bgUrl: '', weaponImgUrl: '', roleImgUrl: '', weaponName: '', roleName: '', stickerUrl: '', bgOpacity: 0.72, weaponSize: 48, stickerSize: 62, artOpacity: 0.75, hideUid: false, roleScale: 1.0, suitIconMode: 'costBadge', showTierBar: true, tierBarOpacity: 0.4, hideProgress: false, layoutFormat: 'desktop' };
                 const sc = window.g_socialConfig;
                 const curWeapon = sc.weaponName || g_globalData.weapon || '未佩戴武器';
                 const curWeaponImg = sc.weaponImgUrl || WEAPONS_PROFILE_PICTURE[curWeapon] || '';
@@ -32469,21 +32932,36 @@
                     </div>
                 </div>
 
-                <!-- 2. Weapon Section (Clean, No artificial background) -->
+                <!-- 2. Weapon Section with Full Armory Database Picker -->
                 <div class="deck-section">
                     <div class="deck-section-title">
                         <span>⚔️ 佩戴武器與圖示</span>
                         <button type="button" class="deck-file-btn" onclick="(function(){window.g_socialConfig.weaponImgUrl='';window.g_socialConfig.weaponName='';try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}renderLiveStudioCard('social');renderStudioControlDeck('social');})()">↺ 恢復預設</button>
                     </div>
+                    
+                    <!-- 武器庫選擇主按鈕 -->
+                    <div style="display:flex;gap:6px;margin-bottom:8px;">
+                        <button type="button" class="deck-file-btn" onclick="openShareWeaponArmoryModal()" style="flex:1;background:linear-gradient(135deg,rgba(229,192,123,0.22),rgba(229,192,123,0.06));border:1px solid var(--accent);color:var(--accent);font-weight:bold;padding:8px 12px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.8rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                            <span>🗡️ 從武器庫選擇 (按種類/星級圖庫)</span>
+                        </button>
+                    </div>
+
+                    <!-- 常用武器快速下拉選擇 -->
+                    <select id="deck-weapon-quick-select" class="deck-input-text" onchange="if(this.value){const opt=this.options[this.selectedIndex];selectShareWeapon(this.value,opt.dataset.icon);}" style="margin-bottom:8px;font-size:0.75rem;cursor:pointer;">
+                        <option value="">⚡ 從武器庫快速挑選熱門武器...</option>
+                        ${getShareQuickWeaponOptionsHtml(curWeapon)}
+                    </select>
+
                     <div style="display:flex;align-items:center;gap:12px;background:rgba(0,0,0,0.35);padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
-                        <div id="deck-weapon-thumb-box" style="width:48px;height:48px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <div id="deck-weapon-thumb-box" onclick="openShareWeaponArmoryModal()" title="點擊開啟武器庫" style="width:48px;height:48px;border-radius:8px;border:1px solid rgba(229,192,123,0.35);background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;position:relative;">
                             ${curWeaponImg ? `<img id="deck-weapon-thumb-img" src="${curWeaponImg}" style="width:42px;height:42px;object-fit:contain;" crossorigin="anonymous">` : `<span style="font-size:1.5rem;">⚔️</span>`}
+                            <span style="position:absolute;bottom:-2px;right:-2px;font-size:0.6rem;background:var(--accent);color:#111;padding:0 3px;border-radius:3px;font-weight:900;">選</span>
                         </div>
                         <div style="flex:1;min-width:0;">
-                            <input type="text" class="deck-input-text" placeholder="武器名稱 (例如：千古洑流)..." value="${escapeHtml(sc.weaponName || '')}" oninput="(function(v){window.g_socialConfig.weaponName=v;try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}const el=document.querySelector('#studio-live-wrapper .social-weapon-name');if(el)el.textContent=v;delete g_shareBlobs['social'];})(this.value)">
+                            <input type="text" id="social-weapon-name" class="deck-input-text" placeholder="武器名稱 (例如：千古洑流)..." value="${escapeHtml(sc.weaponName || '')}" oninput="(function(v){window.g_socialConfig.weaponName=v;try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}const el=document.querySelector('#studio-live-wrapper .social-weapon-name');if(el)el.textContent=v;delete g_shareBlobs['social'];})(this.value)">
                         </div>
                     </div>
-                    <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
                         <input type="text" id="social-weapon-img-url" class="deck-input-text" placeholder="自訂武器圖片網址 (URL)..." value="${escapeHtml(sc.weaponImgUrl || '')}" oninput="(function(v){window.g_socialConfig.weaponImgUrl=v;try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}delete g_shareBlobs['social'];renderLiveStudioCard('social');})(this.value)">
                         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
                             <label class="deck-file-btn">
@@ -32499,11 +32977,22 @@
                     </div>
                 </div>
 
-                <!-- 3. Role Section with Aspect-Ratio Lock & Opacity -->
+                <!-- 0. Mobile / Desktop Layout Selector (手機版專用排版) -->
                 <div class="deck-section">
                     <div class="deck-section-title">
-                        <span>🎭 角色名稱與立繪比例</span>
-                        <button type="button" class="deck-file-btn" onclick="(function(){window.g_socialConfig.roleImgUrl='';window.g_socialConfig.roleName='';try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}renderLiveStudioCard('social');renderStudioControlDeck('social');})()">↺ 恢復官方立繪</button>
+                        <span>📱 卡片版型切換 (防破圖/手機優化)</span>
+                    </div>
+                    <div class="deck-btn-group">
+                        <button type="button" class="deck-pill-btn ${sc.layoutFormat !== 'mobile' ? 'active' : ''}" onclick="setSocialConfig('layoutFormat', 'desktop', this)">🖥️ 橫式寬版 (1000px)</button>
+                        <button type="button" class="deck-pill-btn ${sc.layoutFormat === 'mobile' ? 'active' : ''}" onclick="setSocialConfig('layoutFormat', 'mobile', this)">📱 手機直式 (580px 專用)</button>
+                    </div>
+                </div>
+
+                <!-- 3. Role Section with Aspect-Ratio Lock, Scale & Opacity (支援右側立繪放大縮小) -->
+                <div class="deck-section">
+                    <div class="deck-section-title">
+                        <span>🎭 角色名稱與立繪設定</span>
+                        <button type="button" class="deck-file-btn" onclick="(function(){window.g_socialConfig.roleImgUrl='';window.g_socialConfig.roleName='';window.g_socialConfig.roleScale=1.0;try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}renderLiveStudioCard('social');renderStudioControlDeck('social');})()">↺ 恢復官方立繪</button>
                     </div>
                     <input type="text" class="deck-input-text" placeholder="自訂角色名稱 (留空使用：${curRole})..." value="${escapeHtml(sc.roleName || '')}" oninput="(function(v){window.g_socialConfig.roleName=v;try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}const el=document.querySelector('#studio-live-wrapper .social-role-name');if(el)el.textContent=v||curRole;delete g_shareBlobs['social'];})(this.value)">
                     <input type="text" id="social-role-img-url" class="deck-input-text" placeholder="自訂角色頭像/立繪網址 (URL)..." value="${escapeHtml(sc.roleImgUrl || '')}" oninput="(function(v){window.g_socialConfig.roleImgUrl=v;try{localStorage.setItem('g_socialConfig',JSON.stringify(window.g_socialConfig));}catch(e){}delete g_shareBlobs['social'];renderLiveStudioCard('social');})(this.value)">
@@ -32518,6 +33007,43 @@
                         </div>
                     </div>
                     <input type="range" min="0.3" max="1" step="0.05" value="${sc.artOpacity !== undefined ? sc.artOpacity : 0.75}" oninput="updateLiveArtOpacity(this.value)" style="width:100%;">
+                    
+                    <!-- 放大縮小右側立繪 -->
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+                        <div style="font-size:0.75rem;color:#aaa;">🔍 右側立繪縮放大小:</div>
+                        <span id="deck-role-scale-val" style="color:var(--accent);font-weight:bold;">${Math.round((sc.roleScale || 1.0) * 100)}%</span>
+                    </div>
+                    <input type="range" min="0.6" max="1.8" step="0.05" value="${sc.roleScale || 1.0}" oninput="updateLiveRoleScale(this.value)" style="width:100%;">
+                </div>
+
+                <!-- 3.5 Suit Icon Mode (原本 vs 帶 COST 數字) -->
+                <div class="deck-section">
+                    <div class="deck-section-title">
+                        <span>🛡️ 聲骸套裝圖示樣式</span>
+                    </div>
+                    <div class="deck-btn-group">
+                        <button type="button" class="deck-pill-btn ${sc.suitIconMode !== 'normal' ? 'active' : ''}" onclick="setSocialConfig('suitIconMode', 'costBadge', this)">🏷️ 融為一體 COST 圖示 (推薦)</button>
+                        <button type="button" class="deck-pill-btn ${sc.suitIconMode === 'normal' ? 'active' : ''}" onclick="setSocialConfig('suitIconMode', 'normal', this)">🎨 純套裝圖示 (原本)</button>
+                    </div>
+                </div>
+
+                <!-- 3.6 Sub-stat Tier Bar (副詞條級距能量條開關與透明度) -->
+                <div class="deck-section">
+                    <div class="deck-section-title">
+                        <span>📏 副詞條級距能量條</span>
+                        <span id="deck-tier-bar-opacity-val" style="font-size:0.75rem;color:var(--accent);font-weight:bold;">${Math.round((sc.tierBarOpacity !== undefined ? sc.tierBarOpacity : 0.4) * 100)}%</span>
+                    </div>
+                    <div class="deck-btn-group">
+                        <button type="button" class="deck-pill-btn ${sc.showTierBar !== false ? 'active' : ''}" onclick="setSocialConfig('showTierBar', true, this)">👁️ 顯示級距條</button>
+                        <button type="button" class="deck-pill-btn ${sc.showTierBar === false ? 'active' : ''}" onclick="setSocialConfig('showTierBar', false, this)">🚫 隱藏級距條</button>
+                    </div>
+                    <div style="display:${sc.showTierBar !== false ? 'flex' : 'none'};flex-direction:column;gap:4px;margin-top:6px;">
+                        <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#aaa;">
+                            <span>能量條濃度 (調低不搶戲):</span>
+                            <span>低調 10% ～ 100% 明亮</span>
+                        </div>
+                        <input type="range" min="0.1" max="1" step="0.05" value="${sc.tierBarOpacity !== undefined ? sc.tierBarOpacity : 0.4}" oninput="updateLiveTierBarOpacity(this.value)" style="width:100%;">
+                    </div>
                 </div>
 
                 <!-- 4. Sticker Section -->
@@ -32529,7 +33055,7 @@
                         </div>
                     </div>
                     <div style="display:flex;align-items:center;gap:12px;background:rgba(0,0,0,0.35);padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
-                        <img id="social-sticker-thumb" src="${curSticker}" style="width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));" crossorigin="anonymous">
+                        <img id="social-sticker-thumb" src="${curSticker}" style="width:52px;height:52px;object-fit:contain;filter:none !important;" crossorigin="anonymous">
                         <div style="flex:1;font-size:0.73rem;color:#aaa;line-height:1.5;">
                             依據目前評分等級自動匹配，同級距隨機抽選。<br>
                             <a href="javascript:void(0)" onclick="clearCustomSticker(event)" style="color:var(--accent);text-decoration:underline;">恢復自動匹配評分</a>
@@ -32548,7 +33074,17 @@
                     <input type="range" min="45" max="75" step="2" value="${stickerSz}" oninput="updateLiveStickerSize(this.value)" style="width:100%;">
                 </div>
 
-                <!-- 5. Privacy & Extra -->
+                <!-- 5. Privacy & Extra (含畢業進度欄位移除/顯示開關) -->
+                <div class="deck-section">
+                    <div class="deck-section-title">
+                        <span>📊 畢業進度預估欄位</span>
+                    </div>
+                    <div class="deck-btn-group">
+                        <button type="button" class="deck-pill-btn ${!sc.hideProgress ? 'active' : ''}" onclick="toggleLiveHideProgress(false)">👁️ 顯示畢業進度</button>
+                        <button type="button" class="deck-pill-btn ${sc.hideProgress ? 'active' : ''}" onclick="toggleLiveHideProgress(true)">🚫 移除/隱藏欄位</button>
+                    </div>
+                </div>
+
                 <div class="deck-section">
                     <div class="deck-section-title">
                         <span>🔒 社群隱私防窺</span>
@@ -32683,6 +33219,12 @@
                 const el = document.getElementById('social-custom-bg-inputs');
                 if (el) el.style.display = val === 'custom' ? 'flex' : 'none';
             }
+            if (key === 'layoutFormat') {
+                setTimeout(() => { if (typeof adjustStudioScale === 'function') adjustStudioScale(); }, 50);
+            }
+            if (key === 'showTierBar') {
+                if (typeof renderStudioControlDeck === 'function') renderStudioControlDeck('social');
+            }
             delete g_shareBlobs['social'];
             if (immediate && typeof renderLiveStudioCard === 'function') {
                 renderLiveStudioCard('social');
@@ -32717,7 +33259,12 @@
                 if (field === 'bgUrl') { const inp = document.getElementById('social-bg-url'); if (inp) inp.value = '[本地已上傳]'; }
                 if (field === 'weaponImgUrl') { const inp = document.getElementById('social-weapon-img-url'); if (inp) inp.value = '[本地已上傳]'; }
                 if (field === 'roleImgUrl') { const inp = document.getElementById('social-role-img-url'); if (inp) inp.value = '[本地已上傳]'; }
-                renderShareLayout('social');
+                delete g_shareBlobs['social'];
+                if (window.g_activeShareTab === 'all') {
+                    renderShareLayout('social');
+                } else {
+                    renderLiveStudioCard('social');
+                }
             };
             r.readAsDataURL(file);
         };
@@ -33036,7 +33583,6 @@
         }
 
         async function renderShareLayout(type) {
-            const captureArea = document.getElementById('share-capture-area');
             const previewContainer = document.getElementById(`preview-${type}`);
 
             // Show loading state
@@ -33049,6 +33595,31 @@
                     stage.innerHTML = '<div style="color:#aaa; display:flex; flex-direction:column; align-items:center; gap:12px; padding:40px;"><div class="loader-icon" style="font-size:2rem; animation:spin 1s linear infinite;">⚙️</div><div style="font-weight:bold;color:var(--accent);">正在生成高解析度圖片...</div><div style="font-size:0.75rem;color:#888;">正在處理圖層與字型渲染</div></div>';
                 }
             }
+
+            // 若已經有生成的快取圖片，立即顯示無需重新計算
+            if (g_shareBlobs[type] && previewContainer) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(g_shareBlobs[type]);
+                img.style.maxWidth = '100%';
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(img);
+                return;
+            }
+
+            // 建立獨立離屏容器，徹底杜絕三張並排時互相覆蓋 innerHTML 的競態衝突
+            // 絕不可設 opacity: 0，否則 html2canvas 會將內容繪製為全透明/純黑！
+            const captureArea = document.createElement('div');
+            captureArea.style.position = 'fixed';
+            captureArea.style.left = '-9999px';
+            captureArea.style.top = '0';
+            captureArea.style.pointerEvents = 'none';
+            captureArea.style.zIndex = '-9999';
+
+            if (type === 'default' || type === 'graduation') {
+                captureArea.className = 'share-capture-container';
+            }
+
+            document.body.appendChild(captureArea);
 
             try {
                 // Get ranking data if needed
@@ -33070,42 +33641,58 @@
 
                 captureArea.innerHTML = html;
 
-                // Optimization: wait a bit for images to load if needed, though they should be cached.
-                // Using a slightly more efficient capture for Social cards.
+                // 核心關鍵修復: 等待卡片內所有圖片 (包含自訂上傳的 base64 或外鏈角色圖) 真正載入/解碼完畢再截圖
+                const imgs = Array.from(captureArea.querySelectorAll('img'));
+                if (imgs.length > 0) {
+                    await Promise.all(imgs.map(img => {
+                        if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+                        return new Promise(resolve => {
+                            img.onload = () => resolve();
+                            img.onerror = () => resolve();
+                            setTimeout(resolve, 3500); // 3.5秒安全超時保護
+                        });
+                    }));
+                }
+
                 const captureOptions = {
                     backgroundColor: (type === 'social') ? null : '#121214',
-                    scale: (window.innerWidth < 900) ? 1.0 : 1.2, // Lower scale on mobile for speed
+                    scale: (window.innerWidth < 900) ? 1.0 : 1.2,
                     useCORS: true,
                     logging: false,
-                    allowTaint: true,
-                    imageTimeout: 5000
+                    allowTaint: false,
+                    imageTimeout: 6000
                 };
 
                 const canvas = await html2canvas(captureArea, captureOptions);
 
-                // Convert to blob and store
-                canvas.toBlob(blob => {
-                    g_shareBlobs[type] = blob;
-                    const blobUrl = URL.createObjectURL(blob);
-                    if (previewContainer) {
-                        const img = document.createElement('img');
-                        img.src = blobUrl;
-                        img.style.maxWidth = '100%';
-                        previewContainer.innerHTML = '';
-                        previewContainer.appendChild(img);
-                    }
-                    if (window.g_activeShareTab === type) {
-                        updateStudioPreview(type, blobUrl);
-                    }
-                }, 'image/png');
+                // Convert to blob and store (等待 blob 轉換完成)
+                await new Promise(resolve => {
+                    canvas.toBlob(blob => {
+                        g_shareBlobs[type] = blob;
+                        const blobUrl = URL.createObjectURL(blob);
+                        if (previewContainer) {
+                            const img = document.createElement('img');
+                            img.src = blobUrl;
+                            img.style.maxWidth = '100%';
+                            previewContainer.innerHTML = '';
+                            previewContainer.appendChild(img);
+                        }
+                        if (window.g_activeShareTab === type) {
+                            updateStudioPreview(type, blobUrl);
+                        }
+                        resolve(blob);
+                    }, 'image/png');
+                });
 
             } catch (e) {
                 console.error(`Failed to render ${type}:`, e);
                 const isSplitError = e.message && e.message.includes('split is not a function');
                 const hintMsg = isSplitError ? '<div style="margin-top:8px;color:#ffca28;font-size:0.8rem;">⚠️ 雲端資料無套裝名稱，請重新上傳圖片進行分析</div>' : '';
-                previewContainer.innerHTML = `<div style="color:#f44;padding:30px;font-size:0.9rem;background:rgba(255,0,0,0.05);border-radius:12px;border:1px solid rgba(255,0,0,0.1);">生成失敗<br><div style="margin-top:10px;color:rgba(255,255,255,0.4);font-size:0.75rem;font-family:monospace;word-break:break-all;">原因: ${e.message || '未知渲染錯誤'}</div>${hintMsg}<button class="btn-primary-action" style="margin-top:15px;font-size:0.7rem;" onclick="renderShareLayout('${type}')">🔄 重試</button></div>`;
+                if (previewContainer) {
+                    previewContainer.innerHTML = `<div style="color:#f44;padding:30px;font-size:0.9rem;background:rgba(255,0,0,0.05);border-radius:12px;border:1px solid rgba(255,0,0,0.1);">生成失敗<br><div style="margin-top:10px;color:rgba(255,255,255,0.4);font-size:0.75rem;font-family:monospace;word-break:break-all;">原因: ${e.message || '未知渲染錯誤'}</div>${hintMsg}<button class="btn-primary-action" style="margin-top:15px;font-size:0.7rem;" onclick="renderShareLayout('${type}')">🔄 重試</button></div>`;
+                }
             } finally {
-                captureArea.innerHTML = '';
+                captureArea.remove();
             }
         }
 
@@ -33132,7 +33719,8 @@
             const bgStyle = isCustomBg
                 ? `background:url('${dc.bgUrl}') center/cover no-repeat;`
                 : `background:#121214;`;
-            const overlayHtml = `<div id="default-live-bg-overlay" style="position:absolute;inset:0;background:rgba(10,10,14,${isCustomBg ? bgOpacity : 0});pointer-events:none;z-index:0;transition:background 0.05s ease;"></div>`;
+            // 預設與自訂皆套用遮罩濃度
+            const overlayHtml = `<div id="default-live-bg-overlay" style="position:absolute;inset:0;background:rgba(10,10,14,${bgOpacity});pointer-events:none;z-index:0;transition:background 0.05s ease;"></div>`;
 
             return `
  <div style="position:relative;overflow:hidden;border-radius:14px;${bgStyle}">
@@ -33278,7 +33866,7 @@
                 bgLayerHtml = `<div id="grad-live-bg-layer" style="position:absolute; inset:0; background-image: url('${config.bgUrl}'); background-size: cover; background-position: center; opacity:${bgOpacity}; border-radius:inherit; z-index:0; transition:opacity 0.05s ease;"></div>`;
                 customBgStyle = isLight ? `background: #f8f9fa;` : `background: #0a0a0d;`;
             } else {
-                bgLayerHtml = `<div id="grad-live-bg-layer" style="position:absolute; inset:0; opacity:${bgOpacity}; border-radius:inherit; z-index:0; transition:opacity 0.05s ease;"></div>`;
+                bgLayerHtml = `<div id="grad-live-bg-layer" style="position:absolute; inset:0; background:${isLight ? '#ffffff' : '#0e1014'}; opacity:${bgOpacity}; border-radius:inherit; z-index:0; transition:opacity 0.05s ease;"></div>`;
                 customBgStyle = isLight
                     ? `background: #f8f9fa;`
                     : `background: #0a0a0d;`;
@@ -33694,6 +34282,13 @@
             const stars = '⭐'.repeat(chainCount);
             const uidText = (g_globalData && g_globalData.uid) || g_currentUserUid || '---';
 
+            // 角色屬性與專屬主題色彩 (提升社群卡片視覺質感與特色)
+            const elem = (typeof getRoleElementByName === 'function') ? getRoleElementByName(roleName) : 'Spectro';
+            const elemColor = (typeof getElementColor === 'function') ? getElementColor(elem) : '#ffd43b';
+
+            // 排名資料自動回退檢查，確保即使傳入 null 也能讀取全域最新排名快照，杜絕「未上榜」
+            const rankDataEffective = rankData || ((typeof g_lastRankInfo !== 'undefined' && g_lastRankInfo) ? g_lastRankInfo : null);
+
             const advStats = getAdvancedStats(roleName);
             const compareData = advStats ? advStats.avg : null;
             const safeEchoes = Array.isArray(g_echoesData) && g_echoesData.length > 0
@@ -33715,12 +34310,12 @@
             window._lastSocialPct = pctValue;
             const gradeInfo = getGrading(pctValue);
             const gradeClass = getGradeClass(pctValue);
-            const rankMain = rankData ? `#${rankData.rank} / ${rankData.total}` : '未上榜';
-            const rankSub = rankData ? `${rankData.pr}` : '等待排名';
+            const rankMain = rankDataEffective ? `#${rankDataEffective.rank} / ${rankDataEffective.total}` : '未上榜';
+            const rankSub = rankDataEffective ? `${rankDataEffective.pr}` : '等待排名';
             const displayScore = (totalScore * 1.25).toFixed(0);
             const displayMax = totalMax.toFixed(0);
 
-            // Emotional descriptors & Guide
+            // 情感評語與指南
             let moodLabel = "潛力無限";
             let guideText = "聲骸詞條仍有提升空間，建議優先刷取高權重部位。";
             if (pctValue >= 95) { moodLabel = "✨ 戰神降臨"; guideText = "這裝備已經是傳說級別，可以放心去師父人家的聲骸了！"; }
@@ -33729,20 +34324,20 @@
             else if (pctValue >= 70) { moodLabel = "💪 強力打手"; guideText = "再拼一把就能畢業了，勝利就在眼前！"; }
             else if (pctValue >= 60) { moodLabel = "📈 持續進步"; guideText = "已經在路上了，再努力一下就能穿上更帥的裝備！"; }
             else if (pctValue >= 40) { moodLabel = "🌱 種子選手"; guideText = "樹苗已經發芽，系統性刷副詞條將帶來飛躍成長！"; }
-            else { moodLabel = "🙏 初入江湖"; guideText = "每個大佬都是從這裡開始的，先條大電梯再說！"; }
+            else { moodLabel = "🙏 初入江湖"; guideText = "每個大佬都是從這裡開始的，慢慢累積聲骸吧！"; }
 
             // 貼圖依分數等級 (1最低至9最高)，同級距隨機抽選
             const stickerUrl = sc.stickerUrl || getStickerForPct(pctValue);
 
-            // 自訂背景與透明度
+            // 背景設定
             const isCustomBg = sc.bgType === 'custom' && sc.bgUrl;
             const bgOpacity = sc.bgOpacity !== undefined ? sc.bgOpacity : 0.72;
             const bgStyle = isCustomBg
                 ? `background:url('${sc.bgUrl}') center/cover no-repeat;`
                 : '';
-            const bgOverlay = `<div id="social-live-bg-overlay" style="position:absolute;inset:0;background:rgba(10,10,14,${isCustomBg ? bgOpacity : 0});backdrop-filter:blur(2px);pointer-events:none;z-index:0;transition:background 0.05s ease;"></div>`;
+            const bgOverlay = `<div id="social-live-bg-overlay" style="position:absolute;inset:0;background:rgba(10,10,14,${bgOpacity});backdrop-filter:blur(2px);pointer-events:none;z-index:0;transition:background 0.05s ease;"></div>`;
 
-            // 計算屬性總和 (防護 totals is not defined 錯誤)
+            // 計算屬性總和
             const totals = buildShareSubTotals(safeEchoes);
 
             const statOrder = ['生命百分比', '攻擊百分比', '防禦百分比', '爆擊', '暴擊傷害', '共鳴效率', '普攻傷害加成', '重擊傷害加成', '共鳴技能傷害加成', '共鳴解放傷害加成'];
@@ -33769,9 +34364,13 @@
             }).join('');
 
             const legendHtml = `
- <div class="social-stat-row social-stat-legend">
- <span>箭頭：<span class="social-stat-indicator up">▲</span>高於平均 <span class="social-stat-indicator down">▼</span>低於平均 <span class="social-stat-indicator neutral">►</span>接近平均</span>
- </div>`;
+            <div class="social-stat-row social-stat-legend">
+                <span>箭頭：<span class="social-stat-indicator up">▲</span>高於平均 <span class="social-stat-indicator down">▼</span>低於平均 <span class="social-stat-indicator neutral">►</span>接近平均</span>
+            </div>`;
+
+            const showTier = sc.showTierBar !== false;
+            const tierOp = sc.tierBarOpacity !== undefined ? sc.tierBarOpacity : 0.4;
+            const isCostBadge = sc.suitIconMode !== 'normal';
 
             const echoHtml = safeEchoes.map(e => {
                 if (!e) return '';
@@ -33781,7 +34380,8 @@
                 const suitName = String(rawSuit || '未知');
                 const suitKey = suitName.replace('套裝', '');
                 const suitIcon = ATTRIBUTES_PROFILE_PICTURE[suitKey] || '';
-                const costColor = costTxt == '4' ? '#ffd782' : (costTxt == '3' ? '#b8d8ff' : '#ffb38a');
+                const costColor = costTxt == '4' ? '#ffd782' : (costTxt == '3' ? '#88c0ff' : '#ffb38a');
+                const topAccentBorder = costTxt == '4' ? 'border-top: 2px solid rgba(255, 215, 130, 0.75);' : (costTxt == '3' ? 'border-top: 2px solid rgba(136, 192, 255, 0.55);' : 'border-top: 2px solid rgba(255, 179, 138, 0.45);');
                 const scoreInfo = activeWeights ? calculateEchoScore(e, activeWeights) : null;
                 const scorePct = scoreInfo ? `${scoreInfo.totalPercentage.toFixed(0)}%` : '--';
                 const gradeInfoEcho = scoreInfo ? getGrading(scoreInfo.totalPercentage) : { label: '-' };
@@ -33808,8 +34408,8 @@
 
                     const tierData = getTierInfo(s.name, s.val);
                     let tierBarHtml = '';
-                    if (tierData) {
-                        tierBarHtml = `<div class="social-sub-tier">`;
+                    if (showTier && tierData) {
+                        tierBarHtml = `<div class="social-sub-tier" style="opacity:${tierOp};">`;
                         for (let i = 0; i < tierData.max; i++) {
                             tierBarHtml += `<span class="social-tier-seg ${i < tierData.current ? 'on' : ''}"></span>`;
                         }
@@ -33817,184 +34417,212 @@
                     }
 
                     return `
- <div class="social-echo-sub ${subGradeClass}">
- <div class="social-sub-main">
- <span>${s.name}</span>
- <span>${s.val}</span>
- </div>
- ${tierBarHtml}
- </div>`;
+                    <div class="social-echo-sub ${subGradeClass}">
+                        <div class="social-sub-main">
+                            <span>${s.name}</span>
+                            <span>${s.val}</span>
+                        </div>
+                        ${tierBarHtml}
+                    </div>`;
                 }).join('');
 
+                // 核心需求修復: COST 與套裝圖示「融為一體」(無右上浮動背景色塊，直接以立體輪廓內嵌在圖示右下角)
+                let suitIconBox = '';
+                if (suitIcon) {
+                    if (isCostBadge) {
+                        suitIconBox = `
+                        <div class="social-suit-integrated" style="position:relative; width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <img src="${suitIcon}" class="social-echo-icon" style="width:36px; height:36px; object-fit:contain; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.7));" crossorigin="anonymous">
+                            <span style="position:absolute; bottom:-1px; right:0px; font-size:0.75rem; font-weight:900; color:${costColor}; font-family:'JetBrains Mono', monospace; line-height:1; letter-spacing:-0.5px; text-shadow: 0 1px 3px #000, 0 0 5px #000, 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; pointer-events:none;">${costTxt}</span>
+                        </div>`;
+                    } else {
+                        suitIconBox = `<img src="${suitIcon}" class="social-echo-icon" crossorigin="anonymous">`;
+                    }
+                } else {
+                    suitIconBox = '<div class="social-echo-icon"></div>';
+                }
+
                 return `
- <div class="social-echo-card">
- <div class="social-echo-header">
- ${suitIcon ? `<img src="${suitIcon}" class="social-echo-icon" crossorigin="anonymous">` : '<div class="social-echo-icon"></div>'}
- <div class="social-echo-info">
- <div class="social-echo-suit">${sonataName(suitKey)}</div>
- <div class="social-suit-icon">COST ${costTxt}</div>
- </div>
- <div class="social-echo-score-wrap">
- <div class="social-echo-score">${scorePct}</div>
- <div class="social-echo-grade ${getGradeClass(scoreInfo ? scoreInfo.totalPercentage : 0)}">${gradeInfoEcho.label}</div>
- </div>
- </div>
- <div class="social-echo-main">
- <strong>${e.main1 || '-'}</strong>
- <span>${e.main2 || '-'}</span>
- </div>
- <div class="social-echo-subs">
- ${subsHtml}
- </div>
- </div>
- `;
+                <div class="social-echo-card" style="position:relative; ${topAccentBorder}">
+                    <div class="social-echo-header">
+                        ${suitIconBox}
+                        <div class="social-echo-info">
+                            <div class="social-echo-suit">${sonataName(suitKey)}</div>
+                            <div class="social-suit-icon">COST ${costTxt}</div>
+                        </div>
+                        <div class="social-echo-score-wrap">
+                            <div class="social-echo-score">${scorePct}</div>
+                            <div class="social-echo-grade ${getGradeClass(scoreInfo ? scoreInfo.totalPercentage : 0)}">${gradeInfoEcho.label}</div>
+                        </div>
+                    </div>
+                    <div class="social-echo-main">
+                        <strong>${e.main1 || '-'}</strong>
+                        <span>${e.main2 || '-'}</span>
+                    </div>
+                    <div class="social-echo-subs">
+                        ${subsHtml}
+                    </div>
+                </div>`;
             }).join('');
 
+            const isMobileLayout = sc.layoutFormat === 'mobile';
+            const cardClass = isMobileLayout ? 'social-card layout-mobile' : 'social-card';
+            const roleScale = sc.roleScale || 1.0;
+            const roleImgIsDataOrBlob = roleImg.startsWith('data:') || roleImg.startsWith('blob:');
+            const roleImgCors = roleImgIsDataOrBlob ? '' : 'crossorigin="anonymous"';
+
+            const progressSectionHtml = sc.hideProgress ? '' : `
+            <div class="social-progress">
+                <div class="social-progress-left">
+                    <div style="font-size:0.9rem;font-weight:900;color:#fff;margin-bottom:2px;">畢業進度預估</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.4;">${guideText}</div>
+                </div>
+                <div class="social-progress-right">
+                    <div class="social-progress-meter">
+                        <div class="social-progress-val">${pctValue.toFixed(1)}%</div>
+                        <div class="social-progress-bar-wrapper">
+                            <div class="social-progress-bar">
+                                <div class="social-progress-fill" style="width:${Math.min(100, pctValue).toFixed(1)}%"></div>
+                            </div>
+                            <div class="social-progress-markers">
+                                <div class="social-progress-marker small">
+                                    <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg></span>
+                                    <span class="social-progress-marker-text">小畢業</span>
+                                </div>
+                                <div class="social-progress-marker medium">
+                                    <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.5 9-7 11-3.5-2-7-6-7-11V6l7-4z"/></svg></span>
+                                    <span class="social-progress-marker-text">中畢業</span>
+                                </div>
+                                <div class="social-progress-marker large">
+                                    <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+                                    <span class="social-progress-marker-text">大畢業</span>
+                                </div>
+                                <div class="social-progress-marker heirloom">
+                                    <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-6 5 6 4-4v10H3z"/></svg></span>
+                                    <span class="social-progress-marker-text">傳家寶</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
             return `
- <div class="social-card" style="position:relative;${bgStyle}">
- ${bgOverlay}
- <div style="position:relative;z-index:1;">
- <div class="social-top">
- <div class="social-role-panel">
- ${roleImg ? `<img src="${roleImg}" class="social-role-art" id="social-live-role-art" style="opacity:${sc.artOpacity !== undefined ? sc.artOpacity : 0.75};" crossorigin="anonymous">` : ''}
- <div style="font-size:1.05rem;font-weight:900;color:#e5c07b;margin-bottom:auto;background:rgba(0,0,0,0.6);width:fit-content;padding:4px 12px;border-radius:6px;border:1px solid rgba(229,192,123,0.3);letter-spacing:1px;position:relative;z-index:2;">${moodLabel}</div>
- <div class="social-role-name" title="${escapeHtml(roleName)}">${roleName}</div>
- <div class="social-role-meta" style="position:relative;z-index:2;">
- <span class="social-role-tag">${sc.hideUid ? 'UID 已隱藏' : `UID ${uidText}`}</span>
- <span class="social-role-tag">${chainCount} 鏈度 ${stars}</span>
- </div>
- </div>
- <div class="social-stats-panel">
- <div class="social-panel-title">屬性總和分析</div>
- <div class="social-stats-grid">
- ${statsHtml}
- ${legendHtml}
- </div>
- </div>
- </div>
- 
- <div class="social-mid">
- <div class="social-info-card" style="justify-content:center;">
- <div class="social-info-header">
- <svg class="social-info-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 21l2-2 4 4 2-2-4-4 9-9 2 2 3-3-5-5-3 3 2 2-9 9-4-4-2 2z"/></svg>
- <div class="social-info-label">佩戴武器</div>
- </div>
- <div class="social-weapon-row" style="display:flex;align-items:center;gap:12px;margin-top:6px;">
-     ${weaponImg ? `<img src="${weaponImg}" id="social-live-weapon-img" style="width:${sc.weaponSize || 48}px;height:${sc.weaponSize || 48}px;object-fit:contain;background:none !important;border:none !important;box-shadow:none !important;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.65));flex-shrink:0;" crossorigin="anonymous" onerror="this.style.display='none'">` : ''}
-     <div style="min-width:0;display:flex;flex-direction:column;justify-content:center;">
-         <div class="social-weapon-name" style="font-size:1.2rem;font-weight:900;color:#fff;letter-spacing:0.5px;text-shadow:0 2px 6px rgba(0,0,0,0.8);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(weaponName)}">${weaponName}</div>
-         <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:3px;font-weight:600;letter-spacing:0.4px;">BUILD: ${g_currentWeights[roleName]?.[g_selectedBuildIdx]?.name || '通用'}</div>
-     </div>
- </div>
- </div>
- <div class="social-info-card" style="display:flex;flex-direction:column;justify-content:center;">
- <div class="social-info-header">
- <svg class="social-info-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
- <div class="social-info-label">聲骸評分</div>
- </div>
- <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:2px;">
-     <div style="text-align:center;">
-         <div class="social-score-grade ${gradeClass}" style="font-size:1.35rem;font-weight:900;">${getGradeCrown(pctValue)} ${gradeInfo.label}</div>
-         <div class="social-score-value" style="font-size:1.15rem;font-weight:800;color:#fff;">${displayScore}<span style="font-size:0.8rem;color:#888;">/${displayMax}</span></div>
-     </div>
-     <div style="position:relative;display:flex;align-items:center;justify-content:center;" title="評分專屬陪伴貼圖">
-         <img src="${stickerUrl}" id="social-live-sticker-img" style="height:${sc.stickerSize || 62}px;width:${sc.stickerSize || 62}px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.5));" crossorigin="anonymous" onerror="this.style.display='none'">
-     </div>
- </div>
- </div>
- <div class="social-info-card">
- <div class="social-info-header">
- <svg class="social-info-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4h10v2h2a2 2 0 0 1 2 2c0 3.3-2.2 5.8-5.2 6.3A6 6 0 0 1 13 18v2h3v2H8v-2h3v-2a6 6 0 0 1-2.8-3.7C5.2 13.8 3 11.3 3 8a2 2 0 0 1 2-2h2V4zm-2 4c0 2.2 1.3 3.8 3.2 4.3A6 6 0 0 1 7 8H5zm16 0h-2a6 6 0 0 1-1.2 4.3C19.7 11.8 21 10.2 21 8z"/></svg>
- <div class="social-info-label">全服排名</div>
- </div>
- <div class="social-rank-main">${rankMain}</div>
- <div class="social-rank-sub">${rankSub}</div>
- </div>
- </div>
- 
- <div class="social-progress">
- <div class="social-progress-left">
- <div style="font-size:0.9rem;font-weight:900;color:#fff;margin-bottom:2px;">畢業進度預估</div>
- <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.4;">${guideText}</div>
- </div>
- <div class="social-progress-right">
- <div class="social-progress-meter">
- <div class="social-progress-val">${pctValue.toFixed(1)}%</div>
- <div class="social-progress-bar-wrapper">
- <div class="social-progress-bar">
- <div class="social-progress-fill" style="width:${Math.min(100, pctValue).toFixed(1)}%"></div>
- </div>
- <div class="social-progress-markers">
- <div class="social-progress-marker small">
- <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg></span>
- <span class="social-progress-marker-text">小畢業</span>
- </div>
- <div class="social-progress-marker medium">
- <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.5 9-7 11-3.5-2-7-6-7-11V6l7-4z"/></svg></span>
- <span class="social-progress-marker-text">中畢業</span>
- </div>
- <div class="social-progress-marker large">
- <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
- <span class="social-progress-marker-text">大畢業</span>
- </div>
- <div class="social-progress-marker heirloom">
- <span class="social-progress-marker-icon"><svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-6 5 6 4-4v10H3z"/></svg></span>
- <span class="social-progress-marker-text">傳家寶</span>
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
- 
- <div class="social-echo-grid">
- ${echoHtml}
- </div>
- 
- ${(() => {
-                    if (!activeWeights) return '';
-                    // Build weight proportion items sorted by theoretical max value
-                    const weightItems = [];
-                    let totalPotential = 0;
-                    for (const [key, weight] of Object.entries(activeWeights)) {
-                        if (weight <= 0) continue;
-                        const maxVal = SUB_STAT_MAX_VALUES[key] || 0;
-                        if (maxVal <= 0) continue;
-                        const potential = weight * maxVal;
-                        const heatColor = getHeatmapColor(potential, activeWeights);
-                        const dotColor = heatColor ? heatColor : 'rgba(255,255,255,0.2)';
-                        weightItems.push({ name: key, maxVal, weight, potential, dotColor });
-                        totalPotential += potential;
-                    }
-                    weightItems.sort((a, b) => b.potential - a.potential);
-                    if (weightItems.length === 0) return '';
+            <div class="${cardClass}" style="position:relative; border: 1px solid ${elemColor}38; box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 35px ${elemColor}15; ${bgStyle}">
+                ${bgOverlay}
+                <!-- 角色專屬屬性光暈 (提升卡片精緻度與社群吸睛度) -->
+                <div style="position:absolute; top:0; right:0; width:55%; height:100%; background:radial-gradient(ellipse at 85% 25%, ${elemColor}22 0%, transparent 68%); pointer-events:none; z-index:0;"></div>
+                <div style="position:relative;z-index:1;">
+                    <div class="social-top">
+                        <div class="social-role-panel">
+                            ${roleImg ? `<img src="${roleImg}" class="social-role-art" id="social-live-role-art" style="opacity:${sc.artOpacity !== undefined ? sc.artOpacity : 0.75}; transform: scale(${roleScale}); transform-origin: right top;" ${roleImgCors}>` : ''}
+                            <div style="font-size:1.05rem;font-weight:900;color:${elemColor};margin-bottom:auto;background:rgba(0,0,0,0.65);width:fit-content;padding:4px 12px;border-radius:6px;border:1px solid ${elemColor}44;box-shadow:0 0 10px ${elemColor}22;letter-spacing:1px;position:relative;z-index:2;">${moodLabel}</div>
+                            <div class="social-role-name" title="${escapeHtml(roleName)}">${roleName}</div>
+                            <div class="social-role-meta" style="position:relative;z-index:2;">
+                                <span class="social-role-tag">${sc.hideUid ? 'UID 已隱藏' : `UID ${uidText}`}</span>
+                                <span class="social-role-tag">${chainCount} 鏈度 ${stars}</span>
+                            </div>
+                        </div>
+                        <div class="social-stats-panel">
+                            <div class="social-panel-title">屬性總和分析</div>
+                            <div class="social-stats-grid">
+                                ${statsHtml}
+                                ${legendHtml}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-mid">
+                        <!-- 佩戴武器 (內容置中，與評分卡片完全對齊) -->
+                        <div class="social-info-card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+                            <div class="social-info-header" style="justify-content:center;width:100%;">
+                                <svg class="social-info-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 21l2-2 4 4 2-2-4-4 9-9 2 2 3-3-5-5-3 3 2 2-9 9-4-4-2 2z"/></svg>
+                                <div class="social-info-label">佩戴武器</div>
+                            </div>
+                            <div class="social-weapon-row" style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:4px;text-align:center;">
+                                ${weaponImg ? `<img src="${weaponImg}" id="social-live-weapon-img" style="width:${sc.weaponSize || 48}px;height:${sc.weaponSize || 48}px;object-fit:contain;background:none !important;border:none !important;box-shadow:none !important;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.65));flex-shrink:0;" crossorigin="anonymous" onerror="this.style.display='none'">` : ''}
+                                <div style="min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+                                    <div class="social-weapon-name" style="font-size:1.2rem;font-weight:900;color:#fff;letter-spacing:0.5px;text-shadow:0 2px 6px rgba(0,0,0,0.8);line-height:1.2;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(weaponName)}">${weaponName}</div>
+                                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:3px;font-weight:600;letter-spacing:0.4px;text-align:center;">BUILD: ${g_currentWeights[roleName]?.[g_selectedBuildIdx]?.name || '通用'}</div>
+                                </div>
+                            </div>
+                        </div>
 
-                    const legendItems = weightItems.map((item, idx) => {
-                        const pct = totalPotential > 0 ? (item.potential / totalPotential * 100).toFixed(1) : '0.0';
-                        const sep = idx < weightItems.length - 1 ? '<span class="social-weight-legend-sep">›</span>' : '';
-                        return '<span class="social-weight-legend-item"><span class="social-weight-dot" style="background:' + item.dotColor + '"></span><span style="color:' + item.dotColor + ';">' + item.name + '</span>(' + pct + '%<span style="color:rgba(255,255,255,0.25);">[' + item.weight + ']</span>)</span>' + sep;
-                    }).join('');
+                        <!-- 聲骸評分 (置中排版) -->
+                        <div class="social-info-card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+                            <div class="social-info-header" style="justify-content:center;width:100%;">
+                                <svg class="social-info-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                <div class="social-info-label">聲骸評分</div>
+                            </div>
+                            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:2px;">
+                                <div style="text-align:center;">
+                                    <div class="social-score-grade ${gradeClass}" style="font-size:1.35rem;font-weight:900;">${getGradeCrown(pctValue)} ${gradeInfo.label}</div>
+                                    <div class="social-score-value" style="font-size:1.15rem;font-weight:800;color:#fff;">${displayScore}<span style="font-size:0.8rem;color:#888;">/${displayMax}</span></div>
+                                </div>
+                                <div style="position:relative;display:flex;align-items:center;justify-content:center;" title="評分專屬陪伴貼圖">
+                                    <img src="${stickerUrl}" id="social-live-sticker-img" style="height:${sc.stickerSize || 62}px;width:${sc.stickerSize || 62}px;object-fit:contain;filter:none !important;" crossorigin="anonymous" onerror="this.style.display='none'">
+                                </div>
+                            </div>
+                        </div>
 
-                    // Meta info: cloud ID, upload time, version
-                    const history = JSON.parse(localStorage.getItem('ww_history') || '[]');
-                    const currentEntry = history.find(h => h.id === g_currentEntryId);
-                    const cloudId = currentEntry?.dbId || '';
-                    const uploadTime = currentEntry?.ts || '';
-                    const metaLeft = (cloudId ? 'ID: ' + cloudId : '') + (uploadTime ? ' ｜ ' + uploadTime : '');
-                    const metaRight = CURRENT_VERSION;
+                        <!-- 全服排名 (置中排版) -->
+                        <div class="social-info-card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+                            <div class="social-info-header" style="justify-content:center;width:100%;">
+                                <svg class="social-info-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4h10v2h2a2 2 0 0 1 2 2c0 3.3-2.2 5.8-5.2 6.3A6 6 0 0 1 13 18v2h3v2H8v-2h3v-2a6 6 0 0 1-2.8-3.7C5.2 13.8 3 11.3 3 8a2 2 0 0 1 2-2h2V4zm-2 4c0 2.2 1.3 3.8 3.2 4.3A6 6 0 0 1 7 8H5zm16 0h-2a6 6 0 0 1-1.2 4.3C19.7 11.8 21 10.2 21 8z"/></svg>
+                                <div class="social-info-label">全服排名</div>
+                            </div>
+                            <div class="social-rank-main">${rankMain}</div>
+                            <div class="social-rank-sub">${rankSub}</div>
+                        </div>
+                    </div>
+                    
+                    ${progressSectionHtml}
+                    
+                    <div class="social-echo-grid">
+                        ${echoHtml}
+                    </div>
+                    
+                    ${(() => {
+                        if (!activeWeights) return '';
+                        const weightItems = [];
+                        let totalPotential = 0;
+                        for (const [key, weight] of Object.entries(activeWeights)) {
+                            if (weight <= 0) continue;
+                            const maxVal = SUB_STAT_MAX_VALUES[key] || 0;
+                            if (maxVal <= 0) continue;
+                            const potential = weight * maxVal;
+                            const heatColor = getHeatmapColor(potential, activeWeights);
+                            const dotColor = heatColor ? heatColor : 'rgba(255,255,255,0.2)';
+                            weightItems.push({ name: key, maxVal, weight, potential, dotColor });
+                            totalPotential += potential;
+                        }
+                        weightItems.sort((a, b) => b.potential - a.potential);
+                        if (weightItems.length === 0) return '';
 
-                    return '<div class="social-weight-legend"><div class="social-weight-legend-title">🎯 權重貢獻排序 (理論最大分數占比)</div><div class="social-weight-legend-items">' + legendItems + '</div><div class="social-weight-legend-meta"><span>' + metaLeft + '</span><span>' + metaRight + '</span></div></div>';
-                })()}
- 
- <div class="social-footer">
- <span>POWERED BY GAME ZH ANALYSIS SYSTEM</span>
- <div class="social-footer-accent">https://sites.google.com/view/gamedada-ocr/</div>
- </div>
- </div>
- </div>
- `;
+                        const legendItems = weightItems.map((item, idx) => {
+                            const pct = totalPotential > 0 ? (item.potential / totalPotential * 100).toFixed(1) : '0.0';
+                            const sep = idx < weightItems.length - 1 ? '<span class="social-weight-legend-sep">›</span>' : '';
+                            return '<span class="social-weight-legend-item"><span class="social-weight-dot" style="background:' + item.dotColor + '"></span><span style="color:' + item.dotColor + ';">' + item.name + '</span>(' + pct + '%<span style="color:rgba(255,255,255,0.25);">[' + item.weight + ']</span>)</span>' + sep;
+                        }).join('');
+
+                        const history = JSON.parse(localStorage.getItem('ww_history') || '[]');
+                        const currentEntry = history.find(h => h.id === g_currentEntryId);
+                        const cloudId = currentEntry?.dbId || '';
+                        const uploadTime = currentEntry?.ts || '';
+                        const metaLeft = (cloudId ? 'ID: ' + cloudId : '') + (uploadTime ? ' ｜ ' + uploadTime : '');
+                        const metaRight = CURRENT_VERSION;
+
+                        return '<div class="social-weight-legend"><div class="social-weight-legend-title">🎯 權重貢獻排序 (理論最大分數占比)</div><div class="social-weight-legend-items">' + legendItems + '</div><div class="social-weight-legend-meta"><span>' + metaLeft + '</span><span>' + metaRight + '</span></div></div>';
+                    })()}
+                    
+                    <div class="social-footer">
+                        <span>POWERED BY GAME ZH ANALYSIS SYSTEM</span>
+                        <div class="social-footer-accent">https://sites.google.com/view/gamedada-ocr/</div>
+                    </div>
+                </div>
+            </div>
+            `;
         }
-
 
         function filterShareLayouts(filter) {
             g_shareFilter = filter;
