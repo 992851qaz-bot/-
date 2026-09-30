@@ -22,11 +22,9 @@
         content="免費鳴潮聲骸分析工具，自動辨識聲骸詞條並計算 CV 評分，提供各角色聲骸 Build 推薦與畢業標準攻略。Wuthering Waves echo analyzer with CV scoring and build guides.">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:locale:alternate" content="en_US">
-    <meta property="og:image" content="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="鳴潮聲骸分析儀 | Wuthering Waves Echo Analyzer">
     <meta name="twitter:description" content="免費鳴潮聲骸分析工具，自動辨識聲骸詞條並計算 CV 評分，提供各角色聲骸 Build 推薦與畢業標準攻略。">
-    <meta name="twitter:image" content="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000">
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LD4742Y6ZF"></script>
     <script>
@@ -102,26 +100,7 @@
         }
 
         * {
-            box-sizing: border-box;
-        }
-
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        input, textarea, [contenteditable="true"] {
-            -webkit-user-select: text !important;
-            -moz-user-select: text !important;
-            -ms-user-select: text !important;
-            user-select: text !important;
-        }
-
-        img {
-            -webkit-user-drag: none;
-            user-drag: none;
+            box-sizing: border-box
         }
 
         body.theme-custom {
@@ -10850,13 +10829,6 @@
                 <button id="qs-feedback" onclick="openFeedbackModal()"
                     style="padding:8px 12px;border-radius:10px;border:none;background:rgba(255,255,255,0.05);color:#fff;font-weight:800;cursor:pointer;transition:all 0.2s;">📝
                     <span data-lang-zh="問卷與回報" data-lang-en="Feedback">問卷與回報</span></button>
-                <a id="qs-calculator-link" href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
-                    style="padding:8px 12px;border-radius:10px;border:1px solid rgba(56,189,248,0.4);background:linear-gradient(90deg,rgba(56,189,248,0.18),rgba(56,189,248,0.08));color:#38bdf8;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s;"
-                    onmouseover="this.style.background='rgba(56,189,248,0.28)'"
-                    onmouseout="this.style.background='linear-gradient(90deg,rgba(56,189,248,0.18),rgba(56,189,248,0.08))'">💎
-                    <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
-                        data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
-                </a>
             </div>
         </div>
     </div>
@@ -10920,29 +10892,18 @@
                     data-lang-en="This tool <b style='color:#ddd;'>only requires your in-game UID (numbers only)</b>. We never ask for passwords, tokens, or personal data. All analysis data is used solely for echo scoring display and will never steal or misuse your account.">
                     本工具 <b style="color:#ddd;">僅需輸入遊戲 UID（純數字）</b>，不索取任何帳號密碼、Token 或個人資料。所有分析資料僅用於聲骸評分顯示，不會竊取或濫用您的帳號資訊。
                 </div>
-                <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                        <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
-                            style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="隱私政策"
-                            data-lang-en="Privacy Policy">隱私政策</a>
-                        <span style="color:#555;">|</span>
-                        <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
-                            style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="安全政策"
-                            data-lang-en="Security Policy">安全政策</a>
-                        <span style="color:#555;">|</span>
-                        <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
-                            style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="使用條款"
-                            data-lang-en="Terms of Use">使用條款</a>
-                    </div>
-                    <a href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
-                        style="color:#38bdf8;text-decoration:none;font-size:0.72rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:rgba(56,189,248,0.12);padding:2px 8px;border-radius:6px;border:1px solid rgba(56,189,248,0.35);transition:all 0.2s;"
-                        onmouseover="this.style.background='rgba(56,189,248,0.22)'"
-                        onmouseout="this.style.background='rgba(56,189,248,0.12)'">
-                        <span>💎</span>
-                        <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
-                            data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
-                        <span>➔</span>
-                    </a>
+                <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
+                        style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="隱私政策"
+                        data-lang-en="Privacy Policy">隱私政策</a>
+                    <span style="color:#555;">|</span>
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
+                        style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="安全政策"
+                        data-lang-en="Security Policy">安全政策</a>
+                    <span style="color:#555;">|</span>
+                    <a href="javascript:void(0)" onclick="openSecurityPolicyModal()"
+                        style="color:#61afef;text-decoration:underline;font-size:0.72rem;" data-lang-zh="使用條款"
+                        data-lang-en="Terms of Use">使用條款</a>
                 </div>
             </div>
             <div id="pwa-install-area">
@@ -12342,23 +12303,6 @@
                                 style="background:rgba(76,175,80,0.25);color:#4caf50;border-color:rgba(76,175,80,0.5);"
                                 data-lang-zh="查看" data-lang-en="View">查看</button></div>
                     </div>
-
-                    <a class="feature-card" href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
-                        style="grid-column:1/-1;background:linear-gradient(135deg,rgba(56,189,248,0.12),rgba(20,20,25,0.85));border-color:rgba(56,189,248,0.35);text-decoration:none;display:flex;align-items:center;">
-                        <div class="feature-card-icon-box" style="background:rgba(56,189,248,0.2);color:#38bdf8;font-size:1.4rem;">💎</div>
-                        <div class="feature-card-main">
-                            <div class="feature-card-title" style="color:#38bdf8;"
-                                data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
-                                data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</div>
-                            <div class="feature-card-desc"
-                                data-lang-zh="3.7 月影溯尋全品項性價比 CP 值排行懶人包、防溢出智慧補足演算、限定禮匣與雙倍月相最佳規劃！"
-                                data-lang-en="WuWa 3.7 top-up value ranking, smart milestone planner & gacha pity simulator.">
-                                3.7 月影溯尋全品項性價比 CP 值排行懶人包、防溢出智慧補足演算、限定禮匣與雙倍月相最佳規劃！</div>
-                        </div>
-                        <div class="feature-card-action"><button class="quick-btn"
-                                style="background:rgba(56,189,248,0.25);color:#38bdf8;border-color:rgba(56,189,248,0.5);pointer-events:none;"
-                                data-lang-zh="前往 ➔" data-lang-en="Visit ➔">前往 ➔</button></div>
-                    </a>
                 </div>
             </div>
         </div>
@@ -13587,20 +13531,9 @@
                 </div>
 
                 <!-- Footer: Security & Skip -->
-                <div class="ios-entry-footer" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                        <button type="button" class="ios-link-btn" onclick="openSecurityPolicyModal()"
-                            data-lang-zh="🔒 安全聲明・隱私政策・使用條款" data-lang-en="🔒 Security & Terms">🔒 安全聲明・隱私政策・使用條款</button>
-                        <a href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
-                            style="color:#38bdf8;text-decoration:none;font-size:0.72rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:rgba(56,189,248,0.12);padding:2px 8px;border-radius:6px;border:1px solid rgba(56,189,248,0.35);transition:all 0.2s;"
-                            onmouseover="this.style.background='rgba(56,189,248,0.22)'"
-                            onmouseout="this.style.background='rgba(56,189,248,0.12)'">
-                            <span>💎</span>
-                            <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
-                                data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
-                            <span>➔</span>
-                        </a>
-                    </div>
+                <div class="ios-entry-footer">
+                    <button type="button" class="ios-link-btn" onclick="openSecurityPolicyModal()"
+                        data-lang-zh="🔒 安全聲明・隱私政策・使用條款" data-lang-en="🔒 Security & Terms">🔒 安全聲明・隱私政策・使用條款</button>
                     <button id="btn-close-welcome" class="ios-skip-btn" onclick="closeWelcomePanel()"
                         style="display:none;" data-lang-zh="✕ 關閉教學" data-lang-en="✕ Close Tutorial">✕ 關閉教學</button>
                 </div>
@@ -13720,15 +13653,9 @@
                     <div class="scan-radar"></div>
                 </div>
                 <div id="img-placeholder" class="empty-state">
-                    <div data-lang-zh="等待影像輸入..." data-lang-en="Waiting for image input...">等待影像輸入...</div>
-                    <div style="font-size:0.8rem;color:#666;display:flex;gap:8px;justify-content:center;align-items:center;margin-top:6px;flex-wrap:wrap;">
-                        <span><span data-lang-zh="或" data-lang-en="or">或</span> <a href="#" onclick="triggerFileUpload();return false;"
-                            style="color:var(--accent)" data-lang-zh="選擇本地圖片" data-lang-en="Select Local Image">選擇本地圖片</a></span>
-                        <span style="color:#555">·</span>
-                        <a href="javascript:void(0)" onclick="openPreviewImageLightbox()"
-                            style="color:#61afef;cursor:pointer;text-decoration:underline;"
-                            data-lang-zh="🖼️ 查看範例預覽圖" data-lang-en="🖼️ View Sample Preview">🖼️ 查看範例預覽圖</a>
-                    </div>
+                    <div>等待影像輸入...</div>
+                    <div style="font-size:0.8rem;color:#666;">或 <a href="#" onclick="triggerFileUpload();return false;"
+                            style="color:var(--accent)">選擇本地圖片</a></div>
                 </div>
             </div>
             <div class="status-bar"><span id="status-text" data-lang-zh="就緒" data-lang-en="Ready">就緒</span><span
@@ -17543,7 +17470,9 @@
             "麗貝卡": "https://guide-res.aki-game.net/introduction/material/b2aad989f901df447ac4f6c4fa87b327/12f4a3c1249a4d44190e7757b314ac53.png",
             "露西": "https://guide-res.aki-game.net/introduction/material/b2aad989f901df447ac4f6c4fa87b327/b7ee163d2126c08e328d59c8f2d84469.png",
             "穗穗": "https://prod-alicdn-community.kurobbs.com/forum/a1a06d946dae4b039e958e799ba0f63e20260625.png?x-oss-process=image/format,webp",
-            "秧秧玄翎": "https://prod-alicdn-community.kurobbs.com/forum/98f36fc53c1348549477517828744cde20260625.png?x-oss-process=image/format,webp"
+            "秧秧玄翎": "https://prod-alicdn-community.kurobbs.com/forum/98f36fc53c1348549477517828744cde20260625.png?x-oss-process=image/format,webp",
+            "鎖暝": "https://static.nanoka.cc/assets/ww/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_76_UI.webp",
+            "心": "https://static.nanoka.cc/assets/ww/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_75_UI.webp"
         };
         const ATTRIBUTES_PROFILE_PICTURE = {
             "浮星祛暗": "https://guide-res.aki-game.net/introduction/material/c4d88a047905cdb485c0e9abcca20348/8266e4bfeda1bd42d8f9794eb4ea0a13.png",
@@ -17576,7 +17505,10 @@
             "聽取語意之願": "https://prod-alicdn-community.kurobbs.com/forum/db00d18ae6ff47c4b38a593a6c5becee20260204.png",
             "雪落無聲之願": "https://prod-alicdn-community.kurobbs.com/forum/ae0fc0bd0f6840058c1bfae0927861e920260428.png",
             "剪心輯夢之影": "https://prod-alicdn-community.kurobbs.com/forum/b717f80f49b642cf83e32689a0b6412a20260428.png",
-            "碎夢亡鬼之魘": "https://prod-alicdn-community.kurobbs.com/forum/949f25880eef4cc0bd51cd176aefd91120260607.png"
+            "碎夢亡鬼之魘": "https://prod-alicdn-community.kurobbs.com/forum/949f25880eef4cc0bd51cd176aefd91120260607.png",
+            "茜染懷想之花": "https://static.nanoka.cc/assets/ww/UIResources/Common/Image/IconElementAttri/T_IconElementAttriCureA.webp",
+            "鏡影流電之瞬": "https://static.nanoka.cc/assets/ww/UIResources/Common/Image/IconElementAttri/T_IconElementAttriThunderError.webp",
+            "銜夢照世之心": "https://static.nanoka.cc/assets/ww/UIResources/Common/Image/IconElementAttri/T_IconElementAttriXin.webp"
 
         };
         const WEAPONS_PROFILE_PICTURE = {
@@ -18110,42 +18042,16 @@
                     }
                 }
             });
-        function handleInvalidInputFeedback(val) {
-            const v = (val || '').trim();
-            const input = document.getElementById('url-input');
-            if (input) {
-                input.style.transition = 'all 0.2s ease';
-                input.style.borderColor = '#ff5555';
-                input.style.boxShadow = '0 0 12px rgba(255, 85, 85, 0.45)';
-                setTimeout(() => {
-                    if (input) {
-                        input.style.borderColor = '';
-                        input.style.boxShadow = '';
-                    }
-                }, 1600);
-                input.focus();
-            }
-
-            if (/^\d+$/.test(v)) {
-                if (v === "714034316") {
-                    showMsg("⚠️ 此 UID (714034316) 為舊版教學測試帳號，已停止服務。\n請輸入您個人的 9 碼遊戲 UID！");
-                } else {
-                    showMsg(`⚠️ UID 格式不正確（目前為 ${v.length} 碼）\n鳴潮遊戲 UID 必須為 9 位純數字（例如：900123456）。`);
-                }
-            } else if (v.startsWith('http://') || v.startsWith('https://')) {
-                showMsg("⚠️ 圖片連結格式不符合要求！\n請貼上 Discord 或支援圖床的聲骸截圖直鏈 (JPG/PNG)。");
-            } else {
-                showMsg("⚠️ 輸入格式不符：\n• 切換/載入：請輸入 9 碼遊戲 UID\n• 分析圖片：請貼上聲骸圖片直鏈\n• 若需指引請點擊下方「💡 新手教學指南」");
-            }
-        }
-
-        urlInput.addEventListener('keydown', async (e) => {
+            urlInput.addEventListener('keydown', async (e) => {
                 if (e.key === 'Enter') {
                     const v = urlInput.value.trim();
                     if (/^\d{9}$/.test(v)) {
                         if (await ensureWeightsLoaded()) handleProfileSwitch(v);
                     } else if (analyzeBtn.classList.contains('invalid')) {
-                        handleInvalidInputFeedback(v);
+                        // Show tutorial if invalid
+                        document.getElementById('welcome-panels').style.display = 'flex';
+                        document.querySelector('.container').style.display = 'none';
+                        document.getElementById('btn-close-welcome').style.display = 'block';
                     } else if (/^GAMEZH$/i.test(v)) {
                         urlInput.value = '';
                         showDiagnosticPanel();
@@ -18170,7 +18076,9 @@
                     return;
                 }
                 if (analyzeBtn.classList.contains('invalid')) {
-                    handleInvalidInputFeedback(v);
+                    document.getElementById('welcome-panels').style.display = 'flex';
+                    document.querySelector('.container').style.display = 'none';
+                    document.getElementById('btn-close-welcome').style.display = 'block';
                 } else if (/^\d{9}$/.test(v)) {
                     if (await ensureWeightsLoaded()) handleProfileSwitch(v);
                 } else if (/^GAMEZH$/i.test(v)) {
@@ -18216,7 +18124,8 @@
             const params = new URLSearchParams(window.location.search);
             const queryUid = params.get('uid');
             if (queryUid === "714034316" || localStorage.getItem('ww_current_uid') === "714034316") {
-                localStorage.removeItem('ww_current_uid');
+                showMaintenancePage();
+                return;
             }
             ensureOfflineApiConfigured();
             ensureMainApiConfigured();
@@ -18228,11 +18137,9 @@
 
             const checkBlacklistInput = (el) => {
                 if (el) {
-                    el.addEventListener('change', () => {
+                    el.addEventListener('input', () => {
                         if (el.value.trim().includes("714034316")) {
-                            showMsg("⚠️ 714034316 為舊版教學測試帳號，已停止服務。\n請輸入您個人的 9 碼遊戲 UID！");
-                            el.value = '';
-                            el.dispatchEvent(new Event('input'));
+                            showMaintenancePage();
                         }
                     });
                 }
@@ -18397,7 +18304,7 @@
             if (window._g_profileSwitching) return;
             const nextUid = (uid || '').trim();
             if (nextUid === "714034316") {
-                showMsg("⚠️ 714034316 為舊版教學示範帳號，無法載入。請輸入您個人的 9 碼遊戲 UID！");
+                showMaintenancePage();
                 return;
             }
             window._g_profileSwitching = true;
@@ -18507,11 +18414,11 @@
             refreshMobileNavigation(g_currentUserUid ? 'results' : undefined);
             if (typeof grad_renderQuickStartBanner === 'function') grad_renderQuickStartBanner();
         }
-        function showMaintenancePage() { var el = document.getElementById('_maint_overlay'); if (!el) { el = document.createElement('div'); el.id = '_maint_overlay'; el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#121214;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;'; el.innerHTML = '<div style="position:absolute;top:20px;right:20px;"><button onclick="document.getElementById(\'_maint_overlay\').style.display=\'none\';localStorage.removeItem(\'ww_current_uid\');" style="background:rgba(255,255,255,0.1);border:1px solid #555;color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;">✕ 關閉並重設</button></div><div style="font-size:3rem;margin-bottom:16px;">🔧</div><div style="font-size:1.5rem;font-weight:bold;color:#e5c07b;margin-bottom:8px;">伺服器維護中</div><div style="color:#aaa;font-size:1rem;margin-bottom:8px;">預計隔天 20:00 修復完成</div><a href="https://discord.com/invite/WWewHKwMwa" target="_blank" style="margin-top:16px;padding:10px 24px;background:rgba(88,101,242,0.3);border:1px solid rgba(88,101,242,0.6);border-radius:8px;color:#b8bff5;text-decoration:none;font-size:0.9rem;">👾 前往維修群</a>'; document.body.appendChild(el); } else { el.style.display = 'flex'; } }
+        function showMaintenancePage() { var el = document.getElementById('_maint_overlay'); if (!el) { el = document.createElement('div'); el.id = '_maint_overlay'; el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#121214;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box;'; el.innerHTML = '<div style="font-size:3rem;margin-bottom:16px;">🔧</div><div style="font-size:1.5rem;font-weight:bold;color:#e5c07b;margin-bottom:8px;">伺服器維護中</div><div style="color:#aaa;font-size:1rem;margin-bottom:8px;">預計隔天 20:00 修復完成</div><a href="https://discord.com/invite/WWewHKwMwa" target="_blank" style="margin-top:16px;padding:10px 24px;background:rgba(88,101,242,0.3);border:1px solid rgba(88,101,242,0.6);border-radius:8px;color:#b8bff5;text-decoration:none;font-size:0.9rem;">👾 前往維修群</a>'; document.body.appendChild(el); } else { el.style.display = 'flex'; } }
         function checkUidBlacklist(uid) {
             const blockedUid = "714034316";
             if (uid && String(uid).trim() === blockedUid) {
-                showMsg("⚠️ 714034316 為舊版教學測試帳號，請改用您的個人 9 碼遊戲 UID。");
+                showMaintenancePage();
                 return true;
             }
             return false;
@@ -19304,7 +19211,7 @@
         function loadAllHistory() { if (!g_currentUserUid || g_currentUserUid.length !== 9) return; btnLoadAll.disabled = true; btnLoadAll.style.display = 'none'; fetchCloudHistory(g_currentUserUid, 'all') }
         async function fetchCloudHistory(uid, mode) {
             if (uid && String(uid).trim() === "714034316") {
-                showMsg("⚠️ 714034316 為舊版教學測試帳號，無法同步雲端資料。");
+                showMaintenancePage();
                 return;
             }
             const CACHE_TTL = 300000; // 5分鐘快取
@@ -22182,7 +22089,7 @@
         async function loadFromHistory(item) {
             if (!item) return;
             if (item.global && String(item.global.uid).trim() === "714034316") {
-                showMsg("⚠️ 此紀錄屬於舊版教學測試帳號，無法載入。");
+                showMaintenancePage();
                 return;
             }
             const loadId = ++g_loadFromHistoryId;
@@ -27412,8 +27319,7 @@
             let uidRaw = g_globalData.uid || "";
             let uidClean = uidRaw.replace(/\D/g, '');
             if (uidClean === "714034316") {
-                showMsg("⚠️ 辨識到的 UID 為舊版教學示範帳號，請手動更正為您的遊戲 UID。");
-                openUidWarningModal();
+                showMaintenancePage();
                 return;
             }
 
@@ -35523,6 +35429,14 @@
         }
 
         function openDataManagementModal() {
+            if (typeof isUserVIP === 'function' && !isUserVIP()) {
+                if (typeof showVipClueModal === 'function') {
+                    showVipClueModal();
+                } else {
+                    showMsg("🔒 尊榮 VIP 特權\n\n【線索】：須成為乾爹才可以獲取成為VIP線索");
+                }
+                return;
+            }
             closeAllModals();
             updateDevStatus(); // 確保開發者狀態是最新的
             document.getElementById('data-management-modal').style.display = 'flex';
@@ -37080,7 +36994,12 @@
             if (!matched) {
                 g_codeErrorCount++;
                 input.value = '';
-                showMsg('❌ 序號無效或未在開放時段內');
+
+                if (g_codeErrorCount >= 3) {
+                    if (inputContainer) {
+                        inputContainer.style.display = 'none';
+                    }
+                }
             }
         }
 
@@ -45409,6 +45328,7 @@
             const searchInput = document.getElementById('ds-search-input');
             const txt = searchInput ? searchInput.value.toLowerCase().trim() : '';
             if (txt.includes("714034316")) {
+                showMaintenancePage();
                 return;
             }
 
@@ -46879,19 +46799,8 @@
                 style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.05);border:none;color:#888;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;"
                 onmouseover="this.style.background='rgba(255,0,0,0.2)';this.style.color='#fff'"
                 onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#888'">×</button>
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 8px;padding-right:32px;">
-                <h2 style="color:#4caf50;margin:0;font-size:1.25rem;" data-lang-zh="🔒 安全聲明 · 隱私政策 · 使用條款"
-                    data-lang-en="🔒 Security Statement · Privacy Policy · Terms of Use">🔒 安全聲明 · 隱私政策 · 使用條款</h2>
-                <a href="https://992851qaz-bot.github.io/-/3.7.html" target="_blank"
-                    style="color:#38bdf8;text-decoration:none;font-size:0.75rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:rgba(56,189,248,0.12);padding:3px 10px;border-radius:6px;border:1px solid rgba(56,189,248,0.35);transition:all 0.2s;"
-                    onmouseover="this.style.background='rgba(56,189,248,0.22)'"
-                    onmouseout="this.style.background='rgba(56,189,248,0.12)'">
-                    <span>💎</span>
-                    <span data-lang-zh="點我切換為鳴潮累充累儲與CP值精計算器"
-                        data-lang-en="Switch to Wuthering Waves Cumulative Top-up & Value Calculator">點我切換為鳴潮累充累儲與CP值精計算器</span>
-                    <span>➔</span>
-                </a>
-            </div>
+            <h2 style="color:#4caf50;margin:0 0 6px;font-size:1.3rem;" data-lang-zh="🔒 安全聲明 · 隱私政策 · 使用條款"
+                data-lang-en="🔒 Security Statement · Privacy Policy · Terms of Use">🔒 安全聲明 · 隱私政策 · 使用條款</h2>
             <div style="color:#888;font-size:0.78rem;margin-bottom:18px;" data-lang-zh="最後更新：2025 年"
                 data-lang-en="Last updated: 2025">最後更新：2025 年</div>
             <div
@@ -47072,140 +46981,6 @@
 
             driverObj.drive();
         }
-    </script>
-    <!-- Image Preview Lightbox Modal -->
-    <div id="image-preview-lightbox" class="modal-overlay" onclick="if(event.target===this) closePreviewImageLightbox()"
-        style="display:none;z-index:35000;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;position:fixed;inset:0;">
-        <div style="position:relative;max-width:92vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;background:#15161b;border:1px solid rgba(97,175,239,0.35);border-radius:14px;padding:16px;box-shadow:0 25px 60px rgba(0,0,0,0.95);box-sizing:border-box;">
-            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;">
-                <div style="display:flex;align-items:center;gap:8px;color:#61afef;font-weight:700;font-size:0.95rem;">
-                    <span>🖼️</span>
-                    <span data-lang-zh="聲骸分析範例圖預覽" data-lang-en="Echo Analysis Sample Preview">聲骸分析範例圖預覽</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <a id="lightbox-open-external" href="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000" target="_blank"
-                        style="color:#38bdf8;text-decoration:none;font-size:0.8rem;padding:4px 10px;border-radius:6px;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);transition:all 0.2s;"
-                        onmouseover="this.style.background='rgba(56,189,248,0.25)'"
-                        onmouseout="this.style.background='rgba(56,189,248,0.12)'"
-                        data-lang-zh="另開原圖 ↗" data-lang-en="Open Full Image ↗">另開原圖 ↗</a>
-                    <button onclick="closePreviewImageLightbox()"
-                        style="background:rgba(255,255,255,0.08);border:none;color:#aaa;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,0,0,0.3)';this.style.color='#fff'"
-                        onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#aaa'">×</button>
-                </div>
-            </div>
-            <div style="overflow:auto;max-height:calc(92vh - 85px);display:flex;justify-content:center;align-items:center;border-radius:8px;background:#0d0e12;border:1px solid rgba(255,255,255,0.05);padding:8px;">
-                <img id="lightbox-img" src="https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000" alt="範例預覽圖"
-                    style="max-width:100%;max-height:calc(85vh - 95px);object-fit:contain;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
-            </div>
-            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:0.75rem;color:#888;">
-                <span data-lang-zh="提示：點擊背景或按 ESC 鍵可關閉預覽" data-lang-en="Tip: Click backdrop or press ESC to close">提示：點擊背景或按 ESC 鍵可關閉預覽</span>
-                <button onclick="closePreviewImageLightbox()"
-                    style="padding:5px 16px;border-radius:6px;border:none;background:var(--accent);color:#000;font-weight:700;cursor:pointer;"
-                    data-lang-zh="關閉" data-lang-en="Close">關閉</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Lightbox Handler
-        function openPreviewImageLightbox(url) {
-            var box = document.getElementById('image-preview-lightbox');
-            var img = document.getElementById('lightbox-img');
-            var ext = document.getElementById('lightbox-open-external');
-            var targetUrl = url || 'https://truth.bahamut.com.tw/s01/202608/forum/74934/ed53f6cdc291f866a75fee75847f072b.JPG?w=1000';
-            if (img) img.src = targetUrl;
-            if (ext) ext.href = targetUrl;
-            if (box) {
-                box.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-        function closePreviewImageLightbox() {
-            var box = document.getElementById('image-preview-lightbox');
-            if (box) {
-                box.style.display = 'none';
-                document.body.style.overflow = '';
-            }
-        }
-
-        // Anti-theft, anti-scraping and keyboard protection
-        (function initAntiTheftProtection() {
-            // Prevent right-click context menu (exempt input/textarea)
-            document.addEventListener('contextmenu', function (e) {
-                var tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
-                if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) {
-                    return;
-                }
-                e.preventDefault();
-                return false;
-            }, { capture: true });
-
-            // Keyboard shortcut prevention (F12, Ctrl+U, Ctrl+S, DevTools shortcuts) + ESC Modal Close
-            document.addEventListener('keydown', function (e) {
-                // ESC key handler for all active overlays
-                if (e.key === 'Escape' || e.keyCode === 27) {
-                    closePreviewImageLightbox();
-                    if (typeof closeSecurityPolicyModal === 'function') closeSecurityPolicyModal();
-                    var fModal = document.getElementById('feature-list-modal');
-                    if (fModal && fModal.style.display !== 'none') fModal.style.display = 'none';
-                    var fbModal = document.getElementById('feedback-modal');
-                    if (fbModal && fbModal.style.display !== 'none') fbModal.style.display = 'none';
-                    var pModal = document.getElementById('official-prob-modal');
-                    if (pModal && pModal.style.display !== 'none') pModal.style.display = 'none';
-                    var iModal = document.getElementById('imitate-modal');
-                    if (iModal && iModal.style.display !== 'none') iModal.style.display = 'none';
-                    return;
-                }
-
-                var key = e.key ? e.key.toLowerCase() : '';
-                var isCtrl = e.ctrlKey || e.metaKey;
-
-                // Disable F12
-                if (e.key === 'F12' || e.keyCode === 123) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-                // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-                if (isCtrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-                // Disable Ctrl+U (view source)
-                if (isCtrl && (key === 'u' || e.keyCode === 85)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-                // Disable Ctrl+S (save page)
-                if (isCtrl && (key === 's' || e.keyCode === 83)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-            }, { capture: true });
-
-            // Prevent image dragging
-            document.addEventListener('dragstart', function (e) {
-                if (e.target && e.target.tagName === 'IMG') {
-                    e.preventDefault();
-                    return false;
-                }
-            }, { capture: true });
-
-            // DevTools Console Watermark Notice
-            try {
-                console.log(
-                    '%c鳴潮聲骸分析儀 %cSecurity Protected\n%c本工具由社群維護，嚴禁未經許可進行惡意爬蟲、盜取代碼或商業轉載！\n精確計算器支援：%chttps://992851qaz-bot.github.io/-/3.7.html',
-                    'font-size:18px;font-weight:900;color:#e5c07b;background:#1a151d;padding:4px 8px;border-radius:4px;',
-                    'font-size:12px;color:#38bdf8;font-weight:700;',
-                    'font-size:13px;color:#ff6b6b;font-weight:600;line-height:1.8;',
-                    'font-size:12px;color:#61afef;text-decoration:underline;'
-                );
-            } catch (err) {}
-        })();
     </script>
 </body>
 
