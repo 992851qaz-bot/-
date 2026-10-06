@@ -1,0 +1,3656 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鳴潮資料庫管理控制台 - 安全防護與數據管理後台</title>
+    <meta name="description" content="鳴潮聲骸分析儀資料庫安全管理控制台，提供嚴格單一UID刪除保護、50筆限制、自動備份至圖片數據_備份、序號兌換碼設定與封鎖名單管理。">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #070a12;
+            --bg-secondary: #0d121f;
+            --bg-card: rgba(18, 24, 38, 0.75);
+            --bg-card-hover: rgba(25, 34, 54, 0.85);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(56, 189, 248, 0.35);
+            --border-danger: rgba(239, 68, 68, 0.4);
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.25);
+            --accent: #818cf8;
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.25);
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.3);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-sub: #64748b;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --font-main: 'Outfit', 'Noto Sans TC', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.6) 0%, transparent 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* 頂部導航欄 */
+        header {
+            background: rgba(10, 15, 26, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0.9rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0284c7, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #38bdf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            font-family: var(--font-mono);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .badge-security {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        .badge-security::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .btn-tutorial {
+            background: rgba(129, 140, 248, 0.12);
+            border: 1px solid rgba(129, 140, 248, 0.35);
+            color: #a5b4fc;
+            padding: 0.45rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-tutorial:hover {
+            background: rgba(129, 140, 248, 0.25);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* 主容器 */
+        main {
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            flex: 1;
+        }
+
+        /* 警示與教學宣導橫幅 */
+        .banner-guide {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .banner-guide-content h3 {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .banner-guide-content p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .banner-guide-content strong {
+            color: #fef08a;
+            font-weight: 600;
+        }
+
+        /* 授權驗證卡片 */
+        .card-auth {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-glass);
+            transition: border-color 0.3s ease;
+        }
+
+        .card-auth.active {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.15);
+        }
+
+        .card-auth-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .card-auth-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #fff;
+        }
+
+        .card-auth-status {
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+        }
+
+        .card-auth-status.verified {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .auth-form-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-size: 0.95rem;
+            font-family: var(--font-mono);
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            align-self: flex-end;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0ea5e9, #1d4ed8);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.75rem 1.4rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 授權資訊詳情條 (驗證通過後顯示) */
+        .auth-details-bar {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .auth-detail-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.6rem 0.9rem;
+        }
+
+        .auth-detail-label {
+            font-size: 0.72rem;
+            color: var(--text-sub);
+            margin-bottom: 0.2rem;
+        }
+
+        .auth-detail-val {
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--text-main);
+        }
+
+        /* 分頁標籤欄 */
+        .tabs-nav {
+            display: flex;
+            gap: 0.6rem;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 1.75rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* 分頁面板 */
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 工作區面板卡片 */
+        .section-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-glass);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .section-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* 安全防護規則條 */
+        .protection-pills {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: 999px;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .pill.danger {
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .pill.success {
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        /* 查詢與過濾操作列 */
+        .search-action-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        /* 批量操作控制列 */
+        .batch-control-bar {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .selection-counter {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .selection-counter .num {
+            color: var(--primary);
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+        }
+
+        .selection-counter .limit {
+            color: var(--text-sub);
+            font-size: 0.8rem;
+        }
+
+        .batch-buttons {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        /* 數據列表表格 */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.95);
+            color: var(--text-sub);
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-subtle);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .td-uid {
+            font-family: var(--font-mono);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .td-time {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            white-space: nowrap;
+        }
+
+        .td-img-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .td-img-thumb:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* 模態彈窗 (Modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-card {
+            background: #0f172a;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 580px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0.2rem;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* 教學步驟列表 */
+        .tutorial-steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tutorial-step-item {
+            display: flex;
+            gap: 0.9rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.85rem 1rem;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #041226;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .step-info h4 {
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .step-info p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .step-info code {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        /* Toast 訊息通知 */
+        #toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.85rem 1.25rem;
+            color: #fff;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            min-width: 280px;
+            max-width: 420px;
+            pointer-events: auto;
+            animation: slideIn 0.25s ease;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+        .toast.info { border-left: 4px solid var(--primary); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* 空狀態 */
+        .empty-state {
+            text-align: center;
+            padding: 3.5rem 1.5rem;
+            color: var(--text-sub);
+        }
+
+        .empty-state-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            opacity: 0.6;
+        }
+
+        /* 響應式 */
+        @media (max-width: 768px) {
+            header { padding: 0.75rem 1rem; }
+            main { padding: 1rem 0.75rem 3rem; }
+            .auth-form-row { flex-direction: column; }
+            .btn-primary, .btn-danger { width: 100%; justify-content: center; }
+            .batch-control-bar { flex-direction: column; align-items: flex-start; }
+        /* 聲骸模擬開詞條與積分兌換模組樣式 */
+        .sim-balance-header {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .sim-balance-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .sim-balance-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .sim-balance-num {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: var(--font-mono);
+            line-height: 1.1;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .sim-balance-hint {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .sim-balance-hint code {
+            color: var(--primary);
+            background: rgba(56, 189, 248, 0.1);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+        }
+
+        .sim-redeem-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .sim-controls-bar {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .sim-workspace-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .sim-workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sim-slots-container {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+        }
+
+        .sim-slots-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-height: 280px;
+        }
+
+        .sim-slot-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sim-slot-item.double-crit {
+            border-color: rgba(192, 132, 252, 0.5);
+            background: rgba(192, 132, 252, 0.06);
+            box-shadow: 0 0 15px rgba(192, 132, 252, 0.15);
+        }
+
+        .sim-slot-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .sim-slot-idx {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--text-sub);
+        }
+
+        .sim-slot-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .sim-slot-val {
+            font-family: var(--font-mono);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .sim-slot-val.gold {
+            color: #f59e0b;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .sim-slot-val.purple {
+            color: #c084fc;
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+        }
+
+        .tier-bar {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .tier-seg {
+            width: 14px;
+            height: 4px;
+            border-radius: 2px;
+            background: #334155;
+        }
+
+        .tier-seg.active {
+            background: var(--primary);
+            box-shadow: 0 0 6px var(--primary-glow);
+        }
+
+        .tier-seg.gold {
+            background: #f59e0b;
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+        }
+
+        .tier-seg.purple {
+            background: #c084fc;
+            box-shadow: 0 0 6px rgba(192, 132, 252, 0.5);
+        }
+
+        .sim-stats-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .sim-score-card, .sim-prob-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .sim-prob-card {
+            text-align: left;
+        }
+
+        .sim-prob-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .sim-prob-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .sim-prob-row.highlight {
+            padding-top: 0.3rem;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: none;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sim-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .sim-history-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            padding: 0.5rem 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+        }
+
+        /* ══════════════════════════════════════════════════════════════ */
+        /* 兩大主模式切換器 (直覺、醒目、科技感) */
+        /* ══════════════════════════════════════════════════════════════ */
+        .main-mode-switcher-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-mode-switcher-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .main-mode-btn {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .main-mode-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: transparent;
+            transition: all 0.25s ease;
+        }
+
+        .main-mode-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .main-mode-btn.active {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.12));
+            border-color: rgba(56, 189, 248, 0.6);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .main-mode-btn.active::before {
+            background: linear-gradient(to bottom, #38bdf8, #818cf8);
+            box-shadow: 0 0 12px var(--primary);
+        }
+
+        .main-mode-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+        }
+
+        .main-mode-btn.active .main-mode-icon {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(129, 140, 248, 0.25));
+            transform: scale(1.08);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .main-mode-info {
+            flex: 1;
+        }
+
+        .main-mode-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .main-mode-btn.active .main-mode-title {
+            color: #38bdf8;
+        }
+
+        .main-mode-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .mode-badge-free {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .mode-badge-lock {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: #fbbf24;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .mode-badge-lock.verified {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #34d399;
+        }
+
+        /* ══════════════════════════════════════════════════════════════ */
+        /* 抽大月活動專屬橫幅 & 鎖定菲比標籤 */
+        /* ══════════════════════════════════════════════════════════════ */
+        .event-hero-banner {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-left: 5px solid #f59e0b;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-hero-banner::after {
+            content: '⭐';
+            position: absolute;
+            right: 1.5rem;
+            bottom: -0.5rem;
+            font-size: 6rem;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+
+        .event-hero-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .event-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #041226;
+            font-weight: 800;
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .event-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .event-desc-box p {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .event-desc-box strong {
+            color: #fef08a;
+        }
+
+        .event-rules-tags {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .locked-role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem 1rem;
+        }
+
+        .locked-role-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .locked-role-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #38bdf8;
+            font-family: var(--font-mono);
+        }
+
+        /* ══════════════════════════════════════════════════════════════ */
+        /* 達成 90%+ 榮譽中獎橫幅 */
+        /* ══════════════════════════════════════════════════════════════ */
+        .winner-trophy-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.25));
+            border: 2px solid #f59e0b;
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.25); }
+            50% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.5); }
+        }
+
+        .trophy-icon {
+            font-size: 2.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .trophy-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 0.3rem;
+        }
+
+        .trophy-desc {
+            font-size: 0.85rem;
+            color: #fef3c7;
+            line-height: 1.5;
+        }
+
+        /* ══════════════════════════════════════════════════════════════ */
+        /* 未核驗管理員鎖定卡 (無權限無法查看與操作) */
+        /* ══════════════════════════════════════════════════════════════ */
+        .admin-locked-placeholder {
+            background: var(--bg-card);
+            border: 1px dashed rgba(245, 158, 11, 0.4);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            box-shadow: var(--shadow-glass);
+        }
+
+        .admin-locked-placeholder .locked-icon {
+            font-size: 3.2rem;
+            margin-bottom: 1rem;
+            opacity: 0.85;
+        }
+
+        .admin-locked-placeholder h3 {
+            font-size: 1.3rem;
+            color: #fbbf24;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+
+        .admin-locked-placeholder p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 1.75rem;
+            line-height: 1.6;
+        }
+
+        .locked-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .locked-feature-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0.5;
+        }
+
+        .locked-feature-item .item-icon {
+            font-size: 1.4rem;
+        }
+
+        .locked-feature-item .item-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            flex: 1;
+            text-align: left;
+        }
+
+        .locked-feature-item .item-status {
+            font-size: 0.7rem;
+            color: #fbbf24;
+            font-family: var(--font-mono);
+        }
+
+        /* 標籤按鈕禁用樣式 (非 ALL 用戶) */
+        .tab-btn.disabled-tab {
+            opacity: 0.4;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .tab-btn.disabled-tab:hover {
+            color: var(--text-muted);
+            background: transparent;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導航欄 -->
+    <header>
+        <div class="brand-container">
+            <div class="brand-logo">WW</div>
+            <div class="brand-text">
+                <h1>鳴潮資料庫管理控制台</h1>
+                <p>DATABASE ADMIN CONSOLE v1.0 • SECURE MODE</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <span class="badge-security" id="security-status-indicator">防全刪保護已啟用</span>
+            <button class="btn-tutorial" id="btn-open-tutorial">
+                📖 授權碼申請教學
+            </button>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+        <main>
+
+        <!-- 頂部兩大模式主切換器 (直覺、現代、流暢) -->
+        <div class="main-mode-switcher-container">
+            <button type="button" class="main-mode-btn active" id="btn-mode-activity" onclick="switchMainMode('activity')">
+                <div class="main-mode-icon">🎯</div>
+                <div class="main-mode-info">
+                    <div class="main-mode-title">⭐ 抽大月活動 • 聲骸模擬開詞條序號兌換</div>
+                    <div class="main-mode-desc">開放體驗 • 菲比固定加權達 90%+ 抽大月卡資格 • 兌換碼儲值</div>
+                </div>
+                <span class="mode-badge-free">熱門進行中</span>
+            </button>
+            <button type="button" class="main-mode-btn" id="btn-mode-admin" onclick="switchMainMode('admin')">
+                <div class="main-mode-icon">🛡️</div>
+                <div class="main-mode-info">
+                    <div class="main-mode-title">資料庫管理控制台</div>
+                    <div class="main-mode-desc">安全授權核驗 • 圖片數據刪除 • 兌換碼設定 • 封鎖管理 • A1設定</div>
+                </div>
+                <span class="mode-badge-lock" id="mode-admin-lock-pill">🔒 需管理員授權</span>
+            </button>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- 模式一：⭐ 抽大月活動 • 聲骸模擬開詞條序號兌換 (預設優先顯示) -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <section id="section-mode-activity" class="main-mode-section">
+            <!-- 活動資訊宣導卡 (參考 0923.html 同款機制) -->
+            <div class="event-hero-banner">
+                <div class="event-hero-header">
+                    <div class="event-badge">🎯 特別活動企劃</div>
+                    <h2 class="event-title">鳴潮聲骸模擬開詞條 • 抽大月卡 / 小月卡活動</h2>
+                </div>
+                <div class="event-hero-body">
+                    <div class="event-desc-box">
+                        <p>
+                            💡 <strong>活動機制（與 0923.html 任務與積分系統同款評分）：</strong>
+                            消耗 1 網站積分開啟 1 次聲骸副詞條。本抽大月活動<strong>專屬鎖定【菲比】(暴擊/暴傷/攻擊%/共鳴解放/攻擊) 戰力權重</strong>！
+                            每位開滿 5 條詞條且<strong>綜合戰力評分達成 90.0% 以上</strong>之玩家，即自動獲得<strong>抽大月卡抽獎資格</strong>！
+                        </p>
+                        <div class="event-rules-tags">
+                            <span class="pill success">⚖️ 目標權重：菲比專屬標準 (固定鎖定)</span>
+                            <span class="pill">🏆 抽獎資格門檻：菲比評分 ≥ 90.0%</span>
+                            <span class="pill danger" id="admin-perk-pill" style="display:none;">👑 ALL 超級管理員特權：無限刷 (免扣積分)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 積分餘額與儲值橫幅 -->
+            <div class="sim-balance-header">
+                <div class="sim-balance-info">
+                    <div class="sim-balance-label">🪙 目前網站可用積分餘額</div>
+                    <div class="sim-balance-num">
+                        <span id="sim-points-val">10</span> 
+                        <span style="font-size:1.1rem;color:var(--text-muted);font-weight:400" id="sim-points-unit">點</span>
+                    </div>
+                    <div class="sim-balance-hint">
+                        💡 1 積分 = 1 次聲骸模擬開詞條 (可向 DCBOT <code>/兌換積分</code> 轉換或輸入兌換碼儲值)
+                        <span id="admin-mode-text-hint" style="color:#f59e0b;font-weight:700;display:none;margin-left:0.5rem;">[👑 管理員模式：無限刷免扣分]</span>
+                    </div>
+                </div>
+                <div class="sim-redeem-box">
+                    <label for="sim-input-code" style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.4rem; display:block; font-weight:600;">🎟️ 輸入兌換碼儲值積分 (每碼限領一次)：</label>
+                    <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                        <input type="text" id="sim-input-code" class="input-field" placeholder="WEB-XXXX-XXXX-XXXX" style="text-transform:uppercase; min-width:240px; font-family:var(--font-mono);">
+                        <button type="button" class="btn-primary" id="btn-sim-redeem">🎁 立即儲值積分</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 聲骸模擬器控制列 (固定菲比，不提供其他角色切換) -->
+            <div class="sim-controls-bar">
+                <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                    <div class="locked-role-badge">
+                        <span class="locked-role-label">⚖️ 評分目標角色：</span>
+                        <strong class="locked-role-name">菲比 (推薦標準 • 已鎖定加權)</strong>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                    <button type="button" class="btn-primary" id="btn-sim-start">⚒ 開啟單一詞條 (-1 分)</button>
+                    <button type="button" class="btn-primary" id="btn-sim-auto5" style="background:linear-gradient(135deg, #f59e0b, #d97706); border-color:#f59e0b; color:#041226; font-weight:700;">⚡ 連開 5 詞條 (-5 分)</button>
+                    <button type="button" class="btn-secondary" id="btn-sim-reset">🔄 全部重置</button>
+                </div>
+            </div>
+
+            <!-- 模擬器主區塊：詞條展示與評分 -->
+            <div class="sim-workspace-grid">
+                <!-- 左側：5 個已開啟詞條卡片 -->
+                <div class="sim-slots-container">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                        <h4 style="font-size:1.05rem; color:#fff; display:flex; align-items:center; gap:0.4rem;">
+                            <span>🎲</span> 聲骸副詞條開啟進度 (<span id="sim-slot-count">0</span> / 5)
+                        </h4>
+                        <span id="sim-double-crit-badge" class="pill success" style="display:none; font-weight:700;">✨ 雙爆已達成</span>
+                    </div>
+                    <div id="sim-slots-list" class="sim-slots-list">
+                        <!-- 5 個詞條槽位 -->
+                    </div>
+
+                    <!-- 歷史紀錄 (持久化存檔) -->
+                    <div style="margin-top:1.5rem; border-top:1px solid var(--border-subtle); padding-top:1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <h5 style="color:var(--text-muted); font-size:0.9rem;">📜 模擬歷史紀錄 (持久化儲存最近 20 筆)</h5>
+                            <button type="button" class="btn-secondary" id="btn-sim-clear-history" style="font-size:0.75rem; padding:0.25rem 0.6rem;">🗑️ 清除紀錄</button>
+                        </div>
+                        <div id="sim-history-list" class="sim-history-list">
+                            <div style="color:var(--text-sub); font-size:0.82rem; text-align:center; padding:1.2rem;">尚無歷史模擬紀錄</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：綜合評分與機率推算 -->
+                <div class="sim-stats-sidebar">
+                    <!-- 綜合戰力評分卡 -->
+                    <div class="sim-score-card">
+                        <div style="font-size:0.85rem; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">菲比 綜合戰力評分</div>
+                        <div style="display:flex; align-items:baseline; justify-content:center; gap:0.4rem; margin:0.8rem 0;">
+                            <div id="sim-score-val" style="font-size:3.2rem; font-weight:800; color:#fff; font-family:var(--font-mono); line-height:1;">0.0</div>
+                            <div id="sim-score-pct" style="font-size:1.8rem; font-weight:700; color:var(--primary); font-family:var(--font-mono);">0.0%</div>
+                        </div>
+                        <div id="sim-score-max" style="font-size:0.8rem; color:var(--text-muted); text-align:center;">
+                            菲比理論最高滿分：--
+                        </div>
+
+                        <!-- 達成 90%+ 榮譽中獎橫幅 -->
+                        <div id="sim-pass-badge" class="winner-trophy-card" style="display:none;">
+                            <div class="trophy-icon">🏆</div>
+                            <div class="trophy-title" id="trophy-title-text">恭喜達成 90%+ 抽大月活動資格！</div>
+                            <div class="trophy-desc" id="trophy-desc-text">您的菲比加權評分達標，已成功解鎖抽大月卡/小月卡抽獎資格！</div>
+                        </div>
+                    </div>
+
+                    <!-- 勝算機率推算卡 -->
+                    <div class="sim-prob-card">
+                        <h5 style="color:#fff; font-size:0.9rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.4rem;">
+                            <span>🔮</span> 下一詞條勝算機率推算
+                        </h5>
+                        <div class="sim-prob-rows">
+                            <div class="sim-prob-row"><span>暴擊出現率</span><strong id="sim-prob-cr" style="color:var(--success);">0%</strong></div>
+                            <div class="sim-prob-row"><span>暴傷出現率</span><strong id="sim-prob-cd" style="color:var(--success);">0%</strong></div>
+                            <div class="sim-prob-row"><span>大攻擊出現率</span><strong id="sim-prob-atk" style="color:var(--success);">0%</strong></div>
+                            <div class="sim-prob-row highlight"><span>雙爆達成總機率</span><strong id="sim-prob-dc" style="color:var(--primary);">0%</strong></div>
+                            <div class="sim-prob-row" style="font-size:0.78rem; color:var(--text-sub);"><span>下個詞條為生存項機率</span><span id="sim-prob-surv" style="color:#f87171;">0%</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- 模式二：🛡️ 資料庫管理控制台 (未通過核驗無法操作與查看) -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <section id="section-mode-admin" class="main-mode-section" style="display:none;">
+            <!-- 警示宣導橫幅 -->
+            <div class="banner-guide">
+                <div class="banner-guide-content">
+                    <h3>🛡️ 資料庫安全防禦守則與規範</h3>
+                    <p>
+                        <strong>加成DC及贊助或是在DC活躍的用戶可以向灰灰申請生成授權碼申請權限</strong>。
+                        本系統設有防護機制避免漏洞將數據全刪，刪除圖片數據<strong>僅可刪除同一UID</strong>之數據，<strong>單次上限 50 筆</strong>。所有刪除資料將自動存入<strong>「圖片數據_備份」</strong>後執行。同一 IP 授權碼錯誤 3 次將觸發暫時封鎖。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 授權碼身分驗證卡片 (必須驗證) -->
+            <section class="card-auth" id="auth-section">
+                <div class="card-auth-header">
+                    <div class="card-auth-title">
+                        🔑 管理員身分與授權碼核驗
+                    </div>
+                    <div class="card-auth-status" id="auth-status-badge">
+                        未核驗 • 請輸入由 DCBOT 核發之授權碼
+                    </div>
+                </div>
+
+                <div style="background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.25); border-radius:10px; padding:0.75rem 1rem; margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+                    <div style="font-size:0.85rem; color:var(--text-sub);">
+                        <span style="font-size:1rem;">💡</span>
+                        <strong style="color:var(--primary-light);">如何取得授權碼？</strong>
+                        於 Discord 輸入 <code style="background:rgba(255,255,255,0.1); padding:0.15rem 0.4rem; border-radius:4px;">/授權碼</code> 向 DCBOT 申請，亦可在資料庫管理控制台直接操作。
+                    </div>
+                    <a href="https://992851qaz-bot.github.io/-/dcss.html" target="_blank" rel="noopener"
+                        style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-size:0.82rem; font-weight:600; padding:0.4rem 0.9rem; border-radius:8px; text-decoration:none; white-space:nowrap; transition:opacity 0.2s;"
+                        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                        🗄️ 前往資料庫管理
+                    </a>
+                </div>
+                <div class="auth-form-row">
+                    <div class="input-group">
+                        <label for="input-auth-code">後台授權碼 (請向 DCBOT 輸入 /授權碼 申請)：</label>
+                        <input type="password" id="input-auth-code" class="input-field" placeholder="AUTH-XXXX-XXXX-XXXX" autocomplete="off">
+                    </div>
+                    <button type="button" class="btn-primary" id="btn-auth-validate">
+                        🔐 驗證授權碼並解鎖功能
+                    </button>
+                    <button type="button" class="btn-secondary" id="btn-auth-clear" style="display: none;">
+                        🚪 登出憑證
+                    </button>
+                </div>
+
+                <!-- 核驗通過後展示之授權資訊 -->
+                <div class="auth-details-bar" id="auth-details-container">
+                    <div class="auth-detail-item">
+                        <div class="auth-detail-label">授權權限級別</div>
+                        <div class="auth-detail-val" id="auth-disp-perm">--</div>
+                    </div>
+                    <div class="auth-detail-item">
+                        <div class="auth-detail-label">申請人遊戲 UID</div>
+                        <div class="auth-detail-val" id="auth-disp-uid">--</div>
+                    </div>
+                    <div class="auth-detail-item">
+                        <div class="auth-detail-label">剩餘可用次數</div>
+                        <div class="auth-detail-val" id="auth-disp-uses">--</div>
+                    </div>
+                    <div class="auth-detail-item">
+                        <div class="auth-detail-label">有效截止時間</div>
+                        <div class="auth-detail-val" id="auth-disp-expire">--</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 未核驗時顯示之安全鎖定佔位卡 (無權限無法查看與操作) -->
+            <div class="admin-locked-placeholder" id="admin-locked-placeholder">
+                <div class="locked-icon">🔒</div>
+                <h3>資料庫後台受安全金鑰保護</h3>
+                <p>請先於上方輸入由 DC 機器人核發之管理授權碼，驗證通過後即可解鎖後台 5 大管理模組：</p>
+                <div class="locked-features-grid">
+                    <div class="locked-feature-item">
+                        <span class="item-icon">🖼️</span>
+                        <span class="item-name">圖片數據刪除管理</span>
+                        <span class="item-status">待解鎖</span>
+                    </div>
+                    <div class="locked-feature-item">
+                        <span class="item-icon">🎟️</span>
+                        <span class="item-name">網站積分兌換碼設定</span>
+                        <span class="item-status">待解鎖</span>
+                    </div>
+                    <div class="locked-feature-item">
+                        <span class="item-icon">📜</span>
+                        <span class="item-name">兌換碼紀錄</span>
+                        <span class="item-status">待解鎖</span>
+                    </div>
+                    <div class="locked-feature-item">
+                        <span class="item-icon">🚫</span>
+                        <span class="item-name">封鎖名單管理</span>
+                        <span class="item-status">待解鎖</span>
+                    </div>
+                    <div class="locked-feature-item">
+                        <span class="item-icon">⚙️</span>
+                        <span class="item-name">授權名單模式 (A1設定)</span>
+                        <span class="item-status">待解鎖</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 核驗通過後解鎖展示之管理內容 (無權限完全無法查看與操作) -->
+            <div id="admin-authenticated-content" style="display:none;">
+                <!-- 分頁標籤導航 (5大管理模組) -->
+                <nav class="tabs-nav" id="admin-tabs">
+                    <button class="tab-btn active" data-tab="tab-images">
+                        🖼️ 圖片數據刪除管理
+                    </button>
+                    <button class="tab-btn" data-tab="tab-promos" id="tab-btn-promos">
+                        🎟️ 網站積分兌換碼設定
+                    </button>
+                    <button class="tab-btn" data-tab="tab-promo-logs" id="tab-btn-promo-logs">
+                        📜 兌換碼紀錄
+                    </button>
+                    <button class="tab-btn" data-tab="tab-blocks" id="tab-btn-blocks">
+                        🚫 封鎖名單管理 (IP/UID/DCID)
+                    </button>
+                    <button class="tab-btn" data-tab="tab-authlist" id="tab-btn-authlist">
+                        ⚙️ 授權名單模式 (A1 設定)
+                    </button>
+                </nav>
+
+                <div class="tab-pane active" id="tab-images">
+            <div class="section-card">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">
+                            🗑️ 圖片數據安全維護與備份刪除
+                        </div>
+                        <div class="section-desc">
+                            嚴格安全機制：僅限查詢與刪除單一指定 UID，禁止全刪或跨 UID 刪除。刪除前自動於「圖片數據_備份」備份留存。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 安全防護指標 -->
+                <div class="protection-pills">
+                    <span class="pill danger">🛡️ 僅限單一 UID 操作 (禁止多 UID 或萬用字元)</span>
+                    <span class="pill danger">⚠️ 單次刪除硬限制：上限 50 筆</span>
+                    <span class="pill success">💾 備份保護：刪除前寫入「圖片數據_備份」</span>
+                    <span class="pill">🔒 錯誤 3 次自動封鎖 IP</span>
+                </div>
+
+                <!-- 查詢操作列 -->
+                <div class="search-action-bar">
+                    <div class="input-group" style="max-width: 320px;">
+                        <label for="input-target-uid">目標遊戲 UID (9 碼數字)：</label>
+                        <input type="text" id="input-target-uid" class="input-field" placeholder="例如: 900000000" maxlength="15">
+                    </div>
+                    <button type="button" class="btn-primary" id="btn-query-images">
+                        🔍 查詢該 UID 圖片數據
+                    </button>
+                </div>
+
+                <!-- 批量選擇控制列 -->
+                <div class="batch-control-bar" id="batch-control-bar" style="display: none;">
+                    <div class="selection-counter">
+                        已選取：<span class="num" id="selected-count">0</span> 筆
+                        <span class="limit">(單次上限 50 筆限制)</span>
+                    </div>
+                    <div class="batch-buttons">
+                        <button type="button" class="btn-secondary" id="btn-select-all-50">
+                            全選 (最多前 50 筆)
+                        </button>
+                        <button type="button" class="btn-secondary" id="btn-deselect-all">
+                            取消全選
+                        </button>
+                        <button type="button" class="btn-danger" id="btn-open-delete-modal" disabled>
+                            🗑️ 安全備份並刪除所選資料
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 圖片數據列表表格 -->
+                <div class="table-responsive">
+                    <table id="table-images">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">
+                                    <input type="checkbox" id="chk-master" class="checkbox-custom" title="全選/取消全選">
+                                </th>
+                                <th>記錄 ID</th>
+                                <th>遊戲 UID</th>
+                                <th>玩家名稱</th>
+                                <th>角色</th>
+                                <th>武器</th>
+                                <th>鏈數</th>
+                                <th>圖片預覽</th>
+                                <th>備註</th>
+                                <th>上傳時間</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-images">
+                            <tr>
+                                <td colspan="10" class="empty-state">
+                                    <div class="empty-state-icon">🔍</div>
+                                    <p>請先驗證授權碼，並輸入單一目標 UID 進行數據查詢</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───────────────────────────────────────────── -->
+        <!-- TAB 2: 網站積分兌換碼設定 (防刷機制已啟用) -->
+        <!-- ───────────────────────────────────────────── -->
+
+                <div class="tab-pane" id="tab-promos">
+            <div class="section-card">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">
+                            🎟️ 網站積分兌換碼管理
+                        </div>
+                        <div class="section-desc">
+                            管理系統發行之網站積分兌換碼。每個序號每位用戶僅限兌換一次 (防刷機制已啟用)。兌換之積分可用於「聲骸模擬開詞條」。
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" id="btn-open-add-promo">
+                        ➕ 新增積分兌換碼
+                    </button>
+                </div>
+
+                <div class="protection-pills" style="margin-bottom:1rem;">
+                    <span class="pill success">🔒 單一用戶限制：同一兌換碼每用戶僅可兌換一次</span>
+                    <span class="pill">🪙 1 網站積分 = 1 次聲骸模擬開詞條</span>
+                    <span class="pill danger">🛡️ 系統自動登記兌換歷史，防止重複刷分</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>兌換碼</th>
+                                <th>獎勵網站積分</th>
+                                <th>有效開始時間</th>
+                                <th>有效結束時間</th>
+                                <th>總限制次數</th>
+                                <th>已使用次數</th>
+                                <th>目前狀態</th>
+                                <th>建立時間</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-promos">
+                            <tr>
+                                <td colspan="9" class="empty-state">
+                                    <div class="empty-state-icon">🎟️</div>
+                                    <p>請驗證授權碼以載入兌換碼清單</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───────────────────────────────────────────── -->
+        <!-- TAB 2-LOGS: 兌換碼紀錄 (防刷稽核明細) -->
+        <!-- ───────────────────────────────────────────── -->
+
+                <div class="tab-pane" id="tab-promo-logs">
+            <div class="section-card">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">
+                            📜 兌換碼使用紀錄與防刷明細
+                        </div>
+                        <div class="section-desc">
+                            即時記錄每位用戶 (DCID / UID) 兌換過之兌換碼。同一兌換碼每用戶僅限領取一次，避免無限刷積分。
+                        </div>
+                    </div>
+                    <button type="button" class="btn-secondary" id="btn-refresh-promo-logs">
+                        🔄 重新整理明細
+                    </button>
+                </div>
+
+                <div class="search-action-bar" style="margin-bottom: 1rem;">
+                    <div class="input-group" style="max-width: 360px;">
+                        <input type="text" id="input-filter-promo-logs" class="input-field" placeholder="🔍 搜尋兌換碼、DCID 或 UID...">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>兌換時間</th>
+                                <th>兌換碼</th>
+                                <th>使用者 DCID</th>
+                                <th>使用者 UID</th>
+                                <th>獲得積分</th>
+                                <th>備註 / 狀態</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-promo-logs">
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <div class="empty-state-icon">📜</div>
+                                    <p>載入兌換明細中...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───────────────────────────────────────────── -->
+        <!-- TAB 2-SIM: ⭐ 任務與積分獎勵系統 • 聲骸模擬開詞條 -->
+        <!-- ───────────────────────────────────────────── -->
+
+                <div class="tab-pane" id="tab-blocks">
+            <div class="section-card">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">
+                            🚫 安全封鎖名單管理 (IP / UID / DCID)
+                        </div>
+                        <div class="section-desc">
+                            列出已被安全系統或管理員封鎖之項目。被封鎖者無法申請授權碼或訪問後台。
+                        </div>
+                    </div>
+                    <button type="button" class="btn-danger" id="btn-open-add-block">
+                        ➕ 手動新增封鎖目標
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>封鎖類型</th>
+                                <th>封鎖目標 (IP / UID / DCID)</th>
+                                <th>封鎖原因說明</th>
+                                <th>封鎖時間</th>
+                                <th>操作人</th>
+                                <th>管理操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-blocks">
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <div class="empty-state-icon">🛡️</div>
+                                    <p>請驗證授權碼以載入封鎖名單</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ───────────────────────────────────────────── -->
+        <!-- TAB 4: 授權名單模式 (A1 設定) -->
+        <!-- ───────────────────────────────────────────── -->
+
+                <div class="tab-pane" id="tab-authlist">
+            <div class="section-card">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">
+                            ⚙️ 授權名單申請規則與 A1 模式設定
+                        </div>
+                        <div class="section-desc">
+                            控制 Discord /授權碼 的申請資格判定邏輯。
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); margin-bottom: 1.5rem;">
+                    <h4 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">當前規則狀態 (來自工作表「授權名單」A1 欄位)：</h4>
+                    <p id="auth-mode-desc" style="color: var(--primary); font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">
+                        載入中...
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button type="button" class="btn-secondary" id="btn-set-mode-0">
+                            切換為【模式 0: 僅授權名單用戶(A欄)可申請】
+                        </button>
+                        <button type="button" class="btn-primary" id="btn-set-mode-1">
+                            切換為【模式 1: B1~含以下 UID 可申請】
+                        </button>
+                    </div>
+                </div>
+
+                <div style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+                    <p>📌 <strong>規則說明：</strong></p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.3rem;">
+                        <li><strong>A1 = 0：</strong>僅在「授權名單」工作表 A 欄 (A2 及以下) 登記之 Discord ID 用戶可透過 /授權碼 申請。</li>
+                        <li><strong>A1 = 1：</strong>只要該用戶在 DC 資料庫有綁定 UID，且其 UID 存在於 B 欄 (B1~含以下) 即可申請。</li>
+                        <li><strong>無權限提示：</strong>查無權限時，機器人將回覆「加成DC及贊助或是在DC活躍的用戶可以向灰灰申請生成授權碼申請權限」並附帶最低級距貼圖。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ───────────────────────────────────────────── -->
+    <!-- 模態彈窗 1: 授權碼申請教學 -->
+    <!-- ───────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-tutorial">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>📖 如何取得資料庫管理授權碼</h3>
+                <button type="button" class="modal-close" data-close-modal="modal-tutorial">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 0.75rem; color: #bae6fd; font-weight: 600; font-size: 0.88rem;">
+                    💡 加成DC及贊助或是在DC活躍的用戶可以向灰灰申請生成授權碼申請權限
+                </p>
+
+                <ul class="tutorial-steps">
+                    <li class="tutorial-step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-info">
+                            <h4>加入 Discord 伺服器並獲得授權</h4>
+                            <p>活躍發言、為伺服器加成 (Boost) 或贊助的用戶，可聯繫管理員<strong>灰灰</strong>將您的帳號登錄至後台授權名單。</p>
+                        </div>
+                    </li>
+                    <li class="tutorial-step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-info">
+                            <h4>在 Discord 輸入斜線指令</h4>
+                            <p>於任一頻道中輸入 <code>/授權碼</code> 指令並發送。</p>
+                        </div>
+                    </li>
+                    <li class="tutorial-step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-info">
+                            <h4>核發專屬臨時授權碼</h4>
+                            <p>機器人核驗通過後，將發送私密訊息提供一組專屬授權碼 (例如 <code>AUTH-XXXX-XXXX-XXXX</code>)。若無權限則會顯示指引與趣味貼圖。</p>
+                        </div>
+                    </li>
+                    <li class="tutorial-step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-info">
+                            <h4>返回本控制台驗證並管理</h4>
+                            <p>將授權碼貼入本頁上方核驗欄位即可解鎖。注意：<strong>請勿將授權碼借給他人</strong>，同一 IP 錯誤 3 次將觸發安全封鎖！</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" data-close-modal="modal-tutorial">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───────────────────────────────────────────── -->
+    <!-- 模態彈窗 2: 刪除確認防呆彈窗 (高安全性) -->
+    <!-- ───────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-delete-confirm">
+        <div class="modal-card">
+            <div class="modal-header" style="border-bottom-color: rgba(239, 68, 68, 0.3);">
+                <h3 style="color: #f87171;">⚠️ 嚴格安全確認：即將刪除圖片數據</h3>
+                <button type="button" class="modal-close" data-close-modal="modal-delete-confirm">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); padding: 0.9rem; margin-bottom: 1rem; color: #fecaca; font-size: 0.88rem;">
+                    <strong>安全防護提醒：</strong>
+                    <ul style="padding-left: 1.25rem; margin-top: 0.3rem;">
+                        <li>目標遊戲 UID：<strong id="modal-delete-target-uid" style="color: #fff; font-family: var(--font-mono);">--</strong></li>
+                        <li>預計刪除筆數：<strong id="modal-delete-count" style="color: #fca5a5; font-family: var(--font-mono);">--</strong> 筆 (符合 50 筆上限限制)</li>
+                        <li>所有待刪除資料<strong>將自動先行備份寫入「圖片數據_備份」工作表</strong>，存檔完成後才執行刪除。</li>
+                        <li>系統嚴格禁止跨 UID 或全刪，若後端發現有不符合目標 UID 之資料將整批駁回！</li>
+                    </ul>
+                </div>
+
+                <div class="input-group">
+                    <label for="input-delete-verify">為防手滑誤刪，請於下方輸入「<strong>確認刪除</strong>」四個字：</label>
+                    <input type="text" id="input-delete-verify" class="input-field" placeholder="確認刪除" autocomplete="off">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" data-close-modal="modal-delete-confirm">取消</button>
+                <button type="button" class="btn-danger" id="btn-execute-delete" disabled>
+                    💥 確認備份並立即刪除
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───────────────────────────────────────────── -->
+    <!-- 模態彈窗 3: 新增/編輯網站積分兌換碼 -->
+    <!-- ───────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-promo-form">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🎟️ 新增 / 編輯網站積分兌換碼</h3>
+                <button type="button" class="modal-close" data-close-modal="modal-promo-form">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 0.75rem; margin-bottom: 0.9rem; font-size: 0.82rem; color: #bae6fd;">
+                    🔒 <strong>防刷安全機制：</strong>每個序號每位用戶僅限兌換一次，後端已啟用同一使用者防重複兌換機制，兌換後獲得之積分可用於聲骸模擬開詞條。
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+                    <div class="input-group">
+                        <label for="promo-input-code">兌換碼 (大寫英數字，例如: WEB-XXXX-XXXX-XXXX 或自訂活動碼)：</label>
+                        <div style="display:flex; gap:0.6rem;">
+                            <input type="text" id="promo-input-code" class="input-field" placeholder="例如: WEB-7K8M-9P2Q-X1Y2" style="text-transform: uppercase; flex:1;">
+                            <button type="button" class="btn-secondary" id="btn-promo-random-code" style="white-space:nowrap; padding:0.6rem 1rem;">🎲 隨機產生序號</button>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                        <div class="input-group" style="flex: 1;">
+                            <label for="promo-input-reward">獎勵網站積分 (數值，1積分=1次模擬)：</label>
+                            <input type="number" id="promo-input-reward" class="input-field" value="100" min="1" placeholder="例如: 100">
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label for="promo-input-notes">備註 / 說明 (選填)：</label>
+                            <input type="text" id="promo-input-notes" class="input-field" placeholder="例如: DC 兌換積分、活動禮包">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                        <div class="input-group" style="flex: 1;">
+                            <label for="promo-input-start">有效開始時間 (選填)：</label>
+                            <input type="datetime-local" id="promo-input-start" class="input-field">
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label for="promo-input-end">有效結束時間 (選填)：</label>
+                            <input type="datetime-local" id="promo-input-end" class="input-field">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                        <div class="input-group" style="flex: 1;">
+                            <label for="promo-input-limit">總限制次數 (0表不限，個人專屬碼填1)：</label>
+                            <input type="number" id="promo-input-limit" class="input-field" value="1000">
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label for="promo-input-status">目前狀態：</label>
+                            <select id="promo-input-status" class="input-field">
+                                <option value="啟用">啟用</option>
+                                <option value="停用">停用</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" data-close-modal="modal-promo-form">取消</button>
+                <button type="button" class="btn-primary" id="btn-save-promo">儲存兌換碼</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───────────────────────────────────────────── -->
+    <!-- 模態彈窗 4: 手動新增封鎖目標 -->
+    <!-- ───────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-block-form">
+        <div class="modal-card">
+            <div class="modal-header" style="border-bottom-color: rgba(239, 68, 68, 0.3);">
+                <h3 style="color: #f87171;">🚫 手動新增封鎖目標</h3>
+                <button type="button" class="modal-close" data-close-modal="modal-block-form">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+                    <div class="input-group">
+                        <label for="block-input-type">封鎖目標類型：</label>
+                        <select id="block-input-type" class="input-field">
+                            <option value="UID">遊戲 UID (禁止操作與申請)</option>
+                            <option value="DCID">Discord ID (禁止申請授權碼)</option>
+                            <option value="IP">Client IP (禁止訪問後台)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="block-input-target">封鎖目標值：</label>
+                        <input type="text" id="block-input-target" class="input-field" placeholder="輸入目標 IP、UID 或 Discord ID">
+                    </div>
+                    <div class="input-group">
+                        <label for="block-input-reason">封鎖原因：</label>
+                        <input type="text" id="block-input-reason" class="input-field" placeholder="例如: 惡意嘗試攻擊、越權操作、多次違規">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" data-close-modal="modal-block-form">取消</button>
+                <button type="button" class="btn-danger" id="btn-save-block">確認新增封鎖</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 圖片放大預覽 Modal -->
+    <div class="modal-overlay" id="modal-image-preview">
+        <div class="modal-card" style="max-width: 800px; background: rgba(10, 15, 26, 0.95);">
+            <div class="modal-header">
+                <h3>🖼️ 聲骸圖片原圖檢視</h3>
+                <button type="button" class="modal-close" data-close-modal="modal-image-preview">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 1rem;">
+                <img id="preview-full-img" src="" alt="預覽圖" style="max-width: 100%; max-height: 70vh; border-radius: 8px; border: 1px solid var(--border-subtle);">
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 容器 -->
+    <div id="toast-container"></div>
+
+    <script>
+        // ─────────────────────────────────────────────
+        // 核心設定與變數 (絕無任何硬編碼授權碼)
+        // ─────────────────────────────────────────────
+        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbzOu1BjON_VHClCaEorAUjnlDfuE8Q6bGpikUPKEGatzAD9zmdZtxp1HvE3aCX03p5u/exec';
+        
+        // 運行時臨時狀態 (僅保存在記憶體中，絕不存入 LocalStorage 或暴露在程式碼中)
+        let currentAuth = {
+            verified: false,
+            code: '',
+            permission: '',
+            applicantUid: '',
+            applicantDcid: '',
+            remainingUses: 0,
+            expiresAt: null
+        };
+
+        let detectedClientIp = '';
+        let currentLoadedImages = [];
+        let selectedRowIds = new Set();
+
+        // 偵測客戶端 IP (增強後端 3 次錯誤封鎖防護)
+        async function detectClientIp() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(3000) });
+                if (res.ok) {
+                    const data = await res.json();
+                    detectedClientIp = data.ip || '';
+                }
+            } catch (e) {
+                console.warn('IP detection fallback');
+            }
+        }
+        detectClientIp();
+
+        // Toast 彈出通知輔助函式
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // ─────────────────────────────────────────────
+        // 授權碼核驗機制 (呼叫 Google Apps Script)
+        // ─────────────────────────────────────────────
+        const inputAuthCode = document.getElementById('input-auth-code');
+        const btnAuthValidate = document.getElementById('btn-auth-validate');
+        const btnAuthClear = document.getElementById('btn-auth-clear');
+        const authStatusBadge = document.getElementById('auth-status-badge');
+        const authDetailsContainer = document.getElementById('auth-details-container');
+        const authSection = document.getElementById('auth-section');
+
+        btnAuthValidate.addEventListener('click', async () => {
+            const code = inputAuthCode.value.trim();
+            if (!code) {
+                showToast('請輸入授權碼！', 'warning');
+                return;
+            }
+
+            btnAuthValidate.disabled = true;
+            btnAuthValidate.textContent = '🔄 核驗中...';
+
+            try {
+                const payload = {
+                    action: 'validateAuthCode',
+                    authCode: code,
+                    clientIp: detectedClientIp
+                };
+
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (data.result === 'success') {
+                    currentAuth = {
+                        verified: true,
+                        code: code,
+                        permission: data.permission,
+                        applicantUid: data.applicantUid,
+                        applicantDcid: data.applicantDcid,
+                        remainingUses: data.remainingUses,
+                        expiresAt: data.expiresAt
+                    };
+
+                    // 更新 UI 狀態
+                    authSection.classList.add('active');
+                    authStatusBadge.className = 'card-auth-status verified';
+                    authStatusBadge.textContent = `✅ 核驗通過 • 權限: ${data.permission}`;
+                    
+                    document.getElementById('auth-disp-perm').textContent = data.permission;
+                    document.getElementById('auth-disp-uid').textContent = data.applicantUid || '(ALL權限無綁定)';
+                    document.getElementById('auth-disp-uses').textContent = `${data.remainingUses} 次`;
+                    document.getElementById('auth-disp-expire').textContent = data.expiresAt ? new Date(data.expiresAt).toLocaleTimeString() : '有效';
+
+                    authDetailsContainer.style.display = 'grid';
+                    inputAuthCode.disabled = true;
+                    btnAuthValidate.style.display = 'none';
+                    btnAuthClear.style.display = 'inline-flex';
+
+                    // 若授權碼綁定特定 UID 且非 ALL，自動填入且鎖定目標 UID 輸入框
+                    const inputTargetUid = document.getElementById('input-target-uid');
+                    if (data.permission !== 'ALL' && data.applicantUid) {
+                        inputTargetUid.value = data.applicantUid;
+                        inputTargetUid.disabled = true;
+                        inputTargetUid.title = '非 ALL 權限授權碼僅限操作申請人自身的遊戲 UID';
+                    } else {
+                        inputTargetUid.disabled = false;
+                    }
+
+                    showToast('授權碼核驗成功！已解鎖管理操作。', 'success');
+
+                    updateAdminLockState();
+                    updateSimPointsUi();
+                    imitate_render();
+                    refreshActiveTab();
+                } else {
+                    currentAuth.verified = false;
+                    authStatusBadge.className = 'card-auth-status';
+                    authStatusBadge.textContent = '❌ 核驗失敗';
+                    showToast(data.message || '授權碼無效或已過期！', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('連線至伺服器失敗，請確認網路連線。', 'error');
+            } finally {
+                btnAuthValidate.disabled = false;
+                btnAuthValidate.textContent = '🔐 驗證授權碼並解鎖功能';
+            }
+        });
+
+        // 登出憑證
+        btnAuthClear.addEventListener('click', () => {
+            currentAuth = { verified: false, code: '', permission: '', applicantUid: '', applicantDcid: '', remainingUses: 0, expiresAt: null };
+            inputAuthCode.value = '';
+            inputAuthCode.disabled = false;
+            authSection.classList.remove('active');
+            authStatusBadge.className = 'card-auth-status';
+            authStatusBadge.textContent = '未核驗 • 請輸入由 DCBOT 核發之授權碼';
+            authDetailsContainer.style.display = 'none';
+            btnAuthValidate.style.display = 'inline-flex';
+            btnAuthClear.style.display = 'none';
+            document.getElementById('input-target-uid').disabled = false;
+            updateAdminLockState();
+            updateSimPointsUi();
+            imitate_render();
+            showToast('已清除臨時憑證。', 'info');
+        });
+
+        // ─────────────────────────────────────────────
+        // 分頁切換邏輯
+        // ─────────────────────────────────────────────
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+                if (!isAllAdmin() && targetTab !== 'tab-images') {
+                    showToast('⚠️ 權限不足：您的授權限本人 UID 圖片管理，無法存取此超級管理員模組！', 'warning');
+                    return;
+                }
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabPanes.forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                const pane = document.getElementById(targetTab);
+                if (pane) pane.classList.add('active');
+
+                // 切換分頁時自動嘗試加載資料
+                if (targetTab === 'tab-promo-logs') {
+                    loadPromoLogsList();
+                } else if (targetTab === 'tab-echo-sim') {
+                    updateSimPointsUi();
+                    imitate_render();
+                } else if (currentAuth.verified) {
+                    refreshActiveTab();
+                }
+            });
+        });
+
+        function refreshActiveTab() {
+            const activeTab = document.querySelector('.tab-pane.active').id;
+            if (activeTab === 'tab-images') {
+                const uid = document.getElementById('input-target-uid').value.trim();
+                if (uid) loadImagesForUid(uid);
+            } else if (activeTab === 'tab-promos') {
+                loadPromosList();
+            } else if (activeTab === 'tab-promo-logs') {
+                loadPromoLogsList();
+            } else if (activeTab === 'tab-echo-sim') {
+                updateSimPointsUi();
+                imitate_render();
+            } else if (activeTab === 'tab-blocks') {
+                loadBlocksList();
+            } else if (activeTab === 'tab-authlist') {
+                loadAuthListConfig();
+            }
+        }
+
+        // ─────────────────────────────────────────────
+        // TAB 1: 圖片數據查詢與刪除 (單一UID、50筆上限、備份)
+        // ─────────────────────────────────────────────
+        const btnQueryImages = document.getElementById('btn-query-images');
+        const inputTargetUid = document.getElementById('input-target-uid');
+        const tbodyImages = document.getElementById('tbody-images');
+        const batchControlBar = document.getElementById('batch-control-bar');
+        const selectedCountDisp = document.getElementById('selected-count');
+        const btnOpenDeleteModal = document.getElementById('btn-open-delete-modal');
+        const chkMaster = document.getElementById('chk-master');
+        const btnSelectAll50 = document.getElementById('btn-select-all-50');
+        const btnDeselectAll = document.getElementById('btn-deselect-all');
+
+        // 查詢按鈕防呆機制 (冷卻 1.5 秒防狂點)
+        let isQueryingImages = false;
+        btnQueryImages.addEventListener('click', async () => {
+            if (isQueryingImages) {
+                showToast('請勿頻繁點擊查詢，防呆冷卻中 (1.5 秒)...', 'warning');
+                return;
+            }
+            const uid = inputTargetUid.value.trim();
+            if (!uid) {
+                showToast('請輸入目標遊戲 UID！', 'warning');
+                return;
+            }
+            if (/[^0-9]/.test(uid) || uid.length < 5) {
+                showToast('安全限制：UID 必須為純數字遊戲 UID！', 'error');
+                return;
+            }
+
+            isQueryingImages = true;
+            btnQueryImages.disabled = true;
+            const origHtml = btnQueryImages.innerHTML;
+            btnQueryImages.innerHTML = '⏳ 查詢中...';
+            btnQueryImages.style.opacity = '0.65';
+            btnQueryImages.style.cursor = 'not-allowed';
+
+            try {
+                await loadImagesForUid(uid);
+            } finally {
+                setTimeout(() => {
+                    isQueryingImages = false;
+                    btnQueryImages.disabled = false;
+                    btnQueryImages.innerHTML = origHtml;
+                    btnQueryImages.style.opacity = '1';
+                    btnQueryImages.style.cursor = 'pointer';
+                }, 1500);
+            }
+        });
+
+        async function loadImagesForUid(uid) {
+            tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">⏳</div><p>正在載入 UID: ${uid} 的圖片數據...</p></td></tr>`;
+            selectedRowIds.clear();
+            updateSelectionUi();
+
+            try {
+                const res = await fetch(`${GAS_API_URL}?action=queryImageDataByUid&targetUid=${encodeURIComponent(uid)}`);
+                const json = await res.json();
+
+                if (json.result === 'success') {
+                    currentLoadedImages = json.data || [];
+                    renderImagesTable(currentLoadedImages);
+                } else {
+                    tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">⚠️</div><p>${json.message || '查詢失敗'}</p></td></tr>`;
+                    showToast(json.message || '查詢失敗', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">❌</div><p>載入出錯，請確認網路連線</p></td></tr>`;
+            }
+        }
+
+        function renderImagesTable(rows) {
+            if (!rows || rows.length === 0) {
+                tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">📂</div><p>該 UID 查無圖片數據記錄</p></td></tr>`;
+                batchControlBar.style.display = 'none';
+                return;
+            }
+
+            batchControlBar.style.display = 'flex';
+            tbodyImages.innerHTML = rows.map(r => {
+                const isChecked = selectedRowIds.has(String(r.dbId));
+                const tsStr = r.ts ? new Date(r.ts).toLocaleString() : '--';
+                const imgThumb = r.imageUrl 
+                    ? `<img src="${r.imageUrl}" class="td-img-thumb" onclick="previewImage('${r.imageUrl}')" alt="截圖" loading="lazy">` 
+                    : '<span style="color:var(--text-sub)">無圖片</span>';
+
+                return `
+                    <tr data-dbid="${r.dbId}">
+                        <td>
+                            <input type="checkbox" class="checkbox-custom row-chk" data-dbid="${r.dbId}" ${isChecked ? 'checked' : ''}>
+                        </td>
+                        <td style="font-family:var(--font-mono); color:var(--text-sub)">#${r.dbId}</td>
+                        <td class="td-uid">${r.uid}</td>
+                        <td>${r.player || '--'}</td>
+                        <td style="font-weight:600">${r.role || '--'}</td>
+                        <td>${r.weapon || '--'}</td>
+                        <td><span style="color:#f59e0b;font-weight:700">${r.chain ?? 0} 鏈</span></td>
+                        <td>${imgThumb}</td>
+                        <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.notes || ''}">${r.notes || '--'}</td>
+                        <td class="td-time">${tsStr}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // 綁定行 Checkbox 事件
+            document.querySelectorAll('.row-chk').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const id = e.target.getAttribute('data-dbid');
+                    if (e.target.checked) {
+                        if (selectedRowIds.size >= 50) {
+                            e.target.checked = false;
+                            showToast('安全防護限制：單次最多僅能勾選 50 筆資料！', 'warning');
+                            return;
+                        }
+                        selectedRowIds.add(id);
+                    } else {
+                        selectedRowIds.delete(id);
+                    }
+                    updateSelectionUi();
+                });
+            });
+        }
+
+        // 更新選取數量與防護 UI
+        function updateSelectionUi() {
+            const count = selectedRowIds.size;
+            selectedCountDisp.textContent = count;
+            btnOpenDeleteModal.disabled = (count === 0);
+            chkMaster.checked = (count > 0 && count === currentLoadedImages.length && count <= 50);
+        }
+
+        // 全選前 50 筆
+        btnSelectAll50.addEventListener('click', () => {
+            selectedRowIds.clear();
+            const limit = Math.min(50, currentLoadedImages.length);
+            for (let i = 0; i < limit; i++) {
+                selectedRowIds.add(String(currentLoadedImages[i].dbId));
+            }
+            renderImagesTable(currentLoadedImages);
+            updateSelectionUi();
+            showToast(`已選取前 ${limit} 筆資料 (單次上限 50 筆)`, 'info');
+        });
+
+        // 取消全選
+        btnDeselectAll.addEventListener('click', () => {
+            selectedRowIds.clear();
+            renderImagesTable(currentLoadedImages);
+            updateSelectionUi();
+        });
+
+        chkMaster.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                btnSelectAll50.click();
+            } else {
+                btnDeselectAll.click();
+            }
+        });
+
+        // 圖片預覽
+        window.previewImage = function(url) {
+            document.getElementById('preview-full-img').src = url;
+            openModal('modal-image-preview');
+        };
+
+        // ─────────────────────────────────────────────
+        // 刪除確認 Modal 與執行流程
+        // ─────────────────────────────────────────────
+        const modalDeleteConfirm = document.getElementById('modal-delete-confirm');
+        const modalDeleteTargetUid = document.getElementById('modal-delete-target-uid');
+        const modalDeleteCount = document.getElementById('modal-delete-count');
+        const inputDeleteVerify = document.getElementById('input-delete-verify');
+        const btnExecuteDelete = document.getElementById('btn-execute-delete');
+
+        btnOpenDeleteModal.addEventListener('click', () => {
+            if (!currentAuth.verified) {
+                showToast('請先於上方完成授權碼核驗！', 'warning');
+                return;
+            }
+            if (selectedRowIds.size === 0) {
+                showToast('請先勾選欲刪除的資料！', 'warning');
+                return;
+            }
+            if (selectedRowIds.size > 50) {
+                showToast('安全性拒絕：選取筆數超過 50 筆上限！', 'error');
+                return;
+            }
+
+            const targetUid = inputTargetUid.value.trim();
+            modalDeleteTargetUid.textContent = targetUid;
+            modalDeleteCount.textContent = selectedRowIds.size;
+            inputDeleteVerify.value = '';
+            btnExecuteDelete.disabled = true;
+            openModal('modal-delete-confirm');
+        });
+
+        inputDeleteVerify.addEventListener('input', () => {
+            btnExecuteDelete.disabled = (inputDeleteVerify.value.trim() !== '確認刪除');
+        });
+
+        // 執行刪除與備份
+        btnExecuteDelete.addEventListener('click', async () => {
+            const targetUid = inputTargetUid.value.trim();
+            const deleteIds = Array.from(selectedRowIds);
+
+            btnExecuteDelete.disabled = true;
+            btnExecuteDelete.textContent = '💾 備份並刪除中...';
+
+            try {
+                const payload = {
+                    action: 'deleteImageData',
+                    authCode: currentAuth.code,
+                    targetUid: targetUid,
+                    deleteIds: deleteIds,
+                    clientIp: detectedClientIp
+                };
+
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+
+                if (json.result === 'success') {
+                    closeModal('modal-delete-confirm');
+                    showToast(json.message || `成功備份並刪除 ${deleteIds.length} 筆資料！`, 'success');
+
+                    // 更新剩餘使用次數
+                    if (json.remainingUses !== undefined) {
+                        currentAuth.remainingUses = json.remainingUses;
+                        document.getElementById('auth-disp-uses').textContent = `${json.remainingUses} 次`;
+                    }
+
+                    // 使用後端最新回傳的剩餘資料更新前端表格
+                    currentLoadedImages = json.remainingData || [];
+                    selectedRowIds.clear();
+                    renderImagesTable(currentLoadedImages);
+                    updateSelectionUi();
+                } else {
+                    showToast(json.message || '刪除失敗！', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('請求出錯，請確認網路連線。', 'error');
+            } finally {
+                btnExecuteDelete.disabled = false;
+                btnExecuteDelete.textContent = '💥 確認備份並立即刪除';
+            }
+        });
+
+        // ─────────────────────────────────────────────
+        // TAB 2: 網站積分兌換碼管理 (每個序號每位用戶僅限一次)
+        // ─────────────────────────────────────────────
+        const tbodyPromos = document.getElementById('tbody-promos');
+        const btnOpenAddPromo = document.getElementById('btn-open-add-promo');
+        const btnSavePromo = document.getElementById('btn-save-promo');
+
+        async function loadPromosList() {
+            tbodyPromos.innerHTML = `<tr><td colspan="9" class="empty-state"><div class="empty-state-icon">⏳</div><p>載入兌換碼中...</p></td></tr>`;
+            try {
+                const res = await fetch(`${GAS_API_URL}?action=listExchangeCodes`);
+                const json = await res.json();
+                if (json.result === 'success') {
+                    renderPromosTable(json.data || []);
+                } else {
+                    tbodyPromos.innerHTML = `<tr><td colspan="9" class="empty-state"><p>${json.message || '無法載入兌換碼'}</p></td></tr>`;
+                }
+            } catch (err) {
+                tbodyPromos.innerHTML = `<tr><td colspan="9" class="empty-state"><p>載入出錯</p></td></tr>`;
+            }
+        }
+
+        function renderPromosTable(list) {
+            if (!list || list.length === 0) {
+                tbodyPromos.innerHTML = `<tr><td colspan="9" class="empty-state"><div class="empty-state-icon">🎟️</div><p>目前尚無已設定之兌換碼</p></td></tr>`;
+                return;
+            }
+            tbodyPromos.innerHTML = list.map(item => {
+                const sTime = item.startTime ? new Date(item.startTime).toLocaleDateString() : '即刻生效';
+                const eTime = item.endTime ? new Date(item.endTime).toLocaleDateString() : '永久有效';
+                const pointsVal = item.points || item.reward || 100;
+                return `
+                    <tr>
+                        <td style="font-family:var(--font-mono);font-weight:700;color:var(--primary)">${item.code}</td>
+                        <td style="font-weight:700;color:#f59e0b;">🪙 ${pointsVal} 積分</td>
+                        <td class="td-time">${sTime}</td>
+                        <td class="td-time">${eTime}</td>
+                        <td>${item.maxUses || '無上限'}</td>
+                        <td><span style="color:#38bdf8">${item.usedCount || 0}</span></td>
+                        <td><span class="pill ${item.status === '啟用' ? 'success' : 'danger'}">${item.status}</span></td>
+                        <td class="td-time">${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '--'}</td>
+                        <td>
+                            <button type="button" class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem" onclick="deletePromo('${item.code}')">刪除</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        btnOpenAddPromo.addEventListener('click', () => {
+            if (!currentAuth.verified) {
+                showToast('請先於上方完成授權碼核驗！', 'warning');
+                return;
+            }
+            if (currentAuth.permission !== 'ALL') {
+                showToast('權限不足：序號管理需要【ALL】完整權限！', 'error');
+                return;
+            }
+            document.getElementById('promo-input-code').value = '';
+            document.getElementById('promo-input-reward').value = '100';
+            const notesEl = document.getElementById('promo-input-notes');
+            if (notesEl) notesEl.value = '';
+            openModal('modal-promo-form');
+        });
+
+        btnSavePromo.addEventListener('click', async () => {
+            const code = document.getElementById('promo-input-code').value.trim().toUpperCase();
+            const points = parseInt(document.getElementById('promo-input-reward').value) || 100;
+            const notesEl = document.getElementById('promo-input-notes');
+            const notes = notesEl ? notesEl.value.trim() : '';
+            const startTime = document.getElementById('promo-input-start').value;
+            const endTime = document.getElementById('promo-input-end').value;
+            const maxUses = parseInt(document.getElementById('promo-input-limit').value) || 0;
+            const status = document.getElementById('promo-input-status').value;
+
+            if (!code) {
+                showToast('請輸入兌換碼！', 'warning');
+                return;
+            }
+
+            btnSavePromo.disabled = true;
+            try {
+                const payload = {
+                    action: 'saveExchangeCode',
+                    authCode: currentAuth.code,
+                    clientIp: detectedClientIp,
+                    code, points, reward: points, notes, startTime, endTime, maxUses, status
+                };
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.result === 'success') {
+                    showToast(json.message || '兌換碼儲存成功！', 'success');
+                    closeModal('modal-promo-form');
+                    loadPromosList();
+                } else {
+                    showToast(json.message || '儲存失敗', 'error');
+                }
+            } catch (e) {
+                showToast('請求出錯', 'error');
+            } finally {
+                btnSavePromo.disabled = false;
+            }
+        });
+
+        window.deletePromo = async function(code) {
+            if (!confirm(`確定要刪除兌換碼【${code}】嗎？`)) return;
+            try {
+                const payload = {
+                    action: 'deleteExchangeCode',
+                    authCode: currentAuth.code,
+                    clientIp: detectedClientIp,
+                    code
+                };
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.result === 'success') {
+                    showToast(json.message || '已刪除', 'success');
+                    loadPromosList();
+                } else {
+                    showToast(json.message || '刪除失敗', 'error');
+                }
+            } catch (e) {
+                showToast('請求出錯', 'error');
+            }
+        };
+
+        // ─────────────────────────────────────────────
+        // TAB 2-LOGS: 兌換碼紀錄 (每用戶限領一次稽核)
+        // ─────────────────────────────────────────────
+        const tbodyPromoLogs = document.getElementById('tbody-promo-logs');
+        const btnRefreshPromoLogs = document.getElementById('btn-refresh-promo-logs');
+        const inputFilterPromoLogs = document.getElementById('input-filter-promo-logs');
+        let currentLoadedLogs = [];
+
+        async function loadPromoLogsList() {
+            tbodyPromoLogs.innerHTML = `<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">⏳</div><p>載入兌換碼紀錄中...</p></td></tr>`;
+            try {
+                const res = await fetch(`${GAS_API_URL}?action=listExchangeLogs`);
+                const json = await res.json();
+                if (json.result === 'success') {
+                    currentLoadedLogs = json.data || [];
+                    renderPromoLogsTable(currentLoadedLogs);
+                } else {
+                    tbodyPromoLogs.innerHTML = `<tr><td colspan="6" class="empty-state"><p>${json.message || '無法載入兌換明細'}</p></td></tr>`;
+                }
+            } catch (err) {
+                tbodyPromoLogs.innerHTML = `<tr><td colspan="6" class="empty-state"><p>載入出錯，請確認網路連線</p></td></tr>`;
+            }
+        }
+
+        function renderPromoLogsTable(logs) {
+            if (!logs || logs.length === 0) {
+                tbodyPromoLogs.innerHTML = `<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">📜</div><p>尚無任何兌換紀錄</p></td></tr>`;
+                return;
+            }
+            tbodyPromoLogs.innerHTML = logs.map(item => {
+                const tStr = item.time ? new Date(item.time).toLocaleString() : '--';
+                return `
+                    <tr>
+                        <td class="td-time">${tStr}</td>
+                        <td style="font-family:var(--font-mono);font-weight:700;color:var(--primary)">${item.code || '--'}</td>
+                        <td style="font-family:var(--font-mono);">${item.dcid || '<span style="color:var(--text-sub)">(無)</span>'}</td>
+                        <td class="td-uid">${item.uid || '<span style="color:var(--text-sub)">(無)</span>'}</td>
+                        <td style="font-weight:700;color:#f59e0b;">+${item.points || 0} 點</td>
+                        <td><span class="pill success">${item.note || '兌換成功'}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        if (btnRefreshPromoLogs) {
+            btnRefreshPromoLogs.addEventListener('click', () => loadPromoLogsList());
+        }
+
+        if (inputFilterPromoLogs) {
+            inputFilterPromoLogs.addEventListener('input', (e) => {
+                const kw = e.target.value.trim().toLowerCase();
+                if (!kw) {
+                    renderPromoLogsTable(currentLoadedLogs);
+                    return;
+                }
+                const filtered = currentLoadedLogs.filter(item => {
+                    const c = String(item.code || '').toLowerCase();
+                    const d = String(item.dcid || '').toLowerCase();
+                    const u = String(item.uid || '').toLowerCase();
+                    return c.includes(kw) || d.includes(kw) || u.includes(kw);
+                });
+                renderPromoLogsTable(filtered);
+            });
+        }
+
+        // ─────────────────────────────────────────────
+        // ══════════════════════════════════════════════════════════════
+        // 模式切換與權限狀態控制
+        // ══════════════════════════════════════════════════════════════
+        function isAllAdmin() {
+            return !!(currentAuth && currentAuth.verified && String(currentAuth.permission || '').trim().toUpperCase() === 'ALL');
+        }
+
+        window.switchMainMode = function(mode) {
+            const btnAct = document.getElementById('btn-mode-activity');
+            const btnAdmin = document.getElementById('btn-mode-admin');
+            const secAct = document.getElementById('section-mode-activity');
+            const secAdmin = document.getElementById('section-mode-admin');
+
+            if (mode === 'admin') {
+                btnAct.classList.remove('active');
+                btnAdmin.classList.add('active');
+                secAct.style.display = 'none';
+                secAdmin.style.display = 'block';
+                updateAdminLockState();
+                if (currentAuth.verified) {
+                    refreshActiveTab();
+                }
+            } else {
+                btnAct.classList.add('active');
+                btnAdmin.classList.remove('active');
+                secAct.style.display = 'block';
+                secAdmin.style.display = 'none';
+                updateSimPointsUi();
+                imitate_render();
+            }
+        };
+
+        function updateAdminLockState() {
+            const lockedPlaceholder = document.getElementById('admin-locked-placeholder');
+            const authContent = document.getElementById('admin-authenticated-content');
+            const modeAdminLockPill = document.getElementById('mode-admin-lock-pill');
+            const adminPerkPill = document.getElementById('admin-perk-pill');
+            const adminModeTextHint = document.getElementById('admin-mode-text-hint');
+
+            if (currentAuth.verified) {
+                if (lockedPlaceholder) lockedPlaceholder.style.display = 'none';
+                if (authContent) authContent.style.display = 'block';
+                if (modeAdminLockPill) {
+                    modeAdminLockPill.textContent = `✅ 已核驗 (${currentAuth.permission})`;
+                    modeAdminLockPill.className = 'mode-badge-lock verified';
+                }
+
+                // 依權限開放分頁
+                const allAdmin = isAllAdmin();
+                const nonAllTabs = ['tab-btn-promos', 'tab-btn-promo-logs', 'tab-btn-blocks', 'tab-btn-authlist'];
+                nonAllTabs.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (!btn) return;
+                    if (allAdmin) {
+                        btn.classList.remove('disabled-tab');
+                        btn.removeAttribute('title');
+                    } else {
+                        btn.classList.add('disabled-tab');
+                        btn.title = '權限限制：此模組僅供 ALL 超級管理員存取與操作';
+                    }
+                });
+
+                if (adminPerkPill) adminPerkPill.style.display = allAdmin ? 'inline-flex' : 'none';
+                if (adminModeTextHint) adminModeTextHint.style.display = allAdmin ? 'inline' : 'none';
+            } else {
+                if (lockedPlaceholder) lockedPlaceholder.style.display = 'block';
+                if (authContent) authContent.style.display = 'none';
+                if (modeAdminLockPill) {
+                    modeAdminLockPill.textContent = '🔒 需管理員授權';
+                    modeAdminLockPill.className = 'mode-badge-lock';
+                }
+                if (adminPerkPill) adminPerkPill.style.display = 'none';
+                if (adminModeTextHint) adminModeTextHint.style.display = 'none';
+            }
+        }
+
+        // 隨機產生兌換碼序號按鈕
+        const btnPromoRandomCode = document.getElementById('btn-promo-random-code');
+        if (btnPromoRandomCode) {
+            btnPromoRandomCode.addEventListener('click', () => {
+                const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+                function seg(len) {
+                    let s = '';
+                    for (let i = 0; i < len; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
+                    return s;
+                }
+                const generatedCode = `WEB-${seg(4)}-${seg(4)}-${seg(4)}`;
+                const codeInput = document.getElementById('promo-input-code');
+                if (codeInput) codeInput.value = generatedCode;
+                showToast(`🎲 已隨機生成兌換碼序號：${generatedCode}`, 'info');
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // ⭐ 抽大月活動 • 聲骸模擬開詞條與序號兌換系統 (菲比加權固定，ALL無限刷)
+        // ══════════════════════════════════════════════════════════════
+        const SIM_FCT_VALUE = [
+            { type: 0, values: ["6.3%", "6.9%", "7.5%", "8.1%", "8.7%", "9.3%", "9.9%", "10.5%"] }, // 0: 暴擊
+            { type: 1, values: ["12.6%", "13.8%", "15%", "16.2%", "17.4%", "18.6%", "19.8%", "21%"] }, // 1: 暴傷
+            { type: 2, values: ["6.4%", "7.1%", "7.9%", "8.6%", "9.4%", "10.1%", "10.9%", "11.6%"] }, // 2: 攻擊%/生命%/傷害加成
+            { type: 3, values: ["8.1%", "9%", "10%", "10.9%", "11.8%", "12.8%", "13.8%", "14.7%"] }, // 3: 防禦%
+            { type: 4, values: ["6.8%", "7.6%", "8.4%", "9.2%", "10%", "10.8%", "11.6%", "12.4%"] }, // 4: 共鳴效率
+            { type: 5, values: ["320", "360", "390", "430", "470", "510", "540", "580"] },           // 5: 生命
+            { type: 6, values: ["30", "40", "50", "60"] },                                            // 6: 攻擊
+            { type: 7, values: ["40", "50", "60", "70"] }                                             // 7: 防禦
+        ];
+
+        const SIM_PROPERTIES = [
+            { property: "暴擊", type: 0 },
+            { property: "暴擊傷害", type: 1 },
+            { property: "攻擊百分比", type: 2 },
+            { property: "攻擊", type: 6 },
+            { property: "生命", type: 5 },
+            { property: "生命百分比", type: 2 },
+            { property: "防禦", type: 7 },
+            { property: "防禦百分比", type: 3 },
+            { property: "共鳴效率", type: 4 },
+            { property: "普攻傷害加成", type: 2 },
+            { property: "重擊傷害加成", type: 2 },
+            { property: "共鳴技能傷害加成", type: 2 },
+            { property: "共鳴解放傷害加成", type: 2 }
+        ];
+
+        const SIM_MAX_VALUES = {
+            "攻擊": 60, "攻擊百分比": 11.6, "生命": 580, "生命百分比": 11.6, "防禦": 70, "防禦百分比": 14.7,
+            "暴擊": 10.5, "暴擊傷害": 21.0, "共鳴效率": 12.4, "普攻傷害加成": 11.6, "重擊傷害加成": 11.6,
+            "共鳴技能傷害加成": 11.6, "共鳴解放傷害加成": 11.6
+        };
+
+        // 本活動專屬鎖定【菲比】權重
+        const PHOEBE_ROLE_WEIGHTS = {
+            "暴擊": 1.0,
+            "暴擊傷害": 1.0,
+            "攻擊百分比": 1.0,
+            "共鳴解放傷害加成": 1.0,
+            "攻擊": 0.4
+        };
+
+        // 菲比理論最高滿分計算
+        let phoebePotentials = [];
+        for (let k in PHOEBE_ROLE_WEIGHTS) {
+            if (SIM_MAX_VALUES[k]) {
+                phoebePotentials.push(PHOEBE_ROLE_WEIGHTS[k] * SIM_MAX_VALUES[k]);
+            }
+        }
+        phoebePotentials.sort((a, b) => b - a);
+        const PHOEBE_MAX_THEORETICAL = phoebePotentials.slice(0, 5).reduce((a, b) => a + b, 0); // 約 77.7
+
+        // 網站端可用積分管理
+        let simPoints = parseInt(localStorage.getItem('ww_database_sim_points'));
+        if (isNaN(simPoints) || simPoints < 0) {
+            simPoints = 10;
+            localStorage.setItem('ww_database_sim_points', simPoints);
+        }
+
+        let simRolledList = [];
+        let simHistory = [];
+
+        function updateSimPointsUi() {
+            const elVal = document.getElementById('sim-points-val');
+            const elUnit = document.getElementById('sim-points-unit');
+            const adminPill = document.getElementById('admin-perk-pill');
+            const adminHint = document.getElementById('admin-mode-text-hint');
+
+            if (isAllAdmin()) {
+                if (elVal) elVal.textContent = '👑 無限 (免扣分)';
+                if (elUnit) elUnit.textContent = '';
+                if (adminPill) adminPill.style.display = 'inline-flex';
+                if (adminHint) adminHint.style.display = 'inline';
+            } else {
+                if (elVal) elVal.textContent = simPoints;
+                if (elUnit) elUnit.textContent = '點';
+                if (adminPill) adminPill.style.display = 'none';
+                if (adminHint) adminHint.style.display = 'none';
+            }
+        }
+
+        function getWebClientId() {
+            let cid = localStorage.getItem('ww_web_client_id');
+            if (!cid) {
+                cid = 'USR_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                localStorage.setItem('ww_web_client_id', cid);
+            }
+            return cid;
+        }
+
+        // 解決兌換常常卡「系統忙碌中」：實作 POST + GET 備援雙層防卡死機制
+        async function redeemExchangeCodeSafe(code) {
+            const dcid = currentAuth.applicantDcid || getWebClientId();
+            const uid = currentAuth.applicantUid || '';
+            let result = null;
+
+            // 1. 優先送出 POST 請求
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 7500);
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'redeemExchangeCode',
+                        code: code,
+                        dcid: dcid,
+                        uid: uid,
+                        userName: '網頁用戶'
+                    }),
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                result = await res.json();
+            } catch (postErr) {
+                console.warn('POST 兌換通訊逾時或受阻，自動切換至 GET 備援通道...', postErr);
+            }
+
+            // 2. 若 POST 逾時、失敗或伺服器鎖定忙碌 (server_busy)，自動使用輕量 GET 備援重試
+            if (!result || result.error === 'server_busy') {
+                try {
+                    const getUrl = `${GAS_API_URL}?action=redeemExchangeCode&code=${encodeURIComponent(code)}&dcid=${encodeURIComponent(dcid)}&uid=${encodeURIComponent(uid)}`;
+                    const resGet = await fetch(getUrl, { signal: AbortSignal.timeout(8000) });
+                    result = await resGet.json();
+                } catch (getErr) {
+                    console.error('GET 備援通道亦失敗:', getErr);
+                }
+            }
+
+            return result;
+        }
+
+        // 兌換碼儲值事件
+        const btnSimRedeem = document.getElementById('btn-sim-redeem');
+        const inputSimCode = document.getElementById('sim-input-code');
+
+        if (btnSimRedeem) {
+            btnSimRedeem.addEventListener('click', async () => {
+                const code = inputSimCode.value.trim().toUpperCase();
+                if (!code) {
+                    showToast('請輸入兌換碼序號！', 'warning');
+                    return;
+                }
+
+                btnSimRedeem.disabled = true;
+                btnSimRedeem.textContent = '🔄 儲值核驗中...';
+
+                try {
+                    const json = await redeemExchangeCodeSafe(code);
+
+                    if (json && json.result === 'success') {
+                        const gained = json.points || 0;
+                        simPoints += gained;
+                        localStorage.setItem('ww_database_sim_points', simPoints);
+                        updateSimPointsUi();
+                        inputSimCode.value = '';
+                        showToast(`🎉 成功儲值！獲得 +${gained} 網站積分！當前積分：${simPoints} 點`, 'success');
+                    } else if (json && json.message) {
+                        showToast(`❌ ${json.message}`, 'error');
+                    } else {
+                        showToast('❌ 伺服器連線逾時，請確認兌換碼是否正確或稍後重試。', 'error');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showToast('連線至伺服器異常，請確認網路連線。', 'error');
+                } finally {
+                    btnSimRedeem.disabled = false;
+                    btnSimRedeem.textContent = '🎁 立即儲值積分';
+                }
+            });
+        }
+
+        // 開單一詞條隨機邏輯
+        function rollOneStat() {
+            let sjs = Math.floor(Math.random() * SIM_PROPERTIES.length);
+            for (let i = 0; i < 30; i++) {
+                let candidate = SIM_PROPERTIES[sjs];
+                let exists = simRolledList.some(p => p.property === candidate.property);
+                if (!exists) {
+                    const fct = SIM_FCT_VALUE[candidate.type];
+                    let pool = fct.values;
+                    let valIdx = Math.floor(Math.random() * pool.length);
+                    let val = pool[valIdx];
+                    simRolledList.push({
+                        property: candidate.property,
+                        value: val,
+                        idx: valIdx,
+                        max: pool.length,
+                        type: candidate.type
+                    });
+                    return true;
+                }
+                sjs = (sjs + 1) % SIM_PROPERTIES.length;
+            }
+            return false;
+        }
+
+        // 單開 1 詞條 (-1 積分，ALL管理員無限刷)
+        const btnSimStart = document.getElementById('btn-sim-start');
+        if (btnSimStart) {
+            btnSimStart.addEventListener('click', () => {
+                const adminFree = isAllAdmin();
+                if (!adminFree && simPoints < 1) {
+                    showToast('🪙 網站積分不足！請於上方輸入兌換碼儲值，或在 Discord 輸入 /兌換積分 轉換獲取！', 'warning');
+                    return;
+                }
+
+                if (simRolledList.length >= 5) {
+                    simRolledList = [];
+                }
+
+                if (!adminFree) {
+                    simPoints -= 1;
+                    localStorage.setItem('ww_database_sim_points', simPoints);
+                    updateSimPointsUi();
+                }
+
+                rollOneStat();
+                imitate_render();
+
+                // 若單開湊滿 5 條，立即持久化保存至歷史紀錄
+                if (simRolledList.length === 5) {
+                    recordSimHistory();
+                }
+            });
+        }
+
+        // 連開 5 詞條 (-5 積分，ALL管理員無限刷)
+        const btnSimAuto5 = document.getElementById('btn-sim-auto5');
+        if (btnSimAuto5) {
+            btnSimAuto5.addEventListener('click', () => {
+                const adminFree = isAllAdmin();
+                if (!adminFree && simPoints < 5) {
+                    showToast(`🪙 網站積分不足 5 點！您目前有 ${simPoints} 點，請先透過兌換碼儲值！`, 'warning');
+                    return;
+                }
+
+                if (!adminFree) {
+                    simPoints -= 5;
+                    localStorage.setItem('ww_database_sim_points', simPoints);
+                    updateSimPointsUi();
+                }
+
+                simRolledList = [];
+                for (let i = 0; i < 5; i++) {
+                    rollOneStat();
+                }
+                imitate_render();
+                recordSimHistory();
+            });
+        }
+
+
+        // 全部重置
+        const btnSimReset = document.getElementById('btn-sim-reset');
+        if (btnSimReset) {
+            btnSimReset.addEventListener('click', () => {
+                simRolledList = [];
+                imitate_render();
+                showToast('已清空當前聲骸詞條。', 'info');
+            });
+        }
+
+        // 渲染聲骸槽位、評分與勝算機率 (專屬鎖定菲比權重)
+        function imitate_render() {
+            const listEl = document.getElementById('sim-slots-list');
+            const slotCountEl = document.getElementById('sim-slot-count');
+            const doubleCritBadge = document.getElementById('sim-double-crit-badge');
+            const scoreValEl = document.getElementById('sim-score-val');
+            const scorePctEl = document.getElementById('sim-score-pct');
+            const scoreMaxEl = document.getElementById('sim-score-max');
+            const passBadge = document.getElementById('sim-pass-badge');
+            const trophyTitle = document.getElementById('trophy-title-text');
+            const trophyDesc = document.getElementById('trophy-desc-text');
+
+            if (!listEl) return;
+
+            slotCountEl.textContent = simRolledList.length;
+            scoreMaxEl.textContent = `菲比 理論最高滿分：${PHOEBE_MAX_THEORETICAL.toFixed(1)}`;
+
+            let currentScore = 0;
+            const hasCritRate = simRolledList.some(p => p.property === '暴擊');
+            const hasCritDmg = simRolledList.some(p => p.property === '暴擊傷害');
+            doubleCritBadge.style.display = (hasCritRate && hasCritDmg) ? 'inline-flex' : 'none';
+
+            // 渲染 5 個槽位
+            let slotsHtml = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < simRolledList.length) {
+                    const p = simRolledList[i];
+                    const numVal = parseFloat(p.value);
+                    const weight = PHOEBE_ROLE_WEIGHTS[p.property] || 0;
+                    currentScore += weight * numVal;
+
+                    const isCrit = (p.property === '暴擊' || p.property === '暴擊傷害');
+                    const rankNum = p.max - p.idx;
+                    const valClass = isCrit ? 'purple' : (rankNum <= 2 ? 'gold' : '');
+                    const itemClass = isCrit ? 'sim-slot-item double-crit' : 'sim-slot-item';
+
+                    // 階級燈條 (8格)
+                    let tierHtml = '<div class="tier-bar">';
+                    for (let j = 0; j < p.max; j++) {
+                        const isOn = j <= p.idx;
+                        let segClass = 'tier-seg';
+                        if (isOn) {
+                            segClass += isCrit ? ' purple' : (rankNum <= 2 ? ' gold' : ' active');
+                        }
+                        tierHtml += `<span class="${segClass}"></span>`;
+                    }
+                    tierHtml += '</div>';
+
+                    slotsHtml += `
+                        <div class="${itemClass}">
+                            <div class="sim-slot-left">
+                                <div class="sim-slot-idx">#${i + 1}</div>
+                                <div>
+                                    <div class="sim-slot-name">${p.property} ${isCrit ? '⭐' : ''}</div>
+                                    ${tierHtml}
+                                </div>
+                            </div>
+                            <div style="text-align:right">
+                                <div class="sim-slot-val ${valClass}">${p.value}</div>
+                                <div style="font-size:0.75rem; color:var(--text-sub)">加權 +${(weight * numVal).toFixed(1)} 分</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    slotsHtml += `
+                        <div class="sim-slot-item" style="border-style:dashed; opacity:0.45; justify-content:center;">
+                            <span style="font-size:0.85rem; color:var(--text-sub)">槽位 #${i + 1} • 待開啟</span>
+                        </div>
+                    `;
+                }
+            }
+            listEl.innerHTML = slotsHtml;
+
+            // 菲比加權戰力評分與百分比
+            scoreValEl.textContent = currentScore.toFixed(1);
+            const pct = PHOEBE_MAX_THEORETICAL > 0 ? ((currentScore / PHOEBE_MAX_THEORETICAL) * 100).toFixed(1) : '0.0';
+            scorePctEl.textContent = `${pct}%`;
+
+            // 90%+ 通關中獎提示 (若 ALL 管理員，標註【管理員模式】)
+            const isPassed = (parseFloat(pct) >= 90.0 && simRolledList.length === 5);
+            if (isPassed) {
+                passBadge.style.display = 'block';
+                if (isAllAdmin()) {
+                    trophyTitle.textContent = '👑【管理員模式】達成 90%+ 評分！';
+                    trophyDesc.textContent = '超級管理員無限刷測試達成！本中獎記錄已標記為【管理員模式】。';
+                } else {
+                    trophyTitle.textContent = '🏆 恭喜達成 90%+ 抽大月活動資格！';
+                    trophyDesc.textContent = '您的菲比加權評分達標，已成功解鎖抽大月卡/小月卡抽獎資格！';
+                }
+            } else {
+                passBadge.style.display = 'none';
+            }
+
+            // 機率推算
+            calculateSimProbabilities();
+        }
+
+        function calculateSimProbabilities() {
+            const totalProps = SIM_PROPERTIES.length;
+            const rolledCount = simRolledList.length;
+            const remainingPool = totalProps - rolledCount;
+
+            const hasCr = simRolledList.some(p => p.property === '暴擊');
+            const hasCd = simRolledList.some(p => p.property === '暴擊傷害');
+            const hasAtk = simRolledList.some(p => p.property === '攻擊百分比');
+
+            const crProb = hasCr ? '已獲得' : (remainingPool > 0 ? `${(1 / remainingPool * 100).toFixed(0)}%` : '0%');
+            const cdProb = hasCd ? '已獲得' : (remainingPool > 0 ? `${(1 / remainingPool * 100).toFixed(0)}%` : '0%');
+            const atkProb = hasAtk ? '已獲得' : (remainingPool > 0 ? `${(1 / remainingPool * 100).toFixed(0)}%` : '0%');
+
+            let dcProb = '0%';
+            if (hasCr && hasCd) dcProb = '100% (已達成)';
+            else if (rolledCount <= 3 && !hasCr && !hasCd) dcProb = '28%';
+            else if (rolledCount === 4 && (!hasCr || !hasCd)) dcProb = `${(1 / remainingPool * 100).toFixed(0)}%`;
+            else dcProb = '15%';
+
+            const elCr = document.getElementById('sim-prob-cr');
+            const elCd = document.getElementById('sim-prob-cd');
+            const elAtk = document.getElementById('sim-prob-atk');
+            const elDc = document.getElementById('sim-prob-dc');
+            const elSurv = document.getElementById('sim-prob-surv');
+
+            if (elCr) elCr.textContent = crProb;
+            if (elCd) elCd.textContent = cdProb;
+            if (elAtk) elAtk.textContent = atkProb;
+            if (elDc) elDc.textContent = dcProb;
+            if (elSurv) elSurv.textContent = `${((3 / (remainingPool || 1)) * 100).toFixed(0)}%`;
+        }
+
+        // ─────────────────────────────────────────────
+        // 持久化歷史紀錄機制 (存入 localStorage，重整絕不消失)
+        // ─────────────────────────────────────────────
+        function loadSimHistory() {
+            try {
+                const saved = localStorage.getItem('ww_sim_chal_history');
+                simHistory = saved ? JSON.parse(saved) : [];
+            } catch (e) {
+                simHistory = [];
+            }
+            renderSimHistory();
+        }
+
+        function recordSimHistory() {
+            if (simRolledList.length !== 5) return;
+
+            let currentScore = 0;
+            simRolledList.forEach(p => {
+                currentScore += (PHOEBE_ROLE_WEIGHTS[p.property] || 0) * parseFloat(p.value);
+            });
+            const hasCr = simRolledList.some(p => p.property === '暴擊');
+            const hasCd = simRolledList.some(p => p.property === '暴擊傷害');
+            const pct = PHOEBE_MAX_THEORETICAL > 0 ? ((currentScore / PHOEBE_MAX_THEORETICAL) * 100).toFixed(1) : '0.0';
+            const adminMode = isAllAdmin();
+            const isPass = parseFloat(pct) >= 90.0;
+
+            const record = {
+                time: new Date().toLocaleTimeString(),
+                role: '菲比',
+                score: currentScore.toFixed(1),
+                pct: pct,
+                isDoubleCrit: hasCr && hasCd,
+                isAdmin: adminMode,
+                pass: isPass
+            };
+
+            simHistory.unshift(record);
+            if (simHistory.length > 20) simHistory.pop();
+
+            try {
+                localStorage.setItem('ww_sim_chal_history', JSON.stringify(simHistory));
+            } catch (e) {
+                console.warn('LocalStorage save failed:', e);
+            }
+
+            renderSimHistory();
+
+            if (isPass) {
+                if (adminMode) {
+                    showToast('👑【管理員模式】菲比戰力評分達 90%+ (超級管理員測試中獎)！', 'success');
+                } else {
+                    showToast('🎉 恭喜！菲比加權評分達 90%+，成功獲取抽大月活動資格！', 'success');
+                }
+            }
+        }
+
+        function renderSimHistory() {
+            const container = document.getElementById('sim-history-list');
+            if (!container) return;
+            if (!simHistory || simHistory.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-sub); font-size:0.82rem; text-align:center; padding:1.2rem;">尚無歷史模擬紀錄</div>';
+                return;
+            }
+
+            container.innerHTML = simHistory.map(h => {
+                const adminBadge = h.isAdmin ? '<span class="pill danger" style="padding:0.1rem 0.4rem;font-size:0.68rem;margin-left:0.3rem;">👑 管理員模式</span>' : '';
+                const passBadge = h.pass ? '<span class="pill success" style="padding:0.1rem 0.4rem;font-size:0.68rem;margin-left:0.3rem;">🏆 90%+中獎</span>' : '';
+                const dcBadge = h.isDoubleCrit ? '<span style="color:#c084fc;font-weight:700;margin-left:0.3rem;">[雙爆]</span>' : '';
+                return `
+                    <div class="sim-history-item">
+                        <span>
+                            ${h.time} • <strong>菲比</strong>
+                            ${dcBadge}
+                            ${adminBadge}
+                            ${passBadge}
+                        </span>
+                        <span style="font-family:var(--font-mono);font-weight:700;color:var(--primary);">${h.score} 分 (${h.pct}%)</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        const btnClearHist = document.getElementById('btn-sim-clear-history');
+        if (btnClearHist) {
+            btnClearHist.addEventListener('click', () => {
+                simHistory = [];
+                try {
+                    localStorage.removeItem('ww_sim_chal_history');
+                } catch (e) {}
+                renderSimHistory();
+                showToast('已清除歷史模擬紀錄。', 'info');
+            });
+        }
+
+        // ─────────────────────────────────────────────
+        // TAB 3: 封鎖名單管理
+        // ─────────────────────────────────────────────
+        const tbodyBlocks = document.getElementById('tbody-blocks');
+        const btnOpenAddBlock = document.getElementById('btn-open-add-block');
+        const btnSaveBlock = document.getElementById('btn-save-block');
+
+        async function loadBlocksList() {
+            tbodyBlocks.innerHTML = `<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">⏳</div><p>載入封鎖名單中...</p></td></tr>`;
+            try {
+                const res = await fetch(`${GAS_API_URL}?action=listBlocked`);
+                const json = await res.json();
+                if (json.result === 'success') {
+                    renderBlocksTable(json.data || []);
+                } else {
+                    tbodyBlocks.innerHTML = `<tr><td colspan="6" class="empty-state"><p>${json.message || '無法載入封鎖名單'}</p></td></tr>`;
+                }
+            } catch (err) {
+                tbodyBlocks.innerHTML = `<tr><td colspan="6" class="empty-state"><p>載入出錯</p></td></tr>`;
+            }
+        }
+
+        function renderBlocksTable(list) {
+            if (!list || list.length === 0) {
+                tbodyBlocks.innerHTML = `<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">🛡️</div><p>目前尚無被封鎖的項目</p></td></tr>`;
+                return;
+            }
+            tbodyBlocks.innerHTML = list.map(item => `
+                <tr>
+                    <td><span class="pill danger">${item.type}</span></td>
+                    <td style="font-family:var(--font-mono);font-weight:700">${item.target}</td>
+                    <td>${item.reason || '--'}</td>
+                    <td class="td-time">${item.time ? new Date(item.time).toLocaleString() : '--'}</td>
+                    <td>${item.operator || '系統'}</td>
+                    <td>
+                        <button type="button" class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem" onclick="removeBlock('${item.target}')">解除封鎖</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        btnOpenAddBlock.addEventListener('click', () => {
+            if (!currentAuth.verified) {
+                showToast('請先於上方完成授權碼核驗！', 'warning');
+                return;
+            }
+            if (currentAuth.permission !== 'ALL') {
+                showToast('權限不足：管理封鎖名單需要【ALL】完整權限！', 'error');
+                return;
+            }
+            document.getElementById('block-input-target').value = '';
+            document.getElementById('block-input-reason').value = '';
+            openModal('modal-block-form');
+        });
+
+        btnSaveBlock.addEventListener('click', async () => {
+            const type = document.getElementById('block-input-type').value;
+            const target = document.getElementById('block-input-target').value.trim();
+            const reason = document.getElementById('block-input-reason').value.trim();
+
+            if (!target) {
+                showToast('請輸入封鎖目標！', 'warning');
+                return;
+            }
+
+            btnSaveBlock.disabled = true;
+            try {
+                const payload = {
+                    action: 'addBlocked',
+                    authCode: currentAuth.code,
+                    clientIp: detectedClientIp,
+                    type, target, reason
+                };
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.result === 'success') {
+                    showToast(json.message || '已加入封鎖名單', 'success');
+                    closeModal('modal-block-form');
+                    loadBlocksList();
+                } else {
+                    showToast(json.message || '操作失敗', 'error');
+                }
+            } catch (e) {
+                showToast('請求出錯', 'error');
+            } finally {
+                btnSaveBlock.disabled = false;
+            }
+        });
+
+        window.removeBlock = async function(target) {
+            if (!confirm(`確定要解除封鎖【${target}】嗎？`)) return;
+            try {
+                const payload = {
+                    action: 'removeBlocked',
+                    authCode: currentAuth.code,
+                    clientIp: detectedClientIp,
+                    target
+                };
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.result === 'success') {
+                    showToast(json.message || '已解除封鎖', 'success');
+                    loadBlocksList();
+                } else {
+                    showToast(json.message || '解除失敗', 'error');
+                }
+            } catch (e) {
+                showToast('請求出錯', 'error');
+            }
+        };
+
+        // ─────────────────────────────────────────────
+        // TAB 4: 授權模式 (A1 設定)
+        // ─────────────────────────────────────────────
+        const authModeDesc = document.getElementById('auth-mode-desc');
+        const btnSetMode0 = document.getElementById('btn-set-mode-0');
+        const btnSetMode1 = document.getElementById('btn-set-mode-1');
+
+        async function loadAuthListConfig() {
+            authModeDesc.textContent = '載入中...';
+            try {
+                const res = await fetch(`${GAS_API_URL}?action=getAuthListConfig`);
+                const json = await res.json();
+                if (json.result === 'success') {
+                    authModeDesc.textContent = json.description || (json.mode === 1 ? '模式 1: B1~含以下 UID 可申請' : '模式 0: 僅授權名單用戶可申請');
+                }
+            } catch (e) {
+                authModeDesc.textContent = '載入出錯';
+            }
+        }
+
+        async function updateAuthMode(mode) {
+            if (!currentAuth.verified) {
+                showToast('請先於上方完成授權碼核驗！', 'warning');
+                return;
+            }
+            if (currentAuth.permission !== 'ALL') {
+                showToast('權限不足：修改模式需要【ALL】完整管理權限！', 'error');
+                return;
+            }
+            try {
+                const payload = {
+                    action: 'updateAuthListConfig',
+                    authCode: currentAuth.code,
+                    clientIp: detectedClientIp,
+                    mode: mode
+                };
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.result === 'success') {
+                    showToast(json.message || '模式更新成功！', 'success');
+                    loadAuthListConfig();
+                } else {
+                    showToast(json.message || '更新失敗', 'error');
+                }
+            } catch (e) {
+                showToast('請求出錯', 'error');
+            }
+        }
+
+        btnSetMode0.addEventListener('click', () => updateAuthMode(0));
+        btnSetMode1.addEventListener('click', () => updateAuthMode(1));
+
+        // ─────────────────────────────────────────────
+        // 模態彈窗控制與關閉按鈕
+        // ─────────────────────────────────────────────
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.remove('active');
+        }
+
+        document.getElementById('btn-open-tutorial').addEventListener('click', () => openModal('modal-tutorial'));
+
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-close-modal');
+                closeModal(id);
+            });
+        });
+
+        // 點擊遮罩外圍關閉
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // 頁面初始化
+        updateSimPointsUi();
+        loadSimHistory();
+        imitate_render();
+        switchMainMode('activity');
+    </script>
+</body>
+</html>
