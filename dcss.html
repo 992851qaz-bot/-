@@ -1419,6 +1419,119 @@
             background: transparent;
         }
 
+
+        /* 系統安全警告公告橫幅 */
+        .system-security-warning-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(185, 28, 28, 0.08));
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            border-left: 4px solid #ef4444;
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1);
+        }
+        .system-security-warning-banner .warning-icon {
+            font-size: 1.4rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+        .system-security-warning-banner .warning-text {
+            color: #fca5a5;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+        .system-security-warning-banner .warning-text strong {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* 公開刪除資料教學手冊卡片 */
+        .public-instruction-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.4rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        .public-instruction-card .instruction-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 0.6rem;
+        }
+        .public-instruction-card .instruction-header h4 {
+            color: #fff;
+            font-size: 0.98rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .instruction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.9rem;
+        }
+        .instruction-step {
+            display: flex;
+            gap: 0.75rem;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 0.85rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+        .instruction-step .step-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: #041226;
+            font-weight: 800;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .instruction-step .step-content strong {
+            display: block;
+            color: #f1f5f9;
+            font-size: 0.86rem;
+            margin-bottom: 0.25rem;
+        }
+        .instruction-step .step-content p {
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        /* 綁定 UID 鎖定橫幅 */
+        .user-bound-info-card {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #bae6fd;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+        .user-bound-info-card strong {
+            color: #38bdf8;
+            font-family: var(--font-mono);
+            font-size: 1.05rem;
+        }
+
     </style>
 </head>
 <body>
@@ -1483,7 +1596,11 @@
                         <div class="event-rules-tags">
                             <span class="pill success">⚖️ 目標權重：菲比專屬標準 (固定鎖定)</span>
                             <span class="pill">🏆 抽獎資格門檻：菲比評分 ≥ 90.0%</span>
+                            <span class="pill danger" style="font-weight:700;">⛔ 公平抽獎：嚴禁且無提供急速洗雙爆功能</span>
                             <span class="pill danger" id="admin-perk-pill" style="display:none;">👑 ALL 超級管理員特權：無限刷 (免扣積分)</span>
+                        </div>
+                        <div style="margin-top:0.6rem; font-size:0.82rem; color:#fca5a5; line-height:1.45;">
+                            ⚠️ <strong>特別聲明</strong>：本活動為確保全體玩家公平競爭，<strong>嚴格禁止出現任何急速洗雙爆機制</strong>，每次皆須手動開啟與判定！中獎結果 (≥90.0%) 將即時驗證並傳送至 Discord 官方抽獎通知頻道！
                         </div>
                     </div>
                 </div>
@@ -1505,7 +1622,8 @@
                 <div class="sim-redeem-box">
                     <label for="sim-input-code" style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.4rem; display:block; font-weight:600;">🎟️ 輸入兌換碼儲值積分 (每碼限領一次)：</label>
                     <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
-                        <input type="text" id="sim-input-code" class="input-field" placeholder="WEB-XXXX-XXXX-XXXX" style="text-transform:uppercase; min-width:240px; font-family:var(--font-mono);">
+                        <input type="text" id="sim-input-code" class="input-field" placeholder="WEB-XXXX-XXXX-XXXX" style="text-transform:uppercase; min-width:240px; font-family:var(--font-mono); font-weight:600;">
+                        <button type="button" class="btn-secondary" id="btn-paste-sim" title="從剪貼簿貼上" style="padding:0.75rem 1rem; display:inline-flex; align-items:center; gap:0.35rem;">📋 貼上</button>
                         <button type="button" class="btn-primary" id="btn-sim-redeem">🎁 立即儲值積分</button>
                     </div>
                 </div>
@@ -1612,7 +1730,7 @@
                         🔑 管理員身分與授權碼核驗
                     </div>
                     <div class="card-auth-status" id="auth-status-badge">
-                        未核驗 • 請輸入由 DCBOT 核發之授權碼
+                        未核驗 • 請輸入由 DCBOT 核發之授權碼 (時效15分鐘•限5次)
                     </div>
                 </div>
 
@@ -1630,8 +1748,13 @@
                 </div>
                 <div class="auth-form-row">
                     <div class="input-group">
-                        <label for="input-auth-code">後台授權碼 (請向 DCBOT 輸入 /授權碼 申請)：</label>
-                        <input type="password" id="input-auth-code" class="input-field" placeholder="AUTH-XXXX-XXXX-XXXX" autocomplete="off">
+                        <label for="input-auth-code">後台授權碼 (請向 DCBOT 輸入 /授權碼 申請，超管可輸入 /授權碼 玩家:@用戶)：</label>
+                        <div style="display:flex; gap:0.5rem; width:100%;">
+                            <input type="text" id="input-auth-code" class="input-field" placeholder="AUTH-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="font-family:var(--font-mono); font-weight:600; letter-spacing:0.5px;">
+                            <button type="button" class="btn-secondary" id="btn-paste-auth" title="從剪貼簿自動貼上並去除反引號" style="padding:0.75rem 1rem; white-space:nowrap; display:inline-flex; align-items:center; gap:0.35rem;">
+                                📋 貼上
+                            </button>
+                        </div>
                     </div>
                     <button type="button" class="btn-primary" id="btn-auth-validate">
                         🔐 驗證授權碼並解鎖功能
@@ -1656,7 +1779,7 @@
                         <div class="auth-detail-val" id="auth-disp-uses">--</div>
                     </div>
                     <div class="auth-detail-item">
-                        <div class="auth-detail-label">有效截止時間</div>
+                        <div class="auth-detail-label">有效時長 (15分鐘)</div>
                         <div class="auth-detail-val" id="auth-disp-expire">--</div>
                     </div>
                 </div>
@@ -1738,8 +1861,52 @@
                     <span class="pill">🔒 錯誤 3 次自動封鎖 IP</span>
                 </div>
 
-                <!-- 查詢操作列 -->
-                <div class="search-action-bar">
+                <!-- 公開刪除資料教學與安全防護手冊 -->
+                <div class="public-instruction-card">
+                    <div class="instruction-header">
+                        <h4>📖 圖片數據刪除教學與系統安全防護規範 (公開操作手冊)</h4>
+                        <span class="pill success" style="font-size:0.75rem;">100% 自動鏡像備份</span>
+                    </div>
+                    <div class="instruction-grid">
+                        <div class="instruction-step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <strong>授權碼登入導入</strong>
+                                <p>於上方輸入由 DCBOT 核發之授權碼 (時效 15 分鐘)。非 ALL 權限登入後<strong>自動導入本人 UID 資料並隱藏手動查詢</strong>。</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <strong>勾選欲刪除項目</strong>
+                                <p>於列表勾選欲清除之圖片數據。系統硬性限制<strong>單次最多 50 筆</strong>，且嚴禁跨 UID 刪除。</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <strong>鏡像備份並清除</strong>
+                                <p>點選「安全備份並刪除」並輸入「確認刪除」。系統會先<strong>完整存入「圖片數據_備份」</strong>後執行清除。</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-num">4</div>
+                            <div class="step-content">
+                                <strong>自動還原與警示</strong>
+                                <p>刪除異動即時推播至 DC 管理頻道。若誤刪可一鍵還原；<strong>惡意刪除他人資料查證屬實將予以停權並調查</strong>！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 非名單用戶鎖定導入之 UID 狀態條 -->
+                <div id="user-bound-uid-banner" class="user-bound-info-card" style="display: none;">
+                    <div id="user-bound-uid-text">👤 已自動導入您綁定之遊戲 UID：--</div>
+                    <button type="button" class="btn-secondary" id="btn-refresh-bound-data" style="font-size:0.8rem; padding:0.3rem 0.75rem;">🔄 重新載入資料</button>
+                </div>
+
+                <!-- 查詢操作列 (ALL 超管可指定 UID；非名單用戶登入時隱藏) -->
+                <div class="search-action-bar" id="search-action-bar">
                     <div class="input-group" style="max-width: 320px;">
                         <label for="input-target-uid">目標遊戲 UID (9 碼數字)：</label>
                         <input type="text" id="input-target-uid" class="input-field" placeholder="例如: 900000000" maxlength="15">
@@ -1972,12 +2139,15 @@
                     <p id="auth-mode-desc" style="color: var(--primary); font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">
                         載入中...
                     </p>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
                         <button type="button" class="btn-secondary" id="btn-set-mode-0">
                             切換為【模式 0: 僅授權名單用戶(A欄)可申請】
                         </button>
-                        <button type="button" class="btn-primary" id="btn-set-mode-1">
+                        <button type="button" class="btn-secondary" id="btn-set-mode-1">
                             切換為【模式 1: B1~含以下 UID 可申請】
+                        </button>
+                        <button type="button" class="btn-primary" id="btn-set-mode-2">
+                            切換為【模式 2: 開放全體玩家 (有綁定UID均可申請)】
                         </button>
                     </div>
                 </div>
@@ -1987,6 +2157,7 @@
                     <ul style="padding-left: 1.5rem; margin-top: 0.3rem;">
                         <li><strong>A1 = 0：</strong>僅在「授權名單」工作表 A 欄 (A2 及以下) 登記之 Discord ID 用戶可透過 /授權碼 申請。</li>
                         <li><strong>A1 = 1：</strong>只要該用戶在 DC 資料庫有綁定 UID，且其 UID 存在於 B 欄 (B1~含以下) 即可申請。</li>
+                        <li><strong>A1 = 2：</strong><strong>開放全體玩家功能！</strong>凡已在 Discord 完成 <code>/綁定</code> 之玩家，均可申請專屬授權碼。非名單用戶僅開放刪除本人綁定 UID 之圖片數據（系統自動導入該 UID 資料並隱藏手動 UID 輸入框按鈕，若載入失敗 20 秒後可再次刷新一次），其餘所有後台管理模組權限一律自動禁用！</li>
                         <li><strong>無權限提示：</strong>查無權限時，機器人將回覆「加成DC及贊助或是在DC活躍的用戶可以向灰灰申請生成授權碼申請權限」並附帶最低級距貼圖。</li>
                     </ul>
                 </div>
@@ -2065,6 +2236,7 @@
                         <li>預計刪除筆數：<strong id="modal-delete-count" style="color: #fca5a5; font-family: var(--font-mono);">--</strong> 筆 (符合 50 筆上限限制)</li>
                         <li>所有待刪除資料<strong>將自動先行備份寫入「圖片數據_備份」工作表</strong>，存檔完成後才執行刪除。</li>
                         <li>系統嚴格禁止跨 UID 或全刪，若後端發現有不符合目標 UID 之資料將整批駁回！</li>
+                        <li style="color:#f87171;font-weight:700;">⚠️ 警告：嚴禁惡意刪除他人資料或破壞系統！查證屬實將予以停權並深入調查（系統皆有備份會自動還原誤刪資料）。</li>
                     </ul>
                 </div>
 
@@ -2201,7 +2373,55 @@
         // ─────────────────────────────────────────────
         // 核心設定與變數 (絕無任何硬編碼授權碼)
         // ─────────────────────────────────────────────
-        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbzOu1BjON_VHClCaEorAUjnlDfuE8Q6bGpikUPKEGatzAD9zmdZtxp1HvE3aCX03p5u/exec';
+        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyZsFkyBMUmGi2TaxGxEunLVwXsihU1Z2CZnXLGgJyVeAEcHYRBSUpszNTSyZqZP5K_/exec';
+        const LOTTERY_WIN_WEBHOOK_URL = 'https://discord.com/api/webhooks/1520739983579676873/LbWjCK8n0gdEMtnUbUsk0zX2DKlA53ktMcLa69SjUycjJev6tbzIQM2kabDu3qfP9v_k';
+        const ADMIN_LOG_WEBHOOK_URL = 'https://discord.com/api/webhooks/1557344639101566987/fj2i6tiO-vqoolcf3xABIjkj52s8GMgHkiD-lcewm-mz6gPUkkfU5HjoEtvxkcoMVkwY';
+
+        // 自動清理 Discord 複製時夾帶之 Markdown 反引號及前後空白
+        function cleanCopiedText(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/```[a-z0-9_-]*\n?/gi, '')
+                .replace(/```/g, '')
+                .replace(/`/g, '')
+                .trim();
+        }
+
+        // 安全發送 Discord Webhook (直接發送並相容 GAS 轉發備援，突破瀏覽器 CORS 限制)
+        async function sendDiscordWebhookSafe(webhookUrl, payload) {
+            let directSuccess = false;
+            try {
+                const res = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) directSuccess = true;
+            } catch (err) {
+                console.warn('Direct Discord Webhook send blocked or CORS restricted, falling back to GAS backend proxy:', err);
+            }
+
+            if (!directSuccess) {
+                try {
+                    const gasRes = await fetch(`${GAS_API_URL}?action=reportLotteryWin`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({
+                            action: 'reportLotteryWin',
+                            payload: JSON.stringify(payload)
+                        })
+                    });
+                    const gasData = await gasRes.json();
+                    if (gasData && gasData.result === 'success') {
+                        console.log('Successfully forwarded Discord Webhook via GAS proxy');
+                        return true;
+                    }
+                } catch (e2) {
+                    console.warn('GAS proxy Webhook forwarding error:', e2);
+                }
+            }
+            return directSuccess;
+        }
         
         // 運行時臨時狀態 (僅保存在記憶體中，絕不存入 LocalStorage 或暴露在程式碼中)
         let currentAuth = {
@@ -2258,8 +2478,33 @@
         const authDetailsContainer = document.getElementById('auth-details-container');
         const authSection = document.getElementById('auth-section');
 
+        // 即時自動無視與清除複製時多加之反引號
+        inputAuthCode.addEventListener('input', () => {
+            const clean = cleanCopiedText(inputAuthCode.value);
+            if (clean !== inputAuthCode.value) inputAuthCode.value = clean;
+        });
+        inputAuthCode.addEventListener('paste', () => {
+            setTimeout(() => {
+                inputAuthCode.value = cleanCopiedText(inputAuthCode.value);
+            }, 0);
+        });
+
+        const inputSimCode = document.getElementById('sim-input-code');
+        if (inputSimCode) {
+            inputSimCode.addEventListener('input', () => {
+                const clean = cleanCopiedText(inputSimCode.value);
+                if (clean !== inputSimCode.value) inputSimCode.value = clean;
+            });
+            inputSimCode.addEventListener('paste', () => {
+                setTimeout(() => {
+                    inputSimCode.value = cleanCopiedText(inputSimCode.value);
+                }, 0);
+            });
+        }
+
+
         btnAuthValidate.addEventListener('click', async () => {
-            const code = inputAuthCode.value.trim();
+            const code = cleanCopiedText(inputAuthCode.value);
             if (!code) {
                 showToast('請輸入授權碼！', 'warning');
                 return;
@@ -2308,14 +2553,27 @@
                     btnAuthValidate.style.display = 'none';
                     btnAuthClear.style.display = 'inline-flex';
 
-                    // 若授權碼綁定特定 UID 且非 ALL，自動填入且鎖定目標 UID 輸入框
+                    // 若授權碼綁定特定 UID 且非 ALL，自動填入並隱藏 UID 輸入框與按鈕，開放刪除本人資料
                     const inputTargetUid = document.getElementById('input-target-uid');
+                    const searchBar = document.getElementById('search-action-bar');
+                    const boundBanner = document.getElementById('user-bound-uid-banner');
+                    const boundText = document.getElementById('user-bound-uid-text');
+
                     if (data.permission !== 'ALL' && data.applicantUid) {
                         inputTargetUid.value = data.applicantUid;
-                        inputTargetUid.disabled = true;
-                        inputTargetUid.title = '非 ALL 權限授權碼僅限操作申請人自身的遊戲 UID';
+                        if (searchBar) searchBar.style.display = 'none';
+                        if (boundBanner) {
+                            boundBanner.style.display = 'flex';
+                            if (boundText) {
+                                boundText.innerHTML = `👤 已自動導入您綁定之遊戲 UID：<strong>${data.applicantUid}</strong> <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;margin-left:0.5rem;">(非名單/UID權限僅開放刪除本人資料，已自動隱藏手動查詢，其餘管理權限已禁用)</span>`;
+                            }
+                        }
+                        // 自動導入並載入本人 UID 資料
+                        loadImagesForUid(data.applicantUid);
                     } else {
                         inputTargetUid.disabled = false;
+                        if (searchBar) searchBar.style.display = 'flex';
+                        if (boundBanner) boundBanner.style.display = 'none';
                     }
 
                     showToast('授權碼核驗成功！已解鎖管理操作。', 'success');
@@ -2351,6 +2609,11 @@
             btnAuthValidate.style.display = 'inline-flex';
             btnAuthClear.style.display = 'none';
             document.getElementById('input-target-uid').disabled = false;
+            const searchBar = document.getElementById('search-action-bar');
+            const boundBanner = document.getElementById('user-bound-uid-banner');
+            if (searchBar) searchBar.style.display = 'flex';
+            if (boundBanner) boundBanner.style.display = 'none';
+            clearInterval(uidRetryTimer);
             updateAdminLockState();
             updateSimPointsUi();
             imitate_render();
@@ -2366,8 +2629,8 @@
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const targetTab = btn.getAttribute('data-tab');
-                if (!isAllAdmin() && targetTab !== 'tab-images') {
-                    showToast('⚠️ 權限不足：您的授權限本人 UID 圖片管理，無法存取此超級管理員模組！', 'warning');
+                if (!isAllAdmin() && targetTab !== 'tab-images' && targetTab !== 'tab-echo-sim') {
+                    showToast('⚠️ 權限不足：非 ALL 管理員僅限操作本人綁定 UID 之圖片數據，其餘管理權限一律禁用！', 'warning');
                     return;
                 }
                 tabBtns.forEach(b => b.classList.remove('active'));
@@ -2457,7 +2720,49 @@
             }
         });
 
+        let uidRetryTimer = null;
+        let uidRetrySeconds = 20;
+
+        function triggerUidRetryCountdown(uid, errorMsg) {
+            clearInterval(uidRetryTimer);
+            uidRetrySeconds = 20;
+            tbodyImages.innerHTML = `
+                <tr>
+                    <td colspan="10" class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <p style="color:#f87171;font-weight:700;">資料載入失敗：${errorMsg || '伺服器忙碌或連線逾時'}</p>
+                        <p style="font-size:0.84rem;color:var(--text-sub);margin-top:0.4rem;">非名單用戶已鎖定載入綁定之 UID (${uid})。若載入失敗，20 秒後可再次刷新一次。</p>
+                        <div style="margin-top:1.2rem;">
+                            <button type="button" class="btn-primary" id="btn-retry-uid-countdown" disabled style="min-width:240px;opacity:0.65;cursor:not-allowed;">
+                                ⏳ 20 秒後可再次刷新 (20s)
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            const btnRetry = document.getElementById('btn-retry-uid-countdown');
+            uidRetryTimer = setInterval(() => {
+                uidRetrySeconds--;
+                if (uidRetrySeconds > 0) {
+                    if (btnRetry) btnRetry.textContent = `⏳ ${uidRetrySeconds} 秒後可再次刷新 (${uidRetrySeconds}s)`;
+                } else {
+                    clearInterval(uidRetryTimer);
+                    if (btnRetry) {
+                        btnRetry.disabled = false;
+                        btnRetry.style.opacity = '1';
+                        btnRetry.style.cursor = 'pointer';
+                        btnRetry.textContent = '🔄 重新整理我的 UID 數據';
+                        btnRetry.onclick = () => {
+                            loadImagesForUid(uid);
+                        };
+                    }
+                }
+            }, 1000);
+        }
+
         async function loadImagesForUid(uid) {
+            clearInterval(uidRetryTimer);
             tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">⏳</div><p>正在載入 UID: ${uid} 的圖片數據...</p></td></tr>`;
             selectedRowIds.clear();
             updateSelectionUi();
@@ -2470,13 +2775,30 @@
                     currentLoadedImages = json.data || [];
                     renderImagesTable(currentLoadedImages);
                 } else {
-                    tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">⚠️</div><p>${json.message || '查詢失敗'}</p></td></tr>`;
                     showToast(json.message || '查詢失敗', 'error');
+                    if (currentAuth.permission !== 'ALL') {
+                        triggerUidRetryCountdown(uid, json.message);
+                    } else {
+                        tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">⚠️</div><p>${json.message || '查詢失敗'}</p></td></tr>`;
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">❌</div><p>載入出錯，請確認網路連線</p></td></tr>`;
+                if (currentAuth.permission !== 'ALL') {
+                    triggerUidRetryCountdown(uid, '連線逾時或網路異常');
+                } else {
+                    tbodyImages.innerHTML = `<tr><td colspan="10" class="empty-state"><div class="empty-state-icon">❌</div><p>載入出錯，請確認網路連線</p></td></tr>`;
+                }
             }
+        }
+
+        const btnRefreshBoundData = document.getElementById('btn-refresh-bound-data');
+        if (btnRefreshBoundData) {
+            btnRefreshBoundData.addEventListener('click', () => {
+                if (currentAuth.applicantUid) {
+                    loadImagesForUid(currentAuth.applicantUid);
+                }
+            });
         }
 
         function renderImagesTable(rows) {
@@ -2634,6 +2956,24 @@
                 if (json.result === 'success') {
                     closeModal('modal-delete-confirm');
                     showToast(json.message || `成功備份並刪除 ${deleteIds.length} 筆資料！`, 'success');
+
+                    // 傳送刪除異動至 Discord Webhook
+                    sendDiscordWebhookSafe(ADMIN_LOG_WEBHOOK_URL, {
+                        embeds: [{
+                            title: "🗑️ 資料庫異動：圖片數據安全備份並刪除",
+                            color: 0xef4444,
+                            description: "已成功備份至「圖片數據_備份」工作表並完成刪除。\n*(若為誤刪可隨時從備份表一鍵還原)*",
+                            fields: [
+                                { name: "操作人", value: (currentAuth.applicantDcid ? `<@${currentAuth.applicantDcid}>` : "未知") + ` (綁定 UID: \`${currentAuth.applicantUid || '無'}\`)`, inline: true },
+                                { name: "目標 UID", value: `\`${targetUid}\``, inline: true },
+                                { name: "刪除筆數", value: `${deleteIds.length} 筆`, inline: true },
+                                { name: "權限等級", value: `\`${currentAuth.permission}\``, inline: true },
+                                { name: "剩餘授權次數", value: `${json.remainingUses || currentAuth.remainingUses} 次`, inline: true }
+                            ],
+                            timestamp: new Date().toISOString(),
+                            footer: { text: "鳴潮數據控制台 • 資料庫變更安全監控" }
+                        }]
+                    });
 
                     // 更新剩餘使用次數
                     if (json.remainingUses !== undefined) {
@@ -3088,11 +3428,10 @@
 
         // 兌換碼儲值事件
         const btnSimRedeem = document.getElementById('btn-sim-redeem');
-        const inputSimCode = document.getElementById('sim-input-code');
 
         if (btnSimRedeem) {
             btnSimRedeem.addEventListener('click', async () => {
-                const code = inputSimCode.value.trim().toUpperCase();
+                const code = cleanCopiedText(inputSimCode ? inputSimCode.value : '').toUpperCase();
                 if (!code) {
                     showToast('請輸入兌換碼序號！', 'warning');
                     return;
@@ -3395,10 +3734,52 @@
 
             if (isPass) {
                 if (adminMode) {
-                    showToast('👑【管理員模式】菲比戰力評分達 90%+ (超級管理員測試中獎)！', 'success');
+                    showToast('👑【管理員模式】菲比戰力評分達 90%+ (超級管理員測試中獎)！中獎結果已發送至 DC！', 'success');
                 } else {
-                    showToast('🎉 恭喜！菲比加權評分達 90%+，成功獲取抽大月活動資格！', 'success');
+                    showToast('🎉 恭喜！菲比加權評分達 90%+，成功獲取抽大月卡/小月卡抽獎資格！中獎通知已即時送出至官方 DC 頻道！', 'success');
                 }
+
+                // 確實傳送中獎結果至官方 Discord Webhook
+                const statsSummary = simRolledList.map((p, idx) => {
+                    const w = PHOEBE_ROLE_WEIGHTS[p.property] || 0;
+                    const val = parseFloat(p.value);
+                    const isCrit = (p.property === '暴擊' || p.property === '暴擊傷害');
+                    return `#${idx + 1} **${p.property}** \`${p.value}\` ${isCrit ? '⭐' : ''} (加權 +${(w * val).toFixed(1)}分)`;
+                }).join('\n');
+
+                const winPayload = {
+                    content: "🎉 **【鳴潮聲骸模擬開詞條 • 抽大月卡 / 小月卡活動】恭喜玩家達成 90%+ 評分！**",
+                    embeds: [{
+                        title: "🏆 90%+ 菲比加權評分達成 • 抽大月卡/小月卡抽獎資格解鎖！",
+                        color: adminMode ? 0xef4444 : 0xf59e0b,
+                        description: [
+                            "玩家於資料庫管理控制台聲骸模擬器完成 5 條副詞條開啟，菲比加權評分成功超越 **90.0%** 門檻！",
+                            "",
+                            `> ⚖️ **活動目標**: 菲比 (推薦標準 • 專屬加權)`,
+                            `> 📊 **達成得分**: **${currentScore.toFixed(1)}** / ${PHOEBE_MAX_THEORETICAL.toFixed(1)} 分 (**${pct}%**)`,
+                            `> ✨ **雙爆狀態**: ${(hasCr && hasCd) ? "🔥 達成雙爆 (暴擊+暴傷)" : "單爆/無雙爆"}`,
+                            `> 👑 **模式標註**: ${adminMode ? "👑 管理員無限刷測試模式" : "✅ 玩家正式活動挑戰"}`
+                        ].join('\n'),
+                        fields: [
+                            {
+                                name: "👤 玩家身分 / UID",
+                                value: currentAuth.verified
+                                    ? `• 遊戲 UID: \`${currentAuth.applicantUid || '無'}\`\n• Discord: <@${currentAuth.applicantDcid}> (\`${currentAuth.applicantDcid}\`)`
+                                    : `• 訪客 / 尚未核驗授權碼\n*(如欲兌獎請至控制台驗證授權碼登入，或聯繫灰灰)*`,
+                                inline: false
+                            },
+                            {
+                                name: "🎲 5 條副詞條明細",
+                                value: statsSummary || "無",
+                                inline: false
+                            }
+                        ],
+                        timestamp: new Date().toISOString(),
+                        footer: { text: "鳴潮數據控制台 • 抽大月卡/小月卡活動抽獎系統" }
+                    }]
+                };
+
+                sendDiscordWebhookSafe(LOTTERY_WIN_WEBHOOK_URL, winPayload);
             }
         }
 
@@ -3565,6 +3946,7 @@
         const authModeDesc = document.getElementById('auth-mode-desc');
         const btnSetMode0 = document.getElementById('btn-set-mode-0');
         const btnSetMode1 = document.getElementById('btn-set-mode-1');
+        const btnSetMode2 = document.getElementById('btn-set-mode-2');
 
         async function loadAuthListConfig() {
             authModeDesc.textContent = '載入中...';
@@ -3572,7 +3954,13 @@
                 const res = await fetch(`${GAS_API_URL}?action=getAuthListConfig`);
                 const json = await res.json();
                 if (json.result === 'success') {
-                    authModeDesc.textContent = json.description || (json.mode === 1 ? '模式 1: B1~含以下 UID 可申請' : '模式 0: 僅授權名單用戶可申請');
+                    if (json.mode === 2) {
+                        authModeDesc.textContent = json.description || '模式 2: 開放全體玩家 (有綁定UID均可申請並刪除自身資料)';
+                    } else if (json.mode === 1) {
+                        authModeDesc.textContent = json.description || '模式 1: B1~含以下 UID 可申請';
+                    } else {
+                        authModeDesc.textContent = json.description || '模式 0: 僅授權名單用戶(A欄)可申請';
+                    }
                 }
             } catch (e) {
                 authModeDesc.textContent = '載入出錯';
@@ -3604,6 +3992,17 @@
                 if (json.result === 'success') {
                     showToast(json.message || '模式更新成功！', 'success');
                     loadAuthListConfig();
+
+                    const modeText = mode === 2 ? '【模式 2: 開放全體玩家】' : (mode === 1 ? '【模式 1: B1~含以下UID可申請】' : '【模式 0: 僅授權名單用戶可申請】');
+                    sendDiscordWebhookSafe(ADMIN_LOG_WEBHOOK_URL, {
+                        embeds: [{
+                            title: "⚙️ 資料庫異動：授權模式變更 (A1)",
+                            color: 0x38bdf8,
+                            description: `超級管理員 <@${currentAuth.applicantDcid}> 切換了授權名單規則為：${modeText}`,
+                            timestamp: new Date().toISOString(),
+                            footer: { text: "鳴潮數據控制台 • 授權名單設定" }
+                        }]
+                    });
                 } else {
                     showToast(json.message || '更新失敗', 'error');
                 }
@@ -3612,8 +4011,9 @@
             }
         }
 
-        btnSetMode0.addEventListener('click', () => updateAuthMode(0));
-        btnSetMode1.addEventListener('click', () => updateAuthMode(1));
+        if (btnSetMode0) btnSetMode0.addEventListener('click', () => updateAuthMode(0));
+        if (btnSetMode1) btnSetMode1.addEventListener('click', () => updateAuthMode(1));
+        if (btnSetMode2) btnSetMode2.addEventListener('click', () => updateAuthMode(2));
 
         // ─────────────────────────────────────────────
         // 模態彈窗控制與關閉按鈕
@@ -3650,7 +4050,62 @@
         updateSimPointsUi();
         loadSimHistory();
         imitate_render();
-        switchMainMode('activity');
+        // ── 智慧模式路由與 URL 參數自動解析 ──
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlHash = (window.location.hash || '').toLowerCase();
+        const hasAuthParam = urlParams.get('auth') || (urlHash.startsWith('#auth=') ? urlHash.replace('#auth=', '') : '');
+        const targetMode = (urlParams.get('mode') === 'admin' || urlHash === '#admin' || Boolean(hasAuthParam)) 
+            ? 'admin' 
+            : (urlParams.get('mode') === 'activity' || urlHash === '#activity' ? 'activity' : 'activity');
+
+        // 綁定剪貼簿一鍵貼上事件 (自動清理反引號與空格)
+        const btnPasteAuth = document.getElementById('btn-paste-auth');
+        if (btnPasteAuth) {
+            btnPasteAuth.addEventListener('click', async () => {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        inputAuthCode.value = cleanCopiedText(text);
+                        showToast('已自剪貼簿貼上授權碼！', 'info');
+                    }
+                } catch (_) {
+                    showToast('請手動於輸入框貼上授權碼。', 'warning');
+                }
+            });
+        }
+
+        const btnPasteSim = document.getElementById('btn-paste-sim');
+        if (btnPasteSim) {
+            btnPasteSim.addEventListener('click', async () => {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        inputSimCode.value = cleanCopiedText(text).toUpperCase();
+                        showToast('已自剪貼簿貼上兌換碼！', 'info');
+                    }
+                } catch (_) {
+                    showToast('請手動於輸入框貼上兌換碼。', 'warning');
+                }
+            });
+        }
+
+        // 監聽 Hash 變更以便瀏覽器上一頁/下一頁流暢切換
+        window.addEventListener('hashchange', () => {
+            const h = (window.location.hash || '').toLowerCase();
+            if (h === '#admin') switchMainMode('admin');
+            else if (h === '#activity') switchMainMode('activity');
+        });
+
+        // 啟動模式
+        switchMainMode(targetMode);
+
+        // 若 URL 帶有 ?auth=AUTH-XXXX 或 #auth=AUTH-XXXX，自動填入並立即觸發驗證
+        if (hasAuthParam) {
+            inputAuthCode.value = cleanCopiedText(hasAuthParam);
+            setTimeout(() => {
+                if (btnAuthValidate) btnAuthValidate.click();
+            }, 350);
+        }
     </script>
 </body>
 </html>
