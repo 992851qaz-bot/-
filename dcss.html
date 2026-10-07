@@ -1613,6 +1613,684 @@
             font-size: 0.82rem;
         }
 
+
+        /* ══════════════════════════════════════════════════════════════ */
+        /* 精簡優化樣式系統 (消除雜亂、強化視覺焦點) */
+        /* ══════════════════════════════════════════════════════════════ */
+        
+        /* 膠囊模式導航 */
+        .mode-nav-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 1.25rem 0 2rem;
+        }
+        .mode-nav-tabs {
+            display: inline-flex;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            padding: 0.35rem;
+            gap: 0.4rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            max-width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .mode-nav-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.65rem 1.4rem;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            white-space: nowrap;
+        }
+        .mode-nav-tab:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .mode-nav-tab.active {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.45);
+        }
+        .mode-badge-pill {
+            font-size: 0.72rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            font-weight: 600;
+        }
+
+        /* 專注登入 Hero 卡片 (完美分行、零碰撞) */
+        .auth-hero-box {
+            max-width: 560px;
+            width: 100%;
+            margin: 1.5rem auto 2.5rem;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.75));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 2.2rem 2.2rem;
+            text-align: center;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 35px rgba(56, 189, 248, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-sizing: border-box;
+        }
+        .auth-hero-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.6rem;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.4));
+        }
+        .auth-hero-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.4rem;
+        }
+        .auth-hero-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 1.6rem;
+            line-height: 1.5;
+        }
+        .auth-hero-input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .auth-input-pill {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: rgba(8, 12, 22, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: var(--radius-md);
+            padding: 0.45rem 0.75rem;
+            gap: 0.5rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .auth-input-pill:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+        .auth-input-pill input {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.05rem;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            outline: none;
+            padding: 0.35rem 0.2rem;
+            letter-spacing: 0.5px;
+        }
+        .btn-paste-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-main);
+            padding: 0.45rem 0.8rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-paste-pill:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+        }
+        .btn-primary-hero {
+            width: 100%;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.85rem 1.5rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-sizing: border-box;
+        }
+        .btn-primary-hero:hover {
+            background: linear-gradient(135deg, #0ea5e9, #1d4ed8);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+        .auth-hero-hints {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        .auth-hero-hints .cmd-pill {
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .auth-hero-pills {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* 解鎖後精簡身分狀態條 */
+        .auth-status-strip {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.7));
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+        }
+        .auth-status-info {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .auth-status-badge-main {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+        }
+        .auth-status-item {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+        .auth-status-item strong {
+            color: #fff;
+            font-family: var(--font-mono);
+            margin-left: 0.25rem;
+        }
+
+        /* 活動頂部看板 (雙欄結構、告別跑版) */
+        .activity-dashboard-bar {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.78));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(360px, 1fr);
+            gap: 1.5rem;
+            align-items: center;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        @media (max-width: 1040px) {
+            .activity-dashboard-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .activity-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .activity-title-row h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-status-live {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fbbf24;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            animation: pulse-live 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-live {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .activity-tags-inline {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.6rem;
+        }
+
+        .activity-rule-desc {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* 儲值與積分卡片 */
+        .activity-wallet-card {
+            background: rgba(10, 15, 26, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 1.1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-sizing: border-box;
+        }
+
+        .activity-wallet-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .wallet-label {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+
+        .wallet-balance {
+            font-size: 1.85rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #38bdf8;
+            line-height: 1;
+            text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .pts-unit {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-sub);
+            margin-left: 0.25rem;
+        }
+
+        .activity-redeem-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .redeem-input-wrap {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            background: rgba(8, 12, 22, 0.95);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.25rem 0.5rem;
+            gap: 0.35rem;
+            transition: border-color 0.2s;
+        }
+
+        .redeem-input-wrap:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+
+        .redeem-icon {
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+
+        .redeem-input-wrap input {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 0.88rem;
+            outline: none;
+            text-transform: uppercase;
+            padding: 0.35rem 0.2rem;
+        }
+
+        .wallet-hint {
+            font-size: 0.76rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        /* 聲骸模擬器控制列 */
+        .sim-controls-bar {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.4rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .locked-role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 0.55rem 1rem;
+        }
+
+        .locked-role-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .locked-role-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #38bdf8;
+            font-family: var(--font-mono);
+        }
+
+        /* 聲骸副詞條工作區 Grid */
+        .sim-workspace-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        @media (max-width: 960px) {
+            .sim-workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sim-slots-container {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.4rem;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .sim-slots-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sim-slot-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 0.85rem 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 68px;
+            box-sizing: border-box;
+        }
+
+        .sim-slot-item:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sim-slot-item.slot-empty {
+            border-style: dashed;
+            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .sim-slot-item.double-crit {
+            border-color: rgba(192, 132, 252, 0.55);
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.1), rgba(168, 85, 247, 0.04));
+            box-shadow: 0 0 20px rgba(192, 132, 252, 0.18);
+        }
+
+        .sim-slot-left {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            min-width: 0;
+        }
+
+        .sim-slot-idx {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            flex-shrink: 0;
+        }
+
+        .sim-slot-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .sim-slot-val {
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: var(--primary);
+            line-height: 1.1;
+        }
+
+        .sim-slot-val.gold {
+            color: #fbbf24;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+        }
+
+        .sim-slot-val.purple {
+            color: #c084fc;
+            text-shadow: 0 0 12px rgba(192, 132, 252, 0.4);
+        }
+
+        .tier-bar {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .tier-seg {
+            width: 13px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .tier-seg.active {
+            background: var(--primary);
+            box-shadow: 0 0 6px var(--primary-glow);
+        }
+
+        .tier-seg.gold {
+            background: #f59e0b;
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+        }
+
+        .tier-seg.purple {
+            background: #c084fc;
+            box-shadow: 0 0 6px rgba(192, 132, 252, 0.6);
+        }
+
+        /* 右側統計欄與評分卡 */
+        .sim-stats-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            min-width: 0;
+        }
+
+        .sim-score-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .sim-score-header {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .sim-score-main {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.4rem;
+            margin: 0.75rem 0 0.5rem;
+        }
+
+        .sim-score-number {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #fff;
+            font-family: var(--font-mono);
+            line-height: 1;
+        }
+
+        .sim-score-percent {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: var(--font-mono);
+        }
+
+        .sim-score-max-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
+        /* 90% 獲獎動態進度條 */
+        .sim-progress-wrapper {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            height: 12px;
+            margin: 0.75rem 0 0.4rem;
+            overflow: visible;
+        }
+
+        .sim-progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #0284c7, #38bdf8);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            transition: width 0.35s ease;
+            width: 0%;
+        }
+
+        .sim-progress-fill.winner {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            box-shadow: 0 0 16px rgba(251, 191, 36, 0.8);
+        }
+
+        .sim-progress-marker {
+            position: absolute;
+            left: 90%;
+            top: -5px;
+            bottom: -5px;
+            width: 2px;
+            background: #fbbf24;
+            box-shadow: 0 0 8px #fbbf24;
+            z-index: 2;
+        }
+
+        .sim-progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-sub);
+            margin-top: 0.35rem;
+        }
+
+        /* 歷史紀錄列表與項目 */
+        .sim-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .sim-history-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-sm);
+            padding: 0.55rem 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: var(--text-main);
+        }
+
+        .sim-history-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
 <body>
@@ -1622,12 +2300,12 @@
         <div class="brand-container">
             <div class="brand-logo">WW</div>
             <div class="brand-text">
-                <h1>鳴潮資料庫管理控制台</h1>
-                <p>DATABASE ADMIN CONSOLE v1.0 • SECURE MODE</p>
+                <h1>鳴潮聲骸模擬 • 抽大月活動系統</h1>
+                <p>WUTHERING WAVES ECHO SIMULATOR &amp; DATA MANAGEMENT</p>
             </div>
         </div>
         <div class="header-actions">
-            <span class="badge-security" id="security-status-indicator">防全刪保護已啟用</span>
+            <span class="badge-security" id="security-status-indicator">🔥 抽大月活動熱門進行中</span>
             <button class="btn-tutorial" id="btn-open-tutorial">
                 📖 授權碼申請教學
             </button>
@@ -1637,77 +2315,63 @@
     <!-- 主內容區 -->
         <main>
 
-        <!-- 頂部兩大模式主切換器 (直覺、現代、流暢) -->
-        <div class="main-mode-switcher-container">
-            <button type="button" class="main-mode-btn active" id="btn-mode-activity" onclick="switchMainMode('activity')">
-                <div class="main-mode-icon">🎯</div>
-                <div class="main-mode-info">
-                    <div class="main-mode-title">⭐ 抽大月活動 • 聲骸模擬開詞條序號兌換</div>
-                    <div class="main-mode-desc">開放體驗 • 菲比固定加權達 90%+ 抽大月卡資格 • 兌換碼儲值</div>
-                </div>
-                <span class="mode-badge-free">熱門進行中</span>
-            </button>
-            <button type="button" class="main-mode-btn" id="btn-mode-admin" onclick="switchMainMode('admin')">
-                <div class="main-mode-icon">🛡️</div>
-                <div class="main-mode-info">
-                    <div class="main-mode-title">資料庫管理控制台</div>
-                    <div class="main-mode-desc">安全授權核驗 • 圖片數據刪除 • 兌換碼設定 • 封鎖管理 • A1設定</div>
-                </div>
-                <span class="mode-badge-lock" id="mode-admin-lock-pill">🔒 需管理員授權</span>
-            </button>
-        </div>
+        <!-- 頂部高科技膠囊模式導航 (極簡現代、消除雜亂感) -->
+        <nav class="mode-nav-wrapper">
+            <div class="mode-nav-tabs">
+                <button type="button" class="mode-nav-tab active" id="btn-mode-activity" onclick="switchMainMode('activity')">
+                    <span class="nav-tab-icon">🎯</span>
+                    <span class="nav-tab-title">聲骸模擬 • 抽大月活動</span>
+                    <span class="mode-badge-pill" style="background:rgba(245,158,11,0.25);color:#fbbf24;">🔥 主要活動</span>
+                </button>
+                <button type="button" class="mode-nav-tab" id="btn-mode-admin" onclick="switchMainMode('admin')">
+                    <span class="nav-tab-icon">🗄️</span>
+                    <span class="nav-tab-title">資料庫管理控制台</span>
+                    <span class="mode-badge-pill" id="mode-admin-lock-pill">🔒 需授權</span>
+                </button>
+            </div>
+        </nav>
 
         <!-- ══════════════════════════════════════════════════════════════ -->
         <!-- 模式一：⭐ 抽大月活動 • 聲骸模擬開詞條序號兌換 (預設優先顯示) -->
         <!-- ══════════════════════════════════════════════════════════════ -->
-        <section id="section-mode-activity" class="main-mode-section">
-            <!-- 活動資訊宣導卡 (參考 0923.html 同款機制) -->
-            <div class="event-hero-banner">
-                <div class="event-hero-header">
-                    <div class="event-badge">🎯 特別活動企劃</div>
-                    <h2 class="event-title">鳴潮聲骸模擬開詞條 • 抽大月卡 / 小月卡活動</h2>
+        <section id="section-mode-activity" class="main-mode-section" style="display:block;">
+            <!-- 活動資訊與積分儲值緊湊型面板 (乾淨明瞭) -->
+            <div class="activity-dashboard-bar">
+                <div class="activity-info-box">
+                    <div class="activity-title-row">
+                        <h2>🎯 鳴潮聲骸模擬開詞條 • 抽大月卡/小月卡活動</h2>
+                        <span class="badge-status-live">🔥 進行中</span>
+                    </div>
+                    <div class="activity-tags-inline">
+                        <span class="pill success">⚖️ 菲比固定加權 (2.5/2.5/1.0/0.8/0.8)</span>
+                        <span class="pill" style="background:rgba(245,158,11,0.2);color:#fbbf24;">🏆 綜合評分 ≥ 90.0% 自動獲獎資格</span>
+                        <span class="pill danger" style="font-weight:700;">⛔ 公平競技：嚴格禁止急速洗雙爆</span>
+                        <span class="pill danger" id="admin-perk-pill" style="display:none;">👑 ALL 特權：免扣積分</span>
+                    </div>
+                    <div class="activity-rule-desc">
+                        💡 消耗 1 網站積分開啟 1 次副詞條；開滿 5 條且菲比加權評分達標即自動透過 Webhook 回傳官方中獎頻道！
+                    </div>
                 </div>
-                <div class="event-hero-body">
-                    <div class="event-desc-box">
-                        <p>
-                            💡 <strong>活動機制（與 0923.html 任務與積分系統同款評分）：</strong>
-                            消耗 1 網站積分開啟 1 次聲骸副詞條。本抽大月活動<strong>專屬鎖定【菲比】(暴擊/暴傷/攻擊%/共鳴解放/攻擊) 戰力權重</strong>！
-                            每位開滿 5 條詞條且<strong>綜合戰力評分達成 90.0% 以上</strong>之玩家，即自動獲得<strong>抽大月卡抽獎資格</strong>！
-                        </p>
-                        <div class="event-rules-tags">
-                            <span class="pill success">⚖️ 目標權重：菲比專屬標準 (固定鎖定)</span>
-                            <span class="pill">🏆 抽獎資格門檻：菲比評分 ≥ 90.0%</span>
-                            <span class="pill danger" style="font-weight:700;">⛔ 公平抽獎：嚴禁且無提供急速洗雙爆功能</span>
-                            <span class="pill danger" id="admin-perk-pill" style="display:none;">👑 ALL 超級管理員特權：無限刷 (免扣積分)</span>
+
+                <div class="activity-wallet-card">
+                    <div class="activity-wallet-top">
+                        <span class="wallet-label">🪙 可用積分餘額</span>
+                        <div class="wallet-balance"><span id="sim-points-val">10</span> <span class="pts-unit" id="sim-points-unit">點</span></div>
+                    </div>
+                    <div class="activity-redeem-row">
+                        <div class="redeem-input-wrap">
+                            <span class="redeem-icon">🎟️</span>
+                            <input type="text" id="sim-input-code" placeholder="WEB-XXXX-XXXX-XXXX" spellcheck="false" autocomplete="off">
+                            <button type="button" class="btn-paste-pill" id="btn-paste-sim" title="從剪貼簿貼上">📋 貼上</button>
                         </div>
-                        <div style="margin-top:0.6rem; font-size:0.82rem; color:#fca5a5; line-height:1.45;">
-                            ⚠️ <strong>特別聲明</strong>：本活動為確保全體玩家公平競爭，<strong>嚴格禁止出現任何急速洗雙爆機制</strong>，每次皆須手動開啟與判定！中獎結果 (≥90.0%) 將即時驗證並傳送至 Discord 官方抽獎通知頻道！
-                        </div>
+                        <button type="button" class="btn-primary" id="btn-sim-redeem" style="white-space:nowrap; padding:0.5rem 0.9rem;">🎁 立即儲值</button>
+                    </div>
+                    <div class="wallet-hint">
+                        💡 1 積分 = 1 次模擬。可由 DCBOT <code class="cmd-pill">/兌換積分</code> 轉換
+                        <span id="admin-mode-text-hint" style="color:#f59e0b;font-weight:700;display:none;">[👑 免扣分]</span>
                     </div>
                 </div>
             </div>
-
-            <!-- 積分餘額與儲值橫幅 -->
-            <div class="sim-balance-header">
-                <div class="sim-balance-info">
-                    <div class="sim-balance-label">🪙 目前網站可用積分餘額</div>
-                    <div class="sim-balance-num">
-                        <span id="sim-points-val">10</span> 
-                        <span style="font-size:1.1rem;color:var(--text-muted);font-weight:400" id="sim-points-unit">點</span>
-                    </div>
-                    <div class="sim-balance-hint">
-                        💡 1 積分 = 1 次聲骸模擬開詞條 (可向 DCBOT <code>/兌換積分</code> 轉換或輸入兌換碼儲值)
-                        <span id="admin-mode-text-hint" style="color:#f59e0b;font-weight:700;display:none;margin-left:0.5rem;">[👑 管理員模式：無限刷免扣分]</span>
-                    </div>
-                </div>
-                <div class="sim-redeem-box">
-                    <label for="sim-input-code" style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.4rem; display:block; font-weight:600;">🎟️ 輸入兌換碼儲值積分 (每碼限領一次)：</label>
-                    <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
-                        <input type="text" id="sim-input-code" class="input-field" placeholder="WEB-XXXX-XXXX-XXXX" style="text-transform:uppercase; min-width:240px; font-family:var(--font-mono); font-weight:600;">
-                        <button type="button" class="btn-secondary" id="btn-paste-sim" title="從剪貼簿貼上" style="padding:0.75rem 1rem; display:inline-flex; align-items:center; gap:0.35rem;">📋 貼上</button>
-                        <button type="button" class="btn-primary" id="btn-sim-redeem">🎁 立即儲值積分</button>
-                    </div>
-                </div>
             </div>
 
             <!-- 聲骸模擬器控制列 (固定菲比，不提供其他角色切換) -->
@@ -1755,13 +2419,24 @@
                 <div class="sim-stats-sidebar">
                     <!-- 綜合戰力評分卡 -->
                     <div class="sim-score-card">
-                        <div style="font-size:0.85rem; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">菲比 綜合戰力評分</div>
-                        <div style="display:flex; align-items:baseline; justify-content:center; gap:0.4rem; margin:0.8rem 0;">
-                            <div id="sim-score-val" style="font-size:3.2rem; font-weight:800; color:#fff; font-family:var(--font-mono); line-height:1;">0.0</div>
-                            <div id="sim-score-pct" style="font-size:1.8rem; font-weight:700; color:var(--primary); font-family:var(--font-mono);">0.0%</div>
+                        <div class="sim-score-header">⚖️ 菲比 綜合戰力加權評分</div>
+                        <div class="sim-score-main">
+                            <div id="sim-score-val" class="sim-score-number">0.0</div>
+                            <div id="sim-score-pct" class="sim-score-percent">0.0%</div>
                         </div>
-                        <div id="sim-score-max" style="font-size:0.8rem; color:var(--text-muted); text-align:center;">
-                            菲比理論最高滿分：--
+                        <div id="sim-score-max" class="sim-score-max-info">
+                            菲比理論最高滿分：78.7
+                        </div>
+
+                        <!-- 獲獎進度條 (直觀展示 90% 門檻) -->
+                        <div class="sim-progress-wrapper">
+                            <div id="sim-progress-fill" class="sim-progress-fill"></div>
+                            <div class="sim-progress-marker" title="90.0% 獲獎門檻"></div>
+                        </div>
+                        <div class="sim-progress-labels">
+                            <span>0% 起點</span>
+                            <span style="color:#fbbf24; font-weight:700;">🏆 90.0% 獲獎門檻</span>
+                            <span>100% 滿分</span>
                         </div>
 
                         <!-- 達成 90%+ 榮譽中獎橫幅 -->
@@ -1793,118 +2468,73 @@
         <!-- 模式二：🛡️ 資料庫管理控制台 (未通過核驗無法操作與查看) -->
         <!-- ══════════════════════════════════════════════════════════════ -->
         <section id="section-mode-admin" class="main-mode-section" style="display:none;">
-            <!-- 系統安全防禦與規範 3 欄指標卡 (直覺、清晰) -->
-            <div class="security-rules-grid">
-                <div class="security-rule-card">
-                    <div class="rule-icon">🛡️</div>
-                    <div class="rule-content">
-                        <strong>單一 UID 嚴格防護</strong>
-                        <p>僅可刪除所綁定之同一遊戲 UID 數據，禁止跨號或全刪操作，全面保障玩家資產安全。</p>
-                    </div>
-                </div>
-                <div class="security-rule-card">
-                    <div class="rule-icon">💾</div>
-                    <div class="rule-content">
-                        <strong>100% 鏡像備份保護</strong>
-                        <p>任何刪除操作執行前，後端全自動將資料鏡像備份至「圖片數據_備份」工作表，支援一鍵還原。</p>
-                    </div>
-                </div>
-                <div class="security-rule-card">
-                    <div class="rule-icon">🔒</div>
-                    <div class="rule-content">
-                        <strong>安全稽核與防刷機制</strong>
-                        <p>單次刪除上限 50 筆，授權碼連續錯誤 3 次自動封鎖 IP，所有異動皆推播 Discord 審計日誌。</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 授權碼身分驗證卡片 (必須驗證) -->
+            <!-- 授權身分驗證與管理後台 (極簡專注、消除雜亂資訊) -->
             <section class="card-auth" id="auth-section">
-                <div class="card-auth-header">
-                    <div class="card-auth-title">
-                        🔑 管理員身分與授權碼核驗
-                    </div>
-                    <div class="card-auth-status" id="auth-status-badge">
-                        未核驗 • 請輸入由 DCBOT 核發之授權碼 (時效15分鐘•限5次)
-                    </div>
-                </div>
-
-                <div class="auth-helper-banner">
-                    <div class="auth-helper-text">
-                        <span style="font-size:1.2rem;">💡</span>
-                        <span><strong>如何取得授權碼？</strong> 請至任一 Discord 伺服器頻道輸入 <code class="cmd-pill">/授權碼</code> 即可向 DCBOT 快速領取 15 分鐘臨時授權碼（超管可輸入 <code class="cmd-pill">/授權碼 玩家:@用戶</code> 快速核發或撤銷）。</span>
-                    </div>
-                </div>
-                <div class="auth-form-row">
-                    <div class="input-group">
-                        <label for="input-auth-code">後台授權碼 (請向 DCBOT 輸入 /授權碼 申請，超管可輸入 /授權碼 玩家:@用戶)：</label>
-                        <div style="display:flex; gap:0.5rem; width:100%;">
-                            <input type="text" id="input-auth-code" class="input-field" placeholder="AUTH-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="font-family:var(--font-mono); font-weight:600; letter-spacing:0.5px;">
-                            <button type="button" class="btn-secondary" id="btn-paste-auth" title="從剪貼簿自動貼上並去除反引號" style="padding:0.75rem 1rem; white-space:nowrap; display:inline-flex; align-items:center; gap:0.35rem;">
-                                📋 貼上
+                <!-- 1. 未驗證時：優雅精簡的 Hero 登入卡片 -->
+                <div id="auth-login-view">
+                    <div class="auth-hero-box">
+                        <div class="auth-hero-icon">🛡️</div>
+                        <h2 class="auth-hero-title">鳴潮資料庫管理安全登入</h2>
+                        <p class="auth-hero-desc">請輸入由 DCBOT 核發之管理授權碼以解鎖數據操作權限</p>
+                        
+                        <div class="auth-hero-input-row">
+                            <div class="auth-input-pill">
+                                <span style="font-size:1.15rem; opacity:0.8;">🔑</span>
+                                <input type="text" id="input-auth-code" placeholder="AUTH-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+                                <button type="button" class="btn-paste-pill" id="btn-paste-auth" title="從剪貼簿貼上">📋 貼上</button>
+                            </div>
+                            <button type="button" class="btn-primary-hero" id="btn-auth-validate">
+                                🔐 驗證授權碼並解鎖權限
                             </button>
                         </div>
+
+                        <div class="auth-hero-hints">
+                            <div style="display:flex; flex-direction:column; gap:0.25rem; align-items:center;">
+                                <span>💡 於任一 Discord 頻道輸入 <code class="cmd-pill">/授權碼</code> 即可領取</span>
+                                <span style="font-size:0.78rem; opacity:0.8;">(超級管理員可使用 <code class="cmd-pill">/授權碼 玩家:@用戶</code>)</span>
+                            </div>
+                            <div class="auth-hero-pills">
+                                <span class="pill">⏱️ 時效 15 分鐘</span>
+                                <span class="pill">🎟️ 限制使用 5 次</span>
+                                <span class="pill">🔒 錯誤 3 次封鎖 IP</span>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="btn-primary" id="btn-auth-validate">
-                        🔐 驗證授權碼並解鎖功能
-                    </button>
-                    <button type="button" class="btn-secondary" id="btn-auth-clear" style="display: none;">
-                        🚪 登出憑證
-                    </button>
                 </div>
 
-                <!-- 核驗通過後展示之授權資訊 -->
-                <div class="auth-details-bar" id="auth-details-container">
-                    <div class="auth-detail-item">
-                        <div class="auth-detail-label">授權權限級別</div>
-                        <div class="auth-detail-val" id="auth-disp-perm">--</div>
+                <!-- 2. 驗證通過後：緊湊高科技身分狀態條 -->
+                <div class="auth-status-strip" id="auth-details-container" style="display:none;">
+                    <div class="auth-status-info">
+                        <div class="auth-status-badge-main" id="auth-disp-perm-badge">
+                            👑 權限: <span id="auth-disp-perm">--</span>
+                        </div>
+                        <div class="auth-status-item">
+                            👤 綁定 UID: <strong id="auth-disp-uid">--</strong>
+                        </div>
+                        <div class="auth-status-item">
+                            🎟️ 可用次數: <strong id="auth-disp-uses">--</strong>
+                        </div>
+                        <div class="auth-status-item">
+                            ⏱️ 有效時效: <strong id="auth-disp-expire">--</strong>
+                        </div>
                     </div>
-                    <div class="auth-detail-item">
-                        <div class="auth-detail-label">申請人遊戲 UID</div>
-                        <div class="auth-detail-val" id="auth-disp-uid">--</div>
-                    </div>
-                    <div class="auth-detail-item">
-                        <div class="auth-detail-label">剩餘可用次數</div>
-                        <div class="auth-detail-val" id="auth-disp-uses">--</div>
-                    </div>
-                    <div class="auth-detail-item">
-                        <div class="auth-detail-label">有效時長 (15分鐘)</div>
-                        <div class="auth-detail-val" id="auth-disp-expire">--</div>
-                    </div>
+                    <button type="button" class="btn-secondary" id="btn-auth-clear" style="padding:0.4rem 0.9rem; font-size:0.82rem;">
+                        🚪 登出憑證
+                    </button>
+                    <!-- 相容性隱藏元素 -->
+                    <span id="auth-status-badge" style="display:none;"></span>
                 </div>
             </section>
 
-            <!-- 未核驗時顯示之安全鎖定佔位卡 (無權限無法查看與操作) -->
+            <!-- 未驗證時之精簡功能預覽橫幅 (替代原先巨大佔位卡) -->
             <div class="admin-locked-placeholder" id="admin-locked-placeholder">
-                <div class="locked-icon">🔒</div>
-                <h3>資料庫後台受安全金鑰保護</h3>
-                <p>請先於上方輸入由 DC 機器人核發之管理授權碼，驗證通過後即可解鎖後台 5 大管理模組：</p>
-                <div class="locked-features-grid">
-                    <div class="locked-feature-item">
-                        <span class="item-icon">🖼️</span>
-                        <span class="item-name">圖片數據刪除管理</span>
-                        <span class="item-status">待解鎖</span>
-                    </div>
-                    <div class="locked-feature-item">
-                        <span class="item-icon">🎟️</span>
-                        <span class="item-name">網站積分兌換碼設定</span>
-                        <span class="item-status">待解鎖</span>
-                    </div>
-                    <div class="locked-feature-item">
-                        <span class="item-icon">📜</span>
-                        <span class="item-name">兌換碼紀錄</span>
-                        <span class="item-status">待解鎖</span>
-                    </div>
-                    <div class="locked-feature-item">
-                        <span class="item-icon">🚫</span>
-                        <span class="item-name">封鎖名單管理</span>
-                        <span class="item-status">待解鎖</span>
-                    </div>
-                    <div class="locked-feature-item">
-                        <span class="item-icon">⚙️</span>
-                        <span class="item-name">授權名單模式 (A1設定)</span>
-                        <span class="item-status">待解鎖</span>
-                    </div>
+                <div class="locked-preview-bar">
+                    <span style="font-weight:700; color:#fbbf24;">🔒 安全受控模組：</span>
+                    <span class="locked-chip">🖼️ 圖片數據安全刪除</span>
+                    <span class="locked-chip">🎟️ 網站積分兌換碼</span>
+                    <span class="locked-chip">📜 兌換明細紀錄</span>
+                    <span class="locked-chip">🚫 違規封鎖管理</span>
+                    <span class="locked-chip">⚙️ 授權名單模式 (A1)</span>
                 </div>
             </div>
 
@@ -1950,43 +2580,40 @@
                     <span class="pill">🔒 錯誤 3 次自動封鎖 IP</span>
                 </div>
 
-                <!-- 公開刪除資料教學與安全防護手冊 -->
-                <div class="public-instruction-card">
-                    <div class="instruction-header">
-                        <h4>📖 圖片數據刪除教學與系統安全防護規範 (公開操作手冊)</h4>
-                        <span class="pill success" style="font-size:0.75rem;">100% 自動鏡像備份</span>
-                    </div>
-                    <div class="instruction-grid">
+                <!-- 圖片數據刪除與安全備份規範 (預設折疊，消除雜亂感) -->
+                <details class="instruction-accordion">
+                    <summary>📖 圖片數據刪除教學與系統安全防護規範 (點擊展開說明)</summary>
+                    <div class="instruction-grid" style="margin-top:0.8rem;">
                         <div class="instruction-step">
                             <div class="step-num">1</div>
                             <div class="step-content">
-                                <strong>授權碼登入導入</strong>
-                                <p>於上方輸入由 DCBOT 核發之授權碼 (時效 15 分鐘)。非 ALL 權限登入後<strong>自動導入本人 UID 資料並隱藏手動查詢</strong>。</p>
+                                <strong>自動鎖定本人 UID</strong>
+                                <p>UID 權限登入後<strong>自動導入本人 UID 並隱藏手動搜尋</strong>，完全保護他人隱私。</p>
                             </div>
                         </div>
                         <div class="instruction-step">
                             <div class="step-num">2</div>
                             <div class="step-content">
                                 <strong>勾選欲刪除項目</strong>
-                                <p>於列表勾選欲清除之圖片數據。系統硬性限制<strong>單次最多 50 筆</strong>，且嚴禁跨 UID 刪除。</p>
+                                <p>列表勾選欲清除之截圖。硬性限制<strong>單次最多 50 筆</strong>，嚴禁跨 UID 刪除。</p>
                             </div>
                         </div>
                         <div class="instruction-step">
                             <div class="step-num">3</div>
                             <div class="step-content">
-                                <strong>鏡像備份並清除</strong>
-                                <p>點選「安全備份並刪除」並輸入「確認刪除」。系統會先<strong>完整存入「圖片數據_備份」</strong>後執行清除。</p>
+                                <strong>100% 鏡像備份</strong>
+                                <p>點選刪除時系統會先<strong>完整存入「圖片數據_備份」工作表</strong>後再行清除。</p>
                             </div>
                         </div>
                         <div class="instruction-step">
                             <div class="step-num">4</div>
                             <div class="step-content">
-                                <strong>自動還原與警示</strong>
-                                <p>刪除異動即時推播至 DC 管理頻道。若誤刪可一鍵還原；<strong>惡意刪除他人資料查證屬實將予以停權並調查</strong>！</p>
+                                <strong>安全稽核防護</strong>
+                                <p>異動即時推播 DC 管理頻道；<strong>惡意刪除他人資料查證屬實將予以停權並調查</strong>！</p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </details>
 
                 <!-- 非名單用戶鎖定導入之 UID 狀態條 -->
                 <div id="user-bound-uid-banner" class="user-bound-info-card" style="display: none;">
@@ -2627,17 +3254,22 @@
                         expiresAt: data.expiresAt
                     };
 
-                    // 更新 UI 狀態
+                    // 更新 UI 狀態 (精簡模式)
                     authSection.classList.add('active');
-                    authStatusBadge.className = 'card-auth-status verified';
-                    authStatusBadge.textContent = `✅ 核驗通過 • 權限: ${data.permission}`;
-                    
+                    const authLoginView = document.getElementById('auth-login-view');
+                    if (authLoginView) authLoginView.style.display = 'none';
+
                     document.getElementById('auth-disp-perm').textContent = data.permission;
-                    document.getElementById('auth-disp-uid').textContent = data.applicantUid || '(ALL權限無綁定)';
+                    const permBadge = document.getElementById('auth-disp-perm-badge');
+                    if (permBadge) {
+                        permBadge.textContent = data.permission === 'ALL' ? '👑 ALL 全權管理員' : `🔑 UID 專屬管理員 (${data.permission})`;
+                    }
+                    const uidDisp = data.applicantUid || '(ALL權限無綁定)';
+                    document.getElementById('auth-disp-uid').textContent = uidDisp;
                     document.getElementById('auth-disp-uses').textContent = `${data.remainingUses} 次`;
                     document.getElementById('auth-disp-expire').textContent = data.expiresAt ? new Date(data.expiresAt).toLocaleTimeString() : '有效';
 
-                    authDetailsContainer.style.display = 'grid';
+                    authDetailsContainer.style.display = 'flex';
                     inputAuthCode.disabled = true;
                     btnAuthValidate.style.display = 'none';
                     btnAuthClear.style.display = 'inline-flex';
@@ -2692,8 +3324,8 @@
             inputAuthCode.value = '';
             inputAuthCode.disabled = false;
             authSection.classList.remove('active');
-            authStatusBadge.className = 'card-auth-status';
-            authStatusBadge.textContent = '未核驗 • 請輸入由 DCBOT 核發之授權碼';
+            const authLoginView = document.getElementById('auth-login-view');
+            if (authLoginView) authLoginView.style.display = 'block';
             authDetailsContainer.style.display = 'none';
             btnAuthValidate.style.display = 'inline-flex';
             btnAuthClear.style.display = 'none';
@@ -3710,8 +4342,20 @@
                     `;
                 } else {
                     slotsHtml += `
-                        <div class="sim-slot-item" style="border-style:dashed; opacity:0.45; justify-content:center;">
-                            <span style="font-size:0.85rem; color:var(--text-sub)">槽位 #${i + 1} • 待開啟</span>
+                        <div class="sim-slot-item slot-empty">
+                            <div class="sim-slot-left">
+                                <div class="sim-slot-idx" style="opacity:0.4;">#${i + 1}</div>
+                                <div>
+                                    <div class="sim-slot-name" style="color:var(--text-sub); font-weight:500;">槽位 #${i + 1} 待開啟</div>
+                                    <div class="tier-bar" style="opacity:0.25;">
+                                        <span class="tier-seg"></span><span class="tier-seg"></span><span class="tier-seg"></span><span class="tier-seg"></span><span class="tier-seg"></span><span class="tier-seg"></span><span class="tier-seg"></span><span class="tier-seg"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align:right; opacity:0.35;">
+                                <div class="sim-slot-val">--</div>
+                                <div style="font-size:0.75rem; color:var(--text-sub)">尚未開啟</div>
+                            </div>
                         </div>
                     `;
                 }
@@ -3722,6 +4366,18 @@
             scoreValEl.textContent = currentScore.toFixed(1);
             const pct = PHOEBE_MAX_THEORETICAL > 0 ? ((currentScore / PHOEBE_MAX_THEORETICAL) * 100).toFixed(1) : '0.0';
             scorePctEl.textContent = `${pct}%`;
+
+            // 更新 90% 獲獎動態進度條
+            const progressFill = document.getElementById('sim-progress-fill');
+            if (progressFill) {
+                const numericPct = parseFloat(pct) || 0;
+                progressFill.style.width = `${Math.min(100, Math.max(0, numericPct))}%`;
+                if (numericPct >= 90.0) {
+                    progressFill.classList.add('winner');
+                } else {
+                    progressFill.classList.remove('winner');
+                }
+            }
 
             // 90%+ 通關中獎提示 (若 ALL 管理員，標註【管理員模式】)
             const isPassed = (parseFloat(pct) >= 90.0 && simRolledList.length === 5);
@@ -4144,9 +4800,9 @@
         const urlHash = (window.location.hash || '').toLowerCase();
         const hasAuthParam = urlParams.get('auth') || (urlHash.startsWith('#auth=') ? urlHash.replace('#auth=', '') : '');
         // 資料庫管理頁面預設優先聚焦管理控制台，若指定活動才切換活動
-        const targetMode = (urlParams.get('mode') === 'activity' || urlHash === '#activity')
-            ? 'activity'
-            : 'admin';
+        const targetMode = (urlParams.get('mode') === 'admin' || urlHash === '#admin' || Boolean(hasAuthParam))
+            ? 'admin'
+            : 'activity';
 
         // 綁定剪貼簿一鍵貼上事件 (自動清理反引號與空格)
         const btnPasteAuth = document.getElementById('btn-paste-auth');
