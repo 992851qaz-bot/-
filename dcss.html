@@ -833,6 +833,8 @@
             .auth-form-row { flex-direction: column; }
             .btn-primary, .btn-danger { width: 100%; justify-content: center; }
             .batch-control-bar { flex-direction: column; align-items: flex-start; }
+        }
+
         /* 聲骸模擬開詞條與積分兌換模組樣式 */
         .sim-balance-header {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
@@ -1532,6 +1534,85 @@
             font-size: 1.05rem;
         }
 
+
+        /* 系統安全規範 3 欄卡片 */
+        .security-rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+        .security-rule-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius-md);
+            padding: 1.1rem 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            transition: all 0.25s ease;
+        }
+        .security-rule-card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-2px);
+        }
+        .security-rule-card .rule-icon {
+            font-size: 1.6rem;
+            line-height: 1;
+            padding: 0.5rem;
+            border-radius: 10px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            flex-shrink: 0;
+        }
+        .security-rule-card .rule-content strong {
+            display: block;
+            color: #f1f5f9;
+            font-size: 0.92rem;
+            margin-bottom: 0.25rem;
+        }
+        .security-rule-card .rule-content p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        /* 授權提示條 */
+        .auth-helper-banner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(56, 189, 248, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 0.85rem 1.2rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .auth-helper-text {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.86rem;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+        .auth-helper-text strong {
+            color: #38bdf8;
+        }
+        .cmd-pill {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 0.82rem;
+        }
+
     </style>
 </head>
 <body>
@@ -1712,14 +1793,28 @@
         <!-- 模式二：🛡️ 資料庫管理控制台 (未通過核驗無法操作與查看) -->
         <!-- ══════════════════════════════════════════════════════════════ -->
         <section id="section-mode-admin" class="main-mode-section" style="display:none;">
-            <!-- 警示宣導橫幅 -->
-            <div class="banner-guide">
-                <div class="banner-guide-content">
-                    <h3>🛡️ 資料庫安全防禦守則與規範</h3>
-                    <p>
-                        <strong>加成DC及贊助或是在DC活躍的用戶可以向灰灰申請生成授權碼申請權限</strong>。
-                        本系統設有防護機制避免漏洞將數據全刪，刪除圖片數據<strong>僅可刪除同一UID</strong>之數據，<strong>單次上限 50 筆</strong>。所有刪除資料將自動存入<strong>「圖片數據_備份」</strong>後執行。同一 IP 授權碼錯誤 3 次將觸發暫時封鎖。
-                    </p>
+            <!-- 系統安全防禦與規範 3 欄指標卡 (直覺、清晰) -->
+            <div class="security-rules-grid">
+                <div class="security-rule-card">
+                    <div class="rule-icon">🛡️</div>
+                    <div class="rule-content">
+                        <strong>單一 UID 嚴格防護</strong>
+                        <p>僅可刪除所綁定之同一遊戲 UID 數據，禁止跨號或全刪操作，全面保障玩家資產安全。</p>
+                    </div>
+                </div>
+                <div class="security-rule-card">
+                    <div class="rule-icon">💾</div>
+                    <div class="rule-content">
+                        <strong>100% 鏡像備份保護</strong>
+                        <p>任何刪除操作執行前，後端全自動將資料鏡像備份至「圖片數據_備份」工作表，支援一鍵還原。</p>
+                    </div>
+                </div>
+                <div class="security-rule-card">
+                    <div class="rule-icon">🔒</div>
+                    <div class="rule-content">
+                        <strong>安全稽核與防刷機制</strong>
+                        <p>單次刪除上限 50 筆，授權碼連續錯誤 3 次自動封鎖 IP，所有異動皆推播 Discord 審計日誌。</p>
+                    </div>
                 </div>
             </div>
 
@@ -1734,17 +1829,11 @@
                     </div>
                 </div>
 
-                <div style="background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.25); border-radius:10px; padding:0.75rem 1rem; margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
-                    <div style="font-size:0.85rem; color:var(--text-sub);">
-                        <span style="font-size:1rem;">💡</span>
-                        <strong style="color:var(--primary-light);">如何取得授權碼？</strong>
-                        於 Discord 輸入 <code style="background:rgba(255,255,255,0.1); padding:0.15rem 0.4rem; border-radius:4px;">/授權碼</code> 向 DCBOT 申請，亦可在資料庫管理控制台直接操作。
+                <div class="auth-helper-banner">
+                    <div class="auth-helper-text">
+                        <span style="font-size:1.2rem;">💡</span>
+                        <span><strong>如何取得授權碼？</strong> 請至任一 Discord 伺服器頻道輸入 <code class="cmd-pill">/授權碼</code> 即可向 DCBOT 快速領取 15 分鐘臨時授權碼（超管可輸入 <code class="cmd-pill">/授權碼 玩家:@用戶</code> 快速核發或撤銷）。</span>
                     </div>
-                    <a href="https://992851qaz-bot.github.io/-/dcss.html" target="_blank" rel="noopener"
-                        style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-size:0.82rem; font-weight:600; padding:0.4rem 0.9rem; border-radius:8px; text-decoration:none; white-space:nowrap; transition:opacity 0.2s;"
-                        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-                        🗄️ 前往資料庫管理
-                    </a>
                 </div>
                 <div class="auth-form-row">
                     <div class="input-group">
@@ -4054,9 +4143,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const urlHash = (window.location.hash || '').toLowerCase();
         const hasAuthParam = urlParams.get('auth') || (urlHash.startsWith('#auth=') ? urlHash.replace('#auth=', '') : '');
-        const targetMode = (urlParams.get('mode') === 'admin' || urlHash === '#admin' || Boolean(hasAuthParam)) 
-            ? 'admin' 
-            : (urlParams.get('mode') === 'activity' || urlHash === '#activity' ? 'activity' : 'activity');
+        // 資料庫管理頁面預設優先聚焦管理控制台，若指定活動才切換活動
+        const targetMode = (urlParams.get('mode') === 'activity' || urlHash === '#activity')
+            ? 'activity'
+            : 'admin';
 
         // 綁定剪貼簿一鍵貼上事件 (自動清理反引號與空格)
         const btnPasteAuth = document.getElementById('btn-paste-auth');
