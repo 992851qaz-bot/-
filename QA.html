@@ -155,7 +155,7 @@
     const deviceOptions = [
       { id: 'pc_desktop', label: '桌上型電腦 (PC 螢幕寬闊)', icon: '🖥️' },
       { id: 'pc_laptop', label: '筆記型電腦 (Laptop 便攜)', icon: '💻' },
-      { id: 'mobile_ios', label: 'iPhone 手市 (iOS 直式瀏覽)', icon: '📱' },
+      { id: 'mobile_ios', label: 'iPhone 手機 (iOS 直式瀏覽)', icon: '📱' },
       { id: 'mobile_android', label: 'Android 旗艦/主流手機', icon: '🤖' },
       { id: 'tablet', label: 'iPad / 平板電腦 (大螢幕觸控)', icon: '📲' },
       { id: 'handheld', label: '掌上遊戲機 (Steam Deck / ROG 等)', icon: '🎮' }
@@ -171,6 +171,30 @@
       { id: 'echo_sim', label: '模擬開詞條與詞條強化機率測試', icon: '🎲', desc: '依官方公示機率演算法模擬聲骸開孔與副詞條跳動。', anim: 'simulate' },
       { id: 'share_card', label: '生成社群分享圖卡（長圖或限定名片）', icon: '🖼️', desc: '將神級面板一鍵輸出成手機直式或寬螢幕高畫質圖卡。', anim: 'share' }
     ];
+
+    // 色階反饋樣式
+    const scoreColorMap = {
+      1: {
+        active: 'bg-rose-500/25 border-rose-500 text-rose-200 ring-1 ring-rose-500/60 shadow-[0_0_12px_rgba(244,63,94,0.3)]',
+        badge: 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+      },
+      2: {
+        active: 'bg-orange-500/25 border-orange-500 text-orange-200 ring-1 ring-orange-500/60 shadow-[0_0_12px_rgba(249,115,22,0.3)]',
+        badge: 'bg-orange-500/20 text-orange-300 border border-orange-500/40'
+      },
+      3: {
+        active: 'bg-amber-500/25 border-amber-500 text-amber-200 ring-1 ring-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.3)]',
+        badge: 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+      },
+      4: {
+        active: 'bg-lime-500/25 border-lime-500 text-lime-200 ring-1 ring-lime-500/60 shadow-[0_0_12px_rgba(132,204,22,0.3)]',
+        badge: 'bg-lime-500/20 text-lime-300 border border-lime-500/40'
+      },
+      5: {
+        active: 'bg-emerald-500/25 border-emerald-400 text-emerald-200 ring-1 ring-emerald-400/70 shadow-[0_0_14px_rgba(52,211,153,0.35)]',
+        badge: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+      }
+    };
 
     const ratingFaces5 = [
       { v: 1, face: '😵', label: '很困難' },
@@ -276,7 +300,6 @@
       { v: 5, face: '✨', label: '極為強大' }
     ];
 
-    // 動態選項：根據分數高低呈現不同痛點或建議標籤
     const discordAspects = [
       {
         id: 'dc_atmosphere',
@@ -549,10 +572,10 @@
       }
     }
 
-    // 安全淨化函式：去除 Markdown 連結、惡意協定與特殊控制字元，防止釣魚與跳轉
-    function sanitizeForDiscord(text) {
+    // 安全淨化函式
+    function sanitizeForDiscord(text, maxLen = 950) {
       if (!text) return '無';
-      return String(text)
+      const clean = String(text)
         .replace(/https?:\/\//gi, '[已過濾連結]//')
         .replace(/discord\.(gg|io|me|li)\//gi, '[已過濾邀請]/')
         .replace(/\[(.*?)\]\((.*?)\)/g, '$1 ($2)')
@@ -560,6 +583,7 @@
         .replace(/@(everyone|here)/g, '@已過濾')
         .replace(/[`_*{}\\]/g, ' ')
         .trim();
+      return clean.length > maxLen ? clean.substring(0, maxLen) + '...(略)' : clean;
     }
 
     async function submitToDiscord() {
@@ -575,54 +599,99 @@
       const getDcFreqName = (id) => (dcFrequencyOptions.find(f => f.id === id) || {}).title || id;
       const getDcAspectName = (id) => (discordAspects.find(a => a.id === id) || {}).name || id;
 
-      const payload = {
-        username: "GAME ZH 問卷系統 (安全防護)",
-        avatar_url: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/shield-halved.svg",
-        embeds: [
+      const webhookUrl = "https://discord.com/api/webhooks/1560999422693744734/TPm18lZ4y7MVvR7UQw-APcYsHmCcPyGcu18wkpyfCK1Mnyc2dF4LAsN5jTG0QpJZtUnI";
+
+      // 分段 1：玩家總覽與網站分析儀評價
+      const embedPart1 = {
+        title: "📋 GAME ZH 調研報告 (Part 1/2：玩家習慣與網站端)",
+        color: 15057019,
+        fields: [
           {
-            title: "📋 收到新的意見回饋問卷 (已完成安全消毒)",
-            color: 15057019,
-            fields: [
-              {
-                name: "👤 玩家輪廓與裝置",
-                value: `• 累計分析：${sanitizeForDiscord(state.persona)} (${state.analysisCount || '0'} 筆)\n• 常用裝置：${sanitizeForDiscord(state.devices.map(getDeviceName).join(' ➔ ') || '未選')}`
-              },
-              {
-                name: "🌐 網站功能評估",
-                value: `• 核心用途理解：${state.understandRating || '-'}/5\n• 功能切換順暢：${state.findRating || '-'}/5\n• 改善優先級：${sanitizeForDiscord(state.webPriorities.map(getWebImproveName).join('、') || '無')}\n• 網站痛點：${sanitizeForDiscord(state.webPainPoint)}`
-              },
-              {
-                name: "🏛️ Discord 社群意見",
-                value: `• 造訪頻率：${sanitizeForDiscord(getDcFreqName(state.dcFrequency))}\n${state.dcFrequency !== 'freq_none' ? Object.entries(state.dcAspectRatings).map(([k, v]) => `• ${getDcAspectName(k)}: ${v}分 (${sanitizeForDiscord(state.dcAspectReasons[k] || '無原因')})`).join('\n') : `• 未活躍原因: ${sanitizeForDiscord((state.dcNoFreqReason || []).join('、'))}`}\n• 贊助意願：${sanitizeForDiscord(state.dcSponsorIntent)}\n• 社群建議：${sanitizeForDiscord(state.dcCommunitySuggestion)}`
-              },
-              {
-                name: "🤖 Discord 機器人意見",
-                value: `• 知曉度：${sanitizeForDiscord(getBotAwarenessName(state.botAwareness))}\n• 整體滿意度：${state.botRating ? state.botRating + '/5' : '未填'}\n• 機器人痛點：${sanitizeForDiscord(state.botPainPoint)}\n• 機器人建議：${sanitizeForDiscord(state.botSuggestion)}`
-              },
-              {
-                name: "💌 團隊正能量鼓勵",
-                value: sanitizeForDiscord(state.teamEncouragement) || '無'
-              }
-            ],
-            footer: {
-              text: `填寫時間：${new Date().toLocaleString('zh-TW')} • 全連結已防毒過濾`
-            }
+            name: "👤 玩家輪廓與裝置偏好",
+            value: `• 累計分析：${sanitizeForDiscord(state.persona)} (${state.analysisCount || '0'} 筆)\n• 常用裝置：${sanitizeForDiscord(state.devices.map(getDeviceName).join(' ➔ ') || '未選')}`
+          },
+          {
+            name: "🎯 核心目的優先序",
+            value: `• 順序：${sanitizeForDiscord(state.purposes.map((id, idx) => `[${idx + 1}] ${getPurposeName(id)}`).join('、') || '無')}\n• 自訂補充：${sanitizeForDiscord(state.otherPurpose)}`
+          },
+          {
+            name: "🌐 網站易懂度與演算法指標",
+            value: `• 核心用途易懂度：${state.understandRating || '-'}/5 ${state.understandDifficultyReason ? `(${sanitizeForDiscord(state.understandDifficultyReason)})` : ''}\n• 工具尋找切換：${state.findRating || '-'}/5 ${state.findDifficultyReason ? `(${sanitizeForDiscord(state.findDifficultyReason)})` : ''}\n• OCR 辨識準確率：${state.ocrRating || '-'}/5 ${state.ocrFailReason ? `(${sanitizeForDiscord(state.ocrFailReason)})` : ''}\n• 首次載入耐受：${state.waitRating || '-'}/5 ${state.waitMaxSeconds ? `(${sanitizeForDiscord(state.waitMaxSeconds)})` : ''}\n• 評分級距合理性：${state.tierRating || '-'}/5 ${state.tierReason ? `(${sanitizeForDiscord(state.tierReason)})` : ''}`
+          },
+          {
+            name: "⚙️ 模組使用頻率與細節",
+            value: sanitizeForDiscord(Object.entries(state.usage).map(([k, v]) => {
+              const featName = (usageFeatures.find(f => f.id === k) || {}).name || k;
+              const status = ['沒用過', '知道未用', '偶爾用', '常用'][v];
+              const reasons = state.usageReasons[k] && state.usageReasons[k].length ? ` (原因: ${state.usageReasons[k].join('、')})` : '';
+              const rating = state.usageRatings[k] ? ` [${state.usageRatings[k]}分]` : '';
+              const rReason = state.usageRatingReasons[k] ? ` (低分原因: ${state.usageRatingReasons[k]})` : '';
+              return `• ${featName}：${status}${reasons}${rating}${rReason}`;
+            }).join('\n') || '無')
+          },
+          {
+            name: "🛠️ 網站改善優先級與自由反饋",
+            value: `• 優先改善重點：${sanitizeForDiscord(state.webPriorities.map(getWebImproveName).join('、') || '無')}\n• 其他補充：${sanitizeForDiscord(state.otherWebPriority)}\n• 常遇痛點：${sanitizeForDiscord(state.webPainPoint)}\n• 功能敲碗：${sanitizeForDiscord(state.webSuggestion)}`
           }
-        ]
+        ],
+        footer: {
+          text: `填寫時間：${new Date().toLocaleString('zh-TW')} • 安全過濾保護中`
+        }
       };
 
-      const webhookUrl = "https://discord.com/api/webhooks/1560999422693744734/TPm18lZ4y7MVvR7UQw-APcYsHmCcPyGcu18wkpyfCK1Mnyc2dF4LAsN5jTG0QpJZtUnI";
+      // 分段 2：Discord 社群、機器人評估與團隊正能量鼓勵
+      const embedPart2 = {
+        title: "💬 GAME ZH 調研報告 (Part 2/2：DC社群、機器人與團隊鼓勵)",
+        color: 5793266,
+        fields: [
+          {
+            name: "🏛️ Discord 社群調研",
+            value: `• 造訪頻率：${sanitizeForDiscord(getDcFreqName(state.dcFrequency))}\n${state.dcFrequency !== 'freq_none' ? Object.entries(state.dcAspectRatings).map(([k, v]) => `• ${getDcAspectName(k)}：${v}分 (${sanitizeForDiscord(state.dcAspectReasons[k] || '無原因')})`).join('\n') : `• 未活躍原因: ${sanitizeForDiscord((state.dcNoFreqReason || []).join('、'))}`}\n• 贊助意願：${sanitizeForDiscord(state.dcSponsorIntent)}\n• 社群運作建議：${sanitizeForDiscord(state.dcCommunitySuggestion)}`
+          },
+          {
+            name: "🤖 Discord 機器人評估",
+            value: `• 知曉度：${sanitizeForDiscord(getBotAwarenessName(state.botAwareness))}\n${(state.botAwareness === 'heavy_user' || state.botAwareness === 'light_user') ? `• 常用指令排序：${sanitizeForDiscord(state.botCommands.map((id, idx) => `[${idx + 1}] ${getBotCmdName(id)} (${state.botCommandRatings[id] ? state.botCommandRatings[id] + '分' : '未評分'})`).join('\n  └ ' || '未選'))}\n• 機器人滿意度：${state.botRating ? state.botRating + '/5' : '未評'} ${state.botRatingReason ? `(${sanitizeForDiscord(state.botRatingReason)})` : ''}\n• 改善優先級：${sanitizeForDiscord(state.botPriorities.map(getBotImproveName).join('、') || '無')}\n• 機器人痛點：${sanitizeForDiscord(state.botPainPoint)}\n• 機器人建議：${sanitizeForDiscord(state.botSuggestion)}` : `• 未使用原因：${sanitizeForDiscord((state.botAwarenessReason || []).join('、'))}`}`
+          },
+          {
+            name: "📢 社群總體看法",
+            value: sanitizeForDiscord(state.communitySuggestions) || '無'
+          },
+          {
+            name: "💌 給 GAME ZH 開發團隊的溫暖鼓勵",
+            value: sanitizeForDiscord(state.teamEncouragement) || '無'
+          }
+        ],
+        footer: {
+          text: `自動分段安全傳送 • 全連結與提及均已過濾處理`
+        }
+      };
 
       try {
         await fetch(webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            username: "GAME ZH 安全問卷系統",
+            embeds: [embedPart1]
+          })
         });
-        showToast('✅ 問卷已成功安全送達團隊！');
+
+        // 錯開 350ms 發送第二段，避免被 Discord Rate Limit 阻擋
+        await new Promise(r => setTimeout(r, 350));
+
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: "GAME ZH 安全問卷系統",
+            embeds: [embedPart2]
+          })
+        });
+
+        showToast('✅ 問卷已安全分段送達開發團隊！');
       } catch (err) {
         console.error('Webhook error:', err);
-        showToast('⚠️ 自動發送遇到網路問題，可點「複製摘要」備份');
+        showToast('⚠️ 自動發送遭遇網路阻礙，請點「顯示填寫總覽」或複製摘要');
       } finally {
         isSubmitting = false;
         nextStep();
@@ -765,10 +834,10 @@
               <div class="p-5 rounded-2xl bg-[#11141C] border border-white/10 max-w-lg mx-auto text-left space-y-3">
                 <div class="text-sm text-brand-gold font-medium">✨ 填答特點：</div>
                 <div class="text-sm text-neutral-300 leading-relaxed">• 點擊選項依「點選先後順序」自動標記重要性序號</div>
-                <div class="text-sm text-neutral-300 leading-relaxed">• 未使用的功能、未加入原因支援快捷標籤複選</div>
+                <div class="text-sm text-neutral-300 leading-relaxed">• 1~5 分評分設有色階反饋（紅 ➔ 橙 ➔ 黃 ➔ 淺綠 ➔ 翡翠綠）</div>
                 <div class="text-sm text-neutral-300 leading-relaxed">• 評分低分時動態提供精準「痛點反饋」標籤</div>
                 <div class="text-sm text-neutral-300 leading-relaxed">• 漏填題目時點擊按鈕直接自動導航至未填項目</div>
-                <div class="text-sm text-neutral-300 leading-relaxed">• 送出時自動過濾可疑連結，保證安全無虞</div>
+                <div class="text-sm text-neutral-300 leading-relaxed">• 自動分段送達 Discord 頻道，內建安全網址消毒機制</div>
               </div>
             </div>
           `;
@@ -899,13 +968,17 @@
                   <p class="text-xs text-neutral-400">核心用途：上傳截圖辨識副詞條、換算暴擊收益、得出畢業評級。</p>
                 </div>
                 <div class="grid grid-cols-5 gap-2.5">
-                  ${ratingFaces5.map(r => `
-                    <button type="button" onclick="setExperienceRate('understandRating', ${r.v})"
-                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.understandRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
-                      <span class="text-2xl sm:text-3xl">${r.face}</span>
-                      <span class="text-xs font-medium">${r.label}</span>
-                    </button>
-                  `).join('')}
+                  ${ratingFaces5.map(r => {
+                    const isSelected = state.understandRating === r.v;
+                    const style = isSelected ? scoreColorMap[r.v].active : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white';
+                    return `
+                      <button type="button" onclick="setExperienceRate('understandRating', ${r.v})"
+                        class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${style}">
+                        <span class="text-2xl sm:text-3xl">${r.face}</span>
+                        <span class="text-xs font-medium">${r.label}</span>
+                      </button>
+                    `;
+                  }).join('')}
                 </div>
                 ${(state.understandRating === 1 || state.understandRating === 2) ? `
                   <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
@@ -935,13 +1008,17 @@
                   <p class="text-xs text-neutral-400">特定工具：如聲骸對比、矩陣編隊、副詞條熱力圖等進階功能。</p>
                 </div>
                 <div class="grid grid-cols-5 gap-2.5">
-                  ${ratingFacesFind5.map(r => `
-                    <button type="button" onclick="setExperienceRate('findRating', ${r.v})"
-                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.findRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
-                      <span class="text-2xl sm:text-3xl">${r.face}</span>
-                      <span class="text-xs font-medium">${r.label}</span>
-                    </button>
-                  `).join('')}
+                  ${ratingFacesFind5.map(r => {
+                    const isSelected = state.findRating === r.v;
+                    const style = isSelected ? scoreColorMap[r.v].active : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white';
+                    return `
+                      <button type="button" onclick="setExperienceRate('findRating', ${r.v})"
+                        class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${style}">
+                        <span class="text-2xl sm:text-3xl">${r.face}</span>
+                        <span class="text-xs font-medium">${r.label}</span>
+                      </button>
+                    `;
+                  }).join('')}
                 </div>
                 ${(state.findRating === 1 || state.findRating === 2) ? `
                   <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
@@ -1050,9 +1127,10 @@
                         <div class="grid grid-cols-5 gap-2">
                           ${[1, 2, 3, 4, 5].map(star => {
                             const active = curRating === star;
+                            const style = active ? scoreColorMap[star].active : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white';
                             return `
                               <button type="button" onclick="setUsageRating('${feat.id}', ${star})"
-                                class="py-1.5 rounded-lg border text-xs transition font-mono ${active ? 'bg-brand-gold text-black border-brand-gold font-bold shadow' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                                class="py-1.5 rounded-lg border text-xs transition font-mono ${style}">
                                 ${star} 分
                               </button>
                             `;
@@ -1101,13 +1179,17 @@
                   <p class="text-xs text-neutral-400">包含角色、UID、主副詞條數值與名稱的辨識正確性。</p>
                 </div>
                 <div class="grid grid-cols-5 gap-2.5">
-                  ${ratingFacesAccuracy.map(r => `
-                    <button type="button" onclick="setDevRating('ocrRating', ${r.v})"
-                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.ocrRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
-                      <span class="text-2xl sm:text-3xl">${r.face}</span>
-                      <span class="text-xs font-medium">${r.label}</span>
-                    </button>
-                  `).join('')}
+                  ${ratingFacesAccuracy.map(r => {
+                    const isSelected = state.ocrRating === r.v;
+                    const style = isSelected ? scoreColorMap[r.v].active : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white';
+                    return `
+                      <button type="button" onclick="setDevRating('ocrRating', ${r.v})"
+                        class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${style}">
+                        <span class="text-2xl sm:text-3xl">${r.face}</span>
+                        <span class="text-xs font-medium">${r.label}</span>
+                      </button>
+                    `;
+                  }).join('')}
                 </div>
                 ${(state.ocrRating !== null && state.ocrRating < 5) ? `
                   <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
@@ -1140,13 +1222,17 @@
                   <p class="text-xs text-neutral-400">首次啟動抓取完整資料庫通常需 10~30 秒不等。</p>
                 </div>
                 <div class="grid grid-cols-5 gap-2.5">
-                  ${ratingFacesWait.map(r => `
-                    <button type="button" onclick="setDevRating('waitRating', ${r.v})"
-                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.waitRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
-                      <span class="text-2xl sm:text-3xl">${r.face}</span>
-                      <span class="text-xs font-medium">${r.label}</span>
-                    </button>
-                  `).join('')}
+                  ${ratingFacesWait.map(r => {
+                    const isSelected = state.waitRating === r.v;
+                    const style = isSelected ? scoreColorMap[r.v].active : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white';
+                    return `
+                      <button type="button" onclick="setDevRating('waitRating', ${r.v})"
+                        class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${style}">
+                        <span class="text-2xl sm:text-3xl">${r.face}</span>
+                        <span class="text-xs font-medium">${r.label}</span>
+                      </button>
+                    `;
+                  }).join('')}
                 </div>
                 ${(state.waitRating !== null && state.waitRating < 5) ? `
                   <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
@@ -1176,13 +1262,17 @@
                   <p class="text-xs text-neutral-400">目前依詞條加權與期望收益計算綜合評分分級。</p>
                 </div>
                 <div class="grid grid-cols-5 gap-2.5">
-                  ${ratingFacesTier.map(r => `
-                    <button type="button" onclick="setDevRating('tierRating', ${r.v})"
-                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.tierRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
-                      <span class="text-2xl sm:text-3xl">${r.face}</span>
-                      <span class="text-xs font-medium">${r.label}</span>
-                    </button>
-                  `).join('')}
+                  ${ratingFacesTier.map(r => {
+                    const isSelected = state.tierRating === r.v;
+                    const style = isSelected ? scoreColorMap[r.v].active : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white';
+                    return `
+                      <button type="button" onclick="setDevRating('tierRating', ${r.v})"
+                        class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${style}">
+                        <span class="text-2xl sm:text-3xl">${r.face}</span>
+                        <span class="text-xs font-medium">${r.label}</span>
+                      </button>
+                    `;
+                  }).join('')}
                 </div>
                 ${(state.tierRating !== null && state.tierRating < 5) ? `
                   <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
@@ -1296,7 +1386,6 @@
                 <p class="text-sm text-neutral-400 mt-1">先了解您的社群參與頻率；若有造訪過，將展開氣氛、制度、活動與吉祥物調查。</p>
               </div>
 
-              <!-- 頻率選擇 -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 ${dcFrequencyOptions.map(opt => {
                   const active = state.dcFrequency === opt.id;
@@ -1313,7 +1402,6 @@
                 }).join('')}
               </div>
 
-              <!-- 未加入 / 未活躍的原因勾選 -->
               <div id="dcNoFreqReasonBox" class="${isNoDcFreq ? 'block' : 'hidden'} p-5 rounded-2xl bg-[#11141C] border border-amber-400/30 fade-enter space-y-3">
                 <div class="text-sm text-amber-300 font-medium">請說明未加入或未活躍的主要原因（可複選）：</div>
                 <div class="flex flex-wrap gap-2.5">
@@ -1329,7 +1417,6 @@
                 </div>
               </div>
 
-              <!-- 若有出現過（每日/經常/偶爾），不限次數展開四大維度評分 -->
               <div id="dcAspectsContainer" class="${isDcFreqActive ? 'block' : 'hidden'} space-y-4 fade-enter pt-4 border-t border-white/10">
                 <div class="text-base font-semibold text-white flex items-center gap-2">
                   <span>🏛️</span> 社群各項機制評估（選填評分，低分將自動切換為具體痛點標籤）：
@@ -1349,22 +1436,22 @@
                             <div class="text-xs text-neutral-400 mt-0.5">${asp.desc}</div>
                           </div>
                         </div>
-                        <span class="text-xs text-neutral-400 shrink-0 font-mono">${curRating > 0 ? `${curRating} 分` : '未評分'}</span>
+                        <span class="text-xs px-2 py-0.5 rounded-md font-mono ${curRating > 0 ? scoreColorMap[curRating].badge : 'text-neutral-500 bg-white/5'}">${curRating > 0 ? `${curRating} 分` : '未評分'}</span>
                       </div>
 
                       <div class="grid grid-cols-5 gap-2">
                         ${[1, 2, 3, 4, 5].map(star => {
                           const active = curRating === star;
+                          const style = active ? scoreColorMap[star].active : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white';
                           return `
                             <button type="button" onclick="setDcAspectRating('${asp.id}', ${star})"
-                              class="py-1.5 rounded-lg border text-xs transition font-mono ${active ? 'bg-brand-gold text-black border-brand-gold font-bold shadow' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                              class="py-1.5 rounded-lg border text-xs transition font-mono ${style}">
                               ${star} 分
                             </button>
                           `;
                         }).join('')}
                       </div>
 
-                      <!-- 非滿分原因輸入框與快捷鈕 (動態依分數切換文字) -->
                       <div id="dc_aspect_low_box_${asp.id}" class="${needLowReason ? 'block' : 'hidden'} pt-2 space-y-2 fade-enter">
                         <div class="text-xs text-amber-300 font-medium">
                           ${curRating <= 2 ? '⚠️ 評分偏低，請告訴我們具體遇到的問題（選填，可跳過）：' : '💡 未滿 5 分的原因或期待改善之處（選填，可跳過）：'}
@@ -1388,7 +1475,6 @@
                   `;
                 }).join('')}
 
-                <!-- 社群區塊最後：贊助意願與具體建議非選題 -->
                 <div class="p-5 rounded-2xl bg-[#11141C] border border-white/10 space-y-4 pt-4">
                   <div>
                     <label class="block text-sm font-medium text-neutral-300 mb-2">💰 對於群內活動獎品／伺服器維護贊助的意願與看法（選填）：</label>
@@ -1485,14 +1571,15 @@
                       <div id="bot_cmd_rating_box_${cmd.id}" class="${isSelected ? 'block' : 'hidden'} pt-3 border-t border-white/10 fade-enter space-y-2.5">
                         <div class="flex items-center justify-between text-xs">
                           <span class="text-neutral-300 font-medium">該指令使用評分（選填，可跳過）：</span>
-                          <span class="text-neutral-400 text-[11px]">${curRating > 0 ? `已評 ${curRating} 分` : '尚未評分'}</span>
+                          <span class="text-xs px-2 py-0.5 rounded-md font-mono ${curRating > 0 ? scoreColorMap[curRating].badge : 'text-neutral-500 bg-white/5'}">${curRating > 0 ? `${curRating} 分` : '尚未評分'}</span>
                         </div>
                         <div class="grid grid-cols-5 gap-2">
                           ${[1, 2, 3, 4, 5].map(star => {
                             const active = curRating === star;
+                            const style = active ? scoreColorMap[star].active : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white';
                             return `
                               <button type="button" onclick="setBotCommandRating('${cmd.id}', ${star})"
-                                class="py-1.5 rounded-lg border text-xs transition font-mono ${active ? 'bg-brand-gold text-black border-brand-gold font-bold shadow' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                                class="py-1.5 rounded-lg border text-xs transition font-mono ${style}">
                                 ${star} 分
                               </button>
                             `;
@@ -1529,13 +1616,17 @@
                   <p class="text-xs text-neutral-400">若評分在普通（3分）含以下，請補充具體原因以供優化。</p>
                 </div>
                 <div class="grid grid-cols-5 gap-2.5">
-                  ${botRatingFaces.map(r => `
-                    <button type="button" onclick="setBotRating(${r.v})"
-                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.botRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
-                      <span class="text-2xl sm:text-3xl">${r.face}</span>
-                      <span class="text-xs font-medium">${r.label}</span>
-                    </button>
-                  `).join('')}
+                  ${botRatingFaces.map(r => {
+                    const isSelected = state.botRating === r.v;
+                    const style = isSelected ? scoreColorMap[r.v].active : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white';
+                    return `
+                      <button type="button" onclick="setBotRating(${r.v})"
+                        class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${style}">
+                        <span class="text-2xl sm:text-3xl">${r.face}</span>
+                        <span class="text-xs font-medium">${r.label}</span>
+                      </button>
+                    `;
+                  }).join('')}
                 </div>
                 ${(state.botRating !== null && state.botRating <= 3) ? `
                   <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
@@ -1669,7 +1760,7 @@
               </div>
               <h2 class="text-3xl font-semibold text-white">非常感謝您的寶貴回饋！</h2>
               <p class="text-base text-neutral-300 max-w-lg mx-auto leading-relaxed">
-                您的回饋已全數經過安全過濾並成功送達開發團隊的專屬頻道！
+                您的回饋已全數經過安全過濾並成功分段送達開發團隊的專屬頻道！
               </p>
               <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 max-w-md mx-auto">
                 <button type="button" onclick="copyResult()"
@@ -1891,7 +1982,7 @@
         btns.forEach((btn, idx) => {
           const star = idx + 1;
           if (star === val) {
-            btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-brand-gold text-black border-brand-gold font-bold shadow';
+            btn.className = `py-1.5 rounded-lg border text-xs transition font-mono ${scoreColorMap[star].active}`;
           } else {
             btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-white/5 border-white/10 text-neutral-300 hover:text-white';
           }
@@ -2025,7 +2116,7 @@
         btns.forEach((btn, idx) => {
           const s = idx + 1;
           if (s === star) {
-            btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-brand-gold text-black border-brand-gold font-bold shadow';
+            btn.className = `py-1.5 rounded-lg border text-xs transition font-mono ${scoreColorMap[star].active}`;
           } else {
             btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-white/5 border-white/10 text-neutral-300 hover:text-white';
           }
@@ -2105,8 +2196,8 @@
           animHtml = `
             <div class="anim-scan bg-[#12141A] p-4 rounded-xl border border-white/15 text-sm font-mono space-y-1.5">
               <div class="text-neutral-400">正在辨識截圖詞條...</div>
-              <div class="text-brand-gold font-semibold">🎯 暴擊率 +10.5% (極品)</div>
-              <div class="text-emerald-400 font-semibold">💥 暴擊傷害 +21.0% (MAX)</div>
+              <div class="text-brand-gold font-semibold">🎯 暴擊率 +10.5% (極品)[cite: 2]</div>
+              <div class="text-emerald-400 font-semibold">💥 暴擊傷害 +21.0% (MAX)[cite: 2]</div>
             </div>
           `;
           break;
@@ -2157,7 +2248,7 @@
           animHtml = `
             <div class="space-y-1 text-sm text-center font-mono">
               <div class="text-neutral-400">全服同角色練度比對</div>
-              <div class="text-brand-gold font-bold text-base">超越 95% 玩家 (SSS 梯隊)</div>
+              <div class="text-brand-gold font-bold text-base">超越 95% 玩家 (SSS 梯隊)[cite: 2]</div>
             </div>
           `;
           break;
@@ -2165,7 +2256,7 @@
           animHtml = `
             <div class="text-center space-y-1.5 text-sm font-mono">
               <div class="text-neutral-400">模擬開第 5 孔副詞條...</div>
-              <div class="text-brand-gold font-semibold" style="animation: miniPulse 1.5s infinite;">獲得【暴擊傷害 21.0%】🎉</div>
+              <div class="text-brand-gold font-semibold" style="animation: miniPulse 1.5s infinite;">獲得【暴擊傷害 21.0%】🎉[cite: 2]</div>
             </div>
           `;
           break;
