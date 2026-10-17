@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GAME ZH 意見回饋問卷</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#E5C07B',
+              'gold-hover': '#F3D494',
+              surface: '#07080B',
+              card: '#11141C',
+              cardHover: '#181C26',
+              border: 'rgba(255, 255, 255, 0.12)',
+              borderFocus: '#E5C07B',
+              muted: '#A0AEC0',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '"Noto Sans TC"', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #06070A;
+      color: #F8FAFC;
+      font-weight: 400;
+      letter-spacing: 0.015em;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.35); }
+    .fade-enter { animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes miniScan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+    @keyframes miniBar { 0% { width: 15%; } 100% { width: 95%; } }
+    @keyframes miniPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .anim-scan { position: relative; overflow: hidden; }
+    .anim-scan::after {
+      content: ''; position: absolute; left: 0; right: 0; height: 3px;
+      background: #E5C07B; box-shadow: 0 0 12px #E5C07B;
+      animation: miniScan 2s linear infinite;
+    }
+    .unanswered-highlight {
+      animation: highlightPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes highlightPulse {
+      0%, 100% { border-color: rgba(239, 68, 68, 0.8); box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.5); }
+      50% { border-color: rgba(245, 158, 11, 0.9); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-brand-gold/30 selection:text-brand-gold relative overflow-x-hidden text-base">
+
+  <header class="sticky top-0 z-40 bg-[#06070A]/95 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-brand-gold shadow-[0_0_10px_#E5C07B]"></span>
+        <span class="font-semibold tracking-wider text-base md:text-lg text-white">GAME ZH</span>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-white/5 text-neutral-300 border border-white/10">全方位回饋調研</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="progressIndicator" class="text-sm font-mono text-neutral-300 tracking-tight">0%</span>
+      </div>
+    </div>
+    <div class="w-full bg-white/5 h-1.5">
+      <div id="progressBar" class="h-full bg-gradient-to-r from-amber-400 to-brand-gold transition-all duration-300 w-0"></div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-3xl w-full mx-auto px-6 py-8 md:py-12 flex flex-col justify-center">
+    <div id="surveyContainer" class="w-full fade-enter"></div>
+  </main>
+
+  <footer id="footerControls" class="sticky bottom-0 bg-[#06070A]/95 backdrop-blur-md border-t border-white/10 py-4 px-6 z-30">
+    <div class="max-w-3xl mx-auto flex items-center justify-between gap-4">
+      <button id="btnPrev" onclick="prevStep()" class="inline-flex items-center gap-2 px-5 py-2.5 text-base font-medium rounded-xl text-neutral-300 hover:text-white hover:bg-white/5 border border-white/10 transition disabled:opacity-0 disabled:pointer-events-none">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        上一題
+      </button>
+
+      <div class="flex items-center gap-3">
+        <button id="btnNext" onclick="handleNextClick()" class="inline-flex items-center gap-2 px-7 py-3 text-base font-medium rounded-xl bg-white hover:bg-neutral-100 text-black transition active:scale-[0.98] shadow-lg">
+          <span id="btnNextText">下一步</span>
+          <svg id="btnNextIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <div id="demoModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-[#11141C] border border-white/20 rounded-2xl max-w-xl w-full p-6 relative shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+        <div class="flex items-center gap-3">
+          <span id="demoModalIcon" class="text-2xl"></span>
+          <h3 id="demoModalTitle" class="text-lg font-medium text-white"></h3>
+        </div>
+        <button onclick="closeDemoModal()" class="text-neutral-400 hover:text-white p-2 rounded-lg hover:bg-white/5 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="demoModalAnimBox" class="mb-4 p-5 rounded-xl bg-[#06070A] border border-white/10 flex flex-col justify-center min-h-[160px]"></div>
+      <p id="demoModalDesc" class="text-sm text-neutral-300 leading-relaxed mb-6"></p>
+      <button onclick="closeDemoModal()" class="w-full py-3 bg-brand-gold text-black font-semibold text-sm rounded-xl hover:bg-brand-gold-hover transition">了解並關閉</button>
+    </div>
+  </div>
+
+  <div id="overviewModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-[#11141C] border border-white/20 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col p-6 relative shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+        <h3 class="text-lg font-medium text-white flex items-center gap-2">
+          <span>📋</span> 問卷填寫完整總覽
+        </h3>
+        <button onclick="closeOverviewModal()" class="text-neutral-400 hover:text-white p-2 rounded-lg hover:bg-white/5 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto pr-2 space-y-4 text-sm leading-relaxed" id="overviewContent"></div>
+      <div class="border-t border-white/10 pt-4 mt-4 flex items-center justify-between gap-3">
+        <button onclick="copyResult()" class="py-2.5 px-5 bg-brand-gold text-black font-semibold text-sm rounded-xl hover:bg-brand-gold-hover transition">複製摘要內容</button>
+        <button onclick="closeOverviewModal()" class="py-2.5 px-5 bg-white/10 text-white font-medium text-sm rounded-xl hover:bg-white/15 transition">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastBox" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-2">
+    <div class="bg-neutral-800 text-white text-sm px-5 py-2.5 rounded-full shadow-2xl border border-white/20 flex items-center gap-2">
+      <span id="toastMsg">通知訊息</span>
+    </div>
+  </div>
+
+  <script>
+    const countOptions = [
+      { id: '0-4', icon: '🌱', title: '0–4 筆', persona: '初訪探索', sub: '初次接觸或剛嘗試輸入' },
+      { id: '5-19', icon: '🧭', title: '5–19 筆', persona: '輕度體驗', sub: '已能正常辨識並查看分數' },
+      { id: '20-49', icon: '📈', title: '20–49 筆', persona: '進階常客', sub: '經常使用歷史對比與聲骸庫' },
+      { id: '50-99', icon: '🧠', title: '50–99 筆', persona: '資深玩家', sub: '依賴戰略大數據與權重自訂' },
+      { id: '100+', icon: '🏆', title: '100+ 筆', persona: '核心重度', sub: '全套配裝極限評級追求者' }
+    ];
+
+    const deviceOptions = [
+      { id: 'pc_desktop', label: '桌上型電腦 (PC 螢幕寬闊)', icon: '🖥️' },
+      { id: 'pc_laptop', label: '筆記型電腦 (Laptop 便攜)', icon: '💻' },
+      { id: 'mobile_ios', label: 'iPhone 手市 (iOS 直式瀏覽)', icon: '📱' },
+      { id: 'mobile_android', label: 'Android 旗艦/主流手機', icon: '🤖' },
+      { id: 'tablet', label: 'iPad / 平板電腦 (大螢幕觸控)', icon: '📲' },
+      { id: 'handheld', label: '掌上遊戲機 (Steam Deck / ROG 等)', icon: '🎮' }
+    ];
+
+    const purposeOptions = [
+      { id: 'ocr_eval', label: '截圖辨識聲骸並判定留存價值', icon: '📷', desc: '上傳遊戲截圖自動解析主副詞條並算出評分級距。', anim: 'ocr' },
+      { id: 'compare_two', label: '比較兩件聲骸的屬性與強化收益', icon: '⚖️', desc: '手動或從庫存選取兩筆聲骸，直觀計算兩者屬性差值。', anim: 'compare' },
+      { id: 'grad_progress', label: '查看全角色聲骸畢業與突破進度', icon: '📊', desc: '統整全角色裝備，以視覺進度條顯示大畢業或傳家寶達成率。', anim: 'overview' },
+      { id: 'dps_calc', label: '試算傷害數值與面板配裝（DPS 計算機）', icon: '💥', desc: '帶入角色等級、武器技能與副詞條，模擬總期望傷害。', anim: 'dps' },
+      { id: 'matrix_team', label: '使用矩陣編隊與全隊組合推薦', icon: '🧩', desc: '根據角色持有狀態與聲骸評分，推薦最佳三人出戰搭配。', anim: 'matrix' },
+      { id: 'server_rank', label: '查看全服玩家評分階級與排行榜', icon: '🏅', desc: '查看全球或好友排行，評估自身練度擊敗了多少玩家。', anim: 'rank' },
+      { id: 'echo_sim', label: '模擬開詞條與詞條強化機率測試', icon: '🎲', desc: '依官方公示機率演算法模擬聲骸開孔與副詞條跳動。', anim: 'simulate' },
+      { id: 'share_card', label: '生成社群分享圖卡（長圖或限定名片）', icon: '🖼️', desc: '將神級面板一鍵輸出成手機直式或寬螢幕高畫質圖卡。', anim: 'share' }
+    ];
+
+    const ratingFaces5 = [
+      { v: 1, face: '😵', label: '很困難' },
+      { v: 2, face: '😕', label: '不太直覺' },
+      { v: 3, face: '😐', label: '普通' },
+      { v: 4, face: '🙂', label: '大致清楚' },
+      { v: 5, face: '✨', label: '非常流暢' }
+    ];
+
+    const ratingFacesFind5 = [
+      { v: 1, face: '😵', label: '很難找' },
+      { v: 2, face: '😕', label: '偏隱蔽' },
+      { v: 3, face: '😐', label: '普通' },
+      { v: 4, face: '🙂', label: '大致清楚' },
+      { v: 5, face: '✨', label: '非常顯眼' }
+    ];
+
+    const ratingFacesAccuracy = [
+      { v: 1, face: '😵', label: '常出錯' },
+      { v: 2, face: '😕', label: '偶爾失誤' },
+      { v: 3, face: '😐', label: '普通' },
+      { v: 4, face: '🙂', label: '大多準確' },
+      { v: 5, face: '✨', label: '非常精準' }
+    ];
+
+    const ratingFacesWait = [
+      { v: 1, face: '😵', label: '無法接受' },
+      { v: 2, face: '😕', label: '偏久不耐煩' },
+      { v: 3, face: '😐', label: '尚可接受' },
+      { v: 4, face: '🙂', label: '載入算快' },
+      { v: 5, face: '✨', label: '非常迅速' }
+    ];
+
+    const ratingFacesTier = [
+      { v: 1, face: '😵', label: '極不合理' },
+      { v: 2, face: '😕', label: '不太符合' },
+      { v: 3, face: '😐', label: '大致可參考' },
+      { v: 4, face: '🙂', label: '貼近實戰' },
+      { v: 5, face: '✨', label: '完全符合' }
+    ];
+
+    const usageFeatures = [
+      { id: 'ocr', name: 'OCR 截圖辨識與離線新增', icon: '📷', desc: '上傳遊戲內聲骸資訊截圖，自動辨識主副詞條並換算評分。', anim: 'ocr' },
+      { id: 'compare', name: '聲骸對比工具', icon: '⚖️', desc: '直接將手頭上的兩筆歷史聲骸進行數值差值計算與雷達圖對比。', anim: 'compare' },
+      { id: 'overview', name: '戰略大數據總匯', icon: '📊', desc: '跨角色統整最佳裝備庫存，自動判斷各角色大畢業或傳家寶達成率。', anim: 'overview' },
+      { id: 'matrix', name: '矩陣編隊推薦', icon: '🧩', desc: '根據當前角色庫與聲骸練度，自動推薦並解析三人戰略陣容搭配。', anim: 'matrix' },
+      { id: 'simulate', name: '模擬開詞條', icon: '🎲', desc: '以官方公示機率演算法模擬聲骸開孔與副詞條跳動過程。', anim: 'simulate' },
+      { id: 'weights', name: 'ZH 資料庫與權重編輯', icon: '⚙️', desc: '自訂暴擊、暴傷或屬性攻擊加權比例，改變個人專屬評級公式。', anim: 'weights' },
+      { id: 'share', name: '一鍵生成質感圖卡', icon: '🖼️', desc: '匯出手機直式或寬螢幕高畫質個人角色聲骸成果卡片。', anim: 'share' }
+    ];
+
+    const usageStates = [
+      { v: 0, label: '沒用過' },
+      { v: 1, label: '知道但未用' },
+      { v: 2, label: '偶爾用' },
+      { v: 3, label: '經常使用' }
+    ];
+
+    const webImproveOptions = [
+      { id: 'w_none', label: '✨ 目前體驗良好，無須改善', isNone: true },
+      { id: 'w_ocr', label: 'OCR 文字辨識速度與準確度' },
+      { id: 'w_load', label: '網站資料連線的載入速度 (GAS API)' },
+      { id: 'w_mobile', label: '手機版直式排版與表格滑動體驗' },
+      { id: 'w_dps', label: 'DPS 計算機公式與實戰契合度' },
+      { id: 'w_weight', label: '詞條權重自訂之彈性與指引' },
+      { id: 'w_matrix', label: '矩陣編隊的隊伍推薦演算法' },
+      { id: 'w_card', label: '社群分享圖卡版型豐富度' }
+    ];
+
+    const botImproveOptions = [
+      { id: 'b_none', label: '✨ 目前運作良好，無須改善', isNone: true },
+      { id: 'b_ocr', label: 'OCR 文字辨識速度與準確度' },
+      { id: 'b_load', label: '資料的載入時間' },
+      { id: 'b_layout', label: '資料排版' },
+      { id: 'b_dps', label: 'DPS 計算機公式與實戰契合度' },
+      { id: 'b_weight', label: '詞條權重自訂之彈性與指引' },
+      { id: 'b_matrix', label: '矩陣攻略的呈現' },
+      { id: 'b_card', label: '社群分享圖卡版型豐富度' }
+    ];
+
+    const botAwarenessOptions = [
+      { id: 'heavy_user', icon: '🤖', title: '經常使用 DC 機器人', sub: '會用 /查詢、/聲骸圖鑑、/洗詞條pk、/鳴潮猜謎 等指令' },
+      { id: 'light_user', icon: '💬', title: '偶爾使用機器人', sub: '知道指令但只用過少數功能' },
+      { id: 'aware_not_used', icon: '❓', title: '知道有機器人，但從未使用過', sub: '習慣只用網頁版，沒在 DC 伺服器輸入過指令' },
+      { id: 'unaware', icon: '🚫', title: '完全不知道有 Discord 機器人', sub: '第一次聽說有這個機器人' }
+    ];
+
+    const botCommandOptions = [
+      { id: 'cmd_query', icon: '🔍', label: '/查詢、/公開查詢、/我的角色 (即時查面板與雙爆CV)' },
+      { id: 'cmd_guide', icon: '📖', label: '/聲骸圖鑑、/配隊 (查43311配置、畢業標準與主流隊伍)' },
+      { id: 'cmd_gantt', icon: '📊', label: '/矩陣深塔排軸甘特圖 (熱門隊伍合軸輸出流程)' },
+      { id: 'cmd_pk', icon: '⚔️', label: '/洗詞條pk (聲骸洗鍊生死擂台，可對戰好友或AI)' },
+      { id: 'cmd_guess', icon: '🎭', label: '/鳴潮猜謎 (黑影剪影猜角色/套裝/聲骸)' },
+      { id: 'cmd_quiz', icon: '🏆', label: '/問答pk、/鳴潮問答 (多人搶答與個人積分榮譽榜)' },
+      { id: 'cmd_gacha', icon: '🎲', label: '/抽數試算、/模擬抽卡、/抽卡分析 (歐非鑑定)' }
+    ];
+
+    const botRatingFaces = [
+      { v: 1, face: '😵', label: '很難用' },
+      { v: 2, face: '😕', label: '常出錯' },
+      { v: 3, face: '😐', label: '普通' },
+      { v: 4, face: '🙂', label: '順暢好用' },
+      { v: 5, face: '✨', label: '極為強大' }
+    ];
+
+    // 動態選項：根據分數高低呈現不同痛點或建議標籤
+    const discordAspects = [
+      {
+        id: 'dc_atmosphere',
+        name: '社群交流氣氛',
+        icon: '🎉',
+        desc: '群友互動友善度、討論風氣與包容性。',
+        getChips: (score) => score <= 2 
+          ? ['爭吵謾罵偏多，環境浮躁', '老手優越感重，對新手冷淡', '常離題洗版，找不到重點討論', '發言氛圍壓抑，不敢開口']
+          : ['偶有離題情況，希望能更聚焦', '新手求助時希望能有更多引導', '希望能增加專屬日常閒聊區', '語音頻道希望能更活絡']
+      },
+      {
+        id: 'dc_rules',
+        name: '群規與管理制度',
+        icon: '🛡️',
+        desc: '版規透明度、頻道分類與管理員處理效率。',
+        getChips: (score) => score <= 2
+          ? ['違規審查標準不一或過嚴', '檢舉違規處理太慢', '頻道分類極其混亂找不到位置', '管理員態度不佳或神隱']
+          : ['頻道層級有點多，希望能整合簡化', '劇透規範希望能更醒目提醒', '希望能開放自訂身分組標籤', '希望增加深塔攻略專用頻道']
+      },
+      {
+        id: 'dc_events',
+        name: '社群定期活動',
+        icon: '🏆',
+        desc: '問答大賽、黑影猜謎、抽卡連動與群內小比賽。',
+        getChips: (score) => score <= 2
+          ? ['活動規則繁瑣難懂', '舉辦時間都在冷門時段無法跟', '獎勵完全無吸引力', '參與體驗混亂，常有爭議']
+          : ['希望增加週末白天的場次', '希望活動題型更豐富多元', '希望增加深塔競速或配隊挑戰', '獎項能多一點群內榮譽稱號']
+      },
+      {
+        id: 'dc_abu_mascot',
+        name: '將「阿布」設為本群吉祥物',
+        icon: '🐾',
+        desc: '官方共鳴夥伴「阿布」作為群吉祥物、專屬頭像與公告代言人。',
+        getChips: (score) => score <= 2
+          ? ['不喜歡阿布，覺得很吵或不可愛', '更希望以特定熱門自機角色為代表', '覺得吉祥物概念沒必要', '擔心風格過於低幼化']
+          : ['建議設計專屬繪製版阿布表情包', '希望能搭配機器人對話口吻', '可以舉辦群內吉祥物二創投票', '阿布很好，但希望能有多個備選']
+      }
+    ];
+
+    const dcFrequencyOptions = [
+      { id: 'freq_daily', icon: '🔥', title: '每日活躍 (常駐在線)', sub: '每天都會看訊息、聊天或使用指令' },
+      { id: 'freq_often', icon: '💬', title: '經常造訪 (每週數次)', sub: '常來查看更新、攻略或參與活動' },
+      { id: 'freq_rare', icon: '👀', title: '偶爾潛水 (每月少數幾次)', sub: '需要特定資訊或活動時才點開' },
+      { id: 'freq_none', icon: '🚫', title: '尚未加入 / 從未在 DC 出現', sub: '未加入群組或加入後完全沒點開過' }
+    ];
+
+    const state = {
+      analysisCount: null,
+      persona: null,
+      devices: [],
+      purposes: [],
+      otherPurpose: '',
+      understandRating: null,
+      understandDifficultyReason: '',
+      findRating: null,
+      findDifficultyReason: '',
+      usage: {},
+      usageReasons: {},
+      usageRatings: {},
+      usageRatingReasons: {},
+      ocrRating: null,
+      ocrFailReason: '',
+      waitRating: null,
+      waitMaxSeconds: '',
+      tierRating: null,
+      tierReason: '',
+      webPriorities: [],
+      otherWebPriority: '',
+      webPainPoint: '',
+      webSuggestion: '',
+      dcFrequency: null,
+      dcNoFreqReason: [],
+      dcAspectRatings: {},
+      dcAspectReasons: {},
+      dcSponsorIntent: '',
+      dcCommunitySuggestion: '',
+      botAwareness: null,
+      botAwarenessReason: [],
+      botCommands: [],
+      botCommandRatings: {},
+      botCommandRatingReasons: {},
+      botRating: null,
+      botRatingReason: '',
+      botPriorities: [],
+      otherBotPriority: '',
+      botPainPoint: '',
+      botSuggestion: '',
+      communitySuggestions: '',
+      teamEncouragement: ''
+    };
+
+    let currentStepIndex = 0;
+    let warmthClickCount = 0;
+    let isSubmitting = false;
+
+    function getSteps() {
+      const steps = [
+        { id: 'welcome', type: 'welcome', chapter: '引言' },
+        { id: 'count', type: 'count', chapter: '第 1 篇：網站使用習慣' },
+        { id: 'device', type: 'device', chapter: '第 1 篇：網站使用習慣' },
+        { id: 'purpose', type: 'purpose', chapter: '第 1 篇：網站使用習慣' },
+        { id: 'experience', type: 'experience', chapter: '第 2 篇：網站上手體驗' },
+        { id: 'usage', type: 'usage', chapter: '第 2 篇：網站功能頻率' },
+        { id: 'dev_research', type: 'dev_research', chapter: '第 3 篇：核心技術調查' },
+        { id: 'web_priorities', type: 'web_priorities', chapter: '第 4 篇：網站改善方針' },
+        { id: 'web_feedback', type: 'web_feedback', chapter: '第 4 篇：網站改善方針' },
+        { id: 'dc_community', type: 'dc_community', chapter: '第 5 篇：Discord 社群調查' },
+        { id: 'bot_awareness', type: 'bot_awareness', chapter: '第 6 篇：Discord 機器人' }
+      ];
+
+      if (state.botAwareness === 'heavy_user' || state.botAwareness === 'light_user') {
+        steps.push({ id: 'bot_survey', type: 'bot_survey', chapter: '第 6 篇：Discord 機器人' });
+        steps.push({ id: 'bot_priorities', type: 'bot_priorities', chapter: '第 6 篇：Discord 機器人' });
+        steps.push({ id: 'bot_feedback', type: 'bot_feedback', chapter: '第 6 篇：Discord 機器人' });
+      }
+
+      steps.push({ id: 'final_cheer', type: 'final_cheer', chapter: '第 7 篇：最後補充與鼓勵' });
+      steps.push({ id: 'finish', type: 'finish', chapter: '提交完成' });
+
+      return steps;
+    }
+
+    function checkStepValidity() {
+      const steps = getSteps();
+      const current = steps[currentStepIndex];
+      if (!current) return true;
+
+      switch (current.type) {
+        case 'welcome':
+          return true;
+        case 'count':
+          return state.analysisCount !== null;
+        case 'device':
+          return state.devices.length > 0;
+        case 'purpose':
+          return state.purposes.length > 0 || state.otherPurpose.trim().length > 0;
+        case 'experience': {
+          const uNeed = state.understandRating === 1 || state.understandRating === 2;
+          const uOk = state.understandRating !== null && (!uNeed || state.understandDifficultyReason.trim().length > 0);
+          const fNeed = state.findRating === 1 || state.findRating === 2;
+          const fOk = state.findRating !== null && (!fNeed || state.findDifficultyReason.trim().length > 0);
+          return uOk && fOk;
+        }
+        case 'usage': {
+          const allAnswered = Object.keys(state.usage).length === usageFeatures.length;
+          if (!allAnswered) return false;
+          for (const feat of usageFeatures) {
+            const v = state.usage[feat.id];
+            if (v === 0 || v === 1) {
+              const rList = state.usageReasons[feat.id] || [];
+              if (rList.length === 0) return false;
+            }
+          }
+          return true;
+        }
+        case 'dev_research': {
+          const ocrNeed = state.ocrRating !== null && state.ocrRating < 5;
+          const ocrOk = state.ocrRating !== null && (!ocrNeed || state.ocrFailReason.trim().length > 0);
+          const waitNeed = state.waitRating !== null && state.waitRating < 5;
+          const waitOk = state.waitRating !== null && (!waitNeed || state.waitMaxSeconds.trim().length > 0);
+          const tierNeed = state.tierRating !== null && state.tierRating < 5;
+          const tierOk = state.tierRating !== null && (!tierNeed || state.tierReason.trim().length > 0);
+          return ocrOk && waitOk && tierOk;
+        }
+        case 'web_priorities':
+          return state.webPriorities.length > 0 || state.otherWebPriority.trim().length > 0;
+        case 'web_feedback':
+          return true;
+        case 'dc_community': {
+          if (state.dcFrequency === null) return false;
+          if (state.dcFrequency === 'freq_none') {
+            return (state.dcNoFreqReason || []).length > 0;
+          }
+          return true;
+        }
+        case 'bot_awareness':
+          if (state.botAwareness === null) return false;
+          if (state.botAwareness === 'aware_not_used' || state.botAwareness === 'unaware') {
+            return (state.botAwarenessReason || []).length > 0;
+          }
+          return true;
+        case 'bot_survey':
+          if (state.botRating === null) return false;
+          if (state.botRating <= 3) {
+            return state.botRatingReason.trim().length > 0;
+          }
+          return true;
+        case 'bot_priorities':
+          return state.botPriorities.length > 0 || state.otherBotPriority.trim().length > 0;
+        case 'bot_feedback':
+          return true;
+        case 'final_cheer':
+          return state.teamEncouragement.trim().length > 0;
+        case 'finish':
+          return true;
+        default:
+          return true;
+      }
+    }
+
+    function updateNavButtons() {
+      const steps = getSteps();
+      const isValid = checkStepValidity();
+      const btnNext = document.getElementById('btnNext');
+      const btnNextText = document.getElementById('btnNextText');
+      const btnNextIcon = document.getElementById('btnNextIcon');
+      const btnPrev = document.getElementById('btnPrev');
+      const footer = document.getElementById('footerControls');
+
+      btnPrev.disabled = currentStepIndex === 0 || currentStepIndex === steps.length - 1 || isSubmitting;
+
+      if (currentStepIndex === steps.length - 1) {
+        footer.classList.add('hidden');
+      } else {
+        footer.classList.remove('hidden');
+      }
+
+      if (isSubmitting) {
+        btnNext.disabled = true;
+        btnNext.className = "inline-flex items-center gap-2 px-7 py-3 text-base font-semibold rounded-xl bg-neutral-600 text-neutral-300 transition cursor-not-allowed";
+        btnNextText.innerText = "資料安全加密傳送中...";
+        btnNextIcon.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>`;
+        return;
+      }
+
+      btnNext.disabled = false;
+
+      if (!isValid) {
+        const isFinalCheerStep = steps[currentStepIndex].type === 'final_cheer';
+        btnNext.className = "inline-flex items-center gap-2 px-6 py-3 text-base font-semibold rounded-xl bg-amber-500 hover:bg-amber-400 text-black transition active:scale-[0.98] shadow-lg shadow-amber-500/20";
+        btnNextText.innerText = isFinalCheerStep ? "需要來點溫暖QQ" : "⚠️ 檢查未填項目";
+        btnNextIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>`;
+      } else {
+        btnNext.className = "inline-flex items-center gap-2 px-7 py-3 text-base font-semibold rounded-xl bg-white hover:bg-neutral-100 text-black transition active:scale-[0.98] shadow-lg";
+        btnNextText.innerText = currentStepIndex === steps.length - 2 ? "提交問卷" : "下一步";
+        btnNextIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>`;
+      }
+    }
+
+    async function handleNextClick() {
+      if (checkStepValidity()) {
+        warmthClickCount = 0;
+        const steps = getSteps();
+        if (currentStepIndex === steps.length - 2) {
+          await submitToDiscord();
+        } else {
+          nextStep();
+        }
+      } else {
+        const steps = getSteps();
+        if (steps[currentStepIndex].type === 'final_cheer') {
+          warmthClickCount++;
+          if (warmthClickCount >= 2) {
+            triggerEasterEggConfetti();
+          }
+        }
+        highlightFirstUnanswered();
+      }
+    }
+
+    function triggerEasterEggConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 90,
+          origin: { y: 0.7 },
+          colors: ['#FF69B4', '#FFD700', '#FF1493', '#E5C07B', '#00FFFF']
+        });
+        showToast('💖 收到彩蛋能量！但還是拜託給團隊留一句溫暖鼓勵吧～');
+      }
+    }
+
+    // 安全淨化函式：去除 Markdown 連結、惡意協定與特殊控制字元，防止釣魚與跳轉
+    function sanitizeForDiscord(text) {
+      if (!text) return '無';
+      return String(text)
+        .replace(/https?:\/\//gi, '[已過濾連結]//')
+        .replace(/discord\.(gg|io|me|li)\//gi, '[已過濾邀請]/')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '$1 ($2)')
+        .replace(/<@&?[0-9]+>/g, '[提及過濾]')
+        .replace(/@(everyone|here)/g, '@已過濾')
+        .replace(/[`_*{}\\]/g, ' ')
+        .trim();
+    }
+
+    async function submitToDiscord() {
+      isSubmitting = true;
+      updateNavButtons();
+
+      const getDeviceName = (id) => (deviceOptions.find(d => d.id === id) || {}).label || id;
+      const getPurposeName = (id) => (purposeOptions.find(p => p.id === id) || {}).label || id;
+      const getWebImproveName = (id) => (webImproveOptions.find(i => i.id === id) || {}).label || id;
+      const getBotImproveName = (id) => (botImproveOptions.find(i => i.id === id) || {}).label || id;
+      const getBotAwarenessName = (id) => (botAwarenessOptions.find(b => b.id === id) || {}).title || id;
+      const getBotCmdName = (id) => (botCommandOptions.find(c => c.id === id) || {}).label || id;
+      const getDcFreqName = (id) => (dcFrequencyOptions.find(f => f.id === id) || {}).title || id;
+      const getDcAspectName = (id) => (discordAspects.find(a => a.id === id) || {}).name || id;
+
+      const payload = {
+        username: "GAME ZH 問卷系統 (安全防護)",
+        avatar_url: "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/shield-halved.svg",
+        embeds: [
+          {
+            title: "📋 收到新的意見回饋問卷 (已完成安全消毒)",
+            color: 15057019,
+            fields: [
+              {
+                name: "👤 玩家輪廓與裝置",
+                value: `• 累計分析：${sanitizeForDiscord(state.persona)} (${state.analysisCount || '0'} 筆)\n• 常用裝置：${sanitizeForDiscord(state.devices.map(getDeviceName).join(' ➔ ') || '未選')}`
+              },
+              {
+                name: "🌐 網站功能評估",
+                value: `• 核心用途理解：${state.understandRating || '-'}/5\n• 功能切換順暢：${state.findRating || '-'}/5\n• 改善優先級：${sanitizeForDiscord(state.webPriorities.map(getWebImproveName).join('、') || '無')}\n• 網站痛點：${sanitizeForDiscord(state.webPainPoint)}`
+              },
+              {
+                name: "🏛️ Discord 社群意見",
+                value: `• 造訪頻率：${sanitizeForDiscord(getDcFreqName(state.dcFrequency))}\n${state.dcFrequency !== 'freq_none' ? Object.entries(state.dcAspectRatings).map(([k, v]) => `• ${getDcAspectName(k)}: ${v}分 (${sanitizeForDiscord(state.dcAspectReasons[k] || '無原因')})`).join('\n') : `• 未活躍原因: ${sanitizeForDiscord((state.dcNoFreqReason || []).join('、'))}`}\n• 贊助意願：${sanitizeForDiscord(state.dcSponsorIntent)}\n• 社群建議：${sanitizeForDiscord(state.dcCommunitySuggestion)}`
+              },
+              {
+                name: "🤖 Discord 機器人意見",
+                value: `• 知曉度：${sanitizeForDiscord(getBotAwarenessName(state.botAwareness))}\n• 整體滿意度：${state.botRating ? state.botRating + '/5' : '未填'}\n• 機器人痛點：${sanitizeForDiscord(state.botPainPoint)}\n• 機器人建議：${sanitizeForDiscord(state.botSuggestion)}`
+              },
+              {
+                name: "💌 團隊正能量鼓勵",
+                value: sanitizeForDiscord(state.teamEncouragement) || '無'
+              }
+            ],
+            footer: {
+              text: `填寫時間：${new Date().toLocaleString('zh-TW')} • 全連結已防毒過濾`
+            }
+          }
+        ]
+      };
+
+      const webhookUrl = "https://discord.com/api/webhooks/1560999422693744734/TPm18lZ4y7MVvR7UQw-APcYsHmCcPyGcu18wkpyfCK1Mnyc2dF4LAsN5jTG0QpJZtUnI";
+
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        showToast('✅ 問卷已成功安全送達團隊！');
+      } catch (err) {
+        console.error('Webhook error:', err);
+        showToast('⚠️ 自動發送遇到網路問題，可點「複製摘要」備份');
+      } finally {
+        isSubmitting = false;
+        nextStep();
+      }
+    }
+
+    function highlightFirstUnanswered() {
+      const steps = getSteps();
+      const current = steps[currentStepIndex];
+      let targetEl = null;
+
+      if (current.type === 'count' && state.analysisCount === null) {
+        targetEl = document.getElementById('countOptionsBox');
+        showToast('請選取您的累計分析筆數');
+      } else if (current.type === 'device' && state.devices.length === 0) {
+        targetEl = document.getElementById('deviceOptionsBox');
+        showToast('請至少點選一項常用的裝置');
+      } else if (current.type === 'purpose' && state.purposes.length === 0 && state.otherPurpose.trim().length === 0) {
+        targetEl = document.getElementById('purposeOptionsBox');
+        showToast('請選取主要使用目的或補充說明');
+      } else if (current.type === 'experience') {
+        if (state.understandRating === null) {
+          targetEl = document.getElementById('qUnderstandBox');
+          showToast('請評估核心用途理解度');
+        } else if ((state.understandRating === 1 || state.understandRating === 2) && state.understandDifficultyReason.trim().length === 0) {
+          targetEl = document.getElementById('inputUnderstandReason');
+          showToast('請補充理解困難的具體原因');
+        } else if (state.findRating === null) {
+          targetEl = document.getElementById('qFindBox');
+          showToast('請評估功能尋找順暢度');
+        } else if ((state.findRating === 1 || state.findRating === 2) && state.findDifficultyReason.trim().length === 0) {
+          targetEl = document.getElementById('inputFindReason');
+          showToast('請補充哪項功能偏隱蔽或難找');
+        }
+      } else if (current.type === 'usage') {
+        for (const feat of usageFeatures) {
+          if (state.usage[feat.id] === undefined) {
+            targetEl = document.getElementById(`usage-row-${feat.id}`);
+            showToast(`請選擇【${feat.name}】的使用頻率`);
+            break;
+          }
+          const v = state.usage[feat.id];
+          if ((v === 0 || v === 1) && (!state.usageReasons[feat.id] || state.usageReasons[feat.id].length === 0)) {
+            targetEl = document.getElementById(`usage-reason-box-${feat.id}`);
+            showToast(`請勾選【${feat.name}】未使用的原因`);
+            break;
+          }
+        }
+      } else if (current.type === 'dev_research') {
+        if (state.ocrRating === null) {
+          targetEl = document.getElementById('qOcrBox');
+          showToast('請評估 OCR 準確度');
+        } else if (state.ocrRating < 5 && state.ocrFailReason.trim().length === 0) {
+          targetEl = document.getElementById('inputOcrReason');
+          showToast('請補充 OCR 常見失誤狀況');
+        } else if (state.waitRating === null) {
+          targetEl = document.getElementById('qWaitBox');
+          showToast('請評估載入等待速度');
+        } else if (state.waitRating < 5 && state.waitMaxSeconds.trim().length === 0) {
+          targetEl = document.getElementById('inputWaitSeconds');
+          showToast('請補充可接受等待秒數或建議');
+        } else if (state.tierRating === null) {
+          targetEl = document.getElementById('qTierBox');
+          showToast('請評估評分級距合理性');
+        } else if (state.tierRating < 5 && state.tierReason.trim().length === 0) {
+          targetEl = document.getElementById('inputTierReason');
+          showToast('請補充級距不合理之處');
+        }
+      } else if (current.type === 'web_priorities' && state.webPriorities.length === 0 && state.otherWebPriority.trim().length === 0) {
+        targetEl = document.getElementById('webPrioritiesBox');
+        showToast('請選取網站優先改善重點');
+      } else if (current.type === 'dc_community') {
+        if (state.dcFrequency === null) {
+          targetEl = document.getElementById('dcFrequencyBox');
+          showToast('請選擇您在 Discord 社群的造訪頻率');
+        } else if (state.dcFrequency === 'freq_none' && (!state.dcNoFreqReason || state.dcNoFreqReason.length === 0)) {
+          targetEl = document.getElementById('dcNoFreqReasonBox');
+          showToast('請勾選未加入或未活躍的原因');
+        }
+      } else if (current.type === 'bot_awareness') {
+        if (state.botAwareness === null) {
+          targetEl = document.getElementById('botAwarenessBox');
+          showToast('請選擇您對 Discord 機器人的了解程度');
+        } else if ((state.botAwareness === 'aware_not_used' || state.botAwareness === 'unaware') && (!state.botAwarenessReason || state.botAwarenessReason.length === 0)) {
+          targetEl = document.getElementById('botAwarenessReasonBox');
+          showToast('請勾選未使用或不知道機器人的原因');
+        }
+      } else if (current.type === 'bot_survey') {
+        if (state.botRating === null) {
+          targetEl = document.getElementById('botRatingBox');
+          showToast('請評估機器人整體滿意度');
+        } else if (state.botRating <= 3 && state.botRatingReason.trim().length === 0) {
+          targetEl = document.getElementById('inputBotRatingReason');
+          showToast('請補充機器人滿意度普通或不滿意的具體原因');
+        }
+      } else if (current.type === 'bot_priorities' && state.botPriorities.length === 0 && state.otherBotPriority.trim().length === 0) {
+        targetEl = document.getElementById('botPrioritiesBox');
+        showToast('請選取機器人優先改善重點');
+      } else if (current.type === 'final_cheer' && state.teamEncouragement.trim().length === 0) {
+        targetEl = document.getElementById('inputCheer');
+        showToast('需要來點溫暖QQ');
+      }
+
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetEl.classList.add('unanswered-highlight');
+        setTimeout(() => targetEl.classList.remove('unanswered-highlight'), 2200);
+      }
+    }
+
+    function renderStep() {
+      const steps = getSteps();
+      if (currentStepIndex >= steps.length) currentStepIndex = steps.length - 1;
+      const currentStep = steps[currentStepIndex];
+
+      const container = document.getElementById('surveyContainer');
+      container.classList.remove('fade-enter');
+      void container.offsetWidth;
+      container.classList.add('fade-enter');
+
+      const progressPct = Math.round((currentStepIndex / (steps.length - 1)) * 100);
+      document.getElementById('progressBar').style.width = `${progressPct}%`;
+      document.getElementById('progressIndicator').innerText = `${progressPct}% (${currentStepIndex + 1}/${steps.length})`;
+
+      let html = '';
+
+      switch (currentStep.type) {
+        case 'welcome':
+          html = `
+            <div class="text-center py-6 space-y-7">
+              <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-brand-gold text-sm font-medium">
+                <span>🎯</span> GAME ZH 鳴潮數據分析儀、DC社群與機器人全方位調研
+              </div>
+              <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white leading-snug">
+                讓聲骸評分、DC社群與機器人更流暢，<br class="hidden sm:inline" />需要您的真實使用體感。
+              </h1>
+              <p class="text-base text-neutral-300 max-w-xl mx-auto leading-relaxed">
+                本調查涵蓋「網站工具評估」、「Discord社群交流」與「機器人互動體驗」，題目結構已清晰劃分，歡迎依實際體驗填答。
+              </p>
+              <div class="p-5 rounded-2xl bg-[#11141C] border border-white/10 max-w-lg mx-auto text-left space-y-3">
+                <div class="text-sm text-brand-gold font-medium">✨ 填答特點：</div>
+                <div class="text-sm text-neutral-300 leading-relaxed">• 點擊選項依「點選先後順序」自動標記重要性序號</div>
+                <div class="text-sm text-neutral-300 leading-relaxed">• 未使用的功能、未加入原因支援快捷標籤複選</div>
+                <div class="text-sm text-neutral-300 leading-relaxed">• 評分低分時動態提供精準「痛點反饋」標籤</div>
+                <div class="text-sm text-neutral-300 leading-relaxed">• 漏填題目時點擊按鈕直接自動導航至未填項目</div>
+                <div class="text-sm text-neutral-300 leading-relaxed">• 送出時自動過濾可疑連結，保證安全無虞</div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'count':
+          html = `
+            <div class="space-y-6" id="countOptionsBox">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">您大約在 GAME ZH 分析過多少筆聲骸資料？</h2>
+                <p class="text-sm text-neutral-400 mt-1">選取後即可進行下一步。</p>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-3.5">
+                ${countOptions.map(opt => {
+                  const active = state.analysisCount === opt.id;
+                  return `
+                    <button type="button" onclick="selectCount('${opt.id}', '${opt.persona}')"
+                      class="text-left p-4 rounded-2xl border transition-all flex items-start gap-3.5 ${active ? 'bg-brand-gold/15 border-brand-gold text-white shadow-xl ring-1 ring-brand-gold/50' : 'bg-[#11141C] border-white/10 text-neutral-200 hover:border-white/20 hover:bg-[#181C26]'}">
+                      <span class="text-2xl p-2.5 rounded-xl bg-white/5 border border-white/10 shrink-0">${opt.icon}</span>
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="font-medium text-base text-white">${opt.title}</span>
+                          <span class="text-xs px-2 py-0.5 rounded-full ${active ? 'bg-brand-gold/20 text-brand-gold' : 'bg-white/10 text-neutral-300'}">${opt.persona}</span>
+                        </div>
+                        <p class="text-xs text-neutral-400 mt-1.5">${opt.sub}</p>
+                      </div>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'device':
+          html = `
+            <div class="space-y-6" id="deviceOptionsBox">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                  <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">您通常使用哪些裝置造訪本網站？</h2>
+                  <p class="text-sm text-neutral-400 mt-1">可複選，請依【常用 ➔ 不常用】順序點選（數字越小代表越常用）。</p>
+                </div>
+                <button type="button" onclick="clearDevices()" title="清空已選順序" class="shrink-0 p-2 text-neutral-400 hover:text-white rounded-xl bg-[#11141C] border border-white/10 hover:border-white/30 transition flex items-center gap-1.5 text-xs">
+                  <svg class="w-4 h-4 text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  <span>清除順序</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${deviceOptions.map(d => {
+                  const orderIndex = state.devices.indexOf(d.id);
+                  const isSelected = orderIndex !== -1;
+                  return `
+                    <button type="button" onclick="toggleDeviceOrder('${d.id}')"
+                      class="p-4 rounded-2xl border text-sm transition text-left flex items-center justify-between gap-3 ${isSelected ? 'bg-brand-gold/15 border-brand-gold text-white font-medium shadow-md' : 'bg-[#11141C] border-white/10 text-neutral-200 hover:border-white/20 hover:bg-[#181C26]'}">
+                      <div class="flex items-center gap-3">
+                        <span class="text-2xl">${d.icon}</span>
+                        <span class="leading-relaxed">${d.label}</span>
+                      </div>
+                      <span class="w-7 h-7 rounded-lg flex items-center justify-center border font-mono text-xs shrink-0 ${isSelected ? 'bg-brand-gold text-black border-brand-gold font-bold shadow-sm' : 'border-white/20 text-transparent'}">${isSelected ? orderIndex + 1 : ''}</span>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'purpose':
+          html = `
+            <div class="space-y-6" id="purposeOptionsBox">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                  <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">平時主要用 GAME ZH 做什麼？</h2>
+                  <p class="text-sm text-neutral-400 mt-1">依據點擊順序自動標記重要性序號（1 > 2 > 3）。點擊「？」可看演示。</p>
+                </div>
+                <button type="button" onclick="clearPurposes()" title="清空已選順序" class="shrink-0 p-2 text-neutral-400 hover:text-white rounded-xl bg-[#11141C] border border-white/10 hover:border-white/30 transition flex items-center gap-1.5 text-xs">
+                  <svg class="w-4 h-4 text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  <span>清除順序</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${purposeOptions.map(p => {
+                  const orderIndex = state.purposes.indexOf(p.id);
+                  const isSelected = orderIndex !== -1;
+                  return `
+                    <div class="p-3.5 rounded-2xl border text-sm transition flex items-center justify-between gap-2.5 ${isSelected ? 'bg-brand-gold/15 border-brand-gold text-white font-medium' : 'bg-[#11141C] border-white/10 text-neutral-200 hover:border-white/20 hover:bg-[#181C26]'}">
+                      <button type="button" onclick="showPurposeDemo('${p.id}')" title="點擊查看詳細說明與動態演示"
+                        class="w-7 h-7 rounded-full bg-white/5 hover:bg-brand-gold/20 hover:text-brand-gold text-neutral-400 border border-white/10 flex items-center justify-center text-xs shrink-0 transition">
+                        ?
+                      </button>
+                      <button type="button" onclick="togglePurposeOrder('${p.id}')" class="flex-1 text-left py-1 leading-relaxed">
+                        ${p.label}
+                      </button>
+                      <button type="button" onclick="togglePurposeOrder('${p.id}')" class="w-7 h-7 rounded-lg flex items-center justify-center border font-mono text-xs shrink-0 ${isSelected ? 'bg-brand-gold text-black border-brand-gold font-bold shadow-sm' : 'border-white/20 text-transparent'}">${isSelected ? orderIndex + 1 : ''}</button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <div class="pt-3 border-t border-white/10">
+                <label class="block text-sm font-medium text-neutral-300 mb-2">其他自訂用途（獨立補充，不列入序號）：</label>
+                <input type="text" value="${state.otherPurpose}" oninput="state.otherPurpose = this.value; updateNavButtons();"
+                  placeholder="例如：比對官方公示機率、測試特定武器數值..."
+                  class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-xl px-4 py-3 text-sm text-white placeholder-neutral-500 transition" />
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'experience':
+          html = `
+            <div class="space-y-6">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">第一印象與上手難易度</h2>
+                <p class="text-sm text-neutral-400 mt-1">選取 1~2 分（很困難 / 不太直覺 / 很難找 / 偏隱蔽）時，請務必補充原因以利調校。</p>
+              </div>
+
+              <!-- 題目 1 -->
+              <div class="space-y-4 bg-[#11141C] p-6 rounded-2xl border border-white/10" id="qUnderstandBox">
+                <div class="flex flex-col gap-1">
+                  <label class="text-base font-medium text-white">1. 第一次造訪時，能否快速理解網站核心用途？</label>
+                  <p class="text-xs text-neutral-400">核心用途：上傳截圖辨識副詞條、換算暴擊收益、得出畢業評級。</p>
+                </div>
+                <div class="grid grid-cols-5 gap-2.5">
+                  ${ratingFaces5.map(r => `
+                    <button type="button" onclick="setExperienceRate('understandRating', ${r.v})"
+                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.understandRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
+                      <span class="text-2xl sm:text-3xl">${r.face}</span>
+                      <span class="text-xs font-medium">${r.label}</span>
+                    </button>
+                  `).join('')}
+                </div>
+                ${(state.understandRating === 1 || state.understandRating === 2) ? `
+                  <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
+                    <label class="block text-sm text-amber-300 font-medium">您覺得不夠直覺或有困難的原因是？（必填）</label>
+                    <div id="chips_understand" class="hidden flex-wrap gap-2 transition-all">
+                      ${['主畫面按鈕太多不知道先按哪', '專有名詞 (CV/詞條級距) 沒說明', '不知道必須用繁體中文截圖', 'UI 字體與背景太擠'].map(chip => `
+                        <button type="button" onmousedown="appendHelperText('understandDifficultyReason', '${chip}')"
+                          class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                          + ${chip}
+                        </button>
+                      `).join('')}
+                    </div>
+                    <input type="text" id="inputUnderstandReason" value="${state.understandDifficultyReason}"
+                      onfocus="showHelperChips('chips_understand')"
+                      onblur="hideHelperChips('chips_understand')"
+                      oninput="state.understandDifficultyReason = this.value; updateNavButtons();"
+                      placeholder="點擊輸入框即會浮現快捷標籤，亦可自行輸入..."
+                      class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500" />
+                  </div>
+                ` : ''}
+              </div>
+
+              <!-- 題目 2 -->
+              <div class="space-y-4 bg-[#11141C] p-6 rounded-2xl border border-white/10" id="qFindBox">
+                <div class="flex flex-col gap-1">
+                  <label class="text-base font-medium text-white">2. 在各功能之間切換或尋找特定工具時，是否順暢？</label>
+                  <p class="text-xs text-neutral-400">特定工具：如聲骸對比、矩陣編隊、副詞條熱力圖等進階功能。</p>
+                </div>
+                <div class="grid grid-cols-5 gap-2.5">
+                  ${ratingFacesFind5.map(r => `
+                    <button type="button" onclick="setExperienceRate('findRating', ${r.v})"
+                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.findRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
+                      <span class="text-2xl sm:text-3xl">${r.face}</span>
+                      <span class="text-xs font-medium">${r.label}</span>
+                    </button>
+                  `).join('')}
+                </div>
+                ${(state.findRating === 1 || state.findRating === 2) ? `
+                  <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
+                    <label class="block text-sm text-amber-300 font-medium">具體是哪個功能偏隱蔽或難找？（必填）</label>
+                    <div id="chips_find" class="hidden flex-wrap gap-2 transition-all">
+                      ${['找不到聲骸庫存列表', '對比按鈕藏在角落沒注意到', '不知道如何自訂加權值', '手機版選單滑動不順'].map(chip => `
+                        <button type="button" onmousedown="appendHelperText('findDifficultyReason', '${chip}')"
+                          class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                          + ${chip}
+                        </button>
+                      `).join('')}
+                    </div>
+                    <input type="text" id="inputFindReason" value="${state.findDifficultyReason}"
+                      onfocus="showHelperChips('chips_find')"
+                      onblur="hideHelperChips('chips_find')"
+                      oninput="state.findDifficultyReason = this.value; updateNavButtons();"
+                      placeholder="點擊輸入框即會浮現快捷標籤，亦可自行輸入..."
+                      class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500" />
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'usage':
+          html = `
+            <div class="space-y-6">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">核心功能實際使用頻率</h2>
+                <p class="text-sm text-neutral-400 mt-1">若選「沒用過/知道但未用」，可勾選原因；若選「偶爾用/常用」，可選填滿意度與原因（評分與原因皆可跳過）。點「？」看演示。</p>
+              </div>
+
+              <div class="flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-neutral-300">
+                <span class="text-neutral-200 font-medium">狀態顏色導引：</span>
+                <div class="flex items-center gap-3">
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-neutral-600"></span> 沒用過</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span> 知道未用</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> 偶爾用</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-brand-gold"></span> 常用</span>
+                </div>
+              </div>
+
+              <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                ${usageFeatures.map(feat => {
+                  const currentVal = state.usage[feat.id];
+                  const isUnused = currentVal === 0 || currentVal === 1;
+                  const isUsed = currentVal === 2 || currentVal === 3;
+                  const currentReasons = state.usageReasons[feat.id] || [];
+                  const curRating = state.usageRatings[feat.id] || 0;
+                  const needLowRatingReason = curRating > 0 && curRating <= 2;
+                  return `
+                    <div id="usage-row-${feat.id}" class="p-4 rounded-2xl bg-[#11141C] border border-white/10 transition flex flex-col gap-3">
+                      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                          <button type="button" onclick="showPurposeDemo('${feat.id}')" title="點擊查看詳細說明與動態演示"
+                            class="w-7 h-7 rounded-full bg-white/5 hover:bg-brand-gold/20 hover:text-brand-gold text-neutral-400 border border-white/10 flex items-center justify-center text-xs shrink-0 transition">
+                            ?
+                          </button>
+                          <div>
+                            <div class="font-medium text-base text-white">${feat.name}</div>
+                            <div class="text-xs text-neutral-400 mt-0.5">${feat.desc}</div>
+                          </div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2 shrink-0">
+                          ${usageStates.map(s => {
+                            const active = currentVal === s.v;
+                            let activeClass = 'bg-[#181C26] border-white/10 text-neutral-300 hover:text-white';
+                            if (active) {
+                              if (s.v === 0) activeClass = 'bg-neutral-700 text-white border-neutral-500 font-bold shadow';
+                              if (s.v === 1) activeClass = 'bg-blue-600 text-white border-blue-400 font-bold shadow';
+                              if (s.v === 2) activeClass = 'bg-emerald-600 text-white border-emerald-400 font-bold shadow';
+                              if (s.v === 3) activeClass = 'bg-brand-gold text-black border-brand-gold font-bold shadow';
+                            }
+                            return `
+                              <button type="button" onclick="setUsageInPlace('${feat.id}', ${s.v})"
+                                class="px-3 py-2 rounded-xl text-xs sm:text-sm border transition ${activeClass}">
+                                ${s.label}
+                              </button>
+                            `;
+                          }).join('')}
+                        </div>
+                      </div>
+
+                      <div id="usage-reason-box-${feat.id}" class="${isUnused ? 'block' : 'hidden'} pt-3 border-t border-white/10 fade-enter space-y-2">
+                        <div class="text-xs text-amber-300 font-medium">請說明未使用的主要原因（可複選）：</div>
+                        <div class="flex flex-wrap gap-2">
+                          ${['沒興趣', '不了解如何使用', '找不到功能入口', '操作太繁瑣', '暫時無此需求'].map(reason => {
+                            const selected = currentReasons.includes(reason);
+                            return `
+                              <button type="button" onclick="toggleUsageReason('${feat.id}', '${reason}')"
+                                class="px-3 py-1.5 rounded-lg border text-xs transition ${selected ? 'bg-amber-400 text-black border-amber-400 font-semibold shadow-sm' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                                ${selected ? '✓ ' : ''}${reason}
+                              </button>
+                            `;
+                          }).join('')}
+                        </div>
+                      </div>
+
+                      <div id="usage-rating-box-${feat.id}" class="${isUsed ? 'block' : 'hidden'} pt-3 border-t border-white/10 fade-enter space-y-2.5">
+                        <div class="flex items-center justify-between text-xs">
+                          <span class="text-neutral-300 font-medium">該功能使用滿意度評分（選填，可跳過）：</span>
+                          <span class="text-neutral-400 text-[11px]">${curRating > 0 ? `已評 ${curRating} 分` : '尚未評分'}</span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                          ${[1, 2, 3, 4, 5].map(star => {
+                            const active = curRating === star;
+                            return `
+                              <button type="button" onclick="setUsageRating('${feat.id}', ${star})"
+                                class="py-1.5 rounded-lg border text-xs transition font-mono ${active ? 'bg-brand-gold text-black border-brand-gold font-bold shadow' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                                ${star} 分
+                              </button>
+                            `;
+                          }).join('')}
+                        </div>
+
+                        <div id="usage-low-rating-${feat.id}" class="${needLowRatingReason ? 'block' : 'hidden'} pt-2 space-y-2 fade-enter">
+                          <div class="text-xs text-amber-300 font-medium">評分較低的原因是？（選填，可跳過）：</div>
+                          <div id="chips_usage_${feat.id}" class="hidden flex-wrap gap-1.5 transition-all">
+                            ${['反應速度慢', '介面不夠直覺', '結果不符合預期', '偶爾會卡住報錯'].map(chip => `
+                              <button type="button" onmousedown="appendUsageRatingReason('${feat.id}', '${chip}')"
+                                class="px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                                + ${chip}
+                              </button>
+                            `).join('')}
+                          </div>
+                          <input type="text" id="inputUsageReason_${feat.id}" value="${state.usageRatingReasons[feat.id] || ''}"
+                            onfocus="showHelperChips('chips_usage_${feat.id}')"
+                            onblur="hideHelperChips('chips_usage_${feat.id}')"
+                            oninput="state.usageRatingReasons['${feat.id}'] = this.value; updateNavButtons();"
+                            placeholder="點擊輸入框會浮現快捷標籤，亦可自行輸入..."
+                            class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500" />
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'dev_research':
+          html = `
+            <div class="space-y-6">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">核心技術與運算機制調查</h2>
+                <p class="text-sm text-neutral-400 mt-1">未達滿分（5分）時會展開常見原因快捷按鈕，方便您快速點選反饋。</p>
+              </div>
+
+              <!-- OCR 準確度 -->
+              <div class="space-y-4 bg-[#11141C] p-6 rounded-2xl border border-white/10" id="qOcrBox">
+                <div class="flex flex-col gap-1">
+                  <label class="text-base font-medium text-white">1. 您對目前截圖辨識（OCR）的整體準確率評價？</label>
+                  <p class="text-xs text-neutral-400">包含角色、UID、主副詞條數值與名稱的辨識正確性。</p>
+                </div>
+                <div class="grid grid-cols-5 gap-2.5">
+                  ${ratingFacesAccuracy.map(r => `
+                    <button type="button" onclick="setDevRating('ocrRating', ${r.v})"
+                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.ocrRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
+                      <span class="text-2xl sm:text-3xl">${r.face}</span>
+                      <span class="text-xs font-medium">${r.label}</span>
+                    </button>
+                  `).join('')}
+                </div>
+                ${(state.ocrRating !== null && state.ocrRating < 5) ? `
+                  <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
+                    <label class="block text-sm text-amber-300 font-medium">最常遇到的辨識失誤狀況是？（必填）</label>
+                    <div id="chips_ocr" class="hidden flex-wrap gap-2 transition-all">
+                      ${['角色辨識錯誤', 'UID 辨識錯誤', '小數點遺失或誤判 (如 10.5 變 105)', '暴擊與暴傷數字互相搞混', '副詞條名稱辨識錯誤', '手機截圖上下被裁切', '特效太亮導致反光辨識失敗'].map(chip => `
+                        <button type="button" onmousedown="appendHelperText('ocrFailReason', '${chip}')"
+                          class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                          + ${chip}
+                        </button>
+                      `).join('')}
+                    </div>
+                    <input type="text" id="inputOcrReason" value="${state.ocrFailReason}"
+                      onfocus="showHelperChips('chips_ocr')"
+                      onblur="hideHelperChips('chips_ocr')"
+                      oninput="state.ocrFailReason = this.value; updateNavButtons();"
+                      placeholder="點擊輸入框即會浮現快捷標籤，亦可自行輸入..."
+                      class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500" />
+                    <p class="text-xs text-neutral-400 flex items-center gap-1.5 mt-1">
+                      <span>💡</span> 若辨識有偶發問題，您可以透過網站內的【錯誤回報】上傳原圖，協助開發者精準優化訓練模型！
+                    </p>
+                  </div>
+                ` : ''}
+              </div>
+
+              <!-- 首次載入速度耐受度 -->
+              <div class="space-y-4 bg-[#11141C] p-6 rounded-2xl border border-white/10" id="qWaitBox">
+                <div class="flex flex-col gap-1">
+                  <label class="text-base font-medium text-white">2. 首次連線從 GAS API 載入角色與權重資料的速度，目前是否滿意？</label>
+                  <p class="text-xs text-neutral-400">首次啟動抓取完整資料庫通常需 10~30 秒不等。</p>
+                </div>
+                <div class="grid grid-cols-5 gap-2.5">
+                  ${ratingFacesWait.map(r => `
+                    <button type="button" onclick="setDevRating('waitRating', ${r.v})"
+                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.waitRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
+                      <span class="text-2xl sm:text-3xl">${r.face}</span>
+                      <span class="text-xs font-medium">${r.label}</span>
+                    </button>
+                  `).join('')}
+                </div>
+                ${(state.waitRating !== null && state.waitRating < 5) ? `
+                  <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
+                    <label class="block text-sm text-amber-300 font-medium">您認為可接受的最大等待秒數或改善建議？（必填）</label>
+                    <div id="chips_wait" class="hidden flex-wrap gap-2 transition-all">
+                      ${['5 秒以內 (超過就想離開)', '10 秒以內尚可接受', '15~30 秒 (需有明顯進度提示)', '希望增加本地快取避免每次重抓'].map(chip => `
+                        <button type="button" onmousedown="appendHelperText('waitMaxSeconds', '${chip}')"
+                          class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                          + ${chip}
+                        </button>
+                      `).join('')}
+                    </div>
+                    <input type="text" id="inputWaitSeconds" value="${state.waitMaxSeconds}"
+                      onfocus="showHelperChips('chips_wait')"
+                      onblur="hideHelperChips('chips_wait')"
+                      oninput="state.waitMaxSeconds = this.value; updateNavButtons();"
+                      placeholder="點擊輸入框即會浮現快捷標籤，亦可自行輸入..."
+                      class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500" />
+                  </div>
+                ` : ''}
+              </div>
+
+              <!-- 評分級距合理性 -->
+              <div class="space-y-4 bg-[#11141C] p-6 rounded-2xl border border-white/10" id="qTierBox">
+                <div class="flex flex-col gap-1">
+                  <label class="text-base font-medium text-white">3. 系統評定「傳家寶 / 大畢業」等評分級距，是否貼合實戰判定？</label>
+                  <p class="text-xs text-neutral-400">目前依詞條加權與期望收益計算綜合評分分級。</p>
+                </div>
+                <div class="grid grid-cols-5 gap-2.5">
+                  ${ratingFacesTier.map(r => `
+                    <button type="button" onclick="setDevRating('tierRating', ${r.v})"
+                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.tierRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
+                      <span class="text-2xl sm:text-3xl">${r.face}</span>
+                      <span class="text-xs font-medium">${r.label}</span>
+                    </button>
+                  `).join('')}
+                </div>
+                ${(state.tierRating !== null && state.tierRating < 5) ? `
+                  <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
+                    <label class="block text-sm text-amber-300 font-medium">具體覺得哪裡不合理或需要調整？（必填）</label>
+                    <div id="chips_tier" class="hidden flex-wrap gap-2 transition-all">
+                      ${['數值不合理 (角色：全部)', '數值不合理 (角色：特定)', '雙暴權重佔比過高', '共鳴效率與屬傷加權不足', '特殊機制角色 (如安可/今汐) 標準應區分', '傳家寶門檻太高很難達到'].map(chip => `
+                        <button type="button" onmousedown="appendHelperText('tierReason', '${chip}')"
+                          class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                          + ${chip}
+                        </button>
+                      `).join('')}
+                    </div>
+                    <input type="text" id="inputTierReason" value="${state.tierReason}"
+                      onfocus="showHelperChips('chips_tier')"
+                      onblur="hideHelperChips('chips_tier')"
+                      oninput="state.tierReason = this.value; updateNavButtons();"
+                      placeholder="例如：數值不合理 (角色：今汐) 技能增傷權重太低..."
+                      class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500" />
+                    <p class="text-xs text-neutral-400 flex items-center gap-1.5 mt-1">
+                      <span>💡</span> 若特定角色評分加權與您實戰體驗有出入，可隨時透過網站內【錯誤回報】提供配裝建議，開發者會據此優化權重！
+                    </p>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'web_priorities':
+          html = `
+            <div class="space-y-6" id="webPrioritiesBox">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                  <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">【網站端】如果只能優先改善 3 項，您最看重？</h2>
+                  <p class="text-sm text-neutral-400 mt-1">依據點選順序標記優先序（1 > 2 > 3）；若覺得目前很好可選亮色「無須改善」。</p>
+                </div>
+                <button type="button" onclick="clearWebPriorities()" title="清空已選順序" class="shrink-0 p-2 text-neutral-400 hover:text-white rounded-xl bg-[#11141C] border border-white/10 hover:border-white/30 transition flex items-center gap-1.5 text-xs">
+                  <svg class="w-4 h-4 text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  <span>清除順序</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${webImproveOptions.map(opt => {
+                  const orderIndex = state.webPriorities.indexOf(opt.id);
+                  const isSelected = orderIndex !== -1;
+                  let cardStyle = 'bg-[#11141C] border-white/10 text-neutral-200 hover:border-white/20 hover:bg-[#181C26]';
+                  if (opt.isNone) {
+                    cardStyle = isSelected 
+                      ? 'bg-emerald-500/30 border-emerald-400 text-emerald-200 font-semibold shadow-lg ring-1 ring-emerald-400' 
+                      : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:border-emerald-400 hover:bg-emerald-900/40';
+                  } else if (isSelected) {
+                    cardStyle = 'bg-brand-gold/15 border-brand-gold text-white ring-1 ring-brand-gold/40 shadow-md';
+                  }
+
+                  return `
+                    <button type="button" onclick="toggleWebPriorityOrder('${opt.id}')"
+                      class="p-4 rounded-2xl border text-sm font-medium transition text-left flex items-center justify-between ${cardStyle}">
+                      <span class="pr-2 leading-relaxed">${opt.label}</span>
+                      <span class="w-6 h-6 rounded-full border flex items-center justify-center font-mono text-xs shrink-0 ${isSelected ? (opt.isNone ? 'border-emerald-400 bg-emerald-400 text-black font-bold' : 'border-brand-gold bg-brand-gold text-black font-bold') : 'border-white/20 text-transparent'}">${isSelected ? (opt.isNone ? '✓' : orderIndex + 1) : ''}</span>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+
+              <div class="pt-3 border-t border-white/10">
+                <label class="block text-sm font-medium text-neutral-300 mb-2">其他想優先改善的網站痛點（獨立補充，不計入 3 項限制）：</label>
+                <input type="text" value="${state.otherWebPriority}" oninput="state.otherWebPriority = this.value; updateNavButtons();"
+                  placeholder="例如：希望支援批次截圖辨識並自動儲存至聲骸庫..."
+                  class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-xl px-4 py-3 text-sm text-white placeholder-neutral-500 transition" />
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'web_feedback':
+          html = `
+            <div class="space-y-6">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">【網站端】還有什麼我們沒想到的痛點？</h2>
+                <p class="text-sm text-neutral-400 mt-1">選填，隨心分享任何使用阻礙或想要的功能點子。</p>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-neutral-300 mb-2">網站最常卡關或困惑的地方：</label>
+                  <textarea id="inputWebPainPoint" oninput="state.webPainPoint = this.value; updateNavButtons();" placeholder="例如：手機版表格左右滑動有點卡、看不太懂某個詞條的分數怎麼算的..."
+                    class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-2xl p-4 text-sm text-white placeholder-neutral-500 h-28 resize-none transition leading-relaxed">${state.webPainPoint}</textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-neutral-300 mb-2">網站其他期望或功能敲碗：</label>
+                  <textarea id="inputWebSuggestion" oninput="state.webSuggestion = this.value; updateNavButtons();" placeholder="例如：希望增加隊伍全隊副詞條一鍵診斷、支援更多套裝模擬..."
+                    class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-2xl p-4 text-sm text-white placeholder-neutral-500 h-28 resize-none transition leading-relaxed">${state.webSuggestion}</textarea>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'dc_community':
+          const isNoDcFreq = state.dcFrequency === 'freq_none';
+          const isDcFreqActive = state.dcFrequency && state.dcFrequency !== 'freq_none';
+          const noDcFreqReasons = state.dcNoFreqReason || [];
+          html = `
+            <div class="space-y-6" id="dcFrequencyBox">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">您在 GAME ZH Discord 社群的造訪頻率？</h2>
+                <p class="text-sm text-neutral-400 mt-1">先了解您的社群參與頻率；若有造訪過，將展開氣氛、制度、活動與吉祥物調查。</p>
+              </div>
+
+              <!-- 頻率選擇 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                ${dcFrequencyOptions.map(opt => {
+                  const active = state.dcFrequency === opt.id;
+                  return `
+                    <button type="button" onclick="selectDcFrequency('${opt.id}')"
+                      class="text-left p-4 rounded-2xl border transition-all flex items-start gap-4 ${active ? 'bg-brand-gold/15 border-brand-gold text-white shadow-xl ring-1 ring-brand-gold/50' : 'bg-[#11141C] border-white/10 text-neutral-200 hover:border-white/20 hover:bg-[#181C26]'}">
+                      <span class="text-3xl p-2 rounded-xl bg-white/5 border border-white/10 shrink-0">${opt.icon}</span>
+                      <div>
+                        <div class="font-medium text-base text-white">${opt.title}</div>
+                        <p class="text-xs text-neutral-400 mt-1">${opt.sub}</p>
+                      </div>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- 未加入 / 未活躍的原因勾選 -->
+              <div id="dcNoFreqReasonBox" class="${isNoDcFreq ? 'block' : 'hidden'} p-5 rounded-2xl bg-[#11141C] border border-amber-400/30 fade-enter space-y-3">
+                <div class="text-sm text-amber-300 font-medium">請說明未加入或未活躍的主要原因（可複選）：</div>
+                <div class="flex flex-wrap gap-2.5">
+                  ${['沒興趣', '不知道有 DC 伺服器', '找不到群組邀請連結', '不習慣使用 Discord', '只習慣默默查資料', '暫時無此需求'].map(reason => {
+                    const isSelected = noDcFreqReasons.includes(reason);
+                    return `
+                      <button type="button" onclick="toggleDcNoFreqReason('${reason}')"
+                        class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm transition ${isSelected ? 'bg-amber-400 text-black border-amber-400 font-semibold shadow-sm' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                        ${isSelected ? '✓ ' : ''}${reason}
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <!-- 若有出現過（每日/經常/偶爾），不限次數展開四大維度評分 -->
+              <div id="dcAspectsContainer" class="${isDcFreqActive ? 'block' : 'hidden'} space-y-4 fade-enter pt-4 border-t border-white/10">
+                <div class="text-base font-semibold text-white flex items-center gap-2">
+                  <span>🏛️</span> 社群各項機制評估（選填評分，低分將自動切換為具體痛點標籤）：
+                </div>
+
+                ${discordAspects.map(asp => {
+                  const curRating = state.dcAspectRatings[asp.id] || 0;
+                  const needLowReason = curRating > 0 && curRating < 5;
+                  const currentChips = asp.getChips(curRating);
+                  return `
+                    <div class="p-4 rounded-2xl bg-[#11141C] border border-white/10 space-y-3">
+                      <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                          <span class="text-2xl">${asp.icon}</span>
+                          <div>
+                            <div class="font-medium text-base text-white">${asp.name}</div>
+                            <div class="text-xs text-neutral-400 mt-0.5">${asp.desc}</div>
+                          </div>
+                        </div>
+                        <span class="text-xs text-neutral-400 shrink-0 font-mono">${curRating > 0 ? `${curRating} 分` : '未評分'}</span>
+                      </div>
+
+                      <div class="grid grid-cols-5 gap-2">
+                        ${[1, 2, 3, 4, 5].map(star => {
+                          const active = curRating === star;
+                          return `
+                            <button type="button" onclick="setDcAspectRating('${asp.id}', ${star})"
+                              class="py-1.5 rounded-lg border text-xs transition font-mono ${active ? 'bg-brand-gold text-black border-brand-gold font-bold shadow' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                              ${star} 分
+                            </button>
+                          `;
+                        }).join('')}
+                      </div>
+
+                      <!-- 非滿分原因輸入框與快捷鈕 (動態依分數切換文字) -->
+                      <div id="dc_aspect_low_box_${asp.id}" class="${needLowReason ? 'block' : 'hidden'} pt-2 space-y-2 fade-enter">
+                        <div class="text-xs text-amber-300 font-medium">
+                          ${curRating <= 2 ? '⚠️ 評分偏低，請告訴我們具體遇到的問題（選填，可跳過）：' : '💡 未滿 5 分的原因或期待改善之處（選填，可跳過）：'}
+                        </div>
+                        <div id="chips_dc_${asp.id}" class="hidden flex-wrap gap-1.5 transition-all">
+                          ${currentChips.map(chip => `
+                            <button type="button" onmousedown="appendDcAspectReason('${asp.id}', '${chip}')"
+                              class="px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                              + ${chip}
+                            </button>
+                          `).join('')}
+                        </div>
+                        <input type="text" id="inputDcAspect_${asp.id}" value="${state.dcAspectReasons[asp.id] || ''}"
+                          onfocus="showHelperChips('chips_dc_${asp.id}')"
+                          onblur="hideHelperChips('chips_dc_${asp.id}')"
+                          oninput="state.dcAspectReasons['${asp.id}'] = this.value; updateNavButtons();"
+                          placeholder="點擊輸入框會浮現快捷標籤，亦可自行輸入..."
+                          class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500" />
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+
+                <!-- 社群區塊最後：贊助意願與具體建議非選題 -->
+                <div class="p-5 rounded-2xl bg-[#11141C] border border-white/10 space-y-4 pt-4">
+                  <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">💰 對於群內活動獎品／伺服器維護贊助的意願與看法（選填）：</label>
+                    <textarea id="inputDcSponsor" oninput="state.dcSponsorIntent = this.value; updateNavButtons();" placeholder="例如：願意小額贊助群內抽獎或周邊、希望有贊助者專屬特殊身分組..."
+                      class="w-full bg-[#06070A] border border-white/10 focus:border-brand-gold focus:outline-none rounded-xl p-3.5 text-xs sm:text-sm text-white placeholder-neutral-500 h-20 resize-none transition leading-relaxed">${state.dcSponsorIntent}</textarea>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-neutral-300 mb-2">💬 對 Discord 社群運作、頻道劃分或未來方向的具體建議（選填）：</label>
+                    <textarea id="inputDcSuggestion" oninput="state.dcCommunitySuggestion = this.value; updateNavButtons();" placeholder="例如：希望多辦語音打深塔直播、增設配隊求助專屬頻道、阿布表情包多一點..."
+                      class="w-full bg-[#06070A] border border-white/10 focus:border-brand-gold focus:outline-none rounded-xl p-3.5 text-xs sm:text-sm text-white placeholder-neutral-500 h-20 resize-none transition leading-relaxed">${state.dcCommunitySuggestion}</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'bot_awareness':
+          const showBotReason = state.botAwareness === 'aware_not_used' || state.botAwareness === 'unaware';
+          const botReasonList = state.botAwarenessReason || [];
+          html = `
+            <div class="space-y-6" id="botAwarenessBox">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">您是否知道或使用過 GAME ZH 的 Discord 機器人？</h2>
+                <p class="text-sm text-neutral-400 mt-1">若選「不知道」或「從未用過」，請勾選原因，完成後自動跳過機器人題目。</p>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3.5">
+                ${botAwarenessOptions.map(opt => {
+                  const active = state.botAwareness === opt.id;
+                  return `
+                    <button type="button" onclick="selectBotAwareness('${opt.id}')"
+                      class="text-left p-4 rounded-2xl border transition-all flex items-start gap-4 ${active ? 'bg-brand-gold/15 border-brand-gold text-white shadow-xl ring-1 ring-brand-gold/50' : 'bg-[#11141C] border-white/10 text-neutral-200 hover:border-white/20 hover:bg-[#181C26]'}">
+                      <span class="text-3xl p-2 rounded-xl bg-white/5 border border-white/10 shrink-0">${opt.icon}</span>
+                      <div>
+                        <div class="font-medium text-base text-white">${opt.title}</div>
+                        <p class="text-xs text-neutral-400 mt-1">${opt.sub}</p>
+                      </div>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+
+              <div id="botAwarenessReasonBox" class="${showBotReason ? 'block' : 'hidden'} p-5 rounded-2xl bg-[#11141C] border border-amber-400/30 fade-enter space-y-3">
+                <div class="text-sm text-amber-300 font-medium">請說明未使用或不知道 Discord 機器人的主要原因（可複選）：</div>
+                <div class="flex flex-wrap gap-2.5">
+                  ${['沒興趣', '不了解如何使用', '找不到功能入口 / 不在有機器人的伺服器', '操作太繁瑣', '習慣只用網頁版', '暫時無此需求'].map(reason => {
+                    const isSelected = botReasonList.includes(reason);
+                    return `
+                      <button type="button" onclick="toggleBotAwarenessReason('${reason}')"
+                        class="px-3.5 py-2 rounded-xl border text-xs sm:text-sm transition ${isSelected ? 'bg-amber-400 text-black border-amber-400 font-semibold shadow-sm' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                        ${isSelected ? '✓ ' : ''}${reason}
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'bot_survey':
+          html = `
+            <div class="space-y-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                  <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">您在 Discord 伺服器中最常使用哪些指令？</h2>
+                  <p class="text-sm text-neutral-400 mt-1">請依【主要 ➔ 次要】順序點選（數字越小代表越常用，未選代表未使用）。若有選擇，可自選填入滿意度評分（評分與原因皆可跳過）。</p>
+                </div>
+                <button type="button" onclick="clearBotCommands()" title="清空已選順序" class="shrink-0 p-2 text-neutral-400 hover:text-white rounded-xl bg-[#11141C] border border-white/10 hover:border-white/30 transition flex items-center gap-1.5 text-xs">
+                  <svg class="w-4 h-4 text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  <span>清除順序</span>
+                </button>
+              </div>
+
+              <div class="space-y-3">
+                ${botCommandOptions.map(cmd => {
+                  const orderIndex = state.botCommands.indexOf(cmd.id);
+                  const isSelected = orderIndex !== -1;
+                  const curRating = state.botCommandRatings[cmd.id] || 0;
+                  const needLowReason = curRating > 0 && curRating < 5;
+                  return `
+                    <div class="p-4 rounded-2xl border transition flex flex-col gap-3 ${isSelected ? 'bg-brand-gold/10 border-brand-gold/60' : 'bg-[#11141C] border-white/10'}">
+                      <div class="flex items-center justify-between gap-3 cursor-pointer" onclick="toggleBotCommandOrder('${cmd.id}')">
+                        <div class="flex items-center gap-3">
+                          <span class="text-xl">${cmd.icon}</span>
+                          <span class="text-sm text-neutral-200">${cmd.label}</span>
+                        </div>
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center border font-mono text-xs shrink-0 ${isSelected ? 'bg-brand-gold text-black border-brand-gold font-bold shadow-sm' : 'border-white/20 text-transparent'}">${isSelected ? orderIndex + 1 : ''}</span>
+                      </div>
+
+                      <div id="bot_cmd_rating_box_${cmd.id}" class="${isSelected ? 'block' : 'hidden'} pt-3 border-t border-white/10 fade-enter space-y-2.5">
+                        <div class="flex items-center justify-between text-xs">
+                          <span class="text-neutral-300 font-medium">該指令使用評分（選填，可跳過）：</span>
+                          <span class="text-neutral-400 text-[11px]">${curRating > 0 ? `已評 ${curRating} 分` : '尚未評分'}</span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                          ${[1, 2, 3, 4, 5].map(star => {
+                            const active = curRating === star;
+                            return `
+                              <button type="button" onclick="setBotCommandRating('${cmd.id}', ${star})"
+                                class="py-1.5 rounded-lg border text-xs transition font-mono ${active ? 'bg-brand-gold text-black border-brand-gold font-bold shadow' : 'bg-white/5 border-white/10 text-neutral-300 hover:text-white'}">
+                                ${star} 分
+                              </button>
+                            `;
+                          }).join('')}
+                        </div>
+
+                        <div id="bot_cmd_low_box_${cmd.id}" class="${needLowReason ? 'block' : 'hidden'} pt-2 space-y-2 fade-enter">
+                          <div class="text-xs text-amber-300 font-medium">未給滿分的原因是？（選填，可跳過）：</div>
+                          <div id="chips_bot_cmd_${cmd.id}" class="hidden flex-wrap gap-1.5 transition-all">
+                            ${['指令回應速度偏慢', '結果排版在手機上太擠', '互動按鈕點擊偶爾報錯', '功能過於複雜難上手'].map(chip => `
+                              <button type="button" onmousedown="appendBotCommandRatingReason('${cmd.id}', '${chip}')"
+                                class="px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                                + ${chip}
+                              </button>
+                            `).join('')}
+                          </div>
+                          <input type="text" id="inputBotCmdReason_${cmd.id}" value="${state.botCommandRatingReasons[cmd.id] || ''}"
+                            onfocus="showHelperChips('chips_bot_cmd_${cmd.id}')"
+                            onblur="hideHelperChips('chips_bot_cmd_${cmd.id}')"
+                            oninput="state.botCommandRatingReasons['${cmd.id}'] = this.value; updateNavButtons();"
+                            placeholder="點擊輸入框會浮現快捷標籤，亦可自行輸入..."
+                            class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500" />
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- 滿意度評分 -->
+              <div class="space-y-4 bg-[#11141C] p-6 rounded-2xl border border-white/10 mt-6" id="botRatingBox">
+                <div class="flex flex-col gap-1">
+                  <label class="text-base font-medium text-white">機器人整體互動流暢度與滿意度？</label>
+                  <p class="text-xs text-neutral-400">若評分在普通（3分）含以下，請補充具體原因以供優化。</p>
+                </div>
+                <div class="grid grid-cols-5 gap-2.5">
+                  ${botRatingFaces.map(r => `
+                    <button type="button" onclick="setBotRating(${r.v})"
+                      class="py-3 px-1 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${state.botRating === r.v ? 'bg-brand-gold/20 border-brand-gold text-white ring-1 ring-brand-gold/60' : 'bg-[#181C26] border-white/10 text-neutral-300 hover:border-white/20 hover:text-white'}">
+                      <span class="text-2xl sm:text-3xl">${r.face}</span>
+                      <span class="text-xs font-medium">${r.label}</span>
+                    </button>
+                  `).join('')}
+                </div>
+                ${(state.botRating !== null && state.botRating <= 3) ? `
+                  <div class="mt-4 pt-4 border-t border-white/10 fade-enter space-y-2.5">
+                    <label class="block text-sm text-amber-300 font-medium">請說明滿意度不夠理想的具體原因？（必填）</label>
+                    <div id="chips_bot_rating" class="hidden flex-wrap gap-2 transition-all">
+                      ${['指令回應速度偏慢 (有時超過3秒)', '排版在手機上太擁擠不易點擊', '問答題目重複率偏高', '常常顯示互動失敗 (Application did not respond)', '按鍵太多不知如何操作'].map(chip => `
+                        <button type="button" onmousedown="appendHelperText('botRatingReason', '${chip}')"
+                          class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition">
+                          + ${chip}
+                        </button>
+                      `).join('')}
+                    </div>
+                    <input type="text" id="inputBotRatingReason" value="${state.botRatingReason}"
+                      onfocus="showHelperChips('chips_bot_rating')"
+                      onblur="hideHelperChips('chips_bot_rating')"
+                      oninput="state.botRatingReason = this.value; updateNavButtons();"
+                      placeholder="點擊輸入框即會浮現快捷標籤，亦可自行輸入..."
+                      class="w-full bg-[#06070A] border border-amber-400/40 focus:border-brand-gold rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500" />
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'bot_priorities':
+          html = `
+            <div class="space-y-6" id="botPrioritiesBox">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                  <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">【機器人端】如果只能優先改善 3 項，您最看重？</h2>
+                  <p class="text-sm text-neutral-400 mt-1">依據點選順序標記優先序（1 > 2 > 3）；若覺得目前很好可選亮色「無須改善」。</p>
+                </div>
+                <button type="button" onclick="clearBotPriorities()" title="清空已選順序" class="shrink-0 p-2 text-neutral-400 hover:text-white rounded-xl bg-[#11141C] border border-white/10 hover:border-white/30 transition flex items-center gap-1.5 text-xs">
+                  <svg class="w-4 h-4 text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  <span>清除順序</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${botImproveOptions.map(opt => {
+                  const orderIndex = state.botPriorities.indexOf(opt.id);
+                  const isSelected = orderIndex !== -1;
+                  let cardStyle = 'bg-[#11141C] border-white/10 text-neutral-200 hover:border-white/20 hover:bg-[#181C26]';
+                  if (opt.isNone) {
+                    cardStyle = isSelected 
+                      ? 'bg-emerald-500/30 border-emerald-400 text-emerald-200 font-semibold shadow-lg ring-1 ring-emerald-400' 
+                      : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:border-emerald-400 hover:bg-emerald-900/40';
+                  } else if (isSelected) {
+                    cardStyle = 'bg-brand-gold/15 border-brand-gold text-white ring-1 ring-brand-gold/40 shadow-md';
+                  }
+
+                  return `
+                    <button type="button" onclick="toggleBotPriorityOrder('${opt.id}')"
+                      class="p-4 rounded-2xl border text-sm font-medium transition text-left flex items-center justify-between ${cardStyle}">
+                      <span class="pr-2 leading-relaxed">${opt.label}</span>
+                      <span class="w-6 h-6 rounded-full border flex items-center justify-center font-mono text-xs shrink-0 ${isSelected ? (opt.isNone ? 'border-emerald-400 bg-emerald-400 text-black font-bold' : 'border-brand-gold bg-brand-gold text-black font-bold') : 'border-white/20 text-transparent'}">${isSelected ? (opt.isNone ? '✓' : orderIndex + 1) : ''}</span>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+
+              <div class="pt-3 border-t border-white/10">
+                <label class="block text-sm font-medium text-neutral-300 mb-2">其他想優先改善的機器人項目（獨立補充，不計入 3 項限制）：</label>
+                <input type="text" value="${state.otherBotPriority}" oninput="state.otherBotPriority = this.value; updateNavButtons();"
+                  placeholder="例如：希望支援更多多人遊戲或即時公會排行..."
+                  class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-xl px-4 py-3 text-sm text-white placeholder-neutral-500 transition" />
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'bot_feedback':
+          html = `
+            <div class="space-y-6">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">【機器人端】還有什麼我們沒想到的痛點？</h2>
+                <p class="text-sm text-neutral-400 mt-1">選填，歡迎暢所欲言。</p>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-neutral-300 mb-2">Discord 機器人最常卡關或困惑的地方：</label>
+                  <textarea id="inputBotPainPoint" oninput="state.botPainPoint = this.value; updateNavButtons();" placeholder="例如：在手機上點按鈕有時沒反應、找不到如何綁定 UID..."
+                    class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-2xl p-4 text-sm text-white placeholder-neutral-500 h-28 resize-none transition leading-relaxed">${state.botPainPoint}</textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-neutral-300 mb-2">Discord 機器人其他敲碗功能或建議：</label>
+                  <textarea id="inputBotSuggestion" oninput="state.botSuggestion = this.value; updateNavButtons();" placeholder="例如：希望增加深塔一鍵排軸自動私訊通知、題目報錯反饋更快..."
+                    class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-2xl p-4 text-sm text-white placeholder-neutral-500 h-28 resize-none transition leading-relaxed">${state.botSuggestion}</textarea>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'final_cheer':
+          html = `
+            <div class="space-y-6">
+              <div>
+                <span class="text-brand-gold text-sm font-mono font-medium uppercase tracking-wider">${currentStep.chapter}</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-1.5">最後補充：社群建議與團隊正能量鼓勵</h2>
+                <p class="text-sm text-neutral-400 mt-1">您的肯定與溫暖建議，是 GAME ZH 開發團隊持續迭代與用愛發電的最大動力！✨</p>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-neutral-300 mb-2">對於 GAME ZH 社群的建議與看法（選填）：</label>
+                  <textarea id="inputCommunity" oninput="state.communitySuggestions = this.value; updateNavButtons();" placeholder="例如：希望多舉辦社群猜謎比賽、增加更多玩家交流討論區塊..."
+                    class="w-full bg-[#11141C] border border-white/10 focus:border-brand-gold focus:outline-none rounded-2xl p-4 text-sm text-white placeholder-neutral-500 h-24 resize-none transition leading-relaxed">${state.communitySuggestions}</textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-amber-300 mb-2 flex items-center gap-1.5">
+                    <span>💌</span> 給 GAME ZH 開發團隊的溫暖鼓勵 (送出時會有專屬彩蛋！)：<span class="text-red-400 font-bold">*必填</span>
+                  </label>
+                  <textarea id="inputCheer" oninput="state.teamEncouragement = this.value; triggerWarmthGlow(); updateNavButtons();" placeholder="辛苦開發團隊了！分析儀非常實用、UI 很漂亮，期待後續版本更新，加油！"
+                    class="w-full bg-[#11141C] border border-amber-400/40 focus:border-brand-gold focus:outline-none rounded-2xl p-4 text-sm text-white placeholder-neutral-500 h-28 resize-none transition leading-relaxed">${state.teamEncouragement}</textarea>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'finish':
+          html = `
+            <div class="text-center py-6 space-y-7">
+              <div class="w-16 h-16 rounded-2xl bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center text-4xl mx-auto text-brand-gold shadow-[0_0_20px_rgba(229,192,123,0.3)]">
+                🎉
+              </div>
+              <h2 class="text-3xl font-semibold text-white">非常感謝您的寶貴回饋！</h2>
+              <p class="text-base text-neutral-300 max-w-lg mx-auto leading-relaxed">
+                您的回饋已全數經過安全過濾並成功送達開發團隊的專屬頻道！
+              </p>
+              <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 max-w-md mx-auto">
+                <button type="button" onclick="copyResult()"
+                  class="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-xl bg-brand-gold hover:bg-brand-gold-hover text-black font-semibold text-base transition flex items-center justify-center gap-2 shadow-lg shadow-brand-gold/10">
+                  <span>📋</span> 複製結果摘要
+                </button>
+                <button type="button" onclick="openOverviewModal()"
+                  class="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-base border border-white/10 transition flex items-center justify-center gap-2">
+                  <span>📑</span> 顯示填寫總覽
+                </button>
+              </div>
+            </div>
+          `;
+          break;
+      }
+
+      container.innerHTML = html;
+      updateNavButtons();
+    }
+
+    function triggerWarmthGlow() {
+      if (typeof confetti === 'function' && Math.random() < 0.2) {
+        confetti({
+          particleCount: 25,
+          spread: 60,
+          origin: { y: 0.8 },
+          colors: ['#E5C07B', '#F3D494', '#FFD700', '#FF80BF']
+        });
+      }
+    }
+
+    function nextStep() {
+      const steps = getSteps();
+      if (currentStepIndex === steps.length - 2) {
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 100,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#E5C07B', '#F3D494', '#FFD700', '#60A5FA', '#34D399']
+          });
+        }
+      }
+      if (currentStepIndex < steps.length - 1) {
+        currentStepIndex++;
+        renderStep();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function prevStep() {
+      if (currentStepIndex > 0) {
+        currentStepIndex--;
+        renderStep();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function selectCount(id, persona) {
+      state.analysisCount = id;
+      state.persona = persona;
+      renderStep();
+    }
+
+    function toggleDeviceOrder(id) {
+      const idx = state.devices.indexOf(id);
+      if (idx !== -1) {
+        state.devices.splice(idx, 1);
+      } else {
+        state.devices.push(id);
+      }
+      renderStep();
+    }
+
+    function clearDevices() {
+      state.devices = [];
+      renderStep();
+    }
+
+    function togglePurposeOrder(id) {
+      const idx = state.purposes.indexOf(id);
+      if (idx !== -1) {
+        state.purposes.splice(idx, 1);
+      } else {
+        state.purposes.push(id);
+      }
+      renderStep();
+    }
+
+    function clearPurposes() {
+      state.purposes = [];
+      renderStep();
+    }
+
+    function setExperienceRate(key, val) {
+      state[key] = val;
+      renderStep();
+    }
+
+    function showHelperChips(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
+    }
+
+    function hideHelperChips(id) {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
+      }, 200);
+    }
+
+    function appendHelperText(field, text) {
+      if (!state[field] || state[field].trim() === '') {
+        state[field] = text;
+      } else if (!state[field].includes(text)) {
+        state[field] += `、${text}`;
+      }
+      const elMap = {
+        understandDifficultyReason: 'inputUnderstandReason',
+        findDifficultyReason: 'inputFindReason',
+        ocrFailReason: 'inputOcrReason',
+        waitMaxSeconds: 'inputWaitSeconds',
+        tierReason: 'inputTierReason',
+        botRatingReason: 'inputBotRatingReason'
+      };
+      const inputEl = document.getElementById(elMap[field]);
+      if (inputEl) inputEl.value = state[field];
+      updateNavButtons();
+    }
+
+    function setDevRating(key, val) {
+      state[key] = val;
+      renderStep();
+    }
+
+    function setUsageInPlace(featId, val) {
+      state.usage[featId] = val;
+      const row = document.getElementById(`usage-row-${featId}`);
+      if (!row) return;
+
+      const buttons = row.querySelectorAll('.grid button');
+      buttons.forEach((btn, idx) => {
+        btn.className = 'px-3 py-2 rounded-xl text-xs sm:text-sm border transition bg-[#181C26] border-white/10 text-neutral-300 hover:text-white';
+        if (idx === val) {
+          if (val === 0) btn.className = 'px-3 py-2 rounded-xl text-xs sm:text-sm border transition bg-neutral-700 text-white border-neutral-500 font-bold shadow';
+          if (val === 1) btn.className = 'px-3 py-2 rounded-xl text-xs sm:text-sm border transition bg-blue-600 text-white border-blue-400 font-bold shadow';
+          if (val === 2) btn.className = 'px-3 py-2 rounded-xl text-xs sm:text-sm border transition bg-emerald-600 text-white border-emerald-400 font-bold shadow';
+          if (val === 3) btn.className = 'px-3 py-2 rounded-xl text-xs sm:text-sm border transition bg-brand-gold text-black border-brand-gold font-bold shadow';
+        }
+      });
+
+      const reasonBox = document.getElementById(`usage-reason-box-${featId}`);
+      const ratingBox = document.getElementById(`usage-rating-box-${featId}`);
+
+      if (val === 0 || val === 1) {
+        if (reasonBox) {
+          reasonBox.classList.remove('hidden');
+          reasonBox.classList.add('block');
+        }
+        if (ratingBox) {
+          ratingBox.classList.add('hidden');
+          ratingBox.classList.remove('block');
+          delete state.usageRatings[featId];
+          delete state.usageRatingReasons[featId];
+        }
+      } else {
+        if (reasonBox) {
+          reasonBox.classList.add('hidden');
+          reasonBox.classList.remove('block');
+          delete state.usageReasons[featId];
+        }
+        if (ratingBox) {
+          ratingBox.classList.remove('hidden');
+          ratingBox.classList.add('block');
+        }
+      }
+      updateNavButtons();
+    }
+
+    function toggleUsageReason(featId, reason) {
+      if (!state.usageReasons[featId]) {
+        state.usageReasons[featId] = [];
+      }
+      const arr = state.usageReasons[featId];
+      const idx = arr.indexOf(reason);
+      if (idx !== -1) {
+        arr.splice(idx, 1);
+      } else {
+        arr.push(reason);
+      }
+      const box = document.getElementById(`usage-reason-box-${featId}`);
+      if (box) {
+        const btns = box.querySelectorAll('button');
+        btns.forEach(btn => {
+          const t = btn.innerText.replace('✓ ', '').trim();
+          if (arr.includes(t)) {
+            btn.className = 'px-3 py-1.5 rounded-lg border text-xs transition bg-amber-400 text-black border-amber-400 font-semibold shadow-sm';
+            btn.innerText = `✓ ${t}`;
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg border text-xs transition bg-white/5 border-white/10 text-neutral-300 hover:text-white';
+            btn.innerText = t;
+          }
+        });
+      }
+      updateNavButtons();
+    }
+
+    function setUsageRating(featId, val) {
+      state.usageRatings[featId] = val;
+      const box = document.getElementById(`usage-rating-box-${featId}`);
+      if (box) {
+        const btns = box.querySelectorAll('.grid button');
+        btns.forEach((btn, idx) => {
+          const star = idx + 1;
+          if (star === val) {
+            btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-brand-gold text-black border-brand-gold font-bold shadow';
+          } else {
+            btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-white/5 border-white/10 text-neutral-300 hover:text-white';
+          }
+        });
+        const lowBox = document.getElementById(`usage-low-rating-${featId}`);
+        if (lowBox) {
+          if (val <= 2) {
+            lowBox.classList.remove('hidden');
+            lowBox.classList.add('block');
+          } else {
+            lowBox.classList.add('hidden');
+            lowBox.classList.remove('block');
+            delete state.usageRatingReasons[featId];
+          }
+        }
+      }
+      updateNavButtons();
+    }
+
+    function appendUsageRatingReason(featId, text) {
+      if (!state.usageRatingReasons[featId] || state.usageRatingReasons[featId].trim() === '') {
+        state.usageRatingReasons[featId] = text;
+      } else if (!state.usageRatingReasons[featId].includes(text)) {
+        state.usageRatingReasons[featId] += `、${text}`;
+      }
+      const inputEl = document.getElementById(`inputUsageReason_${featId}`);
+      if (inputEl) inputEl.value = state.usageRatingReasons[featId];
+      updateNavButtons();
+    }
+
+    function toggleWebPriorityOrder(id) {
+      if (id === 'w_none') {
+        state.webPriorities = ['w_none'];
+        renderStep();
+        return;
+      }
+      const noneIdx = state.webPriorities.indexOf('w_none');
+      if (noneIdx !== -1) {
+        state.webPriorities.splice(noneIdx, 1);
+      }
+      const idx = state.webPriorities.indexOf(id);
+      if (idx !== -1) {
+        state.webPriorities.splice(idx, 1);
+      } else {
+        if (state.webPriorities.length >= 3) {
+          showToast('⚠️ 最多選擇 3 項優先順序');
+          return;
+        }
+        state.webPriorities.push(id);
+      }
+      renderStep();
+    }
+
+    function clearWebPriorities() {
+      state.webPriorities = [];
+      renderStep();
+    }
+
+    function selectDcFrequency(id) {
+      state.dcFrequency = id;
+      renderStep();
+    }
+
+    function toggleDcNoFreqReason(reason) {
+      if (!state.dcNoFreqReason) state.dcNoFreqReason = [];
+      const idx = state.dcNoFreqReason.indexOf(reason);
+      if (idx !== -1) {
+        state.dcNoFreqReason.splice(idx, 1);
+      } else {
+        state.dcNoFreqReason.push(reason);
+      }
+      renderStep();
+    }
+
+    function setDcAspectRating(aspectId, star) {
+      state.dcAspectRatings[aspectId] = star;
+      renderStep();
+    }
+
+    function appendDcAspectReason(aspectId, text) {
+      if (!state.dcAspectReasons[aspectId] || state.dcAspectReasons[aspectId].trim() === '') {
+        state.dcAspectReasons[aspectId] = text;
+      } else if (!state.dcAspectReasons[aspectId].includes(text)) {
+        state.dcAspectReasons[aspectId] += `、${text}`;
+      }
+      const inputEl = document.getElementById(`inputDcAspect_${aspectId}`);
+      if (inputEl) inputEl.value = state.dcAspectReasons[aspectId];
+      updateNavButtons();
+    }
+
+    function selectBotAwareness(id) {
+      state.botAwareness = id;
+      renderStep();
+    }
+
+    function toggleBotAwarenessReason(reason) {
+      if (!state.botAwarenessReason) state.botAwarenessReason = [];
+      const idx = state.botAwarenessReason.indexOf(reason);
+      if (idx !== -1) {
+        state.botAwarenessReason.splice(idx, 1);
+      } else {
+        state.botAwarenessReason.push(reason);
+      }
+      renderStep();
+    }
+
+    function toggleBotCommandOrder(id) {
+      const idx = state.botCommands.indexOf(id);
+      if (idx !== -1) {
+        state.botCommands.splice(idx, 1);
+        delete state.botCommandRatings[id];
+        delete state.botCommandRatingReasons[id];
+      } else {
+        state.botCommands.push(id);
+      }
+      renderStep();
+    }
+
+    function clearBotCommands() {
+      state.botCommands = [];
+      state.botCommandRatings = {};
+      state.botCommandRatingReasons = {};
+      renderStep();
+    }
+
+    function setBotCommandRating(cmdId, star) {
+      state.botCommandRatings[cmdId] = star;
+      const box = document.getElementById(`bot_cmd_rating_box_${cmdId}`);
+      if (box) {
+        const btns = box.querySelectorAll('.grid button');
+        btns.forEach((btn, idx) => {
+          const s = idx + 1;
+          if (s === star) {
+            btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-brand-gold text-black border-brand-gold font-bold shadow';
+          } else {
+            btn.className = 'py-1.5 rounded-lg border text-xs transition font-mono bg-white/5 border-white/10 text-neutral-300 hover:text-white';
+          }
+        });
+        const lowBox = document.getElementById(`bot_cmd_low_box_${cmdId}`);
+        if (lowBox) {
+          if (star < 5) {
+            lowBox.classList.remove('hidden');
+            lowBox.classList.add('block');
+          } else {
+            lowBox.classList.add('hidden');
+            lowBox.classList.remove('block');
+            delete state.botCommandRatingReasons[cmdId];
+          }
+        }
+      }
+      updateNavButtons();
+    }
+
+    function appendBotCommandRatingReason(cmdId, text) {
+      if (!state.botCommandRatingReasons[cmdId] || state.botCommandRatingReasons[cmdId].trim() === '') {
+        state.botCommandRatingReasons[cmdId] = text;
+      } else if (!state.botCommandRatingReasons[cmdId].includes(text)) {
+        state.botCommandRatingReasons[cmdId] += `、${text}`;
+      }
+      const inputEl = document.getElementById(`inputBotCmdReason_${cmdId}`);
+      if (inputEl) inputEl.value = state.botCommandRatingReasons[cmdId];
+      updateNavButtons();
+    }
+
+    function setBotRating(val) {
+      state.botRating = val;
+      renderStep();
+    }
+
+    function toggleBotPriorityOrder(id) {
+      if (id === 'b_none') {
+        state.botPriorities = ['b_none'];
+        renderStep();
+        return;
+      }
+      const noneIdx = state.botPriorities.indexOf('b_none');
+      if (noneIdx !== -1) {
+        state.botPriorities.splice(noneIdx, 1);
+      }
+      const idx = state.botPriorities.indexOf(id);
+      if (idx !== -1) {
+        state.botPriorities.splice(idx, 1);
+      } else {
+        if (state.botPriorities.length >= 3) {
+          showToast('⚠️ 最多選擇 3 項優先順序');
+          return;
+        }
+        state.botPriorities.push(id);
+      }
+      renderStep();
+    }
+
+    function clearBotPriorities() {
+      state.botPriorities = [];
+      renderStep();
+    }
+
+    function showPurposeDemo(id) {
+      let item = purposeOptions.find(p => p.id === id) || usageFeatures.find(f => f.id === id);
+      if (!item) return;
+
+      document.getElementById('demoModalIcon').innerText = item.icon || '🔍';
+      document.getElementById('demoModalTitle').innerText = item.label || item.name;
+      document.getElementById('demoModalDesc').innerText = item.desc;
+
+      const animBox = document.getElementById('demoModalAnimBox');
+      let animHtml = '';
+
+      switch (item.anim) {
+        case 'ocr':
+          animHtml = `
+            <div class="anim-scan bg-[#12141A] p-4 rounded-xl border border-white/15 text-sm font-mono space-y-1.5">
+              <div class="text-neutral-400">正在辨識截圖詞條...</div>
+              <div class="text-brand-gold font-semibold">🎯 暴擊率 +10.5% (極品)</div>
+              <div class="text-emerald-400 font-semibold">💥 暴擊傷害 +21.0% (MAX)</div>
+            </div>
+          `;
+          break;
+        case 'compare':
+          animHtml = `
+            <div class="grid grid-cols-2 gap-3 text-sm font-mono text-center">
+              <div class="bg-[#12141A] p-3 rounded-xl border border-white/10">
+                <div class="text-neutral-400">聲骸 A</div>
+                <div class="text-white font-medium mt-1">評分: 78.5</div>
+              </div>
+              <div class="bg-brand-gold/15 p-3 rounded-xl border border-brand-gold/50">
+                <div class="text-brand-gold font-semibold">聲骸 B (優)</div>
+                <div class="text-brand-gold font-semibold mt-1">評分: 89.2 (+10.7)</div>
+              </div>
+            </div>
+          `;
+          break;
+        case 'overview':
+          animHtml = `
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between text-neutral-300"><span>全角色大畢業進度</span><span class="text-brand-gold font-mono font-semibold">92%</span></div>
+              <div class="h-3 w-full bg-neutral-800 rounded-full overflow-hidden border border-white/10">
+                <div class="h-full bg-gradient-to-r from-amber-400 to-brand-gold" style="animation: miniBar 2.5s ease-in-out infinite alternate;"></div>
+              </div>
+            </div>
+          `;
+          break;
+        case 'dps':
+          animHtml = `
+            <div class="text-center space-y-1.5 text-sm font-mono">
+              <div class="text-neutral-400">正在計算預期總傷害 (DPS)...</div>
+              <div class="text-brand-gold font-semibold text-base">暴擊期望提升: +14.2%</div>
+            </div>
+          `;
+          break;
+        case 'matrix':
+          animHtml = `
+            <div class="flex items-center justify-around text-sm">
+              <span class="px-3 py-1.5 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 font-medium">主 C</span>
+              <span class="text-neutral-400">➔</span>
+              <span class="px-3 py-1.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 font-medium">副 C</span>
+              <span class="text-neutral-400">➔</span>
+              <span class="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-medium">輔助</span>
+            </div>
+          `;
+          break;
+        case 'rank':
+          animHtml = `
+            <div class="space-y-1 text-sm text-center font-mono">
+              <div class="text-neutral-400">全服同角色練度比對</div>
+              <div class="text-brand-gold font-bold text-base">超越 95% 玩家 (SSS 梯隊)</div>
+            </div>
+          `;
+          break;
+        case 'simulate':
+          animHtml = `
+            <div class="text-center space-y-1.5 text-sm font-mono">
+              <div class="text-neutral-400">模擬開第 5 孔副詞條...</div>
+              <div class="text-brand-gold font-semibold" style="animation: miniPulse 1.5s infinite;">獲得【暴擊傷害 21.0%】🎉</div>
+            </div>
+          `;
+          break;
+        case 'weights':
+          animHtml = `
+            <div class="space-y-1.5 text-sm font-mono">
+              <div class="flex justify-between text-neutral-300"><span>暴擊率加權值</span><span class="text-brand-gold font-semibold">x 2.0</span></div>
+              <div class="flex justify-between text-neutral-300"><span>共鳴效率加權值</span><span class="text-emerald-400 font-semibold">x 1.2</span></div>
+            </div>
+          `;
+          break;
+        case 'share':
+          animHtml = `
+            <div class="text-center py-3 bg-gradient-to-r from-brand-gold/15 via-purple-500/15 to-transparent rounded-xl border border-white/10 text-sm text-neutral-100">
+              🖼️ 生成專屬社群卡片（支援手機長圖與 PC 寬圖）
+            </div>
+          `;
+          break;
+        default:
+          animHtml = `<div class="text-sm text-neutral-400 text-center">無動畫預覽</div>`;
+      }
+
+      animBox.innerHTML = animHtml;
+      document.getElementById('demoModal').classList.remove('hidden');
+    }
+
+    function closeDemoModal() {
+      document.getElementById('demoModal').classList.add('hidden');
+    }
+
+    function openOverviewModal() {
+      const content = document.getElementById('overviewContent');
+      const text = buildSummaryText();
+      content.innerHTML = text.split('\n').map(l => {
+        if (l.startsWith('【')) return `<div class="font-bold text-brand-gold text-base border-b border-white/10 pb-1 mt-2">${l}</div>`;
+        if (l.startsWith('•')) return `<div class="text-white font-medium">${l}</div>`;
+        if (l.startsWith('  └') || l.startsWith('  -')) return `<div class="text-amber-300 text-xs pl-4">${l}</div>`;
+        return `<div class="text-neutral-400 text-xs">${l}</div>`;
+      }).join('');
+      document.getElementById('overviewModal').classList.remove('hidden');
+    }
+
+    function closeOverviewModal() {
+      document.getElementById('overviewModal').classList.add('hidden');
+    }
+
+    function buildSummaryText() {
+      const getDeviceName = (id) => (deviceOptions.find(d => d.id === id) || {}).label || id;
+      const getPurposeName = (id) => (purposeOptions.find(p => p.id === id) || {}).label || id;
+      const getWebImproveName = (id) => (webImproveOptions.find(i => i.id === id) || {}).label || id;
+      const getBotImproveName = (id) => (botImproveOptions.find(i => i.id === id) || {}).label || id;
+      const getBotAwarenessName = (id) => (botAwarenessOptions.find(b => b.id === id) || {}).title || id;
+      const getBotCmdName = (id) => (botCommandOptions.find(c => c.id === id) || {}).label || id;
+      const getDcFreqName = (id) => (dcFrequencyOptions.find(f => f.id === id) || {}).title || id;
+      const getDcAspectName = (id) => (discordAspects.find(a => a.id === id) || {}).name || id;
+
+      return [
+        '【GAME ZH 聲骸分析儀、DC社群與機器人完整調研報告】',
+        `• 玩家族群：${state.persona || '未提供'} (分析過 ${state.analysisCount || '0'} 筆)`,
+        `• 常用裝置排序：${state.devices.map((id, idx) => `[${idx + 1}]${getDeviceName(id)}`).join(' ➔ ') || '未選'}`,
+        `• 核心目的優先序：${state.purposes.map((id, idx) => `[${idx + 1}]${getPurposeName(id)}`).join('、') || '無'}`,
+        state.otherPurpose ? `• 自訂目的補充：${state.otherPurpose}` : null,
+        `• 核心用途易懂度：${state.understandRating !== null ? state.understandRating + '/5' : '未評估'}`,
+        state.understandDifficultyReason ? `  └ 困難原因：${state.understandDifficultyReason}` : null,
+        `• 工具切換易找度：${state.findRating !== null ? state.findRating + '/5' : '未評估'}`,
+        state.findDifficultyReason ? `  └ 困難原因：${state.findDifficultyReason}` : null,
+        `• 網站模組使用頻率與細節：`,
+        ...Object.entries(state.usage).map(([k, v]) => {
+          const reasons = state.usageReasons[k] && state.usageReasons[k].length ? ` (未用原因: ${state.usageReasons[k].join('、')})` : '';
+          const rating = state.usageRatings[k] ? ` (滿意度: ${state.usageRatings[k]}分)` : '';
+          const ratingReason = state.usageRatingReasons[k] ? ` (低分原因: ${state.usageRatingReasons[k]})` : '';
+          return `  - ${k}: ${['沒用過', '知道未用', '偶爾用', '常用'][v]}${reasons}${rating}${ratingReason}`;
+        }),
+        `• OCR 準確率滿意度：${state.ocrRating !== null ? state.ocrRating + '/5' : '未評估'}`,
+        state.ocrFailReason ? `  └ 常見失誤：${state.ocrFailReason}` : null,
+        `• 載入速度耐受度：${state.waitRating !== null ? state.waitRating + '/5' : '未評估'}`,
+        state.waitMaxSeconds ? `  └ 可接受秒數/建議：${state.waitMaxSeconds}` : null,
+        `• 評分級距合理度：${state.tierRating !== null ? state.tierRating + '/5' : '未評估'}`,
+        state.tierReason ? `  └ 不合理原因：${state.tierReason}` : null,
+        `• 網站端優先改善重點：${state.webPriorities.map((id, idx) => `[${idx + 1}]${getWebImproveName(id)}`).join('、') || '無'}`,
+        state.otherWebPriority ? `• 網站端其他優先補充：${state.otherWebPriority}` : null,
+        state.webPainPoint.trim() ? `• 網站常遇卡關點：${state.webPainPoint.trim()}` : null,
+        state.webSuggestion.trim() ? `• 網站功能建議：${state.webSuggestion.trim()}` : null,
+        `• Discord 社群造訪頻率：${state.dcFrequency ? getDcFreqName(state.dcFrequency) : '未填'}`,
+        state.dcNoFreqReason && state.dcNoFreqReason.length ? `  └ 未活躍原因：${state.dcNoFreqReason.join('、')}` : null,
+        state.dcFrequency && state.dcFrequency !== 'freq_none' ? `• Discord 社群機制評估：` : null,
+        ...(state.dcFrequency && state.dcFrequency !== 'freq_none' ? Object.entries(state.dcAspectRatings).map(([k, v]) => {
+          const reason = state.dcAspectReasons[k] ? ` (原因: ${state.dcAspectReasons[k]})` : '';
+          return `  - ${getDcAspectName(k)}: ${v}分${reason}`;
+        }) : []),
+        state.dcSponsorIntent.trim() ? `• 社群贊助意願與看法：${state.dcSponsorIntent.trim()}` : null,
+        state.dcCommunitySuggestion.trim() ? `• 社群運作與活動建議：${state.dcCommunitySuggestion.trim()}` : null,
+        `• Discord 機器人經驗：${state.botAwareness ? getBotAwarenessName(state.botAwareness) : '未填'}`,
+        state.botAwarenessReason && state.botAwarenessReason.length ? `  └ 未使用/不知道原因：${state.botAwarenessReason.join('、')}` : null,
+        state.botCommands.length ? `• 常用機器人指令優先序與評分：` : null,
+        ...state.botCommands.map((id, idx) => {
+          const rating = state.botCommandRatings[id] ? ` [${state.botCommandRatings[id]}分]` : ' [未評分]';
+          const reason = state.botCommandRatingReasons[id] ? ` (原因: ${state.botCommandRatingReasons[id]})` : '';
+          return `  - [${idx + 1}] ${getBotCmdName(id)}${rating}${reason}`;
+        }),
+        state.botRating !== null ? `• 機器人整體滿意度：${state.botRating}/5` : null,
+        state.botRatingReason ? `  └ 不滿意/普通原因：${state.botRatingReason}` : null,
+        state.botPriorities.length ? `• 機器人端優先改善重點：${state.botPriorities.map((id, idx) => `[${idx + 1}]${getBotImproveName(id)}`).join('、')}` : null,
+        state.otherBotPriority ? `• 機器人端其他優先補充：${state.otherBotPriority}` : null,
+        state.botPainPoint.trim() ? `• 機器人常遇卡關點：${state.botPainPoint.trim()}` : null,
+        state.botSuggestion.trim() ? `• 機器人功能建議：${state.botSuggestion.trim()}` : null,
+        state.communitySuggestions.trim() ? `• 對社群總體建議與看法：${state.communitySuggestions.trim()}` : null,
+        state.teamEncouragement.trim() ? `• 給開發團隊的正能量鼓勵：${state.teamEncouragement.trim()}` : null,
+        `• 填寫時間：${new Date().toLocaleString('zh-TW')}`
+      ].filter(Boolean).join('\n');
+    }
+
+    function copyResult() {
+      const text = buildSummaryText();
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast('✅ 摘要已複製至剪貼簿！');
+      } catch (err) {
+        showToast('❌ 複製失敗，請手動複製');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toastBox');
+      const text = document.getElementById('toastMsg');
+      text.innerText = msg;
+      box.classList.remove('opacity-0', '-translate-y-2');
+      box.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        box.classList.remove('opacity-100', 'translate-y-0');
+        box.classList.add('opacity-0', '-translate-y-2');
+      }, 2600);
+    }
+
+    renderStep();
+  </script>
+</body>
+</html>
