@@ -17863,7 +17863,7 @@
             { x: 0.795, y: 0.59, w: 0.187, h: 0.38 }
         ];
         const GAMEZH_TEAMS_API_URL = "https://script.google.com/macros/s/AKfycbzKul7LDO5_W6N3Lua6Uk5cA3BCOrMORNg2GzRON-_T2hWj0nvXlX77ICYSx3ikfCQ3/exec?action=getWeights";
-        const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbwCY2yaAv92zA3iwENsluPT_YnYWWd7e-pxFdRTMs-0sZSvTKF3DxVo7ZhsM6-aY_Eb/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026"; const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbw1wXrNC47znoLpGN6qBEATjlmE6UWgYtjs9KfU5MIpF9feqlsf3Z25bPkGJcLgzuZz/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
+        const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbzQfn6YjiTrIJI7D8SKyauQgTWwGa9_F6_3dx0qNIW6_dzCcJpPdXpN5ywZEWhnOfI8/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026"; const DEFAULT_OFFLINE_API_URL = "https://script.google.com/macros/s/AKfycbw1wXrNC47znoLpGN6qBEATjlmE6UWgYtjs9KfU5MIpF9feqlsf3Z25bPkGJcLgzuZz/exec"; const TEST_URL = "https://wutheringwaves-dc.kurogames-global.com/back/55/5560f88c433105ce9ca918abde6ed64d1202845a.jpeg"; const ALLOWED_DOMAIN = "https://wutheringwaves-dc.kurogames-global.com/back/";
         const SUB_ALIAS_MAP = { "生命": "生命", "生命值": "生命", "生命固定": "生命", "生命百分比": "生命百分比", "生命%": "生命百分比", "攻擊": "攻擊", "攻擊力": "攻擊", "攻擊固定": "攻擊", "攻擊百分比": "攻擊百分比", "攻擊%": "攻擊百分比", "防禦": "防禦", "防御": "防禦", "防禦力": "防禦", "防御力": "防禦", "防禦百分比": "防禦百分比", "防禦%": "防禦百分比", "防御百分比": "防禦百分比", "暴擊": "暴擊", "爆擊": "暴擊", "暴擎": "暴擊", "暴擊傷害": "暴擊傷害", "爆擊傷害": "暴擊傷害", "暴傷": "暴擊傷害", "爆擊率": "暴擊", "共鳴效率": "共鳴效率", "效率": "共鳴效率", "普攻傷害加成": "普攻傷害加成", "普攻": "普攻傷害加成", "重擊傷害加成": "重擊傷害加成", "重擊": "重擊傷害加成", "共鳴技能傷害加成": "共鳴技能傷害加成", "共鳴技能": "共鳴技能傷害加成", "技能": "共鳴技能傷害加成", "E技能": "共鳴技能傷害加成", "共鳴解放傷害加成": "共鳴解放傷害加成", "共鳴解放": "共鳴解放傷害加成", "大招": "共鳴解放傷害加成", "解放": "共鳴解放傷害加成" };
         const ROLE_EN_MAP = { "Jinhsi": "今汐", "Jiyan": "忌炎", "Changli": "長離", "Zhezhi": "折枝", "Yinlin": "吟霖", "Xiangli Yao": "相里要", "Camellya": "椿", "Shorekeeper": "守岸人", "Encore": "安可", "Calcharo": "卡卡羅", "Verina": "維里奈", "Lingyang": "凌陽", "Jianxin": "鑒心", "Rover": "漂泊者", "Rover (K)": "漂泊者暗", "Rover (M)": "漂泊者光", "Rover (F)": "漂泊者風", "Havoc Rover": "漂泊者(湮滅)", "Spectro Rover": "漂泊者(衍射)", "Sanhua": "散華", "Danjin": "丹瑾", "Mortefi": "莫特斐", "Baizhi": "白芷", "Chixia": "熾霞", "Yangyang": "秧秧", "Yuanwu": "淵武", "Taoqi": "桃祈", "Aalto": "秋水", "Brant": "布蘭特", "Youhu": "釉瑚", "Lumi": "燈燈", "Carlotta": "珂萊塔", "Roccia": "洛可可", "Phoebe": "菲比", "Cantarella": "坎特雷拉", "Zani": "贊妮", "Ciaccona": "夏空", "Cartethyia": "卡提希婭", "Lupa": "露帕", "Phrolova": "弗洛洛", "Augusta": "奧古斯塔", "Iuno": "尤諾", "Galbrena": "嘉貝莉娜", "Qiuyuan": "仇遠", "Chisa": "千咲", "Buling": "卜靈", "Lynae": "琳奈", "Mornye": "莫寧", "Aemeath": "愛彌斯", "Luuk Herssen": "陸赫斯", "Sigrika": "西格莉卡", "Hiyuki": "緋雪", "Denia": "達妮婭" };
         // Reverse map: Chinese name → English name
@@ -20302,7 +20302,7 @@
                 localStorage.removeItem('ww_gas_url');
             }
             // 只要不是最新的權威 DEFAULT_GAS_URL，一律自動清除舊快取，避免指向已失效或超時的舊後端
-            if (mainUrl && !mainUrl.includes('AKfycbwCY2yaAv92zA3iwENsluPT_YnYWWd7e-pxFdRTMs-0sZSvTKF3DxVo7ZhsM6-aY_Eb')) {
+            if (mainUrl && !mainUrl.includes('AKfycbzQfn6YjiTrIJI7D8SKyauQgTWwGa9_F6_3dx0qNIW6_dzCcJpPdXpN5ywZEWhnOfI8')) {
                 localStorage.removeItem('ww_gas_url');
             }
         }
@@ -49664,7 +49664,7 @@
       };
 
       try {
-        const gasUrl = (typeof DEFAULT_GAS_URL !== 'undefined') ? DEFAULT_GAS_URL : 'https://script.google.com/macros/s/AKfycbwCY2yaAv92zA3iwENsluPT_YnYWWd7e-pxFdRTMs-0sZSvTKF3DxVo7ZhsM6-aY_Eb/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026';
+        const gasUrl = (typeof DEFAULT_GAS_URL !== 'undefined') ? DEFAULT_GAS_URL : 'https://script.google.com/macros/s/AKfycbzQfn6YjiTrIJI7D8SKyauQgTWwGa9_F6_3dx0qNIW6_dzCcJpPdXpN5ywZEWhnOfI8/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026';
         const res = await fetch(gasUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -51623,7 +51623,7 @@
     async function checkSurveyStatusAndNotify() {
       if (!g_currentUserUid || g_currentUserUid === 'OFFLINE_LOCAL' || g_currentUserUid.length !== 9) return;
       try {
-        const gasUrl = (typeof DEFAULT_GAS_URL !== 'undefined') ? DEFAULT_GAS_URL : 'https://script.google.com/macros/s/AKfycbwCY2yaAv92zA3iwENsluPT_YnYWWd7e-pxFdRTMs-0sZSvTKF3DxVo7ZhsM6-aY_Eb/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026';
+        const gasUrl = (typeof DEFAULT_GAS_URL !== 'undefined') ? DEFAULT_GAS_URL : 'https://script.google.com/macros/s/AKfycbzQfn6YjiTrIJI7D8SKyauQgTWwGa9_F6_3dx0qNIW6_dzCcJpPdXpN5ywZEWhnOfI8/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026';
         const url = gasUrl + '&action=getSurveyStatus&uid=' + encodeURIComponent(g_currentUserUid);
         const res = await fetch(url).then(r => r.json());
         if (res && res.result === 'success') {
