@@ -7182,6 +7182,26 @@
             border-bottom: 1px solid var(--c-border);
             margin-bottom: 0.45rem;
         }
+        .btn-mini-chart {
+            background: #1c2332;
+            border: 1px solid var(--c-border-light, #2a354b);
+            color: var(--accent, #ffd700);
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-mini-chart:hover {
+            background: #252f44;
+            color: #fff;
+            border-color: var(--accent, #ffd700);
+            transform: translateY(-1px);
+        }
         .btn-mini-clear {
             background: transparent;
             border: none;
@@ -7204,6 +7224,67 @@
             font-size: 0.78rem;
             text-align: center;
             padding: 1.5rem 0;
+        }
+
+        /* 📊 聲骸模擬歷史評分走勢曲線與深度分析 Modal 樣式 */
+        .chart-modal-box {
+            background: #131722;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 14px;
+            max-width: 680px;
+            width: 95%;
+            padding: 1.35rem;
+            box-sizing: border-box;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.85);
+            position: relative;
+        }
+        .chart-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 0.9rem 0 1.25rem;
+        }
+        @media (max-width: 600px) {
+            .chart-metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .metric-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 0.65rem 0.5rem;
+            text-align: center;
+        }
+        .metric-card-label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+        .metric-card-val {
+            font-size: 1.25rem;
+            font-weight: 900;
+            font-family: monospace;
+            color: #fff;
+            margin-top: 0.2rem;
+        }
+        .svg-chart-wrapper {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .chart-legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+            font-family: monospace;
         }
 
         /* ══════════════════════════════════════════════════════════════
@@ -14100,6 +14181,9 @@
                         <div class="history-drawer-header">
                             <div style="display:flex; align-items:center; gap:0.4rem;">
                                 <span>📜 最近存檔</span>
+                                <button type="button" class="btn-mini-chart" id="btn-show-history-chart" onclick="openHistoryChartModal()" title="查看評分曲線走勢與深度分析">
+                                    📊 曲線圖表
+                                </button>
                             </div>
                             <button type="button" class="btn-mini-clear" onclick="imitate_clearHistory()">清空</button>
                         </div>
@@ -14118,6 +14202,66 @@
             <div id="imitate-max-possible" style="display:none;">理論最高分：--</div>
             <div id="imitate-prob-card" style="display:none;"></div>
             <div id="imitate-chal-result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- 📊 歷史抽獎評分走勢曲線與深度分析 Modal -->
+    <div id="modal-sim-history-chart" class="solid-modal-backdrop" style="display:none; z-index:100050;">
+        <div class="chart-modal-box">
+            <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:12px;">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <span style="font-size:1.25rem;">📈</span>
+                    <h3 style="margin:0; font-size:1.05rem; color:#fff; font-weight:700;">歷史抽獎評分走勢與深度分析</h3>
+                </div>
+                <button type="button" onclick="closeHistoryChartModal()" style="background:rgba(255,255,255,0.1); border:none; color:#ddd; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s;">✕</button>
+            </div>
+
+            <!-- 4 大核心統計指標 -->
+            <div class="chart-metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-card-label">總存檔抽數</div>
+                    <div class="metric-card-val" id="chart-stat-total">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-card-label">平均得分率</div>
+                    <div class="metric-card-val" id="chart-stat-avg">0.0%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-card-label">最高紀錄</div>
+                    <div class="metric-card-val" id="chart-stat-max" style="color:var(--accent, #ffd700)">0.0%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-card-label">雙爆達成率</div>
+                    <div class="metric-card-val" id="chart-stat-crit" style="color:#c084fc">0%</div>
+                </div>
+            </div>
+
+            <!-- 歷史走勢 SVG 曲線圖 -->
+            <div class="svg-chart-wrapper">
+                <div class="chart-legend-row">
+                    <span>📊 最近 20 次加權評分曲線 (金色虛線為 90% 獲獎門檻)</span>
+                    <span style="color:var(--accent, #ffd700);">🏆 90.0% 門檻</span>
+                </div>
+                <div id="history-svg-chart-container" style="width:100%; height:180px;">
+                    <!-- SVG 曲線由 JS 動態生成 -->
+                </div>
+            </div>
+
+            <!-- 詞條出現頻率排行 -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:0.85rem;">
+                <div style="font-size:0.78rem; font-weight:800; color:#94a3b8; margin-bottom:0.5rem;">
+                    🎲 副詞條抽取頻率統計
+                </div>
+                <div id="chart-prop-freq-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:0.4rem; font-size:0.76rem;">
+                    <!-- 頻率列表由 JS 生成 -->
+                </div>
+            </div>
+
+            <div style="margin-top:1rem; text-align:right;">
+                <button type="button" class="btn-arcade-push btn-arcade-yellow" onclick="closeHistoryChartModal()" style="width:100%; height:40px; font-weight:800; border-radius:8px; cursor:pointer;">
+                    關閉圖表
+                </button>
+            </div>
         </div>
     </div>
 
@@ -39253,10 +39397,39 @@
             const sig = JSON.stringify(g_imitateCost.propertyList);
             let history = JSON.parse(localStorage.getItem('ww_imitate_history') || '[]');
             if (history.length > 0 && history[0].sig === sig) return;
+
+            // 計算此組存檔的加權評分與百分比
+            let scoreAchieved = 0;
+            let hasCrit = false, hasCritDmg = false;
+            let role = g_imitateSelectedRole || '菲比';
+            let weights = { "暴擊": 1, "暴擊傷害": 1, "攻擊百分比": 1, "共鳴解放傷害加成": 1 };
+            if (g_currentWeights && g_currentWeights[role] && g_currentWeights[role][0]) {
+                weights = g_currentWeights[role][0].weights;
+            }
+            g_imitateCost.propertyList.forEach(s => {
+                let val = parseFloat(String(s.value).replace('%', '')) || 0;
+                let w = weights[s.property] || 0;
+                scoreAchieved += val * w;
+                if (s.property === '暴擊') hasCrit = true;
+                if (s.property === '暴擊傷害') hasCritDmg = true;
+            });
+            let potentials = [];
+            for (let k in weights) {
+                if (typeof SUB_STAT_MAX_VALUES !== 'undefined' && SUB_STAT_MAX_VALUES[k]) {
+                    potentials.push(weights[k] * SUB_STAT_MAX_VALUES[k]);
+                }
+            }
+            potentials.sort((a, b) => b - a);
+            let maxTheoretical = potentials.slice(0, 5).reduce((a, b) => a + b, 0) || 50;
+            let pct = Math.min(100, (scoreAchieved / maxTheoretical) * 100);
+
             history.unshift({
                 ts: Date.now(),
                 stats: JSON.parse(sig),
-                sig: sig
+                sig: sig,
+                score: parseFloat(scoreAchieved.toFixed(1)),
+                pct: parseFloat(pct.toFixed(1)),
+                isDoubleCrit: hasCrit && hasCritDmg
             });
             if (history.length > 30) history.pop();
             localStorage.setItem('ww_imitate_history', JSON.stringify(history));
@@ -39304,11 +39477,12 @@
                         const dt = new Date(h.ts);
                         const timeStr = `${dt.getMonth() + 1}/${dt.getDate()} ${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`;
                         const statsShort = h.stats.map(s => `${s.property}:${s.value}`).join(' | ');
+                        const pctStr = (h.pct !== undefined) ? `<span style="font-size:0.72rem; color:var(--accent, #ffd700); font-weight:bold; margin-left:6px;">${h.pct}%</span>` : '';
                         simHistHtml += `
                         <div class="history-row-item">
                             <div class="row-meta">
                                 <span class="row-time">${timeStr}</span>
-                                <span class="row-tag">存檔 #${history.length - idx}</span>
+                                <span class="row-tag">存檔 #${history.length - idx}${pctStr}</span>
                             </div>
                             <div class="row-stats" title="${statsShort}">
                                 ${h.stats.map(s => `<span class="stat-pill">${s.property} <b>${s.value}</b></span>`).join('')}
@@ -39326,6 +39500,167 @@
                 imitate_renderHistory();
             });
         }
+
+        // ─────────────────────────────────────────────
+        // 📊 歷史評分曲線圖與深度統計分析引擎
+        // ─────────────────────────────────────────────
+        function openHistoryChartModal() {
+            const modal = document.getElementById('modal-sim-history-chart');
+            if (!modal) return;
+            renderHistorySvgChart();
+            modal.style.display = 'flex';
+        }
+
+        function closeHistoryChartModal() {
+            const modal = document.getElementById('modal-sim-history-chart');
+            if (!modal) return;
+            modal.style.display = 'none';
+        }
+
+        function renderHistorySvgChart() {
+            const container = document.getElementById('history-svg-chart-container');
+            const statTotal = document.getElementById('chart-stat-total');
+            const statAvg = document.getElementById('chart-stat-avg');
+            const statMax = document.getElementById('chart-stat-max');
+            const statCrit = document.getElementById('chart-stat-crit');
+            const freqListContainer = document.getElementById('chart-prop-freq-list');
+
+            const history = JSON.parse(localStorage.getItem('ww_imitate_history') || '[]');
+            const totalCount = history.length;
+            if (statTotal) statTotal.textContent = totalCount;
+
+            if (totalCount === 0) {
+                if (statAvg) statAvg.textContent = '0.0%';
+                if (statMax) statMax.textContent = '0.0%';
+                if (statCrit) statCrit.textContent = '0%';
+                if (container) container.innerHTML = '<div style="color:var(--c-text-muted, #94a3b8); text-align:center; padding:3rem 0; font-size:0.85rem;">尚無歷史存檔紀錄，完成滿 5 條詞條後自動存檔並生成趨勢圖</div>';
+                if (freqListContainer) freqListContainer.innerHTML = '<div style="color:var(--c-text-muted, #94a3b8); font-size:0.8rem;">尚無詞條紀錄</div>';
+                return;
+            }
+
+            // 計算統計值
+            let sumPct = 0;
+            let maxPct = 0;
+            let doubleCritCount = 0;
+            const pcts = [];
+            const propCounts = {};
+
+            history.forEach(h => {
+                let p = typeof h.pct === 'number' ? h.pct : parseFloat(h.pct);
+                let hasCrit = false, hasCritDmg = false;
+                if (Array.isArray(h.stats)) {
+                    h.stats.forEach(s => {
+                        propCounts[s.property] = (propCounts[s.property] || 0) + 1;
+                        if (s.property === '暴擊') hasCrit = true;
+                        if (s.property === '暴擊傷害') hasCritDmg = true;
+                    });
+                }
+                const isDoubleCrit = h.isDoubleCrit !== undefined ? h.isDoubleCrit : (hasCrit && hasCritDmg);
+                if (isDoubleCrit) doubleCritCount++;
+
+                if (isNaN(p) || p === undefined) {
+                    let score = 0;
+                    (h.stats || []).forEach(s => {
+                        let val = parseFloat(String(s.value).replace('%', '')) || 0;
+                        score += val;
+                    });
+                    p = Math.min(100, (score / 75) * 100);
+                }
+                pcts.push(p);
+                sumPct += p;
+                if (p > maxPct) maxPct = p;
+            });
+
+            const avgPct = (sumPct / totalCount).toFixed(1);
+            if (statAvg) statAvg.textContent = `${avgPct}%`;
+            if (statMax) statMax.textContent = `${maxPct.toFixed(1)}%`;
+            if (statCrit) statCrit.textContent = `${((doubleCritCount / totalCount) * 100).toFixed(0)}%`;
+
+            // 生成 SVG 曲線圖 (最近最多 20 筆，按時間正序排列)
+            const recentPcts = pcts.slice(0, 20).reverse();
+            const width = 600;
+            const height = 180;
+            const padL = 36;
+            const padR = 20;
+            const padT = 20;
+            const padB = 26;
+
+            const plotW = width - padL - padR;
+            const plotH = height - padT - padB;
+            const y90 = padT + plotH * (1 - (90.0 / 100.0));
+
+            const stepX = recentPcts.length > 1 ? plotW / (recentPcts.length - 1) : plotW / 2;
+            const points = recentPcts.map((val, idx) => {
+                const x = padL + (recentPcts.length > 1 ? idx * stepX : plotW / 2);
+                const y = padT + plotH * (1 - (Math.min(100, Math.max(0, val)) / 100.0));
+                return { x, y, val };
+            });
+
+            const polylinePoints = points.map(pt => `${pt.x.toFixed(1)},${pt.y.toFixed(1)}`).join(' ');
+
+            let dotsHtml = '';
+            points.forEach((pt, i) => {
+                const isWinner = pt.val >= 90.0;
+                const dotColor = isWinner ? '#ffd700' : (pt.val >= 70 ? '#38bdf8' : '#94a3b8');
+                dotsHtml += `
+                    <circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${isWinner ? 5 : 3.5}" fill="${dotColor}" stroke="#131722" stroke-width="2">
+                        <title>存檔 #${i + 1}: ${pt.val.toFixed(1)}%</title>
+                    </circle>
+                    <text x="${pt.x.toFixed(1)}" y="${(pt.y - 8).toFixed(1)}" fill="${dotColor}" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">${pt.val.toFixed(0)}%</text>
+                `;
+            });
+
+            const svgHtml = `
+                <svg viewBox="0 0 ${width} ${height}" style="width:100%; height:100%; overflow:visible;">
+                    <!-- 網格與軸線 -->
+                    <line x1="${padL}" y1="${padT}" x2="${width - padR}" y2="${padT}" stroke="#1e2536" stroke-width="1" />
+                    <line x1="${padL}" y1="${padT + plotH * 0.5}" x2="${width - padR}" y2="${padT + plotH * 0.5}" stroke="#1e2536" stroke-width="1" />
+                    <line x1="${padL}" y1="${padT + plotH}" x2="${width - padR}" y2="${padT + plotH}" stroke="#2e374d" stroke-width="1" />
+                    
+                    <!-- 90% 門檻虛線 -->
+                    <line x1="${padL}" y1="${y90}" x2="${width - padR}" y2="${y90}" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85" />
+                    <text x="${padL - 4}" y="${y90 + 3}" fill="#ffd700" font-size="9" font-family="monospace" text-anchor="end" font-weight="bold">90%</text>
+
+                    <!-- Y軸刻度 -->
+                    <text x="${padL - 4}" y="${padT + 4}" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">100%</text>
+                    <text x="${padL - 4}" y="${padT + plotH + 3}" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">0%</text>
+
+                    <!-- 折線 -->
+                    <polyline fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="${polylinePoints}" />
+
+                    <!-- 資料點 -->
+                    ${dotsHtml}
+                </svg>
+            `;
+
+            if (container) container.innerHTML = svgHtml;
+
+            // 詞條頻率排行
+            if (freqListContainer) {
+                const totalRolls = totalCount * 5 || 1;
+                const sortedProps = Object.keys(propCounts).sort((a, b) => propCounts[b] - propCounts[a]);
+                if (sortedProps.length === 0) {
+                    freqListContainer.innerHTML = '<div style="color:#94a3b8;">尚無詞條紀錄</div>';
+                } else {
+                    freqListContainer.innerHTML = sortedProps.slice(0, 10).map(prop => {
+                        const count = propCounts[prop] || 0;
+                        const pct = ((count / totalRolls) * 100).toFixed(1);
+                        const isCrit = prop === '暴擊' || prop === '暴擊傷害';
+                        const color = isCrit ? '#c084fc' : '#38bdf8';
+                        return `
+                            <div style="background:#151b27; padding:0.25rem 0.5rem; border-radius:4px; display:flex; justify-content:space-between; border:1px solid rgba(255,255,255,0.05);">
+                                <span style="color:#e2e8f0;">${prop}</span>
+                                <strong style="color:${color}; font-family:monospace;">${pct}% <span style="font-size:0.65rem; color:#64748b;">(${count}次)</span></strong>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        window.openHistoryChartModal = openHistoryChartModal;
+        window.closeHistoryChartModal = closeHistoryChartModal;
+        window.renderHistorySvgChart = renderHistorySvgChart;
 
         function openImitateModal() {
             closeAllModals();
@@ -50859,7 +51194,7 @@
     </script>
 <!-- ── Full-Screen Survey Modal & Component ── -->
     <style>
-    /* Strictly scoped survey modal styles */
+    /* Strictly scoped survey modal styles matching 問卷.html */
     #survey-full-modal {
         position: fixed;
         top: 0;
@@ -50867,8 +51202,8 @@
         width: 100vw;
         height: 100vh;
         z-index: 100000;
-        background-color: #06070A;
-        color: #F8FAFC;
+        background-color: #06070A !important;
+        color: #F8FAFC !important;
         display: flex;
         flex-direction: column;
         overflow-x: hidden;
@@ -50887,16 +51222,19 @@
     #survey-full-modal *::after {
         box-sizing: border-box;
     }
+
+    /* Reset button/input defaults without overriding utility classes */
     #survey-full-modal button,
     #survey-full-modal input,
     #survey-full-modal textarea {
         font-family: inherit;
         font-size: 100%;
-        color: inherit;
     }
     #survey-full-modal button {
-        background-color: transparent;
         cursor: pointer;
+        background: transparent;
+        border: none;
+        color: inherit;
     }
     #survey-full-modal img,
     #survey-full-modal svg {
@@ -50922,53 +51260,268 @@
         animation: highlightPulse 1.8s ease-in-out infinite;
     }
     @keyframes highlightPulse {
-        0%, 100% { border-color: rgba(239, 68, 68, 0.8); box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.5); }
-        50% { border-color: rgba(245, 158, 11, 0.9); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+        0%, 100% { border-color: rgba(239, 68, 68, 0.8) !important; box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.5) !important; }
+        50% { border-color: rgba(245, 158, 11, 0.9) !important; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4) !important; }
     }
 
-    /* Scoped Tailwind utilities */
-    #survey-full-modal .pointer-events-none{pointer-events:none}#survey-full-modal .fixed{position:fixed}#survey-full-modal .relative{position:relative}#survey-full-modal .sticky{position:sticky}#survey-full-modal .inset-0{inset:0px}#survey-full-modal .bottom-0{bottom:0px}#survey-full-modal .left-1\/2{left:50%}#survey-full-modal .top-0{top:0px}#survey-full-modal .top-20{top:5rem}#survey-full-modal .z-30{z-index:30}#survey-full-modal .z-40{z-index:40}#survey-full-modal .z-50{z-index:50}#survey-full-modal .mx-auto{margin-left:auto;margin-right:auto}#survey-full-modal .mb-4{margin-bottom:1rem}#survey-full-modal .mb-6{margin-bottom:1.5rem}#survey-full-modal .mt-4{margin-top:1rem}#survey-full-modal .flex{display:flex}#survey-full-modal .inline-flex{display:inline-flex}#survey-full-modal .hidden{display:none}#survey-full-modal .h-1\.5{height:0.375rem}#survey-full-modal .h-16{height:4rem}#survey-full-modal .h-2\.5{height:0.625rem}#survey-full-modal .h-5{height:1.25rem}#survey-full-modal .h-6{height:1.5rem}#survey-full-modal .h-full{height:100%}#survey-full-modal .max-h-\[85vh\]{max-height:85vh}#survey-full-modal .min-h-\[160px\]{min-height:160px}#survey-full-modal .min-h-screen{min-height:100vh}#survey-full-modal .w-0{width:0px}#survey-full-modal .w-2\.5{width:0.625rem}#survey-full-modal .w-5{width:1.25rem}#survey-full-modal .w-6{width:1.5rem}#survey-full-modal .w-full{width:100%}#survey-full-modal .max-w-2xl{max-width:42rem}#survey-full-modal .max-w-3xl{max-width:48rem}#survey-full-modal .max-w-4xl{max-width:56rem}#survey-full-modal .max-w-xl{max-width:36rem}#survey-full-modal .max-w-lg{max-width:32rem}#survey-full-modal .flex-1{flex:1 1 0%}#survey-full-modal .-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}#survey-full-modal .-translate-y-2{--tw-translate-y:-0.5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}#survey-full-modal .flex-col{flex-direction:column}#survey-full-modal .items-center{align-items:center}#survey-full-modal .justify-center{justify-content:center}#survey-full-modal .justify-between{justify-content:space-between}#survey-full-modal .gap-2{gap:0.5rem}#survey-full-modal .gap-3{gap:0.75rem}#survey-full-modal .gap-4{gap:1rem}#survey-full-modal .gap-2\.5{gap:0.625rem}#survey-full-modal .space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}#survey-full-modal .space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}#survey-full-modal .space-y-7 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.75rem * var(--tw-space-y-reverse))}#survey-full-modal .overflow-y-auto{overflow-y:auto}#survey-full-modal .overflow-x-hidden{overflow-x:hidden}#survey-full-modal .rounded-2xl{border-radius:1rem}#survey-full-modal .rounded-full{border-radius:9999px}#survey-full-modal .rounded-lg{border-radius:0.5rem}#survey-full-modal .rounded-xl{border-radius:0.75rem}#survey-full-modal .border{border-width:1px}#survey-full-modal .border-b{border-bottom-width:1px}#survey-full-modal .border-t{border-top-width:1px}#survey-full-modal .border-white\/10{border-color:rgb(255 255 255 / 0.1)}#survey-full-modal .border-white\/20{border-color:rgb(255 255 255 / 0.2)}#survey-full-modal .bg-\[\#06070A\]{--tw-bg-opacity:1;background-color:rgb(6 7 10 / var(--tw-bg-opacity, 1))}#survey-full-modal .bg-\[\#06070A\]\/95{background-color:rgb(6 7 10 / 0.95)}#survey-full-modal .bg-\[\#11141C\]{--tw-bg-opacity:1;background-color:rgb(17 20 28 / var(--tw-bg-opacity, 1))}#survey-full-modal .bg-black\/85{background-color:rgb(0 0 0 / 0.85)}#survey-full-modal .bg-brand-gold{--tw-bg-opacity:1;background-color:rgb(229 192 123 / var(--tw-bg-opacity, 1))}#survey-full-modal .bg-neutral-800{--tw-bg-opacity:1;background-color:rgb(38 38 38 / var(--tw-bg-opacity, 1))}#survey-full-modal .bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}#survey-full-modal .bg-white\/10{background-color:rgb(255 255 255 / 0.1)}#survey-full-modal .bg-white\/5{background-color:rgb(255 255 255 / 0.05)}#survey-full-modal .bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}#survey-full-modal .from-amber-400{--tw-gradient-from:#fbbf24 var(--tw-gradient-from-position);--tw-gradient-to:rgb(251 191 36 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}#survey-full-modal .to-brand-gold{--tw-gradient-to:#E5C07B var(--tw-gradient-to-position)}#survey-full-modal .p-2{padding:0.5rem}#survey-full-modal .p-4{padding:1rem}#survey-full-modal .p-5{padding:1.25rem}#survey-full-modal .p-6{padding:1.5rem}#survey-full-modal .px-2\.5{padding-left:0.625rem;padding-right:0.625rem}#survey-full-modal .px-5{padding-left:1.25rem;padding-right:1.25rem}#survey-full-modal .px-6{padding-left:1.5rem;padding-right:1.5rem}#survey-full-modal .px-7{padding-left:1.75rem;padding-right:1.75rem}#survey-full-modal .py-1{padding-top:0.25rem;padding-bottom:0.25rem}#survey-full-modal .py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}#survey-full-modal .py-3{padding-top:0.75rem;padding-bottom:0.75rem}#survey-full-modal .py-4{padding-top:1rem;padding-bottom:1rem}#survey-full-modal .py-8{padding-top:2rem;padding-bottom:2rem}#survey-full-modal .px-4{padding-left:1rem;padding-right:1rem}#survey-full-modal .py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}#survey-full-modal .py-6{padding-top:1.5rem;padding-bottom:1.5rem}#survey-full-modal .pb-4{padding-bottom:1rem}#survey-full-modal .pr-2{padding-right:0.5rem}#survey-full-modal .pt-4{padding-top:1rem}#survey-full-modal .text-left{text-align:left}#survey-full-modal .text-center{text-align:center}#survey-full-modal .font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}#survey-full-modal .font-sans{font-family:"Inter", "Noto Sans TC", system-ui, sans-serif}#survey-full-modal .text-2xl{font-size:1.5rem;line-height:2rem}#survey-full-modal .text-base{font-size:1rem;line-height:1.5rem}#survey-full-modal .text-lg{font-size:1.125rem;line-height:1.75rem}#survey-full-modal .text-sm{font-size:0.875rem;line-height:1.25rem}#survey-full-modal .text-xs{font-size:0.75rem;line-height:1rem}#survey-full-modal .text-3xl{font-size:1.875rem;line-height:2.25rem}#survey-full-modal .font-medium{font-weight:500}#survey-full-modal .font-semibold{font-weight:600}#survey-full-modal .leading-relaxed{line-height:1.625}#survey-full-modal .leading-snug{line-height:1.375}#survey-full-modal .tracking-tight{letter-spacing:-0.025em}#survey-full-modal .tracking-wider{letter-spacing:0.05em}#survey-full-modal .text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}#survey-full-modal .text-neutral-300{--tw-text-opacity:1;color:rgb(212 212 212 / var(--tw-text-opacity, 1))}#survey-full-modal .text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163 / var(--tw-text-opacity, 1))}#survey-full-modal .text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}#survey-full-modal .text-brand-gold{--tw-text-opacity:1;color:rgb(229 192 123 / var(--tw-text-opacity, 1))}#survey-full-modal .antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}#survey-full-modal .opacity-0{opacity:0}#survey-full-modal .shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}#survey-full-modal .shadow-\[0_0_10px_\#E5C07B\]{--tw-shadow:0 0 10px #E5C07B;--tw-shadow-colored:0 0 10px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}#survey-full-modal .shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}#survey-full-modal .backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}#survey-full-modal .backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}#survey-full-modal .transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}#survey-full-modal .transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}#survey-full-modal .duration-300{transition-duration:300ms}#survey-full-modal .selection\:bg-brand-gold\/30 *::selection{background-color:rgb(229 192 123 / 0.3)}#survey-full-modal .selection\:text-brand-gold *::selection{--tw-text-opacity:1;color:rgb(229 192 123 / var(--tw-text-opacity, 1))}#survey-full-modal .selection\:bg-brand-gold\/30::selection{background-color:rgb(229 192 123 / 0.3)}#survey-full-modal .selection\:text-brand-gold::selection{--tw-text-opacity:1;color:rgb(229 192 123 / var(--tw-text-opacity, 1))}#survey-full-modal .hover\:bg-brand-gold-hover:hover{--tw-bg-opacity:1;background-color:rgb(243 212 148 / var(--tw-bg-opacity, 1))}#survey-full-modal .hover\:bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245 / var(--tw-bg-opacity, 1))}#survey-full-modal .hover\:bg-white\/15:hover{background-color:rgb(255 255 255 / 0.15)}#survey-full-modal .hover\:bg-white\/5:hover{background-color:rgb(255 255 255 / 0.05)}#survey-full-modal .hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}#survey-full-modal .active\:scale-\[0\.98\]:active{--tw-scale-x:0.98;--tw-scale-y:0.98;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}#survey-full-modal .disabled\:pointer-events-none:disabled{pointer-events:none}#survey-full-modal .disabled\:opacity-0:disabled{opacity:0}@media (min-width: 640px){#survey-full-modal .sm\:inline{display:inline}#survey-full-modal .sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width: 768px){#survey-full-modal .md\:py-12{padding-top:3rem;padding-bottom:3rem}#survey-full-modal .md\:text-lg{font-size:1.125rem;line-height:1.75rem}}#survey-full-modal #survey-full-modal .hidden{ display: none !important; }#survey-full-modal #survey-full-modal{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 100000;
-        background-color: #06070A;
-        color: #F8FAFC;
-        display: flex;
-        flex-direction: column;
-        overflow-x: hidden;
-        overflow-y: auto;
-        font-family: 'Noto Sans TC', sans-serif;
-        letter-spacing: 0.015em;
-    }#survey-full-modal .survey-close-btn{
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.15);
-        color: #fff;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-    }#survey-full-modal .survey-close-btn:hover{
-        background: rgba(239, 68, 68, 0.25);
-        border-color: rgba(239, 68, 68, 0.5);
-        color: #ef4444;
-        transform: scale(1.05);
-    }
-    
-
+    /* Layout & Positioning */
+    #survey-full-modal .fixed { position: fixed; }
+    #survey-full-modal .relative { position: relative; }
+    #survey-full-modal .sticky { position: sticky; }
+    #survey-full-modal .inset-0 { inset: 0px; }
+    #survey-full-modal .top-0 { top: 0px; }
+    #survey-full-modal .bottom-0 { bottom: 0px; }
+    #survey-full-modal .left-1\/2 { left: 50%; }
+    #survey-full-modal .z-30 { z-index: 30; }
+    #survey-full-modal .z-40 { z-index: 40; }
+    #survey-full-modal .z-50 { z-index: 50; }
+    #survey-full-modal .flex { display: flex; }
+    #survey-full-modal .inline-flex { display: inline-flex; }
+    #survey-full-modal .grid { display: grid; }
     #survey-full-modal .hidden { display: none !important; }
-    .survey-close-btn {
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.15);
-        color: #fff;
+    #survey-full-modal .flex-col { flex-direction: column; }
+    #survey-full-modal .flex-1 { flex: 1 1 0%; }
+    #survey-full-modal .shrink-0 { flex-shrink: 0; }
+    #survey-full-modal .items-center { align-items: center; }
+    #survey-full-modal .items-start { align-items: flex-start; }
+    #survey-full-modal .justify-center { justify-content: center; }
+    #survey-full-modal .justify-between { justify-content: space-between; }
+    #survey-full-modal .gap-1 { gap: 0.25rem; }
+    #survey-full-modal .gap-1\.5 { gap: 0.375rem; }
+    #survey-full-modal .gap-2 { gap: 0.5rem; }
+    #survey-full-modal .gap-2\.5 { gap: 0.625rem; }
+    #survey-full-modal .gap-3 { gap: 0.75rem; }
+    #survey-full-modal .gap-3\.5 { gap: 0.875rem; }
+    #survey-full-modal .gap-4 { gap: 1rem; }
+    #survey-full-modal .flex-wrap { flex-wrap: wrap; }
+    #survey-full-modal .mx-auto { margin-left: auto; margin-right: auto; }
+    #survey-full-modal .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem; }
+    #survey-full-modal .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem; }
+    #survey-full-modal .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+    #survey-full-modal .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+    #survey-full-modal .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+    #survey-full-modal .space-y-7 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.75rem; }
+
+    /* Widths & Heights */
+    #survey-full-modal .w-full { width: 100%; }
+    #survey-full-modal .h-full { height: 100%; }
+    #survey-full-modal .w-5 { width: 1.25rem; }
+    #survey-full-modal .h-5 { height: 1.25rem; }
+    #survey-full-modal .w-6 { width: 1.5rem; }
+    #survey-full-modal .h-6 { height: 1.5rem; }
+    #survey-full-modal .w-7 { width: 1.75rem; }
+    #survey-full-modal .h-7 { height: 1.75rem; }
+    #survey-full-modal .w-16 { width: 4rem; }
+    #survey-full-modal .h-16 { height: 4rem; }
+    #survey-full-modal .w-2\.5 { width: 0.625rem; }
+    #survey-full-modal .h-2\.5 { height: 0.625rem; }
+    #survey-full-modal .h-1\.5 { height: 0.375rem; }
+    #survey-full-modal .h-20 { height: 5rem; }
+    #survey-full-modal .h-24 { height: 6rem; }
+    #survey-full-modal .h-28 { height: 7rem; }
+    #survey-full-modal .min-h-\[160px\] { min-height: 160px; }
+    #survey-full-modal .min-w-\[38px\] { min-width: 38px; }
+    #survey-full-modal .max-w-lg { max-width: 32rem; }
+    #survey-full-modal .max-w-xl { max-width: 36rem; }
+    #survey-full-modal .max-w-2xl { max-width: 42rem; }
+    #survey-full-modal .max-w-3xl { max-width: 48rem; }
+    #survey-full-modal .max-w-4xl { max-width: 56rem; }
+    #survey-full-modal .max-h-\[85vh\] { max-height: 85vh; }
+    #survey-full-modal .max-h-\[260px\] { max-height: 260px; }
+    #survey-full-modal .overflow-y-auto { overflow-y: auto; }
+    #survey-full-modal .overflow-x-hidden { overflow-x: hidden; }
+    #survey-full-modal .resize-none { resize: none; }
+
+    /* Margins & Paddings */
+    #survey-full-modal .m-0 { margin: 0; }
+    #survey-full-modal .mt-1 { margin-top: 0.25rem; }
+    #survey-full-modal .mt-1\.5 { margin-top: 0.375rem; }
+    #survey-full-modal .mt-2 { margin-top: 0.5rem; }
+    #survey-full-modal .mt-4 { margin-top: 1rem; }
+    #survey-full-modal .mt-6 { margin-top: 1.5rem; }
+    #survey-full-modal .mt-8 { margin-top: 2rem; }
+    #survey-full-modal .mb-2 { margin-bottom: 0.5rem; }
+    #survey-full-modal .mb-4 { margin-bottom: 1rem; }
+    #survey-full-modal .mb-6 { margin-bottom: 1.5rem; }
+    #survey-full-modal .pt-1 { padding-top: 0.25rem; }
+    #survey-full-modal .pt-2 { padding-top: 0.5rem; }
+    #survey-full-modal .pt-3 { padding-top: 0.75rem; }
+    #survey-full-modal .pt-4 { padding-top: 1rem; }
+    #survey-full-modal .pb-4 { padding-bottom: 1rem; }
+    #survey-full-modal .p-2 { padding: 0.5rem; }
+    #survey-full-modal .p-3 { padding: 0.75rem; }
+    #survey-full-modal .p-3\.5 { padding: 0.875rem; }
+    #survey-full-modal .p-4 { padding: 1rem; }
+    #survey-full-modal .p-5 { padding: 1.25rem; }
+    #survey-full-modal .p-6 { padding: 1.5rem; }
+    #survey-full-modal .px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+    #survey-full-modal .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+    #survey-full-modal .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+    #survey-full-modal .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    #survey-full-modal .px-3\.5 { padding-left: 0.875rem; padding-right: 0.875rem; }
+    #survey-full-modal .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    #survey-full-modal .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+    #survey-full-modal .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    #survey-full-modal .px-7 { padding-left: 1.75rem; padding-right: 1.75rem; }
+    #survey-full-modal .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+    #survey-full-modal .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    #survey-full-modal .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+    #survey-full-modal .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    #survey-full-modal .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+    #survey-full-modal .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    #survey-full-modal .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+    #survey-full-modal .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    #survey-full-modal .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    #survey-full-modal .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+
+    /* Border Radii */
+    #survey-full-modal .rounded-md { border-radius: 0.375rem; }
+    #survey-full-modal .rounded-lg { border-radius: 0.5rem; }
+    #survey-full-modal .rounded-xl { border-radius: 0.75rem; }
+    #survey-full-modal .rounded-2xl { border-radius: 1rem; }
+    #survey-full-modal .rounded-full { border-radius: 9999px; }
+
+    /* Borders */
+    #survey-full-modal .border { border-width: 1px; border-style: solid; }
+    #survey-full-modal .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+    #survey-full-modal .border-t { border-top-width: 1px; border-top-style: solid; }
+    #survey-full-modal .border-white\/10 { border-color: rgba(255, 255, 255, 0.1) !important; }
+    #survey-full-modal .border-white\/15 { border-color: rgba(255, 255, 255, 0.15) !important; }
+    #survey-full-modal .border-white\/20 { border-color: rgba(255, 255, 255, 0.2) !important; }
+    #survey-full-modal .border-brand-gold { border-color: #E5C07B !important; }
+    #survey-full-modal .border-brand-gold\/30 { border-color: rgba(229, 192, 123, 0.3) !important; }
+    #survey-full-modal .border-brand-gold\/40 { border-color: rgba(229, 192, 123, 0.4) !important; }
+    #survey-full-modal .border-brand-gold\/50 { border-color: rgba(229, 192, 123, 0.5) !important; }
+    #survey-full-modal .border-amber-400 { border-color: #fbbf24 !important; }
+    #survey-full-modal .border-amber-400\/25 { border-color: rgba(251, 191, 36, 0.25) !important; }
+    #survey-full-modal .border-amber-400\/30 { border-color: rgba(251, 191, 36, 0.30) !important; }
+    #survey-full-modal .border-amber-400\/35 { border-color: rgba(251, 191, 36, 0.35) !important; }
+    #survey-full-modal .border-amber-400\/40 { border-color: rgba(251, 191, 36, 0.40) !important; }
+    #survey-full-modal .border-blue-400\/25 { border-color: rgba(96, 165, 250, 0.25) !important; }
+    #survey-full-modal .border-blue-500\/40 { border-color: rgba(59, 130, 246, 0.4) !important; }
+    #survey-full-modal .border-purple-500\/40 { border-color: rgba(168, 85, 247, 0.4) !important; }
+    #survey-full-modal .border-emerald-500\/30 { border-color: rgba(16, 185, 129, 0.3) !important; }
+    #survey-full-modal .border-emerald-500\/40 { border-color: rgba(16, 185, 129, 0.4) !important; }
+
+    /* Backgrounds with high specificity !important */
+    #survey-full-modal .bg-\[\#06070A\] { background-color: #06070A !important; }
+    #survey-full-modal .bg-\[\#06070A\]\/95 { background-color: rgba(6, 7, 10, 0.95) !important; }
+    #survey-full-modal .bg-\[\#11141C\] { background-color: #11141C !important; }
+    #survey-full-modal .bg-\[\#181C26\] { background-color: #181C26 !important; }
+    #survey-full-modal .bg-\[\#12141A\] { background-color: #12141A !important; }
+    #survey-full-modal .bg-black\/85 { background-color: rgba(0, 0, 0, 0.85) !important; }
+    #survey-full-modal .bg-black\/60 { background-color: rgba(0, 0, 0, 0.6) !important; }
+    #survey-full-modal .bg-white { background-color: #ffffff !important; }
+    #survey-full-modal .bg-white\/5 { background-color: rgba(255, 255, 255, 0.05) !important; }
+    #survey-full-modal .bg-white\/10 { background-color: rgba(255, 255, 255, 0.1) !important; }
+    #survey-full-modal .bg-white\/15 { background-color: rgba(255, 255, 255, 0.15) !important; }
+    #survey-full-modal .bg-brand-gold { background-color: #E5C07B !important; }
+    #survey-full-modal .bg-brand-gold\/10 { background-color: rgba(229, 192, 123, 0.10) !important; }
+    #survey-full-modal .bg-brand-gold\/15 { background-color: rgba(229, 192, 123, 0.15) !important; }
+    #survey-full-modal .bg-brand-gold\/20 { background-color: rgba(229, 192, 123, 0.20) !important; }
+    #survey-full-modal .bg-amber-400 { background-color: #fbbf24 !important; }
+    #survey-full-modal .bg-amber-400\/10 { background-color: rgba(251, 191, 36, 0.10) !important; }
+    #survey-full-modal .bg-amber-400\/20 { background-color: rgba(251, 191, 36, 0.20) !important; }
+    #survey-full-modal .bg-blue-400 { background-color: #60a5fa !important; }
+    #survey-full-modal .bg-blue-500\/20 { background-color: rgba(59, 130, 246, 0.2) !important; }
+    #survey-full-modal .bg-purple-500\/20 { background-color: rgba(168, 85, 247, 0.2) !important; }
+    #survey-full-modal .bg-emerald-400 { background-color: #34d399 !important; }
+    #survey-full-modal .bg-emerald-500\/10 { background-color: rgba(16, 185, 129, 0.1) !important; }
+    #survey-full-modal .bg-emerald-500\/20 { background-color: rgba(16, 185, 129, 0.2) !important; }
+    #survey-full-modal .bg-neutral-800 { background-color: #262626 !important; }
+    #survey-full-modal .bg-gradient-to-r { background-image: linear-gradient(to right, #fbbf24, #E5C07B) !important; }
+    #survey-full-modal .from-amber-400 { --tw-gradient-from: #fbbf24; }
+    #survey-full-modal .to-brand-gold { --tw-gradient-to: #E5C07B; }
+    #survey-full-modal .bg-gradient-to-b { background-image: linear-gradient(to bottom, rgba(229, 192, 123, 0.15), transparent) !important; }
+
+    /* Text Colors with high specificity !important */
+    #survey-full-modal .text-black { color: #000000 !important; }
+    #survey-full-modal .text-white { color: #ffffff !important; }
+    #survey-full-modal .text-brand-gold { color: #E5C07B !important; }
+    #survey-full-modal .text-amber-300 { color: #fde047 !important; }
+    #survey-full-modal .text-amber-400 { color: #fbbf24 !important; }
+    #survey-full-modal .text-amber-200\/90 { color: rgba(253, 230, 138, 0.9) !important; }
+    #survey-full-modal .text-neutral-100 { color: #f5f5f5 !important; }
+    #survey-full-modal .text-neutral-200 { color: #e5e5e5 !important; }
+    #survey-full-modal .text-neutral-300 { color: #d4d4d4 !important; }
+    #survey-full-modal .text-neutral-400 { color: #a3a3a3 !important; }
+    #survey-full-modal .text-neutral-500 { color: #737373 !important; }
+    #survey-full-modal .text-blue-300 { color: #93c5fd !important; }
+    #survey-full-modal .text-purple-300 { color: #d8b4fe !important; }
+    #survey-full-modal .text-emerald-300 { color: #6ee7b7 !important; }
+    #survey-full-modal .text-emerald-400 { color: #34d399 !important; }
+    #survey-full-modal .text-red-400 { color: #f87171 !important; }
+    #survey-full-modal .text-transparent { color: transparent !important; }
+
+    /* Font Sizes & Typography */
+    #survey-full-modal .text-\[10px\] { font-size: 10px; }
+    #survey-full-modal .text-\[11px\] { font-size: 11px; }
+    #survey-full-modal .text-xs { font-size: 0.75rem; line-height: 1rem; }
+    #survey-full-modal .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+    #survey-full-modal .text-base { font-size: 1rem; line-height: 1.5rem; }
+    #survey-full-modal .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    #survey-full-modal .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+    #survey-full-modal .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    #survey-full-modal .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+    #survey-full-modal .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+    #survey-full-modal .text-center { text-align: center; }
+    #survey-full-modal .text-left { text-align: left; }
+    #survey-full-modal .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    #survey-full-modal .font-medium { font-weight: 500; }
+    #survey-full-modal .font-semibold { font-weight: 600; }
+    #survey-full-modal .font-bold { font-weight: 700; }
+    #survey-full-modal .font-extrabold { font-weight: 800; }
+    #survey-full-modal .leading-relaxed { line-height: 1.625; }
+    #survey-full-modal .tracking-wider { letter-spacing: 0.05em; }
+    #survey-full-modal .tracking-tight { letter-spacing: -0.025em; }
+    #survey-full-modal .select-none { user-select: none; }
+    #survey-full-modal .select-all { user-select: all; }
+    #survey-full-modal .underline { text-decoration: underline; }
+
+    /* Hover & Active States */
+    #survey-full-modal .hover\:bg-white\/5:hover { background-color: rgba(255, 255, 255, 0.05) !important; }
+    #survey-full-modal .hover\:bg-white\/10:hover { background-color: rgba(255, 255, 255, 0.1) !important; }
+    #survey-full-modal .hover\:bg-white\/15:hover { background-color: rgba(255, 255, 255, 0.15) !important; }
+    #survey-full-modal .hover\:bg-neutral-100:hover { background-color: #f5f5f5 !important; }
+    #survey-full-modal .hover\:bg-brand-gold-hover:hover { background-color: #F3D494 !important; }
+    #survey-full-modal .hover\:bg-brand-gold\/20:hover { background-color: rgba(229, 192, 123, 0.2) !important; }
+    #survey-full-modal .hover\:bg-\[\#181C26\]:hover { background-color: #181C26 !important; }
+    #survey-full-modal .hover\:bg-amber-400:hover { background-color: #fbbf24 !important; }
+    #survey-full-modal .hover\:bg-amber-300:hover { background-color: #fcd34d !important; }
+    #survey-full-modal .hover\:text-white:hover { color: #ffffff !important; }
+    #survey-full-modal .hover\:text-black:hover { color: #000000 !important; }
+    #survey-full-modal .hover\:text-brand-gold:hover { color: #E5C07B !important; }
+    #survey-full-modal .hover\:border-white\/20:hover { border-color: rgba(255, 255, 255, 0.2) !important; }
+    #survey-full-modal .hover\:border-white\/30:hover { border-color: rgba(255, 255, 255, 0.3) !important; }
+    #survey-full-modal .hover\:border-amber-400\/40:hover { border-color: rgba(251, 191, 36, 0.4) !important; }
+    #survey-full-modal .focus\:border-brand-gold:focus { border-color: #E5C07B !important; outline: none; }
+    #survey-full-modal .focus\:outline-none:focus { outline: none !important; }
+    #survey-full-modal .active\:scale-95:active { transform: scale(0.95); }
+    #survey-full-modal .active\:scale-\[0\.98\]:active { transform: scale(0.98); }
+    #survey-full-modal .disabled\:opacity-0:disabled { opacity: 0 !important; }
+    #survey-full-modal .disabled\:pointer-events-none:disabled { pointer-events: none !important; }
+
+    /* Shadows & Rings */
+    #survey-full-modal .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+    #survey-full-modal .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); }
+    #survey-full-modal .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
+    #survey-full-modal .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
+    #survey-full-modal .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+    #survey-full-modal .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+    #survey-full-modal .shadow-\[0_0_10px_\#E5C07B\] { box-shadow: 0 0 10px #E5C07B; }
+    #survey-full-modal .ring-1 { box-shadow: 0 0 0 1px var(--tw-ring-color, rgba(229, 192, 123, 0.5)) !important; }
+    #survey-full-modal .ring-brand-gold\/40 { --tw-ring-color: rgba(229, 192, 123, 0.4); }
+    #survey-full-modal .ring-brand-gold\/50 { --tw-ring-color: rgba(229, 192, 123, 0.5); }
+    #survey-full-modal .backdrop-blur-sm { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+    #survey-full-modal .backdrop-blur-md { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+    #survey-full-modal .transition { transition: all 0.15s ease-in-out; }
+    #survey-full-modal .transition-all { transition: all 0.2s ease-in-out; }
+    #survey-full-modal .duration-300 { transition-duration: 300ms; }
+
+    #survey-full-modal .survey-close-btn {
+        background: rgba(255,255,255,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.15) !important;
+        color: #fff !important;
         width: 38px;
         height: 38px;
         border-radius: 50%;
@@ -50980,11 +51533,26 @@
         justify-content: center;
         transition: all 0.2s;
     }
-    .survey-close-btn:hover {
-        background: rgba(239, 68, 68, 0.25);
-        border-color: rgba(239, 68, 68, 0.5);
-        color: #ef4444;
+    #survey-full-modal .survey-close-btn:hover {
+        background: rgba(239, 68, 68, 0.25) !important;
+        border-color: rgba(239, 68, 68, 0.5) !important;
+        color: #ef4444 !important;
         transform: scale(1.05);
+    }
+
+    @media (min-width: 640px) {
+        #survey-full-modal .sm\:w-auto { width: auto; }
+        #survey-full-modal .sm\:text-sm { font-size: 0.875rem; }
+        #survey-full-modal .sm\:text-base { font-size: 1rem; }
+        #survey-full-modal .sm\:text-3xl { font-size: 1.875rem; }
+        #survey-full-modal .sm\:text-4xl { font-size: 2.25rem; }
+        #survey-full-modal .sm\:flex-row { flex-direction: row; }
+        #survey-full-modal .sm\:items-center { align-items: center; }
+        #survey-full-modal .sm\:self-center { align-self: center; }
+    }
+    @media (min-width: 768px) {
+        #survey-full-modal .md\:text-lg { font-size: 1.125rem; }
+        #survey-full-modal .md\:py-12 { padding-top: 3rem; padding-bottom: 3rem; }
     }
     </style>
     
@@ -52695,6 +53263,7 @@
         case 'finish': {
           const res = window._lastSurveyResult || {};
           const isFirst = res.isFirst !== false;
+          const isReview = !!window._isSurveyReviewMode;
           const giftLottery = res.giftLottery || (isFirst ? 1000 : 100);
           
           let dcSectionHtml = '';
@@ -52773,15 +53342,45 @@
             `;
           }
 
+          const headerTitle = isReview ? '📋 問卷填寫回顧與專屬兌換碼' : '非常感謝您的寶貴回饋！';
+          const headerSub = isReview 
+            ? '以下為您已完成的意見回饋紀錄與專屬兌換碼。（回顧模式僅供檢視，不重複發放點數獎勵）'
+            : '您的回饋與建議已成功同步至開發團隊！獎勵已即時為您入帳生效：';
+          
+          const pointsCardHtml = isReview ? `
+            <div class="p-4 rounded-2xl bg-[#11141C] border border-blue-400/25 flex items-center gap-3">
+              <span class="text-2xl">🎲</span>
+              <div>
+                <div class="font-bold text-sm text-blue-300">歷史贈送開詞條點數</div>
+                <div class="text-xs text-neutral-400">（此為回顧檢視模式，非重新提交問卷，故不重複發放點數；目前持有點數為 <span class="text-brand-gold font-bold font-mono">${typeof g_sessionPoints !== 'undefined' ? g_sessionPoints : 0}</span> 點）。</div>
+              </div>
+            </div>
+          ` : `
+            <div class="p-4 rounded-2xl bg-[#11141C] border border-blue-400/25 flex items-center gap-3">
+              <span class="text-2xl">🎲</span>
+              <div>
+                <div class="font-bold text-sm text-blue-300">已贈送 ${giftLottery} 次聲骸開詞條次數！</div>
+                <div class="text-xs text-neutral-400">僅當次登入有效，目前挑戰點數已增加至 <span class="text-brand-gold font-bold font-mono">${typeof g_sessionPoints !== 'undefined' ? g_sessionPoints : giftLottery}</span> 點。</div>
+              </div>
+            </div>
+          `;
+
+          const reviewActionBtn = isReview ? `
+            <button type="button" onclick="openSurveyModal()"
+              class="w-full sm:w-auto py-3.5 px-5 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 font-bold text-sm border border-amber-400/40 transition flex items-center justify-center gap-2">
+              ✏️ 修改填寫 (修改送出贈 100 抽)
+            </button>
+          ` : '';
+
           html = `
             <div class="text-center py-4 space-y-6">
               <div class="w-16 h-16 rounded-2xl bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center text-4xl mx-auto text-brand-gold shadow-[0_0_20px_rgba(229,192,123,0.3)]">
-                🎉
+                ${isReview ? '📜' : '🎉'}
               </div>
               <div>
-                <h2 class="text-2xl sm:text-3xl font-semibold text-white">非常感謝您的寶貴回饋！</h2>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-white">${headerTitle}</h2>
                 <p class="text-sm text-neutral-300 max-w-lg mx-auto leading-relaxed mt-2">
-                  您的回饋與建議已成功同步至開發團隊！獎勵已即時為您入帳生效：
+                  ${headerSub}
                 </p>
               </div>
 
@@ -52795,14 +53394,7 @@
                   </div>
                 </div>
 
-                <div class="p-4 rounded-2xl bg-[#11141C] border border-blue-400/25 flex items-center gap-3">
-                  <span class="text-2xl">🎲</span>
-                  <div>
-                    <div class="font-bold text-sm text-blue-300">已贈送 ${giftLottery} 次聲骸開詞條次數！</div>
-                    <div class="text-xs text-neutral-400">僅當次登入有效，目前挑戰點數已增加至 <span class="text-brand-gold font-bold font-mono">${typeof g_sessionPoints !== 'undefined' ? g_sessionPoints : giftLottery}</span> 點。</div>
-                  </div>
-                </div>
-
+                ${pointsCardHtml}
                 ${dcSectionHtml}
                 ${unusedSectionHtml}
               </div>
@@ -52813,6 +53405,7 @@
                   class="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-400 to-brand-gold hover:from-amber-300 hover:to-brand-gold-hover text-black font-extrabold text-base transition flex items-center justify-center gap-2 shadow-xl shadow-brand-gold/20 transform hover:-translate-y-0.5">
                   <span>⚒</span> 前往聲骸模擬開詞條挑戰模式
                 </button>
+                ${reviewActionBtn}
                 <button type="button" onclick="survey_forceClose()"
                   class="w-full sm:w-auto py-3.5 px-5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-sm border border-white/10 transition flex items-center justify-center gap-2">
                   完成並返回
@@ -53718,10 +54311,11 @@
       try {
         if (window._surveyCompleted) return true;
         if (window._surveyIsEditMode) return true;
-        const uidKey = (typeof g_currentUserUid !== 'undefined' && g_currentUserUid) ? g_currentUserUid : 'default';
-        if (localStorage.getItem('ww_last_survey_result_' + uidKey)) return true;
+        const uidKey = (typeof g_currentUserUid !== 'undefined' && g_currentUserUid && g_currentUserUid !== 'OFFLINE_LOCAL') ? g_currentUserUid : '';
+        if (uidKey && localStorage.getItem('ww_last_survey_result_' + uidKey)) return true;
         if (localStorage.getItem('ww_last_survey_result')) return true;
-        if (localStorage.getItem('ww_survey_saved_code')) return true;
+        const savedCode = localStorage.getItem('ww_survey_saved_code');
+        if (savedCode && savedCode !== 'WEB-SRV-OFFLINE') return true;
       } catch (e) {}
       return false;
     }
@@ -53759,6 +54353,20 @@
     }
 
     function openSurveyReviewModal() {
+      if (!isSurveyCompleted()) {
+        const isEN = (typeof g_lang !== 'undefined' && g_lang === 'en');
+        const tip = isEN 
+          ? '⚠️ You have not completed the survey yet! Please fill the survey first to get your rewards.'
+          : '⚠️ 您尚未完成過問卷填寫！請先點擊「前往填寫」領取專屬獎勵！';
+        if (typeof showMsg === 'function') {
+          showMsg(tip, 4000);
+        } else {
+          alert(tip);
+        }
+        return;
+      }
+
+      window._isSurveyReviewMode = true; // 標記為純回顧模式（不給予重複填寫獎勵）
       const uidKey = (typeof g_currentUserUid !== 'undefined' && g_currentUserUid) ? g_currentUserUid : 'default';
       const savedRes = localStorage.getItem('ww_last_survey_result_' + uidKey) || localStorage.getItem('ww_last_survey_result');
       if (savedRes) {
@@ -53769,10 +54377,10 @@
       if (!window._lastSurveyResult) {
         window._lastSurveyResult = {
           result: 'success',
-          isFirst: !window._surveyIsEditMode,
-          code: localStorage.getItem('ww_survey_saved_code') || 'WEB-SRV-OFFLINE',
+          isFirst: false,
+          code: localStorage.getItem('ww_survey_saved_code') || '',
           dcBound: false,
-          giftLottery: 1000
+          giftLottery: 0
         };
       }
 
@@ -53794,6 +54402,7 @@
     }
 
     async function openSurveyModal() {
+      window._isSurveyReviewMode = false;
       if (!g_currentUserUid || g_currentUserUid === 'OFFLINE_LOCAL') {
         if (typeof showMsg === 'function') {
           showMsg(g_lang === 'en' ? '⚠️ Please enter UID or load player data first!' : '⚠️ 請先輸入有效 UID 或載入玩家資料後再填寫問卷！', 4000);
