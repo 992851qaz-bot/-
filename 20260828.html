@@ -12255,8 +12255,8 @@
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;">
             <button type="button" onclick="openSurveyModal()" style="padding:6px 14px;background:linear-gradient(135deg, #ffd700, #ff8c00);color:#000;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-size:0.85rem;box-shadow:0 2px 10px rgba(255,215,0,0.35);transition:all 0.2s;">立即填寫 →</button>
-            <button type="button" onclick="openSurveyResultSummary()" style="padding:6px 12px;background:rgba(255,255,255,0.08);border:1px solid rgba(229,192,123,0.45);color:var(--accent);font-weight:700;border-radius:8px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;white-space:nowrap;">📋 回顧填寫與查看兌換碼</button>
-            <button type="button" onclick="document.getElementById('survey-reminder-notice').style.display='none'" style="background:none;border:none;color:#888;cursor:pointer;font-size:1.1rem;padding:4px 6px;" title="暫時略過">✕</button>
+            <button type="button" id="btn-banner-survey-review" onclick="openSurveyReviewModal()" style="display:none;padding:6px 12px;background:rgba(255,255,255,0.08);border:1px solid rgba(229,192,123,0.45);color:var(--accent);font-weight:700;border-radius:8px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;white-space:nowrap;">📋 回顧填寫與查看兌換碼</button>
+            <button type="button" onclick="survey_handleCloseClick(true)" style="background:none;border:none;color:#888;cursor:pointer;font-size:1.1rem;padding:4px 6px;" title="暫時略過">✕</button>
         </div>
     </div>
     <header>
@@ -13456,8 +13456,8 @@
                         <div class="feature-card-action" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                             <button class="quick-btn" onclick="event.stopPropagation();closeAllModals();openSurveyModal()"
                                 style="background:linear-gradient(135deg, #ffd700, #ff8c00); color:#000; font-weight:800; box-shadow: 0 0 12px rgba(229,192,123,0.5);">前往填寫</button>
-                            <button type="button" class="quick-btn btn-survey-review" onclick="event.stopPropagation();closeAllModals();openSurveyReviewModal()"
-                                style="background:rgba(229,192,123,0.15); border:1px solid rgba(229,192,123,0.45); color:var(--accent); font-weight:700; white-space:nowrap; padding:6px 12px; border-radius:8px; font-size:0.8rem; cursor:pointer; transition:all 0.2s;" title="查看已獲得的專屬兌換碼、解鎖獎勵與填寫回顧">📋 回顧填寫與查看兌換碼</button>
+                            <button type="button" class="quick-btn btn-survey-review" id="btn-feature-survey-review" onclick="event.stopPropagation();closeAllModals();openSurveyReviewModal()"
+                                style="display:none;background:rgba(229,192,123,0.15); border:1px solid rgba(229,192,123,0.45); color:var(--accent); font-weight:700; white-space:nowrap; padding:6px 12px; border-radius:8px; font-size:0.8rem; cursor:pointer; transition:all 0.2s;" title="查看已獲得的專屬兌換碼、解鎖獎勵與填寫回顧">📋 回顧填寫與查看兌換碼</button>
                         </div>
                     </div>
                     <div class="feature-card" onclick="closeAllModals();openPointsModal()"
@@ -23886,28 +23886,33 @@
                 renderEchoLibrary();
             }
             if (typeof updateVipUiStatus === 'function') updateVipUiStatus();
+            if (typeof updateSurveyBannerDisplay === 'function') updateSurveyBannerDisplay();
         }
 
         /* ══════════════════════════════════════════════════════════════
-           歷史紀錄刪除授權驗證與安全快取系統 (ww_db_auth_session)
+           歷史紀錄刪除授權驗證系統 (記憶體暫存 5 分鐘，重整或超時自動重置)
         ══════════════════════════════════════════════════════════════ */
         let g_delAuthPendingItem = null;
         let g_isHistoryDeleting = false;
         let g_deletingHistoryIds = new Set();
+        let g_dbAuthSession = null; // 僅於記憶體暫存，重整網站自動重置
+
+        // 啟動時徹底清理舊版 localStorage 3 天殘留紀錄
+        try { localStorage.removeItem('ww_db_auth_session'); } catch (e) {}
 
         function getStoredAuthSession(targetUid) {
             try {
-                const raw = localStorage.getItem('ww_db_auth_session');
-                if (!raw) return null;
-                const session = JSON.parse(raw);
-                if (!session || !session.authCode) return null;
-                if (session.expiresAt && Date.now() > session.expiresAt) {
-                    localStorage.removeItem('ww_db_auth_session');
+                // 確保舊版 3 天 localStorage 快取已被清除
+                try { localStorage.removeItem('ww_db_auth_session'); } catch (e) {}
+                if (!g_dbAuthSession || !g_dbAuthSession.authCode) return null;
+                // 超過 5 分鐘自動過期失效重置
+                if (g_dbAuthSession.expiresAt && Date.now() > g_dbAuthSession.expiresAt) {
+                    g_dbAuthSession = null;
                     return null;
                 }
-                if (session.permission === 'ALL') return session;
-                if (!session.applicantUid || session.applicantUid === '*' || String(session.applicantUid) === String(targetUid)) {
-                    return session;
+                if (g_dbAuthSession.permission === 'ALL') return g_dbAuthSession;
+                if (!g_dbAuthSession.applicantUid || g_dbAuthSession.applicantUid === '*' || String(g_dbAuthSession.applicantUid) === String(targetUid)) {
+                    return g_dbAuthSession;
                 }
                 return null;
             } catch (e) {
@@ -23932,9 +23937,11 @@
             }
             const session = getStoredAuthSession(targetUid);
             if (session && session.authCode) {
+                const remainingSec = Math.max(1, Math.round((session.expiresAt - Date.now()) / 1000));
+                const remainingMin = Math.ceil(remainingSec / 60);
                 const confirmMsg = isEN
-                    ? `Delete record for UID [${targetUid}] (${targetRole || 'Echo'})?\n(Valid authorization cached until expiry, no need to re-enter code)`
-                    : `確定要刪除 UID【${targetUid}】的【${targetRole || '聲骸紀錄'}】嗎？\n（已沿用有效授權，無須重新輸入授權碼）`;
+                    ? `Delete record for UID [${targetUid}] (${targetRole || 'Echo'})?\n(Valid authorization cached for ~${remainingMin}m, no need to re-enter code)`
+                    : `確定要刪除 UID【${targetUid}】的【${targetRole || '聲骸紀錄'}】嗎？\n（已沿用5分鐘內有效授權，約剩餘 ${remainingMin} 分鐘，無須重新輸入授權碼）`;
                 showConfirm(confirmMsg, () => {
                     executeHistoryItemDeletion(id, targetUid, session.authCode);
                 });
@@ -24084,13 +24091,15 @@
                         if (inp) inp.disabled = false;
                         return;
                     }
-                    const expireTime = data.expiresAt ? new Date(data.expiresAt).getTime() : (Date.now() + 86400000 * 3);
-                    localStorage.setItem('ww_db_auth_session', JSON.stringify({
+                    // 授權通過：僅於記憶體暫存 5 分鐘，重整或超過 5 分鐘自動重置
+                    const expireTime = Date.now() + 5 * 60 * 1000;
+                    g_dbAuthSession = {
                         authCode: authCode,
                         applicantUid: data.applicantUid || '*',
                         permission: data.permission,
                         expiresAt: expireTime
-                    }));
+                    };
+                    try { localStorage.removeItem('ww_db_auth_session'); } catch (e) {}
                     closeDeleteAuthModal();
                     executeHistoryItemDeletion(targetId, targetUid, authCode);
                 } else {
@@ -51581,12 +51590,14 @@
           }
 
           // 3. 更新提示與導航按鈕標籤
+          window._surveyCompleted = true;
           const noticeEl = document.getElementById('survey-reminder-notice');
           if (noticeEl) noticeEl.style.display = 'none';
           const qsSurveyText = document.getElementById('qs-survey-text');
           if (qsSurveyText) qsSurveyText.innerText = '調研問卷 (修改填寫)';
           const qsSurveyBadge = document.getElementById('qs-survey-badge');
           if (qsSurveyBadge) qsSurveyBadge.style.animation = 'none';
+          if (typeof updateSurveyReviewButtonsVisibility === 'function') updateSurveyReviewButtonsVisibility();
 
           showToast('✅ 問卷回饋已成功寫入雲端並為您解鎖當次獎勵！');
         } else {
@@ -51595,8 +51606,10 @@
       } catch (err) {
         console.error('Survey submission error:', err);
         showToast('⚠️ 雲端提交處理中，已為您記錄並解鎖當次權益！');
+        window._surveyCompleted = true;
         window.g_sessionVip = true;
         if (typeof updateVipUiStatus === 'function') updateVipUiStatus();
+        if (typeof updateSurveyReviewButtonsVisibility === 'function') updateSurveyReviewButtonsVisibility();
         const fallbackPulls = window._surveyIsEditMode ? 100 : 1000;
         if (typeof g_sessionPoints !== 'undefined') {
           g_sessionPoints += fallbackPulls;
@@ -53442,16 +53455,21 @@
     
     // ── 問卷主控制器與彈窗互動函式 ──
 
-    function survey_handleCloseClick() {
-      const steps = getSteps();
-      const current = steps[currentStepIndex];
-      if (current && current.type === 'finish') {
-        survey_forceClose();
-        return;
+    function survey_handleCloseClick(fromBanner) {
+      window._surveyExitFromBanner = !!fromBanner;
+      const steps = (typeof getSteps === 'function') ? getSteps() : [];
+      if (!fromBanner && steps.length > 0 && typeof currentStepIndex !== 'undefined') {
+        const current = steps[currentStepIndex];
+        if (current && current.type === 'finish') {
+          survey_forceClose();
+          return;
+        }
       }
 
-      const remQuestions = Math.max(1, steps.length - 1 - currentStepIndex);
-      const estMinutes = Math.max(1, Math.ceil(remQuestions * 0.5));
+      const curIdx = (fromBanner || typeof currentStepIndex === 'undefined') ? 0 : currentStepIndex;
+      const totalSteps = steps.length || 10;
+      const remQuestions = Math.max(1, totalSteps - 1 - curIdx);
+      const estMinutes = Math.max(1, Math.ceil(remQuestions * 0.2));
 
       const remEl = document.getElementById('survey-exit-rem-count');
       const estEl = document.getElementById('survey-exit-est-min');
@@ -53465,6 +53483,12 @@
     function survey_dismissExitModal() {
       const modal = document.getElementById('survey-exit-confirm-modal');
       if (modal) modal.style.display = 'none';
+      if (window._surveyExitFromBanner) {
+        window._surveyExitFromBanner = false;
+        if (typeof openSurveyModal === 'function') {
+          openSurveyModal();
+        }
+      }
     }
 
     function survey_forceClose() {
@@ -53472,6 +53496,11 @@
       if (exitModal) exitModal.style.display = 'none';
       const mainModal = document.getElementById('survey-full-modal');
       if (mainModal) mainModal.style.display = 'none';
+      if (window._surveyExitFromBanner) {
+        const noticeEl = document.getElementById('survey-reminder-notice');
+        if (noticeEl) noticeEl.style.display = 'none';
+        window._surveyExitFromBanner = false;
+      }
       document.body.style.overflow = '';
     }
 
@@ -53685,6 +53714,50 @@
       }
     }
 
+    function isSurveyCompleted() {
+      try {
+        if (window._surveyCompleted) return true;
+        if (window._surveyIsEditMode) return true;
+        const uidKey = (typeof g_currentUserUid !== 'undefined' && g_currentUserUid) ? g_currentUserUid : 'default';
+        if (localStorage.getItem('ww_last_survey_result_' + uidKey)) return true;
+        if (localStorage.getItem('ww_last_survey_result')) return true;
+        if (localStorage.getItem('ww_survey_saved_code')) return true;
+      } catch (e) {}
+      return false;
+    }
+
+    function updateSurveyReviewButtonsVisibility() {
+      const isDone = isSurveyCompleted();
+      const btnBanner = document.getElementById('btn-banner-survey-review');
+      const btnFeature = document.getElementById('btn-feature-survey-review');
+      if (btnBanner) {
+        btnBanner.style.display = isDone ? 'inline-block' : 'none';
+      }
+      if (btnFeature) {
+        btnFeature.style.display = isDone ? 'inline-block' : 'none';
+      }
+    }
+
+    function shouldShowSurveyBanner() {
+      if (isSurveyCompleted()) return false;
+      const hasUid = (typeof g_currentUserUid !== 'undefined' && g_currentUserUid && g_currentUserUid !== 'OFFLINE_LOCAL' && String(g_currentUserUid).length >= 8);
+      const hasRoles = (typeof getUploadedRolesCount === 'function' && getUploadedRolesCount() > 0);
+      const hasEchoes = (typeof g_echoesData !== 'undefined' && Array.isArray(g_echoesData) && g_echoesData.length > 0);
+      const hasHistory = (typeof g_historyList !== 'undefined' && Array.isArray(g_historyList) && g_historyList.length > 0);
+      return !!(hasUid || hasRoles || hasEchoes || hasHistory);
+    }
+
+    function updateSurveyBannerDisplay() {
+      const noticeEl = document.getElementById('survey-reminder-notice');
+      if (!noticeEl) return;
+      if (shouldShowSurveyBanner()) {
+        noticeEl.style.display = 'flex';
+      } else {
+        noticeEl.style.display = 'none';
+      }
+      updateSurveyReviewButtonsVisibility();
+    }
+
     function openSurveyReviewModal() {
       const uidKey = (typeof g_currentUserUid !== 'undefined' && g_currentUserUid) ? g_currentUserUid : 'default';
       const savedRes = localStorage.getItem('ww_last_survey_result_' + uidKey) || localStorage.getItem('ww_last_survey_result');
@@ -53763,7 +53836,10 @@
     }
 
     async function checkSurveyStatusAndNotify() {
-      if (!g_currentUserUid || g_currentUserUid === 'OFFLINE_LOCAL' || g_currentUserUid.length !== 9) return;
+      if (!g_currentUserUid || g_currentUserUid === 'OFFLINE_LOCAL' || g_currentUserUid.length !== 9) {
+        updateSurveyBannerDisplay();
+        return;
+      }
       try {
         const gasUrl = (typeof DEFAULT_GAS_URL !== 'undefined') ? DEFAULT_GAS_URL : 'https://script.google.com/macros/s/AKfycbzQfn6YjiTrIJI7D8SKyauQgTWwGa9_F6_3dx0qNIW6_dzCcJpPdXpN5ywZEWhnOfI8/exec?token=WW_ZH_DATABASE_SECURE_TOKEN_2026';
         const url = gasUrl + '&action=getSurveyStatus&uid=' + encodeURIComponent(g_currentUserUid);
@@ -53775,6 +53851,7 @@
           const qsSurveyBadge = document.getElementById('qs-survey-badge');
 
           if (res.filled) {
+            window._surveyCompleted = true;
             window._surveyIsEditMode = true;
             window._surveyPreviousAnswers = res.answers || null;
             if (res.code) {
@@ -53789,6 +53866,7 @@
               qsSurveyBtn.style.background = 'rgba(255,255,255,0.06)';
             }
           } else {
+            window._surveyCompleted = false;
             window._surveyIsEditMode = false;
             window._surveyPreviousAnswers = null;
             if (noticeEl) noticeEl.style.display = 'flex';
@@ -53799,12 +53877,18 @@
               qsSurveyBtn.style.background = 'linear-gradient(90deg, rgba(229,192,123,0.25), rgba(229,192,123,0.1))';
             }
           }
+          updateSurveyReviewButtonsVisibility();
         }
       } catch (e) {
         console.warn('checkSurveyStatusAndNotify error:', e);
+        updateSurveyBannerDisplay();
       }
     }
 
+    window.isSurveyCompleted = isSurveyCompleted;
+    window.updateSurveyReviewButtonsVisibility = updateSurveyReviewButtonsVisibility;
+    window.shouldShowSurveyBanner = shouldShowSurveyBanner;
+    window.updateSurveyBannerDisplay = updateSurveyBannerDisplay;
     window.openSurveyModal = openSurveyModal;
     window.checkSurveyStatusAndNotify = checkSurveyStatusAndNotify;
     window.survey_handleCloseClick = survey_handleCloseClick;
@@ -53818,6 +53902,14 @@
     window.showNavigationStepGuide = showNavigationStepGuide;
     window.dismissNavigationStepGuide = dismissNavigationStepGuide;
     window.openSurveyReviewModal = openSurveyReviewModal;
+    window.openSurveyResultSummary = openSurveyReviewModal;
+
+    setTimeout(() => {
+      try {
+        updateSurveyBannerDisplay();
+        updateSurveyReviewButtonsVisibility();
+      } catch (e) {}
+    }, 400);
 
     </script>
 </body>
