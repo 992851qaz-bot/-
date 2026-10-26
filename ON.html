@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>鳴潮聲骸直播串流與即時辨識 HUD · 官方網頁版 (GAMEZH)</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        :root {
+            --bg-base: #050811;
+            --bg-surface: rgba(11, 18, 34, 0.92);
+            --bg-card: rgba(18, 29, 54, 0.75);
+            --border-subtle: rgba(56, 189, 248, 0.25);
+            --border-glow: rgba(56, 189, 248, 0.6);
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.4);
+            --accent-gold: #f59e0b;
+            --accent-purple: #c084fc;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --font-mono: "Rajdhani", "SF Mono", Monaco, Consolas, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.08) 0%, transparent 45%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .broadcast-bar {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .broadcast-brand { display: flex; align-items: center; gap: 10px; }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-red); }
+
+        .live-streaming .live-indicator {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .live-streaming .live-dot {
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse-live 1.2s infinite;
+        }
+
+        @keyframes pulse-live {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.7; }
+        }
+
+        .brand-title { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+
+        .stream-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+        .interval-setting {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .interval-input {
+            width: 55px;
+            background: #070e1c;
+            border: 1px solid var(--border-glow);
+            color: var(--primary);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 800;
+            padding: 3px 6px;
+            border-radius: 4px;
+            text-align: center;
+            outline: none;
+        }
+
+        .btn {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover, .btn:active {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 14px var(--primary-glow);
+        }
+
+        .btn-live-start {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-scan-loop {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .btn-scan-loop.scanning {
+            background: var(--accent-green);
+            color: #000;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+        }
+
+        .btn-pip {
+            background: rgba(192, 132, 252, 0.15);
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .studio-grid {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 900px) {
+            .studio-grid { grid-template-columns: 1fr 380px; }
+        }
+
+        .monitor-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .monitor-screen {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #020409;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #stream-video { width: 100%; height: 100%; object-fit: fill; display: none; }
+
+        .screen-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .screen-placeholder-icon { font-size: 40px; opacity: 0.6; margin-bottom: 4px; }
+
+        .scan-overlay-box {
+            position: absolute;
+            left: 70%;
+            top: 11%;
+            width: 28%;
+            height: 46%;
+            border: 2px dashed rgba(56, 189, 248, 0.85);
+            border-radius: 6px;
+            pointer-events: none;
+            display: none;
+            box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .scan-overlay-label {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            background: var(--primary);
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        .laser-beam {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 8px var(--primary);
+            display: none;
+            animation: laser-sweep 1.2s infinite ease-in-out;
+        }
+
+        @keyframes laser-sweep {
+            0% { top: 0%; opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0.2; }
+        }
+
+        .monitor-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-dim);
+            font-family: var(--font-mono);
+            padding: 2px 4px;
+        }
+
+        .meta-stat { color: var(--primary); font-weight: 800; }
+
+        .bottom-console-grid {
+            display: grid;
+            grid-template-columns: 1fr 180px;
+            gap: 10px;
+        }
+
+        .terminal-box {
+            background: #02050e;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.5;
+            color: #94a3b8;
+        }
+
+        .preview-box {
+            background: #02050e;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-box span {
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            font-size: 9px;
+            font-weight: 800;
+            color: #000;
+            background: var(--primary);
+            padding: 1px 4px;
+            border-radius: 3px;
+            z-index: 2;
+        }
+
+        #crop-canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .log-entry { margin-bottom: 2px; }
+        .log-time { color: var(--text-dim); }
+        .log-success { color: #34d399; }
+        .log-warn { color: #fbbf24; }
+        .log-info { color: #38bdf8; }
+
+        .hud-wrapper { width: 100%; }
+
+        .hud-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 14px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .hud-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .role-picker {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 5px 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .role-picker select {
+            background: #0b1426;
+            color: #fff;
+            border: 1px solid var(--border-glow);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 800;
+            outline: none;
+            flex: 1;
+        }
+
+        .echo-info-card {
+            background: rgba(15, 23, 42, 0.85);
+            border-left: 4px solid var(--primary);
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+        }
+
+        .echo-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .echo-name { font-size: 14px; font-weight: 800; color: #fff; }
+
+        .cost-pill {
+            font-size: 10px;
+            font-weight: 900;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .cost-4 { color: #f59e0b; border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
+        .cost-3 { color: #c084fc; border-color: #c084fc; background: rgba(192, 132, 252, 0.15); }
+        .cost-1 { color: #38bdf8; border-color: #38bdf8; background: rgba(56, 189, 248, 0.15); }
+
+        .echo-main-stat {
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .grade-dash {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+        }
+
+        .grade-badge {
+            font-size: 13px;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-sss { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
+        .badge-s { background: linear-gradient(135deg, #a855f7, #c084fc); color: #fff; box-shadow: 0 0 12px rgba(192, 132, 252, 0.5); }
+        .badge-a { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; }
+        .badge-b { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .badge-c { background: #475569; color: #cbd5e1; }
+
+        .score-info { text-align: right; }
+        .score-main { font-size: 15px; font-weight: 900; color: #fbbf24; font-family: var(--font-mono); }
+        .score-sub { font-size: 10px; color: var(--text-dim); }
+
+        .advice-banner {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #34d399;
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .advice-warn {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #f87171;
+        }
+
+        .subs-stack { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+
+        .sub-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+        }
+
+        .sub-name { color: #cbd5e1; font-weight: 600; }
+        .sub-val { color: var(--primary); font-weight: 800; font-family: var(--font-mono); font-size: 12px; }
+        .sub-rv { font-size: 9px; padding: 1px 4px; border-radius: 3px; background: rgba(0,0,0,0.5); color: var(--text-dim); font-weight: 700; }
+
+        #full-canvas { display: none; }
+    </style>
+</head>
+<body id="body-root">
+
+    <header class="broadcast-bar">
+        <div class="broadcast-brand">
+            <div class="live-indicator" id="live-indicator">
+                <span class="live-dot"></span>
+                <span id="live-status-text">串流離線 (OFFLINE)</span>
+            </div>
+            <div class="brand-title">鳴潮實時直播畫面分析系統</div>
+        </div>
+
+        <div class="stream-controls">
+            <div class="interval-setting">
+                <span>⏱️ 分析間隔:</span>
+                <input type="number" id="scan-interval" class="interval-input" value="1.5" min="0.5" max="10.0" step="0.1">
+                <span>秒</span>
+            </div>
+
+            <button class="btn btn-live-start" id="btn-start-stream">
+                <span>📡 開啟遊戲直播畫面</span>
+            </button>
+
+            <button class="btn btn-scan-loop" id="btn-toggle-scan">
+                <span id="scan-btn-icon">▶</span>
+                <span id="scan-btn-text">啟動自動循環辨識 (1.5s)</span>
+            </button>
+
+            <button class="btn btn-pip" id="btn-open-pip">
+                <span>📱 畫中畫懸浮 (PiP)</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="studio-grid">
+        <div class="monitor-card">
+            <div class="monitor-screen" id="monitor-screen">
+                <video id="stream-video" autoplay playsinline muted></video>
+                <div class="screen-placeholder" id="placeholder">
+                    <div class="screen-placeholder-icon">🖥️</div>
+                    <div style="font-weight: 800; color: #cbd5e1; font-size: 14px;">尚未選取鳴潮遊戲畫面</div>
+                    <div style="font-size: 12px; max-width: 380px; line-height: 1.5;">
+                        點擊上方 <b>「📡 開啟遊戲直播畫面」</b>，直接選取「鳴潮遊戲視窗」，系統會精準鎖定右上角主副詞條區塊並放大 3.0 倍進行 OCR 辨識。
+                    </div>
+                </div>
+                <div class="scan-overlay-box" id="scan-box">
+                    <span class="scan-overlay-label">AI 詞條掃描鎖定區</span>
+                    <div class="laser-beam" id="laser-beam"></div>
+                </div>
+            </div>
+
+            <div class="monitor-meta">
+                <div>解析度: <span class="meta-stat" id="meta-res">-- x --</span></div>
+                <div>串流幀率: <span class="meta-stat" id="meta-fps">0 FPS</span></div>
+                <div>平均分析延遲: <span class="meta-stat" id="meta-latency">-- ms</span></div>
+                <div>累計掃描次數: <span class="meta-stat" id="meta-count">0 次</span></div>
+            </div>
+
+            <div style="font-size: 11px; font-weight: 800; color: var(--primary); display: flex; justify-content: space-between;">
+                <span>✦ 實時分析終端日誌 & OCR 影像預覽：</span>
+                <span style="color: var(--text-dim); cursor: pointer;" onclick="clearLogs()">清空紀錄</span>
+            </div>
+            <div class="bottom-console-grid">
+                <div class="terminal-box" id="terminal-box">
+                    <div class="log-entry log-info">[系統啟動] 已將掃描區縮小對準右上角詞條區，並加入 3.0 倍放大、灰階反相與第五詞條補抓。</div>
+                </div>
+                <div class="preview-box">
+                    <span>OCR 預覽</span>
+                    <canvas id="crop-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="hud-wrapper" id="hud-wrapper">
+            <div class="hud-card" id="hud-card">
+                <div class="hud-head">
+                    <span style="font-size: 13px; font-weight: 800; color: var(--primary);">⚡ 聲骸即時評分 (HUD)</span>
+                    <span id="hud-scan-badge" style="font-size: 10px; font-weight: 800; color: var(--accent-green); background: rgba(16, 185, 129, 0.15); padding: 1px 6px; border-radius: 4px;">待命中</span>
+                </div>
+
+                <div class="role-picker">
+                    <span style="font-size: 11px; color: var(--text-dim); font-weight: 800;">當前角色:</span>
+                    <select id="role-select">
+                        <option value="今汐" selected>今汐 (技能/雙暴)</option>
+                        <option value="長離">長離 (技能/雙暴)</option>
+                        <option value="椿">椿 (普攻/雙暴)</option>
+                        <option value="忌炎">忌炎 (重擊/雙暴)</option>
+                        <option value="相里要">相里要 (解放/雙暴)</option>
+                        <option value="守岸人">守岸人 (共鳴效率)</option>
+                        <option value="維里奈">維里奈 (攻擊/效率)</option>
+                        <option value="散華">散華 (普攻/雙暴)</option>
+                        <option value="珂萊塔">珂萊塔 (技能/雙暴)</option>
+                        <option value="安可">安可 (普攻/雙暴)</option>
+                        <option value="暗主">暗主 (大招/雙暴)</option>
+                        <option value="光主">光主 (技能/雙暴)</option>
+                        <option value="秧秧">秧秧 (重擊/效率)</option>
+                    </select>
+                </div>
+
+                <div class="echo-info-card">
+                    <div class="echo-top-row">
+                        <span class="echo-name" id="echo-name-txt">--</span>
+                        <span class="cost-pill cost-4" id="echo-cost-pill">COST --</span>
+                    </div>
+                    <div class="echo-main-stat" id="echo-main-txt">
+                        <span>主屬性: 等待掃描辨識中</span>
+                    </div>
+                </div>
+
+                <div class="grade-dash">
+                    <span class="grade-badge badge-c" id="grade-badge">-- 等待掃描</span>
+                    <div class="score-info">
+                        <div class="score-main" id="score-main-txt">0.0 / 100.0 (0%)</div>
+                        <div class="score-sub" id="rv-info-txt">總 RV: 0% | 雙暴 0 條</div>
+                    </div>
+                </div>
+
+                <div class="advice-banner" id="advice-banner">
+                    💡 請開啟遊戲畫面串流並切換至鳴潮「聲骸詳細屬性」右側面板。
+                </div>
+
+                <div class="subs-stack" id="subs-stack">
+                    <div class="sub-row"><span class="sub-name">✦ 第 1 孔</span><span class="sub-val">--</span></div>
+                    <div class="sub-row"><span class="sub-name">✦ 第 2 孔</span><span class="sub-val">--</span></div>
+                    <div class="sub-row"><span class="sub-name">✦ 第 3 孔</span><span class="sub-val">--</span></div>
+                    <div class="sub-row"><span class="sub-name">✦ 第 4 孔</span><span class="sub-val">--</span></div>
+                    <div class="sub-row"><span class="sub-name">✦ 第 5 孔</span><span class="sub-val">--</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="full-canvas"></canvas>
+
+    <script>
+        const SUBSTAT_DATA = {
+            "Crit_Rate": { name: "暴擊", max: 10.5, unit: "%" },
+            "Crit_Damage": { name: "暴擊傷害", max: 21.0, unit: "%" },
+            "Attack": { name: "攻擊百分比", max: 11.6, unit: "%" },
+            "Attack_Flat": { name: "固定攻擊", max: 60.0, unit: "" },
+            "ER": { name: "共鳴效率", max: 12.4, unit: "%" },
+            "Skill_Damage": { name: "共鳴技能傷害加成", max: 11.6, unit: "%" },
+            "Ult_Damage": { name: "共鳴解放傷害加成", max: 11.6, unit: "%" },
+            "Basic_Attack_Damage": { name: "普攻傷害加成", max: 11.6, unit: "%" },
+            "Heavy_Attack_Damage": { name: "重擊傷害加成", max: 11.6, unit: "%" },
+            "HP": { name: "生命百分比", max: 11.6, unit: "%" },
+            "HP_Flat": { name: "固定生命", max: 580.0, unit: "" },
+            "Defence": { name: "防禦百分比", max: 14.7, unit: "%" },
+            "Defence_Flat": { name: "固定防禦", max: 70.0, unit: "" }
+        };
+
+        const CHAR_PRESETS = {
+            "今汐": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "ER": 0.62, "Skill_Damage": 0.835, "Ult_Damage": 0.23 } },
+            "長離": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "ER": 0.62, "Skill_Damage": 0.684, "Ult_Damage": 0.313 } },
+            "椿": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Basic_Attack_Damage": 0.95, "ER": 0.45 } },
+            "忌炎": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Heavy_Attack_Damage": 0.788, "ER": 0.62 } },
+            "相里要": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Ult_Damage": 0.85, "Skill_Damage": 0.35 } },
+            "守岸人": { weights: { "ER": 1.6, "HP": 1.2, "HP_Flat": 0.2, "Crit_Damage": 0.4, "Ult_Damage": 0.5 } },
+            "維里奈": { weights: { "Attack": 1.2, "Attack_Flat": 0.3, "ER": 1.3 } },
+            "散華": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Basic_Attack_Damage": 0.40, "ER": 0.70 } },
+            "珂萊塔": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Skill_Damage": 0.75, "ER": 0.55 } },
+            "安可": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Basic_Attack_Damage": 0.684, "ER": 0.62 } },
+            "暗主": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Ult_Damage": 0.348, "Skill_Damage": 0.290 } },
+            "光主": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Skill_Damage": 0.65, "ER": 0.60 } },
+            "秧秧": { weights: { "Crit_Rate": 1.8, "Crit_Damage": 0.9, "Attack": 1.0, "Attack_Flat": 0.1, "ER": 0.5, "Heavy_Attack_Damage": 1.03 } }
+        };
+
+        let mediaStream = null;
+        let isScanning = false;
+        let isBusyOCR = false;
+        let scanTimer = null;
+        let scanCount = 0;
+        let lastFrameHash = 0;
+        let lastRecognizedEcho = null;
+        let ocrWorker = null;
+        let ocrReady = false;
+
+        const videoEl = document.getElementById("stream-video");
+        const placeholderEl = document.getElementById("placeholder");
+        const scanBoxEl = document.getElementById("scan-box");
+        const laserBeamEl = document.getElementById("laser-beam");
+        const btnStartStream = document.getElementById("btn-start-stream");
+        const btnToggleScan = document.getElementById("btn-toggle-scan");
+        const scanIntervalInput = document.getElementById("scan-interval");
+        const terminalBox = document.getElementById("terminal-box");
+
+        // ===== v3.1 FIX: HUD 節點採「固定引用」而不是每次從主 document 重抓 =====
+        // Document Picture-in-Picture 會把 hud-card 搬到另一個 document。
+        // DOM 節點被搬走後，主頁 document.getElementById(...) 會得到 null，
+        // 但事先保存的節點引用仍然有效，因此 PiP 開啟後也能持續更新 HUD。
+        const hudCardEl = document.getElementById("hud-card");
+        const hudWrapperEl = document.getElementById("hud-wrapper");
+        const roleSelectEl = hudCardEl.querySelector("#role-select");
+        const hudScanBadgeEl = hudCardEl.querySelector("#hud-scan-badge");
+        const echoNameEl = hudCardEl.querySelector("#echo-name-txt");
+        const echoCostPillEl = hudCardEl.querySelector("#echo-cost-pill");
+        const echoMainEl = hudCardEl.querySelector("#echo-main-txt");
+        const gradeBadgeEl = hudCardEl.querySelector("#grade-badge");
+        const scoreMainEl = hudCardEl.querySelector("#score-main-txt");
+        const rvInfoEl = hudCardEl.querySelector("#rv-info-txt");
+        const adviceBannerEl = hudCardEl.querySelector("#advice-banner");
+        const subsStackEl = hudCardEl.querySelector("#subs-stack");
+
+        let pipWindowRef = null;
+        let lastAcceptedFrameHash = null;
+        let lastOcrWasComplete = false;
+
+        async function initOCR() {
+            try {
+                if (window.Tesseract) {
+                    addLog("正在啟動 Tesseract.js 繁體中文 OCR 模型...", "log-info");
+                    ocrWorker = await Tesseract.createWorker("chi_tra+eng", 1, {
+                        logger: m => {}
+                    });
+                    await ocrWorker.setParameters({
+                        tessedit_pageseg_mode: '6'
+                    });
+                    ocrReady = true;
+                    addLog("✅ OCR 核心載入完成！支援高解析度灰階反相識別。", "log-success");
+                }
+            } catch (err) {
+                addLog("❌ OCR 核心載入失敗: " + err.message, "log-warn");
+            }
+        }
+        initOCR();
+
+        function addLog(msg, type = "") {
+            const timeStr = new Date().toTimeString().split(" ")[0];
+            const div = document.createElement("div");
+            div.className = `log-entry ${type}`;
+            div.innerHTML = `<span class="log-time">[${timeStr}]</span> ${msg}`;
+            terminalBox.appendChild(div);
+            terminalBox.scrollTop = terminalBox.scrollHeight;
+        }
+
+        function clearLogs() {
+            terminalBox.innerHTML = "";
+            addLog("日誌已清空。", "log-info");
+        }
+
+        btnStartStream.addEventListener("click", async () => {
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+                lastAcceptedFrameHash = null;
+                lastOcrWasComplete = false;
+                lastRecognizedEcho = null;
+                videoEl.style.display = "none";
+                placeholderEl.style.display = "flex";
+                scanBoxEl.style.display = "none";
+                document.getElementById("body-root").classList.remove("live-streaming");
+                document.getElementById("live-status-text").textContent = "串流離線 (OFFLINE)";
+                btnStartStream.innerHTML = "<span>📡 開啟遊戲直播畫面</span>";
+                stopScanLoop();
+                addLog("直播畫面串流已關閉。", "log-warn");
+                return;
+            }
+
+            try {
+                mediaStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { cursor: "never", frameRate: { ideal: 60, max: 60 } },
+                    audio: false
+                });
+
+                // 新串流不沿用上一個畫面的 OCR 穩定化結果
+                lastAcceptedFrameHash = null;
+                lastOcrWasComplete = false;
+                lastRecognizedEcho = null;
+
+                videoEl.srcObject = mediaStream;
+                videoEl.style.display = "block";
+                placeholderEl.style.display = "none";
+                scanBoxEl.style.display = "block";
+
+                document.getElementById("body-root").classList.add("live-streaming");
+                document.getElementById("live-status-text").textContent = "實時直播中 (LIVE 60FPS)";
+                btnStartStream.innerHTML = "<span>⏹ 停止畫面直播</span>";
+
+                videoEl.onloadedmetadata = () => {
+                    const w = videoEl.videoWidth;
+                    const h = videoEl.videoHeight;
+                    document.getElementById("meta-res").textContent = `${w} x ${h}`;
+                    document.getElementById("meta-fps").textContent = `60 FPS`;
+                    addLog(`🟢 直播串流連線成功！解析度: ${w}x${h}`, "log-success");
+                    startScanLoop();
+                };
+
+                mediaStream.getVideoTracks()[0].onended = () => {
+                    if (mediaStream) btnStartStream.click();
+                };
+            } catch (err) {
+                addLog("❌ 開啟畫面直播已取消或失敗: " + err.message, "log-warn");
+            }
+        });
+
+        btnToggleScan.addEventListener("click", () => {
+            if (isScanning) stopScanLoop();
+            else startScanLoop();
+        });
+
+        scanIntervalInput.addEventListener("change", () => {
+            let val = parseFloat(scanIntervalInput.value);
+            if (isNaN(val) || val < 0.5) val = 0.5;
+            if (val > 10.0) val = 10.0;
+            scanIntervalInput.value = val.toFixed(1);
+            if (isScanning) startScanLoop();
+        });
+
+        function startScanLoop() {
+            if (!mediaStream) {
+                addLog("請先點擊「開啟遊戲直播畫面」連接鳴潮視窗！", "log-warn");
+                return;
+            }
+
+            stopScanLoop();
+            isScanning = true;
+            laserBeamEl.style.display = "block";
+            btnToggleScan.classList.add("scanning");
+            hudScanBadgeEl.textContent = "定時掃描中";
+            hudScanBadgeEl.style.color = "#38bdf8";
+
+            const intervalMs = Math.max(500, parseFloat(scanIntervalInput.value) * 1000);
+            document.getElementById("scan-btn-icon").textContent = "⏸";
+            document.getElementById("scan-btn-text").textContent = `暫停循環 (${(intervalMs / 1000).toFixed(1)}s)`;
+
+            addLog(`▶ 啟動自動分析循環：每隔 ${(intervalMs / 1000).toFixed(1)} 秒分析一次影格。`, "log-info");
+
+            captureAndAnalyzeFrame();
+            scanTimer = setInterval(captureAndAnalyzeFrame, intervalMs);
+        }
+
+        function stopScanLoop() {
+            if (scanTimer) {
+                clearInterval(scanTimer);
+                scanTimer = null;
+            }
+            isScanning = false;
+            laserBeamEl.style.display = "none";
+            btnToggleScan.classList.remove("scanning");
+            document.getElementById("scan-btn-icon").textContent = "▶";
+            document.getElementById("scan-btn-text").textContent = `啟動自動循環辨識 (${parseFloat(scanIntervalInput.value).toFixed(1)}s)`;
+            hudScanBadgeEl.textContent = "已暫停";
+            hudScanBadgeEl.style.color = "#94a3b8";
+        }
+
+        // ===== v3.1 FIX: OCR 前處理 =====
+        // mode="strong"：一般掃描；mode="soft"：第五詞條 fallback，
+        // 保留比較淡的字，避免強對比把底部細字吃掉。
+        function preprocessCanvasForOCR(ctx, width, height, mode = "strong") {
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const data = imgData.data;
+
+            const offset = mode === "soft" ? 48 : 70;
+            const gain = mode === "soft" ? 1.45 : 1.80;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const lum = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                const inverted = 255 - lum;
+                const val = Math.max(0, Math.min(255, (inverted - offset) * gain));
+                data[i] = val;
+                data[i + 1] = val;
+                data[i + 2] = val;
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function normalizeOcrLine(input) {
+            if (!input) return "";
+
+            // 全形數字/符號轉半形
+            let s = input.replace(/[０-９]/g, ch =>
+                String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)
+            );
+            s = s
+                .replace(/％/g, "%")
+                .replace(/[，,、·•・]/g, ".")
+                .replace(/[：﹕]/g, ":")
+                .replace(/\s+/g, "");
+
+            // OCR 常見的數字混淆，只在數字附近修正，避免破壞英文單字。
+            s = s
+                .replace(/(?<=\d)[Oo](?=[\d.%]|$)/g, "0")
+                .replace(/(?<=^|[^A-Za-z])[Oo](?=\d)/g, "0")
+                .replace(/(?<=\d)[Il|](?=[\d.%]|$)/g, "1")
+                .replace(/(?<=^|[^A-Za-z])[Il|](?=\d)/g, "1")
+                .replace(/(\d)[。.](\d)/g, "$1.$2");
+
+            return s;
+        }
+
+        function countMatchingSubstats(a, b) {
+            if (!a || !b) return 0;
+            let count = 0;
+            for (const current of a.substats || []) {
+                const hit = (b.substats || []).find(prev =>
+                    prev.key === current.key && Math.abs(prev.val - current.val) <= 0.25
+                );
+                if (hit) count++;
+            }
+            return count;
+        }
+
+        function mergeParsedResults(base, extra) {
+            if (!extra) return base;
+
+            const merged = {
+                name: base.name,
+                cost: base.cost,
+                mainStat: base.mainStat,
+                substats: [...(base.substats || [])]
+            };
+
+            if (
+                merged.mainStat === "未偵測到主屬性" &&
+                extra.mainStat &&
+                extra.mainStat !== "未偵測到主屬性"
+            ) {
+                merged.mainStat = extra.mainStat;
+            }
+
+            if (
+                (!merged.name || merged.name.startsWith("已辨識聲骸")) &&
+                extra.name &&
+                !extra.name.startsWith("已辨識聲骸")
+            ) {
+                merged.name = extra.name;
+            }
+
+            if (extra.cost) merged.cost = extra.cost;
+
+            for (const item of extra.substats || []) {
+                if (merged.substats.length >= 5) break;
+                const exists = merged.substats.some(s =>
+                    s.key === item.key && Math.abs(s.val - item.val) <= 0.25
+                );
+                const sameKey = merged.substats.some(s => s.key === item.key);
+                if (!exists && !sameKey) merged.substats.push(item);
+            }
+
+            return merged;
+        }
+
+        function stabilizeRecognition(current) {
+            if (!lastRecognizedEcho || !current) return current;
+
+            const sameMain =
+                current.mainStat !== "未偵測到主屬性" &&
+                current.mainStat === lastRecognizedEcho.mainStat;
+
+            const overlap = countMatchingSubstats(current, lastRecognizedEcho);
+
+            // 若這一幀只漏掉 1~2 條，但其餘內容和上一個完整結果高度一致，
+            // 不讓 HUD 因單次 OCR 抖動從 5 條退回 4 條。
+            if (
+                sameMain &&
+                current.substats.length >= 3 &&
+                lastRecognizedEcho.substats.length > current.substats.length &&
+                overlap >= Math.min(3, current.substats.length)
+            ) {
+                return mergeParsedResults(current, lastRecognizedEcho);
+            }
+
+            return current;
+        }
+
+        async function runBottomSubstatFallback(fullCanvas, cropX, cropY, cropW, cropH) {
+            const fallbackCanvas = document.createElement("canvas");
+            const fctx = fallbackCanvas.getContext("2d", { willReadFrequently: true });
+
+            // 專抓主掃描框的下半部：第五詞條通常就在這裡。
+            const bandY = Math.floor(cropY + cropH * 0.34);
+            const bandH = Math.floor(cropH * 0.72);
+            const scale = 3.6;
+
+            fallbackCanvas.width = Math.floor(cropW * scale);
+            fallbackCanvas.height = Math.floor(bandH * scale);
+
+            fctx.imageSmoothingEnabled = true;
+            fctx.imageSmoothingQuality = "high";
+            fctx.drawImage(
+                fullCanvas,
+                cropX, bandY, cropW, bandH,
+                0, 0, fallbackCanvas.width, fallbackCanvas.height
+            );
+
+            preprocessCanvasForOCR(
+                fctx,
+                fallbackCanvas.width,
+                fallbackCanvas.height,
+                "soft"
+            );
+
+            const res = await ocrWorker.recognize(fallbackCanvas);
+            return {
+                text: res.data.text || "",
+                parsed: parseEchoTextFromOCR(res.data.text || "")
+            };
+        }
+
+        async function captureAndAnalyzeFrame() {
+            if (!videoEl.videoWidth || !videoEl.videoHeight || isBusyOCR) return;
+            if (!ocrReady || !ocrWorker) return;
+
+            isBusyOCR = true;
+            const t0 = performance.now();
+            scanCount++;
+            document.getElementById("meta-count").textContent = `${scanCount} 次`;
+
+            try {
+                const fullCanvas = document.getElementById("full-canvas");
+                const cropCanvas = document.getElementById("crop-canvas");
+                const fctx = fullCanvas.getContext("2d", { willReadFrequently: true });
+                const cctx = cropCanvas.getContext("2d", { willReadFrequently: true });
+
+                const vw = videoEl.videoWidth;
+                const vh = videoEl.videoHeight;
+                fullCanvas.width = vw;
+                fullCanvas.height = vh;
+
+                fctx.drawImage(videoEl, 0, 0, vw, vh);
+
+                // v3.1：下緣往下放寬，避免第 5 條副詞條剛好被裁掉。
+                // X: 70%~98%, Y: 11%~57%
+                const cropX = Math.floor(vw * 0.70);
+                const cropY = Math.floor(vh * 0.11);
+                const cropW = Math.floor(vw * 0.28);
+                const cropH = Math.floor(vh * 0.46);
+
+                // 由 2.5x 提升至 3.0x，小字與小數點更穩定。
+                const scale = 3.0;
+                cropCanvas.width = Math.floor(cropW * scale);
+                cropCanvas.height = Math.floor(cropH * scale);
+                cctx.imageSmoothingEnabled = true;
+                cctx.imageSmoothingQuality = "high";
+                cctx.drawImage(
+                    fullCanvas,
+                    cropX, cropY, cropW, cropH,
+                    0, 0, cropCanvas.width, cropCanvas.height
+                );
+
+                const rawImgData = cctx.getImageData(
+                    0, 0, cropCanvas.width, cropCanvas.height
+                );
+                const currentHash = computeFastSampleHash(rawImgData.data);
+
+                // v3.1：只有「上一次已完整辨識 5 條」才允許跳過幾乎相同的畫面。
+                // 若上次只有 3/4 條，就算畫面沒變也會繼續 OCR，直到補齊。
+                const nearSameFrame =
+                    lastAcceptedFrameHash !== null &&
+                    Math.abs(currentHash - lastAcceptedFrameHash) < 350;
+
+                const forceRescan = scanCount % 6 === 0;
+
+                if (nearSameFrame && lastOcrWasComplete && !forceRescan) {
+                    const tDiff = (performance.now() - t0).toFixed(0);
+                    document.getElementById("meta-latency").textContent = `${tDiff} ms`;
+                    return;
+                }
+
+                preprocessCanvasForOCR(
+                    cctx,
+                    cropCanvas.width,
+                    cropCanvas.height,
+                    "strong"
+                );
+
+                const ocrRes = await ocrWorker.recognize(cropCanvas);
+                const text = ocrRes.data.text || "";
+
+                let parsedResult = parseEchoTextFromOCR(text);
+
+                // 主 OCR 已有 3~4 條時，再針對下半部補做一次辨識。
+                // 這比每次都跑雙 OCR 省很多效能，也專門解決最後一條忽有忽無。
+                if (
+                    parsedResult.substats.length >= 3 &&
+                    parsedResult.substats.length < 5
+                ) {
+                    const fallback = await runBottomSubstatFallback(
+                        fullCanvas, cropX, cropY, cropW, cropH
+                    );
+                    const before = parsedResult.substats.length;
+                    parsedResult = mergeParsedResults(
+                        parsedResult,
+                        fallback.parsed
+                    );
+
+                    if (parsedResult.substats.length > before) {
+                        addLog(
+                            `🧩 [第五詞條補抓] ${before} → ${parsedResult.substats.length} 條`,
+                            "log-info"
+                        );
+                    }
+                }
+
+                parsedResult = stabilizeRecognition(parsedResult);
+
+                const latency = (performance.now() - t0).toFixed(0);
+                document.getElementById("meta-latency").textContent = `${latency} ms`;
+
+                const hasAnyResult =
+                    parsedResult.substats.length > 0 ||
+                    parsedResult.mainStat !== "未偵測到主屬性";
+
+                if (hasAnyResult) {
+                    lastRecognizedEcho = parsedResult;
+                    lastAcceptedFrameHash = currentHash;
+                    lastOcrWasComplete = parsedResult.substats.length >= 5;
+                    renderEvaluatedHUD(parsedResult, latency);
+                } else {
+                    lastOcrWasComplete = false;
+                    addLog(
+                        `⚠️ [未偵測到完整詞條] 原始讀取: ${text.replace(/\s+/g, " ").slice(0, 70)}...`,
+                        "log-warn"
+                    );
+                }
+            } catch (e) {
+                lastOcrWasComplete = false;
+                addLog(`❌ [辨識錯誤] ${e.message}`, "log-warn");
+                console.error(e);
+            } finally {
+                isBusyOCR = false;
+            }
+        }
+
+        function computeFastSampleHash(pixels) {
+            let hash = 0;
+            const pixelCount = Math.floor(pixels.length / 4);
+            const stride = Math.max(1, Math.floor(pixelCount / 900));
+
+            // 只從 RGBA 的 RGB 起始位置取樣，避免原版 step 落在任意 channel。
+            for (let p = 0; p < pixelCount; p += stride) {
+                const i = p * 4;
+                hash = (
+                    hash +
+                    pixels[i] * 31 +
+                    pixels[i + 1] * 17 +
+                    pixels[i + 2] * 13
+                ) | 0;
+            }
+            return hash;
+        }
+
+        function parseEchoTextFromOCR(rawText) {
+            const rawLines = rawText.split("\n").map(l => normalizeOcrLine(l)).filter(l => l.length > 0);
+            const result = {
+                name: "已辨識聲骸 +25",
+                cost: 4,
+                mainStat: "未偵測到主屬性",
+                substats: []
+            };
+
+            const fullNoSpace = normalizeOcrLine(rawText).toUpperCase();
+
+            // 容錯匹配 COST (包含 O 被識別為 0 的情況)
+            if (/C[O0]ST\s*4/.test(fullNoSpace)) result.cost = 4;
+            else if (/C[O0]ST\s*3/.test(fullNoSpace)) result.cost = 3;
+            else if (/C[O0]ST\s*1/.test(fullNoSpace)) result.cost = 1;
+
+            // 專屬主屬性匹配（屬性傷害加成、治療效果加成）
+            const elementMainRegex = /(導電|熱熔|冷凝|氣動|衍射|湮滅|治療).*?([0-9]+\.?[0-9]*)\s*%?/;
+
+            // 容錯詞條匹配（放寬筆畫複雜中文字的單字匹配）
+            const statMatchers = [
+                { key: "Crit_Damage", regex: /(暴擊傷害|暴傷|擊傷害|暴擊傷|暴.*傷).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Crit_Rate", regex: /(暴擊率|暴擊|暴率)(?!.*傷).*?([0-9]+\.?[0-9]*)/ },
+                { key: "ER", regex: /(共鳴效率|鳴效率|共鳴效|效率|鳴效).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Skill_Damage", regex: /(共鳴技能傷害|共鳴技能|技能傷害|技能).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Ult_Damage", regex: /(共鳴解放傷害|共鳴解放|解放傷害|解放).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Basic_Attack_Damage", regex: /(普攻傷害|普攻).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Heavy_Attack_Damage", regex: /(重擊傷害|重擊).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Attack", regex: /(攻擊力|攻擊|攻).*?([0-9]+\.?[0-9]*)/ },
+                { key: "HP", regex: /(生命值|生命|生).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Defence", regex: /(防禦力|防禦|防).*?([0-9]+\.?[0-9]*)/ }
+            ];
+
+            let candidateStats = [];
+
+            for (let i = 0; i < rawLines.length; i++) {
+                const line = rawLines[i];
+
+                // 第一行若含中文字且非屬性詞，提取為聲骸名稱
+                if (i === 0) {
+                    const zhMatch = line.match(/[\u4e00-\u9fa5]{2,6}/);
+                    if (zhMatch && !/(加成|攻擊|生命|防禦|暴擊|效率)/.test(zhMatch[0])) {
+                        result.name = `${zhMatch[0]} +25`;
+                    }
+                }
+
+                // 檢查是否為屬性傷害主詞條 (如 導電傷害加成 30.0%)
+                const elemMatch = line.match(elementMainRegex);
+                if (elemMatch && result.mainStat === "未偵測到主屬性") {
+                    result.mainStat = `${elemMatch[1]}傷害加成 ${elemMatch[2]}%`;
+                    if ( parseFloat(elemMatch[2]) === 30 ) result.cost = 3;
+                    continue;
+                }
+
+                for (let m of statMatchers) {
+                    const match = line.match(m.regex);
+                    if (match) {
+                        // 抓取該行最後一個數字作為詞條數值
+                        const allNums = line.match(/[0-9]+\.?[0-9]*/g);
+                        if (!allNums) continue;
+                        const rawVal = parseFloat(allNums[allNums.length - 1]);
+                        if (isNaN(rawVal) || rawVal <= 0 || rawVal === 25) continue;
+
+                        const hasDotOrPct = line.includes("%") || allNums[allNums.length - 1].includes(".");
+                        let finalKey = m.key;
+
+                        if (m.key === "Attack") {
+                            finalKey = (hasDotOrPct || rawVal < 25) ? "Attack" : "Attack_Flat";
+                        } else if (m.key === "HP") {
+                            finalKey = (hasDotOrPct || rawVal < 40) ? "HP" : "HP_Flat";
+                        } else if (m.key === "Defence") {
+                            finalKey = (hasDotOrPct || rawVal < 30) ? "Defence" : "Defence_Flat";
+                        }
+
+                        candidateStats.push({ key: finalKey, val: rawVal, hasPct: hasDotOrPct });
+                        break;
+                    }
+                }
+            }
+
+            // 分離主屬性（前 1~2 條）與 5 條副詞條
+            for (let idx = 0; idx < candidateStats.length; idx++) {
+                const item = candidateStats[idx];
+                const meta = SUBSTAT_DATA[item.key];
+                if (!meta) continue;
+
+                // 固定攻擊 100 / 150 或 固定生命 2280 為聲骸固定副主詞條，直接跳過不計入 5 條副詞條
+                if ((item.key === "Attack_Flat" && item.val >= 80) || (item.key === "HP_Flat" && item.val >= 1000)) {
+                    continue;
+                }
+
+                // 若尚未偵測到主屬性，且數值大於副詞條上限（例如暴擊 22%、暴傷 44%、攻擊 18%/30%/33%），列為主屬性
+                if (result.mainStat === "未偵測到主屬性" && item.val > meta.max) {
+                    result.mainStat = `${meta.name} ${item.val}${meta.unit}`;
+                    continue;
+                }
+
+                // 收集最多 5 條副詞條（合理數值範圍內）
+                if (result.substats.length < 5 && item.val <= meta.max * 1.05) {
+                    if (!result.substats.some(s => s.key === item.key)) {
+                        result.substats.push({ key: item.key, val: item.val });
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        function renderEvaluatedHUD(echo, latency) {
+            const charName = roleSelectEl ? roleSelectEl.value : "今汐";
+            const charCfg = CHAR_PRESETS[charName] || CHAR_PRESETS["今汐"];
+            const weights = charCfg.weights;
+
+            echoNameEl.textContent = echo.name;
+            const costPill = echoCostPillEl;
+            costPill.textContent = `COST ${echo.cost}`;
+            costPill.className = `cost-pill cost-${echo.cost}`;
+            echoMainEl.innerHTML = `<span>主屬性: ${echo.mainStat}</span>`;
+
+            let totalScore = 0.0;
+            let totalRv = 0.0;
+            let critCount = 0;
+
+            const subsStack = subsStackEl;
+            subsStack.innerHTML = "";
+
+            for (let i = 0; i < 5; i++) {
+                const sub = echo.substats[i];
+                if (sub) {
+                    const meta = SUBSTAT_DATA[sub.key] || { name: sub.key, max: 10.0, unit: "%" };
+                    const rvRatio = Math.min(1.0, sub.val / meta.max);
+                    const rvPct = rvRatio * 100.0;
+                    totalRv += rvPct;
+
+                    const w = weights[sub.key] || 0.0;
+                    totalScore += rvRatio * w * 100.0;
+
+                    if (sub.key === "Crit_Rate" || sub.key === "Crit_Damage") critCount++;
+
+                    const row = document.createElement("div");
+                    row.className = "sub-row";
+                    row.innerHTML = `
+                        <span class="sub-name">✦ ${meta.name}</span>
+                        <div>
+                            <span class="sub-val">${sub.val}${meta.unit}</span>
+                            <span class="sub-rv">RV ${rvPct.toFixed(0)}%</span>
+                        </div>
+                    `;
+                    subsStack.appendChild(row);
+                } else {
+                    const row = document.createElement("div");
+                    row.className = "sub-row";
+                    row.style.opacity = "0.4";
+                    row.innerHTML = `<span class="sub-name">✦ 第 ${i + 1} 孔</span><span class="sub-val">未偵測</span>`;
+                    subsStack.appendChild(row);
+                }
+            }
+
+            const sortedW = Object.values(weights).sort((a, b) => b - a);
+            let theoreticalMax = 0.0;
+            for (let i = 0; i < 5; i++) theoreticalMax += (sortedW[i] || 0.0) * 100.0;
+            if (theoreticalMax <= 0) theoreticalMax = 500.0;
+
+            const percentage = Math.min(100.0, (totalScore / theoreticalMax) * 100.0);
+
+            let tierName = "C";
+            let badgeClass = "badge-c";
+            let tierTitle = "♻ C 建議重調";
+            if (percentage >= 85.0) { tierName = "SSS"; badgeClass = "badge-sss"; tierTitle = "👑 SSS 傳家寶"; }
+            else if (percentage >= 75.0) { tierName = "S"; badgeClass = "badge-s"; tierTitle = "🌟 S 優秀畢業"; }
+            else if (percentage >= 60.0) { tierName = "A"; badgeClass = "badge-a"; tierTitle = "✨ A 及格好用"; }
+            else if (percentage >= 45.0) { tierName = "B"; badgeClass = "badge-b"; tierTitle = "📦 B 過渡良品"; }
+
+            const badgeEl = gradeBadgeEl;
+            badgeEl.className = `grade-badge ${badgeClass}`;
+            badgeEl.textContent = tierTitle;
+
+            scoreMainEl.textContent = `${totalScore.toFixed(1)} / ${theoreticalMax.toFixed(1)} (${percentage.toFixed(1)}%)`;
+            rvInfoEl.textContent = `總 RV: ${totalRv.toFixed(1)}% | 雙暴 ${critCount} 條`;
+
+            const advBox = adviceBannerEl;
+            advBox.className = "advice-banner";
+            if (percentage >= 85.0) {
+                advBox.textContent = `👑 【SSS 極品傳家寶】${charName} 完美適配！`;
+            } else if (percentage >= 75.0) {
+                advBox.textContent = `🌟 【S 優秀大畢業】核心詞條兼備，推薦鎖定裝配！`;
+            } else if (percentage >= 60.0) {
+                advBox.textContent = `✨ 【A 及格良品】過渡期可用胚子，可先裝配提升戰力。`;
+            } else {
+                advBox.className = "advice-banner advice-warn";
+                advBox.textContent = `🛑 【建議重調】有效詞條偏低，建議作為升級素材。`;
+            }
+
+            addLog(`📸 [OCR成功] 主詞條: ${echo.mainStat} | 副詞條: ${echo.substats.length} 條 -> ${totalScore.toFixed(1)}分 (${tierName}) [${latency}ms]`, "log-success");
+        }
+
+        document.getElementById("btn-open-pip").addEventListener("click", async () => {
+            // Document PiP 已開啟時，不重複搬 DOM，直接把視窗叫到前景。
+            if (pipWindowRef && !pipWindowRef.closed) {
+                try { pipWindowRef.focus(); } catch (_) {}
+                return;
+            }
+
+            if ('documentPictureInPicture' in window) {
+                try {
+                    const pipWindow = await window.documentPictureInPicture.requestWindow({
+                        width: 380,
+                        height: 520
+                    });
+                    pipWindowRef = pipWindow;
+
+                    document.querySelectorAll('style, link[rel="stylesheet"]').forEach(style => {
+                        pipWindow.document.head.appendChild(style.cloneNode(true));
+                    });
+
+                    // 搬的是同一個 DOM 節點，事件監聽器與固定節點引用都會保留。
+                    pipWindow.document.body.appendChild(hudCardEl);
+                    pipWindow.document.body.style.background = '#050811';
+                    pipWindow.document.body.style.padding = '8px';
+                    pipWindow.document.body.style.margin = '0';
+
+                    addLog("📱 畫中畫獨立 HUD 已彈出！", "log-info");
+
+                    pipWindow.addEventListener('pagehide', () => {
+                        pipWindowRef = null;
+                        if (hudCardEl && hudWrapperEl && !hudWrapperEl.contains(hudCardEl)) {
+                            hudWrapperEl.appendChild(hudCardEl);
+                        }
+                        addLog("畫中畫視窗已還原至網頁。", "log-info");
+                    }, { once: true });
+
+                    return;
+                } catch (e) {
+                    pipWindowRef = null;
+                    console.warn("Document PiP 失敗:", e);
+                    addLog(`⚠️ Document PiP 失敗，改用影片 PiP：${e.message}`, "log-warn");
+                }
+            }
+
+            // 瀏覽器不支援 Document PiP 時只能退回原生 Video PiP；
+            // 此模式只能顯示遊戲畫面，無法把 HTML HUD 一起搬過去。
+            if (videoEl && videoEl.requestPictureInPicture) {
+                try {
+                    await videoEl.requestPictureInPicture();
+                } catch (err) {
+                    alert("畫中畫開啟失敗: " + err.message);
+                }
+            } else {
+                alert("目前瀏覽器尚未支援畫中畫 API，建議使用最新版 Chrome 或 Edge！");
+            }
+        });
+
+        roleSelectEl.addEventListener("change", () => {
+            addLog(`切換目標角色為: 【${roleSelectEl.value}】`, "log-info");
+            if (lastRecognizedEcho) {
+                renderEvaluatedHUD(lastRecognizedEcho, 0);
+            }
+        });
+    </script>
+</body>
+</html>
