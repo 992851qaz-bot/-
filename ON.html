@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -25,11 +26,17 @@
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             background-color: var(--bg-base);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
                 radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.08) 0%, transparent 45%);
             color: var(--text-main);
@@ -57,7 +64,11 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
         }
 
-        .broadcast-brand { display: flex; align-items: center; gap: 10px; }
+        .broadcast-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
         .live-indicator {
             display: flex;
@@ -73,7 +84,12 @@
             letter-spacing: 0.5px;
         }
 
-        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-red); }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-red);
+        }
 
         .live-streaming .live-indicator {
             background: rgba(16, 185, 129, 0.15);
@@ -88,14 +104,35 @@
         }
 
         @keyframes pulse-live {
-            0% { transform: scale(0.9); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.7; }
+            0% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
         }
 
-        .brand-title { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
 
-        .stream-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+        .stream-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
 
         .interval-setting {
             display: flex;
@@ -139,7 +176,8 @@
             transition: all 0.2s ease;
         }
 
-        .btn:hover, .btn:active {
+        .btn:hover,
+        .btn:active {
             background: var(--primary);
             color: #000;
             box-shadow: 0 0 14px var(--primary-glow);
@@ -179,7 +217,9 @@
         }
 
         @media (min-width: 900px) {
-            .studio-grid { grid-template-columns: 1fr 380px; }
+            .studio-grid {
+                grid-template-columns: 1fr 380px;
+            }
         }
 
         .monitor-card {
@@ -207,7 +247,12 @@
             justify-content: center;
         }
 
-        #stream-video { width: 100%; height: 100%; object-fit: fill; display: none; }
+        #stream-video {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: none;
+        }
 
         .screen-placeholder {
             display: flex;
@@ -219,7 +264,11 @@
             padding: 20px;
         }
 
-        .screen-placeholder-icon { font-size: 40px; opacity: 0.6; margin-bottom: 4px; }
+        .screen-placeholder-icon {
+            font-size: 40px;
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
 
         .scan-overlay-box {
             position: absolute;
@@ -258,9 +307,19 @@
         }
 
         @keyframes laser-sweep {
-            0% { top: 0%; opacity: 0.2; }
-            50% { opacity: 1; }
-            100% { top: 100%; opacity: 0.2; }
+            0% {
+                top: 0%;
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0.2;
+            }
         }
 
         .monitor-meta {
@@ -273,7 +332,10 @@
             padding: 2px 4px;
         }
 
-        .meta-stat { color: var(--primary); font-weight: 800; }
+        .meta-stat {
+            color: var(--primary);
+            font-weight: 800;
+        }
 
         .bottom-console-grid {
             display: grid;
@@ -326,13 +388,29 @@
             object-fit: contain;
         }
 
-        .log-entry { margin-bottom: 2px; }
-        .log-time { color: var(--text-dim); }
-        .log-success { color: #34d399; }
-        .log-warn { color: #fbbf24; }
-        .log-info { color: #38bdf8; }
+        .log-entry {
+            margin-bottom: 2px;
+        }
 
-        .hud-wrapper { width: 100%; }
+        .log-time {
+            color: var(--text-dim);
+        }
+
+        .log-success {
+            color: #34d399;
+        }
+
+        .log-warn {
+            color: #fbbf24;
+        }
+
+        .log-info {
+            color: #38bdf8;
+        }
+
+        .hud-wrapper {
+            width: 100%;
+        }
 
         .hud-card {
             background: var(--bg-surface);
@@ -390,7 +468,11 @@
             margin-bottom: 4px;
         }
 
-        .echo-name { font-size: 14px; font-weight: 800; color: #fff; }
+        .echo-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+        }
 
         .cost-pill {
             font-size: 10px;
@@ -402,9 +484,23 @@
             border: 1px solid var(--primary);
         }
 
-        .cost-4 { color: #f59e0b; border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
-        .cost-3 { color: #c084fc; border-color: #c084fc; background: rgba(192, 132, 252, 0.15); }
-        .cost-1 { color: #38bdf8; border-color: #38bdf8; background: rgba(56, 189, 248, 0.15); }
+        .cost-4 {
+            color: #f59e0b;
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .cost-3 {
+            color: #c084fc;
+            border-color: #c084fc;
+            background: rgba(192, 132, 252, 0.15);
+        }
+
+        .cost-1 {
+            color: #38bdf8;
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+        }
 
         .echo-main-stat {
             font-size: 12px;
@@ -433,15 +529,48 @@
             letter-spacing: 0.5px;
         }
 
-        .badge-sss { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
-        .badge-s { background: linear-gradient(135deg, #a855f7, #c084fc); color: #fff; box-shadow: 0 0 12px rgba(192, 132, 252, 0.5); }
-        .badge-a { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; }
-        .badge-b { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
-        .badge-c { background: #475569; color: #cbd5e1; }
+        .badge-sss {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+        }
 
-        .score-info { text-align: right; }
-        .score-main { font-size: 15px; font-weight: 900; color: #fbbf24; font-family: var(--font-mono); }
-        .score-sub { font-size: 10px; color: var(--text-dim); }
+        .badge-s {
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(192, 132, 252, 0.5);
+        }
+
+        .badge-a {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #fff;
+        }
+
+        .badge-b {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+        }
+
+        .badge-c {
+            background: #475569;
+            color: #cbd5e1;
+        }
+
+        .score-info {
+            text-align: right;
+        }
+
+        .score-main {
+            font-size: 15px;
+            font-weight: 900;
+            color: #fbbf24;
+            font-family: var(--font-mono);
+        }
+
+        .score-sub {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
 
         .advice-banner {
             background: rgba(16, 185, 129, 0.12);
@@ -461,7 +590,12 @@
             color: #f87171;
         }
 
-        .subs-stack { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+        .subs-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
 
         .sub-row {
             display: flex;
@@ -474,16 +608,250 @@
             font-size: 11px;
         }
 
-        .sub-name { color: #cbd5e1; font-weight: 600; }
-        .sub-val { color: var(--primary); font-weight: 800; font-family: var(--font-mono); font-size: 12px; }
-        .sub-rv { font-size: 9px; padding: 1px 4px; border-radius: 3px; background: rgba(0,0,0,0.5); color: var(--text-dim); font-weight: 700; }
+        .sub-name {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
 
-        #full-canvas { display: none; }
+        .sub-val {
+            color: var(--primary);
+            font-weight: 800;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        .sub-rv {
+            font-size: 9px;
+            padding: 1px 4px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--text-dim);
+            font-weight: 700;
+        }
+
+        #full-canvas {
+            display: none;
+        }
+
+        /* ==================== 微軟商店認證應用資訊橫幅 ==================== */
+        .ms-app-banner {
+            width: 100%;
+            max-width: 1200px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.92));
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 12px;
+            padding: 10px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        }
+
+        .ms-brand-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ms-brand-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ms-brand-sub {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .btn-ms-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .btn-ms-download:hover {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* ==================== 懸浮介面多種顯示模式與控制按鈕 ==================== */
+        .hud-top-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hud-btn-action {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            color: #38bdf8;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .hud-btn-action:hover {
+            background: rgba(56, 189, 248, 0.35);
+            color: #ffffff;
+            border-color: #38bdf8;
+        }
+
+        .hud-btn-rescan {
+            background: rgba(16, 185, 129, 0.18);
+            border-color: rgba(16, 185, 129, 0.45);
+            color: #34d399;
+        }
+
+        .hud-btn-rescan:hover {
+            background: rgba(16, 185, 129, 0.38);
+            border-color: #10b981;
+            color: #ffffff;
+        }
+
+        .hud-mode-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mode-chip {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-chip.active {
+            background: rgba(56, 189, 248, 0.25);
+            color: #38bdf8;
+            font-weight: 900;
+        }
+
+        .hud-style-panel {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .style-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #cbd5e1;
+        }
+
+        .style-row select, .style-row input[type="range"] {
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 11px;
+        }
+
+        /* 橫條模式 (Bar Mode - 參考 Python is_compact_bar) */
+        .hud-card.mode-bar {
+            padding: 8px 12px;
+        }
+        .hud-card.mode-bar .echo-info-card,
+        .hud-card.mode-bar .advice-banner,
+        .hud-card.mode-bar .subs-stack {
+            display: none !important;
+        }
+        .hud-card.mode-bar .grade-dash {
+            margin-bottom: 0;
+            padding: 6px 8px;
+        }
+
+        /* 迷你模式 (Mini Mode) */
+        .hud-card.mode-mini {
+            max-width: 200px;
+            padding: 8px;
+        }
+        .hud-card.mode-mini .role-picker,
+        .hud-card.mode-mini .echo-info-card,
+        .hud-card.mode-mini .advice-banner,
+        .hud-card.mode-mini .subs-stack,
+        .hud-card.mode-mini .score-sub {
+            display: none !important;
+        }
+
+        /* 主題樣式 (Theme Styles) */
+        .theme-neon-purple {
+            --bg-surface: rgba(24, 12, 38, 0.94);
+            --border-glow: rgba(192, 132, 252, 0.65);
+            --primary: #c084fc;
+        }
+        .theme-frosted-glass {
+            --bg-surface: rgba(15, 23, 42, 0.55) !important;
+            backdrop-filter: blur(28px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.22) !important;
+        }
+        .theme-oled-black {
+            --bg-surface: rgba(0, 0, 0, 0.98) !important;
+            border-color: #38bdf8 !important;
+        }
     </style>
+
 </head>
+
 <body id="body-root">
 
+
+    <!-- 微軟應用商店官方認證資訊橫幅 -->
+    <div class="ms-app-banner">
+        <div class="ms-brand-left">
+            <svg class="ms-logo-svg" width="22" height="22" viewBox="0 0 24 24"><path fill="#f25022" d="M1 1h10v10H1z"/><path fill="#00a4ef" d="M1 13h10v10H1z"/><path fill="#7fba00" d="M13 1h10v13H13z"/><path fill="#ffb900" d="M13 13h10v10H13z"/></svg>
+            <div class="ms-brand-text">
+                <div class="ms-brand-title">微軟商城官方認證桌面版 (Windows MSIX 原生客戶端)</div>
+                <div class="ms-brand-sub">極速 C++ 原生編譯 · 內建 ONNX 離線神經網路 · 全域遊戲滑鼠穿透置頂 · 一鍵安裝自動更新</div>
+            </div>
+        </div>
+        <a href="https://apps.microsoft.com/detail/9N19LCKX2NSW?hl=zh-hant-tw&gl=TW&ocid=pdpshare" target="_blank" rel="noopener noreferrer" class="btn-ms-download">
+            <span>🛒 前往微軟商店取得桌面版</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+    </div>
+
     <header class="broadcast-bar">
+
         <div class="broadcast-brand">
             <div class="live-indicator" id="live-indicator">
                 <span class="live-dot"></span>
@@ -495,7 +863,8 @@
         <div class="stream-controls">
             <div class="interval-setting">
                 <span>⏱️ 分析間隔:</span>
-                <input type="number" id="scan-interval" class="interval-input" value="1.5" min="0.5" max="10.0" step="0.1">
+                <input type="number" id="scan-interval" class="interval-input" value="1.5" min="0.5" max="10.0"
+                    step="0.1">
                 <span>秒</span>
             </div>
 
@@ -538,7 +907,8 @@
                 <div>累計掃描次數: <span class="meta-stat" id="meta-count">0 次</span></div>
             </div>
 
-            <div style="font-size: 11px; font-weight: 800; color: var(--primary); display: flex; justify-content: space-between;">
+            <div
+                style="font-size: 11px; font-weight: 800; color: var(--primary); display: flex; justify-content: space-between;">
                 <span>✦ 實時分析終端日誌 & OCR 影像預覽：</span>
                 <span style="color: var(--text-dim); cursor: pointer;" onclick="clearLogs()">清空紀錄</span>
             </div>
@@ -557,7 +927,37 @@
             <div class="hud-card" id="hud-card">
                 <div class="hud-head">
                     <span style="font-size: 13px; font-weight: 800; color: var(--primary);">⚡ 聲骸即時評分 (HUD)</span>
-                    <span id="hud-scan-badge" style="font-size: 10px; font-weight: 800; color: var(--accent-green); background: rgba(16, 185, 129, 0.15); padding: 1px 6px; border-radius: 4px;">待命中</span>
+                    <div class="hud-top-actions">
+                        <button id="btn-hud-rescan" class="hud-btn-action hud-btn-rescan" title="強制重新截取當前畫面並進行 OCR 評分">🔄 重掃</button>
+                        <button id="btn-hud-style" class="hud-btn-action" title="切換背景風格與透明度設定">🎨 外觀</button>
+                        <span id="hud-scan-badge"
+                            style="font-size: 10px; font-weight: 800; color: var(--accent-green); background: rgba(16, 185, 129, 0.15); padding: 2px 6px; border-radius: 4px;">待命中</span>
+                    </div>
+                </div>
+
+                <!-- 顯示方式切換列 (參考 Python HUD) -->
+                <div class="hud-mode-bar" id="hud-mode-bar">
+                    <button class="mode-chip active" data-mode="full" id="btn-mode-full">📊 完整詳細</button>
+                    <button class="mode-chip" data-mode="bar" id="btn-mode-bar">➖ 精簡橫條</button>
+                    <button class="mode-chip" data-mode="mini" id="btn-mode-mini">🎯 迷你角標</button>
+                </div>
+
+                <!-- 外觀與背景設定抽屜 -->
+                <div class="hud-style-panel" id="hud-style-panel" style="display: none;">
+                    <div class="style-row">
+                        <span>🎨 背景風格:</span>
+                        <select id="sel-hud-theme">
+                            <option value="cyber-cyan" selected>深邃科技藍 (預設)</option>
+                            <option value="neon-purple">賽博霓虹紫</option>
+                            <option value="frosted-glass">高透毛玻璃</option>
+                            <option value="oled-black">純黑高對比</option>
+                        </select>
+                    </div>
+                    <div class="style-row">
+                        <span>🌫️ 背景不透明度:</span>
+                        <input type="range" id="rng-hud-opacity" min="0.4" max="1.0" step="0.05" value="0.92">
+                        <span id="txt-hud-opacity">92%</span>
+                    </div>
                 </div>
 
                 <div class="role-picker">
@@ -631,7 +1031,29 @@
             "Defence_Flat": { name: "固定防禦", max: 70.0, unit: "" }
         };
 
+        // ==================== 安全加密之 ZH 資料庫 API 端點 (防爬蟲與程式保護) ====================
+        const _GAMEZH_API_SEC = {
+            _k: "GAMEZH_WW_2026_TOKEN",
+            _e1: "LzU5NSlycHgkPEBZQkJxMyAkIiIiby4qN2cyNjQtXUMdRXAVBC08LSU7BjA2fxMTGGptZwR4bBg6KnMbLHQuBGkKHBglEn1ifFFtEzUZCgBqHhl3Mh81ZzkpalxqAWgdDBIWNnQoJiMZGWx4MidXUw1XPCAmJCtzICQ5Ej8hOD8jLA==",
+            _e2: "LzU5NSlycHgkPEBZQkJxMyAkIiIiby4qN2cyNjQtXUMdRXAVBC08LSU7HCM0fgY9PgtAeXh/aBB3GA43JjQcIg4fKBA2Zm12BGlsMDd7NAAOFnsaPjIcNB0vYlRqRhFhNjwfCxApIwo8AWd4MidXUw1CMD8qJXgZEB4XDQUMHgMWHXNjd2kMEQweFwsYFQIOHwYAZWdtBA=="
+        };
+
+        function _decryptApiUrl(enc, key) {
+            try {
+                const raw = atob(enc);
+                let out = "";
+                for (let i = 0; i < raw.length; i++) {
+                    out += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+                }
+                return out;
+            } catch (e) {
+                return "";
+            }
+        }
+
         const CHAR_PRESETS = {
+            "緋雪": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Basic_Attack_Damage": 0.85, "ER": 0.50 } },
+            "達妮婭": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Skill_Damage": 0.80, "ER": 0.55 } },
             "今汐": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "ER": 0.62, "Skill_Damage": 0.835, "Ult_Damage": 0.23 } },
             "長離": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "ER": 0.62, "Skill_Damage": 0.684, "Ult_Damage": 0.313 } },
             "椿": { weights: { "Crit_Rate": 1.89, "Crit_Damage": 1.89, "Attack": 1.16, "Attack_Flat": 0.60, "Basic_Attack_Damage": 0.95, "ER": 0.45 } },
@@ -692,7 +1114,7 @@
                 if (window.Tesseract) {
                     addLog("正在啟動 Tesseract.js 繁體中文 OCR 模型...", "log-info");
                     ocrWorker = await Tesseract.createWorker("chi_tra+eng", 1, {
-                        logger: m => {}
+                        logger: m => { }
                     });
                     await ocrWorker.setParameters({
                         tessedit_pageseg_mode: '6'
@@ -705,6 +1127,148 @@
             }
         }
         initOCR();
+
+        // ==================== 動態載入 ZH 資料庫雲端權重 ====================
+        async function loadZHDatabaseWeights() {
+            const cacheKey = "GAMEZH_ZH_WEIGHTS_V2_CACHE";
+            let payload = null;
+            try {
+                const cached = localStorage.getItem(cacheKey);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Date.now() - parsed.ts < 3600000) { // 1 小時快取
+                        payload = parsed.d;
+                    }
+                }
+            } catch (_) {}
+
+            if (!payload) {
+                const u1 = _decryptApiUrl(_GAMEZH_API_SEC._e1, _GAMEZH_API_SEC._k);
+                try {
+                    const res = await fetch(u1, { cache: "no-store" });
+                    const json = await res.json();
+                    if (json && json.result === 'success') {
+                        payload = json;
+                        try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), d: json })); } catch(_) {}
+                    }
+                } catch (e) {
+                    // 備用安全通道
+                    try {
+                        const u2 = _decryptApiUrl(_GAMEZH_API_SEC._e2, _GAMEZH_API_SEC._k);
+                        const res2 = await fetch(u2);
+                        const json2 = await res2.json();
+                        if (json2 && json2.result === 'success') payload = json2;
+                    } catch (_) {}
+                }
+            }
+
+            if (payload && payload.headers && payload.data) {
+                const headers = payload.headers;
+                const headerMap = {
+                    "暴擊率": "Crit_Rate", "暴擊傷害": "Crit_Damage",
+                    "攻擊百分比": "Attack", "攻擊固定": "Attack_Flat", "攻擊": "Attack_Flat",
+                    "生命百分比": "HP", "生命固定": "HP_Flat", "生命": "HP_Flat",
+                    "防禦百分比": "Defence", "防禦固定": "Defence_Flat", "防禦": "Defence_Flat",
+                    "共鳴效率": "ER",
+                    "普攻傷害加成": "Basic_Attack_Damage",
+                    "重擊傷害加成": "Heavy_Attack_Damage",
+                    "共鳴技能傷害加成(E)": "Skill_Damage", "共鳴技能傷害加成": "Skill_Damage",
+                    "共鳴解放傷害加成(大招)": "Ult_Damage", "共鳴解放傷害加成": "Ult_Damage"
+                };
+
+                payload.data.forEach(row => {
+                    const cName = row[1];
+                    if (!cName || cName === '(N/A)') return;
+                    const wMap = {};
+                    headers.forEach((h, idx) => {
+                        const k = headerMap[h];
+                        if (k) wMap[k] = parseFloat(row[idx]) || 0;
+                    });
+                    const bName = row[0] ? String(row[0]).trim() : "通用";
+                    CHAR_PRESETS[cName] = {
+                        build: bName,
+                        weights: wMap
+                    };
+                });
+
+                // 更新下拉選單
+                const cur = roleSelectEl.value;
+                roleSelectEl.innerHTML = "";
+                Object.keys(CHAR_PRESETS).sort().forEach(c => {
+                    const opt = document.createElement("option");
+                    opt.value = c;
+                    const b = CHAR_PRESETS[c].build ? ` (${CHAR_PRESETS[c].build})` : "";
+                    opt.textContent = `${c}${b}`;
+                    if (c === cur) opt.selected = true;
+                    roleSelectEl.appendChild(opt);
+                });
+                if (!roleSelectEl.value && Object.keys(CHAR_PRESETS).length > 0) {
+                    roleSelectEl.value = Object.keys(CHAR_PRESETS)[0];
+                }
+                addLog(`☁️ [ZH資料庫 API] 全角色最新流派權重已就緒 (共 ${Object.keys(CHAR_PRESETS).length} 位角色)！`, "log-success");
+            }
+        }
+        setTimeout(loadZHDatabaseWeights, 300);
+
+        // ==================== 懸浮視窗「重掃」與外觀事件綁定 ====================
+        function forceRescanNow() {
+            lastAcceptedFrameHash = null;
+            lastOcrWasComplete = false;
+            if (hudScanBadgeEl) {
+                hudScanBadgeEl.textContent = "重掃中...";
+                hudScanBadgeEl.style.color = "var(--primary)";
+            }
+            addLog("🔄 [手動重掃] 強制略過影像快取，重新執行即時辨識與評分...", "log-info");
+            captureAndAnalyzeFrame();
+        }
+
+        const btnHudRescan = hudCardEl.querySelector("#btn-hud-rescan");
+        if (btnHudRescan) {
+            btnHudRescan.addEventListener("click", forceRescanNow);
+        }
+
+        const btnHudStyle = hudCardEl.querySelector("#btn-hud-style");
+        const hudStylePanel = hudCardEl.querySelector("#hud-style-panel");
+        if (btnHudStyle && hudStylePanel) {
+            btnHudStyle.addEventListener("click", () => {
+                hudStylePanel.style.display = (hudStylePanel.style.display === "none") ? "flex" : "none";
+            });
+        }
+
+        // 顯示模式切換 (完整 / 精簡橫條 / 迷你)
+        const modeChips = hudCardEl.querySelectorAll(".mode-chip");
+        modeChips.forEach(chip => {
+            chip.addEventListener("click", () => {
+                modeChips.forEach(c => c.classList.remove("active"));
+                chip.classList.add("active");
+                const m = chip.getAttribute("data-mode");
+                hudCardEl.classList.remove("mode-bar", "mode-mini");
+                if (m === "bar") hudCardEl.classList.add("mode-bar");
+                else if (m === "mini") hudCardEl.classList.add("mode-mini");
+            });
+        });
+
+        // 主題與透明度切換
+        const selTheme = hudCardEl.querySelector("#sel-hud-theme");
+        if (selTheme) {
+            selTheme.addEventListener("change", () => {
+                hudCardEl.classList.remove("theme-neon-purple", "theme-frosted-glass", "theme-oled-black");
+                if (selTheme.value === "neon-purple") hudCardEl.classList.add("theme-neon-purple");
+                else if (selTheme.value === "frosted-glass") hudCardEl.classList.add("theme-frosted-glass");
+                else if (selTheme.value === "oled-black") hudCardEl.classList.add("theme-oled-black");
+            });
+        }
+
+        const rngOpacity = hudCardEl.querySelector("#rng-hud-opacity");
+        const txtOpacity = hudCardEl.querySelector("#txt-hud-opacity");
+        if (rngOpacity && txtOpacity) {
+            rngOpacity.addEventListener("input", () => {
+                const v = parseFloat(rngOpacity.value);
+                txtOpacity.textContent = `${Math.round(v * 100)}%`;
+                hudCardEl.style.opacity = v;
+            });
+        }
+
 
         function addLog(msg, type = "") {
             const timeStr = new Date().toTimeString().split(" ")[0];
@@ -1172,7 +1736,7 @@
                 const elemMatch = line.match(elementMainRegex);
                 if (elemMatch && result.mainStat === "未偵測到主屬性") {
                     result.mainStat = `${elemMatch[1]}傷害加成 ${elemMatch[2]}%`;
-                    if ( parseFloat(elemMatch[2]) === 30 ) result.cost = 3;
+                    if (parseFloat(elemMatch[2]) === 30) result.cost = 3;
                     continue;
                 }
 
@@ -1321,7 +1885,7 @@
         document.getElementById("btn-open-pip").addEventListener("click", async () => {
             // Document PiP 已開啟時，不重複搬 DOM，直接把視窗叫到前景。
             if (pipWindowRef && !pipWindowRef.closed) {
-                try { pipWindowRef.focus(); } catch (_) {}
+                try { pipWindowRef.focus(); } catch (_) { }
                 return;
             }
 
@@ -1382,4 +1946,5 @@
         });
     </script>
 </body>
+
 </html>
