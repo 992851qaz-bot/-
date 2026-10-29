@@ -1,0 +1,3041 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>鳴潮聲骸直播串流與即時辨識 HUD · 官方網頁版 (GAMEZH)</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        :root {
+            --bg-base: #050811;
+            --bg-surface: rgba(11, 18, 34, 0.92);
+            --bg-card: rgba(18, 29, 54, 0.75);
+            --border-subtle: rgba(56, 189, 248, 0.25);
+            --border-glow: rgba(56, 189, 248, 0.6);
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.4);
+            --accent-gold: #f59e0b;
+            --accent-purple: #c084fc;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --font-mono: "Rajdhani", "SF Mono", Monaco, Consolas, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+            --anim-speed: 0.28s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.08) 0%, transparent 45%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .no-anim *,
+        .no-anim *::before,
+        .no-anim *::after {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popUpdate {
+            0% {
+                transform: scale(0.96);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes roleSwitchGlow {
+            0% {
+                box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+                border-color: var(--primary);
+            }
+            50% {
+                box-shadow: 0 0 18px rgba(56, 189, 248, 0.75);
+                border-color: #fbbf24;
+            }
+            100% {
+                box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+        }
+
+        .broadcast-bar {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            transition: all var(--anim-speed) ease;
+        }
+
+        .broadcast-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            letter-spacing: 0.5px;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-red);
+        }
+
+        .live-streaming .live-indicator {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .live-streaming .live-dot {
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse-live 1.2s infinite;
+        }
+
+        @keyframes pulse-live {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+        }
+
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .stream-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .interval-setting {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .interval-input {
+            width: 55px;
+            background: #070e1c;
+            border: 1px solid var(--border-glow);
+            color: var(--primary);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 800;
+            padding: 3px 6px;
+            border-radius: 4px;
+            text-align: center;
+            outline: none;
+        }
+
+        .btn {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all var(--anim-speed) cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .btn:hover,
+        .btn:active {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 14px var(--primary-glow);
+            transform: translateY(-1px);
+        }
+
+        .btn-live-start {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-scan-loop {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .btn-scan-loop.scanning {
+            background: var(--accent-green);
+            color: #000;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+        }
+
+        .btn-pip {
+            background: rgba(192, 132, 252, 0.15);
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .studio-grid {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 900px) {
+            .studio-grid {
+                grid-template-columns: 1fr 395px;
+            }
+        }
+
+        .monitor-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .monitor-screen {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #020409;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #stream-video {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: none;
+        }
+
+        .screen-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .screen-placeholder-icon {
+            font-size: 40px;
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
+
+        .scan-overlay-box {
+            position: absolute;
+            left: 70%;
+            top: 11%;
+            width: 28%;
+            height: 46%;
+            border: 2px dashed rgba(56, 189, 248, 0.85);
+            border-radius: 6px;
+            pointer-events: none;
+            display: none;
+            box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.2);
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .scan-overlay-subbox {
+            position: absolute;
+            left: 77%;
+            top: 84.5%;
+            width: 14%;
+            height: 5%;
+            border: 1.5px dashed rgba(245, 158, 11, 0.85);
+            border-radius: 4px;
+            pointer-events: none;
+            display: none;
+            box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.2);
+            transition: all 0.35s ease;
+        }
+
+        .scan-overlay-label {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            background: var(--primary);
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .scan-overlay-sublabel {
+            position: absolute;
+            top: -16px;
+            left: 0;
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 0 4px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .laser-beam {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 8px var(--primary);
+            display: none;
+            animation: laser-sweep 1.2s infinite ease-in-out;
+        }
+
+        @keyframes laser-sweep {
+            0% {
+                top: 0%;
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0.2;
+            }
+        }
+
+        .monitor-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-dim);
+            font-family: var(--font-mono);
+            padding: 2px 4px;
+        }
+
+        .meta-stat {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .bottom-console-grid {
+            display: grid;
+            grid-template-columns: 1fr 180px;
+            gap: 10px;
+        }
+
+        .terminal-box {
+            background: #02050e;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.5;
+            color: #94a3b8;
+        }
+
+        .preview-box {
+            background: #02050e;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-box span {
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            font-size: 9px;
+            font-weight: 800;
+            color: #000;
+            background: var(--primary);
+            padding: 1px 4px;
+            border-radius: 3px;
+            z-index: 2;
+        }
+
+        #crop-canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .log-entry {
+            margin-bottom: 2px;
+            animation: fadeSlideUp 0.2s ease;
+        }
+
+        .log-time {
+            color: var(--text-dim);
+        }
+
+        .log-success {
+            color: #34d399;
+        }
+
+        .log-warn {
+            color: #fbbf24;
+        }
+
+        .log-info {
+            color: #38bdf8;
+        }
+
+        .hud-wrapper {
+            width: 100%;
+        }
+
+        .hud-card {
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 14px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            transition: all var(--anim-speed) cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 1;
+        }
+
+        .hud-custom-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            pointer-events: none;
+            z-index: -2;
+            transition: opacity var(--anim-speed) ease;
+        }
+
+        .hud-custom-dim {
+            position: absolute;
+            inset: 0;
+            background: rgba(5, 8, 17, 0.65);
+            pointer-events: none;
+            z-index: -1;
+            transition: background var(--anim-speed) ease;
+        }
+
+        .hud-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .role-picker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all var(--anim-speed) ease;
+        }
+
+        .role-picker.role-switched {
+            animation: roleSwitchGlow 0.9s ease;
+        }
+
+        .auto-role-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--accent-green);
+            cursor: pointer;
+            user-select: none;
+            padding: 2px 6px;
+            border-radius: 5px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            white-space: nowrap;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .auto-role-label:hover {
+            background: rgba(16, 185, 129, 0.22);
+        }
+
+        .auto-role-label input[type="checkbox"] {
+            accent-color: var(--accent-green);
+            width: 13px;
+            height: 13px;
+            cursor: pointer;
+        }
+
+        .role-picker select {
+            background: rgba(11, 20, 38, 0.9);
+            color: #fff;
+            border: 1px solid var(--border-glow);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            outline: none;
+            flex: 1;
+            min-width: 0;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .echo-info-card {
+            background: rgba(15, 23, 42, 0.82);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .echo-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            gap: 6px;
+        }
+
+        .echo-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .equipped-tag {
+            font-size: 10px;
+            font-weight: 800;
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.16);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        .cost-pill {
+            font-size: 10px;
+            font-weight: 900;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .cost-4 {
+            color: #f59e0b;
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .cost-3 {
+            color: #c084fc;
+            border-color: #c084fc;
+            background: rgba(192, 132, 252, 0.15);
+        }
+
+        .cost-1 {
+            color: #38bdf8;
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+        }
+
+        .echo-main-stat {
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .grade-dash {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.48);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .grade-badge {
+            font-size: 13px;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .badge-sss {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+        }
+
+        .badge-s {
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(192, 132, 252, 0.5);
+        }
+
+        .badge-a {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #fff;
+        }
+
+        .badge-b {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+        }
+
+        .badge-c {
+            background: #475569;
+            color: #cbd5e1;
+        }
+
+        .score-info {
+            text-align: right;
+        }
+
+        .score-main {
+            font-size: 15px;
+            font-weight: 900;
+            color: #fbbf24;
+            font-family: var(--font-mono);
+        }
+
+        .score-sub {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        .advice-banner {
+            background: rgba(16, 185, 129, 0.14);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #34d399;
+            line-height: 1.45;
+            margin-bottom: 10px;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .advice-warn {
+            background: rgba(239, 68, 68, 0.14);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #f87171;
+        }
+
+        .subs-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .sub-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            animation: fadeSlideUp var(--anim-speed) ease both;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .sub-row:hover {
+            background: rgba(56, 189, 248, 0.12);
+            transform: translateX(2px);
+        }
+
+        .sub-name {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .sub-val {
+            color: var(--primary);
+            font-weight: 800;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        .sub-rv {
+            font-size: 9px;
+            padding: 1px 4px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--text-dim);
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        #full-canvas,
+        #header-canvas {
+            display: none;
+        }
+
+        .ms-app-banner {
+            width: 100%;
+            max-width: 1200px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.92));
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 12px;
+            padding: 10px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+        }
+
+        .ms-brand-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ms-brand-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ms-brand-sub {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .btn-ms-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .btn-ms-download:hover {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .hud-top-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hud-btn-action {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            color: #38bdf8;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .hud-btn-action:hover {
+            background: rgba(56, 189, 248, 0.35);
+            color: #ffffff;
+            border-color: #38bdf8;
+        }
+
+        .hud-btn-rescan {
+            background: rgba(16, 185, 129, 0.18);
+            border-color: rgba(16, 185, 129, 0.45);
+            color: #34d399;
+        }
+
+        .hud-btn-rescan:hover {
+            background: rgba(16, 185, 129, 0.38);
+            border-color: #10b981;
+            color: #ffffff;
+        }
+
+        .hud-mode-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.38);
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .mode-chip {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .mode-chip.active {
+            background: rgba(56, 189, 248, 0.25);
+            color: #38bdf8;
+            font-weight: 900;
+            box-shadow: inset 0 0 8px rgba(56, 189, 248, 0.25);
+        }
+
+        .hud-style-panel {
+            background: rgba(6, 11, 24, 0.88);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 11px;
+            animation: fadeSlideUp var(--anim-speed) ease;
+        }
+
+        .hud-style-panel.open {
+            display: flex;
+        }
+
+        .style-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            color: #cbd5e1;
+        }
+
+        .style-row select,
+        .style-row input[type="range"],
+        .style-row input[type="text"] {
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 4px;
+            padding: 3px 6px;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .style-row input[type="text"] {
+            flex: 1;
+            min-width: 0;
+            color: #f8fafc;
+        }
+
+        .bg-btn-group {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .bg-mini-btn {
+            flex: 1;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .bg-mini-btn:hover {
+            background: rgba(56, 189, 248, 0.3);
+            color: #fff;
+        }
+
+        .bg-mini-btn.danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #f87171;
+        }
+
+        .bg-mini-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.35);
+            color: #fff;
+        }
+
+        .hud-view-pane {
+            animation: fadeSlideUp var(--anim-speed) cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .hud-char-panel-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .cp-status-banner {
+            font-size: 11px;
+            font-weight: 800;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            border-radius: 6px;
+            padding: 4px 8px;
+            text-align: center;
+        }
+
+        .cp-info-box {
+            background: linear-gradient(135deg, rgba(18, 26, 42, 0.88), rgba(10, 16, 26, 0.92));
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-left: 3px solid #38bdf8;
+            border-radius: 8px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .cp-top-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cp-char-name {
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        .cp-level-elem {
+            color: #38bdf8;
+            font-weight: 800;
+            font-size: 11px;
+            background: rgba(56, 189, 248, 0.18);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 4px;
+            padding: 1px 6px;
+        }
+
+        .cp-weapon-line {
+            color: #fbbf24;
+            font-size: 11px;
+            font-weight: 800;
+            margin-top: 2px;
+        }
+
+        .cp-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .cp-stat-cell {
+            background: rgba(15, 23, 42, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 6px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .cp-stat-cell:hover {
+            border-color: rgba(56, 189, 248, 0.45);
+            transform: translateY(-1px);
+        }
+
+        .cp-stat-label {
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .cp-stat-val {
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 900;
+            font-family: var(--font-mono);
+        }
+
+        .cp-stat-val.crit-glow {
+            color: #f59e0b;
+            text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+        }
+
+        .cp-actions-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .cp-btn {
+            flex: 1;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: all var(--anim-speed) ease;
+        }
+
+        .cp-btn-primary {
+            background: rgba(56, 189, 248, 0.25);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.5);
+        }
+
+        .cp-btn-primary:hover {
+            background: #0284c7;
+            color: #fff;
+        }
+
+        .cp-btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.45);
+        }
+
+        .cp-btn-danger:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .theme-neon-purple {
+            --bg-surface: rgba(24, 12, 38, 0.94);
+            --border-glow: rgba(192, 132, 252, 0.65);
+            --primary: #c084fc;
+        }
+
+        .theme-frosted-glass {
+            --bg-surface: rgba(15, 23, 42, 0.55) !important;
+            backdrop-filter: blur(28px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.22) !important;
+        }
+
+        .theme-oled-black {
+            --bg-surface: rgba(0, 0, 0, 0.98) !important;
+            border-color: #38bdf8 !important;
+        }
+
+        .pop-anim {
+            animation: popUpdate 0.3s ease;
+        }
+    </style>
+</head>
+
+<body id="body-root">
+
+    <div class="ms-app-banner">
+        <div class="ms-brand-left">
+            <svg class="ms-logo-svg" width="22" height="22" viewBox="0 0 24 24">
+                <path fill="#f25022" d="M1 1h10v10H1z" />
+                <path fill="#00a4ef" d="M1 13h10v10H1z" />
+                <path fill="#7fba00" d="M13 1h10v10H13z" />
+                <path fill="#ffb900" d="M13 13h10v10H13z" />
+            </svg>
+            <div class="ms-brand-text">
+                <div class="ms-brand-title">微軟商城官方認證桌面版 (Windows MSIX 原生客戶端)</div>
+                <div class="ms-brand-sub">極速 C++ 原生編譯 · 內建 ONNX 離線神經網路 · 全域遊戲滑鼠穿透置頂 · 一鍵安裝自動更新</div>
+            </div>
+        </div>
+        <a href="https://apps.microsoft.com/detail/9N19LCKX2NSW?hl=zh-hant-tw&gl=TW&ocid=pdpshare" target="_blank"
+            rel="noopener noreferrer" class="btn-ms-download">
+            <span>🛒 前往微軟商店取得桌面版</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+        </a>
+    </div>
+
+    <header class="broadcast-bar">
+        <div class="broadcast-brand">
+            <div class="live-indicator" id="live-indicator">
+                <span class="live-dot"></span>
+                <span id="live-status-text">串流離線 (OFFLINE)</span>
+            </div>
+            <div class="brand-title">鳴潮實時直播畫面分析系統</div>
+        </div>
+
+        <div class="stream-controls">
+            <div class="interval-setting">
+                <span>⏱️ 分析間隔:</span>
+                <input type="number" id="scan-interval" class="interval-input" value="1.5" min="0.5" max="10.0"
+                    step="0.1">
+                <span>秒</span>
+            </div>
+
+            <button class="btn btn-live-start" id="btn-start-stream">
+                <span>📡 開啟遊戲直播畫面</span>
+            </button>
+
+            <button class="btn btn-scan-loop" id="btn-toggle-scan">
+                <span id="scan-btn-icon">▶</span>
+                <span id="scan-btn-text">啟動自動循環辨識 (1.5s)</span>
+            </button>
+
+            <button class="btn btn-pip" id="btn-open-pip">
+                <span>📱 畫中畫懸浮 (PiP)</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="studio-grid">
+        <div class="monitor-card">
+            <div class="monitor-screen" id="monitor-screen">
+                <video id="stream-video" autoplay playsinline muted></video>
+                <div class="screen-placeholder" id="placeholder">
+                    <div class="screen-placeholder-icon">🖥️</div>
+                    <div style="font-weight: 800; color: #cbd5e1; font-size: 14px;">尚未選取鳴潮遊戲畫面</div>
+                    <div style="font-size: 12px; max-width: 420px; line-height: 1.5;">
+                        點擊上方 <b>「📡 開啟遊戲直播畫面」</b> 選取鳴潮視窗。系統會自動判斷左上角 <b>「屬性詳情」</b> 切換角色面板與聲骸模式，並辨識 <b>「???裝配中」</b> 自動切換角色。
+                    </div>
+                </div>
+                <div class="scan-overlay-box" id="scan-box">
+                    <span class="scan-overlay-label" id="scan-box-label">AI 詞條掃描鎖定區</span>
+                    <div class="laser-beam" id="laser-beam"></div>
+                </div>
+                <div class="scan-overlay-subbox" id="scan-subbox">
+                    <span class="scan-overlay-sublabel">裝配角色偵測區</span>
+                </div>
+            </div>
+
+            <div class="monitor-meta">
+                <div>解析度: <span class="meta-stat" id="meta-res">-- x --</span></div>
+                <div>當前偵測頁面: <span class="meta-stat" id="meta-scene">待命</span></div>
+                <div>平均分析延遲: <span class="meta-stat" id="meta-latency">-- ms</span></div>
+                <div>累計掃描次數: <span class="meta-stat" id="meta-count">0 次</span></div>
+            </div>
+
+            <div
+                style="font-size: 11px; font-weight: 800; color: var(--primary); display: flex; justify-content: space-between;">
+                <span>✦ 實時分析終端日誌 & OCR 影像預覽：</span>
+                <span style="color: var(--text-dim); cursor: pointer;" onclick="clearLogs()">清空紀錄</span>
+            </div>
+            <div class="bottom-console-grid">
+                <div class="terminal-box" id="terminal-box">
+                    <div class="log-entry log-info">[系統就緒] 支援「屬性詳情 / 聲骸」全自動場景切換、「???裝配中」角色自動切換與面板畢業度評分。</div>
+                </div>
+                <div class="preview-box">
+                    <span>OCR 預覽</span>
+                    <canvas id="crop-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="hud-wrapper" id="hud-wrapper">
+            <div class="hud-card" id="hud-card">
+                <div class="hud-custom-bg" id="hud-custom-bg"></div>
+                <div class="hud-custom-dim" id="hud-custom-dim"></div>
+
+                <div class="hud-head">
+                    <span style="font-size: 13px; font-weight: 800; color: var(--primary);">⚡ 鳴潮智能即時分析 (HUD)</span>
+                    <div class="hud-top-actions">
+                        <button id="btn-hud-rescan" class="hud-btn-action hud-btn-rescan"
+                            title="強制重新截取當前畫面並進行 OCR 評分">🔄 重掃</button>
+                        <button id="btn-hud-style" class="hud-btn-action" title="切換背景風格、自訂圖片與動畫設定">🎨 外觀</button>
+                        <span id="hud-scan-badge"
+                            style="font-size: 10px; font-weight: 800; color: var(--accent-green); background: rgba(16, 185, 129, 0.15); padding: 2px 6px; border-radius: 4px;">待命中</span>
+                    </div>
+                </div>
+
+                <div class="hud-mode-bar" id="hud-mode-bar">
+                    <button class="mode-chip active" data-mode="echo" id="btn-mode-echo">⚡ 聲骸評分</button>
+                    <button class="mode-chip" data-mode="panel" id="btn-mode-panel">📋 角色面板分析</button>
+                </div>
+
+                <div class="hud-style-panel" id="hud-style-panel">
+                    <div class="style-row">
+                        <span>🎨 背景風格:</span>
+                        <select id="sel-hud-theme">
+                            <option value="cyber-cyan" selected>深邃科技藍 (預設)</option>
+                            <option value="neon-purple">賽博霓虹紫</option>
+                            <option value="frosted-glass">高透毛玻璃</option>
+                            <option value="oled-black">純黑高對比</option>
+                        </select>
+                    </div>
+                    <div class="style-row">
+                        <span>🌫️ 整體不透明度:</span>
+                        <input type="range" id="rng-hud-opacity" min="0.4" max="1.0" step="0.05" value="0.95">
+                        <span id="txt-hud-opacity">95%</span>
+                    </div>
+                    <div class="style-row">
+                        <span>🖼️ 自訂背景圖片:</span>
+                        <input type="file" id="inp-bg-file" accept="image/*" style="display: none;">
+                        <div class="bg-btn-group" style="width: auto;">
+                            <button type="button" class="bg-mini-btn" id="btn-bg-upload">📁 選擇圖片</button>
+                            <button type="button" class="bg-mini-btn danger" id="btn-bg-clear">🗑️ 清除</button>
+                        </div>
+                    </div>
+                    <div class="style-row">
+                        <input type="text" id="inp-bg-url" placeholder="或貼上圖片網址 (https://...) 按 Enter">
+                    </div>
+                    <div class="style-row">
+                        <span>🌑 背景圖遮罩濃度:</span>
+                        <input type="range" id="rng-bg-dim" min="0.2" max="0.9" step="0.05" value="0.65">
+                        <span id="txt-bg-dim">65%</span>
+                    </div>
+                    <div class="style-row">
+                        <span>✨ 介面過渡動畫:</span>
+                        <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 800; color: var(--primary);">
+                            <input type="checkbox" id="chk-hud-anim" checked style="accent-color: var(--primary);">
+                            <span id="txt-hud-anim">已開啟</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="role-picker" id="role-picker-box">
+                    <label class="auto-role-label" title="打勾時會自動辨識『???裝配中』與『角色面板』自動切換角色">
+                        <input type="checkbox" id="chk-auto-role" checked>
+                        <span>自動切換</span>
+                    </label>
+                    <span style="font-size: 11px; color: var(--text-dim); font-weight: 800; white-space: nowrap;">當前角色:</span>
+                    <select id="role-select">
+                        <option value="" selected>☁️ 載入雲端 ZH 權重中...</option>
+                    </select>
+                </div>
+
+                <div id="hud-echo-view" class="hud-view-pane">
+                    <div class="echo-info-card">
+                        <div class="echo-top-row">
+                            <span class="echo-name" id="echo-name-txt">--</span>
+                            <span class="equipped-tag" id="echo-equipped-tag" style="display: none;">無人裝配</span>
+                            <span class="cost-pill cost-4" id="echo-cost-pill">COST --</span>
+                        </div>
+                        <div class="echo-main-stat" id="echo-main-txt">
+                            <span>主屬性: 等待掃描辨識中</span>
+                        </div>
+                    </div>
+
+                    <div class="grade-dash" id="echo-grade-dash">
+                        <span class="grade-badge badge-c" id="grade-badge">-- 等待掃描</span>
+                        <div class="score-info">
+                            <div class="score-main" id="score-main-txt">0.0 / 100.0 (0%)</div>
+                            <div class="score-sub" id="rv-info-txt">總 RV: 0% | 雙暴 0 條</div>
+                        </div>
+                    </div>
+
+                    <div class="advice-banner" id="advice-banner">
+                        💡 請開啟遊戲畫面串流，系統將自動辨識「聲骸詞條」與「???裝配中」所屬角色。
+                    </div>
+
+                    <div class="subs-stack" id="subs-stack">
+                        <div class="sub-row"><span class="sub-name">✦ 第 1 孔</span><span class="sub-val">--</span></div>
+                        <div class="sub-row"><span class="sub-name">✦ 第 2 孔</span><span class="sub-val">--</span></div>
+                        <div class="sub-row"><span class="sub-name">✦ 第 3 孔</span><span class="sub-val">--</span></div>
+                        <div class="sub-row"><span class="sub-name">✦ 第 4 孔</span><span class="sub-val">--</span></div>
+                        <div class="sub-row"><span class="sub-name">✦ 第 5 孔</span><span class="sub-val">--</span></div>
+                    </div>
+                </div>
+
+                <div id="hud-panel-view" class="hud-char-panel-card hud-view-pane" style="display: none;">
+                    <div class="cp-status-banner" id="cp-status-banner">
+                        📊 角色屬性面板分析 · 自動偵測左上「屬性詳情」
+                    </div>
+                    <div class="cp-info-box">
+                        <div class="cp-top-line">
+                            <span class="cp-char-name" id="cp-char-name">【當前角色】</span>
+                            <span class="cp-level-elem" id="cp-level-elem">Lv -- · 屬性</span>
+                        </div>
+                        <div class="cp-weapon-line" id="cp-weapon-line">
+                            ⚖️ 雙暴總分 (CV): -- | 核心屬性加成分析就緒
+                        </div>
+                    </div>
+
+                    <div class="grade-dash" id="cp-grade-dash" style="margin-bottom: 4px;">
+                        <span class="grade-badge badge-c" id="cp-grade-badge">-- 等待分析</span>
+                        <div class="score-info">
+                            <div class="score-main" id="cp-score-main">0.0% 畢業度</div>
+                            <div class="score-sub" id="cp-score-sub">雙暴分 CV: 0.0 | 面板戰力評估</div>
+                        </div>
+                    </div>
+
+                    <div class="advice-banner" id="cp-advice-banner" style="margin-bottom: 4px;">
+                        💡 當畫面左上角為「屬性詳情」時，系統將自動切換至此面板並計算畢業度。
+                    </div>
+
+                    <div class="cp-stats-grid">
+                        <div class="cp-stat-cell">
+                            <span class="cp-stat-label">❤️ 生命</span>
+                            <span class="cp-stat-val" id="cp-stat-hp">--</span>
+                        </div>
+                        <div class="cp-stat-cell">
+                            <span class="cp-stat-label">⚔️ 攻擊</span>
+                            <span class="cp-stat-val" id="cp-stat-atk">--</span>
+                        </div>
+                        <div class="cp-stat-cell">
+                            <span class="cp-stat-label">🛡️ 防禦</span>
+                            <span class="cp-stat-val" id="cp-stat-def">--</span>
+                        </div>
+                        <div class="cp-stat-cell">
+                            <span class="cp-stat-label">🌀 共鳴效率</span>
+                            <span class="cp-stat-val" id="cp-stat-er">--</span>
+                        </div>
+                        <div class="cp-stat-cell">
+                            <span class="cp-stat-label">🎯 暴擊</span>
+                            <span class="cp-stat-val crit-glow" id="cp-stat-crit">--</span>
+                        </div>
+                        <div class="cp-stat-cell">
+                            <span class="cp-stat-label">💥 暴擊傷害</span>
+                            <span class="cp-stat-val crit-glow" id="cp-stat-cd">--</span>
+                        </div>
+                    </div>
+
+                    <div class="cp-actions-row">
+                        <button class="cp-btn cp-btn-primary" id="btn-cp-save" title="儲存當前面板數值至本地資料庫">💾 儲存面板</button>
+                        <button class="cp-btn cp-btn-danger" id="btn-cp-clear" title="清空已儲存之面板記錄">🗑️ 清空記錄</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="full-canvas"></canvas>
+    <canvas id="header-canvas"></canvas>
+
+    <script>
+        const SUBSTAT_DATA = {
+            "Crit_Rate": { name: "暴擊", max: 10.5, unit: "%" },
+            "Crit_Damage": { name: "暴擊傷害", max: 21.0, unit: "%" },
+            "Attack": { name: "攻擊百分比", max: 11.6, unit: "%" },
+            "Attack_Flat": { name: "固定攻擊", max: 60.0, unit: "" },
+            "ER": { name: "共鳴效率", max: 12.4, unit: "%" },
+            "Skill_Damage": { name: "共鳴技能傷害加成", max: 11.6, unit: "%" },
+            "Ult_Damage": { name: "共鳴解放傷害加成", max: 11.6, unit: "%" },
+            "Basic_Attack_Damage": { name: "普攻傷害加成", max: 11.6, unit: "%" },
+            "Heavy_Attack_Damage": { name: "重擊傷害加成", max: 11.6, unit: "%" },
+            "HP": { name: "生命百分比", max: 11.6, unit: "%" },
+            "HP_Flat": { name: "固定生命", max: 580.0, unit: "" },
+            "Defence": { name: "防禦百分比", max: 14.7, unit: "%" },
+            "Defence_Flat": { name: "固定防禦", max: 70.0, unit: "" }
+        };
+
+        const DEFAULT_DPS_WEIGHTS = {
+            "Crit_Rate": 1.0,
+            "Crit_Damage": 1.0,
+            "Attack": 0.75,
+            "Attack_Flat": 0.3,
+            "ER": 0.55,
+            "Skill_Damage": 0.6,
+            "Ult_Damage": 0.6,
+            "Basic_Attack_Damage": 0.5,
+            "Heavy_Attack_Damage": 0.5,
+            "HP": 0.0,
+            "HP_Flat": 0.0,
+            "Defence": 0.0,
+            "Defence_Flat": 0.0
+        };
+
+        const _GAMEZH_API_SEC = {
+            _k: "GAMEZH_WW_2026_TOKEN",
+            _p: ["LzU5NSlycHgkPEBZ", "QkJxMyAkIiIiby4q", "N2cyNjQtXUMdRXAV", "BC08LSU7BjA2fxMT", "GGptZwR4bBg6KnMb", "LHQuBGkKHBglEn1i", "fFFtEzUZCgBqHhl3", "Mh81ZzkpalxqAWgd", "DBIWNnQoJiMZGWx4", "MidXUw1XPCAmJCtz", "ICQ5Ej8hOD8jLA=="],
+            _b: ["LzU5NSlycHgkPEBZ", "QkJxMyAkIiIiby4q", "N2cyNjQtXUMdRXAV", "BC08LSU7HCM0fgY9", "PgtAeXh/aBB3GA43", "JjQcIg4fKBA2Zm12", "BGlsMDd7NAAOFnsa", "PjIcNB0vYlRqRhFh", "NjwfCxApIwo8AWd4", "MidXUw1CMD8qJXgZ", "EB4XDQUMHgMWHXNj", "d2kMEQweFwsYFQIO", "HwYAZWdtBA=="]
+        };
+
+        function _decryptApiUrl(parts, key) {
+            try {
+                const enc = Array.isArray(parts) ? parts.join("") : parts;
+                const raw = atob(enc);
+                let out = "";
+                for (let i = 0; i < raw.length; i++) {
+                    out += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+                }
+                return out;
+            } catch (e) {
+                return "";
+            }
+        }
+
+        const CHAR_PRESETS = {};
+
+        function isCacheExpiredPastMidnight(cachedTimestamp) {
+            if (!cachedTimestamp) return true;
+            const cachedDate = new Date(cachedTimestamp);
+            const now = new Date();
+            return (
+                cachedDate.getFullYear() !== now.getFullYear() ||
+                cachedDate.getMonth() !== now.getMonth() ||
+                cachedDate.getDate() !== now.getDate()
+            );
+        }
+
+        let mediaStream = null;
+        let isScanning = false;
+        let isBusyOCR = false;
+        let scanTimer = null;
+        let scanCount = 0;
+        let lastRecognizedEcho = null;
+        let ocrWorker = null;
+        let ocrReady = false;
+
+        const videoEl = document.getElementById("stream-video");
+        const placeholderEl = document.getElementById("placeholder");
+        const scanBoxEl = document.getElementById("scan-box");
+        const scanBoxLabelEl = document.getElementById("scan-box-label");
+        const scanSubBoxEl = document.getElementById("scan-subbox");
+        const laserBeamEl = document.getElementById("laser-beam");
+        const btnStartStream = document.getElementById("btn-start-stream");
+        const btnToggleScan = document.getElementById("btn-toggle-scan");
+        const scanIntervalInput = document.getElementById("scan-interval");
+        const terminalBox = document.getElementById("terminal-box");
+        const metaSceneEl = document.getElementById("meta-scene");
+
+        const hudCardEl = document.getElementById("hud-card");
+        const hudWrapperEl = document.getElementById("hud-wrapper");
+        const hudCustomBgEl = hudCardEl.querySelector("#hud-custom-bg");
+        const hudCustomDimEl = hudCardEl.querySelector("#hud-custom-dim");
+        const rolePickerBoxEl = hudCardEl.querySelector("#role-picker-box");
+        const chkAutoRoleEl = hudCardEl.querySelector("#chk-auto-role");
+        const roleSelectEl = hudCardEl.querySelector("#role-select");
+        const hudScanBadgeEl = hudCardEl.querySelector("#hud-scan-badge");
+        const echoNameEl = hudCardEl.querySelector("#echo-name-txt");
+        const echoEquippedTagEl = hudCardEl.querySelector("#echo-equipped-tag");
+        const echoCostPillEl = hudCardEl.querySelector("#echo-cost-pill");
+        const echoMainEl = hudCardEl.querySelector("#echo-main-txt");
+        const gradeBadgeEl = hudCardEl.querySelector("#grade-badge");
+        const scoreMainEl = hudCardEl.querySelector("#score-main-txt");
+        const rvInfoEl = hudCardEl.querySelector("#rv-info-txt");
+        const adviceBannerEl = hudCardEl.querySelector("#advice-banner");
+        const subsStackEl = hudCardEl.querySelector("#subs-stack");
+
+        const cpStatusBannerEl = hudCardEl.querySelector("#cp-status-banner");
+        const cpCharNameEl = hudCardEl.querySelector("#cp-char-name");
+        const cpLevelElemEl = hudCardEl.querySelector("#cp-level-elem");
+        const cpWeaponLineEl = hudCardEl.querySelector("#cp-weapon-line");
+        const cpGradeBadgeEl = hudCardEl.querySelector("#cp-grade-badge");
+        const cpScoreMainEl = hudCardEl.querySelector("#cp-score-main");
+        const cpScoreSubEl = hudCardEl.querySelector("#cp-score-sub");
+        const cpAdviceBannerEl = hudCardEl.querySelector("#cp-advice-banner");
+        const cpStatHpEl = hudCardEl.querySelector("#cp-stat-hp");
+        const cpStatAtkEl = hudCardEl.querySelector("#cp-stat-atk");
+        const cpStatDefEl = hudCardEl.querySelector("#cp-stat-def");
+        const cpStatErEl = hudCardEl.querySelector("#cp-stat-er");
+        const cpStatCritEl = hudCardEl.querySelector("#cp-stat-crit");
+        const cpStatCdEl = hudCardEl.querySelector("#cp-stat-cd");
+
+        let pipWindowRef = null;
+        let lastAcceptedFrameHash = null;
+        let lastOcrWasComplete = false;
+
+        async function initOCR() {
+            try {
+                if (window.Tesseract) {
+                    addLog("正在啟動 Tesseract.js 繁體中文 OCR 模型...", "log-info");
+                    ocrWorker = await Tesseract.createWorker("chi_tra+eng", 1, {
+                        logger: m => { }
+                    });
+                    await ocrWorker.setParameters({
+                        tessedit_pageseg_mode: '6'
+                    });
+                    ocrReady = true;
+                    addLog("✅ OCR 核心載入完成！支援聲骸/屬性詳情自動判斷與裝配角色切換。", "log-success");
+                }
+            } catch (err) {
+                addLog("❌ OCR 核心載入失敗: " + err.message, "log-warn");
+            }
+        }
+        initOCR();
+
+        async function loadZHDatabaseWeights() {
+            const cacheKey = "GAMEZH_ZH_WEIGHTS_V2_CACHE";
+            let payload = null;
+            let fromCache = false;
+
+            try {
+                const cached = localStorage.getItem(cacheKey);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed && parsed.ts && !isCacheExpiredPastMidnight(parsed.ts)) {
+                        payload = parsed.d;
+                        fromCache = true;
+                    } else {
+                        localStorage.removeItem(cacheKey);
+                    }
+                }
+            } catch (_) { }
+
+            if (!payload) {
+                const u1 = _decryptApiUrl(_GAMEZH_API_SEC._p, _GAMEZH_API_SEC._k);
+                try {
+                    const res = await fetch(u1, { cache: "no-store" });
+                    const json = await res.json();
+                    if (json && json.result === 'success') {
+                        payload = json;
+                        try {
+                            localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), d: json }));
+                        } catch (_) { }
+                    }
+                } catch (e) {
+                    try {
+                        const u2 = _decryptApiUrl(_GAMEZH_API_SEC._b, _GAMEZH_API_SEC._k);
+                        const res2 = await fetch(u2, { cache: "no-store" });
+                        const json2 = await res2.json();
+                        if (json2 && json2.result === 'success') {
+                            payload = json2;
+                            try {
+                                localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), d: json2 }));
+                            } catch (_) { }
+                        }
+                    } catch (_) { }
+                }
+            }
+
+            if (payload && payload.headers && payload.data) {
+                const headers = payload.headers;
+                const headerMap = {
+                    "暴擊率": "Crit_Rate", "暴擊傷害": "Crit_Damage",
+                    "攻擊百分比": "Attack", "攻擊固定": "Attack_Flat", "攻擊": "Attack_Flat",
+                    "生命百分比": "HP", "生命固定": "HP_Flat", "生命": "HP_Flat",
+                    "防禦百分比": "Defence", "防禦固定": "Defence_Flat", "防禦": "Defence_Flat",
+                    "共鳴效率": "ER",
+                    "普攻傷害加成": "Basic_Attack_Damage",
+                    "重擊傷害加成": "Heavy_Attack_Damage",
+                    "共鳴技能傷害加成(E)": "Skill_Damage", "共鳴技能傷害加成": "Skill_Damage",
+                    "共鳴解放傷害加成(大招)": "Ult_Damage", "共鳴解放傷害加成": "Ult_Damage"
+                };
+
+                payload.data.forEach(row => {
+                    const cName = row[1];
+                    if (!cName || cName === '(N/A)') return;
+                    const wMap = {};
+                    headers.forEach((h, idx) => {
+                        const k = headerMap[h];
+                        if (k) wMap[k] = parseFloat(row[idx]) || 0;
+                    });
+                    const bName = row[0] ? String(row[0]).trim() : "通用";
+                    CHAR_PRESETS[cName] = {
+                        build: bName,
+                        weights: wMap
+                    };
+                });
+
+                rebuildRoleSelectOptions();
+                const cacheTag = fromCache ? "[瀏覽器本地快取]" : "[雲端即時同步]";
+                addLog(`☁️ ${cacheTag} ZH資料庫全角色權重已就緒 (共 ${Object.keys(CHAR_PRESETS).length} 位角色)！`, "log-success");
+            } else {
+                addLog("⚠️ 無法取得雲端 ZH 權重，將使用預設通用輸出權重。", "log-warn");
+            }
+        }
+        setTimeout(loadZHDatabaseWeights, 300);
+
+        function rebuildRoleSelectOptions(keepSelected) {
+            const cur = keepSelected || roleSelectEl.value;
+            roleSelectEl.innerHTML = "";
+            Object.keys(CHAR_PRESETS).sort().forEach(c => {
+                const opt = document.createElement("option");
+                opt.value = c;
+                const b = CHAR_PRESETS[c].build ? ` (${CHAR_PRESETS[c].build})` : "";
+                opt.textContent = `${c}${b}`;
+                if (c === cur) opt.selected = true;
+                roleSelectEl.appendChild(opt);
+            });
+            if (!roleSelectEl.value && Object.keys(CHAR_PRESETS).length > 0) {
+                roleSelectEl.value = Object.keys(CHAR_PRESETS)[0];
+            }
+        }
+
+        function matchOrRegisterCharacter(rawCharName) {
+            if (!rawCharName) return null;
+            const clean = rawCharName.replace(/[^\u4e00-\u9fa5A-Za-z]/g, "").trim();
+            if (!clean || clean.length < 1) return null;
+
+            const blacklist = ["屬性詳情", "屬性", "詳情", "聲骸技能", "聲骸", "合鳴", "培養", "卸下", "推薦", "未裝備", "簡述", "暴擊", "傷害", "攻擊", "生命", "防禦", "效率", "當前", "等級", "上限", "戰鬥風格"];
+            if (blacklist.some(w => clean === w || clean.includes("傷害") || clean.includes("加成"))) return null;
+
+            const keys = Object.keys(CHAR_PRESETS);
+            for (const k of keys) {
+                const zhPart = k.split("(")[0].replace(/[^\u4e00-\u9fa5]/g, "").trim();
+                if (zhPart && (zhPart === clean || k.includes(clean) || clean.includes(zhPart))) {
+                    return k;
+                }
+            }
+
+            if (clean.length >= 2) {
+                let bestKey = null;
+                let bestScore = 0;
+                for (const k of keys) {
+                    const zhPart = k.split("(")[0].replace(/[^\u4e00-\u9fa5]/g, "").trim();
+                    if (!zhPart || Math.abs(zhPart.length - clean.length) > 1) continue;
+                    let shared = 0;
+                    for (const ch of clean) {
+                        if (zhPart.includes(ch)) shared++;
+                    }
+                    if (shared >= Math.max(2, zhPart.length - 1) && shared > bestScore) {
+                        bestScore = shared;
+                        bestKey = k;
+                    }
+                }
+                if (bestKey) return bestKey;
+            }
+
+            if (clean.length >= 2 && clean.length <= 5) {
+                if (!CHAR_PRESETS[clean]) {
+                    CHAR_PRESETS[clean] = {
+                        build: "自動辨識角色",
+                        weights: { ...DEFAULT_DPS_WEIGHTS }
+                    };
+                    rebuildRoleSelectOptions(clean);
+                }
+                return clean;
+            }
+            return null;
+        }
+
+        function tryAutoSwitchCharacter(detectedName, sourceLabel = "畫面辨識") {
+            if (!detectedName) return false;
+            const matchedKey = matchOrRegisterCharacter(detectedName);
+            if (!matchedKey) return false;
+
+            if (echoEquippedTagEl) {
+                echoEquippedTagEl.style.display = "inline-block";
+                echoEquippedTagEl.textContent = `${matchedKey.split("(")[0].trim()} 裝配中`;
+            }
+
+            if (!chkAutoRoleEl || !chkAutoRoleEl.checked) return false;
+
+            if (roleSelectEl.value !== matchedKey) {
+                roleSelectEl.value = matchedKey;
+                if (rolePickerBoxEl) {
+                    rolePickerBoxEl.classList.remove("role-switched");
+                    void rolePickerBoxEl.offsetWidth;
+                    rolePickerBoxEl.classList.add("role-switched");
+                }
+                addLog(`🔄 [角色自動切換] 由${sourceLabel}偵測到「${detectedName}」→ 已切換為【${matchedKey}】`, "log-success");
+                return true;
+            }
+            return false;
+        }
+
+        function forceRescanNow() {
+            lastAcceptedFrameHash = null;
+            lastOcrWasComplete = false;
+            if (hudScanBadgeEl) {
+                hudScanBadgeEl.textContent = "重掃中...";
+                hudScanBadgeEl.style.color = "var(--primary)";
+            }
+            addLog("🔄 [手動重掃] 強制略過影像快取，重新執行即時辨識與評分...", "log-info");
+            captureAndAnalyzeFrame();
+        }
+
+        const btnHudRescan = hudCardEl.querySelector("#btn-hud-rescan");
+        if (btnHudRescan) {
+            btnHudRescan.addEventListener("click", forceRescanNow);
+        }
+
+        const btnHudStyle = hudCardEl.querySelector("#btn-hud-style");
+        const hudStylePanel = hudCardEl.querySelector("#hud-style-panel");
+        if (btnHudStyle && hudStylePanel) {
+            btnHudStyle.addEventListener("click", () => {
+                hudStylePanel.classList.toggle("open");
+            });
+        }
+
+        let g_hudCurrentMode = "echo";
+        const echoViewEl = hudCardEl.querySelector("#hud-echo-view");
+        const panelViewEl = hudCardEl.querySelector("#hud-panel-view");
+        const modeChips = hudCardEl.querySelectorAll(".mode-chip");
+
+        function switchHudView(targetMode, isAuto = false) {
+            if (g_hudCurrentMode === targetMode && echoViewEl.style.display !== "none" && targetMode === "echo") return;
+            if (g_hudCurrentMode === targetMode && panelViewEl.style.display !== "none" && targetMode === "panel") return;
+
+            g_hudCurrentMode = targetMode;
+            modeChips.forEach(c => {
+                if (c.getAttribute("data-mode") === targetMode) c.classList.add("active");
+                else c.classList.remove("active");
+            });
+
+            if (targetMode === "echo") {
+                echoViewEl.style.display = "block";
+                panelViewEl.style.display = "none";
+                if (scanBoxEl && mediaStream) {
+                    scanBoxEl.style.left = "70%";
+                    scanBoxEl.style.top = "11%";
+                    scanBoxEl.style.width = "28%";
+                    scanBoxEl.style.height = "46%";
+                    if (scanBoxLabelEl) scanBoxLabelEl.textContent = "AI 聲骸詞條鎖定區";
+                }
+                if (scanSubBoxEl && mediaStream) scanSubBoxEl.style.display = "block";
+            } else if (targetMode === "panel") {
+                echoViewEl.style.display = "none";
+                panelViewEl.style.display = "flex";
+                if (scanBoxEl && mediaStream) {
+                    scanBoxEl.style.left = "8%";
+                    scanBoxEl.style.top = "13%";
+                    scanBoxEl.style.width = "23%";
+                    scanBoxEl.style.height = "45%";
+                    if (scanBoxLabelEl) scanBoxLabelEl.textContent = "AI 角色屬性面板鎖定區";
+                }
+                if (scanSubBoxEl) scanSubBoxEl.style.display = "none";
+                refreshCharacterPanelDisplay();
+            }
+
+            if (isAuto) {
+                addLog(`🧭 [場景自動判斷] 偵測到「${targetMode === "panel" ? "屬性詳情 (角色面板)" : "聲骸裝備頁"}」，已自動切換視圖。`, "log-info");
+            }
+        }
+
+        modeChips.forEach(chip => {
+            chip.addEventListener("click", () => {
+                const m = chip.getAttribute("data-mode");
+                switchHudView(m, false);
+            });
+        });
+
+        const CP_LOCAL_STORAGE_KEY = "GAMEZH_SAVED_CHARACTER_PANELS_V1";
+        let g_currentPanelData = {
+            char_name: "",
+            element: "",
+            level: "",
+            stats: {
+                "生命": "--",
+                "攻擊": "--",
+                "防禦": "--",
+                "共鳴效率": "--",
+                "暴擊": "--",
+                "暴擊傷害": "--"
+            },
+            updated_at: ""
+        };
+
+        function loadAllSavedPanels() {
+            try {
+                const raw = localStorage.getItem(CP_LOCAL_STORAGE_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch (_) {
+                return {};
+            }
+        }
+
+        function saveAllPanels(panels) {
+            try {
+                localStorage.setItem(CP_LOCAL_STORAGE_KEY, JSON.stringify(panels));
+            } catch (_) { }
+        }
+
+        function evaluateCharacterPanelStats(charName, stats) {
+            const cfg = CHAR_PRESETS[charName] || { weights: DEFAULT_DPS_WEIGHTS };
+            const w = cfg.weights || DEFAULT_DPS_WEIGHTS;
+
+            const parseNum = v => {
+                if (!v || v === "--") return 0;
+                const m = String(v).match(/(\d+(?:\.\d+)?)/);
+                return m ? parseFloat(m[1]) : 0;
+            };
+
+            const hp = parseNum(stats["生命"]);
+            const atk = parseNum(stats["攻擊"]);
+            const def = parseNum(stats["防禦"]);
+            const er = parseNum(stats["共鳴效率"]);
+            const cr = parseNum(stats["暴擊"]);
+            const cd = parseNum(stats["暴擊傷害"]);
+
+            if (hp === 0 && atk === 0 && cr === 0 && cd === 0) {
+                return {
+                    hasData: false,
+                    cv: 0,
+                    pct: 0,
+                    tierTitle: "-- 等待分析",
+                    badgeClass: "badge-c",
+                    advice: "💡 當畫面左上角為「屬性詳情」時，系統將自動擷取六維數值並進行面板分析。",
+                    isWarn: false
+                };
+            }
+
+            const cv = cr * 2 + cd;
+            let mainScaleScore = 0;
+            if ((w["HP"] || 0) >= 0.8 && (w["HP"] || 0) > (w["Attack"] || 0)) {
+                mainScaleScore = Math.min(100, (hp / 38000) * 100);
+            } else if ((w["Defence"] || 0) >= 0.8 && (w["Defence"] || 0) > (w["Attack"] || 0)) {
+                mainScaleScore = Math.min(100, (def / 3200) * 100);
+            } else {
+                mainScaleScore = Math.min(100, (atk / 2250) * 100);
+            }
+
+            const critScore = Math.min(100, (cv / 390) * 100);
+            const erTarget = (w["ER"] || 0) >= 0.7 ? 135 : 120;
+            const erScore = Math.min(100, (Math.max(100, er) / erTarget) * 100);
+
+            const isCritRole = (w["Crit_Rate"] || 0) >= 0.5 || (w["Crit_Damage"] || 0) >= 0.5;
+            const totalPct = isCritRole
+                ? Math.min(100, critScore * 0.62 + mainScaleScore * 0.28 + erScore * 0.10)
+                : Math.min(100, mainScaleScore * 0.60 + erScore * 0.40);
+
+            let badgeClass = "badge-c";
+            let tierTitle = "♻ C 尚待培養";
+            let advice = "";
+            let isWarn = false;
+
+            if (totalPct >= 88) {
+                badgeClass = "badge-sss";
+                tierTitle = "👑 SSS 頂級畢業";
+                advice = `👑 【極品大畢業面板】雙暴總分 ${cv.toFixed(1)}，攻擊與雙暴配比臻至完美！`;
+            } else if (totalPct >= 76) {
+                badgeClass = "badge-s";
+                tierTitle = "🌟 S 優秀畢業";
+                advice = `🌟 【優秀畢業面板】雙暴總分 ${cv.toFixed(1)}，實戰輸出與循環表現皆十分穩定！`;
+            } else if (totalPct >= 62) {
+                badgeClass = "badge-a";
+                tierTitle = "✨ A 實戰可用";
+                advice = `✨ 【小畢業及格面板】雙暴總分 ${cv.toFixed(1)}，建議持續優化聲骸雙暴與有效詞條。`;
+            } else if (totalPct >= 45) {
+                badgeClass = "badge-b";
+                tierTitle = "📦 B 過渡面板";
+                advice = `📦 【過渡成型期】目前面板尚有提升空間，優先拉滿角色等級與雙暴聲骸。`;
+            } else {
+                badgeClass = "badge-c";
+                tierTitle = "♻ C 尚待培養";
+                advice = `🛑 【培養初期】核心主屬性與雙暴偏低，建議先刷取正確主詞條之 +25 聲骸。`;
+                isWarn = true;
+            }
+
+            if (isCritRole && cr > 0 && cr < 55) {
+                advice += ` (提示: 暴擊率 ${cr}% 偏低，建議提升至 60%+ 穩定期望值)`;
+            } else if (er > 0 && er < 115 && (w["ER"] || 0) >= 0.4) {
+                advice += ` (提示: 共鳴效率 ${er}% 略緊，注意大招循環)`;
+            }
+
+            return {
+                hasData: true,
+                cv,
+                pct: totalPct,
+                tierTitle,
+                badgeClass,
+                advice,
+                isWarn
+            };
+        }
+
+        function refreshCharacterPanelDisplay() {
+            const charName = roleSelectEl ? roleSelectEl.value : "";
+            const allPanels = loadAllSavedPanels();
+            const hasLiveStats = Object.values(g_currentPanelData.stats || {}).some(v => v && v !== "--");
+            const saved = (!hasLiveStats && charName && allPanels[charName]) ? allPanels[charName] : g_currentPanelData;
+
+            const displayChar = charName ? charName.split("(")[0].trim() : (saved.char_name || "當前角色");
+            if (cpCharNameEl) cpCharNameEl.textContent = `【${displayChar}】`;
+
+            const elemStr = saved.element ? ` · ${saved.element}` : "";
+            const lvlStr = saved.level ? saved.level : "Lv --";
+            if (cpLevelElemEl) cpLevelElemEl.textContent = `${lvlStr}${elemStr}`;
+
+            const stats = saved.stats || {};
+            if (cpStatHpEl) cpStatHpEl.textContent = stats["生命"] || "--";
+            if (cpStatAtkEl) cpStatAtkEl.textContent = stats["攻擊"] || "--";
+            if (cpStatDefEl) cpStatDefEl.textContent = stats["防禦"] || "--";
+            if (cpStatErEl) cpStatErEl.textContent = stats["共鳴效率"] || "--";
+            if (cpStatCritEl) cpStatCritEl.textContent = stats["暴擊"] || "--";
+            if (cpStatCdEl) cpStatCdEl.textContent = stats["暴擊傷害"] || "--";
+
+            const evalRes = evaluateCharacterPanelStats(charName || saved.char_name, stats);
+
+            if (cpWeaponLineEl) {
+                cpWeaponLineEl.textContent = evalRes.hasData
+                    ? `⚖️ 雙暴總分 (CV): ${evalRes.cv.toFixed(1)} | 有效屬性權重評估完成`
+                    : `⚖️ 雙暴總分 (CV): -- | 開啟遊戲「屬性詳情」自動分析`;
+            }
+
+            if (cpGradeBadgeEl) {
+                cpGradeBadgeEl.className = `grade-badge ${evalRes.badgeClass}`;
+                cpGradeBadgeEl.textContent = evalRes.tierTitle;
+            }
+            if (cpScoreMainEl) {
+                cpScoreMainEl.textContent = `${evalRes.pct.toFixed(1)}% 畢業度`;
+            }
+            if (cpScoreSubEl) {
+                cpScoreSubEl.textContent = `雙暴分 CV: ${evalRes.cv.toFixed(1)} (暴擊×2 + 暴傷)`;
+            }
+            if (cpAdviceBannerEl) {
+                cpAdviceBannerEl.className = evalRes.isWarn ? "advice-banner advice-warn" : "advice-banner";
+                cpAdviceBannerEl.textContent = evalRes.advice;
+            }
+
+            if (cpStatusBannerEl) {
+                if (saved.updated_at && !hasLiveStats) {
+                    cpStatusBannerEl.textContent = `📊 已載入【${displayChar}】存檔面板 (${saved.updated_at})`;
+                } else if (evalRes.hasData) {
+                    cpStatusBannerEl.textContent = `📊 實時分析【${displayChar}】角色屬性詳情`;
+                } else {
+                    cpStatusBannerEl.textContent = `📊 檢視【${displayChar}】面板 · 等待屬性詳情畫面`;
+                }
+            }
+        }
+
+        const btnCpSave = hudCardEl.querySelector("#btn-cp-save");
+        if (btnCpSave) {
+            btnCpSave.addEventListener("click", () => {
+                const charName = roleSelectEl ? roleSelectEl.value : "";
+                if (!charName) {
+                    alert("請先選擇或辨識當前角色！");
+                    return;
+                }
+                const all = loadAllSavedPanels();
+                g_currentPanelData.char_name = charName;
+                g_currentPanelData.updated_at = new Date().toLocaleString();
+                all[charName] = JSON.parse(JSON.stringify(g_currentPanelData));
+                saveAllPanels(all);
+                refreshCharacterPanelDisplay();
+                addLog(`💾 [面板存檔] 已成功保存【${charName}】之角色屬性面板！`, "log-success");
+            });
+        }
+
+        const btnCpClear = hudCardEl.querySelector("#btn-cp-clear");
+        if (btnCpClear) {
+            btnCpClear.addEventListener("click", () => {
+                const charName = roleSelectEl ? roleSelectEl.value : "";
+                if (confirm(`確定要清除【${charName || "全部"}】的角色面板記錄嗎？`)) {
+                    const all = loadAllSavedPanels();
+                    if (charName && all[charName]) delete all[charName];
+                    else localStorage.removeItem(CP_LOCAL_STORAGE_KEY);
+                    saveAllPanels(all);
+                    g_currentPanelData.stats = { "生命": "--", "攻擊": "--", "防禦": "--", "共鳴效率": "--", "暴擊": "--", "暴擊傷害": "--" };
+                    g_currentPanelData.level = "";
+                    g_currentPanelData.element = "";
+                    g_currentPanelData.updated_at = "";
+                    refreshCharacterPanelDisplay();
+                    addLog(`🗑️ [面板存檔] 已清除角色屬性面板記錄。`, "log-info");
+                }
+            });
+        }
+
+        const STYLE_PREF_KEY = "GAMEZH_HUD_STYLE_PREFS_V2";
+
+        function applyCustomBackground(bgDataUrl, dimVal) {
+            if (bgDataUrl) {
+                hudCustomBgEl.style.backgroundImage = `url("${bgDataUrl}")`;
+                hudCustomBgEl.style.opacity = "1";
+                hudCustomDimEl.style.background = `rgba(5, 8, 17, ${dimVal})`;
+            } else {
+                hudCustomBgEl.style.backgroundImage = "none";
+                hudCustomBgEl.style.opacity = "0";
+                hudCustomDimEl.style.background = "transparent";
+            }
+        }
+
+        function saveStylePrefs() {
+            try {
+                const prefs = {
+                    theme: selTheme.value,
+                    opacity: rngOpacity.value,
+                    bgDim: rngBgDim.value,
+                    anim: chkHudAnim.checked,
+                    bgImg: hudCustomBgEl.getAttribute("data-bg-src") || ""
+                };
+                localStorage.setItem(STYLE_PREF_KEY, JSON.stringify(prefs));
+            } catch (_) { }
+        }
+
+        const selTheme = hudCardEl.querySelector("#sel-hud-theme");
+        const rngOpacity = hudCardEl.querySelector("#rng-hud-opacity");
+        const txtOpacity = hudCardEl.querySelector("#txt-hud-opacity");
+        const inpBgFile = hudCardEl.querySelector("#inp-bg-file");
+        const btnBgUpload = hudCardEl.querySelector("#btn-bg-upload");
+        const btnBgClear = hudCardEl.querySelector("#btn-bg-clear");
+        const inpBgUrl = hudCardEl.querySelector("#inp-bg-url");
+        const rngBgDim = hudCardEl.querySelector("#rng-bg-dim");
+        const txtBgDim = hudCardEl.querySelector("#txt-bg-dim");
+        const chkHudAnim = hudCardEl.querySelector("#chk-hud-anim");
+        const txtHudAnim = hudCardEl.querySelector("#txt-hud-anim");
+
+        if (selTheme) {
+            selTheme.addEventListener("change", () => {
+                hudCardEl.classList.remove("theme-neon-purple", "theme-frosted-glass", "theme-oled-black");
+                if (selTheme.value === "neon-purple") hudCardEl.classList.add("theme-neon-purple");
+                else if (selTheme.value === "frosted-glass") hudCardEl.classList.add("theme-frosted-glass");
+                else if (selTheme.value === "oled-black") hudCardEl.classList.add("theme-oled-black");
+                saveStylePrefs();
+            });
+        }
+
+        if (rngOpacity && txtOpacity) {
+            rngOpacity.addEventListener("input", () => {
+                const v = parseFloat(rngOpacity.value);
+                txtOpacity.textContent = `${Math.round(v * 100)}%`;
+                hudCardEl.style.opacity = v;
+                saveStylePrefs();
+            });
+        }
+
+        if (btnBgUpload && inpBgFile) {
+            btnBgUpload.addEventListener("click", () => inpBgFile.click());
+            inpBgFile.addEventListener("change", e => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const dataUrl = ev.target.result;
+                    hudCustomBgEl.setAttribute("data-bg-src", dataUrl);
+                    applyCustomBackground(dataUrl, parseFloat(rngBgDim.value));
+                    saveStylePrefs();
+                    addLog("🖼️ 已套用自訂背景圖片！", "log-success");
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        if (inpBgUrl) {
+            inpBgUrl.addEventListener("change", () => {
+                const url = inpBgUrl.value.trim();
+                if (!url) return;
+                hudCustomBgEl.setAttribute("data-bg-src", url);
+                applyCustomBackground(url, parseFloat(rngBgDim.value));
+                saveStylePrefs();
+                addLog("🖼️ 已套用自訂網路背景圖片！", "log-success");
+            });
+        }
+
+        if (btnBgClear) {
+            btnBgClear.addEventListener("click", () => {
+                hudCustomBgEl.removeAttribute("data-bg-src");
+                if (inpBgUrl) inpBgUrl.value = "";
+                if (inpBgFile) inpBgFile.value = "";
+                applyCustomBackground("", parseFloat(rngBgDim.value));
+                saveStylePrefs();
+                addLog("🗑️ 已清除自訂背景圖片。", "log-info");
+            });
+        }
+
+        if (rngBgDim && txtBgDim) {
+            rngBgDim.addEventListener("input", () => {
+                const d = parseFloat(rngBgDim.value);
+                txtBgDim.textContent = `${Math.round(d * 100)}%`;
+                const src = hudCustomBgEl.getAttribute("data-bg-src") || "";
+                applyCustomBackground(src, d);
+                saveStylePrefs();
+            });
+        }
+
+        if (chkHudAnim && txtHudAnim) {
+            chkHudAnim.addEventListener("change", () => {
+                const enabled = chkHudAnim.checked;
+                txtHudAnim.textContent = enabled ? "已開啟" : "已關閉";
+                document.body.classList.toggle("no-anim", !enabled);
+                hudCardEl.classList.toggle("no-anim", !enabled);
+                saveStylePrefs();
+            });
+        }
+
+        (function restoreStylePrefs() {
+            try {
+                const raw = localStorage.getItem(STYLE_PREF_KEY);
+                if (!raw) return;
+                const prefs = JSON.parse(raw);
+                if (prefs.theme && selTheme) {
+                    selTheme.value = prefs.theme;
+                    selTheme.dispatchEvent(new Event("change"));
+                }
+                if (prefs.opacity && rngOpacity) {
+                    rngOpacity.value = prefs.opacity;
+                    txtOpacity.textContent = `${Math.round(parseFloat(prefs.opacity) * 100)}%`;
+                    hudCardEl.style.opacity = prefs.opacity;
+                }
+                if (prefs.bgDim && rngBgDim) {
+                    rngBgDim.value = prefs.bgDim;
+                    txtBgDim.textContent = `${Math.round(parseFloat(prefs.bgDim) * 100)}%`;
+                }
+                if (typeof prefs.anim === "boolean" && chkHudAnim) {
+                    chkHudAnim.checked = prefs.anim;
+                    txtHudAnim.textContent = prefs.anim ? "已開啟" : "已關閉";
+                    document.body.classList.toggle("no-anim", !prefs.anim);
+                    hudCardEl.classList.toggle("no-anim", !prefs.anim);
+                }
+                if (prefs.bgImg) {
+                    hudCustomBgEl.setAttribute("data-bg-src", prefs.bgImg);
+                    applyCustomBackground(prefs.bgImg, parseFloat(rngBgDim.value || 0.65));
+                }
+            } catch (_) { }
+        })();
+
+        function addLog(msg, type = "") {
+            const timeStr = new Date().toTimeString().split(" ")[0];
+            const div = document.createElement("div");
+            div.className = `log-entry ${type}`;
+            div.innerHTML = `<span class="log-time">[${timeStr}]</span> ${msg}`;
+            terminalBox.appendChild(div);
+            terminalBox.scrollTop = terminalBox.scrollHeight;
+        }
+
+        function clearLogs() {
+            terminalBox.innerHTML = "";
+            addLog("日誌已清空。", "log-info");
+        }
+
+        btnStartStream.addEventListener("click", async () => {
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+                lastAcceptedFrameHash = null;
+                lastOcrWasComplete = false;
+                lastRecognizedEcho = null;
+                videoEl.style.display = "none";
+                placeholderEl.style.display = "flex";
+                scanBoxEl.style.display = "none";
+                scanSubBoxEl.style.display = "none";
+                document.getElementById("body-root").classList.remove("live-streaming");
+                document.getElementById("live-status-text").textContent = "串流離線 (OFFLINE)";
+                btnStartStream.innerHTML = "<span>📡 開啟遊戲直播畫面</span>";
+                stopScanLoop();
+                addLog("直播畫面串流已關閉。", "log-warn");
+                return;
+            }
+
+            try {
+                mediaStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { cursor: "never", frameRate: { ideal: 60, max: 60 } },
+                    audio: false
+                });
+
+                lastAcceptedFrameHash = null;
+                lastOcrWasComplete = false;
+                lastRecognizedEcho = null;
+
+                videoEl.srcObject = mediaStream;
+                videoEl.style.display = "block";
+                placeholderEl.style.display = "none";
+                scanBoxEl.style.display = "block";
+                if (g_hudCurrentMode === "echo") scanSubBoxEl.style.display = "block";
+
+                document.getElementById("body-root").classList.add("live-streaming");
+                document.getElementById("live-status-text").textContent = "實時直播中 (LIVE 60FPS)";
+                btnStartStream.innerHTML = "<span>⏹ 停止畫面直播</span>";
+
+                videoEl.onloadedmetadata = () => {
+                    const w = videoEl.videoWidth;
+                    const h = videoEl.videoHeight;
+                    document.getElementById("meta-res").textContent = `${w} x ${h}`;
+                    addLog(`🟢 直播串流連線成功！解析度: ${w}x${h}`, "log-success");
+                    startScanLoop();
+                };
+
+                mediaStream.getVideoTracks()[0].onended = () => {
+                    if (mediaStream) btnStartStream.click();
+                };
+            } catch (err) {
+                addLog("❌ 開啟畫面直播已取消或失敗: " + err.message, "log-warn");
+            }
+        });
+
+        btnToggleScan.addEventListener("click", () => {
+            if (isScanning) stopScanLoop();
+            else startScanLoop();
+        });
+
+        scanIntervalInput.addEventListener("change", () => {
+            let val = parseFloat(scanIntervalInput.value);
+            if (isNaN(val) || val < 0.5) val = 0.5;
+            if (val > 10.0) val = 10.0;
+            scanIntervalInput.value = val.toFixed(1);
+            if (isScanning) startScanLoop();
+        });
+
+        function startScanLoop() {
+            if (!mediaStream) {
+                addLog("請先點擊「開啟遊戲直播畫面」連接鳴潮視窗！", "log-warn");
+                return;
+            }
+
+            stopScanLoop();
+            isScanning = true;
+            laserBeamEl.style.display = "block";
+            btnToggleScan.classList.add("scanning");
+            hudScanBadgeEl.textContent = "定時掃描中";
+            hudScanBadgeEl.style.color = "#38bdf8";
+
+            const intervalMs = Math.max(500, parseFloat(scanIntervalInput.value) * 1000);
+            document.getElementById("scan-btn-icon").textContent = "⏸";
+            document.getElementById("scan-btn-text").textContent = `暫停循環 (${(intervalMs / 1000).toFixed(1)}s)`;
+
+            addLog(`▶ 啟動自動分析循環：每隔 ${(intervalMs / 1000).toFixed(1)} 秒分析一次影格。`, "log-info");
+
+            captureAndAnalyzeFrame();
+            scanTimer = setInterval(captureAndAnalyzeFrame, intervalMs);
+        }
+
+        function stopScanLoop() {
+            if (scanTimer) {
+                clearInterval(scanTimer);
+                scanTimer = null;
+            }
+            isScanning = false;
+            laserBeamEl.style.display = "none";
+            btnToggleScan.classList.remove("scanning");
+            document.getElementById("scan-btn-icon").textContent = "▶";
+            document.getElementById("scan-btn-text").textContent = `啟動自動循環辨識 (${parseFloat(scanIntervalInput.value).toFixed(1)}s)`;
+            hudScanBadgeEl.textContent = "已暫停";
+            hudScanBadgeEl.style.color = "#94a3b8";
+        }
+
+        function preprocessCanvasForOCR(ctx, width, height, mode = "strong") {
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const data = imgData.data;
+
+            const offset = mode === "soft" ? 46 : 68;
+            const gain = mode === "soft" ? 1.48 : 1.82;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const lum = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                const inverted = 255 - lum;
+                const val = Math.max(0, Math.min(255, (inverted - offset) * gain));
+                data[i] = val;
+                data[i + 1] = val;
+                data[i + 2] = val;
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function normalizeOcrLine(input) {
+            if (!input) return "";
+            let s = input.replace(/[０-９]/g, ch =>
+                String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)
+            );
+            s = s
+                .replace(/％/g, "%")
+                .replace(/[，,、·•・]/g, ".")
+                .replace(/[：﹕]/g, ":")
+                .replace(/\s+/g, "");
+
+            s = s
+                .replace(/(?<=\d)[Oo](?=[\d.%]|$)/g, "0")
+                .replace(/(?<=^|[^A-Za-z])[Oo](?=\d)/g, "0")
+                .replace(/(?<=\d)[Il|](?=[\d.%]|$)/g, "1")
+                .replace(/(?<=^|[^A-Za-z])[Il|](?=\d)/g, "1")
+                .replace(/(\d)[。.](\d)/g, "$1.$2");
+
+            return s;
+        }
+
+        function countMatchingSubstats(a, b) {
+            if (!a || !b) return 0;
+            let count = 0;
+            for (const current of a.substats || []) {
+                const hit = (b.substats || []).find(prev =>
+                    prev.key === current.key && Math.abs(prev.val - current.val) <= 0.25
+                );
+                if (hit) count++;
+            }
+            return count;
+        }
+
+        function mergeParsedResults(base, extra) {
+            if (!extra) return base;
+
+            const merged = {
+                name: base.name,
+                cost: base.cost,
+                mainStat: base.mainStat,
+                equippedChar: base.equippedChar || extra.equippedChar || "",
+                substats: [...(base.substats || [])]
+            };
+
+            if (
+                merged.mainStat === "未偵測到主屬性" &&
+                extra.mainStat &&
+                extra.mainStat !== "未偵測到主屬性"
+            ) {
+                merged.mainStat = extra.mainStat;
+            }
+
+            if (
+                (!merged.name || merged.name.startsWith("已辨識聲骸")) &&
+                extra.name &&
+                !extra.name.startsWith("已辨識聲骸")
+            ) {
+                merged.name = extra.name;
+            }
+
+            if (extra.cost) merged.cost = extra.cost;
+
+            for (const item of extra.substats || []) {
+                if (merged.substats.length >= 5) break;
+                const exists = merged.substats.some(s =>
+                    s.key === item.key && Math.abs(s.val - item.val) <= 0.25
+                );
+                const sameKey = merged.substats.some(s => s.key === item.key);
+                if (!exists && !sameKey) merged.substats.push(item);
+            }
+
+            return merged;
+        }
+
+        function stabilizeRecognition(current) {
+            if (!lastRecognizedEcho || !current) return current;
+
+            const sameMain =
+                current.mainStat !== "未偵測到主屬性" &&
+                current.mainStat === lastRecognizedEcho.mainStat;
+
+            const overlap = countMatchingSubstats(current, lastRecognizedEcho);
+
+            if (
+                sameMain &&
+                current.substats.length >= 3 &&
+                lastRecognizedEcho.substats.length > current.substats.length &&
+                overlap >= Math.min(3, current.substats.length)
+            ) {
+                return mergeParsedResults(current, lastRecognizedEcho);
+            }
+
+            return current;
+        }
+
+        async function runBottomSubstatFallback(fullCanvas, cropX, cropY, cropW, cropH) {
+            const fallbackCanvas = document.createElement("canvas");
+            const fctx = fallbackCanvas.getContext("2d", { willReadFrequently: true });
+
+            const bandY = Math.floor(cropY + cropH * 0.34);
+            const bandH = Math.floor(cropH * 0.72);
+            const scale = 3.5;
+
+            fallbackCanvas.width = Math.floor(cropW * scale);
+            fallbackCanvas.height = Math.floor(bandH * scale);
+
+            fctx.imageSmoothingEnabled = true;
+            fctx.imageSmoothingQuality = "high";
+            fctx.drawImage(
+                fullCanvas,
+                cropX, bandY, cropW, bandH,
+                0, 0, fallbackCanvas.width, fallbackCanvas.height
+            );
+
+            preprocessCanvasForOCR(
+                fctx,
+                fallbackCanvas.width,
+                fallbackCanvas.height,
+                "soft"
+            );
+
+            const res = await ocrWorker.recognize(fallbackCanvas);
+            return {
+                text: res.data.text || "",
+                parsed: parseEchoTextFromOCR(res.data.text || "")
+            };
+        }
+
+        async function detectTopLeftSceneMode(fullCanvas, vw, vh) {
+            const headerCanvas = document.getElementById("header-canvas");
+            const hctx = headerCanvas.getContext("2d", { willReadFrequently: true });
+
+            const hx = Math.floor(vw * 0.042);
+            const hy = Math.floor(vh * 0.036);
+            const hw = Math.floor(vw * 0.095);
+            const hh = Math.floor(vh * 0.055);
+
+            const scale = 2.6;
+            headerCanvas.width = Math.floor(hw * scale);
+            headerCanvas.height = Math.floor(hh * scale);
+
+            hctx.drawImage(fullCanvas, hx, hy, hw, hh, 0, 0, headerCanvas.width, headerCanvas.height);
+            preprocessCanvasForOCR(hctx, headerCanvas.width, headerCanvas.height, "soft");
+
+            const res = await ocrWorker.recognize(headerCanvas);
+            const txt = normalizeOcrLine(res.data.text || "");
+            const isPanel = /(屬性|詳情|属性|详情|屬|詳)/.test(txt) && !/COST/i.test(txt);
+            return { isPanel, headerText: txt };
+        }
+
+        async function captureAndAnalyzeFrame() {
+            if (!videoEl.videoWidth || !videoEl.videoHeight || isBusyOCR) return;
+            if (!ocrReady || !ocrWorker) return;
+
+            isBusyOCR = true;
+            const t0 = performance.now();
+            scanCount++;
+            document.getElementById("meta-count").textContent = `${scanCount} 次`;
+
+            try {
+                const fullCanvas = document.getElementById("full-canvas");
+                const cropCanvas = document.getElementById("crop-canvas");
+                const fctx = fullCanvas.getContext("2d", { willReadFrequently: true });
+                const cctx = cropCanvas.getContext("2d", { willReadFrequently: true });
+
+                const vw = videoEl.videoWidth;
+                const vh = videoEl.videoHeight;
+                fullCanvas.width = vw;
+                fullCanvas.height = vh;
+                fctx.drawImage(videoEl, 0, 0, vw, vh);
+
+                const sceneCheck = await detectTopLeftSceneMode(fullCanvas, vw, vh);
+
+                if (sceneCheck.isPanel) {
+                    if (metaSceneEl) metaSceneEl.textContent = "屬性詳情 (角色面板)";
+                    switchHudView("panel", g_hudCurrentMode !== "panel");
+
+                    const scale = 3.0;
+                    const headerX = Math.floor(vw * 0.098);
+                    const headerY = Math.floor(vh * 0.135);
+                    const headerW = Math.floor(vw * 0.185);
+                    const headerH = Math.floor(vh * 0.145);
+
+                    const statsY = Math.floor(vh * 0.312);
+                    const statsH = Math.floor(vh * 0.252);
+                    const labelX = Math.floor(vw * 0.128);
+                    const labelW = Math.floor(vw * 0.082);
+                    const valX = Math.floor(vw * 0.222);
+                    const valW = Math.floor(vw * 0.078);
+
+                    const outW = Math.floor(Math.max(headerW, labelW + valW + 12) * scale);
+                    const topH = Math.floor(headerH * scale);
+                    const botH = Math.floor(statsH * scale);
+                    cropCanvas.width = outW;
+                    cropCanvas.height = topH + botH + 16;
+
+                    cctx.fillStyle = "#000000";
+                    cctx.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
+                    cctx.imageSmoothingEnabled = true;
+                    cctx.imageSmoothingQuality = "high";
+
+                    cctx.drawImage(
+                        fullCanvas,
+                        headerX, headerY, headerW, headerH,
+                        0, 0, Math.floor(headerW * scale), topH
+                    );
+
+                    const lblDestW = Math.floor(labelW * scale);
+                    const valDestW = Math.floor(valW * scale);
+                    cctx.drawImage(
+                        fullCanvas,
+                        labelX, statsY, labelW, statsH,
+                        0, topH + 12, lblDestW, botH
+                    );
+                    cctx.drawImage(
+                        fullCanvas,
+                        valX, statsY, valW, statsH,
+                        lblDestW + 10, topH + 12, valDestW, botH
+                    );
+
+                    preprocessCanvasForOCR(cctx, cropCanvas.width, cropCanvas.height, "soft");
+
+                    const panelOcr = await ocrWorker.recognize(cropCanvas);
+                    const panelText = panelOcr.data.text || "";
+                    const parsedPanel = parseCharacterPanelFromOCR(panelText);
+
+                    if (parsedPanel.charName) {
+                        tryAutoSwitchCharacter(parsedPanel.charName, "角色屬性面板");
+                    }
+                    if (parsedPanel.element) g_currentPanelData.element = parsedPanel.element;
+                    if (parsedPanel.level) g_currentPanelData.level = parsedPanel.level;
+
+                    const statKeys = Object.keys(parsedPanel.stats);
+                    if (statKeys.length >= 2) {
+                        for (const [k, v] of Object.entries(parsedPanel.stats)) {
+                            g_currentPanelData.stats[k] = v;
+                        }
+                        refreshCharacterPanelDisplay();
+                        const latency = (performance.now() - t0).toFixed(0);
+                        document.getElementById("meta-latency").textContent = `${latency} ms`;
+                        addLog(`📊 [面板分析成功] 生命:${g_currentPanelData.stats["生命"]} | 攻擊:${g_currentPanelData.stats["攻擊"]} | 雙暴:${g_currentPanelData.stats["暴擊"]}/${g_currentPanelData.stats["暴擊傷害"]} [${latency}ms]`, "log-success");
+                    }
+                    return;
+                }
+
+                if (metaSceneEl) metaSceneEl.textContent = "聲骸裝配頁";
+                switchHudView("echo", g_hudCurrentMode !== "echo");
+
+                const cropX = Math.floor(vw * 0.70);
+                const cropY = Math.floor(vh * 0.11);
+                const cropW = Math.floor(vw * 0.28);
+                const cropH = Math.floor(vh * 0.46);
+
+                const eqX = Math.floor(vw * 0.802);
+                const eqY = Math.floor(vh * 0.852);
+                const eqW = Math.floor(vw * 0.105);
+                const eqH = Math.floor(vh * 0.042);
+
+                const scale = 3.0;
+                const mainDestW = Math.floor(cropW * scale);
+                const mainDestH = Math.floor(cropH * scale);
+                const eqDestW = Math.floor(eqW * scale * 1.15);
+                const eqDestH = Math.floor(eqH * scale * 1.15);
+
+                cropCanvas.width = mainDestW;
+                cropCanvas.height = mainDestH + eqDestH + 14;
+
+                cctx.fillStyle = "#080d1a";
+                cctx.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
+                cctx.imageSmoothingEnabled = true;
+                cctx.imageSmoothingQuality = "high";
+
+                cctx.drawImage(
+                    fullCanvas,
+                    cropX, cropY, cropW, cropH,
+                    0, 0, mainDestW, mainDestH
+                );
+
+                cctx.drawImage(
+                    fullCanvas,
+                    eqX, eqY, eqW, eqH,
+                    10, mainDestH + 10, eqDestW, eqDestH
+                );
+
+                const rawImgData = cctx.getImageData(0, 0, cropCanvas.width, cropCanvas.height);
+                const currentHash = computeFastSampleHash(rawImgData.data);
+
+                const nearSameFrame =
+                    lastAcceptedFrameHash !== null &&
+                    Math.abs(currentHash - lastAcceptedFrameHash) < 350;
+
+                const forceRescan = scanCount % 6 === 0;
+
+                if (nearSameFrame && lastOcrWasComplete && !forceRescan) {
+                    const tDiff = (performance.now() - t0).toFixed(0);
+                    document.getElementById("meta-latency").textContent = `${tDiff} ms`;
+                    return;
+                }
+
+                preprocessCanvasForOCR(cctx, cropCanvas.width, mainDestH, "strong");
+
+                const eqImgData = cctx.getImageData(0, mainDestH, cropCanvas.width, eqDestH + 14);
+                const eqData = eqImgData.data;
+                for (let i = 0; i < eqData.length; i += 4) {
+                    const lum = 0.299 * eqData[i] + 0.587 * eqData[i + 1] + 0.114 * eqData[i + 2];
+                    const inv = 255 - lum;
+                    const v = Math.max(0, Math.min(255, (inv - 42) * 1.55));
+                    eqData[i] = v;
+                    eqData[i + 1] = v;
+                    eqData[i + 2] = v;
+                }
+                cctx.putImageData(eqImgData, 0, mainDestH);
+
+                const ocrRes = await ocrWorker.recognize(cropCanvas);
+                const text = ocrRes.data.text || "";
+
+                let parsedResult = parseEchoTextFromOCR(text);
+
+                if (parsedResult.equippedChar) {
+                    tryAutoSwitchCharacter(parsedResult.equippedChar, "「裝配中」標籤");
+                }
+
+                if (
+                    parsedResult.substats.length >= 3 &&
+                    parsedResult.substats.length < 5
+                ) {
+                    const fallback = await runBottomSubstatFallback(
+                        fullCanvas, cropX, cropY, cropW, cropH
+                    );
+                    const before = parsedResult.substats.length;
+                    parsedResult = mergeParsedResults(
+                        parsedResult,
+                        fallback.parsed
+                    );
+
+                    if (parsedResult.substats.length > before) {
+                        addLog(
+                            `🧩 [第五詞條補抓] ${before} → ${parsedResult.substats.length} 條`,
+                            "log-info"
+                        );
+                    }
+                }
+
+                parsedResult = stabilizeRecognition(parsedResult);
+
+                const latency = (performance.now() - t0).toFixed(0);
+                document.getElementById("meta-latency").textContent = `${latency} ms`;
+
+                const hasAnyResult =
+                    parsedResult.substats.length > 0 ||
+                    parsedResult.mainStat !== "未偵測到主屬性";
+
+                if (hasAnyResult) {
+                    lastRecognizedEcho = parsedResult;
+                    lastAcceptedFrameHash = currentHash;
+                    lastOcrWasComplete = parsedResult.substats.length >= 5;
+                    renderEvaluatedHUD(parsedResult, latency);
+                } else {
+                    lastOcrWasComplete = false;
+                    addLog(
+                        `⚠️ [未偵測到完整詞條] 原始讀取: ${text.replace(/\s+/g, " ").slice(0, 70)}...`,
+                        "log-warn"
+                    );
+                }
+            } catch (e) {
+                lastOcrWasComplete = false;
+                addLog(`❌ [辨識錯誤] ${e.message}`, "log-warn");
+            } finally {
+                isBusyOCR = false;
+            }
+        }
+
+        function computeFastSampleHash(pixels) {
+            let hash = 0;
+            const pixelCount = Math.floor(pixels.length / 4);
+            const stride = Math.max(1, Math.floor(pixelCount / 900));
+
+            for (let p = 0; p < pixelCount; p += stride) {
+                const i = p * 4;
+                hash = (
+                    hash +
+                    pixels[i] * 31 +
+                    pixels[i + 1] * 17 +
+                    pixels[i + 2] * 13
+                ) | 0;
+            }
+            return hash;
+        }
+
+        function parseCharacterPanelFromOCR(rawText) {
+            const out = {
+                charName: "",
+                element: "",
+                level: "",
+                stats: {}
+            };
+
+            const lines = rawText.split("\n").map(l => normalizeOcrLine(l)).filter(Boolean);
+            const cleanText = lines.join(" ");
+
+            const elemMatch = cleanText.match(/(導電|熱熔|冷凝|氣動|衍射|湮滅)/);
+            if (elemMatch) out.element = elemMatch[1];
+
+            const lvlMatch = cleanText.match(/L[vV]\.?\s*(\d{1,2}(?:\/\d{1,2})?)/);
+            if (lvlMatch) out.level = `Lv ${lvlMatch[1]}`;
+
+            for (let i = 0; i < Math.min(5, lines.length); i++) {
+                const line = lines[i];
+                if (/L[vV]\d|屬性|詳情|生命|攻擊|防禦|效率|暴擊/.test(line)) continue;
+                const cleanLine = line.replace(/(導電|熱熔|冷凝|氣動|衍射|湮滅)/g, "");
+                const zhName = cleanLine.match(/[\u4e00-\u9fa5]{2,5}/);
+                if (zhName) {
+                    out.charName = zhName[0];
+                    break;
+                }
+            }
+
+            const hpMatch = cleanText.match(/(?:生命)[^0-9]{0,8}(\d{3,6})/);
+            if (hpMatch) out.stats["生命"] = hpMatch[1];
+
+            const atkMatch = cleanText.match(/(?:攻擊|攻击)[^0-9]{0,8}(\d{3,5})/);
+            if (atkMatch) out.stats["攻擊"] = atkMatch[1];
+
+            const defMatch = cleanText.match(/(?:防禦|防御)[^0-9]{0,8}(\d{2,5})/);
+            if (defMatch) out.stats["防禦"] = defMatch[1];
+
+            const erMatch = cleanText.match(/(?:共鳴效率|共鸣效率|鳴效率|效率)[^0-9%]{0,8}(\d{2,3}(?:\.\d+)?%?)/);
+            if (erMatch) out.stats["共鳴效率"] = erMatch[1].endsWith("%") ? erMatch[1] : `${erMatch[1]}%`;
+
+            const cdMatch = cleanText.match(/(?:暴擊傷害|暴击伤害|暴傷|擊傷害)[^0-9%]{0,8}(\d{2,3}(?:\.\d+)?%?)/);
+            if (cdMatch) out.stats["暴擊傷害"] = cdMatch[1].endsWith("%") ? cdMatch[1] : `${cdMatch[1]}%`;
+
+            const crMatch = cleanText.match(/(?:暴擊率|暴擊|暴击)(?!.*傷)[^0-9%]{0,8}(\d{1,3}(?:\.\d+)?%?)/);
+            if (crMatch) out.stats["暴擊"] = crMatch[1].endsWith("%") ? crMatch[1] : `${crMatch[1]}%`;
+
+            if (Object.keys(out.stats).length < 4) {
+                const statOrder = ["生命", "攻擊", "防禦", "共鳴效率", "暴擊", "暴擊傷害"];
+                const statLines = lines.filter(l => !/L[vV]\d/.test(l) && /\d{2,}/.test(l));
+                if (statLines.length >= 6) {
+                    const lastSix = statLines.slice(-6);
+                    lastSix.forEach((lineStr, idx) => {
+                        const key = statOrder[idx];
+                        if (!out.stats[key]) {
+                            const m = lineStr.match(/(\d+(?:\.\d+)?%?)/g);
+                            if (m) {
+                                let v = m[m.length - 1];
+                                if (idx >= 3 && !v.includes("%")) v += "%";
+                                out.stats[key] = v;
+                            }
+                        }
+                    });
+                }
+            }
+
+            return out;
+        }
+
+        function parseEchoTextFromOCR(rawText) {
+            const rawLines = rawText.split("\n").map(l => normalizeOcrLine(l)).filter(l => l.length > 0);
+            const result = {
+                name: "已辨識聲骸 +25",
+                cost: 4,
+                mainStat: "未偵測到主屬性",
+                equippedChar: "",
+                substats: []
+            };
+
+            const fullNoSpace = normalizeOcrLine(rawText);
+            const fullUpper = fullNoSpace.toUpperCase();
+
+            const eqMatch = fullNoSpace.match(/([\u4e00-\u9fa5]{1,5})(?:裝配中|裝備中|装配中|裝配)/);
+            if (eqMatch && eqMatch[1]) {
+                result.equippedChar = eqMatch[1].replace(/^[裝配中]+/, "");
+            }
+
+            if (/C[O0]ST\s*4/.test(fullUpper)) result.cost = 4;
+            else if (/C[O0]ST\s*3/.test(fullUpper)) result.cost = 3;
+            else if (/C[O0]ST\s*1/.test(fullUpper)) result.cost = 1;
+
+            const elementMainRegex = /(導電|熱熔|冷凝|氣動|衍射|湮滅|治療).*?([0-9]+\.?[0-9]*)\s*%?/;
+
+            const statMatchers = [
+                { key: "Crit_Damage", regex: /(暴擊傷害|暴傷|擊傷害|暴擊傷|暴.*傷).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Crit_Rate", regex: /(暴擊率|暴擊|暴率)(?!.*傷).*?([0-9]+\.?[0-9]*)/ },
+                { key: "ER", regex: /(共鳴效率|鳴效率|共鳴效|效率|鳴效).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Skill_Damage", regex: /(共鳴技能傷害|共鳴技能|技能傷害|技能).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Ult_Damage", regex: /(共鳴解放傷害|共鳴解放|解放傷害|解放).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Basic_Attack_Damage", regex: /(普攻傷害|普攻).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Heavy_Attack_Damage", regex: /(重擊傷害|重擊).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Attack", regex: /(攻擊力|攻擊|攻).*?([0-9]+\.?[0-9]*)/ },
+                { key: "HP", regex: /(生命值|生命|生).*?([0-9]+\.?[0-9]*)/ },
+                { key: "Defence", regex: /(防禦力|防禦|防).*?([0-9]+\.?[0-9]*)/ }
+            ];
+
+            let candidateStats = [];
+
+            for (let i = 0; i < rawLines.length; i++) {
+                const line = rawLines[i];
+                if (/裝配中|裝備中|装配中/.test(line)) continue;
+
+                if (i === 0) {
+                    const zhMatch = line.match(/[\u4e00-\u9fa5]{2,8}/);
+                    if (zhMatch && !/(加成|攻擊|生命|防禦|暴擊|效率|裝配)/.test(zhMatch[0])) {
+                        result.name = `${zhMatch[0]} +25`;
+                    }
+                }
+
+                const elemMatch = line.match(elementMainRegex);
+                if (elemMatch && result.mainStat === "未偵測到主屬性") {
+                    result.mainStat = `${elemMatch[1]}傷害加成 ${elemMatch[2]}%`;
+                    if (parseFloat(elemMatch[2]) === 30) result.cost = 3;
+                    continue;
+                }
+
+                for (let m of statMatchers) {
+                    const match = line.match(m.regex);
+                    if (match) {
+                        const allNums = line.match(/[0-9]+\.?[0-9]*/g);
+                        if (!allNums) continue;
+                        const rawVal = parseFloat(allNums[allNums.length - 1]);
+                        if (isNaN(rawVal) || rawVal <= 0 || rawVal === 25) continue;
+
+                        const hasDotOrPct = line.includes("%") || allNums[allNums.length - 1].includes(".");
+                        let finalKey = m.key;
+
+                        if (m.key === "Attack") {
+                            finalKey = (hasDotOrPct || rawVal < 25) ? "Attack" : "Attack_Flat";
+                        } else if (m.key === "HP") {
+                            finalKey = (hasDotOrPct || rawVal < 40) ? "HP" : "HP_Flat";
+                        } else if (m.key === "Defence") {
+                            finalKey = (hasDotOrPct || rawVal < 30) ? "Defence" : "Defence_Flat";
+                        }
+
+                        candidateStats.push({ key: finalKey, val: rawVal, hasPct: hasDotOrPct });
+                        break;
+                    }
+                }
+            }
+
+            for (let idx = 0; idx < candidateStats.length; idx++) {
+                const item = candidateStats[idx];
+                const meta = SUBSTAT_DATA[item.key];
+                if (!meta) continue;
+
+                if ((item.key === "Attack_Flat" && item.val >= 80) || (item.key === "HP_Flat" && item.val >= 1000)) {
+                    continue;
+                }
+
+                if (result.mainStat === "未偵測到主屬性" && item.val > meta.max) {
+                    result.mainStat = `${meta.name} ${item.val}${meta.unit}`;
+                    continue;
+                }
+
+                if (result.substats.length < 5 && item.val <= meta.max * 1.05) {
+                    if (!result.substats.some(s => s.key === item.key)) {
+                        result.substats.push({ key: item.key, val: item.val });
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        function renderEvaluatedHUD(echo, latency) {
+            const charName = roleSelectEl ? roleSelectEl.value : "通用角色";
+            const charCfg = CHAR_PRESETS[charName] || Object.values(CHAR_PRESETS)[0] || { weights: DEFAULT_DPS_WEIGHTS };
+            const weights = charCfg.weights || DEFAULT_DPS_WEIGHTS;
+
+            echoNameEl.textContent = echo.name;
+            const costPill = echoCostPillEl;
+            costPill.textContent = `COST ${echo.cost}`;
+            costPill.className = `cost-pill cost-${echo.cost}`;
+            echoMainEl.innerHTML = `<span>主屬性: ${echo.mainStat}</span>`;
+
+            let totalScore = 0.0;
+            let totalRv = 0.0;
+            let critCount = 0;
+
+            const subsStack = subsStackEl;
+            subsStack.innerHTML = "";
+
+            for (let i = 0; i < 5; i++) {
+                const sub = echo.substats[i];
+                if (sub) {
+                    const meta = SUBSTAT_DATA[sub.key] || { name: sub.key, max: 10.0, unit: "%" };
+                    const rvRatio = Math.min(1.0, sub.val / meta.max);
+                    const rvPct = rvRatio * 100.0;
+                    totalRv += rvPct;
+
+                    const w = weights[sub.key] || 0.0;
+                    totalScore += rvRatio * w * 100.0;
+
+                    if (sub.key === "Crit_Rate" || sub.key === "Crit_Damage") critCount++;
+
+                    const row = document.createElement("div");
+                    row.className = "sub-row";
+                    row.style.animationDelay = `${i * 0.04}s`;
+                    row.innerHTML = `
+                        <span class="sub-name">✦ ${meta.name}</span>
+                        <div>
+                            <span class="sub-val">${sub.val}${meta.unit}</span>
+                            <span class="sub-rv">RV ${rvPct.toFixed(0)}%</span>
+                        </div>
+                    `;
+                    subsStack.appendChild(row);
+                } else {
+                    const row = document.createElement("div");
+                    row.className = "sub-row";
+                    row.style.opacity = "0.4";
+                    row.style.animationDelay = `${i * 0.04}s`;
+                    row.innerHTML = `<span class="sub-name">✦ 第 ${i + 1} 孔</span><span class="sub-val">未偵測</span>`;
+                    subsStack.appendChild(row);
+                }
+            }
+
+            const sortedW = Object.values(weights).sort((a, b) => b - a);
+            let theoreticalMax = 0.0;
+            for (let i = 0; i < 5; i++) theoreticalMax += (sortedW[i] || 0.0) * 100.0;
+            if (theoreticalMax <= 0) theoreticalMax = 500.0;
+
+            const percentage = Math.min(100.0, (totalScore / theoreticalMax) * 100.0);
+
+            let tierName = "C";
+            let badgeClass = "badge-c";
+            let tierTitle = "♻ C 建議重調";
+            if (percentage >= 85.0) { tierName = "SSS"; badgeClass = "badge-sss"; tierTitle = "👑 SSS 傳家寶"; }
+            else if (percentage >= 75.0) { tierName = "S"; badgeClass = "badge-s"; tierTitle = "🌟 S 優秀畢業"; }
+            else if (percentage >= 60.0) { tierName = "A"; badgeClass = "badge-a"; tierTitle = "✨ A 及格好用"; }
+            else if (percentage >= 45.0) { tierName = "B"; badgeClass = "badge-b"; tierTitle = "📦 B 過渡良品"; }
+
+            const badgeEl = gradeBadgeEl;
+            badgeEl.className = `grade-badge ${badgeClass} pop-anim`;
+            badgeEl.textContent = tierTitle;
+
+            scoreMainEl.textContent = `${totalScore.toFixed(1)} / ${theoreticalMax.toFixed(1)} (${percentage.toFixed(1)}%)`;
+            rvInfoEl.textContent = `總 RV: ${totalRv.toFixed(1)}% | 雙暴 ${critCount} 條`;
+
+            const advBox = adviceBannerEl;
+            advBox.className = "advice-banner";
+            if (percentage >= 85.0) {
+                advBox.textContent = `👑 【SSS 極品傳家寶】${charName.split("(")[0]} 完美適配！`;
+            } else if (percentage >= 75.0) {
+                advBox.textContent = `🌟 【S 優秀大畢業】核心詞條兼備，推薦鎖定裝配！`;
+            } else if (percentage >= 60.0) {
+                advBox.textContent = `✨ 【A 及格良品】過渡期可用胚子，可先裝配提升戰力。`;
+            } else {
+                advBox.className = "advice-banner advice-warn";
+                advBox.textContent = `🛑 【建議重調】有效詞條偏低，建議作為升級素材。`;
+            }
+
+            addLog(`📸 [聲骸OCR] 主詞條: ${echo.mainStat} | 副詞條: ${echo.substats.length} 條 -> ${totalScore.toFixed(1)}分 (${tierName}) [${latency}ms]`, "log-success");
+        }
+
+        document.getElementById("btn-open-pip").addEventListener("click", async () => {
+            if (pipWindowRef && !pipWindowRef.closed) {
+                try { pipWindowRef.focus(); } catch (_) { }
+                return;
+            }
+
+            if ('documentPictureInPicture' in window) {
+                try {
+                    const pipWindow = await window.documentPictureInPicture.requestWindow({
+                        width: 395,
+                        height: 560
+                    });
+                    pipWindowRef = pipWindow;
+
+                    document.querySelectorAll('style, link[rel="stylesheet"]').forEach(style => {
+                        pipWindow.document.head.appendChild(style.cloneNode(true));
+                    });
+
+                    pipWindow.document.body.appendChild(hudCardEl);
+                    pipWindow.document.body.style.background = '#050811';
+                    pipWindow.document.body.style.padding = '8px';
+                    pipWindow.document.body.style.margin = '0';
+
+                    addLog("📱 畫中畫獨立 HUD 已彈出！", "log-info");
+
+                    pipWindow.addEventListener('pagehide', () => {
+                        pipWindowRef = null;
+                        if (hudCardEl && hudWrapperEl && !hudWrapperEl.contains(hudCardEl)) {
+                            hudWrapperEl.appendChild(hudCardEl);
+                        }
+                        addLog("畫中畫視窗已還原至網頁。", "log-info");
+                    }, { once: true });
+
+                    return;
+                } catch (e) {
+                    pipWindowRef = null;
+                    addLog(`⚠️ Document PiP 失敗，改用影片 PiP：${e.message}`, "log-warn");
+                }
+            }
+
+            if (videoEl && videoEl.requestPictureInPicture) {
+                try {
+                    await videoEl.requestPictureInPicture();
+                } catch (err) {
+                    alert("畫中畫開啟失敗: " + err.message);
+                }
+            } else {
+                alert("目前瀏覽器尚未支援畫中畫 API，建議使用最新版 Chrome 或 Edge！");
+            }
+        });
+
+        roleSelectEl.addEventListener("change", () => {
+            addLog(`手動切換目標角色為: 【${roleSelectEl.value}】`, "log-info");
+            if (lastRecognizedEcho) {
+                renderEvaluatedHUD(lastRecognizedEcho, 0);
+            }
+            if (g_hudCurrentMode === "panel") {
+                refreshCharacterPanelDisplay();
+            }
+        });
+    </script>
+</body>
+
+</html>
