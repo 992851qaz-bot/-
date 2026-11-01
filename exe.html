@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMEZH HUD v2.1 | 鳴潮聲骸即時光學評分與面板紀錄系統</title>
+<style>
+:root {
+  --bg-core: #05080f;
+  --bg-surface: #0b101d;
+  --bg-panel: rgba(14, 20, 32, 0.96);
+  --bg-sub: rgba(18, 26, 42, 0.88);
+  --cyan: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.35);
+  --amber: #f59e0b;
+  --emerald: #10b981;
+  --violet: #c084fc;
+  --crimson: #ef4444;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --border-std: rgba(56, 189, 248, 0.35);
+  --font-mono: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-core);
+  background-image: 
+    linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.10) 0%, transparent 40%);
+  background-size: 36px 36px, 36px 36px, 100% 100%, 100% 100%;
+  color: var(--text-primary);
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+.svg-ic {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.svg-ic.lg { width: 22px; height: 22px; }
+.svg-ic.sm { width: 13px; height: 13px; }
+
+/* ==================== 頂部導覽列 ==================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 5%;
+  background: rgba(5, 8, 15, 0.90);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: 0.8px;
+  color: #f3c053;
+}
+
+.brand-tag {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--cyan);
+  border: 1px solid var(--border-std);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.nav-menu a:hover { color: var(--cyan); }
+
+.nav-btn-dc {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid #6366f1;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 800;
+  transition: 0.2s;
+}
+.nav-btn-dc:hover { background: #6366f1; color: #fff; }
+
+.container {
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ==================== 置頂 2.2 版本系統公告 ==================== */
+.bulletin-panel {
+  margin-top: 22px;
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(20, 28, 46, 0.95));
+  border: 1px solid rgba(245, 158, 11, 0.55);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 860px) {
+  .bulletin-panel { grid-template-columns: 1fr; gap: 10px; }
+}
+
+.bulletin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.bulletin-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 760px) {
+  .bulletin-items { grid-template-columns: 1fr; }
+}
+
+.b-item {
+  background: rgba(6, 9, 16, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.b-item.cyan { border-left: 3px solid var(--cyan); }
+.b-item.violet { border-left: 3px solid var(--violet); }
+
+/* ==================== Hero 標題與雙載點 ==================== */
+.hero-header {
+  text-align: center;
+  padding: 36px 0 24px;
+}
+
+.hero-header h1 {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #ffffff 0%, #38bdf8 55%, #f3c053 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.hero-header p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  max-width: 780px;
+  margin: 0 auto 22px;
+}
+
+.dl-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14.5px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.btn-action:hover { transform: translateY(-2px); }
+
+.btn-ms {
+  background: linear-gradient(90deg, #0284c7, #0ea5e9);
+  color: #fff;
+  border: 1px solid #38bdf8;
+  box-shadow: 0 6px 24px rgba(14, 165, 233, 0.35);
+}
+
+.btn-cloud {
+  background: rgba(16, 185, 129, 0.16);
+  color: #34d399;
+  border: 1px solid #10b981;
+}
+.btn-cloud:hover { background: rgba(16, 185, 129, 0.28); color: #fff; }
+
+.btn-auth {
+  background: rgba(168, 85, 247, 0.16);
+  color: #d8b4fe;
+  border: 1px solid #a855f7;
+}
+.btn-auth:hover { background: rgba(168, 85, 247, 0.28); color: #fff; }
+
+/* ==================== 互動式雙視窗實機模擬器 ==================== */
+.simulator-shell {
+  background: rgba(9, 13, 22, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 48px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+}
+
+.sim-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sim-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sim-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #060911;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.18s;
+}
+.sim-tab:hover { border-color: var(--cyan); color: #fff; }
+.sim-tab.active {
+  background: rgba(56, 189, 248, 0.18);
+  color: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+.sim-auto-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--emerald);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sim-workspace {
+  display: grid;
+  grid-template-columns: 1fr 432px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .sim-workspace { grid-template-columns: 1fr; }
+}
+
+/* 左側：遊戲模擬視口 */
+.game-viewport {
+  background: linear-gradient(145deg, #090e1a 0%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 16px;
+  min-height: 430px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.vp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--cyan);
+}
+
+.vp-targets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+}
+
+@media (max-width: 560px) {
+  .vp-targets-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.vp-card {
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 11px 10px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.18s;
+}
+.vp-card:hover { border-color: var(--cyan); background: rgba(30, 41, 59, 0.9); }
+.vp-card.active {
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.2), rgba(15, 23, 42, 0.95));
+  border: 1.5px solid var(--cyan);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.3);
+}
+
+.vp-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.vp-card-title {
+  font-size: 13.5px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.vp-card-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+/* OCR 掃描取樣框與雷射動畫 */
+.ocr-capture-zone {
+  background: rgba(5, 8, 15, 0.9);
+  border: 1px dashed rgba(56, 189, 248, 0.55);
+  border-radius: 8px;
+  padding: 12px 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ocr-beam {
+  position: absolute;
+  left: 0;
+  top: -100%;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.45), #38bdf8);
+  pointer-events: none;
+  opacity: 0;
+}
+.ocr-beam.active {
+  animation: scanSweep 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes scanSweep {
+  0% { top: -30%; opacity: 1; }
+  85% { top: 100%; opacity: 1; }
+  100% { top: 110%; opacity: 0; }
+}
+
+.ocr-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--cyan);
+  margin-bottom: 6px;
+}
+
+.ocr-raw-box {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  line-height: 1.5;
+}
+
+/* 虛擬滑鼠指標 */
+.sim-cursor {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+  z-index: 60;
+  transition: top 0.5s cubic-bezier(0.22, 1, 0.36, 1), left 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85));
+}
+
+.cursor-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2.5px solid var(--cyan);
+  transform: scale(0);
+  opacity: 0;
+}
+.cursor-ring.pulse {
+  animation: ringPulse 0.45s ease-out;
+}
+@keyframes ringPulse {
+  0% { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(2.0); opacity: 0; }
+}
+
+/* ==================== 右側：100% 原生 PyQt6 HUD 復刻面板 ==================== */
+.pyqt-hud {
+  background: linear-gradient(180deg, rgba(14, 20, 32, 0.97) 0%, rgba(10, 15, 25, 0.96) 45%, rgba(6, 9, 16, 0.98) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  border-radius: 14px;
+  padding: 11px 12px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9), 0 0 20px rgba(56, 189, 248, 0.16);
+}
+
+.qt-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.qt-title {
+  color: #f3c053;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.qt-status {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-weight: 800;
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.qt-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.qt-icon-btn {
+  background: rgba(30, 41, 59, 0.75);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 5px;
+  height: 22px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.qt-icon-btn:hover { background: rgba(56, 189, 248, 0.3); color: #fff; }
+.qt-icon-btn.amber { color: #f59e0b; border-color: rgba(245, 158, 11, 0.45); background: rgba(245, 158, 11, 0.15); }
+.qt-icon-btn.violet { color: #c084fc; border-color: rgba(168, 85, 247, 0.45); background: rgba(168, 85, 247, 0.15); }
+
+.qt-combo-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1.1fr 1fr;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.qt-combo {
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-weight: 800;
+  font-size: 11px;
+  outline: none;
+}
+
+/* 聲骸資訊卡 */
+.qt-info-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.90), rgba(9, 14, 24, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-left: 3px solid #38bdf8;
+  border-radius: 7px;
+  padding: 5px 8px;
+  margin-bottom: 5px;
+}
+
+.qt-info-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+
+.qt-grade-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 24px;
+  margin-bottom: 5px;
+}
+
+.qt-grade-badge {
+  height: 24px;
+  padding: 2px 10px;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.qt-substats-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.qt-sub-item {
+  display: grid;
+  grid-template-columns: 124px 46px 1fr 38px;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 11.5px;
+}
+.qt-sub-item.top {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.28) 0%, rgba(245, 158, 11, 0.08) 70%, rgba(245, 158, 11, 0.02) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-left: 4px solid #f59e0b;
+  color: #fef08a;
+  font-weight: 800;
+}
+.qt-sub-item.eff {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.08) 70%, rgba(16, 185, 129, 0.02) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.40);
+  border-left: 4px solid #10b981;
+  color: #a7f3d0;
+  font-weight: 800;
+}
+.qt-sub-item.norm {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-left: 4px solid rgba(100, 116, 139, 0.35);
+  color: #94a3b8;
+}
+
+.qt-tier-bar {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2.5px;
+  height: 9px;
+}
+.qt-tier-seg {
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.qt-tier-seg.t8 { background: linear-gradient(180deg, #00f0ff, #0284c7); border: none; }
+.qt-tier-seg.t6 { background: linear-gradient(180deg, #c084fc, #7c3aed); border: none; }
+.qt-tier-seg.t4 { background: linear-gradient(180deg, #38bdf8, #0284c7); border: none; }
+.qt-tier-seg.t2 { background: linear-gradient(180deg, #ef4444, #b91c1c); border: none; }
+
+/* Page 3: 角色屬性面板與武器庫模式 (完整復刻程式碼 init_character_panel_widget) */
+.qt-char-panel {
+  display: none;
+  margin-bottom: 6px;
+}
+.qt-cp-banner {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: 800;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+.qt-cp-info {
+  background: linear-gradient(135deg, rgba(18, 26, 42, 0.88), rgba(10, 16, 26, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-left: 3px solid #38bdf8;
+  border-radius: 8px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+.qt-cp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+.qt-cp-cell {
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  padding: 5px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+}
+
+.qt-advice-box {
+  background: linear-gradient(180deg, rgba(11, 19, 31, 0.95), rgba(6, 11, 18, 0.98));
+  border: 1px solid #10b981;
+  border-left: 4px solid #10b981;
+  border-radius: 9px;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.qt-footer {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 7px;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+}
+
+/* ==================== 專業技術規格與功能矩陣 ==================== */
+.sec-header {
+  margin: 54px 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+  padding-bottom: 10px;
+}
+
+.sec-header h2 {
+  font-size: 24px;
+  font-weight: 900;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sec-header span.sub {
+  font-size: 12.5px;
+  font-family: var(--font-mono);
+  color: var(--cyan);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 920px) {
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .tech-grid { grid-template-columns: 1fr; }
+}
+
+.tech-card {
+  background: var(--bg-panel);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 10px;
+  padding: 18px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.tech-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+}
+
+.tc-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: var(--cyan);
+}
+
+.tc-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tech-card h3 {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.tech-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.tc-spec {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* ==================== 標準部署流程與評分級距表 ==================== */
+.dual-section {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 20px;
+  margin-bottom: 50px;
+}
+
+@media (max-width: 920px) {
+  .dual-section { grid-template-columns: 1fr; }
+}
+
+.sop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sop-item {
+  background: var(--bg-panel);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--cyan);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.sop-step-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 6px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sop-item h4 {
+  font-size: 15px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.sop-item p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.tier-table-card {
+  background: var(--bg-panel);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.tier-row {
+  display: grid;
+  grid-template-columns: 95px 78px 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 12.5px;
+}
+.tier-row:last-child { border-bottom: none; }
+
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 28px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <svg class="svg-ic lg" style="color:#38bdf8;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    <span>GAMEZH HUD</span>
+    <span class="brand-tag">v2.1.0 RELEASE</span>
+  </div>
+  <div class="nav-menu">
+    <a href="#simulator">實機互動演示</a>
+    <a href="#architecture">核心架構與面板辨識</a>
+    <a href="#deployment">標準作業流程</a>
+    <a href="https://discord.gg/WWewHKwMwa" target="_blank" class="nav-btn-dc">
+      <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>ZHDC 授權與支援群</span>
+    </a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- 置頂 v2.2 系統查核與更新預告 -->
+  <div class="bulletin-panel">
+    <div class="bulletin-badge">
+      <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>SYSTEM NOTICE // v2.2 預告</span>
+    </div>
+    <div class="bulletin-items">
+      <div class="b-item cyan">
+        <svg class="svg-ic" style="color:var(--cyan);" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <div>
+          <strong style="color:#fff;">評分計算補償修正：</strong>
+          <span style="color:var(--text-secondary);">經查核目前版本少加了分數（現況評分較嚴格），將於 <strong>v2.2 版本</strong>修復補回標準分值。</span>
+        </div>
+      </div>
+      <div class="b-item violet">
+        <svg class="svg-ic" style="color:var(--violet);" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+        <div>
+          <strong style="color:#fff;">指定視窗鎖定修復：</strong>
+          <span style="color:var(--text-secondary);">目前版本切換指定視窗後仍固定擷取全螢幕，將於 <strong>v2.2 版本</strong>修復視窗座標鎖定。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主視覺區 -->
+  <div class="hero-header">
+    <h1>鳴潮聲骸即時懸浮評分與角色面板紀錄系統</h1>
+    <p>基於 RapidOCR 2.5x 超分辨率銳化與 PyQt6 硬件加速疊層。支援聲骸 8 檔位即時評分、階段性開孔止損、雙聲骸同框比對、官方推薦面板吸取與角色六維屬性/武器庫自動歸檔。</p>
+    <div class="dl-actions">
+      <a href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" class="btn-action btn-ms">
+        <svg class="svg-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+        <span>Microsoft Store 微軟載點</span>
+      </a>
+      <a href="https://drive.google.com/drive/folders/17pFcXxshUHvVkvNWgxLp6Lpw0tpbyRNR?usp=sharing" target="_blank" class="btn-action btn-cloud">
+        <svg class="svg-ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Google 雲端下載</span>
+      </a>
+      <a href="https://discord.gg/WWewHKwMwa" target="_blank" class="btn-action btn-auth">
+        <svg class="svg-ic" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        <span>前往 DC 領取授權碼 (/授權碼)</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 互動式實機系統模擬器 (含聲骸評分、止損、角色面板辨識、雙聲骸對比、推薦面板辨識、就地編輯) -->
+  <div class="simulator-shell" id="simulator">
+    <div class="sim-nav-bar">
+      <div class="sim-tabs">
+        <button class="sim-tab active" id="stab-0" onclick="manualSelectMode(0)">
+          <svg class="svg-ic sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>01. SSS 滿孔評分</span>
+        </button>
+        <button class="sim-tab" id="stab-1" onclick="manualSelectMode(1)">
+          <svg class="svg-ic sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <span>02. +10 開孔止損</span>
+        </button>
+        <button class="sim-tab" id="stab-2" onclick="manualSelectMode(2)">
+          <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+          <span>03. 角色面板與武器辨識</span>
+        </button>
+        <button class="sim-tab" id="stab-3" onclick="manualSelectMode(3)">
+          <svg class="svg-ic sm" viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          <span>04. 雙聲骸同框對比</span>
+        </button>
+        <button class="sim-tab" id="stab-4" onclick="manualSelectMode(4)">
+          <svg class="svg-ic sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <span>05. 官方推薦面板辨識</span>
+        </button>
+        <button class="sim-tab" id="stab-5" onclick="manualSelectMode(5)">
+          <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span>06. 暫停即就地編輯</span>
+        </button>
+      </div>
+      <div class="sim-auto-ctrl" id="auto-btn" onclick="toggleSimAuto()">
+        <svg class="svg-ic sm" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span id="auto-txt">AUTO-DEMO RUNNING (點擊左方區塊可手動測試)</span>
+      </div>
+    </div>
+
+    <div class="sim-workspace">
+      <!-- 左側：模擬遊戲畫面與 OCR 取樣框 -->
+      <div class="game-viewport">
+        <div class="vp-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <svg class="svg-ic sm" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>WUTHERING WAVES // 遊戲畫面模擬器 (點擊下方項目觸發 OCR)</span>
+          </div>
+          <span style="font-family:var(--font-mono); color:#10b981;">DEBOUNCE: 0.10s</span>
+        </div>
+
+        <div class="vp-targets-grid">
+          <div class="vp-card active" id="vpc-0" onclick="manualSelectMode(0)">
+            <div class="vp-card-head">
+              <span style="color:var(--amber);">COST 4</span>
+              <span style="color:var(--cyan);">SLOT #1</span>
+            </div>
+            <div class="vp-card-title">無妄者 +25</div>
+            <div class="vp-card-sub">右側背包 / 滿孔雙暴</div>
+          </div>
+
+          <div class="vp-card" id="vpc-1" onclick="manualSelectMode(1)">
+            <div class="vp-card-head">
+              <span style="color:var(--violet);">COST 3</span>
+              <span style="color:var(--crimson);">LEFT PANEL</span>
+            </div>
+            <div class="vp-card-title">暗鬃狼 +10</div>
+            <div class="vp-card-sub">左側培養 / 前2孔防禦</div>
+          </div>
+
+          <div class="vp-card" id="vpc-2" onclick="manualSelectMode(2)">
+            <div class="vp-card-head">
+              <span style="color:var(--cyan);">CHAR DETAIL</span>
+              <span style="color:var(--emerald);">PANEL + WEP</span>
+            </div>
+            <div class="vp-card-title">屬性詳情與武器</div>
+            <div class="vp-card-sub">角色六維面板自動歸檔</div>
+          </div>
+
+          <div class="vp-card" id="vpc-3" onclick="manualSelectMode(3)">
+            <div class="vp-card-head">
+              <span style="color:var(--cyan);">COMPARE</span>
+              <span style="color:var(--emerald);">+17.2 PTS</span>
+            </div>
+            <div class="vp-card-title">雙聲骸換裝比對</div>
+            <div class="vp-card-sub">左側待選 vs 右側現裝</div>
+          </div>
+
+          <div class="vp-card" id="vpc-4" onclick="manualSelectMode(4)">
+            <div class="vp-card-head">
+              <span style="color:var(--amber);">OFFICIAL REC</span>
+              <span style="color:var(--cyan);">AUTO IMPORT</span>
+            </div>
+            <div class="vp-card-title">聲骸推薦面板</div>
+            <div class="vp-card-sub">一鍵導入主詞條與權重</div>
+          </div>
+
+          <div class="vp-card" id="vpc-5" onclick="manualSelectMode(5)">
+            <div class="vp-card-head">
+              <span style="color:var(--amber);">IN-PLACE</span>
+              <span style="color:var(--violet);">8-TIER LOCK</span>
+            </div>
+            <div class="vp-card-title">就地編輯重算</div>
+            <div class="vp-card-sub">官方8檔位即時連動</div>
+          </div>
+        </div>
+
+        <!-- 底部 OCR 取樣實況 -->
+        <div class="ocr-capture-zone">
+          <div class="ocr-beam" id="ocr-laser"></div>
+          <div class="ocr-meta-bar">
+            <span id="ocr-zone-label">[ROI CAPTURE] 右側背包卡片 (x:0.76~0.98, y:0.11~0.49)</span>
+            <span id="ocr-conf-label">2.5x LANCZOS | CONF: 99.2%</span>
+          </div>
+          <div class="ocr-raw-box" id="ocr-raw-text">
+            &gt; [MAIN] 暴擊傷害 44.0% | 攻擊 150 (COST 4 鎖定)<br>
+            &gt; [SUBS] 暴擊 9.9% (7/8) | 暴傷 19.8% (7/8) | 普攻加成 11.6% (8/8) | 攻擊% 10.9% (7/8) | 共鳴效率 10.0% (5/8)
+          </div>
+        </div>
+
+        <!-- 虛擬滑鼠游標 -->
+        <div class="sim-cursor" id="sim-mouse" style="top:95px; left:110px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#38bdf8" stroke="#ffffff" stroke-width="1.8">
+            <path d="M4 2l16 11-7 2 4 7-3 1-4-7-6 5z"/>
+          </svg>
+          <div class="cursor-ring" id="sim-ring"></div>
+        </div>
+      </div>
+
+      <!-- 右側：PyQt6 懸浮 HUD 實體面板 -->
+      <div class="pyqt-hud">
+        <div class="qt-header">
+          <div class="qt-title">
+            <svg class="svg-ic sm" style="color:#f3c053;" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>聲骸評分</span>
+          </div>
+          <div class="qt-status" id="qt-status-pill">
+            <span class="qt-dot"></span>
+            <span id="qt-status-text">掃描正常</span>
+          </div>
+          <div style="flex:1;"></div>
+          <button class="qt-icon-btn amber" id="qt-btn-pause" onclick="manualSelectMode(5)" title="暫停/就地編輯">
+            <svg class="svg-ic sm" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <button class="qt-icon-btn violet" onclick="toggleSlotDrawer()" title="5槽位裝配紀錄">
+            <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>歷史 (5)</span>
+          </button>
+          <button class="qt-icon-btn" onclick="manualSelectMode(2)" title="角色屬性面板與武器庫">
+            <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+          </button>
+        </div>
+
+        <div class="qt-combo-row">
+          <select class="qt-combo" onchange="triggerOcrSweep()">
+            <option>椿 (Camellya)</option>
+            <option>今汐 (Jinhsi)</option>
+            <option>長離 (Changli)</option>
+            <option>珂萊塔 (Carlotta)</option>
+          </select>
+          <select class="qt-combo" style="color:var(--cyan); border-color:rgba(56,189,248,0.45);">
+            <option>ZH·通用輸出</option>
+            <option>自訂·極致雙暴</option>
+          </select>
+          <select class="qt-combo" style="color:var(--amber); border-color:rgba(245,158,11,0.45);">
+            <option>自動判斷</option>
+            <option>右側 (背包)</option>
+            <option>左側 (培養)</option>
+          </select>
+        </div>
+
+        <!-- [Stack Page 0] 標準聲骸評分檢視 -->
+        <div id="qt-page-echo">
+          <div class="qt-info-card">
+            <div class="qt-info-top">
+              <span style="font-weight:900; font-size:13px; color:#fff;" id="qt-echo-name">無妄者</span>
+              <span style="background:rgba(56,189,248,0.16); color:var(--cyan); border:1px solid rgba(56,189,248,0.45); padding:0 5px; border-radius:4px; font-size:10.5px; font-weight:900;" id="qt-echo-lvl">+25</span>
+              <span style="background:rgba(56,189,248,0.12); color:#7dd3fc; border:1px solid rgba(56,189,248,0.35); padding:0 5px; border-radius:4px; font-size:10px; font-weight:800;" id="qt-sonata">沉日劫明</span>
+              <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.5); padding:0 5px; border-radius:4px; font-size:10px; font-weight:800;" id="qt-slot">1號位·裝配</span>
+              <span style="margin-left:auto; background:rgba(245,158,11,0.25); color:#fbbf24; border:1px solid rgba(251,191,36,0.7); padding:0 7px; border-radius:5px; font-size:11px; font-weight:900;" id="qt-cost">COST 4</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+              <span id="qt-main-stat" style="color:#fef08a; font-weight:900;">暴擊傷害 44.0% | 攻擊 150</span>
+              <span id="qt-rec-tag" style="background:rgba(16,185,129,0.25); color:#34d399; border:1px solid rgba(52,211,153,0.7); border-radius:4px; padding:0 6px; font-size:10px; font-weight:900;">推薦主詞條</span>
+            </div>
+          </div>
+
+          <div class="qt-grade-row">
+            <div class="qt-grade-badge" id="qt-grade-badge" style="background:linear-gradient(90deg,#f59e0b,#d97706); color:#000;">
+              <span>SSS 傳家寶</span>
+            </div>
+            <div style="color:#f3c053; font-weight:900; font-size:13px; font-family:var(--font-mono);" id="qt-score-num">
+              得分: 88.4 / 96.5 (91.6%)
+            </div>
+          </div>
+
+          <div class="qt-substats-box" id="qt-subs-container"></div>
+        </div>
+
+        <!-- [Stack Page 3] 角色屬性面板與武器庫模式 (對應程式碼 init_character_panel_widget) -->
+        <div class="qt-char-panel" id="qt-page-charpanel">
+          <div class="qt-cp-banner">
+            目前您正在看【椿】面板 · 進入紀錄面板模式 (已自動歸檔)
+          </div>
+          <div class="qt-cp-info">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="color:#fff; font-weight:900; font-size:14.5px;">【椿】</span>
+              <span style="color:var(--cyan); font-weight:800; font-size:11.5px; background:rgba(56,189,248,0.18); border:1px solid rgba(56,189,248,0.4); border-radius:4px; padding:1px 6px;">Lv.90/90 · 湮滅</span>
+            </div>
+            <div style="color:#fbbf24; font-size:11px; font-weight:800;">
+              裝備武器：裁春 (諧振 1階) [已自動記錄至武器庫]
+            </div>
+          </div>
+          <div class="qt-cp-grid">
+            <div class="qt-cp-cell"><span style="color:#94a3b8; font-weight:700;">生命</span><span style="font-family:var(--font-mono); font-weight:900;">16,840</span></div>
+            <div class="qt-cp-cell"><span style="color:#94a3b8; font-weight:700;">攻擊</span><span style="font-family:var(--font-mono); font-weight:900;">2,415</span></div>
+            <div class="qt-cp-cell"><span style="color:#94a3b8; font-weight:700;">防禦</span><span style="font-family:var(--font-mono); font-weight:900;">1,182</span></div>
+            <div class="qt-cp-cell"><span style="color:#94a3b8; font-weight:700;">共鳴效率</span><span style="font-family:var(--font-mono); font-weight:900;">124.8%</span></div>
+            <div class="qt-cp-cell"><span style="color:#94a3b8; font-weight:700;">暴擊</span><span style="font-family:var(--font-mono); font-weight:900; color:var(--amber);">74.6%</span></div>
+            <div class="qt-cp-cell"><span style="color:#94a3b8; font-weight:700;">暴擊傷害</span><span style="font-family:var(--font-mono); font-weight:900; color:var(--amber);">286.4%</span></div>
+          </div>
+        </div>
+
+        <!-- [Stack Page 2] 雙聲骸即時比對視圖 -->
+        <div id="qt-page-compare" style="display:none; background:rgba(15,23,42,0.95); border:1.5px solid var(--cyan); border-radius:8px; padding:8px; margin-bottom:6px;">
+          <div style="color:var(--cyan); font-weight:900; font-size:11.5px;">雙聲骸即時對比 (左側待選 vs 右側現裝)</div>
+          <div style="color:#fff; font-weight:800; font-size:11px; margin:3px 0;">
+            待選: <b style="color:var(--cyan);">88.4</b>分 vs 現裝: <b style="color:var(--emerald);">71.2</b>分 | 差值: <b style="color:var(--emerald);">+17.2分 (建議替換)</b>
+          </div>
+          <div style="font-size:10px; color:#94a3b8; font-family:var(--font-mono);">
+            <span style="color:var(--emerald);">暴擊 +2.4%</span> | <span style="color:var(--emerald);">暴傷 +4.8%</span> | <span style="color:var(--emerald);">普攻加成 +11.6%</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; font-size:10.5px;">
+            <div style="background:#090d16; border:1px solid rgba(56,189,248,0.4); border-radius:6px; padding:6px;">
+              <div style="color:var(--cyan); font-weight:800;">【待選聲骸】無妄者 +25</div>
+              <div style="color:#fbbf24; font-weight:800;">評級: SSS (88.4分 / 91.6%)</div>
+              <div style="color:#cbd5e1; margin-top:3px;">• 暴擊 9.9%<br>• 暴擊傷害 19.8%<br>• 普攻加成 11.6%</div>
+            </div>
+            <div style="background:#090d16; border:1px solid rgba(16,185,129,0.4); border-radius:6px; padding:6px;">
+              <div style="color:var(--emerald); font-weight:800;">【現裝聲骸】無妄者 +25</div>
+              <div style="color:var(--violet); font-weight:800;">評級: S級 (71.2分 / 73.8%)</div>
+              <div style="color:#94a3b8; margin-top:3px;">• 暴擊 7.5%<br>• 暴擊傷害 15.0%<br>• 防禦 50</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- [Stack Page 1] 暫停即就地編輯視圖 -->
+        <div id="qt-page-edit" style="display:none; background:rgba(15,23,42,0.92); border:1px solid var(--amber); border-radius:8px; padding:8px; margin-bottom:6px;">
+          <div style="color:var(--amber); font-size:11px; font-weight:800; margin-bottom:6px;">
+            就地編輯模式 (鎖定鳴潮官方 8 檔標準數值，修改即時重算)
+          </div>
+          <div style="display:flex; gap:6px; align-items:center; margin-bottom:5px; font-size:11px;">
+            <span style="width:45px;">副詞1:</span>
+            <select class="qt-combo" id="ed-c1" onchange="calcLiveEdit()" style="flex:1; color:#f3c053;">
+              <option value="10.5">暴擊 10.5% (8檔/頂)</option>
+              <option value="9.3">暴擊 9.3% (6檔)</option>
+              <option value="7.5">暴擊 7.5% (3檔)</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center; margin-bottom:6px; font-size:11px;">
+            <span style="width:45px;">副詞2:</span>
+            <select class="qt-combo" id="ed-c2" onchange="calcLiveEdit()" style="flex:1; color:#f3c053;">
+              <option value="21.0">暴擊傷害 21.0% (8檔/頂)</option>
+              <option value="18.6">暴擊傷害 18.6% (6檔)</option>
+              <option value="15.0">暴擊傷害 15.0% (3檔)</option>
+            </select>
+          </div>
+          <div style="color:#34d399; font-size:11.5px; font-weight:900; font-family:var(--font-mono);" id="ed-score-out">
+            重算預覽：92.8 / 96.5 分 (96.2% · SSS 傳家寶)
+          </div>
+        </div>
+
+        <!-- 5 槽位總覽抽屜 -->
+        <div id="qt-slot-drawer" style="display:none; background:rgba(0,0,0,0.78); border:1px solid rgba(168,85,247,0.45); border-radius:8px; padding:6px; margin-bottom:6px;">
+          <div style="color:#fbbf24; font-size:10.5px; font-weight:800; margin-bottom:4px;">
+            【椿】裝配練度 (5/5): 總分 <b style="color:var(--cyan);">412.6</b> | 達成度: <b style="color:var(--emerald);">86.4%</b> (完美畢業)
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:4px; text-align:center; font-size:9.5px;">
+            <div style="background:#0f172a; border:1.5px solid #f59e0b; border-radius:5px; padding:3px;">1號(4C)<br>無妄者<br><b>88.4</b></div>
+            <div style="background:#0f172a; border:1.5px solid #c084fc; border-radius:5px; padding:3px;">2號(3C)<br>暗鬃狼<br><b>81.2</b></div>
+            <div style="background:#0f172a; border:1.5px solid #c084fc; border-radius:5px; padding:3px;">3號(3C)<br>玫瑰菇<br><b>79.5</b></div>
+            <div style="background:#0f172a; border:1.5px solid #f59e0b; border-radius:5px; padding:3px;">4號(1C)<br>咔嚓嚓<br><b>83.0</b></div>
+            <div style="background:#0f172a; border:1.5px solid #c084fc; border-radius:5px; padding:3px;">5號(1C)<br>稜鏡<br><b>80.5</b></div>
+          </div>
+        </div>
+
+        <!-- 止損建議與系統狀態卡 -->
+        <div class="qt-advice-box" id="qt-advice-bar">
+          【SSS 完美畢業】滿 5 詞條極品傳家寶！深塔隨便亂殺！
+        </div>
+
+        <div class="qt-footer">
+          <span style="color:#64748b; font-family:var(--font-mono); font-weight:700;">99%</span>
+          <span style="color:#f3c053; font-weight:900;">GAMEZH 評分資訊</span>
+          <span style="color:#64748b;">|</span>
+          <span style="color:var(--cyan); font-weight:700; font-family:var(--font-mono);">992851qaz-bot.github.io/-/</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 六大核心工程架構與辨識技術 -->
+  <div class="sec-header" id="architecture">
+    <h2>
+      <svg class="svg-ic lg" style="color:var(--cyan);" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+      <span>核心辨識架構與系統亮點</span>
+    </h2>
+    <span class="sub">CORE OCR ENGINE &amp; TELEMETRY ARCHITECTURE</span>
+  </div>
+
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tc-head">
+        <div class="tc-icon-box">
+          <svg class="svg-ic" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+        </div>
+        <h3>角色面板與武器庫自動辨識</h3>
+      </div>
+      <p>獨創狀態機追蹤：於遊戲內點擊「角色詳情」進入「屬性詳情」時，自動擷取生命、攻擊、防禦、共鳴效率、暴擊、暴傷六維數值，切換至武器分頁同步記錄武器名稱與諧振階級。</p>
+      <span class="tc-spec">STATE MACHINE // 6-STATS + WEAPON ARCHIVE</span>
+    </div>
+
+    <div class="tech-card">
+      <div class="tc-head">
+        <div class="tc-icon-box">
+          <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </div>
+        <h3>2.5x 超分辨率防禦/攻擊抗混淆</h3>
+      </div>
+      <p>針對副詞條切片進行 2.5x Lanczos 放大與雙重對比銳化，支援特殊混淆字庫比對，並引入同聲骸平值 40/50/60 唯一性互斥校驗，徹底杜絕「+防禦」誤判為「+攻擊」。</p>
+      <span class="tc-spec">2.5X LANCZOS // FLAT-STAT MUTEX CHECK</span>
+    </div>
+
+    <div class="tech-card">
+      <div class="tc-head">
+        <div class="tc-icon-box">
+          <svg class="svg-ic" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>左側培養畫面防偽詞條過濾</h3>
+      </div>
+      <p>嚴格將等級讀取範圍限縮於經驗條上方，排除「強化至+15/+20/+25」文字干擾；徹底過濾未解鎖孔位「並啟用輔音屬性」偽詞條，並由副主屬性自動反推 COST 1/3/4。</p>
+      <span class="tc-spec">LEFT PANEL FILTER // AUTO COST INFERENCE</span>
+    </div>
+
+    <div class="tech-card">
+      <div class="tc-head">
+        <div class="tc-icon-box">
+          <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+        <h3>官方推薦面板一鍵光學導入</h3>
+      </div>
+      <p>於設定介面點擊「辨識推薦面板」，系統自動瞬移避開遮擋並擷取遊戲中央【聲骸推薦】視窗，自動解析並儲存 4/3/1 Cost 推薦主詞條、推薦合鳴套裝與副詞條優先序。</p>
+      <span class="tc-spec">CLAHE ENHANCE // 1-CLICK PRESET IMPORT</span>
+    </div>
+
+    <div class="tech-card">
+      <div class="tc-head">
+        <div class="tc-icon-box">
+          <svg class="svg-ic" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>階段性開孔期望值止損引擎</h3>
+      </div>
+      <p>可針對開前 2 孔、前 3 孔、前 4 孔獨立設定需命中的「理論最高前三詞條」或「非 0 有效詞條」門檻。一旦開孔未達標立即以紅框告警停手，大幅節省密音筒與調諧器。</p>
+      <span class="tc-spec">HOLE 2/3/4 STOP-LOSS // TOP-3 WEIGHTING</span>
+    </div>
+
+    <div class="tech-card">
+      <div class="tc-head">
+        <div class="tc-icon-box">
+          <svg class="svg-ic" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01"/></svg>
+        </div>
+        <h3>BelowNormal 排程與防卡頓調度</h3>
+      </div>
+      <p>自動將 OCR 與監控執行緒設為 BelowNormal 優先級並支援自訂 2~8 運算核心；畫面靜止時透過微縮圖差分比對自動進入深度休眠，100% 優先保障《鳴潮》本體幀率。</p>
+      <span class="tc-spec">ONNX INTRA-OP THREADS // 0% IDLE CPU</span>
+    </div>
+  </div>
+
+  <!-- 標準作業流程 (SOP) 與 五檔評級數學標準 -->
+  <div class="sec-header" id="deployment">
+    <h2>
+      <svg class="svg-ic lg" style="color:var(--amber);" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>標準作業流程與評分數學模型</span>
+    </h2>
+    <span class="sub">STANDARD OPERATING PROCEDURE &amp; SCORING FORMULA</span>
+  </div>
+
+  <div class="dual-section">
+    <div class="sop-list">
+      <div class="sop-item">
+        <div class="sop-step-num">01</div>
+        <div>
+          <h4>以系統管理員身分啟動程式 (High Integrity Level)</h4>
+          <p>由於《鳴潮》客戶端具備管理員權限，請對執行檔按右鍵選擇「以系統管理員身分執行」，確保全域滑鼠左鍵點擊 0.10 秒防抖觸發正常運作（若未提權將自動切換為 0.3 秒定時循環模式）。</p>
+        </div>
+      </div>
+
+      <div class="sop-item">
+        <div class="sop-step-num">02</div>
+        <div>
+          <h4>雲端通行證核驗或切換訪客自訂模式</h4>
+          <p>進入官方 Discord (<a href="https://discord.gg/WWewHKwMwa" target="_blank" style="color:var(--cyan); text-decoration:underline;">discord.gg/WWewHKwMwa</a>) 於任一頻道輸入 <code>/授權碼</code> 即可取得 <code>AUTH-</code> 授權碼解鎖全角色 ZH 雲端權重；或點擊「跳過授權 · 以訪客模式進入」建立個人自訂權重。</p>
+        </div>
+      </div>
+
+      <div class="sop-item">
+        <div class="sop-step-num">03</div>
+        <div>
+          <h4>擺放懸浮窗位置與自動角色識別</h4>
+          <p>將 HUD 拖曳至螢幕左側或中央偏左（避免遮擋右側聲骸卡片；若重疊系統將自動顯示防遮擋警告）。當角色穿戴聲骸且右下角顯示「[角色名]裝配中 / 卸下」時，系統將自動切換對應角色權重並存入 1~5 號槽位。</p>
+        </div>
+      </div>
+
+      <div class="sop-item">
+        <div class="sop-step-num">04</div>
+        <div>
+          <h4>開啟角色面板自動紀錄 (選配加速)</h4>
+          <p>點擊頂部面板圖示或進入設定勾選「是否偵測詳情」，在遊戲主畫面點擊「角色詳情」進入屬性頁即可自動歸檔角色六維面板與武器；返回大世界讀取到下方血條與 LV 時即自動解除紀錄狀態。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 數學公式與五檔級距表 -->
+    <div class="tier-table-card">
+      <h3 style="font-size:16px; font-weight:900; color:var(--cyan); margin-bottom:8px;">
+        核心計算公式與五檔評級標準
+      </h3>
+      <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(56,189,248,0.25); border-radius:6px; padding:10px; font-family:var(--font-mono); font-size:11.5px; color:#e2e8f0; margin-bottom:14px;">
+        • 單項得分 = 詞條實際數值 × 角色專屬權重<br>
+        • 理論滿分 = 前 5 高有效詞條 (8檔極值 × 權重) 總和<br>
+        • 得分達成率(%) = (聲骸總分 ÷ 理論滿分) × 100%
+      </div>
+
+      <div class="tier-row">
+        <span style="color:#f59e0b; font-weight:900;">SSS 傳家寶</span>
+        <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">≥ 85.0%</span>
+        <span style="color:var(--text-secondary);">高檔位全中核心雙暴與有效詞條，深塔頂配畢業</span>
+      </div>
+      <div class="tier-row">
+        <span style="color:#c084fc; font-weight:900;">S 優秀畢業</span>
+        <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">70% ~ 84%</span>
+        <span style="color:var(--text-secondary);">主力輸出成型，雙暴與有效詞條扎實，推薦拉滿</span>
+      </div>
+      <div class="tier-row">
+        <span style="color:#38bdf8; font-weight:900;">A 及格好用</span>
+        <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">55% ~ 69%</span>
+        <span style="color:var(--text-secondary);">高性價比過渡良品，二隊或中期配裝首選</span>
+      </div>
+      <div class="tier-row">
+        <span style="color:#10b981; font-weight:900;">B 過渡使用</span>
+        <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">40% ~ 54%</span>
+        <span style="color:var(--text-secondary);">暫用湊合鳴套裝效果，後續資源充裕建議替換</span>
+      </div>
+      <div class="tier-row">
+        <span style="color:#64748b; font-weight:900;">C 建議換胚</span>
+        <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">&lt; 40.0%</span>
+        <span style="color:var(--text-secondary);">有效詞條過少或期望值不達標，建議及時止損</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>GAMEZH 鳴潮聲骸即時懸浮評分 HUD v2.1.0 // NON-INTRUSIVE OPTICAL CHARACTER RECOGNITION UTILITY</p>
+    <p style="margin-top:4px;">本軟體僅透過作業系統標準顯示介面進行本地端光學文字辨識，絕不讀取、注入或修改任何遊戲記憶體與封包。</p>
+  </div>
+</footer>
+
+<script>
+const SIM_MODES = [
+  {
+    mouse: { top: "92px", left: "95px" },
+    zone: "[ROI CAPTURE] 右側背包卡片 (x:0.76~0.98, y:0.11~0.49)",
+    conf: "2.5x LANCZOS | CONF: 99.2%",
+    raw: "&gt; [MAIN] 暴擊傷害 44.0% | 攻擊 150 (COST 4 鎖定)<br>&gt; [SUBS] 暴擊 9.9% (7/8) | 暴傷 19.8% (7/8) | 普攻加成 11.6% (8/8) | 攻擊% 10.9% (7/8) | 共鳴效率 10.0% (5/8)",
+    page: "echo",
+    status: "掃描正常",
+    name: "無妄者", lvl: "+25", sonata: "沉日劫明", slot: "1號位·裝配", cost: "COST 4",
+    main: "暴擊傷害 44.0% | 攻擊 150",
+    grade: "SSS 傳家寶", gradeBg: "linear-gradient(90deg,#f59e0b,#d97706)", gradeFg: "#000",
+    score: "得分: 88.4 / 96.5 (91.6%)",
+    advice: "【SSS 完美畢業】滿 5 詞條極品傳家寶！深塔隨便亂殺！",
+    advCol: "#f59e0b",
+    subs: [
+      { n: "暴擊: 9.9%", c: "+19.8分", t: 7, cls: "top", seg: "t6" },
+      { n: "暴擊傷害: 19.8%", c: "+19.8分", t: 7, cls: "top", seg: "t6" },
+      { n: "普攻傷害加成: 11.6%", c: "+20.9分", t: 8, cls: "top", seg: "t8" },
+      { n: "攻擊百分比: 10.9%", c: "+19.6分", t: 7, cls: "eff", seg: "t6" },
+      { n: "共鳴效率: 10.0%", c: "+8.3分", t: 5, cls: "eff", seg: "t4" }
+    ]
+  },
+  {
+    mouse: { top: "92px", left: "285px" },
+    zone: "[ROI CAPTURE] 左側培養強化面板 (自動過濾未解鎖孔位偽詞條)",
+    conf: "LEFT PANEL | CONF: 98.7%",
+    raw: "&gt; [MAIN] 湮滅傷害加成 30.0% | 攻擊 100 (自動推斷 COST 3)<br>&gt; [SUBS] 防禦 50 (4/8) | 生命百分比 7.9% (3/8) | [已過濾: 強化至+15並啟用輔音屬性]",
+    page: "echo",
+    status: "左側培養模式",
+    name: "暗鬃狼", lvl: "+10", sonata: "沉日劫明", slot: "2號位·預覽", cost: "COST 3",
+    main: "湮滅傷害加成 30.0% | 攻擊 100",
+    grade: "C 建議換胚", gradeBg: "#475569", gradeFg: "#fff",
+    score: "得分: 0.0 / 96.5 (0.0%)",
+    advice: "【建議不要繼續】前 2 孔未命中足夠理論最高前三高詞條 (命中 0/1)，期望值偏低，建議換胚止損！",
+    advCol: "#ef4444",
+    subs: [
+      { n: "防禦: 50", c: "+0.0分", t: 4, cls: "norm", seg: "t2" },
+      { n: "生命百分比: 7.9%", c: "+0.0分", t: 3, cls: "norm", seg: "t2" }
+    ]
+  },
+  {
+    mouse: { top: "92px", left: "475px" },
+    zone: "[ROI CAPTURE] 角色屬性詳情與武器頁面 (x:0.08~0.35, y:0.12~0.62)",
+    conf: "CHAR PANEL STATE | CONF: 99.5%",
+    raw: "&gt; [STATE] 已偵測點擊【角色詳情】按鈕 -> 進入紀錄面板模式<br>&gt; [ARCHIVE] 角色: 椿 (Lv.90/90 湮滅) | 生命 16840 | 攻擊 2415 | 暴擊 74.6% | 暴傷 286.4% | 武器: 裁春(1階)",
+    page: "charpanel",
+    status: "紀錄面板模式",
+    advice: "【角色面板已歸檔】切換至武器頁可同步記錄武器階級；返回主畫面讀取到血條/LV時自動解除狀態。",
+    advCol: "#38bdf8"
+  },
+  {
+    mouse: { top: "195px", left: "95px" },
+    zone: "[ROI CAPTURE] 雙聲骸比對模式 (左待選 x:0.55~0.76 vs 右現裝 x:0.76~0.98)",
+    conf: "DUAL COMPARE | CONF: 98.9%",
+    raw: "&gt; [CANDIDATE] 無妄者 +25 (88.4分 / SSS) vs [EQUIPPED] 無妄者 +25 (71.2分 / S)<br>&gt; [DELTA] 總分淨增 +17.2 分 | 暴擊 +2.4% | 暴擊傷害 +4.8% | 普攻傷害加成 +11.6%",
+    page: "compare",
+    status: "雙聲骸比對中",
+    advice: "【推薦換裝】待選聲骸總分領先 +17.2 分，能實質提升角色戰力！",
+    advCol: "#10b981"
+  },
+  {
+    mouse: { top: "195px", left: "285px" },
+    zone: "[ROI CAPTURE] 遊戲中央【聲骸推薦】面板 (x:0.38~0.70, y:0.08~0.90)",
+    conf: "CLAHE 1.6x | REC IMPORTED",
+    raw: "&gt; [SONATA] 推薦合鳴套裝：沉日劫明<br>&gt; [COST MAINS] 4Cost: 暴擊, 暴擊傷害 | 3Cost: 湮滅傷害加成 | 1Cost: 攻擊百分比<br>&gt; [SUBS ORDER] 暴擊 &gt; 暴擊傷害 &gt; 攻擊百分比 &gt; 普攻傷害加成 &gt; 共鳴效率 (已自動寫入設定檔)",
+    page: "echo",
+    status: "推薦面板已導入",
+    name: "無妄者", lvl: "+25", sonata: "沉日劫明", slot: "1號位·裝配", cost: "COST 4",
+    main: "暴擊傷害 44.0% | 攻擊 150",
+    grade: "SSS 傳家寶", gradeBg: "linear-gradient(90deg,#f59e0b,#d97706)", gradeFg: "#000",
+    score: "得分: 88.4 / 96.5 (91.6%)",
+    advice: "【官方推薦導入成功】已自動更新 4/3/1 Cost 推薦主詞條與推薦合鳴套裝標示！",
+    advCol: "#10b981",
+    subs: [
+      { n: "暴擊: 9.9%", c: "+19.8分", t: 7, cls: "top", seg: "t6" },
+      { n: "暴擊傷害: 19.8%", c: "+19.8分", t: 7, cls: "top", seg: "t6" },
+      { n: "普攻傷害加成: 11.6%", c: "+20.9分", t: 8, cls: "top", seg: "t8" }
+    ]
+  },
+  {
+    mouse: { top: "195px", left: "475px" },
+    zone: "[IN-PLACE EDIT] 暫停掃描並鎖定鳴潮官方 8 檔標準數值表",
+    conf: "PAUSED // LIVE RECALC",
+    raw: "&gt; [EDIT MODE] 已暫停背景 OCR 掃描，展開就地編輯選單<br>&gt; [8-TIER TABLE] 僅允許選取鳴潮官方真實存在之 8 檔數值，調整下拉選單即時重算總分",
+    page: "edit",
+    status: "已暫停 (編輯中)",
+    advice: "掃描已暫停。上方【就地編輯】修改數值即時重算評分，按頂部按鈕即可保存並恢復掃描。",
+    advCol: "#f59e0b"
+  }
+];
+
+let activeModeIdx = 0;
+let simInterval = null;
+
+function renderQtSubstats(subs) {
+  const box = document.getElementById("qt-subs-container");
+  box.innerHTML = "";
+  subs.forEach(s => {
+    let segHtml = "";
+    for (let i = 1; i <= 8; i++) {
+      segHtml += `<div class="qt-tier-seg ${i <= s.t ? s.seg : ''}"></div>`;
+    }
+    const row = document.createElement("div");
+    row.className = `qt-sub-item ${s.cls}`;
+    const prefix = s.cls === "top" ? "★ " : (s.cls === "eff" ? "✦ " : "• ");
+    row.innerHTML = `
+      <span>${prefix}${s.n}</span>
+      <span style="text-align:right; color:${s.cls === 'norm' ? '#64748b' : '#38bdf8'};">${s.c}</span>
+      <div class="qt-tier-bar">${segHtml}</div>
+      <span style="text-align:right; font-family:var(--font-mono); font-size:10px; font-weight:700;">${s.t}/8檔</span>
+    `;
+    box.appendChild(row);
+  });
+}
+
+function triggerOcrSweep() {
+  const beam = document.getElementById("ocr-laser");
+  const ring = document.getElementById("sim-ring");
+  beam.classList.remove("active");
+  ring.classList.remove("pulse");
+  void beam.offsetWidth;
+  beam.classList.add("active");
+  ring.classList.add("pulse");
+}
+
+function switchSimMode(idx) {
+  activeModeIdx = idx;
+  for (let i = 0; i < 6; i++) {
+    document.getElementById(`stab-${i}`).classList.toggle("active", i === idx);
+    document.getElementById(`vpc-${i}`).classList.toggle("active", i === idx);
+  }
+
+  const m = SIM_MODES[idx];
+  const cursor = document.getElementById("sim-mouse");
+  cursor.style.top = m.mouse.top;
+  cursor.style.left = m.mouse.left;
+  triggerOcrSweep();
+
+  document.getElementById("ocr-zone-label").textContent = m.zone;
+  document.getElementById("ocr-conf-label").textContent = m.conf;
+  document.getElementById("ocr-raw-text").innerHTML = m.raw;
+  document.getElementById("qt-status-text").textContent = m.status;
+
+  const pEcho = document.getElementById("qt-page-echo");
+  const pChar = document.getElementById("qt-page-charpanel");
+  const pComp = document.getElementById("qt-page-compare");
+  const pEdit = document.getElementById("qt-page-edit");
+
+  pEcho.style.display = m.page === "echo" ? "block" : "none";
+  pChar.style.display = m.page === "charpanel" ? "block" : "none";
+  pComp.style.display = m.page === "compare" ? "block" : "none";
+  pEdit.style.display = m.page === "edit" ? "block" : "none";
+
+  if (m.page === "echo") {
+    document.getElementById("qt-echo-name").textContent = m.name;
+    document.getElementById("qt-echo-lvl").textContent = m.lvl;
+    document.getElementById("qt-sonata").textContent = m.sonata;
+    document.getElementById("qt-slot").textContent = m.slot;
+    document.getElementById("qt-cost").textContent = m.cost;
+    document.getElementById("qt-main-stat").textContent = m.main;
+
+    const gb = document.getElementById("qt-grade-badge");
+    gb.textContent = m.grade;
+    gb.style.background = m.gradeBg;
+    gb.style.color = m.gradeFg;
+
+    document.getElementById("qt-score-num").textContent = m.score;
+    renderQtSubstats(m.subs);
+  } else if (m.page === "edit") {
+    calcLiveEdit();
+  }
+
+  const adv = document.getElementById("qt-advice-bar");
+  adv.textContent = m.advice;
+  adv.style.borderColor = m.advCol;
+  adv.style.borderLeftColor = m.advCol;
+}
+
+function manualSelectMode(idx) {
+  if (simInterval) {
+    clearInterval(simInterval);
+    simInterval = null;
+    const txt = document.getElementById("auto-txt");
+    txt.textContent = "MANUAL MODE (點擊恢復自動輪播)";
+    document.getElementById("auto-btn").style.color = "#fbbf24";
+  }
+  switchSimMode(idx);
+}
+
+function calcLiveEdit() {
+  const v1 = parseFloat(document.getElementById("ed-c1").value || 10.5);
+  const v2 = parseFloat(document.getElementById("ed-c2").value || 21.0);
+  const tot = (v1 * 2.0 + v2 * 1.0 + 50.8).toFixed(1);
+  const pct = Math.min(99.5, (tot / 96.5 * 100)).toFixed(1);
+  document.getElementById("ed-score-out").textContent = `重算預覽：${tot} / 96.5 分 (${pct}% · SSS 傳家寶)`;
+}
+
+function toggleSlotDrawer() {
+  const dr = document.getElementById("qt-slot-drawer");
+  dr.style.display = dr.style.display === "none" ? "block" : "none";
+}
+
+function toggleSimAuto() {
+  const txt = document.getElementById("auto-txt");
+  const btn = document.getElementById("auto-btn");
+  if (simInterval) {
+    clearInterval(simInterval);
+    simInterval = null;
+    txt.textContent = "PAUSED (點擊啟動自動演示)";
+    btn.style.color = "#fbbf24";
+  } else {
+    simInterval = setInterval(() => {
+      switchSimMode((activeModeIdx + 1) % 6);
+    }, 4200);
+    txt.textContent = "AUTO-DEMO RUNNING (點擊左方區塊可手動測試)";
+    btn.style.color = "#10b981";
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  switchSimMode(0);
+  simInterval = setInterval(() => {
+    switchSimMode((activeModeIdx + 1) % 6);
+  }, 4200);
+});
+</script>
+</body>
+</html>
