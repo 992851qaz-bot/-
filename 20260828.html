@@ -37,6 +37,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // CDN 載入失敗（被擋或離線）時避免 ReferenceError
+        window.tailwind = window.tailwind || {};
         tailwind.config = {
             corePlugins: { preflight: false, container: false },
             darkMode: 'class',
@@ -12207,6 +12209,70 @@
             filter: brightness(1.05);
         }
     </style>
+<!-- ===== Mobile layout fixes (手機排版優化) ===== -->
+    <style id="mobile-layout-fixes">
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        button, a, [onclick], .ios-chip, select, label { touch-action: manipulation; }
+        /* 矩陣編隊分頁列：不換行、可橫向滑動 */
+        .grad-tabbar { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .grad-tabbar::-webkit-scrollbar { display: none; }
+        .grad-tabbar > button { white-space: nowrap; flex-shrink: 0; }
+
+        @media (max-width: 768px) {
+            /* iOS 輸入框字體 < 16px 時聚焦會自動放大頁面 */
+            input[type="text"], input[type="search"], input[type="number"], input[type="url"],
+            input[type="email"], input[type="tel"], input:not([type]), textarea, select {
+                font-size: 16px !important;
+            }
+            /* 全螢幕彈窗：使用動態視窗高度，避免被手機網址列遮住，並保留瀏海安全區 */
+            .modal-overlay, .dashboard-modal {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+                padding-bottom: env(safe-area-inset-bottom);
+                overscroll-behavior: contain;
+            }
+            .modal-full, .dashboard-modal .db-container { max-height: 100dvh; }
+
+            /* 矩陣編隊分頁：縮小間距，關閉鈕固定在右側 */
+            .grad-tabbar { padding: 0 0 0 6px !important; }
+            .grad-tabbar > button { padding: 10px 12px !important; font-size: 0.8rem !important; }
+            .grad-tabbar > button:last-child {
+                position: sticky; right: 0; background: rgba(14, 16, 22, 0.98) !important; z-index: 2;
+                box-shadow: -10px 0 12px rgba(14, 16, 22, 0.95);
+            }
+
+            /* 首頁頂部列：品牌與語言切換不換行 */
+            .ios-top-bar { gap: 8px; }
+            .ios-brand-badge { min-width: 0; flex: 1 1 auto; }
+            .ios-brand-title, .ios-brand-sub, .ios-lang-chip { white-space: nowrap; }
+            .ios-brand-sub { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+            .ios-lang-segmented { flex-shrink: 0; }
+
+            /* ZH 資料庫標題列：允許換行，按鈕不被擠壓 */
+            #weights-modal .modal-header { flex-wrap: wrap; gap: 8px; }
+            #weights-modal .modal-header > div { flex-wrap: wrap; gap: 6px !important; min-width: 0; flex: 1 1 auto; }
+            #weights-modal .modal-header h3 { white-space: nowrap; }
+            #weights-modal .modal-header button { white-space: nowrap; }
+            #zh-db-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            #zh-db-tabs > * { flex-shrink: 0; white-space: nowrap; }
+
+            /* 一般彈窗標題列 */
+            .modal-header { flex-wrap: wrap; row-gap: 8px; }
+            .modal-header h3 { min-width: 0; }
+
+            /* 分享圖片工作室標題列按鈕 */
+            .share-modal-header > div { flex-wrap: wrap; gap: 6px; }
+            .share-modal-header-btn { white-space: nowrap; }
+
+            /* 寬表格可橫向捲動，不撐破版面 */
+            .weights-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+            img, canvas, video { max-width: 100%; }
+        }
+
+        @media (max-width: 380px) {
+            .ios-brand-sub { display: none; }
+        }
+    </style>
 </head>
 
 <body class="is-login-mode">
@@ -16520,28 +16586,6 @@
             </div>
         </div>
     </div>
-    <!-- Heatmap Modal -->
-    <div id="heatmap-modal" class="dashboard-modal">
-        <div class="db-container" style="max-width:1000px;">
-            <div class="db-header">
-                <div class="db-title-group">
-                    <h2 style="font-size:1.5rem;" data-lang-zh="🌡️ 副詞條強度熱力圖" data-lang-en="🌡️ Sub-stat Heatmap">🌡️
-                        副詞條強度熱力圖</h2>
-                    <div style="color:#888;font-size:0.85rem;"
-                        data-lang-zh="橫軸為詞條種類，縱軸為角色。顏色深淺代表該角色在歷史紀錄中該詞條出現的頻率與權重綜合強度。"
-                        data-lang-en="X-axis: stat types, Y-axis: characters. Color intensity shows frequency and weight strength per character.">
-                        橫軸為詞條種類，縱軸為角色。顏色深淺代表該角色在歷史紀錄中該詞條出現的頻率與權重綜合強度。</div>
-                </div>
-                <button class="db-close-btn"
-                    onclick="document.getElementById('heatmap-modal').style.display='none'">×</button>
-            </div>
-            <div class="db-card" style="grid-column: 1 / -1; overflow-x:auto; padding:0;">
-                <div id="heatmap-container" style="min-width:800px; padding:20px;">
-                    <!-- Heatmap will be rendered here -->
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="uid-display-container" class="bottom-pill-container">
         <button class="mobile-pill-toggle" onclick="openFeedbackModal()" aria-label="錯誤回報 / 意見回饋">ℹ️</button>
@@ -19965,26 +20009,40 @@
             const inlineLoader = document.getElementById('inline-loader');
             const inputGroup = document.querySelector('.input-group');
             // Show loading animation
-            inlineLoader.classList.add('active');
-            inputGroup.style.display = 'none'; // Hide input during strict wait
+            if (inlineLoader) inlineLoader.classList.add('active');
+            if (inputGroup) inputGroup.style.display = 'none'; // Hide input during strict wait
 
+            const _startFresh = () => {
+                g_weightsPromise = loadWeightsBackground(getMainApiUrl());
+                g_weightsPromise.catch(() => { });
+                return g_weightsPromise;
+            };
             try {
-                if (g_weightsPromise) {
-                    await g_weightsPromise;
-                } else {
-                    // Fail-safe
-                    let url = getMainApiUrl();
-                    g_weightsPromise = loadWeightsBackground(url);
-                    await g_weightsPromise;
+                try {
+                    await (g_weightsPromise || _startFresh());
+                } catch (firstErr) {
+                    // 先前的請求失敗（例如網路不穩）：丟棄失敗的 promise 並重試一次
+                    if (g_weightsLoaded) throw firstErr;
+                    console.warn('Weights load failed, retrying once...', firstErr);
+                    await new Promise(r => setTimeout(r, 800));
+                    await _startFresh();
                 }
-                inlineLoader.classList.remove('active');
-                inputGroup.style.display = 'flex';
+                if (!g_weightsLoaded) throw new Error('weights_not_loaded');
+                if (inlineLoader) inlineLoader.classList.remove('active');
+                if (inputGroup) inputGroup.style.display = 'flex';
                 return true;
             } catch (e) {
                 console.error(e);
+                // 清除失敗的 promise，下次呼叫時才會重新發出請求，而不是永遠卡在維護頁
+                g_weightsPromise = null;
+                if (g_weightsLoaded) {
+                    if (inlineLoader) inlineLoader.classList.remove('active');
+                    if (inputGroup) inputGroup.style.display = 'flex';
+                    return true;
+                }
                 showMaintenancePage();
-                inlineLoader.classList.remove('active');
-                inputGroup.style.display = 'flex';
+                if (inlineLoader) inlineLoader.classList.remove('active');
+                if (inputGroup) inputGroup.style.display = 'flex';
                 return false;
             }
         }
@@ -20041,8 +20099,9 @@
 
             let url = getMainApiUrl();
             if (url) {
-                // Start background load
+                // Start background load（加上 catch 避免 Uncaught (in promise)；錯誤仍會傳給 ensureWeightsLoaded）
                 g_weightsPromise = loadWeightsBackground(url);
+                g_weightsPromise.catch(() => { });
             }
 
             historyListEl.addEventListener('scroll', () => {
@@ -25073,7 +25132,7 @@
             html += `</div>`;
 
             // Tabs
-            html += `<div style="display:flex;gap:0;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.15);padding:0 14px;">`;
+            html += `<div class="grad-tabbar" style="display:flex;gap:0;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.15);padding:0 14px;">`;
             html += `<button id="grad-tab-overview" onclick="grad_switchTab('overview')" style="padding:10px 18px;border:none;border-bottom:2px solid #e5c07b;background:transparent;color:#e5c07b;font-size:0.85rem;cursor:pointer;font-weight:700;transition:all 0.2s;">${isEN ? '🎓 Overview' : '🎓 評分總覽'}</button>`;
             html += `<button id="grad-tab-team" onclick="grad_switchTab('team')" style="padding:10px 18px;border:none;border-bottom:2px solid transparent;background:transparent;color:#555;font-size:0.85rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN ? '👥 Teams' : '👥 配對'}</button>`;
             html += `<button id="grad-tab-custom" onclick="grad_switchTab('custom')" style="padding:10px 18px;border:none;border-bottom:2px solid transparent;background:transparent;color:#555;font-size:0.85rem;cursor:pointer;font-weight:600;transition:all 0.2s;">${isEN ? '🧩 Matrix Formation' : '🧩 矩陣編隊'}</button>`;
@@ -37937,16 +37996,21 @@
             const rName = document.getElementById('dps_roleSelect').value;
             if (!rName) return;
 
-            const wId = document.getElementById('dps_weaponSelect').value;
-            const wData = g_dpsDB.weapons?.find(w => w['ID'] === wId);
-            const wName = wData ? wData['名稱'] : '無武器';
+            const _val = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
+            const wName = _val('dps_weaponSelect') || '無武器';
 
-            const eId = document.getElementById('dps_echoSelect').value;
-            const eData = g_dpsDB.echos?.find(e => e['ID'] === eId);
-            const eName = eData ? eData['名稱'] : '無聲骸';
+            let eName = '無聲骸';
+            const eRaw = _val('dps_activeEchoSelect');
+            if (eRaw) { try { eName = JSON.parse(eRaw)['聲骸名稱'] || eName; } catch (e) { } }
 
-            const sId = document.getElementById('dps_suitSelect').value;
-            const suitName = sId || '無套裝';
+            const sMode = _val('dps_sonataMode');
+            let suitName = '無套裝';
+            if (sMode === 'set5') {
+                suitName = _val('dps_set5Select') || suitName;
+            } else if (sMode === 'set22') {
+                const parts = [_val('dps_set2ASelect'), _val('dps_set2BSelect')].filter(Boolean);
+                if (parts.length) suitName = parts.join(' + ');
+            }
 
             const now = new Date();
             const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
@@ -37956,10 +38020,10 @@
             const name = prompt(promptMsg, defaultName);
             if (name === null) return;
 
-            const totalDmgText = document.getElementById('dps-total-expected-dmg').innerText.replace(/,/g, '');
+            const totalDmgText = (document.getElementById('dps-total-expected-dmg')?.innerText || '0').replace(/,/g, '');
             const totalDmg = parseFloat(totalDmgText) || 0;
 
-            const rotDuration = parseFloat(document.getElementById('dps-rotation-duration')?.value || '15') || 15;
+            const rotDuration = parseFloat(document.getElementById('dps_rotation_duration')?.value || '15') || 15;
             const dpsVal = Math.round(totalDmg / rotDuration);
 
             let snapshots = [];
@@ -41846,12 +41910,12 @@
             if (content) content.innerText = text;
             if (yesBtn) {
                 yesBtn.innerText = yesBtn.dataset.langZh || "確定";
-                yesBtn.onclick = () => { if (modal) modal.style.display = 'none'; if (onYes) onYes(); };
+                yesBtn.onclick = () => { if (modal) modal.style.display = 'none'; if (typeof updateMobilePillAnchor === 'function') updateMobilePillAnchor(); if (onYes) onYes(); };
             }
             const noBtn = modal ? modal.querySelector('.btn-confirm-no') : null;
             if (noBtn) {
                 noBtn.innerText = noBtn.dataset.langZh || "取消";
-                noBtn.onclick = () => { if (modal) modal.style.display = 'none'; };
+                noBtn.onclick = () => { if (modal) modal.style.display = 'none'; if (typeof updateMobilePillAnchor === 'function') updateMobilePillAnchor(); };
             }
             if (modal) modal.style.display = 'flex';
         }
