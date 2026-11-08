@@ -14372,6 +14372,12 @@
         <symbol id="gi-expand" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol>
         <symbol id="gi-bulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/></symbol>
         <symbol id="gi-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+        <symbol id="gi-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
+        <symbol id="gi-pin" viewBox="0 0 24 24"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></symbol>
+        <symbol id="gi-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+        <symbol id="gi-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></symbol>
+        <symbol id="gi-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 4.5a4 4 0 0 1 0 7"/><path d="M19 15a7 7 0 0 1 3 6"/></symbol>
+        <symbol id="gi-box" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
     </svg>
     <!-- GZ 動態背景（主畫面） -->
     <div class="gz-app-bg" aria-hidden="true"><i class="gz-orb gz-orb-a"></i><i class="gz-orb gz-orb-b"></i><i class="gz-orb gz-orb-c"></i><i class="gz-grid"></i></div>
@@ -14517,6 +14523,7 @@
         </div>
     </div>
     <header>
+        <button type="button" id="gz-btn-history" class="gz-bar-btn" onclick="gzToggleDrawer('history')" title="歷史紀錄" aria-label="歷史紀錄" aria-controls="gz-drawer-history"><svg class="gz-svg" aria-hidden="true"><use href="#gi-history"/></svg><span class="gz-lb" data-lang-zh="歷史" data-lang-en="History">歷史</span><span id="gz-history-badge" class="gz-badge" hidden></span></button>
         <div class="header-title-group" onclick="dashboard_open()">
             <h1>GAME ZH</h1>
             <div id="stat-carousel" class="stat-carousel">
@@ -14543,6 +14550,7 @@
             </div>
             <button type="button" id="btn-analyze" class="btn-analyze">離線新增角色</button>
         </div>
+        <button type="button" id="gz-btn-preview" class="gz-bar-btn gz-bar-thumb" onclick="gzToggleDrawer('preview')" title="截圖預覽" aria-label="截圖預覽" aria-controls="gz-drawer-preview"><span class="gz-thumb" aria-hidden="true"></span><svg class="gz-svg" aria-hidden="true"><use href="#gi-image"/></svg><span class="gz-lb" data-lang-zh="截圖" data-lang-en="Image">截圖</span></button>
         <!-- New Header Loader -->
         <div id="inline-loader" class="header-loader">
             <div class="loader-content">
@@ -17788,25 +17796,16 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="preview-box">
-            <div id="img-container">
-                <img id="preview-img" alt="預覽圖">
-                <canvas id="zoom-canvas"></canvas>
-                <div id="cv-overlay"></div>
-                <!-- New Scan Overlay -->
-                <div id="scan-overlay" class="scan-overlay">
-                    <div class="scan-digital-grid"></div>
-                    <div class="scan-radar"></div>
-                </div>
-                <div id="img-placeholder" class="empty-state">
-                    <div>等待影像輸入...</div>
-                    <div style="font-size:0.8rem;color:#666;">或 <a href="#" onclick="triggerFileUpload();return false;"
-                            style="color:var(--accent)">選擇本地圖片</a></div>
+    <div class="container gz-shell">
+        <!-- 左抽屜：歷史紀錄 -->
+        <aside id="gz-drawer-history" class="gz-drawer gz-drawer-left" aria-label="歷史紀錄">
+            <div class="gz-drawer-head">
+                <div class="gz-drawer-title"><svg class="gz-svg" aria-hidden="true"><use href="#gi-history"/></svg><span data-lang-zh="歷史紀錄" data-lang-en="History">歷史紀錄</span></div>
+                <div class="gz-drawer-actions">
+                    <button type="button" class="gz-icon-btn gz-pin-btn" onclick="gzTogglePin('history')" title="釘選在旁邊" aria-label="釘選" aria-pressed="false"><svg class="gz-svg" aria-hidden="true"><use href="#gi-pin"/></svg></button>
+                    <button type="button" class="gz-icon-btn" onclick="gzCloseDrawer('history')" title="關閉" aria-label="關閉"><svg class="gz-svg" aria-hidden="true"><use href="#gi-x"/></svg></button>
                 </div>
             </div>
-            <div class="status-bar"><span id="status-text" data-lang-zh="就緒" data-lang-en="Ready">就緒</span><span
-                    id="dim-text"></span></div>
             <div class="history-panel">
                 <div class="history-header gz-hist-head">
                     <!-- 第一列：標題 / 數量 / 主要動作 -->
@@ -17884,7 +17883,8 @@
                 </div>
                 <div class="history-list" id="history-list"></div>
             </div>
-        </div>
+        </aside>
+        <!-- 主內容：全寬 -->
         <div class="result-box" onmouseleave="unlockPreview()">
 
             <div class="mobile-result-toolbar">
@@ -18826,7 +18826,35 @@
                 </div>
             </div>
         </div>
+        <!-- 右抽屜：截圖預覽 -->
+        <aside id="gz-drawer-preview" class="preview-box gz-drawer gz-drawer-right" aria-label="截圖預覽">
+            <div class="gz-drawer-head">
+                <div class="gz-drawer-title"><svg class="gz-svg" aria-hidden="true"><use href="#gi-image"/></svg><span data-lang-zh="截圖預覽" data-lang-en="Screenshot">截圖預覽</span></div>
+                <div class="gz-drawer-actions">
+                    <button type="button" class="gz-icon-btn gz-pin-btn" onclick="gzTogglePin('preview')" title="釘選在旁邊" aria-label="釘選" aria-pressed="false"><svg class="gz-svg" aria-hidden="true"><use href="#gi-pin"/></svg></button>
+                    <button type="button" class="gz-icon-btn" onclick="gzCloseDrawer('preview')" title="關閉" aria-label="關閉"><svg class="gz-svg" aria-hidden="true"><use href="#gi-x"/></svg></button>
+                </div>
+            </div>
+            <div id="img-container">
+                <img id="preview-img" alt="預覽圖">
+                <canvas id="zoom-canvas"></canvas>
+                <div id="cv-overlay"></div>
+                <!-- New Scan Overlay -->
+                <div id="scan-overlay" class="scan-overlay">
+                    <div class="scan-digital-grid"></div>
+                    <div class="scan-radar"></div>
+                </div>
+                <div id="img-placeholder" class="empty-state">
+                    <div>等待影像輸入...</div>
+                    <div style="font-size:0.8rem;color:#666;">或 <a href="#" onclick="triggerFileUpload();return false;"
+                            style="color:var(--accent)">選擇本地圖片</a></div>
+                </div>
+            </div>
+            <div class="status-bar"><span id="status-text" data-lang-zh="就緒" data-lang-en="Ready">就緒</span><span
+                    id="dim-text"></span></div>
+        </aside>
     </div>
+    <div id="gz-scrim" class="gz-scrim" onclick="gzCloseDrawers()" aria-hidden="true"></div>
     <!-- Heatmap Modal -->
     <div id="heatmap-modal" class="dashboard-modal">
         <div class="db-container" style="max-width:1000px;">
@@ -27348,7 +27376,6 @@
             unlockPreview();
             urlInput.value = "";
             urlInput.dispatchEvent(new Event('input'));
-            analyzeBtn.innerText = g_lang === 'en' ? "View History" : "檢視歷史";
             g_selectedBuildIdx = autoSelectBuild(g_globalData.role, g_chains.filter(Boolean).length);
 
             // 確保結果面板可見
@@ -33769,6 +33796,7 @@
             }
         }
         function editSubStat(eIdx, sIdx) {
+            if (!g_echoesData[eIdx] || !g_echoesData[eIdx].rects || !g_echoesData[eIdx].rects.sub) return; // 資料已被其他流程替換時略過修正視窗
             g_editingSub = { eIdx, sIdx };
             let item = g_echoesData[eIdx].subs[sIdx];
             subEditName.value = item.name;
@@ -55245,13 +55273,15 @@
                 modal.style.pointerEvents = 'none';
             }
 
-            const isEN = (typeof window.g_lang !== 'undefined' ? window.g_lang === 'en' : (typeof g_lang !== 'undefined' && g_lang === 'en')) || (localStorage.getItem('ww_lang') === 'en') || (localStorage.getItem('lang') === 'en');
+            const isEN = (typeof window.g_lang !== 'undefined' ? isEn() : (typeof g_lang !== 'undefined' && g_lang === 'en')) || (localStorage.getItem('ww_lang') === 'en') || (localStorage.getItem('lang') === 'en');
 
             // Check window width to determine correct elements for mobile vs desktop
-            const isMobile = window.innerWidth <= 768;
-            const matrixSelector = isMobile ? 'button[onclick*="openGraduationPanel(\'team\')"]' : 'button[onclick*="openGraduationPanel(\'team\')"]';
-            const imageSelector = isMobile ? '#mobile-btn-share' : 'button.btn-primary-action[onclick*="generateShareImage"]';
-            const offlineSelector = isMobile ? '#mobile-btn-offline' : '#offline-edit-btn';
+            const isMobile = window.innerWidth <= 900;
+            if (window.gzGo) gzGo('home');
+            const navSel = (v) => (isMobile ? '.gz-tabbar' : '.gz-nav') + ' [data-v="' + v + '"]';
+            const matrixSelector = '.gz-tile[onclick*="openGraduationPanel"]';
+            const imageSelector = '.gz-tile[onclick*="openDemoShareModal"]';
+            const offlineSelector = '.gz-tile-feature';
 
             const driverObj = window.driver.js.driver({
                 showProgress: true,
@@ -55262,7 +55292,7 @@
                 prevBtnText: isEN ? '⬅ Back' : '⬅ 上一步',
                 steps: [
                     {
-                        element: '#url-input',
+                        element: '#ios-search-shell',
                         popover: {
                             title: isEN ? '1. Enter UID' : '1. 輸入 UID',
                             description: isEN
@@ -55321,7 +55351,7 @@
                         }
                     },
                     {
-                        element: '.btn-weights-mini',
+                        element: '.gz-tile[onclick*="showWeightsModal"]',
                         popover: {
                             title: isEN ? '5. Echo Database' : '5. ZH資料庫',
                             description: isEN
@@ -55332,7 +55362,7 @@
                         }
                     },
                     {
-                        element: '.header-title-group',
+                        element: navSel('roster'),
                         popover: {
                             title: isEN ? '6. Stats & Achievements' : '6. 成就與數據總覽',
                             description: isEN
@@ -55343,7 +55373,7 @@
                         }
                     },
                     {
-                        element: isMobile ? '.mobile-nav-btn[data-section="menu"]' : '#btn-analyze',
+                        element: navSel('tools'),
                         popover: {
                             title: isEN ? '7. Feature Hub' : '7. 功能列表',
                             description: isEN
@@ -59246,11 +59276,11 @@
             const FEATURE_GUIDES = {
                 ocr: {
                     name: '在UID/網址框輸入網址',
-                    selector: '#url-input',
+                    selector: '#welcome-url-input',
                     pathText: '首頁頂部 ➔ UID / 圖片網址輸入框',
                     tooltip: '🎯 就是這裡！在此輸入 9 碼 UID 或貼上截圖網址，按 Enter 即可快速分析！',
                     action: () => {
-                        const inp = document.getElementById('url-input');
+                        const inp = document.getElementById('welcome-url-input');
                         if (inp) {
                             inp.focus();
                             inp.select();
@@ -62703,6 +62733,3022 @@
             }
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initInks);
             else initInks();
+        })();
+    </script>
+    <!-- ══════════════════════════════════════════════════════════════════
+         GZ Shell — 全寬單欄 + 左右抽屜版面（歷史紀錄 / 截圖預覽）
+    ═══════════════════════════════════════════════════════════════════ -->
+    <style id="gz-shell-css">
+        /* ── 頂部列按鈕 ─────────────────────────────────────────────── */
+        .gz-bar-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 40px;
+            padding: 0 14px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            border: 1px solid var(--g-line-2);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--g-text);
+            font: inherit;
+            font-size: 0.86rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: transform 0.3s var(--g-spring), background 0.25s, border-color 0.25s, color 0.25s;
+        }
+
+        .gz-bar-btn:hover {
+            border-color: rgba(236, 199, 136, 0.45);
+            color: var(--g-gold);
+            transform: translateY(-1px);
+        }
+
+        .gz-bar-btn.is-active {
+            background: var(--g-gold-soft);
+            border-color: rgba(236, 199, 136, 0.55);
+            color: var(--g-gold);
+        }
+
+        .gz-bar-btn .gz-svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .gz-badge {
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: var(--g-gold-grad);
+            color: #1a1408;
+            font-size: 0.72rem;
+            font-weight: 900;
+            line-height: 20px;
+            text-align: center;
+        }
+
+        .gz-badge[hidden] {
+            display: none;
+        }
+
+        .gz-thumb {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 7px;
+            background: center / cover no-repeat;
+            box-shadow: 0 0 0 1px rgba(236, 199, 136, 0.5);
+        }
+
+        #gz-btn-preview.has-img .gz-thumb {
+            display: inline-block;
+        }
+
+        #gz-btn-preview.has-img>.gz-svg {
+            display: none;
+        }
+
+        body>header .header-title-group {
+            margin-right: auto;
+        }
+
+        /* ── 版面骨架 ───────────────────────────────────────────────── */
+        .gz-shell {
+            gap: 14px !important;
+        }
+
+        .gz-shell>.result-box {
+            order: 1;
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+        }
+
+        .gz-shell>.gz-drawer-left {
+            order: 0;
+        }
+
+        .gz-shell>.gz-drawer-right {
+            order: 2;
+        }
+
+        /* 分頁列置中（桌機；手機改用底部導覽） */
+        @media (min-width: 901px) {
+            .gz-shell .tab-container {
+                display: flex !important;
+                justify-content: center;
+            }
+
+            .gz-shell .gz-tabs {
+                flex: 0 1 auto;
+                max-width: 100%;
+            }
+        }
+
+        /* ── 抽屜（浮出模式） ──────────────────────────────────────── */
+        .gz-shell>.gz-drawer {
+            position: fixed !important;
+            top: 12px;
+            bottom: 12px;
+            z-index: 10050;
+            display: flex !important;
+            flex-direction: column;
+            min-width: 0 !important;
+            min-height: 0;
+            flex: none !important;
+            margin: 0 !important;
+            border-radius: 22px !important;
+            border: 1px solid var(--g-line-2) !important;
+            background: linear-gradient(180deg, rgba(26, 26, 36, 0.94), rgba(13, 13, 19, 0.96)) !important;
+            backdrop-filter: blur(28px) saturate(150%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), var(--g-hl) !important;
+            overflow: hidden !important;
+            visibility: hidden;
+            opacity: 0;
+            animation: none !important;
+            transition: transform 0.5s var(--g-out), opacity 0.3s ease, visibility 0s linear 0.5s;
+        }
+
+        .gz-shell>.gz-drawer-left {
+            left: 12px;
+            width: min(400px, calc(100vw - 24px)) !important;
+            transform: translateX(calc(-100% - 30px));
+        }
+
+        .gz-shell>.gz-drawer-right {
+            right: 12px;
+            width: min(540px, calc(100vw - 24px)) !important;
+            transform: translateX(calc(100% + 30px));
+        }
+
+        body.gz-open-history .gz-shell>.gz-drawer-left,
+        body.gz-open-preview .gz-shell>.gz-drawer-right {
+            transform: none;
+            visibility: visible;
+            opacity: 1;
+            transition: transform 0.55s var(--g-out), opacity 0.25s ease, visibility 0s;
+        }
+
+        .gz-drawer-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 14px 12px 18px;
+            border-bottom: 1px solid var(--g-line);
+            flex-shrink: 0;
+        }
+
+        .gz-drawer-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--g-text);
+        }
+
+        .gz-drawer-title .gz-svg {
+            width: 18px;
+            height: 18px;
+            color: var(--g-gold);
+        }
+
+        .gz-drawer-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .gz-icon-btn {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            border: 1px solid var(--g-line);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--g-text-2);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.3s var(--g-spring);
+        }
+
+        .gz-icon-btn:hover {
+            color: var(--g-text);
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        .gz-icon-btn .gz-svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .gz-pin-btn.is-on {
+            color: var(--g-gold);
+            border-color: rgba(236, 199, 136, 0.5);
+            background: var(--g-gold-soft);
+        }
+
+        /* 抽屜內容填滿 */
+        .gz-drawer-left .history-panel {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            margin: 0 !important;
+            border: none !important;
+            display: flex !important;
+            flex-direction: column;
+        }
+
+        .gz-drawer-left .history-list {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto !important;
+        }
+
+        .gz-drawer-left .history-header.gz-hist-head {
+            background: transparent !important;
+        }
+
+        .gz-drawer-right #img-container {
+            flex: 1 1 auto;
+            min-height: 0;
+            width: auto !important;
+            max-width: none !important;
+            margin: 12px !important;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--g-line);
+        }
+
+        .gz-drawer-right .status-bar {
+            flex-shrink: 0;
+            margin: 0 12px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--g-line) !important;
+        }
+
+        /* 遮罩 */
+        .gz-scrim {
+            position: fixed;
+            inset: 0;
+            z-index: 10040;
+            background: rgba(4, 4, 8, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        body.gz-scrim-on .gz-scrim {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        body.is-login-mode .gz-drawer,
+        body.is-login-mode .gz-scrim {
+            display: none !important;
+        }
+
+        @media (min-width: 901px) {
+            body.gz-scrim-on #uid-display-container,
+            body.gz-open-history:not(.gz-pin-history) #uid-display-container {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* 釘選：抽屜變成並排欄位 */
+            body.gz-pin-history .gz-shell>.gz-drawer-left,
+            body.gz-pin-preview .gz-shell>.gz-drawer-right {
+                position: relative !important;
+                top: auto;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                z-index: auto;
+                transform: none;
+                visibility: visible;
+                opacity: 1;
+                border-radius: 20px !important;
+                background: var(--g-glass) !important;
+                box-shadow: 0 20px 60px -30px rgba(0, 0, 0, 0.9), var(--g-hl) !important;
+                transition: none;
+            }
+
+            body.gz-pin-history .gz-shell>.gz-drawer-left {
+                width: 340px !important;
+                flex: 0 0 340px !important;
+            }
+
+            body.gz-pin-preview .gz-shell>.gz-drawer-right {
+                width: clamp(320px, 28vw, 460px) !important;
+                flex: 0 0 clamp(320px, 28vw, 460px) !important;
+            }
+        }
+
+        /* ═══════════════════════ 手機版 ═══════════════════════ */
+        @media (max-width: 900px) {
+
+            #gz-btn-history,
+            .gz-pin-btn {
+                display: none !important;
+            }
+
+            /* 頂部列：品牌 + 截圖鈕一列，輸入列一列 */
+            body>header .header-title-group {
+                flex: 1 1 auto !important;
+                order: 0;
+                padding-right: 0 !important;
+                min-width: 0;
+            }
+
+            #gz-btn-preview {
+                order: 1;
+                height: 38px;
+                padding: 0 12px;
+                margin-right: 46px;
+            }
+
+            body>header .input-group {
+                order: 2;
+            }
+
+            /* 歷史：作為底部導覽「歷史」頁籤的全頁內容 */
+            .gz-shell>.gz-drawer-left {
+                position: static !important;
+                display: none !important;
+                width: 100% !important;
+                transform: none;
+                visibility: visible;
+                opacity: 1;
+                border-radius: 20px !important;
+                background: var(--g-glass) !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                transition: none;
+            }
+
+            body[data-mobile-section="history"] .gz-shell>.gz-drawer-left {
+                display: flex !important;
+            }
+
+            .gz-drawer-left .gz-drawer-head {
+                display: none;
+            }
+
+            .gz-drawer-left .history-list {
+                overflow-y: visible !important;
+            }
+
+            /* 截圖：右側滑出全高面板，停在底部導覽之上 */
+            .gz-shell>.gz-drawer-right {
+                top: calc(8px + var(--gz-safe-t, 0px));
+                right: 8px;
+                left: 8px;
+                width: auto !important;
+                bottom: calc(8px + var(--gz-safe-b, 0px));
+                transform: translateX(calc(100% + 20px));
+                z-index: 40050;
+            }
+
+            .gz-scrim {
+                z-index: 40040;
+            }
+        }
+
+        @media (max-width: 420px) {
+            #gz-btn-preview .gz-lb {
+                display: none;
+            }
+
+            #gz-btn-preview {
+                width: 40px;
+                padding: 0;
+            }
+        }
+    </style>
+
+    <script id="gz-shell-js">
+        (function () {
+            'use strict';
+            var KEY = 'gz_drawer_pins';
+            var pins = {};
+            try { pins = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) { pins = {}; }
+            var mq = window.matchMedia('(max-width: 900px)');
+            var body = document.body;
+            function save() { try { localStorage.setItem(KEY, JSON.stringify(pins)); } catch (_) { } }
+            function isMobile() { return mq.matches; }
+            function has(c) { return body.classList.contains(c); }
+
+            function sync() {
+                ['history', 'preview'].forEach(function (w) {
+                    var pinned = !!pins[w] && !isMobile();
+                    body.classList.toggle('gz-pin-' + w, pinned);
+                    var shown = pinned || has('gz-open-' + w);
+                    var d = document.getElementById('gz-drawer-' + w);
+                    if (d) {
+                        var pb = d.querySelector('.gz-pin-btn');
+                        if (pb) {
+                            pb.classList.toggle('is-on', pinned);
+                            pb.setAttribute('aria-pressed', pinned ? 'true' : 'false');
+                            pb.title = pinned ? '取消釘選' : '釘選在旁邊';
+                        }
+                    }
+                    var btn = document.getElementById('gz-btn-' + w);
+                    if (btn) {
+                        btn.classList.toggle('is-active', shown);
+                        btn.setAttribute('aria-expanded', shown ? 'true' : 'false');
+                    }
+                });
+                var overlay = (has('gz-open-history') && !has('gz-pin-history')) || (has('gz-open-preview') && !has('gz-pin-preview'));
+                body.classList.toggle('gz-scrim-on', overlay);
+            }
+            // 釘選改變主內容寬度時，讓圖表等元件重新計算
+            function relayout() { setTimeout(function () { try { window.dispatchEvent(new Event('resize')); } catch (_) { } }, 60); }
+
+            window.gzOpenDrawer = function (w) {
+                var hasUid = false;
+                try { hasUid = !!g_currentUserUid; } catch (_) { }
+                if (w === 'history' && isMobile() && hasUid && typeof window.setMobileNavSection === 'function') {
+                    window.setMobileNavSection('history');
+                    return;
+                }
+                if (w === 'history') {
+                    var hl = document.getElementById('history-list');
+                    if (hl && !hl.children.length && typeof window.renderHistoryList === 'function') {
+                        try { window.renderHistoryList(); } catch (_) { }
+                    }
+                }
+                var other = w === 'history' ? 'preview' : 'history';
+                if (!has('gz-pin-' + other)) body.classList.remove('gz-open-' + other);
+                body.classList.add('gz-open-' + w);
+                sync();
+                var d = document.getElementById('gz-drawer-' + w);
+                var f = d && d.querySelector('.gz-icon-btn:last-child');
+                if (f && !has('gz-pin-' + w)) { try { f.focus({ preventScroll: true }); } catch (_) { } }
+            };
+            window.gzCloseDrawer = function (w) {
+                body.classList.remove('gz-open-' + w);
+                var wasPinned = pins[w] && !isMobile();
+                if (wasPinned) { pins[w] = false; save(); }
+                sync();
+                if (wasPinned) relayout();
+            };
+            window.gzToggleDrawer = function (w) {
+                if (has('gz-pin-' + w) || has('gz-open-' + w)) window.gzCloseDrawer(w);
+                else window.gzOpenDrawer(w);
+            };
+            window.gzCloseDrawers = function () {
+                ['history', 'preview'].forEach(function (w) {
+                    if (!has('gz-pin-' + w)) body.classList.remove('gz-open-' + w);
+                });
+                sync();
+            };
+            window.gzTogglePin = function (w) {
+                pins[w] = !pins[w];
+                save();
+                if (pins[w]) body.classList.remove('gz-open-' + w);
+                sync();
+                relayout();
+            };
+
+            // Esc 關閉浮出抽屜（彈窗開啟時不處理）
+            document.addEventListener('keydown', function (e) {
+                if (e.key !== 'Escape') return;
+                if (has('gz-scrim-on')) { window.gzCloseDrawers(); }
+            });
+
+            // 點選歷史紀錄後自動收合（未釘選、桌機）
+            document.addEventListener('click', function (e) {
+                if (has('gz-pin-history') || !has('gz-open-history')) return;
+                var t = e.target;
+                if (!t.closest || !t.closest('#history-list .history-item')) return;
+                if (t.closest('button, input, select, textarea, label, a, .history-drag-handle')) return;
+                setTimeout(function () { window.gzCloseDrawer('history'); }, 180);
+            }, true); // 捕獲階段：點擊後清單會重繪，冒泡時目標已不在 DOM 中
+
+            // 截圖鈕顯示縮圖；歷史鈕顯示筆數
+            function watchPreview() {
+                var img = document.getElementById('preview-img');
+                var btn = document.getElementById('gz-btn-preview');
+                if (!img || !btn) return;
+                var thumb = btn.querySelector('.gz-thumb');
+                function upd() {
+                    var src = img.getAttribute('src');
+                    var ok = !!src && img.classList.contains('visible');
+                    btn.classList.toggle('has-img', ok);
+                    if (thumb) thumb.style.backgroundImage = ok ? 'url("' + String(img.src).replace(/"/g, '%22') + '")' : '';
+                }
+                new MutationObserver(upd).observe(img, { attributes: true, attributeFilter: ['src', 'class'] });
+                upd();
+            }
+            function watchHistory() {
+                var list = document.getElementById('history-list');
+                var badge = document.getElementById('gz-history-badge');
+                if (!list || !badge) return;
+                var pending = 0;
+                function upd() {
+                    pending = 0;
+                    var n = list.querySelectorAll('.history-item:not(.history-add-item)').length;
+                    badge.hidden = n === 0;
+                    badge.textContent = n > 99 ? '99+' : String(n);
+                }
+                new MutationObserver(function () { if (!pending) pending = requestAnimationFrame(upd); })
+                    .observe(list, { childList: true, subtree: true });
+                upd();
+            }
+
+            if (mq.addEventListener) mq.addEventListener('change', sync);
+            else if (mq.addListener) mq.addListener(sync);
+            watchPreview();
+            watchHistory();
+            sync();
+        })();
+    </script>
+    <!-- ══════════════════════════════════════════════════════════════════
+         GZ Results — 分析結果改為「角色總覽 + 聲骸卡片網格」（表格可切換）
+    ═══════════════════════════════════════════════════════════════════ -->
+    <style id="gz-results-css">
+        /* 檢視切換（分頁列右側） */
+        .gz-view-switch {
+            display: none;
+            align-items: center;
+            gap: 2px;
+            margin-left: 10px;
+            padding: 3px;
+            border-radius: 11px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--g-line);
+            flex-shrink: 0;
+        }
+
+        .gz-view-switch button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 30px;
+            padding: 0 12px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--g-text-3);
+            font: inherit;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.25s, color 0.25s;
+        }
+
+        .gz-view-switch button .gz-svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .gz-view-switch button.is-on {
+            background: var(--g-gold-soft);
+            color: var(--g-gold);
+            box-shadow: inset 0 0 0 1px rgba(236, 199, 136, 0.35);
+        }
+
+        @media (min-width: 901px) {
+            .gz-view-switch {
+                display: inline-flex;
+            }
+
+            /* ── 卡片模式：隱藏表格、顯示卡片網格 ── */
+            body.gz-cards-on #tab-analysis #result-table {
+                display: none !important;
+            }
+
+            body.gz-cards-on #tab-analysis:has(#mobile-results:empty) #result-table {
+                display: table !important;
+            }
+
+            body.gz-cards-on #tab-analysis #mobile-results {
+                display: flex !important;
+                flex-direction: column;
+                gap: 14px;
+                padding: 4px 2px 40px;
+            }
+
+            body.gz-cards-on #mobile-results .gz-echo-rail {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 14px;
+            }
+
+            body.gz-cards-on #mobile-results .gz-rail-head,
+            body.gz-cards-on #mobile-results .gz-rail-dots {
+                display: none;
+            }
+
+            body.gz-cards-on #tab-analysis .table-scroll {
+                overflow: visible !important;
+            }
+
+            body.gz-cards-on #mobile-results>* {
+                min-width: 0;
+            }
+
+            /* ── 角色總覽：橫向三欄 Hero ── */
+            body.gz-cards-on #mobile-results>.mobile-role-card {
+                display: grid !important;
+                grid-template-columns: minmax(220px, 0.9fr) minmax(250px, 1fr) minmax(320px, 1.6fr);
+                grid-auto-rows: min-content;
+                column-gap: 22px;
+                row-gap: 8px;
+                align-items: start;
+                margin: 0 !important;
+                padding: 22px 24px !important;
+                border-radius: 22px !important;
+                border: 1px solid var(--g-line-2) !important;
+                background:
+                    radial-gradient(600px 220px at 0% 0%, rgba(236, 199, 136, 0.14), transparent 70%),
+                    radial-gradient(500px 240px at 100% 100%, rgba(96, 140, 250, 0.1), transparent 70%),
+                    linear-gradient(180deg, rgba(30, 30, 42, 0.8), rgba(16, 16, 22, 0.85)) !important;
+                box-shadow: 0 24px 70px -30px rgba(0, 0, 0, 0.9), var(--g-hl) !important;
+                animation: gzRise 0.6s var(--g-out) backwards;
+            }
+
+            body.gz-cards-on .mobile-role-card>* {
+                grid-column: 1;
+                margin: 0 !important;
+                min-width: 0;
+            }
+
+            body.gz-cards-on .mobile-role-card>:nth-child(4) {
+                grid-column: 2;
+                grid-row: 1 / span 7;
+                align-self: stretch;
+            }
+
+            body.gz-cards-on .mobile-role-card>:last-child:nth-child(n+6) {
+                grid-column: 3;
+                grid-row: 1 / span 7;
+                align-self: stretch;
+                max-height: 320px;
+                overflow: auto;
+                background: rgba(0, 0, 0, 0.25) !important;
+                border: 1px solid var(--g-line);
+                border-radius: 16px !important;
+                padding: 14px 16px !important;
+            }
+
+            body.gz-cards-on .mobile-role-card .role-name-large {
+                font-size: 2.1rem !important;
+                font-weight: 900;
+                letter-spacing: 0.06em;
+                line-height: 1.1;
+                background: var(--g-gold-grad);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent !important;
+            }
+
+            body.gz-cards-on .mobile-role-card .chain-indicator {
+                width: 12px !important;
+                height: 12px !important;
+                border-radius: 4px !important;
+                transform: rotate(45deg);
+            }
+
+            /* 綜合評級：大面板 */
+            body.gz-cards-on .mobile-role-card .total-score-badge {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+                margin: 0 !important;
+                padding: 18px 20px !important;
+                border-radius: 18px !important;
+                border: 1px solid rgba(236, 199, 136, 0.28) !important;
+                background: linear-gradient(160deg, rgba(236, 199, 136, 0.12), rgba(0, 0, 0, 0.25)) !important;
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+                cursor: pointer;
+                transition: transform 0.35s var(--g-spring), box-shadow 0.3s;
+            }
+
+            body.gz-cards-on .mobile-role-card .total-score-badge:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 16px 40px -18px rgba(236, 199, 136, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+            }
+
+            body.gz-cards-on .mobile-role-card .ts-val-highlight {
+                font-size: 2.6rem !important;
+                font-weight: 900 !important;
+                line-height: 1;
+                background: var(--g-gold-grad);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent !important;
+            }
+
+            body.gz-cards-on .mobile-role-card .ts-grade {
+                font-size: 0.95rem !important;
+                padding: 4px 12px !important;
+                border-radius: 999px !important;
+            }
+
+            body.gz-cards-on .mobile-role-card .rank-btn {
+                border-radius: 12px !important;
+                min-height: 38px;
+            }
+
+            /* ── 聲骸卡片 ── */
+            body.gz-cards-on #mobile-results .gz-echo-rail>.mobile-echo-card {
+                display: flex !important;
+                flex-direction: column;
+                margin: 0 !important;
+                border-radius: 18px !important;
+                border: 1px solid var(--g-line) !important;
+                background:
+                    radial-gradient(260px circle at var(--mx, -200px) var(--my, -200px), rgba(236, 199, 136, 0.09), transparent 60%),
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)) !important;
+                overflow: hidden;
+                transition: transform 0.4s var(--g-out), border-color 0.3s, box-shadow 0.35s;
+                animation: gzTileIn 0.55s var(--g-out) backwards;
+            }
+
+            body.gz-cards-on #mobile-results .gz-echo-rail>.mobile-echo-card:nth-child(2) {
+                animation-delay: 0.05s;
+            }
+
+            body.gz-cards-on #mobile-results .gz-echo-rail>.mobile-echo-card:nth-child(3) {
+                animation-delay: 0.1s;
+            }
+
+            body.gz-cards-on #mobile-results .gz-echo-rail>.mobile-echo-card:nth-child(4) {
+                animation-delay: 0.15s;
+            }
+
+            body.gz-cards-on #mobile-results .gz-echo-rail>.mobile-echo-card:nth-child(5) {
+                animation-delay: 0.2s;
+            }
+
+            body.gz-cards-on #mobile-results .gz-echo-rail>.mobile-echo-card:nth-child(n+6) {
+                animation-delay: 0.25s;
+            }
+
+            body.gz-cards-on #mobile-results .gz-echo-rail>.mobile-echo-card:hover {
+                transform: translateY(-3px);
+                border-color: rgba(236, 199, 136, 0.35) !important;
+                box-shadow: 0 18px 44px -20px rgba(236, 199, 136, 0.35);
+            }
+
+            @media (max-width: 1200px) {
+                body.gz-cards-on #mobile-results>.mobile-role-card {
+                    grid-template-columns: minmax(200px, 1fr) minmax(240px, 1fr);
+                }
+
+                body.gz-cards-on .mobile-role-card>:last-child:nth-child(n+6) {
+                    grid-column: 1 / -1;
+                    grid-row: auto;
+                    max-height: none;
+                }
+            }
+        }
+
+
+        /* ── 聲骸卡內部（桌機與手機共用） ── */
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-header {
+            order: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 12px 14px !important;
+            background: rgba(0, 0, 0, 0.22) !important;
+            border-bottom: 1px solid var(--g-line) !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-header>span:nth-child(2) {
+            min-width: 0;
+            font-size: 0.84rem;
+            line-height: 1.3;
+            text-align: right;
+            gap: 6px !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-idx {
+            display: inline-grid;
+            place-items: center;
+            min-width: 30px;
+            height: 24px;
+            padding: 0 8px;
+            border-radius: 8px;
+            background: var(--g-gold-soft);
+            color: var(--g-gold);
+            font-weight: 900;
+            font-size: 0.78rem;
+        }
+
+        /* 評分移到卡片上方、放大 */
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-score {
+            order: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 6px 10px;
+            padding: 14px 16px 10px !important;
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-score>span:nth-child(2) {
+            font-size: 1.9rem !important;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-score>div {
+            flex-basis: 100%;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .score-grade {
+            border-radius: 999px !important;
+            padding: 3px 10px !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-main {
+            order: 2;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 0 12px !important;
+            padding: 10px 12px !important;
+            border-radius: 12px !important;
+            background: rgba(236, 199, 136, 0.07) !important;
+            border: 1px solid rgba(236, 199, 136, 0.18) !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .main-stat-name {
+            font-weight: 800;
+            color: var(--g-gold) !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .main-stat-val {
+            font-weight: 900;
+            color: var(--g-text) !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .mobile-echo-subs {
+            order: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 12px 14px !important;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .sub-stat-container {
+            border-radius: 9px !important;
+            padding: 7px 10px !important;
+            background-color: rgba(255, 255, 255, 0.025);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .sub-stat-container:hover {
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+
+        #mobile-results .gz-echo-rail .mobile-echo-card .sub-stat-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.86rem;
+        }
+
+
+        /* ── 手機：聲骸卡左右滑動輪播 ── */
+        @media (max-width: 900px) {
+            #mobile-results .gz-rail-head {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                margin: 16px 2px 8px;
+                color: var(--g-text);
+                font-weight: 800;
+                font-size: 1rem;
+            }
+
+            #mobile-results .gz-rail-head small {
+                color: var(--g-text-3);
+                font-weight: 600;
+                font-size: 0.74rem;
+            }
+
+            #mobile-results .gz-echo-rail {
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                overscroll-behavior-x: contain;
+                scroll-snap-type: x mandatory;
+                scroll-padding: 0 10px;
+                margin: 0 -10px;
+                padding: 2px 10px 6px;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            #mobile-results .gz-echo-rail::-webkit-scrollbar {
+                display: none;
+            }
+
+            #mobile-results .gz-echo-rail>.mobile-echo-card {
+                flex: 0 0 84%;
+                display: flex !important;
+                flex-direction: column;
+                scroll-snap-align: center;
+                margin: 0 !important;
+            }
+
+            #mobile-results .gz-rail-dots {
+                display: flex;
+                justify-content: center;
+                gap: 6px;
+                margin: 8px 0 4px;
+            }
+
+            #mobile-results .gz-rail-dots i {
+                width: 6px;
+                height: 6px;
+                border-radius: 3px;
+                background: rgba(255, 255, 255, 0.2);
+                transition: width 0.35s var(--g-out), background 0.3s;
+            }
+
+            #mobile-results .gz-rail-dots i.on {
+                width: 20px;
+                background: var(--g-gold);
+            }
+        }
+
+        /* 手機：角色總覽卡也改成 Hero 樣式 */
+        @media (max-width: 900px) {
+            #mobile-results>.mobile-role-card {
+                border-radius: 20px !important;
+                padding: 18px !important;
+                border: 1px solid var(--g-line-2) !important;
+                background:
+                    radial-gradient(400px 200px at 0% 0%, rgba(236, 199, 136, 0.14), transparent 70%),
+                    linear-gradient(180deg, rgba(30, 30, 42, 0.8), rgba(16, 16, 22, 0.85)) !important;
+            }
+
+            #mobile-results .role-name-large {
+                background: var(--g-gold-grad);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent !important;
+                font-weight: 900;
+            }
+
+            #mobile-results .gz-echo-rail>.mobile-echo-card {
+                border-radius: 18px !important;
+                border: 1px solid var(--g-line) !important;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)) !important;
+                overflow: hidden;
+            }
+        }
+    </style>
+
+    <script id="gz-results-js">
+        (function () {
+            'use strict';
+            var KEY = 'gz_result_view';
+            var mode = 'cards';
+            try { mode = localStorage.getItem(KEY) || 'cards'; } catch (_) { }
+            if (mode !== 'cards' && mode !== 'table') mode = 'cards';
+
+            function editActive() {
+                try {
+                    return !!(g_editMode && (g_offlineEditMode || (g_isDeveloper && g_analyzeFixMode)));
+                } catch (_) { return false; }
+            }
+            function apply() {
+                var on = mode === 'cards' && !editActive();
+                document.body.classList.toggle('gz-cards-on', on);
+                var sw = document.getElementById('gz-view-switch');
+                if (sw) {
+                    sw.querySelectorAll('button').forEach(function (b) {
+                        var isOn = b.getAttribute('data-view') === mode;
+                        b.classList.toggle('is-on', isOn);
+                        b.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+                    });
+                    sw.classList.toggle('is-locked', editActive());
+                }
+            }
+            function isEn() { try { return g_lang === 'en'; } catch (_) { return false; } }
+            function wrapEchoes() {
+                var box = document.getElementById('mobile-results');
+                if (!box || box.querySelector(':scope > .gz-echo-rail')) return;
+                var cards = Array.prototype.filter.call(box.children, function (c) { return c.classList.contains('mobile-echo-card'); });
+                if (!cards.length) return;
+                var head = document.createElement('div');
+                head.className = 'gz-rail-head';
+                head.innerHTML = '<span>' + (isEn() ? 'Echoes' : '聲骸') + ' · ' + cards.length + '</span><small>' +
+                    (isEn() ? 'Swipe ←→' : '左右滑動查看') + '</small>';
+                var rail = document.createElement('div');
+                rail.className = 'gz-echo-rail';
+                box.insertBefore(head, cards[0]);
+                box.insertBefore(rail, cards[0]);
+                cards.forEach(function (c) { rail.appendChild(c); });
+                var dots = document.createElement('div');
+                dots.className = 'gz-rail-dots';
+                dots.setAttribute('aria-hidden', 'true');
+                dots.innerHTML = cards.map(function (_, i) { return '<i' + (i === 0 ? ' class="on"' : '') + '></i>'; }).join('');
+                rail.parentNode.insertBefore(dots, rail.nextSibling);
+                var raf = 0;
+                rail.addEventListener('scroll', function () {
+                    if (raf) return;
+                    raf = requestAnimationFrame(function () {
+                        raf = 0;
+                        var w = rail.firstElementChild ? rail.firstElementChild.getBoundingClientRect().width + 10 : 1;
+                        var idx = Math.round(rail.scrollLeft / w);
+                        Array.prototype.forEach.call(dots.children, function (d, i) { d.classList.toggle('on', i === idx); });
+                    });
+                }, { passive: true });
+            }
+            window.gzSetResultView = function (v) {
+                mode = v === 'table' ? 'table' : 'cards';
+                try { localStorage.setItem(KEY, mode); } catch (_) { }
+                apply();
+            };
+
+            // 在分頁列右側放入「卡片 / 表格」切換
+            var tc = document.querySelector('.gz-tabs');
+            if (tc && !document.getElementById('gz-view-switch')) {
+                var sw = document.createElement('div');
+                sw.id = 'gz-view-switch';
+                sw.className = 'gz-view-switch';
+                sw.setAttribute('role', 'group');
+                sw.setAttribute('aria-label', '結果檢視方式');
+                sw.innerHTML =
+                    '<button type="button" data-view="cards" onclick="gzSetResultView(\'cards\')" title="卡片檢視">' +
+                    '<svg class="gz-svg" aria-hidden="true"><use href="#gi-grid"/></svg><span data-lang-zh="卡片" data-lang-en="Cards">卡片</span></button>' +
+                    '<button type="button" data-view="table" onclick="gzSetResultView(\'table\')" title="表格檢視">' +
+                    '<svg class="gz-svg" aria-hidden="true"><use href="#gi-menu"/></svg><span data-lang-zh="表格" data-lang-en="Table">表格</span></button>';
+                tc.parentNode.insertBefore(sw, tc.nextSibling);
+            }
+
+            // 每次重新渲染結果後同步（修改模式時自動改用表格）
+            if (typeof window.renderTable === 'function' && !window.renderTable.__gzWrapped) {
+                var orig = window.renderTable;
+                var wrapped = function () {
+                    var r = orig.apply(this, arguments);
+                    try { wrapEchoes(); } catch (_) { }
+                    try { apply(); } catch (_) { }
+                    return r;
+                };
+                wrapped.__gzWrapped = true;
+                window.renderTable = wrapped;
+            }
+            // 卡片聚光效果
+            document.addEventListener('pointermove', function (e) {
+                if (!document.body.classList.contains('gz-cards-on') || !e.target.closest) return;
+                var c = e.target.closest('#mobile-results .mobile-echo-card');
+                if (!c) return;
+                var r = c.getBoundingClientRect();
+                c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+            }, { passive: true });
+            try { wrapEchoes(); } catch (_) { }
+            apply();
+        })();
+    </script>
+    <!-- ══════════════════════════════════════════════════════════════════
+         GZ Flow — 主畫面操作動線：角色切換列 / 角色頭像與快捷動作 / 聲骸重點 / 空狀態引導
+    ═══════════════════════════════════════════════════════════════════ -->
+    <style id="gz-flow-css">
+        /* 輸入框只保留一條外框：文字欄位的焦點不再疊加 outline 與外擴光圈 */
+        input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+            outline: none !important;
+        }
+
+        body>header #url-input:focus {
+            border-color: rgba(236, 199, 136, 0.8) !important;
+            box-shadow: 0 8px 26px -12px rgba(236, 199, 136, 0.55) !important;
+        }
+
+        .gz-search.is-focused {
+            box-shadow: 0 22px 60px -18px rgba(236, 199, 136, 0.45) !important;
+        }
+
+        /* ── 角色切換列 ─────────────────────────────────────────────── */
+        .gz-roster {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            min-width: 0;
+            margin-top: 10px;
+        }
+
+        .gz-roster[hidden],
+        body.is-login-mode .gz-roster {
+            display: none;
+        }
+
+        .gz-roster-list {
+            display: flex;
+            gap: 8px;
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 2px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .gz-roster-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gz-chip,
+        .gz-roster-btn {
+            display: inline-flex;
+            align-items: center;
+            flex-shrink: 0;
+            height: 52px;
+            border-radius: 16px;
+            border: 1px solid var(--g-line);
+            background: var(--g-glass);
+            color: var(--g-text);
+            font: inherit;
+            cursor: pointer;
+            transition: transform 0.3s var(--g-spring), border-color 0.25s, background 0.25s;
+        }
+
+        .gz-chip {
+            gap: 9px;
+            padding: 0 14px 0 7px;
+        }
+
+        .gz-chip:hover,
+        .gz-roster-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(236, 199, 136, 0.42);
+        }
+
+        .gz-chip.is-on {
+            border-color: rgba(236, 199, 136, 0.75);
+            background: linear-gradient(135deg, rgba(236, 199, 136, 0.2), rgba(236, 199, 136, 0.05));
+        }
+
+        .gz-chip-av {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            overflow: hidden;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--g-text-3);
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .gz-chip-av img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gz-chip-tx {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+            line-height: 1.15;
+        }
+
+        .gz-chip-tx b {
+            max-width: 84px;
+            overflow: hidden;
+            font-size: 0.84rem;
+            font-weight: 800;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .gz-chip-tx small {
+            color: var(--g-gold);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .gz-roster-btn {
+            gap: 7px;
+            padding: 0 14px;
+            font-size: 0.84rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .gz-roster-btn .gz-svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .gz-roster-new {
+            border-style: dashed;
+            border-color: rgba(236, 199, 136, 0.45);
+            color: var(--g-gold);
+        }
+
+        /* ── 角色總覽：頭像 / 武器 / 快捷動作 ───────────────────────── */
+        .mobile-role-card .gz-hero-id {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .gz-hero-av {
+            display: block;
+            flex-shrink: 0;
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(236, 199, 136, 0.6);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 10px 28px -12px rgba(236, 199, 136, 0.7);
+        }
+
+        .gz-hero-weapon {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            padding: 2px 9px 2px 3px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--g-text);
+            vertical-align: middle;
+        }
+
+        .gz-hero-weapon img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .gz-hero-acts {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .gz-hero-acts button {
+            display: inline-flex;
+            flex: 1 1 0;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-width: 0;
+            height: 38px;
+            border-radius: 12px;
+            border: 1px solid var(--g-line-2);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--g-text);
+            font: inherit;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: border-color 0.25s, color 0.25s;
+        }
+
+        .gz-hero-acts button:hover {
+            border-color: rgba(236, 199, 136, 0.5);
+            color: var(--g-gold);
+        }
+
+        .gz-hero-acts .gz-svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* ── 聲骸重點 ───────────────────────────────────────────────── */
+        #mobile-results .gz-rail-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 4px 14px;
+            margin: 2px 2px 0;
+            color: var(--g-text);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        #mobile-results .gz-rail-head em {
+            color: var(--g-text-2);
+            font-size: 0.8rem;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        #mobile-results .gz-rail-head em b {
+            color: var(--g-gold);
+        }
+
+        #mobile-results .gz-rail-head em.gz-low b {
+            color: #ffb4a0;
+        }
+
+        .gz-echo-tag {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .gz-echo-tag {
+            margin-left: auto;
+            align-self: center;
+        }
+
+        .gz-echo-tag.is-best {
+            background: var(--g-gold-soft);
+            color: var(--g-gold);
+        }
+
+        .gz-echo-tag.is-low {
+            background: rgba(255, 138, 110, 0.15);
+            color: #ffb4a0;
+        }
+
+        #mobile-results .mobile-echo-card.is-low {
+            border-color: rgba(255, 138, 110, 0.4) !important;
+        }
+
+        @media (min-width: 901px) {
+            body.gz-cards-on #mobile-results .gz-rail-head {
+                display: flex;
+            }
+
+            #mobile-results .gz-rail-head small {
+                display: none;
+            }
+
+            /* 內容區佔滿剩餘高度，不被切換列擠出畫面 */
+            .gz-shell>.result-box {
+                display: flex !important;
+                flex-direction: column;
+                min-height: 0;
+            }
+
+            .gz-shell>.result-box>.tab-container {
+                flex-shrink: 0;
+            }
+
+            .gz-shell>.result-box>.tab-content.active {
+                flex: 1 1 auto;
+                min-height: 0;
+                max-height: none !important;
+            }
+
+            .gz-shell>.result-box>#tab-analysis.active,
+            .gz-shell>.result-box>#tab-charts.active,
+            .gz-shell>.result-box>#tab-echo-library.active {
+                overflow-y: auto;
+            }
+        }
+
+        /* 分析中 / 分析失敗的訊息一律可見（訊息只寫在表格內） */
+        body.gz-status-msg #tab-analysis #result-table {
+            display: table !important;
+        }
+
+        body.gz-status-msg #tab-analysis #mobile-results {
+            display: none !important;
+        }
+
+        /* ── 空狀態引導 ─────────────────────────────────────────────── */
+        .gz-empty {
+            display: none;
+            max-width: 620px;
+            margin: 6vh auto 40px;
+            padding: 0 16px;
+            text-align: center;
+        }
+
+        body.gz-no-result .gz-empty {
+            display: block;
+        }
+
+        body.gz-no-result #tab-analysis .table-scroll {
+            display: none;
+        }
+
+        .gz-empty h3 {
+            margin: 0 0 8px;
+            color: var(--g-text);
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .gz-empty p {
+            margin: 0 0 22px;
+            color: var(--g-text-2);
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+
+        .gz-empty-acts {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .gz-empty-acts button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 10px;
+            border-radius: 16px;
+            border: 1px solid var(--g-line);
+            background: var(--g-glass);
+            color: var(--g-text);
+            font: inherit;
+            cursor: pointer;
+            transition: transform 0.3s var(--g-spring), border-color 0.25s;
+        }
+
+        .gz-empty-acts button:hover {
+            transform: translateY(-2px);
+            border-color: rgba(236, 199, 136, 0.5);
+        }
+
+        .gz-empty-acts .gz-svg {
+            width: 24px;
+            height: 24px;
+            color: var(--g-gold);
+        }
+
+        .gz-empty-acts b {
+            font-size: 0.92rem;
+        }
+
+        .gz-empty-acts small {
+            color: var(--g-text-3);
+            font-size: 0.74rem;
+        }
+
+        @media (max-width: 900px) {
+            .gz-roster {
+                margin: 0 0 10px;
+            }
+
+            .gz-roster-btn .gz-lb {
+                display: none;
+            }
+
+            /* 功能導航改為單列橫滑，不再佔據半個畫面 */
+            .gz-qs-desc {
+                display: none;
+            }
+
+            .gz-qs-actions {
+                display: flex !important;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .gz-qs-actions::-webkit-scrollbar {
+                display: none;
+            }
+
+            .gz-qs-btn {
+                flex: 0 0 auto;
+                overflow: visible;
+            }
+
+            .gz-roster-btn {
+                justify-content: center;
+                width: 52px;
+                padding: 0;
+            }
+
+            .gz-hero-acts {
+                display: none;
+            }
+
+            .gz-hero-av {
+                width: 56px;
+                height: 56px;
+            }
+
+            /* 尚未登入 UID 時沒有底部導覽，歷史改用浮出面板 */
+            body.gz-open-history .gz-shell>.gz-drawer-left {
+                position: fixed !important;
+                inset: calc(8px + var(--gz-safe-t, 0px)) 8px calc(8px + var(--gz-safe-b, 0px));
+                z-index: 40050;
+                display: flex !important;
+                width: auto !important;
+                background: rgba(16, 16, 23, 0.98) !important;
+            }
+
+            body.gz-open-history .gz-drawer-left .gz-drawer-head {
+                display: flex;
+            }
+
+            body.gz-open-history .gz-drawer-left .history-list {
+                overflow-y: auto !important;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .gz-empty-acts {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .gz-empty-acts button {
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 14px 16px;
+                text-align: left;
+            }
+
+            .gz-empty-acts small {
+                margin-left: auto;
+            }
+        }
+
+        @media (max-width: 1200px) and (min-width: 901px) {
+            body>header .stat-carousel {
+                display: none;
+            }
+        }
+    </style>
+
+    <script id="gz-flow-js">
+        (function () {
+            'use strict';
+            function en() { try { return g_lang === 'en'; } catch (_) { return false; } }
+            function t(zh, eng) { return en() ? eng : zh; }
+            function svg(n) { return '<svg class="gz-svg" aria-hidden="true"><use href="#gi-' + n + '"/></svg>'; }
+            function $(id) { return document.getElementById(id); }
+            function history() { try { return getCleanHistory() || []; } catch (_) { return []; } }
+            function curId() { try { return g_currentEntryId; } catch (_) { return null; } }
+            function echoes() { try { return g_echoesData || []; } catch (_) { return []; } }
+            function roleIcon(role) {
+                try {
+                    var key = role;
+                    if (!RESONATORS_PROFILE_PICTURE[key]) key = String(role).replace(/[^一-龥]/g, '').substring(0, 4);
+                    return RESONATORS_PROFILE_PICTURE[key] || '';
+                } catch (_) { return ''; }
+            }
+            function focusInput() {
+                var i = $('url-input');
+                if (!i) return;
+                i.focus();
+                i.classList.remove('header-input-pulse');
+                void i.offsetWidth;
+                i.classList.add('header-input-pulse');
+            }
+            window.gzFocusInput = focusInput;
+            window.gzRenderRoster = function () { try { renderRoster(); } catch (_) { } };
+
+            // 與結果頁相同的算法：所選配裝的 (得分/理論值) × 1.25，上限 100%
+            function scoreOf(item) {
+                try {
+                    var role = item.global.role;
+                    var builds = g_currentWeights[role];
+                    if (!builds || !builds.length) return null;
+                    var idx = autoSelectBuild(role, (item.chains || []).filter(Boolean).length) || 0;
+                    var b = builds[idx] || builds[0];
+                    var sum = 0, max = 0;
+                    (item.echoes || []).forEach(function (e) {
+                        var r = calculateEchoScore(e, b.weights);
+                        if (r) { sum += r.score; max += r.maxTheoretical; }
+                    });
+                    return max > 0 ? Math.min(100, sum / max * 125) : null;
+                } catch (_) { return null; }
+            }
+
+            /* 1) 角色切換列：每位角色一顆（同角色取目前檢視或最新一筆） */
+            var bar = document.createElement('div');
+            bar.id = 'gz-roster';
+            bar.className = 'gz-roster';
+            bar.hidden = true;
+            bar.innerHTML =
+                '<button type="button" class="gz-roster-btn gz-roster-new" onclick="gzFocusInput()">' + svg('plus') + '<span class="gz-lb"></span></button>' +
+                '<div class="gz-roster-list" id="gz-roster-list"></div>' +
+                '<button type="button" class="gz-roster-btn" onclick="gzOpenDrawer(\'history\')">' + svg('history') + '<span class="gz-lb"></span></button>';
+            var anchor = $('quick-start-banner');
+            if (anchor) anchor.parentNode.insertBefore(bar, anchor.nextSibling);
+
+            function renderRoster() {
+                var list = $('gz-roster-list');
+                if (!list) return;
+                var all = history(), cur = curId(), byRole = {}, order = [];
+                all.forEach(function (h) {
+                    var role = h.global && h.global.role;
+                    if (!role) return;
+                    if (!byRole[role]) { byRole[role] = h; order.push(role); }
+                    else if (String(h.id) === String(cur)) byRole[role] = h;
+                });
+                var hasCur = all.some(function (h) { return String(h.id) === String(cur); });
+                var curRole = '';
+                try { curRole = (g_globalData && g_globalData.role) || ''; } catch (_) { }
+                bar.hidden = order.length === 0;
+                var labels = bar.querySelectorAll(':scope > .gz-roster-btn .gz-lb');
+                labels[0].textContent = t('新增分析', 'New');
+                labels[1].textContent = t('全部紀錄 ', 'All ') + all.length;
+                var frag = document.createDocumentFragment(), active = null;
+                order.slice(0, 40).forEach(function (role) {
+                    var h = byRole[role];
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'gz-chip';
+                    b.setAttribute('data-id', h.id);
+                    b.title = role;
+                    if (String(h.id) === String(cur) || (!hasCur && role === curRole)) { b.classList.add('is-on'); b.setAttribute('aria-current', 'true'); active = b; }
+                    var av = document.createElement('span');
+                    av.className = 'gz-chip-av';
+                    var src = roleIcon(role);
+                    if (src) {
+                        var im = document.createElement('img');
+                        im.src = src; im.alt = ''; im.loading = 'lazy';
+                        av.appendChild(im);
+                    } else { av.textContent = String(role).charAt(0); }
+                    var tx = document.createElement('span');
+                    tx.className = 'gz-chip-tx';
+                    var nm = document.createElement('b');
+                    nm.textContent = role;
+                    tx.appendChild(nm);
+                    var s = scoreOf(h);
+                    if (s !== null) {
+                        var sm = document.createElement('small');
+                        sm.textContent = Math.round(s) + '%';
+                        tx.appendChild(sm);
+                    }
+                    b.appendChild(av); b.appendChild(tx);
+                    frag.appendChild(b);
+                });
+                // 內容相同時不重建，避免使用者點擊途中節點被換掉
+                var tmp = document.createElement('div');
+                tmp.appendChild(frag);
+                if (tmp.innerHTML !== list.innerHTML) {
+                    list.innerHTML = '';
+                    while (tmp.firstChild) list.appendChild(tmp.firstChild);
+                    active = list.querySelector('.is-on');
+                    if (active) list.scrollLeft = Math.max(0, active.offsetLeft - list.offsetLeft - 40);
+                }
+            }
+            bar.addEventListener('click', function (e) {
+                var c = e.target.closest && e.target.closest('.gz-chip');
+                if (c && typeof loadFromHistoryById === 'function') loadFromHistoryById(c.getAttribute('data-id'));
+            });
+
+            /* 2) 角色總覽：頭像、武器、快捷動作；聲骸最佳 / 優先替換標記 */
+            function enhance() {
+                var card = document.querySelector('#mobile-results > .mobile-role-card');
+                var nameEl = card && card.querySelector('.role-name-large');
+                var g = {};
+                try { g = g_globalData || {}; } catch (_) { }
+                if (nameEl && !card.querySelector('.gz-hero-id')) {
+                    var id = document.createElement('div');
+                    id.className = 'gz-hero-id';
+                    var src = roleIcon(g.role);
+                    if (src) {
+                        var img = document.createElement('img');
+                        img.className = 'gz-hero-av';
+                        img.src = src; img.alt = '';
+                        img.onerror = function () { img.remove(); };
+                        id.appendChild(img);
+                    }
+                    nameEl.parentNode.insertBefore(id, nameEl);
+                    id.appendChild(nameEl);
+                    var uidRow = card.children[2];
+                    if (uidRow && g.weapon && g.weapon !== '-') {
+                        var w = document.createElement('span');
+                        w.className = 'gz-hero-weapon';
+                        var wSrc = '';
+                        try { wSrc = WEAPONS_PROFILE_PICTURE[g.weapon] || ''; } catch (_) { }
+                        if (wSrc) { var wi = document.createElement('img'); wi.src = wSrc; wi.alt = ''; w.appendChild(wi); }
+                        w.appendChild(document.createTextNode(g.weapon));
+                        uidRow.appendChild(w);
+                    }
+                    var host = card.children[4];
+                    if (host) {
+                        var acts = document.createElement('div');
+                        acts.className = 'gz-hero-acts';
+                        acts.innerHTML =
+                            '<button type="button" onclick="generateShareImage()">' + svg('camera') + '<span></span></button>' +
+                            '<button type="button" onclick="gzOpenDrawer(\'preview\')">' + svg('image') + '<span></span></button>';
+                        acts.children[0].lastChild.textContent = t('分享圖片', 'Share');
+                        acts.children[1].lastChild.textContent = t('查看截圖', 'Screenshot');
+                        host.appendChild(acts);
+                    }
+                }
+                var rail = document.querySelector('#mobile-results .gz-echo-rail');
+                var head = document.querySelector('#mobile-results .gz-rail-head');
+                if (!rail || !head || head.querySelector('em')) return;
+                var scored = Array.prototype.map.call(rail.children, function (c, i) {
+                    var el = c.querySelector('.mobile-echo-score > span:nth-child(2)');
+                    return { c: c, i: i, v: el ? parseFloat(el.textContent) : NaN };
+                }).filter(function (x) { return !isNaN(x.v); });
+                if (scored.length < 2 || !scored.some(function (x) { return x.v > 0; })) return;
+                var best = scored.reduce(function (a, b) { return b.v > a.v ? b : a; });
+                var low = scored.reduce(function (a, b) { return b.v < a.v ? b : a; });
+                if (best.v === low.v) return;
+                function tag(x, cls, label) {
+                    var s = document.createElement('span');
+                    s.className = 'gz-echo-tag ' + cls;
+                    s.textContent = label;
+                    var row = x.c.querySelector('.mobile-echo-score');
+                    if (row) row.insertBefore(s, row.querySelector(':scope > div'));
+                }
+                tag(best, 'is-best', t('最佳', 'Best'));
+                tag(low, 'is-low', t('優先替換', 'Replace first'));
+                low.c.classList.add('is-low');
+                function note(cls, label, x) {
+                    var e = document.createElement('em');
+                    if (cls) e.className = cls;
+                    e.appendChild(document.createTextNode(label + ' '));
+                    var b = document.createElement('b');
+                    b.textContent = '#' + (x.i + 1) + ' ' + Math.round(x.v) + '%';
+                    e.appendChild(b);
+                    return e;
+                }
+                var small = head.querySelector('small');
+                head.insertBefore(note('', t('最佳', 'Best'), best), small);
+                head.insertBefore(note('gz-low', t('優先替換', 'Replace first'), low), small);
+            }
+
+            /* 3) 空狀態與分析狀態訊息 */
+            var empty = document.createElement('div');
+            empty.id = 'gz-empty';
+            empty.className = 'gz-empty';
+            empty.innerHTML =
+                '<h3></h3><p></p><div class="gz-empty-acts">' +
+                '<button type="button" onclick="gzFocusInput()">' + svg('search') + '<b></b><small></small></button>' +
+                '<button type="button" onclick="triggerFileUpload()">' + svg('upload') + '<b></b><small></small></button>' +
+                '<button type="button" onclick="startOfflineRoleFlow()">' + svg('zap') + '<b></b><small></small></button></div>';
+            var tab = $('tab-analysis');
+            if (tab) tab.insertBefore(empty, tab.firstChild);
+            function fillEmpty() {
+                empty.querySelector('h3').textContent = t('選一個方式開始分析', 'Choose how to start');
+                empty.querySelector('p').textContent = t('分析完成後，角色評分與每個聲骸的詞條都會顯示在這裡。', 'Scores and every echo substat will appear here after analysis.');
+                var rows = [
+                    [t('輸入 UID', 'Enter UID'), t('載入歷史資料', 'Load your history')],
+                    [t('上傳截圖', 'Upload image'), t('自動辨識詞條', 'Auto-read substats')],
+                    [t('手動建立', 'Create manually'), t('不需 UID', 'No UID needed')]
+                ];
+                empty.querySelectorAll('button').forEach(function (b, i) {
+                    b.querySelector('b').textContent = rows[i][0];
+                    b.querySelector('small').textContent = rows[i][1];
+                });
+            }
+            function syncStatus() {
+                var tb = $('table-body');
+                var statusRow = !!tb && tb.rows.length === 1 && tb.rows[0].cells.length === 1 && tb.rows[0].cells[0].colSpan > 1;
+                var waiting = statusRow && /等待資料載入/.test(tb.textContent);
+                document.body.classList.toggle('gz-status-msg', statusRow && !waiting);
+                document.body.classList.toggle('gz-no-result', echoes().length === 0 && (!statusRow || waiting));
+            }
+            var tbody = $('table-body');
+            if (tbody) new MutationObserver(syncStatus).observe(tbody, { childList: true });
+
+            function refresh() {
+                try { renderRoster(); } catch (_) { }
+                try { enhance(); } catch (_) { }
+                try { fillEmpty(); syncStatus(); } catch (_) { }
+            }
+            var histList = $('history-list'), histRaf = 0;
+            if (histList) new MutationObserver(function () {
+                if (histRaf) return;
+                histRaf = requestAnimationFrame(function () {
+                    histRaf = 0;
+                    try { renderRoster(); } catch (_) { }
+                });
+            }).observe(histList, { childList: true });
+            ['renderTable', 'setLanguage'].forEach(function (name) {
+                var orig = window[name];
+                if (typeof orig !== 'function') return;
+                window[name] = function () {
+                    var r = orig.apply(this, arguments);
+                    refresh();
+                    return r;
+                };
+            });
+            refresh();
+        })();
+    </script>
+    <!-- ══════════════════════════════════════════════════════════════════
+         GZ App — 全站新架構：首頁 / 我的角色 / 分析結果 / 聲骸庫 / 排行榜 / 工具箱
+         舊程式只負責資料與計算；頁面導覽、版面由此層決定
+    ═══════════════════════════════════════════════════════════════════ -->
+    <style id="gz-app-css">
+        /* ── 關閉舊外殼 ─────────────────────────────────────────────── */
+        body.gz-app>header,
+        body.gz-app #quick-start-banner,
+        body.gz-app #mobile-bottom-nav,
+        body.gz-app #uid-display-container,
+        body.gz-app #welcome-panels,
+        body.gz-app .mobile-opt-hint,
+        body.gz-app .gz-pin-btn,
+        body.gz-app #tab-rank-display,
+        body.gz-app #quote-desktop {
+            display: none !important;
+        }
+
+        body.gz-app {
+            display: block !important;
+            height: auto !important;
+            min-height: 100dvh;
+            padding: 0 0 40px !important;
+            overflow: visible !important;
+            overflow-x: clip !important;
+        }
+
+        /* ── 頂部導覽 ───────────────────────────────────────────────── */
+        .gz-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            height: 66px;
+            padding: 0 max(24px, calc((100vw - 1320px) / 2));
+            background: rgba(9, 9, 14, 0.82);
+            border-bottom: 1px solid var(--g-line);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+        }
+
+        .gz-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            border: 0;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .gz-logo b {
+            font-size: 1.12rem;
+            font-weight: 900;
+            letter-spacing: 1.6px;
+            background: var(--g-gold-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .gz-nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .gz-nav button {
+            height: 40px;
+            padding: 0 15px;
+            border: 0;
+            border-radius: 11px;
+            background: none;
+            color: var(--g-text-2);
+            font: inherit;
+            font-size: 0.93rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: color .2s, background .2s;
+        }
+
+        .gz-nav button:hover {
+            color: var(--g-text);
+            background: rgba(255, 255, 255, .05);
+        }
+
+        .gz-nav button.is-on {
+            color: #1a1408;
+            background: var(--g-gold-grad);
+        }
+
+        .gz-top-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .gz-top-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 11px;
+            border: 1px solid var(--g-line-2);
+            background: rgba(255, 255, 255, .04);
+            color: var(--g-text);
+            font: inherit;
+            font-size: .82rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: border-color .2s, color .2s;
+        }
+
+        .gz-top-btn:hover {
+            border-color: rgba(236, 199, 136, .5);
+            color: var(--g-gold);
+        }
+
+        .gz-top-btn .gz-svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .gz-top-new {
+            border: 0;
+            background: var(--g-gold-grad);
+            color: #1a1408;
+        }
+
+        .gz-top-new:hover {
+            color: #1a1408;
+            filter: brightness(1.08);
+        }
+
+        .gz-uid-chip {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── 頁面切換 ───────────────────────────────────────────────── */
+        .gz-view {
+            display: none;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 28px 24px 40px;
+            animation: gzFadeUp .4s var(--g-out) backwards;
+        }
+
+        body.gz-v-home #gz-home,
+        body.gz-v-tools #gz-tools {
+            display: block;
+        }
+
+        body.gz-app .container {
+            display: none !important;
+            flex-direction: column;
+            max-width: 1320px !important;
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 auto;
+            padding: 8px 24px 40px !important;
+            overflow: visible !important;
+        }
+
+        body.gz-app.is-login-mode .container {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            transform: none !important;
+        }
+
+        body.gz-v-roster .container,
+        body.gz-v-analysis .container,
+        body.gz-v-library .container,
+        body.gz-v-rank .container {
+            display: flex !important;
+        }
+
+        body.gz-v-rank .container {
+            max-width: none !important;
+        }
+
+        .gz-page-title {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 26px 24px 8px;
+            display: none;
+        }
+
+        body.gz-v-roster #gz-title,
+        body.gz-v-analysis #gz-title,
+        body.gz-v-library #gz-title,
+        body.gz-v-rank #gz-title {
+            display: block;
+        }
+
+        .gz-page-title h1,
+        .gz-view-head h1 {
+            margin: 0;
+            color: var(--g-text);
+            font-size: 1.7rem;
+            font-weight: 900;
+            letter-spacing: .03em;
+        }
+
+        body.gz-app .gz-hero2 h1,
+        body.gz-app .gz-page-title h1,
+        body.gz-app .gz-view-head h1 {
+            border-right: 0;
+            padding-right: 0;
+            white-space: normal;
+        }
+
+        .gz-page-title p,
+        .gz-view-head p {
+            margin: 6px 0 0;
+            color: var(--g-text-2);
+            font-size: .92rem;
+        }
+
+        body.gz-app .gz-roster {
+            display: none;
+            max-width: 1272px;
+            margin: 8px auto 2px;
+            padding: 0;
+            width: calc(100% - 48px);
+        }
+
+        body.gz-v-analysis .gz-roster:not([hidden]) {
+            display: flex;
+        }
+
+        /* 我的角色：歷史清單成為整頁內容 */
+        body.gz-app .gz-shell>.gz-drawer-left {
+            display: none !important;
+        }
+
+        body.gz-v-roster .gz-shell>.gz-drawer-left {
+            display: flex !important;
+            position: static !important;
+            width: 100% !important;
+            height: auto !important;
+            transform: none !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            background: none !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            overflow: visible !important;
+        }
+
+        body.gz-v-roster .gz-drawer-left .gz-drawer-head {
+            display: none !important;
+        }
+
+        body.gz-v-roster .history-panel {
+            display: flex !important;
+            container-type: normal;
+            overflow: visible !important;
+        }
+
+        body.gz-v-roster .history-header.gz-hist-head {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 0 14px !important;
+            border: 0 !important;
+        }
+
+        body.gz-v-roster .gz-hist-row {
+            flex: 1 1 420px;
+        }
+
+        body.gz-v-roster .gz-hist-head .gz-share-btn {
+            display: none !important;
+        }
+
+        body.gz-v-roster .history-view-control-bar {
+            padding: 0 0 14px !important;
+            background: none !important;
+            border: 0 !important;
+        }
+
+        body.gz-v-roster .history-list {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+            gap: 12px;
+            padding: 0 !important;
+            overflow: visible !important;
+            max-height: none !important;
+        }
+
+        body.gz-v-roster .history-list>*:not(.history-item):not(.history-role-group) {
+            grid-column: 1 / -1;
+        }
+
+        body.gz-v-roster .history-list .history-item {
+            padding: 14px 16px !important;
+            margin: 0 !important;
+        }
+
+        /* 內容頁去掉舊外框 */
+        body.gz-app .gz-shell>.result-box {
+            display: none !important;
+            padding: 0 !important;
+            background: none !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            overflow: visible !important;
+            animation: none !important;
+            min-height: 0;
+        }
+
+        body.gz-v-analysis .gz-shell>.result-box,
+        body.gz-v-library .gz-shell>.result-box,
+        body.gz-v-rank .gz-shell>.result-box {
+            display: flex !important;
+            flex-direction: column;
+        }
+
+        body.gz-app #tab-analysis,
+        body.gz-app #tab-charts,
+        body.gz-app #tab-echo-library {
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        body.gz-app #tab-analysis .table-scroll {
+            max-height: none !important;
+        }
+
+        body.gz-app #tab-rank.active {
+            flex: none !important;
+            height: calc(100dvh - 190px) !important;
+            min-height: 520px;
+        }
+
+        body.gz-v-library .tab-container,
+        body.gz-v-rank .tab-container,
+        body.gz-v-library .mobile-result-toolbar,
+        body.gz-v-rank .mobile-result-toolbar,
+        body.gz-v-roster .mobile-result-toolbar {
+            display: none !important;
+        }
+
+        body.gz-v-analysis .tab-container {
+            display: flex !important;
+            justify-content: flex-start !important;
+            margin: 10px 0 14px !important;
+            background: none !important;
+            border: 0 !important;
+            border-bottom: 1px solid var(--g-line) !important;
+            border-radius: 0 !important;
+            padding: 0 0 8px !important;
+        }
+
+        body.gz-app .gz-tabs .tab-btn[onclick*="tab-rank"] {
+            display: none !important;
+        }
+
+        body.gz-app .gz-view-switch {
+            margin-left: auto;
+        }
+
+        /* 分析頁工具列：桌機為一列按鈕 */
+        body.gz-v-analysis .mobile-result-toolbar {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            margin: 6px 0 2px !important;
+            padding: 0 !important;
+            overflow: visible !important;
+        }
+
+        @media (min-width: 901px) {
+            body.gz-app .gz-tabs .tab-btn[onclick*="tab-echo-library"] {
+                display: none !important;
+            }
+
+            body.gz-v-analysis .mobile-result-toolbar .mobile-tool-btn {
+                flex: 0 0 auto !important;
+                flex-direction: row !important;
+                min-width: 0 !important;
+                min-height: 38px !important;
+                padding: 0 14px !important;
+                border-radius: 11px !important;
+                font-size: .82rem !important;
+            }
+
+            body.gz-v-analysis .mobile-result-toolbar .mobile-tool-btn .gz-ic {
+                width: auto !important;
+                height: auto !important;
+                background: none !important;
+            }
+        }
+
+        /* 分析結果：左側角色資料固定、右側聲骸 */
+        @media (min-width: 1101px) {
+            body.gz-app.gz-cards-on #tab-analysis #mobile-results {
+                display: grid !important;
+                grid-template-columns: 350px minmax(0, 1fr);
+                align-items: start;
+                gap: 14px 22px;
+            }
+
+            body.gz-app.gz-cards-on #mobile-results>* {
+                grid-column: 2;
+            }
+
+            body.gz-app.gz-cards-on #mobile-results>.mobile-role-card {
+                grid-column: 1;
+                grid-row: 1 / span 12;
+                position: sticky;
+                top: 82px;
+                display: flex !important;
+                flex-direction: column;
+                gap: 10px;
+                max-height: calc(100dvh - 100px);
+                overflow-y: auto;
+                padding: 20px !important;
+            }
+
+            body.gz-app.gz-cards-on .mobile-role-card>* {
+                grid-column: auto !important;
+                grid-row: auto !important;
+                max-height: none !important;
+                flex-shrink: 0;
+            }
+
+            body.gz-app.gz-cards-on .mobile-role-card>:nth-child(4) {
+                align-self: auto;
+            }
+
+            body.gz-app.gz-cards-on #mobile-results .gz-echo-rail {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        .gz-ring {
+            --p: 0;
+            display: grid;
+            place-items: center;
+            width: 128px;
+            height: 128px;
+            margin: 0 auto 4px;
+            border-radius: 50%;
+            background: conic-gradient(#ecc788 calc(var(--p) * 1%), rgba(255, 255, 255, .08) 0);
+        }
+
+        .gz-ring span {
+            display: grid;
+            place-items: center;
+            width: 106px;
+            height: 106px;
+            border-radius: 50%;
+            background: #15151d;
+            color: var(--g-text);
+            font-size: 1.75rem;
+            font-weight: 900;
+        }
+
+        body.gz-app .total-score-badge:has(.gz-ring) .ts-val-highlight {
+            display: none;
+        }
+
+        /* ── 首頁 ───────────────────────────────────────────────────── */
+        .gz-hero2 {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr);
+            align-items: center;
+            gap: 48px;
+            min-height: min(520px, 62vh);
+        }
+
+        .gz-hero2 h1 {
+            margin: 14px 0 12px;
+            font-size: clamp(2.3rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.12;
+            letter-spacing: .03em;
+            background: linear-gradient(105deg, #fff 0, #fff 42%, #fbe3ad 58%, #e9b968 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .gz-hero2>div>p {
+            margin: 0 0 24px;
+            max-width: 560px;
+            color: var(--g-text-2);
+            font-size: 1.04rem;
+            line-height: 1.75;
+        }
+
+        body.gz-app #gz-home .gz-search {
+            max-width: 620px !important;
+            margin: 0;
+            animation: none;
+        }
+
+        body.gz-app #gz-home .ios-input-error-badge {
+            max-width: 620px;
+        }
+
+        .gz-hero-sub {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 18px;
+            margin-top: 16px;
+        }
+
+        .gz-hero-sub .gz-top-btn {
+            height: 42px;
+            padding: 0 16px;
+        }
+
+        .gz-ticks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 16px;
+            color: var(--g-text-2);
+            font-size: .84rem;
+        }
+
+        .gz-ticks span::before {
+            content: '✓ ';
+            color: #4ade80;
+            font-weight: 900;
+        }
+
+        body.gz-app #gz-home .ios-spotlight-card {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 0 0 auto;
+            padding: 20px !important;
+            border-radius: 22px !important;
+            border: 1px solid var(--g-line-2) !important;
+            background: linear-gradient(170deg, rgba(36, 36, 50, .85), rgba(15, 15, 22, .9)) !important;
+            box-shadow: var(--g-shadow), var(--g-hl) !important;
+        }
+
+        .gz-sec {
+            margin-top: 44px;
+        }
+
+        .gz-sec[hidden] {
+            display: none;
+        }
+
+        .gz-sec-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .gz-sec-head h2 {
+            margin: 0;
+            color: var(--g-text);
+            font-size: 1.3rem;
+            font-weight: 900;
+        }
+
+        .gz-sec-head button {
+            border: 0;
+            background: none;
+            color: var(--g-gold);
+            font: inherit;
+            font-size: .88rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #gz-home-roster {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 10px;
+        }
+
+        #gz-home-roster .gz-chip {
+            width: 100%;
+            height: 64px;
+        }
+
+        #gz-home-roster .gz-chip-av {
+            width: 46px;
+            height: 46px;
+        }
+
+        body.gz-app #gz-home .gz-tiles {
+            max-width: none;
+            margin: 0 !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .gz-steps {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .gz-step {
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid var(--g-line);
+            background: rgba(255, 255, 255, .03);
+        }
+
+        .gz-step i {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            background: var(--g-gold-soft);
+            color: var(--g-gold);
+            font-style: normal;
+            font-weight: 900;
+        }
+
+        .gz-step b {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--g-text);
+            font-size: 1rem;
+        }
+
+        .gz-step span {
+            color: var(--g-text-2);
+            font-size: .86rem;
+            line-height: 1.6;
+        }
+
+        body.gz-app #gz-home .ios-tutorial-trigger,
+        body.gz-app #gz-home .ios-tutorial-drawer {
+            max-width: none;
+        }
+
+        /* ── 工具箱 ─────────────────────────────────────────────────── */
+        .gz-view-head {
+            margin-bottom: 18px;
+        }
+
+        .gz-tool-search {
+            position: relative;
+            max-width: 520px;
+            margin: 18px 0 14px;
+        }
+
+        .gz-tool-search .gz-svg {
+            position: absolute;
+            left: 15px;
+            top: 14px;
+            width: 18px;
+            height: 18px;
+            color: var(--g-text-3);
+        }
+
+        .gz-tool-search input {
+            width: 100%;
+            height: 46px;
+            padding: 0 16px 0 44px;
+            border-radius: 14px;
+            border: 1px solid var(--g-line-2);
+            background: rgba(0, 0, 0, .3);
+            color: var(--g-text);
+            font: inherit;
+            font-size: 16px;
+        }
+
+        .gz-tool-search input:focus {
+            border-color: rgba(236, 199, 136, .8);
+        }
+
+        body.gz-app #gz-tools .feature-section-tabs {
+            position: sticky;
+            top: 66px;
+            z-index: 20;
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            border: 1px solid var(--g-line);
+            background: rgba(12, 12, 18, .95) !important;
+            scrollbar-width: none;
+        }
+
+        body.gz-app #gz-tools .fst-btn {
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+
+        body.gz-app #gz-tools .feature-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr));
+            gap: 10px;
+            padding: 0 !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        body.gz-app #gz-tools .feature-section {
+            grid-column: 1 / -1;
+            margin-top: 14px;
+            scroll-margin-top: 140px;
+        }
+
+        body.gz-app #gz-tools .feature-card {
+            transform: none !important;
+        }
+
+        .gz-hide {
+            display: none !important;
+        }
+
+        .gz-tool-none {
+            display: none;
+            padding: 40px;
+            text-align: center;
+            color: var(--g-text-2);
+        }
+
+        /* ── 手機底部分頁 ───────────────────────────────────────────── */
+        .gz-tabbar {
+            display: none;
+        }
+
+        @media (max-width: 1080px) and (min-width: 901px) {
+            .gz-topbar {
+                gap: 14px;
+                padding: 0 14px;
+            }
+
+            .gz-nav button {
+                padding: 0 10px;
+            }
+
+            .gz-uid-chip {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            body.gz-app {
+                padding-bottom: calc(92px + var(--gz-safe-b, 0px)) !important;
+            }
+
+            .gz-topbar {
+                height: 56px;
+                gap: 10px;
+                padding: 0 14px;
+            }
+
+            .gz-nav,
+            .gz-top-new .gz-lb,
+            .gz-uid-chip {
+                display: none;
+            }
+
+            .gz-logo {
+                margin-right: auto;
+            }
+
+            .gz-top-btn {
+                min-width: 38px;
+                padding: 0 9px;
+            }
+
+            .gz-tabbar {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 39000;
+                display: grid;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                padding: 6px 6px calc(6px + var(--gz-safe-b, 0px));
+                background: rgba(11, 11, 16, .96);
+                border-top: 1px solid var(--g-line-2);
+            }
+
+            .gz-tabbar button {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                min-width: 0;
+                height: 52px;
+                border: 0;
+                border-radius: 13px;
+                background: none;
+                color: var(--g-text-3);
+                font: inherit;
+                font-size: .7rem;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
+            .gz-tabbar .gz-svg {
+                width: 21px;
+                height: 21px;
+            }
+
+            .gz-tabbar button.is-on {
+                color: var(--g-gold);
+                background: var(--g-gold-soft);
+            }
+
+            .gz-view {
+                padding: 18px 14px 24px;
+            }
+
+            .gz-page-title {
+                padding: 16px 14px 4px;
+            }
+
+            .gz-page-title h1,
+            .gz-view-head h1 {
+                font-size: 1.35rem;
+            }
+
+            body.gz-app .container {
+                padding: 6px 14px 24px !important;
+            }
+
+            body.gz-app .gz-roster {
+                width: calc(100% - 28px);
+            }
+
+            .gz-hero2 {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 24px;
+                min-height: 0;
+            }
+
+            body.gz-app #gz-home .ios-spotlight-card {
+                max-width: none;
+                margin: 0;
+            }
+
+            body.gz-app #gz-home .gz-tiles,
+            .gz-steps {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .gz-steps {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .gz-sec {
+                margin-top: 30px;
+            }
+
+            #gz-home-roster {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            body.gz-app #tab-rank.active {
+                height: calc(100dvh - 230px) !important;
+            }
+        }
+    </style>
+
+    <script id="gz-app-js">
+        (function () {
+            'use strict';
+            function $(id) { return document.getElementById(id); }
+            function svg(n) { return '<svg class="gz-svg" aria-hidden="true"><use href="#gi-' + n + '"/></svg>'; }
+            function L(zh, eng) { return 'data-lang-zh="' + zh + '" data-lang-en="' + eng + '">' + zh; }
+
+            var NAV = [
+                ['home', 'home', '首頁', 'Home'],
+                ['roster', 'users', '我的角色', 'My Roster'],
+                ['analysis', 'chart', '分析結果', 'Analysis'],
+                ['library', 'layers', '聲骸庫', 'Echoes'],
+                ['rank', 'trophy', '排行榜', 'Rankings'],
+                ['tools', 'box', '工具箱', 'Toolbox']
+            ];
+            var TITLES = {
+                roster: ['我的角色', 'My Roster', '所有分析過的角色都在這裡，點一下查看完整評分。', 'Every analyzed character. Tap one to see its full score.'],
+                analysis: ['分析結果', 'Analysis', '角色評分、聲骸詞條與配裝建議。', 'Character score, echo substats and build advice.'],
+                library: ['聲骸庫', 'Echo Library', '管理與比較你收集的聲骸。', 'Manage and compare your echoes.'],
+                rank: ['排行榜', 'Rankings', '和全服玩家比較你的配裝。', 'Compare your builds with all players.']
+            };
+            var TAB_OF = { library: 'tab-echo-library', rank: 'tab-rank' };
+            var view = '', lastGesture = 0, analysisTab = 'tab-analysis';
+            var hasUidParam = /[?&]uid=/.test(location.search);
+            var origSwitch = window.switchTab;
+
+            function userDriven() { return hasUidParam || Date.now() - lastGesture < 60000; }
+            ['pointerdown', 'keydown'].forEach(function (t) {
+                document.addEventListener(t, function () { lastGesture = Date.now(); }, true);
+            });
+
+            /* ── 頂部導覽與底部分頁 ── */
+            var top = document.createElement('div');
+            top.className = 'gz-topbar';
+            top.innerHTML =
+                '<button type="button" class="gz-logo" onclick="gzGo(\'home\')"><b>GAME ZH</b></button>' +
+                '<nav class="gz-nav" aria-label="主選單">' + NAV.map(function (n) {
+                    return '<button type="button" data-v="' + n[0] + '" onclick="gzGo(\'' + n[0] + '\')" ' + L(n[2], n[3]) + '</button>';
+                }).join('') + '</nav>' +
+                '<div class="gz-top-right">' +
+                '<button type="button" class="gz-top-btn gz-top-new" onclick="gzFocusInput()">' + svg('plus') + '<span class="gz-lb" ' + L('新分析', 'New') + '</span></button>' +
+                '<button type="button" class="gz-top-btn gz-uid-chip" id="gz-uid-chip" onclick="gzFocusInput()"></button>' +
+                '<button type="button" class="gz-top-btn" id="gz-lang-btn" onclick="gzToggleLang()" aria-label="語言 / Language"></button>' +
+                '<button type="button" class="gz-top-btn" onclick="openFeedbackModal()" title="意見回饋" aria-label="意見回饋">' + svg('chat') + '</button>' +
+                '</div>';
+            document.body.insertBefore(top, document.body.firstChild);
+
+            var bar = document.createElement('nav');
+            bar.className = 'gz-tabbar';
+            bar.setAttribute('aria-label', '主選單');
+            bar.innerHTML = NAV.filter(function (n) { return n[0] !== 'library'; }).map(function (n) {
+                return '<button type="button" data-v="' + n[0] + '" onclick="gzGo(\'' + n[0] + '\')">' + svg(n[1]) + '<span ' + L(n[2], n[3]) + '</span></button>';
+            }).join('');
+            document.body.appendChild(bar);
+
+            /* ── 首頁 ── */
+            var home = document.createElement('main');
+            home.id = 'gz-home';
+            home.className = 'gz-view';
+            home.innerHTML =
+                '<section class="gz-hero2"><div>' +
+                '<div class="gz-eyebrow"><span class="gz-eyebrow-dot"></span><span ' + L('免費 · 免安裝 · 自動辨識', 'Free · No install · Auto-read') + '</span></div>' +
+                '<h1 ' + L('鳴潮聲骸分析儀', 'Wuthering Waves Echo Analyzer') + '</h1>' +
+                '<p ' + L('輸入 UID 或貼上官方截圖網址，立刻知道每個聲骸值不值得留、下一個該換哪裡。', 'Enter your UID or paste a screenshot link to see which echoes to keep and what to replace next.') + '</p>' +
+                '<div id="gz-search-mount"></div>' +
+                '<div class="gz-hero-sub"><button type="button" class="gz-top-btn" onclick="triggerFileUpload()">' + svg('upload') + '<span ' + L('上傳截圖', 'Upload image') + '</span></button>' +
+                '<div class="gz-ticks"><span ' + L('CV 評分', 'CV score') + '</span><span ' + L('全服排行', 'Rankings') + '</span><span ' + L('配裝建議', 'Build tips') + '</span></div></div>' +
+                '</div><div id="gz-spot-mount"></div></section>' +
+                '<section class="gz-sec" id="gz-sec-roster" hidden><div class="gz-sec-head"><h2 ' + L('我的角色', 'My Roster') + '</h2><button type="button" onclick="gzGo(\'roster\')" ' + L('查看全部 ›', 'View all ›') + '</button></div><div id="gz-home-roster"></div></section>' +
+                '<section class="gz-sec"><div class="gz-sec-head"><h2 ' + L('常用功能', 'Popular tools') + '</h2><button type="button" onclick="gzGo(\'tools\')" ' + L('全部工具 ›', 'All tools ›') + '</button></div><div id="gz-tiles-mount"></div></section>' +
+                '<section class="gz-sec"><div class="gz-sec-head"><h2 ' + L('三步完成分析', 'Three steps') + '</h2></div><div class="gz-steps">' +
+                '<div class="gz-step"><i>1</i><b ' + L('輸入 UID 或截圖', 'Enter UID or image') + '</b><span ' + L('在上方輸入 9 碼 UID，或上傳遊戲角色截圖。', 'Type your 9-digit UID or upload a screenshot.') + '</span></div>' +
+                '<div class="gz-step"><i>2</i><b ' + L('自動辨識詞條', 'Auto-read substats') + '</b><span ' + L('系統讀取聲骸詞條並依角色配裝計分。', 'Substats are read and scored for the character build.') + '</span></div>' +
+                '<div class="gz-step"><i>3</i><b ' + L('看評分與建議', 'Get advice') + '</b><span ' + L('查看總評、最佳聲骸與優先替換的位置。', 'See the rating, best echo and what to replace first.') + '</span></div>' +
+                '</div></section>' +
+                '<section class="gz-sec" id="gz-tut-mount"></section><div id="gz-foot-mount"></div>';
+
+            var tools = document.createElement('main');
+            tools.id = 'gz-tools';
+            tools.className = 'gz-view';
+            tools.innerHTML =
+                '<div class="gz-view-head"><h1 ' + L('工具箱', 'Toolbox') + '</h1><p ' + L('網站所有功能都在這裡，直接搜尋最快。', 'Every feature is here. Search is the fastest way.') + '</p></div>' +
+                '<div class="gz-tool-search">' + svg('search') + '<input id="gz-tool-q" type="search" autocomplete="off" placeholder="搜尋功能，例如：比較、DPS、VIP" data-placeholder-zh="搜尋功能，例如：比較、DPS、VIP" data-placeholder-en="Search, e.g. compare, DPS, VIP"></div>' +
+                '<div id="gz-tools-mount"></div><div class="gz-tool-none" id="gz-tool-none" ' + L('找不到符合的功能', 'No matching feature') + '</div>';
+
+            var title = document.createElement('div');
+            title.id = 'gz-title';
+            title.className = 'gz-page-title';
+            title.innerHTML = '<h1></h1><p></p>';
+
+            var cont = document.querySelector('.container');
+            cont.parentNode.insertBefore(home, cont);
+            cont.parentNode.insertBefore(tools, cont);
+            cont.parentNode.insertBefore(title, cont);
+            var roster = $('gz-roster');
+            if (roster) cont.parentNode.insertBefore(roster, cont);
+
+            /* 沿用舊節點（保留事件與 ID） */
+            function move(node, mount) { if (node && mount) mount.appendChild(node); }
+            move($('ios-search-shell'), $('gz-search-mount'));
+            move($('ios-input-error-msg'), $('gz-search-mount'));
+            move($('ios-spotlight-left'), $('gz-spot-mount'));
+            move(document.querySelector('.gz-tiles'), $('gz-tiles-mount'));
+            move($('ios-tutorial-trigger'), $('gz-tut-mount'));
+            move($('ios-tutorial-drawer'), $('gz-tut-mount'));
+            move(document.querySelector('.ios-entry-footer'), $('gz-foot-mount'));
+            move($('feature-section-tabs'), $('gz-tools-mount'));
+            move(document.querySelector('#feature-list-modal .feature-grid'), $('gz-tools-mount'));
+
+            /* ── 路由 ── */
+            function paintTitle() {
+                var t = TITLES[view];
+                if (!t) return;
+                var en = false;
+                try { en = g_lang === 'en'; } catch (_) { }
+                title.querySelector('h1').textContent = en ? t[1] : t[0];
+                title.querySelector('p').textContent = en ? t[3] : t[2];
+            }
+            function setView(v, push) {
+                var changed = v !== view;
+                view = v;
+                NAV.forEach(function (n) { document.body.classList.toggle('gz-v-' + n[0], n[0] === v); });
+                document.querySelectorAll('.gz-nav button, .gz-tabbar button').forEach(function (b) {
+                    var on = b.getAttribute('data-v') === v;
+                    b.classList.toggle('is-on', on);
+                    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+                });
+                if (v !== 'home') document.body.classList.remove('is-login-mode');
+                paintTitle();
+                if (push !== false && location.hash !== '#' + v) {
+                    try { history.pushState(null, '', '#' + v); } catch (_) { location.hash = v; }
+                }
+                if (changed) window.scrollTo(0, 0);
+                if (window.gzCloseDrawers) window.gzCloseDrawers();
+                syncToolbar();
+            }
+            function go(v, push) {
+                if (!NAV.some(function (n) { return n[0] === v; })) v = 'home';
+                setView(v, push);
+                if (v === 'home' || v === 'roster') {
+                    if (window.gzRenderRoster) window.gzRenderRoster();
+                    copyRoster();
+                }
+                if (v === 'roster') {
+                    var hl = $('history-list');
+                    if (hl && !hl.children.length && window.renderHistoryList) { try { window.renderHistoryList(); } catch (_) { } }
+                } else if (v === 'analysis') {
+                    origSwitch(analysisTab);
+                } else if (TAB_OF[v]) {
+                    origSwitch(TAB_OF[v]);
+                }
+            }
+            window.gzGo = go;
+            window.addEventListener('popstate', function () { go(location.hash.slice(1) || 'home', false); });
+
+            window.switchTab = function (id) {
+                origSwitch(id);
+                if (id === 'tab-rank') setView('rank');
+                else if (id === 'tab-echo-library') setView('library');
+                else { analysisTab = id; if (userDriven()) setView('analysis'); }
+            };
+
+            /* 將舊流程接到新頁面 */
+            var origEnsure = window.ensureAnalysisPanelVisible;
+            window.ensureAnalysisPanelVisible = function () {
+                origEnsure.apply(this, arguments);
+                if (userDriven() && view !== 'analysis') { if (analysisTab !== 'tab-analysis') analysisTab = 'tab-analysis'; go('analysis'); }
+            };
+            window.animateInputToHeader = function (cb) {
+                var a = $('welcome-url-input'), b = $('url-input');
+                if (a && b) b.value = a.value;
+                document.body.classList.remove('is-login-mode');
+                if (typeof cb === 'function') return cb();
+            };
+            window.openFeatureList = function () { if (window.closeAllModals) closeAllModals(); go('tools'); };
+            window.setMobileNavSection = function (s) {
+                go({ history: 'roster', results: 'analysis', rank: 'rank', library: 'library', menu: 'tools' }[s] || 'home');
+            };
+            window.openTutorialPanel = function () {
+                if (window.closeAllModals) closeAllModals();
+                go('home');
+                toggleTutorialDrawer(true);
+                var d = $('ios-tutorial-drawer');
+                if (d) setTimeout(function () { d.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 120);
+            };
+            window.scrollToFeatureSection = function (id) {
+                var s = $(id);
+                if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                updateActiveFSTab(id);
+            };
+            window.gzFocusInput = function () {
+                go('home');
+                var i = $('welcome-url-input');
+                if (i) setTimeout(function () { i.focus(); }, 60);
+            };
+            var origOpen = window.gzOpenDrawer;
+            window.gzOpenDrawer = function (w) { if (w === 'history') go('roster'); else origOpen(w); };
+
+            /* 分析頁工具列：桌機手機共用 */
+            var origSync = window.syncMobileResultToolbar;
+            function syncToolbar() {
+                var tb = document.querySelector('.mobile-result-toolbar');
+                if (!tb) return;
+                var show = view === 'analysis';
+                tb.style.display = show ? 'flex' : 'none';
+                if (!show) return;
+                try {
+                    var canEdit = (g_offlineEditMode || (g_isDeveloper && g_analyzeFixMode)) && g_echoesData.length > 0;
+                    var set = function (id, on) { var e = $(id); if (e) e.style.display = on ? 'flex' : 'none'; };
+                    set('mobile-btn-share', g_echoesData.length > 0);
+                    set('mobile-btn-offline', !g_debugMode);
+                    set('mobile-btn-add-role', !g_debugMode && g_offlineEditMode);
+                    set('mobile-btn-edit-mode', !g_debugMode && canEdit);
+                    set('mobile-btn-debug', !g_offlineEditMode);
+                } catch (_) { }
+            }
+            window.syncMobileResultToolbar = function () {
+                if (origSync) origSync.apply(this, arguments);
+                syncToolbar();
+            };
+
+            /* 首頁角色：沿用切換列的資料 */
+            function copyRoster() {
+                var src = $('gz-roster-list'), dst = $('gz-home-roster'), sec = $('gz-sec-roster');
+                if (!src || !dst || !sec) return;
+                dst.innerHTML = '';
+                Array.prototype.slice.call(src.children, 0, 12).forEach(function (c) {
+                    var k = c.cloneNode(true);
+                    k.classList.remove('is-on');
+                    dst.appendChild(k);
+                });
+                sec.hidden = !dst.children.length;
+            }
+            $('gz-home-roster').addEventListener('click', function (e) {
+                var c = e.target.closest('.gz-chip');
+                if (c) loadFromHistoryById(c.getAttribute('data-id'));
+            });
+            new MutationObserver(copyRoster).observe($('gz-roster-list'), { childList: true });
+
+            /* 分數環 */
+            function addRing() {
+                var badge = document.querySelector('#mobile-results .total-score-badge');
+                var val = badge && badge.querySelector('.ts-val-highlight');
+                if (!val || badge.querySelector('.gz-ring')) return;
+                var p = parseFloat(val.textContent) || 0;
+                var ring = document.createElement('div');
+                ring.className = 'gz-ring';
+                ring.style.setProperty('--p', Math.min(100, p));
+                var s = document.createElement('span');
+                s.textContent = val.textContent.trim();
+                ring.appendChild(s);
+                var body = badge.querySelector('.ts-body');
+                if (body) badge.insertBefore(ring, body);
+            }
+            var origRender = window.renderTable;
+            window.renderTable = function () {
+                var r = origRender.apply(this, arguments);
+                try { addRing(); syncToolbar(); } catch (_) { }
+                return r;
+            };
+
+            /* 工具箱搜尋 */
+            $('gz-tool-q').addEventListener('input', function () {
+                var q = this.value.trim().toLowerCase();
+                var grid = document.querySelector('#gz-tools .feature-grid');
+                var any = false, section = null, hits = 0;
+                function close() { if (section) section.classList.toggle('gz-hide', hits === 0); }
+                Array.prototype.forEach.call(grid.children, function (el) {
+                    if (el.classList.contains('feature-section')) { close(); section = el; hits = 0; return; }
+                    var match = !q || el.textContent.toLowerCase().indexOf(q) !== -1;
+                    el.classList.toggle('gz-hide', !match);
+                    if (match) { hits++; any = true; }
+                });
+                close();
+                $('gz-tool-none').style.display = any ? 'none' : 'block';
+                var tabs = $('feature-section-tabs');
+                if (tabs) tabs.classList.toggle('gz-hide', !!q);
+            });
+
+            /* 帳號與語言 */
+            window.gzToggleLang = function () { setLanguage((typeof g_lang !== 'undefined' && g_lang === 'en') ? 'zh' : 'en'); };
+            function paintAccount() {
+                var en = false, uid = '';
+                try { en = g_lang === 'en'; uid = g_currentUserUid || ''; } catch (_) { }
+                $('gz-lang-btn').textContent = en ? '繁中' : 'EN';
+                $('gz-uid-chip').textContent = uid ? 'UID ' + uid : (en ? 'Enter UID' : '輸入 UID');
+                paintTitle();
+            }
+            new MutationObserver(paintAccount).observe($('uid-display'), { childList: true, characterData: true, subtree: true });
+            var origLang = window.setLanguage;
+            window.setLanguage = function () { var r = origLang.apply(this, arguments); paintAccount(); return r; };
+
+            /* 問卷的功能引導先切到對應頁面 */
+            var origGuide = window.survey_navigateToFeature;
+            if (typeof origGuide === 'function') {
+                window.survey_navigateToFeature = function (id) {
+                    if (id === 'ocr') go('home'); else if (id === 'compare') go('roster');
+                    return origGuide.apply(this, arguments);
+                };
+            }
+
+            /* 啟動 */
+            try { localStorage.removeItem('gz_drawer_pins'); } catch (_) { }
+            if (window.gzCloseDrawer) { gzCloseDrawer('history'); gzCloseDrawer('preview'); }
+            document.body.classList.add('gz-app');
+            paintAccount();
+            var first = location.hash.slice(1) || (hasUidParam ? 'analysis' : 'home');
+            go(first, false);
+            var ticks = 0, timer = setInterval(function () {
+                if (window.gzRenderRoster) window.gzRenderRoster();
+                paintAccount();
+                if (++ticks > 10) clearInterval(timer);
+            }, 2000);
         })();
     </script>
 </body>
