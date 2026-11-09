@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>晝夜像素開關</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap">
+<style>
+  /* 可平滑過渡的顏色變數（不支援 @property 的瀏覽器會直接切換） */
+  @property --bg-1    { syntax: "<color>"; inherits: true; initial-value: #f3f1ee; }
+  @property --bg-2    { syntax: "<color>"; inherits: true; initial-value: #cfccc7; }
+  @property --amb     { syntax: "<color>"; inherits: true; initial-value: rgba(255,186,48,.30); }
+  @property --track-a { syntax: "<color>"; inherits: true; initial-value: #e3e1dd; }
+  @property --track-b { syntax: "<color>"; inherits: true; initial-value: #f3f2ef; }
+
+  /* Layout: 單一開關置中於受光的平面上，光源來自滑塊本身 */
+  :root {
+    --font-pixel: "Silkscreen", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --font-body: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+
+    /* 固定材質（兩種主題都定義在這裡，靠 --light-on 控制顯示） */
+    --sun-ink: #2b2622;
+    --moon-ink: #f3f5ff;
+    --moon-halo: rgba(190, 200, 255, .55);
+    --sun-rim: #ffbf1f;
+    --sun-glow: rgba(255, 166, 0, .8);
+    --moon-rim: #c3cbff;
+    --moon-glow: rgba(110, 120, 255, .9);
+    --sun-face: linear-gradient(180deg, #ffc531 0%, #ffe08c 16%, #fbf1dc 44%, #f2f0ec 100%);
+    --sun-face-shade: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -8px 14px -6px rgba(0,0,0,.08);
+    --moon-face: linear-gradient(180deg, #5b5e6b 0%, #34363f 38%, #2b2e45 74%, #8e98ff 100%);
+    --moon-face-shade: inset 0 1px 0 rgba(255,255,255,.28), inset 0 0 0 1px rgba(255,255,255,.07), inset 0 -10px 18px -8px rgba(200,208,255,.95);
+
+    /* 淺色主題（預設） */
+    --bg-1: #f3f1ee;
+    --bg-2: #cfccc7;
+    --amb: rgba(255, 186, 48, .30);
+    --track-a: #e3e1dd;
+    --track-b: #f3f2ef;
+    --track-shadow:
+      inset 0 2px 6px rgba(0,0,0,.10),
+      inset 0 -1px 1px rgba(255,255,255,.9),
+      0 18px 30px -10px rgba(0,0,0,.25),
+      0 1px 2px rgba(0,0,0,.06);
+    --thumb-shadow:
+      0 -10px 34px -4px rgba(255,176,20,.55),
+      0 12px 18px -6px rgba(60,40,0,.25);
+    --text: #6b655d;
+    --text-strong: #2b2622;
+    --focus: #d08a00;
+    --pos: 1;       /* 1 = 滑塊在右（白天） */
+    --light-on: 1;  /* 1 = 白天材質 */
+
+    transition: --bg-1 .8s ease, --bg-2 .8s ease, --amb .8s ease, --track-a .6s ease, --track-b .6s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg-1: #262833;
+      --bg-2: #06070a;
+      --amb: rgba(96, 108, 255, .26);
+      --track-a: #040507;
+      --track-b: #121319;
+      --track-shadow:
+        inset 0 3px 10px rgba(0,0,0,.95),
+        inset 0 -1px 1px rgba(255,255,255,.06),
+        0 18px 34px -10px rgba(0,0,0,.7),
+        0 0 0 1px rgba(255,255,255,.04);
+      --thumb-shadow:
+        0 14px 38px -2px rgba(104,116,255,.6),
+        0 4px 10px rgba(0,0,0,.55);
+      --text: #8b90a8;
+      --text-strong: #e9ebff;
+      --focus: #9aa4ff;
+      --pos: 0;
+      --light-on: 0;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg-1: #262833;
+    --bg-2: #06070a;
+    --amb: rgba(96, 108, 255, .26);
+    --track-a: #040507;
+    --track-b: #121319;
+    --track-shadow:
+      inset 0 3px 10px rgba(0,0,0,.95),
+      inset 0 -1px 1px rgba(255,255,255,.06),
+      0 18px 34px -10px rgba(0,0,0,.7),
+      0 0 0 1px rgba(255,255,255,.04);
+    --thumb-shadow:
+      0 14px 38px -2px rgba(104,116,255,.6),
+      0 4px 10px rgba(0,0,0,.55);
+    --text: #8b90a8;
+    --text-strong: #e9ebff;
+    --focus: #9aa4ff;
+    --pos: 0;
+    --light-on: 0;
+    color-scheme: dark;
+  }
+
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background-color: var(--bg-2);
+    background-image: radial-gradient(120% 90% at 50% 45%, var(--bg-1), var(--bg-2));
+    color: var(--text);
+    font-family: var(--font-body);
+  }
+
+  main {
+    min-height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 44px;
+    padding-block: 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    overflow: clip;
+  }
+
+  /* ---------- 開關尺寸 ---------- */
+  .stage {
+    --w: min(380px, 78vw);
+    --h: calc(var(--w) * .52);
+    --pad: calc(var(--h) * .055);
+    --tw: calc(var(--w) * .5);
+    --th: calc(var(--h) - 2 * var(--pad));
+    --r: calc(var(--th) * .27);
+    --travel: calc(var(--w) - var(--tw) - 2 * var(--pad));
+    --ease: cubic-bezier(.34, 1.32, .5, 1);
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+  }
+
+  /* 跟著滑塊移動的環境光 */
+  .ambient {
+    position: absolute;
+    width: calc(var(--w) * 1.5);
+    aspect-ratio: 1;
+    left: calc(var(--pad) + var(--tw) / 2 - var(--w) * .75);
+    top: 50%;
+    translate: calc(var(--pos) * var(--travel)) -50%;
+    background: radial-gradient(closest-side, var(--amb), transparent);
+    pointer-events: none;
+    transition: translate .62s var(--ease);
+  }
+
+  .switch {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: calc(var(--h) * .28);
+    background: linear-gradient(180deg, var(--track-a), var(--track-b));
+    box-shadow: var(--track-shadow);
+    cursor: pointer;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+    transition: box-shadow .6s ease;
+  }
+  .switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 6px; }
+
+  .thumb {
+    position: absolute;
+    top: var(--pad);
+    left: var(--pad);
+    width: var(--tw);
+    height: var(--th);
+    transform: translateX(calc(var(--pos) * var(--travel)));
+    transition: transform .62s var(--ease);
+  }
+
+  .thumb-body {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--r);
+    box-shadow: var(--thumb-shadow);
+    transition: box-shadow .6s ease, scale .15s ease, filter .2s ease;
+  }
+  .switch:hover .thumb-body { filter: brightness(1.04); }
+  .switch:active .thumb-body { scale: .97; }
+  .thumb-body.squish { animation: squish .62s cubic-bezier(.3, .7, .4, 1); }
+  @keyframes squish {
+    0%   { transform: scale(1, 1); }
+    35%  { transform: scale(1.12, .93); }
+    70%  { transform: scale(.97, 1.02); }
+    100% { transform: scale(1, 1); }
+  }
+
+  .face, .rim { position: absolute; pointer-events: none; transition: opacity .6s ease; }
+  .face { inset: 0; border-radius: inherit; }
+  .face.sun  { background: var(--sun-face);  box-shadow: var(--sun-face-shade);  opacity: var(--light-on); }
+  .face.moon { background: var(--moon-face); box-shadow: var(--moon-face-shade); opacity: calc(1 - var(--light-on)); }
+
+  /* 發光邊框：白天在上緣、夜晚在下緣 */
+  .rim { border: 3px solid transparent; }
+  .rim.sun {
+    inset: -4px;
+    border-radius: calc(var(--r) + 4px);
+    border-top-color: var(--sun-rim);
+    filter: drop-shadow(0 0 3px var(--sun-rim)) drop-shadow(0 -3px 10px var(--sun-glow));
+    opacity: var(--light-on);
+  }
+  .rim.moon {
+    inset: -2px;
+    border-radius: calc(var(--r) + 2px);
+    border-bottom-color: var(--moon-rim);
+    filter: drop-shadow(0 0 4px var(--moon-rim)) drop-shadow(0 5px 12px var(--moon-glow));
+    opacity: calc(1 - var(--light-on));
+  }
+
+  .thumb canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+  }
+
+  /* ---------- 文字 ---------- */
+  .caption { display: grid; justify-items: center; gap: 10px; text-align: center; }
+  .mode {
+    margin: 0;
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    letter-spacing: .24em;
+    color: var(--text-strong);
+    transition: color .6s ease;
+  }
+  .hint { margin: 0; font-size: 13px; line-height: 1.6; color: var(--text); transition: color .6s ease; }
+  kbd {
+    font-family: var(--font-pixel);
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid currentColor;
+    opacity: .8;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <div class="stage">
+    <div class="ambient" aria-hidden="true"></div>
+    <button class="switch" id="theme-switch" type="button" role="switch" aria-checked="false" aria-label="深色模式">
+      <span class="thumb" aria-hidden="true">
+        <span class="thumb-body">
+          <span class="face sun"></span>
+          <span class="face moon"></span>
+          <span class="rim sun"></span>
+          <span class="rim moon"></span>
+          <canvas></canvas>
+        </span>
+      </span>
+    </button>
+  </div>
+  <div class="caption">
+    <p class="mode" id="mode-label" aria-live="polite">LIGHT MODE</p>
+    <p class="hint">點一下、左右滑動，或按 <kbd>Space</kbd> 切換</p>
+  </div>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-switch');
+  const body = btn.querySelector('.thumb-body');
+  const canvas = btn.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
+  const modeEl = document.getElementById('mode-label');
+  const mqDark = matchMedia('(prefers-color-scheme: dark)');
+  const mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- 像素圖示（17×17 格） ---------- */
+  const N = 17, C = 8;
+  const hash = (x, y) => { const s = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return s - Math.floor(s); };
+
+  function sunPixels() {
+    const px = [], seen = new Set();
+    const add = (x, y, a) => { const k = x + ',' + y; if (!seen.has(k)) { seen.add(k); px.push({ x, y, a }); } };
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      if (Math.hypot(x - C, y - C) <= 3.3) add(x, y, 1);
+    }
+    for (let k = 0; k < 8; k++) {
+      const ang = k * Math.PI / 4;
+      for (const d of [5.6, 6.6]) add(Math.round(C + Math.cos(ang) * d), Math.round(C + Math.sin(ang) * d), .9);
+    }
+    return px;
+  }
+
+  function moonPixels() {
+    const px = [];
+    const cut = { x: 10.6, y: 5.6, r: 5.0 };
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      if (Math.hypot(x - C, y - C) > 6.2) continue;
+      const dc = Math.hypot(x - cut.x, y - cut.y);
+      if (dc < cut.r) continue;
+      const h = hash(x, y);
+      if (dc < cut.r + 1 && h < .3) continue;              // 內緣的像素抖動
+      const shade = 1 - Math.max(0, x - 4) / 10;           // 左亮右暗
+      px.push({ x, y, a: Math.max(.3, Math.min(1, shade)) * (.82 + .18 * h) });
+    }
+    // 星星
+    [[13, 1, .75], [12, 2, .75], [13, 2, 1], [14, 2, .75], [13, 3, .75], [15, 5, .55], [11, 0, .45]]
+      .forEach(([x, y, a]) => px.push({ x, y, a }));
+    return px;
+  }
+
+  const SUN = sunPixels(), MOON = moonPixels();
+
+  const css = name => getComputedStyle(root).getPropertyValue(name).trim();
+  const toRgb = hex => {
+    let h = (hex || '').replace('#', '');
+    if (h.length === 3) h = h.split('').map(c => c + c).join('');
+    const v = parseInt(h, 16);
+    return Number.isNaN(v) ? [128, 128, 128] : [v >> 16 & 255, v >> 8 & 255, v & 255];
+  };
+  const INK = { sun: toRgb(css('--sun-ink') || '#2b2622'), moon: toRgb(css('--moon-ink') || '#f3f5ff') };
+  const HALO = css('--moon-halo') || 'rgba(190,200,255,.55)';
+
+  /* ---------- 畫布 ---------- */
+  let W = 0, H = 0, dpr = 1;
+  let current = [];     // 目前畫面上的粒子
+  let glow = false;     // 夜晚圖示加上微光
+  let anim = null;
+
+  function resize() {
+    W = canvas.offsetWidth; H = canvas.offsetHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 3);
+    canvas.width = Math.max(1, Math.round(W * dpr));
+    canvas.height = Math.max(1, Math.round(H * dpr));
+    draw(current);
+  }
+
+  function draw(list) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    const box = Math.min(W, H) * .62, cell = box / N;
+    const ox = (W - box) / 2, oy = (H - box) / 2;
+    ctx.shadowColor = HALO;
+    ctx.shadowBlur = glow ? 6 : 0;
+    for (const p of list) {
+      if (p.a <= .004) continue;
+      const s = cell * .8 * p.s;
+      const x = ox + (p.x + .5) * cell - s / 2;
+      const y = oy + (p.y + .5) * cell - s / 2;
+      ctx.fillStyle = `rgba(${p.c[0] | 0},${p.c[1] | 0},${p.c[2] | 0},${p.a})`;
+      ctx.fillRect(Math.round(x * dpr) / dpr, Math.round(y * dpr) / dpr, s, s);
+    }
+  }
+
+  const iconFor = dark => (dark ? MOON : SUN).map(p => ({ ...p, s: 1, c: dark ? INK.moon : INK.sun }));
+  const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const DUR = 950, SPREAD = .28;
+
+  /* 像素先散開成粒子，再重組成另一個圖示 */
+  function morphTo(dark) {
+    const target = iconFor(dark);
+    const from = current.filter(p => p.a > .01).map(p => ({ ...p }));
+    if (anim) cancelAnimationFrame(anim.raf);
+    if (mqReduce.matches || !from.length) {
+      anim = null; current = target; glow = dark; draw(current); return;
+    }
+    shuffle(from); shuffle(target);
+    const n = Math.max(from.length, target.length);
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+      const a = from[i] || { ...from[Math.random() * from.length | 0], a: 0 };
+      const b = target[i] || { ...target[Math.random() * target.length | 0], a: 0 };
+      const ang = Math.random() * Math.PI * 2, rad = 3 + Math.random() * 5.5;
+      parts.push({ a, b, cx: C + Math.cos(ang) * rad, cy: C + Math.sin(ang) * rad * .8, d: Math.random() * SPREAD });
+    }
+    const start = performance.now();
+    const step = now => {
+      const T = (now - start) / DUR;
+      current = parts.map(({ a, b, cx, cy, d }) => {
+        const e = ease(Math.min(1, Math.max(0, (T - d) / (1 - SPREAD))));
+        const u = 1 - e;
+        return {
+          x: u * u * a.x + 2 * u * e * cx + e * e * b.x,
+          y: u * u * a.y + 2 * u * e * cy + e * e * b.y,
+          a: a.a + (b.a - a.a) * e,
+          s: 1 - .4 * Math.sin(Math.PI * e),
+          c: [0, 1, 2].map(k => a.c[k] + (b.c[k] - a.c[k]) * e),
+        };
+      });
+      glow = T > .5 ? dark : !dark;
+      draw(current);
+      if (T < 1) anim.raf = requestAnimationFrame(step);
+      else { current = current.filter(p => p.a > .01); anim = null; }
+    };
+    anim = { raf: requestAnimationFrame(step) };
+  }
+
+  /* ---------- 主題狀態 ---------- */
+  const isDark = () => {
+    const t = root.getAttribute('data-theme');
+    return t ? t === 'dark' : mqDark.matches;
+  };
+  let shown = isDark();
+
+  function renderLabel(dark) {
+    btn.setAttribute('aria-checked', String(dark));
+    modeEl.textContent = dark ? 'DARK MODE' : 'LIGHT MODE';
+  }
+
+  function squish() {
+    if (mqReduce.matches) return;
+    body.classList.remove('squish');
+    void body.offsetWidth;
+    body.classList.add('squish');
+  }
+  body.addEventListener('animationend', () => body.classList.remove('squish'));
+
+  function sync() {
+    const dark = isDark();
+    if (dark === shown) return;
+    shown = dark;
+    renderLabel(dark);
+    squish();
+    morphTo(dark);
+  }
+
+  const setTheme = dark => root.setAttribute('data-theme', dark ? 'dark' : 'light');
+
+  /* 點擊 / 鍵盤（button 會把 Enter、Space 轉成 click） */
+  let suppressClick = false;
+  btn.addEventListener('click', () => {
+    if (suppressClick) { suppressClick = false; return; }
+    setTheme(!isDark());
+  });
+
+  /* 左右滑動：往左 = 夜晚，往右 = 白天 */
+  let dragX = null;
+  btn.addEventListener('pointerdown', e => { dragX = e.clientX; });
+  window.addEventListener('pointerup', e => {
+    if (dragX === null) return;
+    const dx = e.clientX - dragX;
+    dragX = null;
+    if (Math.abs(dx) > 24) {
+      suppressClick = true;
+      setTimeout(() => { suppressClick = false; }, 0);
+      setTheme(dx < 0);
+    }
+  });
+  window.addEventListener('pointercancel', () => { dragX = null; });
+
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  mqDark.addEventListener('change', sync);
+
+  renderLabel(shown);
+  glow = shown;
+  current = iconFor(shown);
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+})();
+</script>
+</body>
+</html>
