@@ -9,10 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap">
 <style>
-  /* 可平滑過渡的顏色變數（不支援 @property 的瀏覽器會直接切換） */
-  @property --bg-1    { syntax: "<color>"; inherits: true; initial-value: #f3f1ee; }
-  @property --bg-2    { syntax: "<color>"; inherits: true; initial-value: #cfccc7; }
-  @property --amb     { syntax: "<color>"; inherits: true; initial-value: rgba(255,186,48,.30); }
+  /* 軌道顏色可平滑過渡（面積小，重繪成本低） */
   @property --track-a { syntax: "<color>"; inherits: true; initial-value: #e3e1dd; }
   @property --track-b { syntax: "<color>"; inherits: true; initial-value: #f3f2ef; }
 
@@ -21,10 +18,10 @@
     --font-pixel: "Silkscreen", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     --font-body: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
 
-    /* 固定材質（兩種主題都定義在這裡，靠 --light-on 控制顯示） */
+    /* 固定材質：兩種主題都定義在這裡，用 --light-on 交叉淡入淡出（只動 opacity，GPU 合成） */
     --sun-ink: #2b2622;
     --moon-ink: #f3f5ff;
-    --moon-halo: rgba(190, 200, 255, .55);
+    --moon-halo: #b4bfff;
     --sun-rim: #ffbf1f;
     --sun-glow: rgba(255, 166, 0, .8);
     --moon-rim: #c3cbff;
@@ -33,11 +30,15 @@
     --sun-face-shade: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -8px 14px -6px rgba(0,0,0,.08);
     --moon-face: linear-gradient(180deg, #5b5e6b 0%, #34363f 38%, #2b2e45 74%, #8e98ff 100%);
     --moon-face-shade: inset 0 1px 0 rgba(255,255,255,.28), inset 0 0 0 1px rgba(255,255,255,.07), inset 0 -10px 18px -8px rgba(200,208,255,.95);
+    --sun-shadow: 0 -10px 34px -4px rgba(255,176,20,.55), 0 12px 18px -6px rgba(60,40,0,.25);
+    --moon-shadow: 0 14px 38px -2px rgba(104,116,255,.6), 0 4px 10px rgba(0,0,0,.55);
+    --day-sky: radial-gradient(120% 90% at 50% 45%, #f3f1ee, #cfccc7);
+    --night-sky: radial-gradient(120% 90% at 50% 45%, #262833, #06070a);
+    --day-amb: radial-gradient(closest-side, rgba(255,186,48,.32), transparent);
+    --night-amb: radial-gradient(closest-side, rgba(96,108,255,.28), transparent);
 
     /* 淺色主題（預設） */
-    --bg-1: #f3f1ee;
-    --bg-2: #cfccc7;
-    --amb: rgba(255, 186, 48, .30);
+    --bg: #e4e1dd;
     --track-a: #e3e1dd;
     --track-b: #f3f2ef;
     --track-shadow:
@@ -45,23 +46,20 @@
       inset 0 -1px 1px rgba(255,255,255,.9),
       0 18px 30px -10px rgba(0,0,0,.25),
       0 1px 2px rgba(0,0,0,.06);
-    --thumb-shadow:
-      0 -10px 34px -4px rgba(255,176,20,.55),
-      0 12px 18px -6px rgba(60,40,0,.25);
     --text: #6b655d;
     --text-strong: #2b2622;
     --focus: #d08a00;
     --pos: 1;       /* 1 = 滑塊在右（白天） */
     --light-on: 1;  /* 1 = 白天材質 */
 
-    transition: --bg-1 .8s ease, --bg-2 .8s ease, --amb .8s ease, --track-a .6s ease, --track-b .6s ease;
+    --dur: .9s;
+    --glide: cubic-bezier(.65, 0, .25, 1);   /* 慢起慢停，無回彈 */
+    transition: --track-a var(--dur) ease, --track-b var(--dur) ease;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg-1: #262833;
-      --bg-2: #06070a;
-      --amb: rgba(96, 108, 255, .26);
+      --bg: #101116;
       --track-a: #040507;
       --track-b: #121319;
       --track-shadow:
@@ -69,9 +67,6 @@
         inset 0 -1px 1px rgba(255,255,255,.06),
         0 18px 34px -10px rgba(0,0,0,.7),
         0 0 0 1px rgba(255,255,255,.04);
-      --thumb-shadow:
-        0 14px 38px -2px rgba(104,116,255,.6),
-        0 4px 10px rgba(0,0,0,.55);
       --text: #8b90a8;
       --text-strong: #e9ebff;
       --focus: #9aa4ff;
@@ -81,9 +76,7 @@
     }
   }
   :root[data-theme="dark"] {
-    --bg-1: #262833;
-    --bg-2: #06070a;
-    --amb: rgba(96, 108, 255, .26);
+    --bg: #101116;
     --track-a: #040507;
     --track-b: #121319;
     --track-shadow:
@@ -91,9 +84,6 @@
       inset 0 -1px 1px rgba(255,255,255,.06),
       0 18px 34px -10px rgba(0,0,0,.7),
       0 0 0 1px rgba(255,255,255,.04);
-    --thumb-shadow:
-      0 14px 38px -2px rgba(104,116,255,.6),
-      0 4px 10px rgba(0,0,0,.55);
     --text: #8b90a8;
     --text-strong: #e9ebff;
     --focus: #9aa4ff;
@@ -105,13 +95,18 @@
   html, body { height: 100%; }
   body {
     margin: 0;
-    background-color: var(--bg-2);
-    background-image: radial-gradient(120% 90% at 50% 45%, var(--bg-1), var(--bg-2));
+    background: var(--bg);
     color: var(--text);
     font-family: var(--font-body);
   }
 
+  /* 背景：兩層天空交叉淡化，不重繪漸層 */
+  .sky { position: fixed; inset: 0; pointer-events: none; transition: opacity var(--dur) ease; }
+  .sky.day   { background: var(--day-sky); }
+  .sky.night { background: var(--night-sky); opacity: calc(1 - var(--light-on)); }
+
   main {
+    position: relative;
     min-height: 100%;
     box-sizing: border-box;
     display: grid;
@@ -133,7 +128,6 @@
     --th: calc(var(--h) - 2 * var(--pad));
     --r: calc(var(--th) * .27);
     --travel: calc(var(--w) - var(--tw) - 2 * var(--pad));
-    --ease: cubic-bezier(.34, 1.32, .5, 1);
     position: relative;
     width: var(--w);
     height: var(--h);
@@ -145,12 +139,14 @@
     width: calc(var(--w) * 1.5);
     aspect-ratio: 1;
     left: calc(var(--pad) + var(--tw) / 2 - var(--w) * .75);
-    top: 50%;
-    translate: calc(var(--pos) * var(--travel)) -50%;
-    background: radial-gradient(closest-side, var(--amb), transparent);
+    top: calc(var(--h) / 2 - var(--w) * .75);
+    transform: translateX(calc(var(--pos) * var(--travel)));
     pointer-events: none;
-    transition: translate .62s var(--ease);
+    will-change: transform, opacity;
+    transition: transform var(--dur) var(--glide), opacity var(--dur) ease;
   }
+  .ambient.day   { background: var(--day-amb);   opacity: var(--light-on); }
+  .ambient.night { background: var(--night-amb); opacity: calc(1 - var(--light-on)); }
 
   .switch {
     position: relative;
@@ -165,7 +161,7 @@
     cursor: pointer;
     touch-action: pan-y;
     -webkit-tap-highlight-color: transparent;
-    transition: box-shadow .6s ease;
+    transition: box-shadow var(--dur) ease;
   }
   .switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 6px; }
 
@@ -176,7 +172,8 @@
     width: var(--tw);
     height: var(--th);
     transform: translateX(calc(var(--pos) * var(--travel)));
-    transition: transform .62s var(--ease);
+    will-change: transform;
+    transition: transform var(--dur) var(--glide);
   }
 
   .thumb-body {
@@ -185,21 +182,21 @@
     width: 100%;
     height: 100%;
     border-radius: var(--r);
-    box-shadow: var(--thumb-shadow);
-    transition: box-shadow .6s ease, scale .15s ease, filter .2s ease;
+    will-change: transform;
+    transition: scale .2s ease;
   }
-  .switch:hover .thumb-body { filter: brightness(1.04); }
   .switch:active .thumb-body { scale: .97; }
-  .thumb-body.squish { animation: squish .62s cubic-bezier(.3, .7, .4, 1); }
+  .thumb-body.squish { animation: squish var(--dur) var(--glide); }
   @keyframes squish {
     0%   { transform: scale(1, 1); }
-    35%  { transform: scale(1.12, .93); }
-    70%  { transform: scale(.97, 1.02); }
+    45%  { transform: scale(1.07, .95); }
     100% { transform: scale(1, 1); }
   }
 
-  .face, .rim { position: absolute; pointer-events: none; transition: opacity .6s ease; }
-  .face { inset: 0; border-radius: inherit; }
+  .face, .rim, .shadow { position: absolute; pointer-events: none; transition: opacity var(--dur) ease; }
+  .face, .shadow { inset: 0; border-radius: inherit; }
+  .shadow.sun  { box-shadow: var(--sun-shadow);  opacity: var(--light-on); }
+  .shadow.moon { box-shadow: var(--moon-shadow); opacity: calc(1 - var(--light-on)); }
   .face.sun  { background: var(--sun-face);  box-shadow: var(--sun-face-shade);  opacity: var(--light-on); }
   .face.moon { background: var(--moon-face); box-shadow: var(--moon-face-shade); opacity: calc(1 - var(--light-on)); }
 
@@ -229,16 +226,16 @@
   }
 
   /* ---------- 文字 ---------- */
-  .caption { display: grid; justify-items: center; gap: 10px; text-align: center; }
+  .caption { position: relative; display: grid; justify-items: center; gap: 10px; text-align: center; }
   .mode {
     margin: 0;
     font-family: var(--font-pixel);
     font-size: 14px;
     letter-spacing: .24em;
     color: var(--text-strong);
-    transition: color .6s ease;
+    transition: color var(--dur) ease;
   }
-  .hint { margin: 0; font-size: 13px; line-height: 1.6; color: var(--text); transition: color .6s ease; }
+  .hint { margin: 0; font-size: 13px; line-height: 1.6; color: var(--text); transition: color var(--dur) ease; }
   kbd {
     font-family: var(--font-pixel);
     font-size: 11px;
@@ -255,12 +252,17 @@
 </head>
 <body>
 
+<div class="sky day" aria-hidden="true"></div>
+<div class="sky night" aria-hidden="true"></div>
 <main>
   <div class="stage">
-    <div class="ambient" aria-hidden="true"></div>
+    <div class="ambient day" aria-hidden="true"></div>
+    <div class="ambient night" aria-hidden="true"></div>
     <button class="switch" id="theme-switch" type="button" role="switch" aria-checked="false" aria-label="深色模式">
       <span class="thumb" aria-hidden="true">
         <span class="thumb-body">
+          <span class="shadow sun"></span>
+          <span class="shadow moon"></span>
           <span class="face sun"></span>
           <span class="face moon"></span>
           <span class="rim sun"></span>
@@ -289,6 +291,7 @@
 
   /* ---------- 像素圖示（17×17 格） ---------- */
   const N = 17, C = 8;
+  const TAU = Math.PI * 2;
   const hash = (x, y) => { const s = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return s - Math.floor(s); };
 
   function sunPixels() {
@@ -332,79 +335,111 @@
     return Number.isNaN(v) ? [128, 128, 128] : [v >> 16 & 255, v >> 8 & 255, v & 255];
   };
   const INK = { sun: toRgb(css('--sun-ink') || '#2b2622'), moon: toRgb(css('--moon-ink') || '#f3f5ff') };
-  const HALO = css('--moon-halo') || 'rgba(190,200,255,.55)';
+  const HALO = toRgb(css('--moon-halo') || '#b4bfff');
 
   /* ---------- 畫布 ---------- */
   let W = 0, H = 0, dpr = 1;
   let current = [];     // 目前畫面上的粒子
-  let glow = false;     // 夜晚圖示加上微光
+  let glow = 0;         // 0..1，夜晚圖示的微光強度
   let anim = null;
 
   function resize() {
     W = canvas.offsetWidth; H = canvas.offsetHeight;
-    dpr = Math.min(window.devicePixelRatio || 1, 3);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.max(1, Math.round(W * dpr));
     canvas.height = Math.max(1, Math.round(H * dpr));
-    draw(current);
+    draw(current, false);
   }
 
-  function draw(list) {
+  /* trail = true 時保留上一格的殘影，讓旋轉看起來更連續 */
+  function draw(list, trail) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, W, H);
+    if (trail) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0,0,0,.42)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'source-over';
+    } else {
+      ctx.clearRect(0, 0, W, H);
+    }
     const box = Math.min(W, H) * .62, cell = box / N;
     const ox = (W - box) / 2, oy = (H - box) / 2;
-    ctx.shadowColor = HALO;
-    ctx.shadowBlur = glow ? 6 : 0;
     for (const p of list) {
       if (p.a <= .004) continue;
+      const cx = ox + (p.x + .5) * cell, cy = oy + (p.y + .5) * cell;
+      if (glow > .01) {                                   // 便宜的光暈：畫一個更大的淡方塊
+        const g = cell * 1.7 * p.s;
+        ctx.fillStyle = `rgba(${HALO[0]},${HALO[1]},${HALO[2]},${p.a * .16 * glow})`;
+        ctx.fillRect(cx - g / 2, cy - g / 2, g, g);
+      }
       const s = cell * .8 * p.s;
-      const x = ox + (p.x + .5) * cell - s / 2;
-      const y = oy + (p.y + .5) * cell - s / 2;
       ctx.fillStyle = `rgba(${p.c[0] | 0},${p.c[1] | 0},${p.c[2] | 0},${p.a})`;
-      ctx.fillRect(Math.round(x * dpr) / dpr, Math.round(y * dpr) / dpr, s, s);
+      ctx.fillRect(cx - s / 2, cy - s / 2, s, s);
     }
   }
 
   const iconFor = dark => (dark ? MOON : SUN).map(p => ({ ...p, s: 1, c: dark ? INK.moon : INK.sun }));
-  const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
-  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  const DUR = 950, SPREAD = .28;
+  const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const clamp01 = t => t < 0 ? 0 : t > 1 ? 1 : t;
+  const polar = p => ({ r: Math.hypot(p.x - C, p.y - C), f: Math.atan2(p.y - C, p.x - C) });
+  const byAngle = (a, b) => polar(a).f - polar(b).f;
+  const DUR = 1100, SPREAD = .14;
 
-  /* 像素先散開成粒子，再重組成另一個圖示 */
+  /* 像素繞中心轉一整圈：散開成漩渦，再收攏成另一個圖示 */
   function morphTo(dark) {
     const target = iconFor(dark);
     const from = current.filter(p => p.a > .01).map(p => ({ ...p }));
     if (anim) cancelAnimationFrame(anim.raf);
     if (mqReduce.matches || !from.length) {
-      anim = null; current = target; glow = dark; draw(current); return;
+      anim = null; current = target; glow = dark ? 1 : 0; draw(current, false); return;
     }
-    shuffle(from); shuffle(target);
+
+    // 依角度排序後一一配對，粒子會沿同一方向流動而不是亂飛
+    from.sort(byAngle); target.sort(byAngle);
     const n = Math.max(from.length, target.length);
+    const usedA = new Set(), usedB = new Set();
+    const dir = dark ? -1 : 1;                 // 往右（白天）順時針，往左（夜晚）逆時針，像滾動
+    const glow0 = glow, glow1 = dark ? 1 : 0;
     const parts = [];
     for (let i = 0; i < n; i++) {
-      const a = from[i] || { ...from[Math.random() * from.length | 0], a: 0 };
-      const b = target[i] || { ...target[Math.random() * target.length | 0], a: 0 };
-      const ang = Math.random() * Math.PI * 2, rad = 3 + Math.random() * 5.5;
-      parts.push({ a, b, cx: C + Math.cos(ang) * rad, cy: C + Math.sin(ang) * rad * .8, d: Math.random() * SPREAD });
+      const ia = Math.floor(i * from.length / n), ib = Math.floor(i * target.length / n);
+      const a = { ...from[ia] }, b = { ...target[ib] };
+      if (usedA.has(ia)) a.a = 0; else usedA.add(ia);    // 重複的起點從透明長出來
+      if (usedB.has(ib)) b.a = 0; else usedB.add(ib);    // 重複的終點淡出
+      const pa = polar(a), pb = polar(b);
+      let df = pb.f - pa.f;
+      if (df > Math.PI) df -= TAU; else if (df < -Math.PI) df += TAU;
+      parts.push({
+        a, b, ra: pa.r, rb: pb.r, fa: pa.f, df,
+        bulge: 1.2 + Math.random() * 2.6,
+        d: (i / n) * SPREAD,                    // 沿著角度依序出發，形成流動的尾巴
+      });
     }
+
     const start = performance.now();
     const step = now => {
-      const T = (now - start) / DUR;
-      current = parts.map(({ a, b, cx, cy, d }) => {
-        const e = ease(Math.min(1, Math.max(0, (T - d) / (1 - SPREAD))));
-        const u = 1 - e;
+      const T = clamp01((now - start) / DUR);
+      current = parts.map(({ a, b, ra, rb, fa, df, bulge, d }) => {
+        const e = easeInOut(clamp01((T - d) / (1 - SPREAD)));
+        const r = ra + (rb - ra) * e + bulge * Math.sin(Math.PI * e);
+        const f = fa + df * e + dir * TAU * e;
         return {
-          x: u * u * a.x + 2 * u * e * cx + e * e * b.x,
-          y: u * u * a.y + 2 * u * e * cy + e * e * b.y,
+          x: C + r * Math.cos(f),
+          y: C + r * Math.sin(f),
           a: a.a + (b.a - a.a) * e,
-          s: 1 - .4 * Math.sin(Math.PI * e),
+          s: 1 - .3 * Math.sin(Math.PI * e),
           c: [0, 1, 2].map(k => a.c[k] + (b.c[k] - a.c[k]) * e),
         };
       });
-      glow = T > .5 ? dark : !dark;
-      draw(current);
-      if (T < 1) anim.raf = requestAnimationFrame(step);
-      else { current = current.filter(p => p.a > .01); anim = null; }
+      glow = glow0 + (glow1 - glow0) * easeInOut(T);
+      if (T < 1) {
+        draw(current, true);
+        anim.raf = requestAnimationFrame(step);
+      } else {
+        current = current.filter(p => p.a > .01);
+        anim = null;
+        draw(current, false);
+      }
     };
     anim = { raf: requestAnimationFrame(step) };
   }
@@ -466,7 +501,7 @@
   mqDark.addEventListener('change', sync);
 
   renderLabel(shown);
-  glow = shown;
+  glow = shown ? 1 : 0;
   current = iconFor(shown);
   new ResizeObserver(resize).observe(canvas);
   resize();
