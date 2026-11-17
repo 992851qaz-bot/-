@@ -37,7 +37,7 @@
   <meta name="twitter:image" content="https://992851qaz-bot.github.io/-/og-image.png">
 
   <!-- App -->
-  <meta name="theme-color" content="#0f0f14">
+  <meta name="theme-color" content="#0b0e17">
   <meta name="color-scheme" content="dark">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
@@ -74,243 +74,310 @@
   }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f0f14;
-      --surface: #17171f;
-      --surface-2: #1f1f2a;
-      --border: #2a2a37;
-      --text: #ececf1;
-      --muted: #9a9aab;
-      --cyan: #38bdf8;
-      --gold: #facc15;
-      --red: #f87171;
-      --green: #4ade80;
-      --radius: 18px;
-      --safe-t: env(safe-area-inset-top, 0px);
-      --safe-b: env(safe-area-inset-bottom, 0px);
-      --safe-l: env(safe-area-inset-left, 0px);
-      --safe-r: env(safe-area-inset-right, 0px);
+      --bg: #0b0e17; --bg-2: #10152a; --panel: #131a2e; --panel-2: #182039;
+      --line: rgba(232,214,170,.16); --line-2: rgba(232,214,170,.32);
+      --gold: #e3cd9a; --gold-2: #c9ad6f;
+      --text: #f1eee6; --muted: #a3a6b6; --dim: #6f7386;
+      --cyan: #5cc8ff; --mark: #ffd23f; --green: #3fd28c; --red: #ff6b6b;
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --safe-t: env(safe-area-inset-top, 0px); --safe-b: env(safe-area-inset-bottom, 0px);
+      --gl: max(20px, env(safe-area-inset-left)); --gr: max(20px, env(safe-area-inset-right));
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      min-height: 100dvh;
-      background: var(--bg);
-      color: var(--text);
-      font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      overscroll-behavior-y: none;
-    }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body { margin: 0; min-height: 100dvh; background: var(--bg); color: var(--text); font: 16px/1.7 var(--sans); overflow-x: hidden; }
     body.lock { overflow: hidden; }
+    img { display: block; max-width: 100%; height: auto; }
     a { color: inherit; text-decoration: none; }
-    .wrap {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: calc(12px + var(--safe-t)) calc(16px + var(--safe-r)) calc(28px + var(--safe-b)) calc(16px + var(--safe-l));
-    }
+    h1, h2, h3 { margin: 0; }
+    p { margin: 0; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--gr) 0 var(--gl); }
 
-    /* Top bar */
-    .top {
-      position: sticky; top: 0; z-index: 10;
-      display: flex; align-items: center; gap: 12px;
-      margin: calc(-12px - var(--safe-t)) calc(-16px - var(--safe-r)) 8px calc(-16px - var(--safe-l));
-      padding: calc(10px + var(--safe-t)) calc(16px + var(--safe-r)) 10px calc(16px + var(--safe-l));
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid transparent;
-      transition: border-color .2s;
-    }
-    .top.scrolled { border-bottom-color: var(--border); }
-    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
-    .brand img { width: 36px; height: 36px; border-radius: 10px; flex: none; }
-    .brand b { font-size: 17px; letter-spacing: .02em; white-space: nowrap; }
-    .brand small { display: block; color: var(--muted); font-size: 12px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* header */
+    .hd { position: sticky; top: 0; z-index: 20; padding-top: var(--safe-t); background: rgba(11,14,23,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .hd .wrap { display: flex; align-items: center; gap: 24px; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .logo img { width: 34px; height: 34px; border-radius: 9px; }
+    .logo b { display: block; font-size: 15px; letter-spacing: .14em; }
+    .logo small { display: block; font-size: 10.5px; letter-spacing: .18em; color: var(--gold-2); line-height: 1.2; }
+    .nav { display: flex; gap: 26px; margin-left: auto; font-size: 14px; color: var(--muted); }
+    .nav a:hover { color: var(--text); }
+    @media (max-width: 860px) { .nav { display: none; } #installBtn { margin-left: auto; } }
+
     .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      min-height: 40px; padding: 0 14px; border-radius: 999px;
-      border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
-      font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 44px; padding: 0 20px; border: 1px solid var(--line-2); border-radius: 0;
+      font: 600 15px/1 var(--sans); color: var(--text); background: transparent; cursor: pointer; white-space: nowrap;
+      transition: background .2s, border-color .2s;
     }
-    .btn.primary { background: var(--cyan); border-color: var(--cyan); color: #04131c; }
+    .btn:hover { border-color: var(--gold); }
+    .btn.gold, .btn.primary { background: var(--gold); border-color: var(--gold); color: #1a1508; clip-path: polygon(0 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%); }
+    .btn.gold:hover, .btn.primary:hover { background: #f1dfb2; }
     .btn:disabled { opacity: .45; cursor: not-allowed; }
     .btn[hidden] { display: none; }
+    .btn svg { width: 17px; height: 17px; flex: none; }
+    .hd .btn { min-height: 38px; padding: 0 14px; font-size: 14px; }
 
-    /* Hero */
-    .hero {
-      position: relative; overflow: hidden;
-      display: block; margin-top: 8px; padding: 22px 20px 20px;
-      border-radius: calc(var(--radius) + 4px);
-      background:
-        radial-gradient(120% 90% at 100% 0%, rgba(56,189,248,.28), transparent 60%),
-        radial-gradient(80% 80% at 0% 100%, rgba(250,204,21,.16), transparent 60%),
-        var(--surface);
-      border: 1px solid var(--border);
-    }
-    .hero .tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--gold); background: rgba(250,204,21,.12); padding: 3px 10px; border-radius: 999px; }
-    .hero h1 { margin: 10px 0 6px; font-size: clamp(24px, 6.4vw, 34px); line-height: 1.2; }
-    .hero p { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 34em; }
-    .hero .btn { min-height: 48px; padding: 0 22px; font-size: 16px; }
-    .hero .rings { position: absolute; right: -40px; top: -40px; width: 180px; height: 180px; opacity: .25; pointer-events: none; }
+    /* shared */
+    .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 12px; letter-spacing: .22em; color: var(--gold-2); }
+    .eyebrow::before { content: ""; width: 32px; height: 1px; background: var(--gold-2); flex: none; }
+    .serif, h1, h2 { font-family: var(--serif); font-weight: 900; letter-spacing: .02em; }
+    .lead { color: var(--muted); font-size: 17px; max-width: 32em; }
+    .hl { color: var(--mark); font-weight: 700; }
+    .sec { padding: 88px 0; border-top: 1px solid var(--line); }
+    .sec-head { display: grid; gap: 12px; margin-bottom: 36px; max-width: 720px; }
+    .sec-head .num { font: 600 13px/1 var(--sans); letter-spacing: .2em; color: var(--dim); }
+    .sec-head h2 { font-size: clamp(28px, 4.4vw, 44px); line-height: 1.25; }
+    .sec-head p { color: var(--muted); }
+    .frame { position: relative; border: 1px solid var(--line-2); background: #06080f; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+    .frame::after { content: ""; position: absolute; inset: -6px; pointer-events: none;
+      background: linear-gradient(var(--gold),var(--gold)) left top/14px 1px no-repeat, linear-gradient(var(--gold),var(--gold)) left top/1px 14px no-repeat,
+                  linear-gradient(var(--gold),var(--gold)) right bottom/14px 1px no-repeat, linear-gradient(var(--gold),var(--gold)) right bottom/1px 14px no-repeat; }
 
-    /* Sections */
-    h2 { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .08em; margin: 26px 4px 10px; }
-    .recent { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px 2px; scroll-snap-type: x mandatory; }
-    .recent::-webkit-scrollbar { display: none; }
-    .recent a { flex: none; scroll-snap-align: start; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
-    .recent .ico { width: 30px; height: 30px; font-size: 16px; border-radius: 50%; }
+    /* hero */
+    .hero { position: relative; padding: 72px 0 88px; overflow: hidden; }
+    .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(60% 70% at 85% 30%, rgba(92,200,255,.13), transparent 70%), radial-gradient(50% 60% at 10% 90%, rgba(227,205,154,.08), transparent 70%); }
+    .hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0,5fr) minmax(0,6fr); gap: 56px; align-items: center; }
+    .hero h1 { font-size: clamp(40px, 6.2vw, 72px); line-height: 1.12; margin: 22px 0 20px; }
+    .hero h1 span { display: block; color: var(--gold); }
+    .hero .lead { margin-bottom: 30px; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .meta { display: flex; flex-wrap: wrap; gap: 6px 0; margin-top: 26px; font-size: 13px; color: var(--muted); }
+    .meta span + span::before { content: ""; display: inline-block; width: 1px; height: 11px; background: var(--line-2); margin: 0 14px; vertical-align: -1px; }
+    .hero-visual { position: relative; display: block; padding-bottom: 60px; }
+    .hero-visual .panel-shot { position: absolute; right: -18px; bottom: 0; width: 42%; border: 1px solid var(--mark); box-shadow: 0 24px 60px rgba(0,0,0,.7); }
+    .hero-visual .tag { position: absolute; left: 0; bottom: 18px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; max-width: 54%; line-height: 1.4; }
+    .hero-visual .tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); flex: none; }
 
-    .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
-    @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-
-    .card {
-      display: flex; align-items: center; gap: 14px; width: 100%;
-      min-height: 76px; padding: 14px 16px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      color: inherit; font: inherit; text-align: left; cursor: pointer;
-      transition: transform .12s, border-color .15s, background .15s;
-    }
-    .card:hover { border-color: #3a3a4a; background: var(--surface-2); }
-    .card:active { transform: scale(.985); }
-    .card:focus-visible, .btn:focus-visible, .recent a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
-    .ico {
-      flex: none; display: grid; place-items: center;
-      width: 46px; height: 46px; border-radius: 14px; font-size: 22px;
-      background: var(--c, rgba(56,189,248,.14));
-    }
-    .card .txt { min-width: 0; flex: 1; }
-    .card b { display: block; font-size: 16px; }
-    .card .txt > span { display: block; color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: 2px; }
-    .card .badge { flex: none; font-style: normal; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: rgba(56,189,248,.14); color: var(--cyan); align-self: flex-start; }
-    .card .chev { flex: none; color: #555566; font-size: 20px; }
-
-    /* About (給玩家也給搜尋引擎看的說明文字) */
-    .about { margin-top: 10px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted); font-size: 14px; }
-    .about h3 { margin: 0 0 6px; color: var(--text); font-size: 15px; }
-    .about p { margin: 0 0 10px; }
-    .about ul { margin: 0; padding-left: 1.2em; }
-    .about li { margin: 4px 0; }
-    .about li b { color: var(--text); font-weight: 600; }
-
-    footer { margin-top: 30px; text-align: center; color: #6c6c7c; font-size: 12px; }
-
-    /* Bottom sheets */
-    .backdrop { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; }
-    .backdrop[hidden] { display: none; }
-    .panel {
-      width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto; overscroll-behavior: contain;
-      background: var(--surface-2); border: 1px solid var(--border); border-bottom: 0;
-      border-radius: 22px 22px 0 0;
-      padding: 8px calc(18px + var(--safe-r)) calc(18px + var(--safe-b)) calc(18px + var(--safe-l));
-      animation: up .22s cubic-bezier(.16,1,.3,1);
-    }
-    @keyframes up { from { transform: translateY(24px); opacity: 0; } }
-    @media (min-width: 600px) {
-      .backdrop { align-items: center; padding: 24px; }
-      .panel { border-radius: 22px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-    }
-    .grab { width: 40px; height: 4px; border-radius: 4px; background: #3a3a4a; margin: 4px auto 12px; }
-    @media (min-width: 600px) { .grab { display: none; } }
-    .panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-    .panel-head h3 { margin: 0; font-size: 18px; flex: 1; }
-    .x { width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--muted); font-size: 22px; cursor: pointer; }
-    .panel .sub { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
-
-    label.f { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
-    label.f em { font-style: normal; font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
-    .inp {
-      width: 100%; padding: 12px 14px; border-radius: 12px;
-      border: 1px solid var(--border); background: var(--bg); color: var(--text);
-      font: inherit; font-size: 16px; /* 16px 避免 iOS 自動放大 */
-    }
-    .inp:focus { outline: none; border-color: var(--cyan); }
-    textarea.inp { min-height: 140px; resize: vertical; line-height: 1.5; }
-    .count { text-align: right; font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-    .shot { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px dashed #3a3a4a; border-radius: 12px; cursor: pointer; }
-    .shot input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-    .shot .ph { width: 64px; height: 64px; flex: none; border-radius: 10px; background: var(--bg) center/cover no-repeat; display: grid; place-items: center; font-size: 24px; }
-    .shot .ph.has { font-size: 0; }
-    .shot small { color: var(--muted); font-size: 13px; display: block; }
-    .shot .rm { margin-left: auto; }
-
-    .note { margin-top: 14px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.04); color: var(--muted); font-size: 12px; line-height: 1.5; }
-    .msg { min-height: 20px; margin: 12px 0 0; font-size: 13px; }
-    .msg.err { color: var(--red); }
-    .msg.ok { color: var(--green); }
-    .submit { width: 100%; min-height: 50px; margin-top: 10px; font-size: 16px; }
-
-    .offline { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: rgba(250,204,21,.1); color: var(--gold); font-size: 13px; }
+    .offline { display: none; margin: 16px 0 0; padding: 10px 14px; border: 1px solid rgba(255,210,63,.3); background: rgba(255,210,63,.08); color: #f6e3a6; font-size: 13.5px; }
     body.is-offline .offline { display: block; }
 
-    .toast {
-      position: fixed; left: 50%; bottom: calc(20px + var(--safe-b)); z-index: 40; transform: translateX(-50%);
-      max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 14px;
-      background: #24242f; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,.5); font-size: 14px;
-    }
+    /* recent */
+    .recent-wrap { padding: 0 0 8px; }
+    .recent-wrap h2 { font: 600 12px/1 var(--sans); letter-spacing: .22em; color: var(--dim); margin: 0 0 12px; }
+    .recent { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .recent::-webkit-scrollbar { display: none; }
+    .recent a { flex: none; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px 0 10px; border: 1px solid var(--line); background: var(--panel); font-size: 14px; }
+    .recent a:hover { border-color: var(--line-2); }
+    .recent .ico { font-size: 18px; }
+
+    /* tools */
+    .tools { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+    .tool { position: relative; display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--panel); transition: border-color .2s, transform .2s; overflow: hidden; }
+    .tool:hover { border-color: var(--line-2); transform: translateY(-2px); }
+    .tool:focus-visible, .btn:focus-visible, .recent a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .tool .pic { aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--line); background: #06080f; }
+    .tool .pic img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+    .tool .pic.art { display: grid; place-items: center; position: relative;
+      background: radial-gradient(70% 90% at 80% 10%, var(--c, rgba(92,200,255,.25)), transparent 70%), linear-gradient(160deg, #161d36, #0c1020); }
+    .tool .pic.art .big { font-size: 64px; filter: drop-shadow(0 10px 30px rgba(0,0,0,.6)); }
+    .tool .pic.art .ring { position: absolute; width: 62%; aspect-ratio: 1; border: 1px solid var(--line-2); border-radius: 50%; }
+    .tool .pic.art .ring + .ring { width: 40%; border-color: var(--line); }
+    .tool .body { padding: 20px 22px 22px; display: grid; gap: 6px; flex: 1; }
+    .tool .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tool .tags span { font-size: 11.5px; letter-spacing: .06em; padding: 2px 8px; border: 1px solid var(--line-2); color: var(--gold); }
+    .tool .tags span.pc { color: var(--cyan); border-color: rgba(92,200,255,.4); }
+    .tool h3 { font: 900 22px/1.35 var(--serif); }
+    .tool p { color: var(--muted); font-size: 15px; }
+    .tool .go { margin-top: 6px; font-size: 14px; color: var(--gold); }
+
+    /* HUD promo */
+    .split { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 56px; align-items: center; }
+    .checks { list-style: none; padding: 0; margin: 0 0 30px; display: grid; gap: 14px; }
+    .checks li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; color: var(--muted); }
+    .checks li::before { content: "✓"; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--mark); color: #111; font-weight: 800; font-size: 13px; margin-top: 2px; }
+    .checks b { color: var(--text); }
+
+    /* report band */
+    .report { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 28px; align-items: center; padding: 32px; border: 1px solid var(--line); background: linear-gradient(120deg, rgba(255,107,107,.08), transparent 60%), var(--panel); }
+    .report h2 { font-size: clamp(22px, 3vw, 30px); margin-bottom: 6px; }
+    .report p { color: var(--muted); }
+
+    /* about */
+    .about { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,3fr); gap: 40px; color: var(--muted); font-size: 15px; }
+    .about h2 { font-size: clamp(22px, 3vw, 30px); color: var(--text); line-height: 1.4; }
+    .about ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .about li { padding-left: 16px; border-left: 1px solid var(--line-2); }
+    .about li b { color: var(--text); font-weight: 600; }
+
+    footer { border-top: 1px solid var(--line); padding: 32px 0 calc(32px + var(--safe-b)); color: var(--dim); font-size: 13px; }
+
+    /* sheets & form */
+    .backdrop { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.65); display: flex; align-items: flex-end; justify-content: center; }
+    .backdrop[hidden] { display: none; }
+    .panel { width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto; overscroll-behavior: contain;
+      background: var(--panel-2); border: 1px solid var(--line-2); border-bottom: 0;
+      padding: 8px calc(20px + env(safe-area-inset-right)) calc(20px + var(--safe-b)) calc(20px + env(safe-area-inset-left)); animation: up .22s cubic-bezier(.16,1,.3,1); }
+    @keyframes up { from { transform: translateY(24px); opacity: 0; } }
+    @media (min-width: 600px) { .backdrop { align-items: center; padding: 24px; } .panel { border-bottom: 1px solid var(--line-2); padding-bottom: 22px; } }
+    .grab { width: 40px; height: 4px; background: #3a3f55; margin: 4px auto 12px; }
+    @media (min-width: 600px) { .grab { display: none; } }
+    .panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .panel-head h3 { font: 900 20px/1.4 var(--serif); flex: 1; }
+    .x { width: 44px; height: 44px; border: 0; background: transparent; color: var(--muted); font-size: 22px; cursor: pointer; }
+    .panel .sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+    label.f { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
+    label.f em { font-style: normal; font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    .inp { width: 100%; padding: 12px 14px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit; font-size: 16px; border-radius: 0; }
+    .inp:focus { outline: none; border-color: var(--gold); }
+    textarea.inp { min-height: 140px; resize: vertical; line-height: 1.5; }
+    .count { text-align: right; font-size: 12px; color: var(--muted); margin-top: 4px; }
+    label.shot { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px dashed var(--line-2); cursor: pointer; }
+    label.shot input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    label.shot .ph { width: 64px; height: 64px; flex: none; background: var(--bg) center/cover no-repeat; display: grid; place-items: center; font-size: 24px; }
+    label.shot .ph.has { font-size: 0; }
+    label.shot small { color: var(--muted); font-size: 13px; display: block; }
+    label.shot .rm { margin-left: auto; min-height: 38px; }
+    .note { margin-top: 14px; padding: 10px 12px; background: rgba(255,255,255,.04); color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+    .msg { min-height: 20px; margin: 12px 0 0; font-size: 13px; }
+    .msg.err { color: var(--red); } .msg.ok { color: var(--green); }
+    .submit { width: 100%; min-height: 50px; margin-top: 10px; font-size: 16px; }
+    .toast { position: fixed; left: 50%; bottom: calc(20px + var(--safe-b)); z-index: 40; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 12px 18px; background: var(--panel-2); border: 1px solid var(--line-2); box-shadow: 0 10px 30px rgba(0,0,0,.5); font-size: 14px; }
     .toast[hidden] { display: none; }
 
-    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    /* responsive */
+    @media (max-width: 980px) {
+      .hero .wrap, .split, .about { grid-template-columns: minmax(0,1fr); gap: 40px; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 15.5px; }
+      .hero { padding: 40px 0 56px; }
+      .hero h1 { margin: 16px 0 14px; }
+      .lead { font-size: 16px; }
+      .cta .btn { width: 100%; min-height: 52px; font-size: 16px; }
+      .hero-visual { padding-bottom: 76px; }
+      .hero-visual .panel-shot { right: -6px; width: 50%; }
+      .hero-visual .tag { bottom: 6px; font-size: 12px; max-width: 46%; }
+      .sec { padding: 60px 0; }
+      .sec-head { margin-bottom: 26px; }
+      .tools { grid-template-columns: minmax(0,1fr); gap: 16px; }
+      .report { grid-template-columns: minmax(0,1fr); padding: 24px 20px; gap: 18px; }
+      .report .btn { width: 100%; min-height: 52px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="top" id="top">
-      <a class="brand" href="./" aria-label="GAMEZH 鳴潮工具箱首頁">
-        <img src="icons/icon-192.png" alt="" width="36" height="36">
-        <div><b>GAMEZH</b><small>鳴潮工具箱</small></div>
+  <header class="hd" id="top">
+    <div class="wrap">
+      <a class="logo" href="./" aria-label="GAMEZH 鳴潮工具箱首頁">
+        <img src="icons/icon-192.png" alt="" width="34" height="34">
+        <span><b>GAMEZH</b><small>鳴潮工具箱</small></span>
       </a>
-      <button class="btn primary" id="installBtn" hidden>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>安裝 App
+      <nav class="nav" aria-label="首頁導覽">
+        <a href="#tools">工具</a>
+        <a href="#hud">電腦版 HUD</a>
+        <a href="#report">回報問題</a>
+        <a href="#about">關於</a>
+      </nav>
+      <button class="btn" id="installBtn" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>安裝 App
       </button>
-    </header>
+    </div>
+  </header>
 
-    <main>
-      <div class="offline" role="status">目前離線中。首頁可以開，但工具需要網路才能使用。</div>
-
-      <a class="hero" href="20260828.html" data-tool="echo">
-        <svg class="rings" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="3"><circle cx="50" cy="50" r="46" stroke="#38bdf8"/><circle cx="50" cy="50" r="34" stroke="#38bdf8" opacity=".6"/><circle cx="50" cy="50" r="22" stroke="#facc15"/></g><circle cx="50" cy="50" r="8" fill="#facc15"/></svg>
-        <span class="tag">主力工具</span>
-        <h1>鳴潮聲骸分析儀</h1>
-        <p>上傳聲骸截圖，馬上知道幾分、適合哪個角色，順便算配裝和 DPS。</p>
-        <span class="btn primary">開始分析 →</span>
-      </a>
-
-      <section id="recentWrap" hidden>
-        <h2>最近使用</h2>
-        <div class="recent" id="recent"></div>
-      </section>
-
-      <h2>所有工具</h2>
-      <nav class="grid" id="grid" aria-label="工具列表"></nav>
-
-      <h2>遇到問題？</h2>
-      <div class="grid">
-        <button type="button" class="card" id="openReport">
-          <div class="ico" style="--c:rgba(248,113,113,.14)" aria-hidden="true">🚨</div>
-          <div class="txt"><b>回報問題</b><span>功能壞掉、數值不對、畫面跑版都可以告訴我們</span></div>
-          <span class="chev" aria-hidden="true">›</span>
-        </button>
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <div class="eyebrow">鳴潮玩家工具箱 · FAN-MADE</div>
+          <h1>養聲骸，<span>少走冤枉路。</span></h1>
+          <p class="lead">GAMEZH 是玩家自製的鳴潮工具。手機上傳截圖就能幫聲骸打分；電腦開著遊戲，<span class="hl">點一下聲骸就知道該不該繼續開</span>。全部免費。</p>
+          <div class="cta">
+            <a class="btn gold" href="20260828.html" data-tool="echo">網頁版聲骸分析儀 →</a>
+            <a class="btn" href="exe.html" data-tool="hud">下載電腦版 HUD</a>
+          </div>
+          <div class="meta"><span>免費</span><span>手機、電腦都能用</span><span>7 萬筆聲骸數據</span></div>
+          <div class="offline" role="status">目前離線中。首頁可以開，但工具需要網路才能使用。</div>
+        </div>
+        <a class="hero-visual" href="exe.html" data-tool="hud" aria-label="看電腦版 HUD 介紹">
+          <div class="frame"><img src="img/hud-ingame.webp" width="1124" height="635" alt="鳴潮背包畫面，GameZH HUD 懸浮在聲骸列表旁邊" fetchpriority="high"></div>
+          <img class="panel-shot" src="img/hud-panel.webp" width="586" height="710" alt="HUD 放大：聲骸 96.2 分 S">
+          <span class="tag">實際遊戲畫面：點一下聲骸，分數就浮在旁邊</span>
+        </a>
       </div>
+    </section>
 
-      <h2>關於 GAMEZH</h2>
-      <section class="about">
-        <h3>給鳴潮（Wuthering Waves）玩家的免費工具</h3>
-        <p>GAMEZH 是玩家自製的鳴潮輔助工具，打開瀏覽器就能用，不用下載安裝，手機、平板、電腦都支援。</p>
-        <ul>
-          <li><b>聲骸分析儀</b>：上傳聲骸截圖就能打分數，比較不同角色的配裝與 Build，並試算 DPS。手機也能用。</li>
-          <li><b>累充 CP 值計算</b>：規劃累充與月卡，算出每一抽的成本，並模擬抽卡結果。</li>
-          <li><b>電腦版懸浮評分</b>：Windows 程式，在遊戲畫面旁開一個小視窗，點一下聲骸就顯示分數，強化到一半也會提醒你要不要停。</li>
-          <li><b>網頁版即時評分</b>：不用安裝，用電腦瀏覽器分享鳴潮的遊戲畫面，邊玩邊看聲骸分數。</li>
-        </ul>
-      </section>
-    </main>
+    <div class="wrap recent-wrap" id="recentWrap" hidden>
+      <h2>最近使用</h2>
+      <div class="recent" id="recent"></div>
+    </div>
 
-    <footer>
-      <p>GAMEZH · 非官方玩家工具，與庫洛遊戲（Kuro Games）無關。<br>鳴潮 / Wuthering Waves 為其權利人之商標。</p>
-    </footer>
-  </div>
+    <section class="sec" id="tools">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="num">01 / 工具</span>
+          <h2>挑一個開始</h2>
+          <p>手機能用的、電腦才能用的都標好了。</p>
+        </div>
+        <nav class="tools" id="grid" aria-label="工具列表"></nav>
+      </div>
+    </section>
+
+    <section class="sec" id="hud">
+      <div class="wrap split">
+        <div>
+          <div class="sec-head" style="margin-bottom:24px;">
+            <span class="num">02 / 電腦版 HUD</span>
+            <h2>還沒開滿，<br>就看得到它開滿會落在哪</h2>
+          </div>
+          <ul class="checks">
+            <li><span><b>點一下就有分數</b>：不用再 Alt + Tab 切視窗算。</span></li>
+            <li><span><b>止損建議</b>：直接告訴你繼續開，還是換胚。</span></li>
+            <li><span><b>開滿落點圖</b>：照官方公開機率算，一張圖看出值不值得。</span></li>
+            <li><span><b>不改遊戲檔案</b>：只看畫面，沒有巨集、不讀記憶體。</span></li>
+          </ul>
+          <a class="btn gold" href="exe.html" data-tool="hud">看完整介紹與下載 →</a>
+        </div>
+        <a href="exe.html#forecast" data-tool="hud" class="frame" aria-label="看開滿落點圖介紹">
+          <img src="img/hud-forecast.webp" width="973" height="682" alt="開滿落點圖：繼續開，達到 A 77.9%，開滿期望 79.7" loading="lazy">
+        </a>
+      </div>
+    </section>
+
+    <section class="sec" id="report">
+      <div class="wrap">
+        <div class="report">
+          <div>
+            <h2>工具壞掉、數值不對？</h2>
+            <p>直接寫下發生什麼事就好，不用填問卷。附截圖會更快找到問題。</p>
+          </div>
+          <button type="button" class="btn gold" id="openReport">🚨 回報問題</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="about">
+      <div class="wrap about">
+        <div>
+          <div class="eyebrow" style="margin-bottom:16px;">關於 GAMEZH</div>
+          <h2>給鳴潮（Wuthering Waves）玩家的免費工具</h2>
+        </div>
+        <div>
+          <p>GAMEZH 是玩家自製的鳴潮輔助工具，從玩家回饋一條一條改出來。網頁版打開瀏覽器就能用，手機、平板、電腦都支援；電腦版可以直接浮在遊戲畫面旁邊。</p>
+          <ul>
+            <li><b>聲骸分析儀</b>：上傳聲骸截圖就能打分數，比較不同角色的配裝與 Build，並試算 DPS。</li>
+            <li><b>累充 CP 值計算</b>：規劃累充與月卡，算出每一抽的成本，並模擬抽卡結果。</li>
+            <li><b>電腦版聲骸評分 HUD</b>：點一下聲骸就顯示評分、止損建議和開滿落點，還能換裝比分、匯出分享圖。</li>
+            <li><b>網頁版即時評分</b>：不用安裝，用電腦瀏覽器分享鳴潮的遊戲畫面，邊玩邊看聲骸分數。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>GAMEZH · 玩家自製的第三方工具，與庫洛遊戲（Kuro Games）無關，亦未獲其贊助或背書。鳴潮 / Wuthering Waves 為其權利人之商標。</p>
+    </div>
+  </footer>
 
   <!-- 回報問題 -->
   <div class="backdrop" id="reportSheet" hidden>
@@ -361,10 +428,10 @@
   <script>
     // 工具清單：之後新增頁面只要改這裡
     var TOOLS = [
-      { id: 'echo',  href: '20260828.html', icon: '🎯', title: '聲骸分析儀',     desc: '上傳截圖看聲骸幾分，順便算配裝和 DPS', badge: '熱門', color: 'rgba(56,189,248,.14)' },
-      { id: 'topup', href: '3.7.html',      icon: '💎', title: '累充 CP 值計算',  desc: '月卡、累充怎麼買最划算，還能模擬抽卡',   color: 'rgba(250,204,21,.13)' },
-      { id: 'hud',   href: 'exe.html',      icon: '🖥️', title: '電腦版懸浮評分',  desc: '下載到電腦，邊玩邊在畫面旁顯示聲骸分數', badge: '電腦', color: 'rgba(167,139,250,.14)' },
-      { id: 'live',  href: 'ON1.html',      icon: '📡', title: '網頁版即時評分',  desc: '免安裝，分享遊戲畫面就能邊玩邊評分',     badge: '電腦', color: 'rgba(244,114,182,.13)' }
+      { id: 'echo',  href: '20260828.html', icon: '🎯', title: '聲骸分析儀',          desc: '上傳聲骸截圖，馬上知道幾分、適合哪個角色，順便算配裝和 DPS。', tags: ['熱門', '手機可用'], color: 'rgba(92,200,255,.28)' },
+      { id: 'hud',   href: 'exe.html',      icon: '🖥️', title: '電腦版聲骸評分 HUD',  desc: '開著遊戲點一下聲骸，評分、止損建議、開滿落點直接浮在畫面旁。', tags: ['電腦'], img: 'img/hud-score.webp' },
+      { id: 'topup', href: '3.7.html',      icon: '💎', title: '累充 CP 值計算',      desc: '月卡、累充怎麼買最划算，算出每一抽的成本，還能模擬抽卡。', tags: ['手機可用'], color: 'rgba(255,210,63,.22)' },
+      { id: 'live',  href: 'ON1.html',      icon: '📡', title: '網頁版即時評分',      desc: '免安裝，用電腦瀏覽器分享遊戲畫面，邊玩邊看聲骸分數。', tags: ['電腦'], color: 'rgba(255,107,180,.22)' }
     ];
     var byId = {};
     TOOLS.forEach(function (t) { byId[t.id] = t; });
@@ -390,10 +457,12 @@
 
     // 工具卡片
     TOOLS.forEach(function (t) {
-      $('grid').appendChild(el('a', { class: 'card', href: t.href, 'data-tool': t.id },
-        '<div class="ico" style="--c:' + t.color + '" aria-hidden="true">' + t.icon + '</div>' +
-        '<div class="txt"><b>' + esc(t.title) + '</b><span>' + esc(t.desc) + '</span></div>' +
-        (t.badge ? '<em class="badge">' + esc(t.badge) + '</em>' : '<span class="chev" aria-hidden="true">›</span>')));
+      var pic = t.img
+        ? '<div class="pic"><img src="' + t.img + '" alt="" loading="lazy"></div>'
+        : '<div class="pic art" style="--c:' + t.color + '" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="big">' + t.icon + '</span></div>';
+      var tags = (t.tags || []).map(function (g) { return '<span' + (g === '電腦' ? ' class="pc"' : '') + '>' + esc(g) + '</span>'; }).join('');
+      $('grid').appendChild(el('a', { class: 'tool', href: t.href, 'data-tool': t.id },
+        pic + '<div class="body"><div class="tags">' + tags + '</div><h3>' + esc(t.title) + '</h3><p>' + esc(t.desc) + '</p><span class="go">開啟 →</span></div>'));
     });
 
     // 最近使用（只存在這台裝置）
@@ -412,7 +481,7 @@
       list.forEach(function (id) {
         var t = byId[id];
         box.appendChild(el('a', { href: t.href, 'data-tool': t.id },
-          '<span class="ico" style="--c:' + t.color + '" aria-hidden="true">' + t.icon + '</span>' + esc(t.title)));
+          '<span class="ico" aria-hidden="true">' + t.icon + '</span>' + esc(t.title)));
       });
     }
     document.addEventListener('click', function (e) {
