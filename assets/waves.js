@@ -15,16 +15,16 @@
 
   // 金線：每條有自己的基準高度、振幅、波長、速度
   var LINES = [];
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < 7; i++) {
     LINES.push({
-      base: 0.30 + i * 0.045,
+      base: 0.34 + i * 0.05,
       amp: 0.035 + (i % 3) * 0.012,
       len: 0.9 + (i % 4) * 0.22,
-      speed: 0.10 + (i % 5) * 0.025,
+      speed: 0.05 + (i % 5) * 0.015,
       phase: i * 0.9,
       tilt: -0.10 + i * 0.012,
-      alpha: 0.20 + (i % 3) * 0.10,
-      width: i % 4 === 0 ? 1.4 : 0.9
+      alpha: 0.10 + (i % 3) * 0.06,
+      width: i % 4 === 0 ? 1.1 : 0.7
     });
   }
 
@@ -39,7 +39,7 @@
     var g = ctx.createLinearGradient(0, 0, W, 0);
     g.addColorStop(0, 'rgba(227,205,154,0)');
     g.addColorStop(0.25, 'rgba(227,205,154,' + alpha + ')');
-    g.addColorStop(0.6, 'rgba(240,222,176,' + (alpha * 1.2) + ')');
+    g.addColorStop(0.6, 'rgba(236,214,166,' + (alpha * 1.15) + ')');
     g.addColorStop(1, 'rgba(227,205,154,0)');
     return g;
   }
@@ -56,6 +56,10 @@
           + Math.sin(u * Math.PI * 5.3 + t * L.speed * 1.7 + L.phase * 2) * H * L.amp * 0.25;
         if (x === -step) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
+      // 先畫一層寬而淡的光暈，再畫細線，看起來柔和不刺眼
+      ctx.strokeStyle = goldStroke(L.alpha * 0.22);
+      ctx.lineWidth = 6;
+      ctx.stroke();
       ctx.strokeStyle = goldStroke(L.alpha);
       ctx.lineWidth = L.width;
       ctx.stroke();
@@ -71,13 +75,13 @@
       var y0 = top + Math.pow(depth, 1.6) * (H - top);
       var gap = 7 + depth * 16;
       var size = 0.5 + depth * 1.4;
-      var a = 0.05 + depth * 0.32;
+      var a = 0.03 + depth * 0.16;
       ctx.fillStyle = 'rgba(227,205,154,' + a.toFixed(3) + ')';
       for (var x = (r % 2) * gap / 2; x < W; x += gap) {
         var u = x / W;
         var y = y0
-          + Math.sin(u * 7 + t * 0.55 + r * 0.35) * (4 + depth * 14)
-          + Math.sin(u * 2.3 - t * 0.3) * (3 + depth * 8);
+          + Math.sin(u * 7 + t * 0.32 + r * 0.35) * (4 + depth * 14)
+          + Math.sin(u * 2.3 - t * 0.18) * (3 + depth * 8);
         ctx.fillRect(x, y, size, size);
       }
     }

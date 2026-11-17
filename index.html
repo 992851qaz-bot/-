@@ -77,6 +77,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/flow-nav.css">
   <style>
     :root {
       --bg: #0b0e17; --bg-2: #10152a; --panel: #131a2e; --panel-2: #182039;
@@ -243,7 +244,9 @@
     .toast[hidden] { display: none; }
 
     /* gold waves */
-    .gz-waves { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .gz-waves { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 55% 42% at 50% 46%, rgba(0,0,0,.35), #000 80%);
+          mask-image: radial-gradient(ellipse 55% 42% at 50% 46%, rgba(0,0,0,.35), #000 80%); }
     .hd { z-index: 20; }
     main, footer { position: relative; z-index: 1; }
 
@@ -335,6 +338,13 @@
 </head>
 <body>
   <canvas class="gz-waves" aria-hidden="true"></canvas>
+  <nav class="flow-nav" aria-label="頁面導覽">
+    <a href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg><span class="fn-label">首頁</span></a>
+    <a href="#analyzer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 15l3-3 3 2 4-5"/></svg><span class="fn-label">分析儀</span></a>
+    <a href="#hud"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="fn-label">HUD</span></a>
+    <a href="#tools"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg><span class="fn-label">工具</span></a>
+    <a href="#report"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg><span class="fn-label">回報</span></a>
+  </nav>
   <header class="hd" id="top">
     <div class="wrap">
       <a class="logo" href="./" aria-label="GAMEZH 鳴潮工具箱首頁">
@@ -831,5 +841,6 @@
     }
   </script>
   <script src="assets/waves.js" defer></script>
+  <script src="assets/flow-nav.js" defer></script>
 </body>
 </html>
