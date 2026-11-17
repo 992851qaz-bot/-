@@ -2,7 +2,7 @@
  * 頁面上所有 [data-dl] 連結：
  *   1. 讀 GitHub Releases 最新版，填入檔名 [data-dl-name]、大小 [data-dl-size]、版本 [data-dl-ver]/[data-latest-ver]
  *   2. 點下去跳出「選擇下載方式」
- *      - 電腦：直接下載安裝檔／Microsoft Store／Google 雲端／「我不是電腦，切換為手機」
+ *      - 電腦：Microsoft Store（推薦）／直接下載安裝檔／Google 雲端／「我不是電腦，切換為手機」
  *      - 手機：Google Play 安裝／APK 下載／雲端下載（手機版測試中 → 填 Email 申請測試資格）／「我不是手機，切換為電腦」
  *   3. 申請測試資格送到 Cloudflare Worker 的 /api/beta，由伺服器轉給 Discord。
  *      Discord Webhook 只存在 Cloudflare 的加密變數裡，網頁原始碼看不到。
@@ -143,10 +143,10 @@
     var ver = latest && latest.ver ? latest.ver : '最新版';
     if (mode === 'pc') {
       var direct = onWorker ? 'download/windows' : (latest ? latest.url : RELEASES);
-      var file = latest ? esc(latest.name) + (sizeText(latest) ? ' · ' + sizeText(latest) : '') : '最快，下載完直接安裝';
+      var file = latest ? esc(latest.name) + (sizeText(latest) ? ' · ' + sizeText(latest) : '') : '下載安裝檔自己安裝';
       box.innerHTML = head('選擇下載方式', 'GameZH 懸浮分析 · ' + esc(ver) + ' · Windows 電腦') +
-        opt('a', 'href="' + direct + '"', 'dl', '直接下載安裝檔', file, '<span class="tag">推薦</span>', true) +
-        opt('a', 'href="' + STORE + '" target="_blank" rel="noopener"', 'ms', 'Microsoft Store', '從微軟商城安裝，之後會自動更新', '<span class="arrow">↗</span>') +
+        opt('a', 'href="' + STORE + '" target="_blank" rel="noopener"', 'ms', 'Microsoft Store', '經微軟審核，安裝後會自動更新', '<span class="tag">推薦</span>', true) +
+        opt('a', 'href="' + direct + '"', 'dl', '直接下載安裝檔', file, '<span class="arrow">↓</span>') +
         opt('a', 'href="' + DRIVE + '" target="_blank" rel="noopener"', 'drive', 'Google 雲端硬碟', '備用載點，另外兩個連不上時用', '<span class="arrow">↗</span>') +
         '<button type="button" class="gzdl-swap" data-swap="phone">' + svg('phone', 18) + '我不是電腦，切換為手機選項</button>' +
         '<p class="gzdl-ft">裝好後到 <a href="' + DISCORD + '" target="_blank" rel="noopener">Discord 群組</a> 輸入 /授權碼 領授權碼，就能開始用。</p>';

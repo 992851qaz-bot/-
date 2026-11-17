@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/flow-nav.css?v=20261117g">
+<link rel="stylesheet" href="assets/flow-nav.css?v=20261117h">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -197,10 +197,12 @@ h1, h2, h3.serif { font-family: var(--serif); font-weight: 900; letter-spacing: 
 .tiers small { display: block; font-size: 12px; color: var(--muted); line-height: 1.45; }
 .t-sss b { color: #ffd23f; } .t-s b { color: #c08bff; } .t-a b { color: var(--cyan); } .t-b b { color: var(--green); } .t-c b { color: var(--dim); }
 
-.cases { margin-top: 56px; }
-.cases-cap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 18px; }
-.cases-cap b { display: block; font-size: 17px; }
-.cases-cap span { font-size: 14.5px; }
+.cases { margin-top: 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.case { margin: 0; }
+.case .shot { box-shadow: 0 18px 40px rgba(0, 0, 0, .45); }
+.case figcaption { margin-top: 14px; }
+.case figcaption b { display: block; font-size: 17px; }
+.case figcaption span { font-size: 14.5px; }
 .c-go { color: var(--green); } .c-mid { color: #ffb84d; } .c-stop { color: var(--red); }
 
 /* ---------- feature grid ---------- */
@@ -340,7 +342,7 @@ main, footer { position: relative; z-index: 1; }
   .tiers { gap: 4px; }
   .tiers b { font-size: 17px; }
   .tiers small { font-size: 11px; }
-  .cases-cap { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .cases { grid-template-columns: minmax(0, 1fr); gap: 26px; margin-top: 40px; }
   .feat { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .steps { grid-template-columns: minmax(0, 1fr); }
   .step { border-left: 0; border-top: 1px solid var(--line); padding: 22px 20px; }
@@ -475,14 +477,18 @@ main, footer { position: relative; z-index: 1; }
         </div>
       </div>
       <div class="cases">
-        <figure class="shot" data-full="img/hud-forecast-cases.webp">
-          <img width="1400" height="382" src="img/hud-forecast-cases.webp" alt="三顆胚子的開滿落點比較：雙暴開局、普通開局、三條白詞條" loading="lazy">
+        <figure class="case">
+          <div class="shot" data-full="img/hud-case-1.webp"><img src="img/hud-case-1.webp" width="580" height="372" alt="雙暴開局的開滿落點圖：繼續開，開滿期望 79.7" loading="lazy"></div>
+          <figcaption><b>雙暴開局</b><span class="c-go">曲線擠在右邊：放心繼續開</span></figcaption>
         </figure>
-        <div class="cases-cap">
-          <div><b>雙暴開局</b><span class="c-go">曲線擠在右邊：放心繼續開</span></div>
-          <div><b>普通開局</b><span class="c-mid">曲線偏左、尾巴長：能開，但拚高分機會小</span></div>
-          <div><b>三條白詞條</b><span class="c-stop">曲線貼在左邊：直接換胚</span></div>
-        </div>
+        <figure class="case">
+          <div class="shot" data-full="img/hud-case-2.webp"><img src="img/hud-case-2.webp" width="580" height="372" alt="普通開局的開滿落點圖：繼續開，開滿期望 40.1" loading="lazy"></div>
+          <figcaption><b>普通開局</b><span class="c-mid">曲線偏左、尾巴長：能開，但拚高分機會小</span></figcaption>
+        </figure>
+        <figure class="case">
+          <div class="shot" data-full="img/hud-case-3.webp"><img src="img/hud-case-3.webp" width="580" height="372" alt="三條白詞條的開滿落點圖：建議換胚，開滿期望 19.4" loading="lazy"></div>
+          <figcaption><b>三條白詞條</b><span class="c-stop">曲線貼在左邊：直接換胚</span></figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -547,7 +553,7 @@ main, footer { position: relative; z-index: 1; }
         <li>
           <div class="g-txt">
             <b>下載並安裝</b>
-            <p>按「立即下載」，選一個下載方式：<span class="hl">直接下載安裝檔</span>最快；想自動更新就選 Microsoft Store；前兩個連不上再用 Google 雲端。</p>
+            <p>按「立即下載」，選一個下載方式：推薦 <span class="hl">Microsoft Store</span>，經微軟審核、之後會自動更新；也可以直接下載安裝檔；前兩個連不上再用 Google 雲端。</p>
             <p class="g-tip">如果 Windows 跳出「Windows 已保護您的電腦」，按「其他資訊」→「仍要執行」。不想看到這個提示，可以改用 Microsoft Store 版本。</p>
           </div>
         </li>
@@ -736,8 +742,8 @@ main, footer { position: relative; z-index: 1; }
 })();
 
 </script>
-<script src="assets/waves.js?v=20261117g" defer></script>
-<script src="assets/flow-nav.js?v=20261117g" defer></script>
-<script src="assets/download.js?v=20261117g" defer></script>
+<script src="assets/waves.js?v=20261117h" defer></script>
+<script src="assets/flow-nav.js?v=20261117h" defer></script>
+<script src="assets/download.js?v=20261117h" defer></script>
 </body>
 </html>
