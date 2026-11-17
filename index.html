@@ -273,7 +273,7 @@
         <svg class="rings" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="3"><circle cx="50" cy="50" r="46" stroke="#38bdf8"/><circle cx="50" cy="50" r="34" stroke="#38bdf8" opacity=".6"/><circle cx="50" cy="50" r="22" stroke="#facc15"/></g><circle cx="50" cy="50" r="8" fill="#facc15"/></svg>
         <span class="tag">主力工具</span>
         <h1>鳴潮聲骸分析儀</h1>
-        <p>聲骸評分、Build 攻略與 DPS 試算。</p>
+        <p>上傳聲骸截圖，馬上知道幾分、適合哪個角色，順便算配裝和 DPS。</p>
         <span class="btn primary">開始分析 →</span>
       </a>
 
@@ -299,10 +299,10 @@
         <h3>給鳴潮（Wuthering Waves）玩家的免費工具</h3>
         <p>GAMEZH 是玩家自製的鳴潮輔助工具，打開瀏覽器就能用，不用下載安裝，手機、平板、電腦都支援。</p>
         <ul>
-          <li><b>聲骸分析儀</b>：替聲骸打分數，比較不同角色的配裝與 Build，並試算 DPS。</li>
-          <li><b>累充 CP 值計算</b>：規劃累充與月卡，計算每一抽的成本，並模擬抽卡結果。</li>
-          <li><b>直播即時辨識 HUD</b>：直播時即時辨識畫面上的聲骸數值。</li>
-          <li><b>HUD v2.1</b>：光學辨識評分，記錄角色面板。</li>
+          <li><b>聲骸分析儀</b>：上傳聲骸截圖就能打分數，比較不同角色的配裝與 Build，並試算 DPS。手機也能用。</li>
+          <li><b>累充 CP 值計算</b>：規劃累充與月卡，算出每一抽的成本，並模擬抽卡結果。</li>
+          <li><b>電腦版懸浮評分</b>：Windows 程式，在遊戲畫面旁開一個小視窗，點一下聲骸就顯示分數，強化到一半也會提醒你要不要停。</li>
+          <li><b>網頁版即時評分</b>：不用安裝，用電腦瀏覽器分享鳴潮的遊戲畫面，邊玩邊看聲骸分數。</li>
         </ul>
       </section>
     </main>
@@ -361,10 +361,10 @@
   <script>
     // 工具清單：之後新增頁面只要改這裡
     var TOOLS = [
-      { id: 'echo',  href: '20260828.html', icon: '🎯', title: '聲骸分析儀',      desc: '聲骸評分・Build 攻略・DPS 試算', badge: '熱門', color: 'rgba(56,189,248,.14)' },
-      { id: 'topup', href: '3.7.html',      icon: '💎', title: '累充 CP 值計算',   desc: '累充累儲規劃與抽卡模擬',         color: 'rgba(250,204,21,.13)' },
-      { id: 'live',  href: 'ON1.html',      icon: '📡', title: '直播即時辨識 HUD', desc: '直播串流中即時辨識聲骸',         color: 'rgba(244,114,182,.13)' },
-      { id: 'hud',   href: 'exe.html',      icon: '🖥️', title: 'HUD v2.1',         desc: '光學評分與面板紀錄',             color: 'rgba(167,139,250,.14)' }
+      { id: 'echo',  href: '20260828.html', icon: '🎯', title: '聲骸分析儀',     desc: '上傳截圖看聲骸幾分，順便算配裝和 DPS', badge: '熱門', color: 'rgba(56,189,248,.14)' },
+      { id: 'topup', href: '3.7.html',      icon: '💎', title: '累充 CP 值計算',  desc: '月卡、累充怎麼買最划算，還能模擬抽卡',   color: 'rgba(250,204,21,.13)' },
+      { id: 'hud',   href: 'exe.html',      icon: '🖥️', title: '電腦版懸浮評分',  desc: '下載到電腦，邊玩邊在畫面旁顯示聲骸分數', badge: '電腦', color: 'rgba(167,139,250,.14)' },
+      { id: 'live',  href: 'ON1.html',      icon: '📡', title: '網頁版即時評分',  desc: '免安裝，分享遊戲畫面就能邊玩邊評分',     badge: '電腦', color: 'rgba(244,114,182,.13)' }
     ];
     var byId = {};
     TOOLS.forEach(function (t) { byId[t.id] = t; });

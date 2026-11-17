@@ -2,8 +2,19 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GAMEZH HUD v2.1 | 鳴潮聲骸即時光學評分與面板紀錄系統</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>鳴潮聲骸懸浮評分（電腦版）｜GAMEZH</title>
+<meta name="description" content="放在鳴潮遊戲畫面旁的小視窗：在背包或培養畫面點一下聲骸，馬上告訴你這顆幾分、值不值得繼續強化，還能自動記錄角色面板。Windows 電腦版免費下載。">
+<link rel="canonical" href="https://992851qaz-bot.github.io/-/exe.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GAMEZH 鳴潮工具箱">
+<meta property="og:title" content="鳴潮聲骸懸浮評分（電腦版）｜GAMEZH">
+<meta property="og:description" content="邊玩邊看聲骸分數，強化到一半就知道要不要停。Windows 免費下載。">
+<meta property="og:url" content="https://992851qaz-bot.github.io/-/exe.html">
+<meta property="og:image" content="https://992851qaz-bot.github.io/-/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#05080f">
+<link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
 <style>
 :root {
   --bg-core: #05080f;
@@ -883,6 +894,74 @@ footer {
   font-size: 12px;
   color: var(--text-muted);
 }
+
+/* ==================== 文案區塊與手機版排版 ==================== */
+.hero-header h1 small {
+  display: inline-block; margin-left: 10px; vertical-align: middle;
+  font-size: 14px; font-weight: 800; padding: 3px 10px; border-radius: 999px;
+  -webkit-text-fill-color: #04131c; background: var(--cyan); letter-spacing: 0;
+}
+.hero-header p b { color: #fff; }
+.hero-points { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 auto 22px; }
+.hero-points li { font-size: 13px; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: var(--text-secondary); }
+.mobile-note {
+  display: none; margin: 18px auto 0; max-width: 560px; gap: 10px; align-items: flex-start; text-align: left;
+  padding: 12px 14px; border-radius: 12px; background: rgba(250,204,21,.1); border: 1px solid rgba(250,204,21,.35);
+  color: #fde68a; font-size: 14px; line-height: 1.55;
+}
+.mobile-note b { color: #fff; }
+@media (hover: none) and (pointer: coarse), (max-width: 760px) { .mobile-note { display: flex; } }
+.sec-intro { margin: 8px 0 14px; }
+.sec-intro h2 { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+.sec-intro p { font-size: 14px; color: var(--text-secondary); }
+.tc-spec { font-family: inherit !important; letter-spacing: 0 !important; }
+
+@media (max-width: 760px) {
+  body { font-size: 15px; }
+  .container { padding: 0 max(16px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-right)); }
+  .navbar { padding: 10px 16px; gap: 10px; }
+  .nav-brand { gap: 8px; font-size: 15px; min-width: 0; }
+  .nav-brand span { white-space: nowrap; }
+  .brand-tag { font-family: inherit; font-size: 11px; }
+  .nav-menu { gap: 0; }
+  .nav-menu .nav-link { display: none; }
+  .nav-btn-dc { padding: 8px 12px; min-height: 40px; white-space: nowrap; }
+}
+@media (max-width: 440px) {
+  .brand-tag { display: none; }
+  .nav-btn-dc span { font-size: 12px; }
+  .bulletin-panel { padding: 12px; margin-top: 14px; }
+  .b-item { align-items: flex-start; }
+  .hero-header { padding: 26px 0 18px; }
+  .hero-header h1 { font-size: 27px; line-height: 1.3; }
+  .hero-header h1 small { font-size: 12px; margin-left: 6px; }
+  .hero-header p { font-size: 15px; line-height: 1.7; text-align: left; }
+  .dl-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .dl-actions .btn-action { justify-content: center; min-height: 48px; width: 100%; }
+  .simulator-shell { padding: 12px; overflow: hidden; min-width: 0; }
+  .qt-combo-row { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .qt-combo { min-width: 0; width: 100%; }
+  .dual-section > * { min-width: 0; }
+  .sop-item > div { min-width: 0; overflow-wrap: anywhere; }
+  .sim-workspace > * { min-width: 0; }
+  .sim-nav-bar { flex-direction: column; align-items: stretch; gap: 10px; min-width: 0; }
+  .sim-tabs { flex-wrap: nowrap; overflow-x: auto; min-width: 0; max-width: 100%; padding-bottom: 4px; scrollbar-width: none; }
+  .sim-tabs::-webkit-scrollbar { display: none; }
+  .sim-tab { flex: none; min-height: 40px; }
+  .sim-auto-ctrl { justify-content: center; min-height: 40px; }
+  .vp-header { font-size: 12px; }
+  .vp-latency { display: none; }
+  .game-viewport { min-height: 0; padding: 12px; }
+  .ocr-meta-bar { flex-direction: column; gap: 2px; }
+  .sec-header { flex-direction: column; align-items: flex-start; gap: 4px; margin: 40px 0 18px; }
+  .sec-header h2 { font-size: 21px; }
+  .sec-header span.sub { font-family: inherit; font-size: 13px; color: var(--text-secondary); }
+  .tech-card p, .sop-item p { font-size: 14px; line-height: 1.7; }
+  .sop-item { grid-template-columns: 34px 1fr; padding: 14px; }
+  .tier-row { grid-template-columns: auto 1fr; row-gap: 2px; font-size: 13.5px; }
+  .tier-row > span:nth-child(2) { text-align: right; }
+  .tier-row > span:nth-child(3) { grid-column: 1 / -1; }
+}
 </style>
 </head>
 <body>
@@ -890,16 +969,16 @@ footer {
 <nav class="navbar">
   <div class="nav-brand">
     <svg class="svg-ic lg" style="color:#38bdf8;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-    <span>GAMEZH HUD</span>
-    <span class="brand-tag">v2.1.0 RELEASE</span>
+    <a href="./" style="display:contents;"><span>GAMEZH 懸浮評分</span></a>
+    <span class="brand-tag">電腦版 v2.1</span>
   </div>
   <div class="nav-menu">
-    <a href="#simulator">實機互動演示</a>
-    <a href="#architecture">核心架構與面板辨識</a>
-    <a href="#deployment">標準作業流程</a>
+    <a href="#simulator" class="nav-link">效果展示</a>
+    <a href="#architecture" class="nav-link">功能介紹</a>
+    <a href="#deployment" class="nav-link">怎麼用</a>
     <a href="https://discord.gg/WWewHKwMwa" target="_blank" class="nav-btn-dc">
       <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>ZHDC 授權與支援群</span>
+      <span>加入 Discord</span>
     </a>
   </div>
 </nav>
@@ -910,21 +989,21 @@ footer {
   <div class="bulletin-panel">
     <div class="bulletin-badge">
       <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>SYSTEM NOTICE // v2.2 預告</span>
+      <span>📢 v2.2 更新預告</span>
     </div>
     <div class="bulletin-items">
       <div class="b-item cyan">
         <svg class="svg-ic" style="color:var(--cyan);" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         <div>
-          <strong style="color:#fff;">評分計算補償修正：</strong>
-          <span style="color:var(--text-secondary);">經查核目前版本少加了分數（現況評分較嚴格），將於 <strong>v2.2 版本</strong>修復補回標準分值。</span>
+          <strong style="color:#fff;">分數偏低：</strong>
+          <span style="color:var(--text-secondary);">目前版本少算了一些分，所以分數會比較嚴格，<strong>v2.2</strong> 會補回來。</span>
         </div>
       </div>
       <div class="b-item violet">
         <svg class="svg-ic" style="color:var(--violet);" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
         <div>
-          <strong style="color:#fff;">指定視窗鎖定修復：</strong>
-          <span style="color:var(--text-secondary);">目前版本切換指定視窗後仍固定擷取全螢幕，將於 <strong>v2.2 版本</strong>修復視窗座標鎖定。</span>
+          <strong style="color:#fff;">指定視窗沒作用：</strong>
+          <span style="color:var(--text-secondary);">選了「指定視窗」後還是會抓整個螢幕，<strong>v2.2</strong> 會修好。</span>
         </div>
       </div>
     </div>
@@ -932,12 +1011,15 @@ footer {
 
   <!-- 主視覺區 -->
   <div class="hero-header">
-    <h1>鳴潮聲骸即時懸浮評分與角色面板紀錄系統</h1>
-    <p>基於 RapidOCR 2.5x 超分辨率銳化與 PyQt6 硬件加速疊層。支援聲骸 8 檔位即時評分、階段性開孔止損、雙聲骸同框比對、官方推薦面板吸取與角色六維屬性/武器庫自動歸檔。</p>
+    <h1>鳴潮聲骸懸浮評分<small>電腦版</small></h1>
+    <p>一個放在遊戲畫面旁邊的小視窗。在背包或培養畫面點一下聲骸，馬上告訴你<b>這顆幾分、值不值得繼續強化</b>；兩顆聲骸放一起還能直接比哪顆好，角色面板跟武器也會順手幫你記下來。</p>
+    <ul class="hero-points">
+      <li>✅ 免費</li><li>🖥️ Windows 電腦版鳴潮</li><li>🛡️ 只看螢幕畫面，不碰遊戲檔案</li>
+    </ul>
     <div class="dl-actions">
       <a href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" class="btn-action btn-ms">
         <svg class="svg-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
-        <span>Microsoft Store 微軟載點</span>
+        <span>Microsoft Store 下載（推薦）</span>
       </a>
       <a href="https://drive.google.com/drive/folders/17pFcXxshUHvVkvNWgxLp6Lpw0tpbyRNR?usp=sharing" target="_blank" class="btn-action btn-cloud">
         <svg class="svg-ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -945,9 +1027,18 @@ footer {
       </a>
       <a href="https://discord.gg/WWewHKwMwa" target="_blank" class="btn-action btn-auth">
         <svg class="svg-ic" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-        <span>前往 DC 領取授權碼 (/授權碼)</span>
+        <span>到 Discord 領授權碼</span>
       </a>
     </div>
+    <a class="mobile-note" href="20260828.html">
+      <span>📱</span>
+      <span><b>用手機在看？</b>這是電腦程式，手機裝不了。手機可以改用<u>網頁版聲骸分析儀</u>，上傳截圖一樣能評分 →</span>
+    </a>
+  </div>
+
+  <div class="sec-intro">
+    <h2>實際效果</h2>
+    <p>下面是模擬畫面：左邊當作遊戲，右邊就是評分小視窗。點左邊的卡片或上面的分頁，看看各種情況會怎麼顯示。</p>
   </div>
 
   <!-- 互動式實機系統模擬器 (含聲骸評分、止損、角色面板辨識、雙聲骸對比、推薦面板辨識、就地編輯) -->
@@ -956,32 +1047,32 @@ footer {
       <div class="sim-tabs">
         <button class="sim-tab active" id="stab-0" onclick="manualSelectMode(0)">
           <svg class="svg-ic sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <span>01. SSS 滿孔評分</span>
+          <span>滿孔評分</span>
         </button>
         <button class="sim-tab" id="stab-1" onclick="manualSelectMode(1)">
           <svg class="svg-ic sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-          <span>02. +10 開孔止損</span>
+          <span>強化中途止損</span>
         </button>
         <button class="sim-tab" id="stab-2" onclick="manualSelectMode(2)">
           <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
-          <span>03. 角色面板與武器辨識</span>
+          <span>角色面板記錄</span>
         </button>
         <button class="sim-tab" id="stab-3" onclick="manualSelectMode(3)">
           <svg class="svg-ic sm" viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-          <span>04. 雙聲骸同框對比</span>
+          <span>兩顆比較</span>
         </button>
         <button class="sim-tab" id="stab-4" onclick="manualSelectMode(4)">
           <svg class="svg-ic sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-          <span>05. 官方推薦面板辨識</span>
+          <span>讀官方推薦</span>
         </button>
         <button class="sim-tab" id="stab-5" onclick="manualSelectMode(5)">
           <svg class="svg-ic sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          <span>06. 暫停即就地編輯</span>
+          <span>手動修正</span>
         </button>
       </div>
       <div class="sim-auto-ctrl" id="auto-btn" onclick="toggleSimAuto()">
         <svg class="svg-ic sm" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span id="auto-txt">AUTO-DEMO RUNNING (點擊左方區塊可手動測試)</span>
+        <span id="auto-txt">自動播放中・點這裡暫停</span>
       </div>
     </div>
 
@@ -991,16 +1082,16 @@ footer {
         <div class="vp-header">
           <div style="display:flex; align-items:center; gap:8px;">
             <svg class="svg-ic sm" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            <span>WUTHERING WAVES // 遊戲畫面模擬器 (點擊下方項目觸發 OCR)</span>
+            <span>模擬遊戲畫面（點下面的卡片試試）</span>
           </div>
-          <span style="font-family:var(--font-mono); color:#10b981;">DEBOUNCE: 0.10s</span>
+          <span class="vp-latency" style="font-family:var(--font-mono); color:#10b981;">反應 0.1 秒</span>
         </div>
 
         <div class="vp-targets-grid">
           <div class="vp-card active" id="vpc-0" onclick="manualSelectMode(0)">
             <div class="vp-card-head">
               <span style="color:var(--amber);">COST 4</span>
-              <span style="color:var(--cyan);">SLOT #1</span>
+              <span style="color:var(--cyan);">1 號位</span>
             </div>
             <div class="vp-card-title">無妄者 +25</div>
             <div class="vp-card-sub">右側背包 / 滿孔雙暴</div>
@@ -1009,7 +1100,7 @@ footer {
           <div class="vp-card" id="vpc-1" onclick="manualSelectMode(1)">
             <div class="vp-card-head">
               <span style="color:var(--violet);">COST 3</span>
-              <span style="color:var(--crimson);">LEFT PANEL</span>
+              <span style="color:var(--crimson);">培養畫面</span>
             </div>
             <div class="vp-card-title">暗鬃狼 +10</div>
             <div class="vp-card-sub">左側培養 / 前2孔防禦</div>
@@ -1017,8 +1108,8 @@ footer {
 
           <div class="vp-card" id="vpc-2" onclick="manualSelectMode(2)">
             <div class="vp-card-head">
-              <span style="color:var(--cyan);">CHAR DETAIL</span>
-              <span style="color:var(--emerald);">PANEL + WEP</span>
+              <span style="color:var(--cyan);">角色詳情</span>
+              <span style="color:var(--emerald);">面板＋武器</span>
             </div>
             <div class="vp-card-title">屬性詳情與武器</div>
             <div class="vp-card-sub">角色六維面板自動歸檔</div>
@@ -1026,8 +1117,8 @@ footer {
 
           <div class="vp-card" id="vpc-3" onclick="manualSelectMode(3)">
             <div class="vp-card-head">
-              <span style="color:var(--cyan);">COMPARE</span>
-              <span style="color:var(--emerald);">+17.2 PTS</span>
+              <span style="color:var(--cyan);">比較</span>
+              <span style="color:var(--emerald);">+17.2 分</span>
             </div>
             <div class="vp-card-title">雙聲骸換裝比對</div>
             <div class="vp-card-sub">左側待選 vs 右側現裝</div>
@@ -1035,8 +1126,8 @@ footer {
 
           <div class="vp-card" id="vpc-4" onclick="manualSelectMode(4)">
             <div class="vp-card-head">
-              <span style="color:var(--amber);">OFFICIAL REC</span>
-              <span style="color:var(--cyan);">AUTO IMPORT</span>
+              <span style="color:var(--amber);">官方推薦</span>
+              <span style="color:var(--cyan);">自動導入</span>
             </div>
             <div class="vp-card-title">聲骸推薦面板</div>
             <div class="vp-card-sub">一鍵導入主詞條與權重</div>
@@ -1044,8 +1135,8 @@ footer {
 
           <div class="vp-card" id="vpc-5" onclick="manualSelectMode(5)">
             <div class="vp-card-head">
-              <span style="color:var(--amber);">IN-PLACE</span>
-              <span style="color:var(--violet);">8-TIER LOCK</span>
+              <span style="color:var(--amber);">手動修正</span>
+              <span style="color:var(--violet);">官方 8 檔</span>
             </div>
             <div class="vp-card-title">就地編輯重算</div>
             <div class="vp-card-sub">官方8檔位即時連動</div>
@@ -1056,8 +1147,8 @@ footer {
         <div class="ocr-capture-zone">
           <div class="ocr-beam" id="ocr-laser"></div>
           <div class="ocr-meta-bar">
-            <span id="ocr-zone-label">[ROI CAPTURE] 右側背包卡片 (x:0.76~0.98, y:0.11~0.49)</span>
-            <span id="ocr-conf-label">2.5x LANCZOS | CONF: 99.2%</span>
+            <span id="ocr-zone-label">📷 正在讀：右邊背包的聲骸卡片</span>
+            <span id="ocr-conf-label">辨識信心 99.2%</span>
           </div>
           <div class="ocr-raw-box" id="ocr-raw-text">
             &gt; [MAIN] 暴擊傷害 44.0% | 攻擊 150 (COST 4 鎖定)<br>
@@ -1250,9 +1341,9 @@ footer {
   <div class="sec-header" id="architecture">
     <h2>
       <svg class="svg-ic lg" style="color:var(--cyan);" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-      <span>核心辨識架構與系統亮點</span>
+      <span>它能幫你做什麼</span>
     </h2>
-    <span class="sub">CORE OCR ENGINE &amp; TELEMETRY ARCHITECTURE</span>
+    <span class="sub">六個常用功能</span>
   </div>
 
   <div class="tech-grid">
@@ -1261,10 +1352,10 @@ footer {
         <div class="tc-icon-box">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
         </div>
-        <h3>角色面板與武器庫自動辨識</h3>
+        <h3>角色面板自動記錄</h3>
       </div>
-      <p>獨創狀態機追蹤：於遊戲內點擊「角色詳情」進入「屬性詳情」時，自動擷取生命、攻擊、防禦、共鳴效率、暴擊、暴傷六維數值，切換至武器分頁同步記錄武器名稱與諧振階級。</p>
-      <span class="tc-spec">STATE MACHINE // 6-STATS + WEAPON ARCHIVE</span>
+      <p>在遊戲裡打開角色的「屬性詳情」，生命、攻擊、防禦、共鳴效率、暴擊、暴傷就會自動記下來；切到武器頁，武器和諧振階級也一起存，不用自己抄。</p>
+      <span class="tc-spec">不用自己抄面板</span>
     </div>
 
     <div class="tech-card">
@@ -1272,10 +1363,10 @@ footer {
         <div class="tc-icon-box">
           <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
         </div>
-        <h3>2.5x 超分辨率防禦/攻擊抗混淆</h3>
+        <h3>不會把「防禦」看成「攻擊」</h3>
       </div>
-      <p>針對副詞條切片進行 2.5x Lanczos 放大與雙重對比銳化，支援特殊混淆字庫比對，並引入同聲骸平值 40/50/60 唯一性互斥校驗，徹底杜絕「+防禦」誤判為「+攻擊」。</p>
-      <span class="tc-spec">2.5X LANCZOS // FLAT-STAT MUTEX CHECK</span>
+      <p>副詞條會先放大、調清楚再辨識，固定值 40／50／60 也會交叉檢查，攻擊、防禦這種長得很像的字不容易認錯。</p>
+      <span class="tc-spec">辨識更準</span>
     </div>
 
     <div class="tech-card">
@@ -1283,10 +1374,10 @@ footer {
         <div class="tc-icon-box">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        <h3>左側培養畫面防偽詞條過濾</h3>
+        <h3>培養畫面也能評分</h3>
       </div>
-      <p>嚴格將等級讀取範圍限縮於經驗條上方，排除「強化至+15/+20/+25」文字干擾；徹底過濾未解鎖孔位「並啟用輔音屬性」偽詞條，並由副主屬性自動反推 COST 1/3/4。</p>
-      <span class="tc-spec">LEFT PANEL FILTER // AUTO COST INFERENCE</span>
+      <p>不只背包，左邊的強化培養畫面一樣能評分。「強化至 +25」這類提示字、還沒解鎖的孔位都會自動略過，COST 幾也會自己判斷。</p>
+      <span class="tc-spec">背包、培養都能讀</span>
     </div>
 
     <div class="tech-card">
@@ -1294,10 +1385,10 @@ footer {
         <div class="tc-icon-box">
           <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
         </div>
-        <h3>官方推薦面板一鍵光學導入</h3>
+        <h3>一鍵讀取官方推薦</h3>
       </div>
-      <p>於設定介面點擊「辨識推薦面板」，系統自動瞬移避開遮擋並擷取遊戲中央【聲骸推薦】視窗，自動解析並儲存 4/3/1 Cost 推薦主詞條、推薦合鳴套裝與副詞條優先序。</p>
-      <span class="tc-spec">CLAHE ENHANCE // 1-CLICK PRESET IMPORT</span>
+      <p>在遊戲裡打開【聲骸推薦】，再按程式的「辨識推薦面板」，官方建議的主詞條（4／3／1 Cost）、合鳴套裝和副詞條順序就自動存好。</p>
+      <span class="tc-spec">一鍵設定</span>
     </div>
 
     <div class="tech-card">
@@ -1305,10 +1396,10 @@ footer {
         <div class="tc-icon-box">
           <svg class="svg-ic" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-        <h3>階段性開孔期望值止損引擎</h3>
+        <h3>強化到一半就知道要不要停</h3>
       </div>
-      <p>可針對開前 2 孔、前 3 孔、前 4 孔獨立設定需命中的「理論最高前三詞條」或「非 0 有效詞條」門檻。一旦開孔未達標立即以紅框告警停手，大幅節省密音筒與調諧器。</p>
-      <span class="tc-spec">HOLE 2/3/4 STOP-LOSS // TOP-3 WEIGHTING</span>
+      <p>可以設定開到第 2、3、4 孔時，至少要出幾條有用的詞條。沒達標就亮紅框叫你停手，省下密音筒和調諧器，不用賭到最後才後悔。</p>
+      <span class="tc-spec">省資源</span>
     </div>
 
     <div class="tech-card">
@@ -1316,10 +1407,10 @@ footer {
         <div class="tc-icon-box">
           <svg class="svg-ic" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01"/></svg>
         </div>
-        <h3>BelowNormal 排程與防卡頓調度</h3>
+        <h3>不吃效能、不卡遊戲</h3>
       </div>
-      <p>自動將 OCR 與監控執行緒設為 BelowNormal 優先級並支援自訂 2~8 運算核心；畫面靜止時透過微縮圖差分比對自動進入深度休眠，100% 優先保障《鳴潮》本體幀率。</p>
-      <span class="tc-spec">ONNX INTRA-OP THREADS // 0% IDLE CPU</span>
+      <p>程式會讓遊戲優先使用電腦資源，也能自己限制只用幾個核心；畫面沒變化時會自動休息，不跟遊戲搶幀數。</p>
+      <span class="tc-spec">不卡頓</span>
     </div>
   </div>
 
@@ -1327,9 +1418,9 @@ footer {
   <div class="sec-header" id="deployment">
     <h2>
       <svg class="svg-ic lg" style="color:var(--amber);" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      <span>標準作業流程與評分數學模型</span>
+      <span>怎麼用・分數怎麼算</span>
     </h2>
-    <span class="sub">STANDARD OPERATING PROCEDURE &amp; SCORING FORMULA</span>
+    <span class="sub">四個步驟就能開始</span>
   </div>
 
   <div class="dual-section">
@@ -1337,32 +1428,32 @@ footer {
       <div class="sop-item">
         <div class="sop-step-num">01</div>
         <div>
-          <h4>以系統管理員身分啟動程式 (High Integrity Level)</h4>
-          <p>由於《鳴潮》客戶端具備管理員權限，請對執行檔按右鍵選擇「以系統管理員身分執行」，確保全域滑鼠左鍵點擊 0.10 秒防抖觸發正常運作（若未提權將自動切換為 0.3 秒定時循環模式）。</p>
+          <h4>用「系統管理員身分」打開程式</h4>
+          <p>鳴潮本身是用管理員權限在跑，所以程式也要一樣：對程式按右鍵 →「以系統管理員身分執行」。這樣你在遊戲裡一點聲骸就會馬上評分；沒這樣開也能用，只是會改成每 0.3 秒掃一次，反應慢一點。</p>
         </div>
       </div>
 
       <div class="sop-item">
         <div class="sop-step-num">02</div>
         <div>
-          <h4>雲端通行證核驗或切換訪客自訂模式</h4>
-          <p>進入官方 Discord (<a href="https://discord.gg/WWewHKwMwa" target="_blank" style="color:var(--cyan); text-decoration:underline;">discord.gg/WWewHKwMwa</a>) 於任一頻道輸入 <code>/授權碼</code> 即可取得 <code>AUTH-</code> 授權碼解鎖全角色 ZH 雲端權重；或點擊「跳過授權 · 以訪客模式進入」建立個人自訂權重。</p>
+          <h4>輸入授權碼（或用訪客模式）</h4>
+          <p>加入我們的 Discord（<a href="https://discord.gg/WWewHKwMwa" target="_blank" style="color:var(--cyan); text-decoration:underline;">discord.gg/WWewHKwMwa</a>），在任一頻道輸入 <code>/授權碼</code>，就會拿到一組 <code>AUTH-</code> 開頭的碼，輸入後所有角色的評分標準都能直接用。不想登入的話，按「跳過授權 · 以訪客模式進入」，自己設定也可以。</p>
         </div>
       </div>
 
       <div class="sop-item">
         <div class="sop-step-num">03</div>
         <div>
-          <h4>擺放懸浮窗位置與自動角色識別</h4>
-          <p>將 HUD 拖曳至螢幕左側或中央偏左（避免遮擋右側聲骸卡片；若重疊系統將自動顯示防遮擋警告）。當角色穿戴聲骸且右下角顯示「[角色名]裝配中 / 卸下」時，系統將自動切換對應角色權重並存入 1~5 號槽位。</p>
+          <h4>把小視窗擺好位置</h4>
+          <p>把評分視窗拖到畫面左邊或中間偏左，別擋到右邊的聲骸卡片（擋到會跳提醒）。幫角色換聲骸、右下角出現「[角色名] 裝配中／卸下」時，程式會自動換成那個角色的評分標準，並記到 1～5 號位。</p>
         </div>
       </div>
 
       <div class="sop-item">
         <div class="sop-step-num">04</div>
         <div>
-          <h4>開啟角色面板自動紀錄 (選配加速)</h4>
-          <p>點擊頂部面板圖示或進入設定勾選「是否偵測詳情」，在遊戲主畫面點擊「角色詳情」進入屬性頁即可自動歸檔角色六維面板與武器；返回大世界讀取到下方血條與 LV 時即自動解除紀錄狀態。</p>
+          <h4>（選用）自動記錄角色面板</h4>
+          <p>點小視窗上方的面板圖示，或到設定勾選「是否偵測詳情」。之後在遊戲裡進入角色詳情的屬性頁，就會自動記下面板和武器；回到大世界會自動停止記錄。</p>
         </div>
       </div>
     </div>
@@ -1370,38 +1461,38 @@ footer {
     <!-- 數學公式與五檔級距表 -->
     <div class="tier-table-card">
       <h3 style="font-size:16px; font-weight:900; color:var(--cyan); margin-bottom:8px;">
-        核心計算公式與五檔評級標準
+        分數怎麼算
       </h3>
-      <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(56,189,248,0.25); border-radius:6px; padding:10px; font-family:var(--font-mono); font-size:11.5px; color:#e2e8f0; margin-bottom:14px;">
-        • 單項得分 = 詞條實際數值 × 角色專屬權重<br>
-        • 理論滿分 = 前 5 高有效詞條 (8檔極值 × 權重) 總和<br>
-        • 得分達成率(%) = (聲骸總分 ÷ 理論滿分) × 100%
+      <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(56,189,248,0.25); border-radius:6px; padding:10px; font-size:13px; line-height:1.8; color:#e2e8f0; margin-bottom:14px;">
+        • 每條詞條的分數 ＝ 數值 × 這個角色有多需要它（權重）<br>
+        • 滿分 ＝ 這個角色最想要的 5 條詞條，全部出最高檔<br>
+        • 達成率 ＝ 你的總分 ÷ 滿分
       </div>
 
       <div class="tier-row">
         <span style="color:#f59e0b; font-weight:900;">SSS 傳家寶</span>
         <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">≥ 85.0%</span>
-        <span style="color:var(--text-secondary);">高檔位全中核心雙暴與有效詞條，深塔頂配畢業</span>
+        <span style="color:var(--text-secondary);">雙暴跟有用的詞條都出高檔，直接畢業</span>
       </div>
       <div class="tier-row">
         <span style="color:#c084fc; font-weight:900;">S 優秀畢業</span>
         <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">70% ~ 84%</span>
-        <span style="color:var(--text-secondary);">主力輸出成型，雙暴與有效詞條扎實，推薦拉滿</span>
+        <span style="color:var(--text-secondary);">主C可以用很久，值得強化到滿</span>
       </div>
       <div class="tier-row">
         <span style="color:#38bdf8; font-weight:900;">A 及格好用</span>
         <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">55% ~ 69%</span>
-        <span style="color:var(--text-secondary);">高性價比過渡良品，二隊或中期配裝首選</span>
+        <span style="color:var(--text-secondary);">先拿來用沒問題，二隊或過渡很適合</span>
       </div>
       <div class="tier-row">
         <span style="color:#10b981; font-weight:900;">B 過渡使用</span>
         <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">40% ~ 54%</span>
-        <span style="color:var(--text-secondary);">暫用湊合鳴套裝效果，後續資源充裕建議替換</span>
+        <span style="color:var(--text-secondary);">湊套裝效果用，資源夠了再換掉</span>
       </div>
       <div class="tier-row">
         <span style="color:#64748b; font-weight:900;">C 建議換胚</span>
         <span style="font-family:var(--font-mono); font-weight:800; color:#cbd5e1;">&lt; 40.0%</span>
-        <span style="color:var(--text-secondary);">有效詞條過少或期望值不達標，建議及時止損</span>
+        <span style="color:var(--text-secondary);">有用的詞條太少，別再投資源了</span>
       </div>
     </div>
   </div>
@@ -1410,8 +1501,8 @@ footer {
 
 <footer>
   <div class="container">
-    <p>GAMEZH 鳴潮聲骸即時懸浮評分 HUD v2.1.0 // NON-INTRUSIVE OPTICAL CHARACTER RECOGNITION UTILITY</p>
-    <p style="margin-top:4px;">本軟體僅透過作業系統標準顯示介面進行本地端光學文字辨識，絕不讀取、注入或修改任何遊戲記憶體與封包。</p>
+    <p>GAMEZH 鳴潮聲骸懸浮評分 v2.1 · 非官方玩家工具，與庫洛遊戲無關 · <a href="./" style="color:var(--cyan);">回到工具箱首頁</a></p>
+    <p style="margin-top:4px;">程式只辨識螢幕上看得到的文字，不會讀取、修改遊戲記憶體或封包。</p>
   </div>
 </footer>
 
@@ -1419,8 +1510,8 @@ footer {
 const SIM_MODES = [
   {
     mouse: { top: "92px", left: "95px" },
-    zone: "[ROI CAPTURE] 右側背包卡片 (x:0.76~0.98, y:0.11~0.49)",
-    conf: "2.5x LANCZOS | CONF: 99.2%",
+    zone: "📷 正在讀：右邊背包的聲骸卡片",
+    conf: "辨識信心 99.2%",
     raw: "&gt; [MAIN] 暴擊傷害 44.0% | 攻擊 150 (COST 4 鎖定)<br>&gt; [SUBS] 暴擊 9.9% (7/8) | 暴傷 19.8% (7/8) | 普攻加成 11.6% (8/8) | 攻擊% 10.9% (7/8) | 共鳴效率 10.0% (5/8)",
     page: "echo",
     status: "掃描正常",
@@ -1440,8 +1531,8 @@ const SIM_MODES = [
   },
   {
     mouse: { top: "92px", left: "285px" },
-    zone: "[ROI CAPTURE] 左側培養強化面板 (自動過濾未解鎖孔位偽詞條)",
-    conf: "LEFT PANEL | CONF: 98.7%",
+    zone: "📷 正在讀：左邊的強化培養畫面（沒開的孔會略過）",
+    conf: "辨識信心 98.7%",
     raw: "&gt; [MAIN] 湮滅傷害加成 30.0% | 攻擊 100 (自動推斷 COST 3)<br>&gt; [SUBS] 防禦 50 (4/8) | 生命百分比 7.9% (3/8) | [已過濾: 強化至+15並啟用輔音屬性]",
     page: "echo",
     status: "左側培養模式",
@@ -1458,8 +1549,8 @@ const SIM_MODES = [
   },
   {
     mouse: { top: "92px", left: "475px" },
-    zone: "[ROI CAPTURE] 角色屬性詳情與武器頁面 (x:0.08~0.35, y:0.12~0.62)",
-    conf: "CHAR PANEL STATE | CONF: 99.5%",
+    zone: "📷 正在讀：角色屬性詳情和武器頁",
+    conf: "辨識信心 99.5%",
     raw: "&gt; [STATE] 已偵測點擊【角色詳情】按鈕 -> 進入紀錄面板模式<br>&gt; [ARCHIVE] 角色: 椿 (Lv.90/90 湮滅) | 生命 16840 | 攻擊 2415 | 暴擊 74.6% | 暴傷 286.4% | 武器: 裁春(1階)",
     page: "charpanel",
     status: "紀錄面板模式",
@@ -1468,8 +1559,8 @@ const SIM_MODES = [
   },
   {
     mouse: { top: "195px", left: "95px" },
-    zone: "[ROI CAPTURE] 雙聲骸比對模式 (左待選 x:0.55~0.76 vs 右現裝 x:0.76~0.98)",
-    conf: "DUAL COMPARE | CONF: 98.9%",
+    zone: "📷 正在讀：左邊想換的 vs 右邊身上的",
+    conf: "辨識信心 98.9%",
     raw: "&gt; [CANDIDATE] 無妄者 +25 (88.4分 / SSS) vs [EQUIPPED] 無妄者 +25 (71.2分 / S)<br>&gt; [DELTA] 總分淨增 +17.2 分 | 暴擊 +2.4% | 暴擊傷害 +4.8% | 普攻傷害加成 +11.6%",
     page: "compare",
     status: "雙聲骸比對中",
@@ -1478,8 +1569,8 @@ const SIM_MODES = [
   },
   {
     mouse: { top: "195px", left: "285px" },
-    zone: "[ROI CAPTURE] 遊戲中央【聲骸推薦】面板 (x:0.38~0.70, y:0.08~0.90)",
-    conf: "CLAHE 1.6x | REC IMPORTED",
+    zone: "📷 正在讀：遊戲中間的【聲骸推薦】視窗",
+    conf: "官方推薦已存好",
     raw: "&gt; [SONATA] 推薦合鳴套裝：沉日劫明<br>&gt; [COST MAINS] 4Cost: 暴擊, 暴擊傷害 | 3Cost: 湮滅傷害加成 | 1Cost: 攻擊百分比<br>&gt; [SUBS ORDER] 暴擊 &gt; 暴擊傷害 &gt; 攻擊百分比 &gt; 普攻傷害加成 &gt; 共鳴效率 (已自動寫入設定檔)",
     page: "echo",
     status: "推薦面板已導入",
@@ -1497,8 +1588,8 @@ const SIM_MODES = [
   },
   {
     mouse: { top: "195px", left: "475px" },
-    zone: "[IN-PLACE EDIT] 暫停掃描並鎖定鳴潮官方 8 檔標準數值表",
-    conf: "PAUSED // LIVE RECALC",
+    zone: "✏️ 暫停辨識，改成手動選數值（只能選官方 8 檔）",
+    conf: "改了馬上重算",
     raw: "&gt; [EDIT MODE] 已暫停背景 OCR 掃描，展開就地編輯選單<br>&gt; [8-TIER TABLE] 僅允許選取鳴潮官方真實存在之 8 檔數值，調整下拉選單即時重算總分",
     page: "edit",
     status: "已暫停 (編輯中)",
@@ -1599,7 +1690,7 @@ function manualSelectMode(idx) {
     clearInterval(simInterval);
     simInterval = null;
     const txt = document.getElementById("auto-txt");
-    txt.textContent = "MANUAL MODE (點擊恢復自動輪播)";
+    txt.textContent = "手動模式・點這裡恢復自動播放";
     document.getElementById("auto-btn").style.color = "#fbbf24";
   }
   switchSimMode(idx);
@@ -1624,13 +1715,13 @@ function toggleSimAuto() {
   if (simInterval) {
     clearInterval(simInterval);
     simInterval = null;
-    txt.textContent = "PAUSED (點擊啟動自動演示)";
+    txt.textContent = "已暫停・點這裡繼續播放";
     btn.style.color = "#fbbf24";
   } else {
     simInterval = setInterval(() => {
       switchSimMode((activeModeIdx + 1) % 6);
     }, 4200);
-    txt.textContent = "AUTO-DEMO RUNNING (點擊左方區塊可手動測試)";
+    txt.textContent = "自動播放中・點這裡暫停";
     btn.style.color = "#10b981";
   }
 }
