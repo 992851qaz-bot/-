@@ -14,7 +14,7 @@
   </script>
 
   <title>鳴潮工具箱 GAMEZH｜聲骸評分・配裝・累充計算 | Wuthering Waves Tools</title>
-  <meta name="description" content="GAMEZH 鳴潮（Wuthering Waves）玩家工具入口：聲骸分析儀幫你評分聲骸、規劃 Build 配裝與 DPS 試算，另有累充 CP 值計算、抽卡模擬與直播即時辨識 HUD。免安裝、手機也能用。">
+  <meta name="description" content="GAMEZH 鳴潮（Wuthering Waves）玩家工具：網頁版聲骸分析儀上傳角色資訊卡就能做角色健檢、聲骸評分與排行；電腦版聲骸評分 HUD 邊玩邊顯示分數與止損建議。另有累充 CP 值計算。免費。">
   <meta name="keywords" content="鳴潮, Wuthering Waves, 聲骸, 聲骸評分, 聲骸分析, 鳴潮配裝, 鳴潮Build, 鳴潮計算器, 鳴潮抽卡, 累充, 鳴潮工具">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://992851qaz-bot.github.io/-/">
@@ -144,7 +144,7 @@
     .hero { position: relative; padding: 72px 0 88px; overflow: hidden; }
     .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none;
       background: radial-gradient(60% 70% at 85% 30%, rgba(92,200,255,.13), transparent 70%), radial-gradient(50% 60% at 10% 90%, rgba(227,205,154,.08), transparent 70%); }
-    .hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0,5fr) minmax(0,6fr); gap: 56px; align-items: center; }
+    .hero .wrap { position: relative; }
     .hero h1 { font-size: clamp(40px, 6.2vw, 72px); line-height: 1.12; margin: 22px 0 20px; }
     .hero h1 span { display: block; color: var(--gold); }
     .hero .lead { margin-bottom: 30px; }
@@ -242,9 +242,78 @@
     .toast { position: fixed; left: 50%; bottom: calc(20px + var(--safe-b)); z-index: 40; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 12px 18px; background: var(--panel-2); border: 1px solid var(--line-2); box-shadow: 0 10px 30px rgba(0,0,0,.5); font-size: 14px; }
     .toast[hidden] { display: none; }
 
+    /* gold waves */
+    .gz-waves { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hd { z-index: 20; }
+    main, footer { position: relative; z-index: 1; }
+
+    /* hero (centered) */
+    .hero-in { display: block !important; text-align: center; }
+    .hero-logo { width: 96px; height: 96px; border-radius: 22px; margin: 0 auto 22px; box-shadow: 0 0 0 1px var(--line-2), 0 20px 50px rgba(0,0,0,.5); }
+    .eyebrow.center { justify-content: center; }
+    .eyebrow.center::after { content: ""; width: 32px; height: 1px; background: var(--gold-2); }
+    .hero-in .lead { margin: 0 auto; max-width: 36em; }
+    .hero-in .lead b { color: var(--text); }
+
+    /* routes */
+    .routes { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; margin-top: 48px; }
+    .route { display: flex; flex-direction: column; border: 1px solid var(--line-2); background: rgba(19,26,46,.82); backdrop-filter: blur(6px); transition: border-color .2s, transform .2s; }
+    .route:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .route:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .route-pic { aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--line); background: #06080f; }
+    .route-pic img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+    .route-body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 10px; flex: 1; text-align: left; }
+    .route-tag { display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: .12em; color: var(--gold); }
+    .route-tag span { width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid currentColor; font: 900 14px/1 var(--serif); }
+    .route-tag.pc { color: var(--cyan); }
+    .route h2 { font-size: clamp(26px, 3.2vw, 34px); line-height: 1.25; }
+    .route-q { color: var(--text); font-size: 16px; opacity: .9; }
+    .route ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--muted); font-size: 15px; }
+    .route li { padding-left: 18px; position: relative; }
+    .route li::before { content: ""; position: absolute; left: 0; top: .75em; width: 8px; height: 1px; background: var(--gold-2); }
+    .route-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 8px; }
+    .route-meta span { font-size: 12.5px; padding: 3px 10px; border: 1px solid var(--line-2); color: var(--muted); }
+    .route .btn { align-self: flex-start; margin-top: auto; }
+
+    /* compare table */
+    .cmp { border: 1px solid var(--line-2); background: rgba(19,26,46,.82); }
+    .cmp-row { display: grid; grid-template-columns: 140px minmax(0,1fr) minmax(0,1fr); border-top: 1px solid var(--line); }
+    .cmp-row:first-child { border-top: 0; }
+    .cmp-row > span { padding: 14px 18px; font-size: 15px; }
+    .cmp-row > span:first-child { color: var(--dim); font-size: 13.5px; letter-spacing: .06em; }
+    .cmp-row > span + span { border-left: 1px solid var(--line); }
+    .cmp-h > span { font: 900 17px/1.4 var(--serif); }
+    .cmp-h > span:nth-child(2) { color: var(--gold); }
+    .cmp-h > span:nth-child(3) { color: var(--cyan); }
+    .cmp-cta .btn { width: 100%; }
+
+    .shots3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; margin-top: 48px; }
+    .shots3 figure { margin: 0; }
+    .shots3 img { aspect-ratio: 16 / 9; object-fit: cover; object-position: top left; width: 100%; }
+    .shots3 figcaption { padding: 10px 14px; font-size: 13.5px; color: var(--muted); border-top: 1px solid var(--line); background: var(--panel); }
+    .split.rev > :first-child { order: 2; }
+    .tool, .report, .about, .sec-head { position: relative; }
+
+    @media (max-width: 980px) {
+      .split.rev > :first-child { order: 0; }
+    }
+    @media (max-width: 760px) {
+      .routes { grid-template-columns: minmax(0,1fr); gap: 18px; margin-top: 34px; }
+      .route-body { padding: 20px; }
+      .route .btn { align-self: stretch; min-height: 50px; }
+      .hero-logo { width: 80px; height: 80px; border-radius: 18px; }
+      .cmp-row { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+      .cmp-row > span:first-child { grid-column: 1 / -1; padding: 10px 14px 0; border: 0; }
+      .cmp-row > span:nth-child(2) { border-left: 0; }
+      .cmp-row > span { padding: 8px 14px 12px; font-size: 14px; }
+      .cmp-h > span:first-child, .cmp-cta > span:first-child { display: none; }
+      .cmp-h > span { padding-top: 14px; }
+      .shots3 { grid-template-columns: minmax(0,1fr); gap: 16px; margin-top: 32px; }
+    }
+
     /* responsive */
     @media (max-width: 980px) {
-      .hero .wrap, .split, .about { grid-template-columns: minmax(0,1fr); gap: 40px; }
+      .split, .about { grid-template-columns: minmax(0,1fr); gap: 40px; }
     }
     @media (max-width: 640px) {
       body { font-size: 15.5px; }
@@ -265,17 +334,19 @@
   </style>
 </head>
 <body>
+  <canvas class="gz-waves" aria-hidden="true"></canvas>
   <header class="hd" id="top">
     <div class="wrap">
       <a class="logo" href="./" aria-label="GAMEZH 鳴潮工具箱首頁">
-        <img src="icons/icon-192.png" alt="" width="34" height="34">
+        <img src="icons/logo.png" alt="" width="36" height="36">
         <span><b>GAMEZH</b><small>鳴潮工具箱</small></span>
       </a>
       <nav class="nav" aria-label="首頁導覽">
-        <a href="#tools">工具</a>
+        <a href="#routes">兩種用法</a>
+        <a href="#analyzer">聲骸分析儀</a>
         <a href="#hud">電腦版 HUD</a>
+        <a href="#tools">其他工具</a>
         <a href="#report">回報問題</a>
-        <a href="#about">關於</a>
       </nav>
       <button class="btn" id="installBtn" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>安裝 App
@@ -285,22 +356,44 @@
 
   <main>
     <section class="hero">
-      <div class="wrap">
-        <div>
-          <div class="eyebrow">鳴潮玩家工具箱 · FAN-MADE</div>
-          <h1>養聲骸，<span>少走冤枉路。</span></h1>
-          <p class="lead">GAMEZH 是玩家自製的鳴潮工具。手機上傳截圖就能幫聲骸打分；電腦開著遊戲，<span class="hl">點一下聲骸就知道該不該繼續開</span>。全部免費。</p>
-          <div class="cta">
-            <a class="btn gold" href="20260828.html" data-tool="echo">網頁版聲骸分析儀 →</a>
-            <a class="btn" href="exe.html" data-tool="hud">下載電腦版 HUD</a>
+      <div class="wrap hero-in">
+        <img class="hero-logo" src="icons/logo.png" alt="GAMEZH" width="96" height="96">
+        <div class="eyebrow center">鳴潮玩家工具箱 · FAN-MADE</div>
+        <h1>養聲骸，<span>少走冤枉路。</span></h1>
+        <p class="lead">GAMEZH 是玩家自製的鳴潮工具，分成兩種用法：<b>網頁上幫整隻角色做健檢</b>，或是<b>電腦上邊玩邊幫聲骸打分</b>。全部免費。</p>
+        <div class="offline" role="status">目前離線中。首頁可以開，但工具需要網路才能使用。</div>
+      </div>
+
+      <div class="wrap routes" id="routes">
+        <a class="route" href="20260828.html" data-tool="echo">
+          <div class="route-pic"><img src="img/ana-home.webp" width="1250" height="754" alt="鳴潮聲骸分析儀首頁：輸入 UID 或貼上 WuWaBot 圖片網址" fetchpriority="high"></div>
+          <div class="route-body">
+            <div class="route-tag"><span>A</span>網頁版 · 角色健檢</div>
+            <h2>聲骸分析儀</h2>
+            <p class="route-q">「這隻角色練得怎麼樣？還差什麼？」</p>
+            <ul>
+              <li>上傳官方角色資訊卡，或貼上 WuWaBot 圖片網址</li>
+              <li>整套聲骸評分、CV 值、配裝建議與 DPS 試算</li>
+              <li>聲骸排行榜，看看大佬都怎麼穿</li>
+            </ul>
+            <div class="route-meta"><span>📱 手機 · 電腦 · 平板</span><span>免下載</span></div>
+            <span class="btn gold">開始分析 →</span>
           </div>
-          <div class="meta"><span>免費</span><span>手機、電腦都能用</span><span>7 萬筆聲骸數據</span></div>
-          <div class="offline" role="status">目前離線中。首頁可以開，但工具需要網路才能使用。</div>
-        </div>
-        <a class="hero-visual" href="exe.html" data-tool="hud" aria-label="看電腦版 HUD 介紹">
-          <div class="frame"><img src="img/hud-ingame.webp" width="1124" height="635" alt="鳴潮背包畫面，GameZH HUD 懸浮在聲骸列表旁邊" fetchpriority="high"></div>
-          <img class="panel-shot" src="img/hud-panel.webp" width="586" height="710" alt="HUD 放大：聲骸 96.2 分 S">
-          <span class="tag">實際遊戲畫面：點一下聲骸，分數就浮在旁邊</span>
+        </a>
+        <a class="route" href="exe.html" data-tool="hud">
+          <div class="route-pic"><img src="img/hud-ingame.webp" width="1124" height="635" alt="鳴潮背包畫面，GameZH HUD 懸浮在聲骸列表旁邊"></div>
+          <div class="route-body">
+            <div class="route-tag pc"><span>B</span>電腦版 · 遊戲中即時</div>
+            <h2>聲骸評分 HUD</h2>
+            <p class="route-q">「這顆聲骸要不要繼續開？」</p>
+            <ul>
+              <li>開著遊戲點一下聲骸，分數直接浮在畫面旁</li>
+              <li>止損建議、開滿落點圖，強化前就知道值不值得</li>
+              <li>換裝比分、面板缺什麼、一鍵匯出分享圖</li>
+            </ul>
+            <div class="route-meta"><span>🖥️ Windows 電腦</span><span>需下載安裝</span></div>
+            <span class="btn">看介紹與下載 →</span>
+          </div>
         </a>
       </div>
     </section>
@@ -310,35 +403,81 @@
       <div class="recent" id="recent"></div>
     </div>
 
-    <section class="sec" id="tools">
+    <section class="sec" id="compare">
       <div class="wrap">
         <div class="sec-head">
-          <span class="num">01 / 工具</span>
-          <h2>挑一個開始</h2>
-          <p>手機能用的、電腦才能用的都標好了。</p>
+          <span class="num">01 / 怎麼選</span>
+          <h2>不知道用哪個？</h2>
+          <p>兩個工具不一樣，也可以一起用：平常刷聲骸開 HUD，練完角色再丟分析儀健檢。</p>
         </div>
-        <nav class="tools" id="grid" aria-label="工具列表"></nav>
+        <div class="cmp" role="table" aria-label="聲骸分析儀與聲骸評分 HUD 比較">
+          <div class="cmp-row cmp-h" role="row"><span role="columnheader"></span><span role="columnheader">A 聲骸分析儀</span><span role="columnheader">B 聲骸評分 HUD</span></div>
+          <div class="cmp-row" role="row"><span role="rowheader">什麼時候用</span><span role="cell">角色練完，想看整體還差什麼</span><span role="cell">正在刷、正在強化聲骸</span></div>
+          <div class="cmp-row" role="row"><span role="rowheader">怎麼用</span><span role="cell">上傳角色資訊卡截圖或貼圖片網址</span><span role="cell">開著遊戲，點一下聲骸</span></div>
+          <div class="cmp-row" role="row"><span role="rowheader">看的是</span><span role="cell">整隻角色：5 個聲骸＋面板＋排行</span><span role="cell">眼前這一顆：分數＋要不要繼續開</span></div>
+          <div class="cmp-row" role="row"><span role="rowheader">裝置</span><span role="cell">手機、電腦、平板</span><span role="cell">Windows 電腦</span></div>
+          <div class="cmp-row" role="row"><span role="rowheader">安裝</span><span role="cell">不用，打開網頁就好</span><span role="cell">要下載（免費）</span></div>
+          <div class="cmp-row cmp-cta" role="row"><span></span><span><a class="btn gold" href="20260828.html" data-tool="echo">開始分析</a></span><span><a class="btn" href="exe.html" data-tool="hud">看 HUD</a></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="analyzer">
+      <div class="wrap split">
+        <div>
+          <div class="sec-head" style="margin-bottom:24px;">
+            <span class="num">02 / A · 聲骸分析儀</span>
+            <h2>一張角色卡，<br>整隻角色健檢完</h2>
+            <p>從官方 DC 機器人拿角色資訊卡圖片，丟進來幾秒就分析完。手機也能用。</p>
+          </div>
+          <ul class="checks">
+            <li><span><b>自動辨識詞條</b>：內建校正，減少截圖品質造成的認錯。</span></li>
+            <li><span><b>CV 暴擊潛能</b>：自動算出暴率×2＋暴傷，知道這套暴擊有多強。</span></li>
+            <li><span><b>聲骸排行榜</b>：看自己在伺服器排第幾，順便抄大佬作業。</span></li>
+            <li><span><b>雲端歷史紀錄</b>：輸入 UID 就能載入過去分析過的資料。</span></li>
+          </ul>
+          <a class="btn gold" href="20260828.html" data-tool="echo">開始分析 →</a>
+        </div>
+        <a href="20260828.html" data-tool="echo" class="frame" aria-label="開啟聲骸分析儀">
+          <img src="img/ana-report.webp" width="1600" height="781" alt="聲骸分析儀的角色分析報告畫面" loading="lazy">
+        </a>
+      </div>
+      <div class="wrap shots3">
+        <figure class="frame"><img src="img/ana-teams.webp" width="1600" height="691" alt="多角色配裝總覽" loading="lazy"><figcaption>全角色配裝總覽</figcaption></figure>
+        <figure class="frame"><img src="img/ana-scores.webp" width="1400" height="509" alt="五個聲骸的評分卡" loading="lazy"><figcaption>5 個聲骸逐一評分</figcaption></figure>
+        <figure class="frame"><img src="img/ana-ranking.webp" width="1350" height="922" alt="聲骸傷害與屬性排行" loading="lazy"><figcaption>排行與屬性比較</figcaption></figure>
       </div>
     </section>
 
     <section class="sec" id="hud">
-      <div class="wrap split">
+      <div class="wrap split rev">
         <div>
           <div class="sec-head" style="margin-bottom:24px;">
-            <span class="num">02 / 電腦版 HUD</span>
+            <span class="num">03 / B · 聲骸評分 HUD</span>
             <h2>還沒開滿，<br>就看得到它開滿會落在哪</h2>
+            <p>電腦版懸浮工具，刷聲骸不用再 Alt + Tab 切視窗算分數。</p>
           </div>
           <ul class="checks">
-            <li><span><b>點一下就有分數</b>：不用再 Alt + Tab 切視窗算。</span></li>
+            <li><span><b>點一下就有分數</b>：評分直接浮在遊戲畫面旁。</span></li>
             <li><span><b>止損建議</b>：直接告訴你繼續開，還是換胚。</span></li>
             <li><span><b>開滿落點圖</b>：照官方公開機率算，一張圖看出值不值得。</span></li>
             <li><span><b>不改遊戲檔案</b>：只看畫面，沒有巨集、不讀記憶體。</span></li>
           </ul>
-          <a class="btn gold" href="exe.html" data-tool="hud">看完整介紹與下載 →</a>
+          <a class="btn" href="exe.html" data-tool="hud">看完整介紹與下載 →</a>
         </div>
         <a href="exe.html#forecast" data-tool="hud" class="frame" aria-label="看開滿落點圖介紹">
           <img src="img/hud-forecast.webp" width="973" height="682" alt="開滿落點圖：繼續開，達到 A 77.9%，開滿期望 79.7" loading="lazy">
         </a>
+      </div>
+    </section>
+
+    <section class="sec" id="tools">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="num">04 / 其他工具</span>
+          <h2>順手用得到的</h2>
+        </div>
+        <nav class="tools" id="grid" aria-label="其他工具"></nav>
       </div>
     </section>
 
@@ -361,12 +500,12 @@
           <h2>給鳴潮（Wuthering Waves）玩家的免費工具</h2>
         </div>
         <div>
-          <p>GAMEZH 是玩家自製的鳴潮輔助工具，從玩家回饋一條一條改出來。網頁版打開瀏覽器就能用，手機、平板、電腦都支援；電腦版可以直接浮在遊戲畫面旁邊。</p>
+          <p>GAMEZH 是玩家自製的鳴潮輔助工具，從玩家回饋一條一條改出來，累積超過 7 萬筆聲骸數據。</p>
           <ul>
-            <li><b>聲骸分析儀</b>：上傳聲骸截圖就能打分數，比較不同角色的配裝與 Build，並試算 DPS。</li>
+            <li><b>聲骸分析儀</b>：上傳官方角色資訊卡就能做角色健檢，聲骸評分、CV 值、配裝建議、DPS 試算與聲骸排行榜，手機也能用。</li>
+            <li><b>聲骸評分 HUD</b>：電腦版懸浮工具，點一下聲骸就顯示評分、止損建議和開滿落點。</li>
             <li><b>累充 CP 值計算</b>：規劃累充與月卡，算出每一抽的成本，並模擬抽卡結果。</li>
-            <li><b>電腦版聲骸評分 HUD</b>：點一下聲骸就顯示評分、止損建議和開滿落點，還能換裝比分、匯出分享圖。</li>
-            <li><b>網頁版即時評分</b>：不用安裝，用電腦瀏覽器分享鳴潮的遊戲畫面，邊玩邊看聲骸分數。</li>
+            <li><b>網頁版即時評分</b>：不用安裝，用電腦瀏覽器分享遊戲畫面，邊玩邊看聲骸分數。</li>
           </ul>
         </div>
       </div>
@@ -456,7 +595,7 @@
     }
 
     // 工具卡片
-    TOOLS.forEach(function (t) {
+    TOOLS.filter(function (t) { return t.id !== 'echo' && t.id !== 'hud'; }).forEach(function (t) {
       var pic = t.img
         ? '<div class="pic"><img src="' + t.img + '" alt="" loading="lazy"></div>'
         : '<div class="pic art" style="--c:' + t.color + '" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="big">' + t.icon + '</span></div>';
@@ -691,5 +830,6 @@
       });
     }
   </script>
+  <script src="assets/waves.js" defer></script>
 </body>
 </html>

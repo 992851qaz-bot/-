@@ -1,6 +1,6 @@
 // GAMEZH 入口網 Service Worker
 // 只快取首頁本身（讓 App 可離線開啟）；其他工具頁一律直接走網路，不攔截、不快取。
-const CACHE = 'gamezh-portal-v3';
+const CACHE = 'gamezh-portal-v4';
 const SHELL = [
   './',
   './index.html',
@@ -9,7 +9,9 @@ const SHELL = [
   './icons/icon-512.png',
   './icons/maskable-512.png',
   './icons/apple-touch-icon.png',
-  './icons/favicon-48.png'
+  './icons/favicon-48.png',
+  './icons/logo.png',
+  './assets/waves.js'
 ];
 const SHELL_PATHS = new Set(SHELL.map((p) => new URL(p, self.location).pathname));
 

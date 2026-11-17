@@ -99,6 +99,7 @@ a { color: inherit; text-decoration: none; }
 }
 .btn.gold:hover { background: #f1dfb2; }
 .btn svg { width: 17px; height: 17px; flex: none; }
+.btn[hidden] { display: none; }
 .hd .btn { min-height: 38px; padding: 0 16px; font-size: 14px; margin-left: 0; }
 @media (max-width: 860px) { .nav { display: none; } .hd .btn { margin-left: auto; } }
 
@@ -256,6 +257,11 @@ footer a { color: var(--muted); text-decoration: underline; text-underline-offse
 .lb button { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: 12px; width: 44px; height: 44px; border: 1px solid var(--line-2); background: var(--bg); color: var(--text); font-size: 20px; cursor: pointer; }
 body.lock { overflow: hidden; }
 
+/* ---------- gold waves ---------- */
+.gz-waves { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+main, footer { position: relative; z-index: 1; }
+.card, .steps, .tiers div { background-color: rgba(19, 26, 46, .88); }
+
 /* ---------- responsive ---------- */
 @media (max-width: 980px) {
   .hero .wrap, .split { grid-template-columns: minmax(0, 1fr); gap: 40px; }
@@ -296,11 +302,12 @@ body.lock { overflow: hidden; }
 </style>
 </head>
 <body>
+<canvas class="gz-waves" aria-hidden="true"></canvas>
 
 <header class="hd">
   <div class="wrap">
     <a class="logo" href="./" aria-label="回到 GAMEZH 鳴潮工具箱首頁">
-      <img src="icons/icon-192.png" alt="" width="34" height="34">
+      <img src="icons/logo.png" alt="" width="34" height="34">
       <span><b>GAMEZH</b><small>聲骸評分 HUD</small></span>
     </a>
     <nav class="nav" aria-label="頁面導覽">
@@ -326,6 +333,10 @@ body.lock { overflow: hidden; }
           <a class="btn gold" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
             Microsoft Store 免費下載
+          </a>
+          <a class="btn dl-direct" href="download/windows" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            <span>直接下載安裝檔</span>
           </a>
           <a class="link" href="#score">先看看能做什麼 →</a>
         </div>
@@ -523,6 +534,10 @@ body.lock { overflow: hidden; }
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
           Microsoft Store 免費下載
         </a>
+        <a class="btn dl-direct" href="download/windows" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <span>直接下載安裝檔</span>
+        </a>
         <a class="btn" href="https://drive.google.com/drive/folders/17pFcXxshUHvVkvNWgxLp6Lpw0tpbyRNR?usp=sharing" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Google 雲端下載
@@ -570,6 +585,25 @@ body.lock { overflow: hidden; }
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
 })();
+
+// 直接下載：只有部署在 Cloudflare（有 /download 路由）時才顯示，GitHub Pages 上自動隱藏
+(function () {
+  if (/github\.io$/.test(location.hostname) || location.protocol === 'file:') return;
+  fetch('download/latest.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (info) {
+      var win = info && info.assets && info.assets.windows;
+      if (!win) return;
+      var mb = win.size ? '・' + Math.round(win.size / 1048576) + ' MB' : '';
+      var label = '直接下載安裝檔' + (info.version ? '（' + info.version + mb + '）' : '');
+      document.querySelectorAll('.dl-direct').forEach(function (a) {
+        a.hidden = false;
+        a.querySelector('span').textContent = label;
+      });
+    })
+    .catch(function () {});
+})();
 </script>
+<script src="assets/waves.js" defer></script>
 </body>
 </html>
