@@ -1,24 +1,68 @@
 {
-  "id": "./portal.html",
+  "id": "./",
   "name": "GAMEZH 鳴潮工具箱",
   "short_name": "GAMEZH",
-  "description": "鳴潮聲骸分析、累充計算、直播 HUD 等工具的入口。",
-  "lang": "zh-TW",
-  "start_url": "./portal.html?source=pwa",
+  "description": "鳴潮（Wuthering Waves）聲骸評分、Build 配裝、累充 CP 值計算與直播 HUD 工具。",
+  "lang": "zh-Hant-TW",
+  "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f0f14",
   "theme_color": "#0f0f14",
-  "categories": ["games", "utilities"],
+  "categories": [
+    "games",
+    "utilities"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "聲骸分析儀", "url": "./20260828.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "累充 CP 值計算", "url": "./3.7.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "意見回饋", "url": "./QA.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+    {
+      "name": "聲骸分析儀",
+      "url": "./20260828.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "累充 CP 值計算",
+      "url": "./3.7.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "GAMEZH 鳴潮工具箱"
+    }
   ]
 }

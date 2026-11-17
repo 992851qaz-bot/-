@@ -1,24 +1,626 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Redirecting...</title>
-  <meta http-equiv="refresh" content="0; url=https://992851qaz-bot.github.io/-/20260828.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <script>
+    // 舊連結相容：以前首頁直接跳到聲骸分析儀，帶參數或錨點的舊分享連結（例如 ?uid=）繼續轉過去
     (function () {
-      var current = window.location.pathname || '';
-      var allowLegacy = current.endsWith('/bak.html');
-      if (allowLegacy) return;
-      var target = 'https://992851qaz-bot.github.io/-/20260828.html' + window.location.search + window.location.hash;
-      if (window.location.href !== target) window.location.replace(target);
+      var q = location.search.replace(/^\?/, '').split('&').filter(function (p) { return p && p.indexOf('source=') !== 0; });
+      if (q.length || location.hash.length > 1) {
+        location.replace('20260828.html' + (q.length ? '?' + q.join('&') : '') + location.hash);
+      }
     })();
   </script>
+
+  <title>鳴潮工具箱 GAMEZH｜聲骸評分・配裝・累充計算 | Wuthering Waves Tools</title>
+  <meta name="description" content="GAMEZH 鳴潮（Wuthering Waves）玩家工具入口：聲骸分析儀幫你評分聲骸、規劃 Build 配裝與 DPS 試算，另有累充 CP 值計算、抽卡模擬與直播即時辨識 HUD。免安裝、手機也能用。">
+  <meta name="keywords" content="鳴潮, Wuthering Waves, 聲骸, 聲骸評分, 聲骸分析, 鳴潮配裝, 鳴潮Build, 鳴潮計算器, 鳴潮抽卡, 累充, 鳴潮工具">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://992851qaz-bot.github.io/-/">
+
+  <!-- 分享預覽（Facebook / LINE / Discord / Threads） -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="GAMEZH 鳴潮工具箱">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:url" content="https://992851qaz-bot.github.io/-/">
+  <meta property="og:title" content="鳴潮工具箱 GAMEZH｜聲骸評分・配裝・累充計算">
+  <meta property="og:description" content="聲骸評分、Build 配裝、DPS 試算、累充 CP 值計算，一站搞定。免安裝、手機也能用的鳴潮玩家工具。">
+  <meta property="og:image" content="https://992851qaz-bot.github.io/-/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GAMEZH 鳴潮工具箱：聲骸分析儀、累充計算、直播 HUD">
+  <!-- X (Twitter) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="鳴潮工具箱 GAMEZH｜聲骸評分・配裝・累充計算">
+  <meta name="twitter:description" content="聲骸評分、Build 配裝、DPS 試算、累充 CP 值計算，一站搞定。">
+  <meta name="twitter:image" content="https://992851qaz-bot.github.io/-/og-image.png">
+
+  <!-- App -->
+  <meta name="theme-color" content="#0f0f14">
+  <meta name="color-scheme" content="dark">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="GAMEZH">
+
+  <!-- 結構化資料（讓 Google 認得網站名稱與工具） -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://992851qaz-bot.github.io/-/#website",
+        "url": "https://992851qaz-bot.github.io/-/",
+        "name": "GAMEZH 鳴潮工具箱",
+        "alternateName": ["GAMEZH", "鳴潮聲骸分析儀"],
+        "inLanguage": "zh-Hant-TW"
+      },
+      {
+        "@type": "WebApplication",
+        "name": "鳴潮聲骸分析儀",
+        "url": "https://992851qaz-bot.github.io/-/20260828.html",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Web",
+        "inLanguage": "zh-Hant-TW",
+        "description": "鳴潮（Wuthering Waves）聲骸評分、Build 配裝與 DPS 試算工具。",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --surface: #17171f;
+      --surface-2: #1f1f2a;
+      --border: #2a2a37;
+      --text: #ececf1;
+      --muted: #9a9aab;
+      --cyan: #38bdf8;
+      --gold: #facc15;
+      --red: #f87171;
+      --green: #4ade80;
+      --radius: 18px;
+      --safe-t: env(safe-area-inset-top, 0px);
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-l: env(safe-area-inset-left, 0px);
+      --safe-r: env(safe-area-inset-right, 0px);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      overscroll-behavior-y: none;
+    }
+    body.lock { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: calc(12px + var(--safe-t)) calc(16px + var(--safe-r)) calc(28px + var(--safe-b)) calc(16px + var(--safe-l));
+    }
+
+    /* Top bar */
+    .top {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; gap: 12px;
+      margin: calc(-12px - var(--safe-t)) calc(-16px - var(--safe-r)) 8px calc(-16px - var(--safe-l));
+      padding: calc(10px + var(--safe-t)) calc(16px + var(--safe-r)) 10px calc(16px + var(--safe-l));
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .2s;
+    }
+    .top.scrolled { border-bottom-color: var(--border); }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+    .brand img { width: 36px; height: 36px; border-radius: 10px; flex: none; }
+    .brand b { font-size: 17px; letter-spacing: .02em; white-space: nowrap; }
+    .brand small { display: block; color: var(--muted); font-size: 12px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      min-height: 40px; padding: 0 14px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+      font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    }
+    .btn.primary { background: var(--cyan); border-color: var(--cyan); color: #04131c; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .btn[hidden] { display: none; }
+
+    /* Hero */
+    .hero {
+      position: relative; overflow: hidden;
+      display: block; margin-top: 8px; padding: 22px 20px 20px;
+      border-radius: calc(var(--radius) + 4px);
+      background:
+        radial-gradient(120% 90% at 100% 0%, rgba(56,189,248,.28), transparent 60%),
+        radial-gradient(80% 80% at 0% 100%, rgba(250,204,21,.16), transparent 60%),
+        var(--surface);
+      border: 1px solid var(--border);
+    }
+    .hero .tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--gold); background: rgba(250,204,21,.12); padding: 3px 10px; border-radius: 999px; }
+    .hero h1 { margin: 10px 0 6px; font-size: clamp(24px, 6.4vw, 34px); line-height: 1.2; }
+    .hero p { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 34em; }
+    .hero .btn { min-height: 48px; padding: 0 22px; font-size: 16px; }
+    .hero .rings { position: absolute; right: -40px; top: -40px; width: 180px; height: 180px; opacity: .25; pointer-events: none; }
+
+    /* Sections */
+    h2 { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .08em; margin: 26px 4px 10px; }
+    .recent { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px 2px; scroll-snap-type: x mandatory; }
+    .recent::-webkit-scrollbar { display: none; }
+    .recent a { flex: none; scroll-snap-align: start; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+    .recent .ico { width: 30px; height: 30px; font-size: 16px; border-radius: 50%; }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .card {
+      display: flex; align-items: center; gap: 14px; width: 100%;
+      min-height: 76px; padding: 14px 16px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      color: inherit; font: inherit; text-align: left; cursor: pointer;
+      transition: transform .12s, border-color .15s, background .15s;
+    }
+    .card:hover { border-color: #3a3a4a; background: var(--surface-2); }
+    .card:active { transform: scale(.985); }
+    .card:focus-visible, .btn:focus-visible, .recent a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .ico {
+      flex: none; display: grid; place-items: center;
+      width: 46px; height: 46px; border-radius: 14px; font-size: 22px;
+      background: var(--c, rgba(56,189,248,.14));
+    }
+    .card .txt { min-width: 0; flex: 1; }
+    .card b { display: block; font-size: 16px; }
+    .card .txt > span { display: block; color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: 2px; }
+    .card .badge { flex: none; font-style: normal; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: rgba(56,189,248,.14); color: var(--cyan); align-self: flex-start; }
+    .card .chev { flex: none; color: #555566; font-size: 20px; }
+
+    /* About (給玩家也給搜尋引擎看的說明文字) */
+    .about { margin-top: 10px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted); font-size: 14px; }
+    .about h3 { margin: 0 0 6px; color: var(--text); font-size: 15px; }
+    .about p { margin: 0 0 10px; }
+    .about ul { margin: 0; padding-left: 1.2em; }
+    .about li { margin: 4px 0; }
+    .about li b { color: var(--text); font-weight: 600; }
+
+    footer { margin-top: 30px; text-align: center; color: #6c6c7c; font-size: 12px; }
+
+    /* Bottom sheets */
+    .backdrop { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; }
+    .backdrop[hidden] { display: none; }
+    .panel {
+      width: 100%; max-width: 560px; max-height: 92dvh; overflow-y: auto; overscroll-behavior: contain;
+      background: var(--surface-2); border: 1px solid var(--border); border-bottom: 0;
+      border-radius: 22px 22px 0 0;
+      padding: 8px calc(18px + var(--safe-r)) calc(18px + var(--safe-b)) calc(18px + var(--safe-l));
+      animation: up .22s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes up { from { transform: translateY(24px); opacity: 0; } }
+    @media (min-width: 600px) {
+      .backdrop { align-items: center; padding: 24px; }
+      .panel { border-radius: 22px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+    }
+    .grab { width: 40px; height: 4px; border-radius: 4px; background: #3a3a4a; margin: 4px auto 12px; }
+    @media (min-width: 600px) { .grab { display: none; } }
+    .panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .panel-head h3 { margin: 0; font-size: 18px; flex: 1; }
+    .x { width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--muted); font-size: 22px; cursor: pointer; }
+    .panel .sub { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+
+    label.f { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
+    label.f em { font-style: normal; font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    .inp {
+      width: 100%; padding: 12px 14px; border-radius: 12px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text);
+      font: inherit; font-size: 16px; /* 16px 避免 iOS 自動放大 */
+    }
+    .inp:focus { outline: none; border-color: var(--cyan); }
+    textarea.inp { min-height: 140px; resize: vertical; line-height: 1.5; }
+    .count { text-align: right; font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .shot { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px dashed #3a3a4a; border-radius: 12px; cursor: pointer; }
+    .shot input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .shot .ph { width: 64px; height: 64px; flex: none; border-radius: 10px; background: var(--bg) center/cover no-repeat; display: grid; place-items: center; font-size: 24px; }
+    .shot .ph.has { font-size: 0; }
+    .shot small { color: var(--muted); font-size: 13px; display: block; }
+    .shot .rm { margin-left: auto; }
+
+    .note { margin-top: 14px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.04); color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .msg { min-height: 20px; margin: 12px 0 0; font-size: 13px; }
+    .msg.err { color: var(--red); }
+    .msg.ok { color: var(--green); }
+    .submit { width: 100%; min-height: 50px; margin-top: 10px; font-size: 16px; }
+
+    .offline { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: rgba(250,204,21,.1); color: var(--gold); font-size: 13px; }
+    body.is-offline .offline { display: block; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: calc(20px + var(--safe-b)); z-index: 40; transform: translateX(-50%);
+      max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 14px;
+      background: #24242f; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,.5); font-size: 14px;
+    }
+    .toast[hidden] { display: none; }
+
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  </style>
 </head>
 <body>
-  <p>正在跳轉至新版網站：<a href="https://992851qaz-bot.github.io/-/20260828.html">https://992851qaz-bot.github.io/-/20260828.html</a></p>
+  <div class="wrap">
+    <header class="top" id="top">
+      <a class="brand" href="./" aria-label="GAMEZH 鳴潮工具箱首頁">
+        <img src="icons/icon-192.png" alt="" width="36" height="36">
+        <div><b>GAMEZH</b><small>鳴潮工具箱</small></div>
+      </a>
+      <button class="btn primary" id="installBtn" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>安裝 App
+      </button>
+    </header>
+
+    <main>
+      <div class="offline" role="status">目前離線中。首頁可以開，但工具需要網路才能使用。</div>
+
+      <a class="hero" href="20260828.html" data-tool="echo">
+        <svg class="rings" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke-width="3"><circle cx="50" cy="50" r="46" stroke="#38bdf8"/><circle cx="50" cy="50" r="34" stroke="#38bdf8" opacity=".6"/><circle cx="50" cy="50" r="22" stroke="#facc15"/></g><circle cx="50" cy="50" r="8" fill="#facc15"/></svg>
+        <span class="tag">主力工具</span>
+        <h1>鳴潮聲骸分析儀</h1>
+        <p>聲骸評分、Build 攻略與 DPS 試算。</p>
+        <span class="btn primary">開始分析 →</span>
+      </a>
+
+      <section id="recentWrap" hidden>
+        <h2>最近使用</h2>
+        <div class="recent" id="recent"></div>
+      </section>
+
+      <h2>所有工具</h2>
+      <nav class="grid" id="grid" aria-label="工具列表"></nav>
+
+      <h2>遇到問題？</h2>
+      <div class="grid">
+        <button type="button" class="card" id="openReport">
+          <div class="ico" style="--c:rgba(248,113,113,.14)" aria-hidden="true">🚨</div>
+          <div class="txt"><b>回報問題</b><span>功能壞掉、數值不對、畫面跑版都可以告訴我們</span></div>
+          <span class="chev" aria-hidden="true">›</span>
+        </button>
+      </div>
+
+      <h2>關於 GAMEZH</h2>
+      <section class="about">
+        <h3>給鳴潮（Wuthering Waves）玩家的免費工具</h3>
+        <p>GAMEZH 是玩家自製的鳴潮輔助工具，打開瀏覽器就能用，不用下載安裝，手機、平板、電腦都支援。</p>
+        <ul>
+          <li><b>聲骸分析儀</b>：替聲骸打分數，比較不同角色的配裝與 Build，並試算 DPS。</li>
+          <li><b>累充 CP 值計算</b>：規劃累充與月卡，計算每一抽的成本，並模擬抽卡結果。</li>
+          <li><b>直播即時辨識 HUD</b>：直播時即時辨識畫面上的聲骸數值。</li>
+          <li><b>HUD v2.1</b>：光學辨識評分，記錄角色面板。</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>GAMEZH · 非官方玩家工具，與庫洛遊戲（Kuro Games）無關。<br>鳴潮 / Wuthering Waves 為其權利人之商標。</p>
+    </footer>
+  </div>
+
+  <!-- 回報問題 -->
+  <div class="backdrop" id="reportSheet" hidden>
+    <form class="panel" id="reportForm" role="dialog" aria-modal="true" aria-labelledby="reportTitle" novalidate>
+      <div class="grab" aria-hidden="true"></div>
+      <div class="panel-head">
+        <h3 id="reportTitle">🚨 回報問題</h3>
+        <button type="button" class="x" data-close aria-label="關閉">✕</button>
+      </div>
+      <p class="sub">直接寫下發生了什麼事，我們會儘快處理。</p>
+
+      <label class="f" for="rpText">問題描述</label>
+      <textarea class="inp" id="rpText" maxlength="1000" placeholder="例：在聲骸分析儀按「儲存」後畫面卡住，重新整理也一樣。用的是 iPhone Safari。" required></textarea>
+      <div class="count"><span id="rpCount">0</span> / 1000</div>
+
+      <label class="f" for="rpUid">遊戲 UID<em>選填</em></label>
+      <input class="inp" id="rpUid" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="方便我們查你的資料">
+
+      <label class="f" for="rpContact">聯絡方式<em>選填，Discord ID 或 Email</em></label>
+      <input class="inp" id="rpContact" autocomplete="off" maxlength="100" placeholder="需要回覆你時使用">
+
+      <label class="f">截圖<em>選填</em></label>
+      <label class="shot" for="rpFile">
+        <input type="file" id="rpFile" accept="image/*">
+        <span class="ph" id="rpThumb" aria-hidden="true">📷</span>
+        <span><span id="rpFileName">點這裡附上截圖</span><small>有圖片我們更快找到問題</small></span>
+        <button type="button" class="btn rm" id="rpRemove" hidden>移除</button>
+      </label>
+
+      <div class="note">送出時會一併附上：目前網址、最近使用的工具、螢幕尺寸與瀏覽器版本，用來重現問題。</div>
+      <p class="msg" id="rpMsg" role="status" aria-live="polite"></p>
+      <button type="submit" class="btn primary submit" id="rpSubmit" disabled>送出回報</button>
+    </form>
+  </div>
+
+  <!-- iOS 加入主畫面說明 -->
+  <div class="backdrop" id="iosSheet" hidden>
+    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="iosTitle">
+      <div class="grab" aria-hidden="true"></div>
+      <div class="panel-head"><h3 id="iosTitle">把 GAMEZH 加到主畫面</h3><button type="button" class="x" data-close aria-label="關閉">✕</button></div>
+      <p class="sub">點 Safari 下方的「分享」<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg>，再選「加入主畫面」，之後就能像 App 一樣從桌面開啟。</p>
+      <button type="button" class="btn primary submit" data-close>知道了</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script>
+    // 工具清單：之後新增頁面只要改這裡
+    var TOOLS = [
+      { id: 'echo',  href: '20260828.html', icon: '🎯', title: '聲骸分析儀',      desc: '聲骸評分・Build 攻略・DPS 試算', badge: '熱門', color: 'rgba(56,189,248,.14)' },
+      { id: 'topup', href: '3.7.html',      icon: '💎', title: '累充 CP 值計算',   desc: '累充累儲規劃與抽卡模擬',         color: 'rgba(250,204,21,.13)' },
+      { id: 'live',  href: 'ON1.html',      icon: '📡', title: '直播即時辨識 HUD', desc: '直播串流中即時辨識聲骸',         color: 'rgba(244,114,182,.13)' },
+      { id: 'hud',   href: 'exe.html',      icon: '🖥️', title: 'HUD v2.1',         desc: '光學評分與面板紀錄',             color: 'rgba(167,139,250,.14)' }
+    ];
+    var byId = {};
+    TOOLS.forEach(function (t) { byId[t.id] = t; });
+
+    function $(id) { return document.getElementById(id); }
+    function el(tag, attrs, html) {
+      var n = document.createElement(tag);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (html != null) n.innerHTML = html;
+      return n;
+    }
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+    var toastTimer;
+    function toast(text) {
+      var t = $('toast');
+      t.textContent = text; t.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { t.hidden = true; }, 3200);
+    }
+
+    // 工具卡片
+    TOOLS.forEach(function (t) {
+      $('grid').appendChild(el('a', { class: 'card', href: t.href, 'data-tool': t.id },
+        '<div class="ico" style="--c:' + t.color + '" aria-hidden="true">' + t.icon + '</div>' +
+        '<div class="txt"><b>' + esc(t.title) + '</b><span>' + esc(t.desc) + '</span></div>' +
+        (t.badge ? '<em class="badge">' + esc(t.badge) + '</em>' : '<span class="chev" aria-hidden="true">›</span>')));
+    });
+
+    // 最近使用（只存在這台裝置）
+    var RECENT_KEY = 'gamezh.portal.recent';
+    function getRecent() { try { return JSON.parse(lsGet(RECENT_KEY)) || []; } catch (e) { return []; } }
+    function pushRecent(id) {
+      var list = getRecent().filter(function (x) { return x !== id; });
+      list.unshift(id);
+      lsSet(RECENT_KEY, JSON.stringify(list.slice(0, 4)));
+    }
+    function renderRecent() {
+      var list = getRecent().filter(function (id) { return byId[id]; });
+      var box = $('recent');
+      box.innerHTML = '';
+      $('recentWrap').hidden = list.length === 0;
+      list.forEach(function (id) {
+        var t = byId[id];
+        box.appendChild(el('a', { href: t.href, 'data-tool': t.id },
+          '<span class="ico" style="--c:' + t.color + '" aria-hidden="true">' + t.icon + '</span>' + esc(t.title)));
+      });
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-tool]');
+      if (a) pushRecent(a.getAttribute('data-tool'));
+    });
+    renderRecent();
+    window.addEventListener('pageshow', renderRecent);
+
+    // 頂欄捲動陰影
+    var topBar = $('top');
+    window.addEventListener('scroll', function () { topBar.classList.toggle('scrolled', window.scrollY > 4); }, { passive: true });
+
+    // 離線提示
+    function syncOnline() { document.body.classList.toggle('is-offline', !navigator.onLine); }
+    window.addEventListener('online', syncOnline);
+    window.addEventListener('offline', syncOnline);
+    syncOnline();
+
+    // 彈出面板
+    var lastFocus = null;
+    function openSheet(id, focusEl) {
+      lastFocus = document.activeElement;
+      $(id).hidden = false;
+      document.body.classList.add('lock');
+      if (focusEl) setTimeout(function () { focusEl.focus(); }, 50);
+    }
+    function closeSheet(sheet) {
+      sheet.hidden = true;
+      if (!document.querySelector('.backdrop:not([hidden])')) document.body.classList.remove('lock');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    document.querySelectorAll('.backdrop').forEach(function (b) {
+      b.addEventListener('click', function (e) {
+        if (e.target === b || (e.target.closest && e.target.closest('[data-close]'))) closeSheet(b);
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var open = document.querySelector('.backdrop:not([hidden])');
+      if (open) closeSheet(open);
+    });
+
+    // 安裝成 App
+    var installBtn = $('installBtn');
+    var deferred = null;
+    var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; installBtn.hidden = false; });
+    window.addEventListener('appinstalled', function () { installBtn.hidden = true; deferred = null; });
+    if (isIOS && !standalone) installBtn.hidden = false;
+    installBtn.addEventListener('click', function () {
+      if (deferred) {
+        deferred.prompt();
+        deferred.userChoice.finally(function () { deferred = null; installBtn.hidden = true; });
+      } else if (isIOS) {
+        openSheet('iosSheet');
+      }
+    });
+
+    // ───────── 回報問題（與聲骸分析儀相同：Discord Webhook + FormData） ─────────
+    var rpText = $('rpText'), rpUid = $('rpUid'), rpContact = $('rpContact'), rpFile = $('rpFile');
+    var rpSubmit = $('rpSubmit'), rpMsg = $('rpMsg');
+    var shotBlob = null, shotUrl = null;
+    var COOLDOWN_KEY = 'last_feedback_ts'; // 與聲骸分析儀共用，避免兩邊連發
+
+    function setMsg(text, kind) { rpMsg.textContent = text || ''; rpMsg.className = 'msg' + (kind ? ' ' + kind : ''); }
+    function validate() {
+      var n = rpText.value.trim().length;
+      $('rpCount').textContent = rpText.value.length;
+      rpSubmit.disabled = n < 5;
+      if (n > 0 && n < 5) setMsg('描述再多寫一點（至少 5 個字）', 'err');
+      else if (rpMsg.classList.contains('err')) setMsg('');
+    }
+    rpText.addEventListener('input', validate);
+
+    $('openReport').addEventListener('click', function () {
+      if (!rpUid.value) rpUid.value = lsGet('ww_current_user_uid') || lsGet('ww_current_uid') || lsGet('ww_user_uid') || '';
+      setMsg('');
+      validate();
+      openSheet('reportSheet', rpText);
+    });
+
+    function clearShot() {
+      shotBlob = null;
+      if (shotUrl) URL.revokeObjectURL(shotUrl);
+      shotUrl = null;
+      rpFile.value = '';
+      $('rpThumb').style.backgroundImage = '';
+      $('rpThumb').classList.remove('has');
+      $('rpFileName').textContent = '點這裡附上截圖';
+      $('rpRemove').hidden = true;
+    }
+    $('rpRemove').addEventListener('click', function (e) { e.preventDefault(); clearShot(); });
+
+    // 手機照片常常很大：縮到長邊 1600px、轉 JPEG，避免超過 Discord 上傳限制
+    function shrinkImage(file) {
+      return new Promise(function (resolve) {
+        var url = URL.createObjectURL(file);
+        var img = new Image();
+        img.onload = function () {
+          var max = 1600, w = img.naturalWidth, h = img.naturalHeight;
+          var s = Math.min(1, max / Math.max(w, h));
+          var c = document.createElement('canvas');
+          c.width = Math.round(w * s); c.height = Math.round(h * s);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          c.toBlob(function (b) { resolve(b || file); }, 'image/jpeg', 0.85);
+        };
+        img.onerror = function () { URL.revokeObjectURL(url); resolve(file.size < 8e6 ? file : null); };
+        img.src = url;
+      });
+    }
+    rpFile.addEventListener('change', function () {
+      var f = rpFile.files && rpFile.files[0];
+      if (!f) return;
+      if (!/^image\//.test(f.type)) { setMsg('請選擇圖片檔', 'err'); rpFile.value = ''; return; }
+      $('rpFileName').textContent = '處理中…';
+      shrinkImage(f).then(function (b) {
+        if (!b) { clearShot(); setMsg('這張圖片無法讀取，請換一張', 'err'); return; }
+        shotBlob = b;
+        if (shotUrl) URL.revokeObjectURL(shotUrl);
+        shotUrl = URL.createObjectURL(b);
+        $('rpThumb').style.backgroundImage = 'url(' + shotUrl + ')';
+        $('rpThumb').classList.add('has');
+        $('rpFileName').textContent = f.name.length > 24 ? f.name.slice(0, 21) + '…' : f.name;
+        $('rpRemove').hidden = false;
+      });
+    });
+
+    function webhookUrl() {
+      // 與 20260828.html 的 submitFeedback() 使用同一個 Webhook
+      var p1 = [104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109];
+      var p2 = [47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47];
+      var p3 = [49, 53, 48, 57, 57, 49, 57, 50, 51, 48, 54, 50, 54, 50, 51, 56, 54, 53, 52, 47];
+      var p4 = [51, 114, 102, 66, 79, 77, 53, 70, 98, 90, 66, 113, 82, 65, 70, 82, 66, 100, 67, 115, 87, 79, 75, 69, 95, 105, 55, 56, 111, 70, 50, 84, 55, 117, 112, 113, 97, 81, 56, 104, 108, 117, 54, 82, 119, 75, 74, 71, 49, 110, 82, 103, 71, 107, 77, 95, 112, 108, 89, 73, 113, 71, 81, 95, 68, 116, 119, 72];
+      return String.fromCharCode.apply(null, p1.concat(p2, p3, p4));
+    }
+
+    $('reportForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var text = rpText.value.trim();
+      if (text.length < 5) { validate(); rpText.focus(); return; }
+      var last = parseInt(lsGet(COOLDOWN_KEY), 10);
+      if (last && Date.now() - last < 60000) {
+        setMsg('⏳ 剛剛才送出過，請一分鐘後再試。', 'err');
+        return;
+      }
+      if (!navigator.onLine) { setMsg('目前離線，連上網路後再送出。', 'err'); return; }
+
+      var recent = getRecent().map(function (id) { return byId[id] ? byId[id].title : id; });
+      var uid = rpUid.value.trim();
+      var contact = rpContact.value.trim();
+      var fields = [
+        { name: '🌐 網頁來源 (Page URL)', value: location.href.substring(0, 1024) },
+        { name: '📄 參照來源 (Referrer)', value: (document.referrer || 'Direct / 直接開啟').substring(0, 1024), inline: true },
+        { name: '👤 玩家 UID', value: uid || '未填寫', inline: true },
+        { name: '🕙 回報時間', value: new Date().toLocaleString('zh-TW'), inline: true },
+        { name: '🏷️ 回報分類', value: '入口網回報', inline: true },
+        { name: '🧭 最近使用工具', value: recent.length ? recent.join('、') : '無', inline: true },
+        { name: '📱 App 模式', value: standalone ? '是（已安裝）' : '否（瀏覽器）', inline: true }
+      ];
+      if (contact) fields.push({ name: '✉️ 聯絡方式', value: contact.substring(0, 1024) });
+      fields.push({ name: '📝 問題描述', value: text.substring(0, 1024) });
+      fields.push({ name: '🧩 瀏覽器', value: navigator.userAgent.substring(0, 1024) });
+
+      var payload = {
+        embeds: [{
+          title: '🚨 用戶問題回報 [入口網]',
+          color: 0xf87171,
+          fields: fields,
+          footer: { text: '螢幕: ' + screen.width + 'x' + screen.height + ' | 視窗: ' + innerWidth + 'x' + innerHeight + ' | DPR: ' + (devicePixelRatio || 1).toFixed(2) }
+        }]
+      };
+      if (text.length > 1024) payload.content = '完整描述：\n' + text.substring(0, 1900);
+
+      var fd = new FormData();
+      fd.append('payload_json', JSON.stringify(payload));
+      if (shotBlob) fd.append('file', shotBlob, 'screenshot.' + (shotBlob.type === 'image/png' ? 'png' : 'jpg'));
+
+      rpSubmit.disabled = true;
+      rpSubmit.textContent = '⏳ 發送中…';
+      setMsg('');
+      fetch(webhookUrl(), { method: 'POST', body: fd })
+        .then(function (res) {
+          if (!res.ok) throw new Error('Status ' + res.status);
+          lsSet(COOLDOWN_KEY, String(Date.now()));
+          rpText.value = ''; rpContact.value = '';
+          clearShot();
+          closeSheet($('reportSheet'));
+          toast('✅ 感謝回報！我們收到了。');
+        })
+        .catch(function (err) {
+          console.error('回報發送失敗:', err);
+          setMsg('❌ 發送失敗，請稍後再試。', 'err');
+        })
+        .then(function () {
+          rpSubmit.textContent = '送出回報';
+          validate();
+        });
+    });
+
+    // Service worker：只快取首頁本身，讓 App 能離線開啟
+    if ('serviceWorker' in navigator && location.protocol === 'https:') {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+      });
+    }
+  </script>
 </body>
 </html>
