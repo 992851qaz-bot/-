@@ -1,6 +1,6 @@
 // GAMEZH 入口網 Service Worker
 // 只快取首頁本身（讓 App 可離線開啟）；其他工具頁一律直接走網路，不攔截、不快取。
-const CACHE = 'gamezh-portal-v5';
+const CACHE = 'gamezh-portal-v6';
 const SHELL = [
   './',
   './index.html',

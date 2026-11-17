@@ -30,6 +30,16 @@ async function latestRelease(env, ctx) {
   return res.json();
 }
 
+// 從 tag 或檔名抓出版本號，例如 "GameZH_.HUD_v4.0.14.exe" → "v4.0.14"
+function versionOf(release) {
+  const names = [release.tag_name, release.name].concat((release.assets || []).map((a) => a.name));
+  for (const n of names) {
+    const m = /v?(\d+(?:\.\d+){1,3})/i.exec(n || '');
+    if (m) return 'v' + m[1];
+  }
+  return release.tag_name || null;
+}
+
 function pickAsset(release, platform) {
   const test = PLATFORMS[platform];
   if (!release || !test) return null;
@@ -44,7 +54,7 @@ async function handleDownload(url, env, ctx) {
   try { release = await latestRelease(env, ctx); } catch (e) { release = null; }
 
   if (what === 'latest.json') {
-    const info = { version: release ? release.tag_name : null, published: release ? release.published_at : null, assets: {} };
+    const info = { version: release ? versionOf(release) : null, published: release ? release.published_at : null, assets: {} };
     for (const p of Object.keys(PLATFORMS)) {
       const a = pickAsset(release, p);
       if (a) info.assets[p] = { name: a.name, size: a.size, url: `/download/${p}` };

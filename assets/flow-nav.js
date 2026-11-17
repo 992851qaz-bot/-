@@ -1,5 +1,5 @@
 /* GAMEZH 流動頁籤
- * 線在目前頁籤旁彎成一道流動的光（金色主線＋紅／青色邊），附幾顆閃爍粒子。
+ * 桌機在上方標題列、手機在底部。線在目前頁籤旁彎成一道流動的光（金色主線＋紅／青色邊），附幾顆閃爍粒子。
  * 捲動到哪個區塊，就自動切到對應頁籤，光會滑過去。
  */
 (function () {
@@ -29,7 +29,7 @@
 
   function center(a) {
     var r = a.getBoundingClientRect(), n = nav.getBoundingClientRect();
-    return mq.matches ? r.top - n.top + r.height / 2 : r.left - n.left + r.width / 2;
+    return r.left - n.left + r.width / 2;
   }
 
   // 沿著直線（或橫線）畫一段 S 形彎曲：envelope 控制只在 c 附近彎
@@ -38,7 +38,7 @@
     for (var d = -half; d <= half; d += 3) {
       var env = Math.exp(-(d * d) / (2 * 30 * 30));
       var off = Math.sin(d / 17 + phase) * amp * env + shift * env;
-      pts.push(mq.matches ? [40 - off, c + d] : [c + d, 36 + off]);
+      pts.push([c + d, 36 + off]);
     }
     return 'M' + pts.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' L');
   }
@@ -53,9 +53,9 @@
     var a = links[active].getBoundingClientRect(), n = nav.getBoundingClientRect();
     sparks.forEach(function (s, k) {
       var ang = k * 1.7 + t * 0.4, r = 18 + k * 7;
-      var x, y;
-      if (mq.matches) { x = a.left - n.left + a.width / 2 + Math.cos(ang) * r * 0.9 + 14; y = pos + Math.sin(ang) * r; }
-      else { x = pos + Math.cos(ang) * r * 1.3; y = Math.sin(ang) * 10 - 8; }
+      // 光在線上：桌機線在標題列底部，手機線在底部頁籤列頂端
+      var lineY = mq.matches ? n.height : 0;
+      var x = pos + Math.cos(ang) * r * 1.3, y = lineY + Math.sin(ang) * 10 - (mq.matches ? 2 : 8);
       s.style.left = x + 'px'; s.style.top = y + 'px';
     });
   }

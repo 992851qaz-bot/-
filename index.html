@@ -109,7 +109,7 @@
     .logo small { display: block; font-size: 10.5px; letter-spacing: .18em; color: var(--gold-2); line-height: 1.2; }
     .nav { display: flex; gap: 26px; margin-left: auto; font-size: 14px; color: var(--muted); }
     .nav a:hover { color: var(--text); }
-    @media (max-width: 860px) { .nav { display: none; } #installBtn { margin-left: auto; } }
+    @media (max-width: 860px) { .nav { display: none; } .hd-dl { margin-left: auto; } }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -167,7 +167,7 @@
     .recent::-webkit-scrollbar { display: none; }
     .recent a { flex: none; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px 0 10px; border: 1px solid var(--line); background: var(--panel); font-size: 14px; }
     .recent a:hover { border-color: var(--line-2); }
-    .recent .ico { font-size: 18px; }
+    .recent .ico { width: 30px; height: 22px; object-fit: cover; object-position: top; border: 1px solid var(--line); }
 
     /* tools */
     .tools { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
@@ -175,7 +175,8 @@
     .tool:hover { border-color: var(--line-2); transform: translateY(-2px); }
     .tool:focus-visible, .btn:focus-visible, .recent a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .tool .pic { aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--line); background: #06080f; }
-    .tool .pic img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+    .tool .pic img { width: 100%; height: 100%; object-fit: cover; object-position: top left; transition: transform .5s; }
+    .tool:hover .pic img { transform: scale(1.03); }
     .tool .pic.art { display: grid; place-items: center; position: relative;
       background: radial-gradient(70% 90% at 80% 10%, var(--c, rgba(92,200,255,.25)), transparent 70%), linear-gradient(160deg, #161d36, #0c1020); }
     .tool .pic.art .big { font-size: 64px; filter: drop-shadow(0 10px 30px rgba(0,0,0,.6)); }
@@ -314,6 +315,21 @@
       .shots3 { grid-template-columns: minmax(0,1fr); gap: 16px; margin-top: 32px; }
     }
 
+    /* Discord 懸浮按鈕（右下角） */
+    .dc-float { position: fixed; z-index: 25; right: max(16px, env(safe-area-inset-right)); bottom: calc(20px + var(--safe-b));
+      display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px;
+      background: rgba(19,26,46,.92); border: 1px solid var(--line-2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.45); transition: transform .2s, border-color .2s; }
+    .dc-float:hover { transform: translateY(-2px); border-color: var(--gold); }
+    .dc-float:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .dc-ico { width: 40px; height: 40px; display: grid; place-items: center; background: #5865F2; color: #fff; border-radius: 50%; }
+    .dc-ico svg { width: 22px; height: 22px; }
+    .dc-txt b { display: block; font-size: 14px; letter-spacing: .14em; line-height: 1.2; }
+    .dc-txt small { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.3; }
+    @media (max-width: 1099.98px) { .dc-float { bottom: calc(78px + var(--safe-b)); padding: 5px 12px 5px 5px; } .dc-ico { width: 34px; height: 34px; } .dc-ico svg { width: 19px; height: 19px; } }
+    @media (max-width: 380px) { .dc-txt small { display: none; } }
+    footer { padding-bottom: calc(96px + var(--safe-b)) !important; }
+
     /* responsive */
     @media (max-width: 980px) {
       .split, .about { grid-template-columns: minmax(0,1fr); gap: 40px; }
@@ -358,9 +374,7 @@
         <a href="#tools">其他工具</a>
         <a href="#report">回報問題</a>
       </nav>
-      <button class="btn" id="installBtn" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>安裝 App
-      </button>
+      <a class="btn gold hd-dl" id="dlBtn" href="exe.html#download" data-tool="hud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>下載懸浮程式</span></a>
     </div>
   </header>
 
@@ -386,7 +400,7 @@
               <li>整套聲骸評分、CV 值、配裝建議與 DPS 試算</li>
               <li>聲骸排行榜，看看大佬都怎麼穿</li>
             </ul>
-            <div class="route-meta"><span>📱 手機 · 電腦 · 平板</span><span>免下載</span></div>
+            <div class="route-meta"><span>手機 · 電腦 · 平板</span><span>免下載</span></div>
             <span class="btn gold">開始分析 →</span>
           </div>
         </a>
@@ -401,7 +415,7 @@
               <li>止損建議、開滿落點圖，強化前就知道值不值得</li>
               <li>換裝比分、面板缺什麼、一鍵匯出分享圖</li>
             </ul>
-            <div class="route-meta"><span>🖥️ Windows 電腦</span><span>需下載安裝</span></div>
+            <div class="route-meta"><span>Windows 電腦</span><span>需下載安裝</span></div>
             <span class="btn">看介紹與下載 →</span>
           </div>
         </a>
@@ -498,7 +512,7 @@
             <h2>工具壞掉、數值不對？</h2>
             <p>直接寫下發生什麼事就好，不用填問卷。附截圖會更快找到問題。</p>
           </div>
-          <button type="button" class="btn gold" id="openReport">🚨 回報問題</button>
+          <button type="button" class="btn gold" id="openReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v4M12 14h.01"/></svg>回報問題</button>
         </div>
       </div>
     </section>
@@ -528,12 +542,17 @@
     </div>
   </footer>
 
+  <a class="dc-float" href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener" aria-label="加入 GAMEZH 的 Discord 群組">
+    <span class="dc-ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.211.375-.445.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.098.245.197.372.291a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029zM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></span>
+    <span class="dc-txt"><b>GAMEZH</b><small>加入 Discord 群組</small></span>
+  </a>
+
   <!-- 回報問題 -->
   <div class="backdrop" id="reportSheet" hidden>
     <form class="panel" id="reportForm" role="dialog" aria-modal="true" aria-labelledby="reportTitle" novalidate>
       <div class="grab" aria-hidden="true"></div>
       <div class="panel-head">
-        <h3 id="reportTitle">🚨 回報問題</h3>
+        <h3 id="reportTitle">回報問題</h3>
         <button type="button" class="x" data-close aria-label="關閉">✕</button>
       </div>
       <p class="sub">直接寫下發生了什麼事，我們會儘快處理。</p>
@@ -551,7 +570,7 @@
       <label class="f">截圖<em>選填</em></label>
       <label class="shot" for="rpFile">
         <input type="file" id="rpFile" accept="image/*">
-        <span class="ph" id="rpThumb" aria-hidden="true">📷</span>
+        <span class="ph" id="rpThumb" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
         <span><span id="rpFileName">點這裡附上截圖</span><small>有圖片我們更快找到問題</small></span>
         <button type="button" class="btn rm" id="rpRemove" hidden>移除</button>
       </label>
@@ -562,25 +581,16 @@
     </form>
   </div>
 
-  <!-- iOS 加入主畫面說明 -->
-  <div class="backdrop" id="iosSheet" hidden>
-    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="iosTitle">
-      <div class="grab" aria-hidden="true"></div>
-      <div class="panel-head"><h3 id="iosTitle">把 GAMEZH 加到主畫面</h3><button type="button" class="x" data-close aria-label="關閉">✕</button></div>
-      <p class="sub">點 Safari 下方的「分享」<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M5 12v8h14v-8"/></svg>，再選「加入主畫面」，之後就能像 App 一樣從桌面開啟。</p>
-      <button type="button" class="btn primary submit" data-close>知道了</button>
-    </div>
-  </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script>
     // 工具清單：之後新增頁面只要改這裡
     var TOOLS = [
-      { id: 'echo',  href: '20260828.html', icon: '🎯', title: '聲骸分析儀',          desc: '上傳聲骸截圖，馬上知道幾分、適合哪個角色，順便算配裝和 DPS。', tags: ['熱門', '手機可用'], color: 'rgba(92,200,255,.28)' },
-      { id: 'hud',   href: 'exe.html',      icon: '🖥️', title: '電腦版聲骸評分 HUD',  desc: '開著遊戲點一下聲骸，評分、止損建議、開滿落點直接浮在畫面旁。', tags: ['電腦'], img: 'img/hud-score.webp' },
-      { id: 'topup', href: '3.7.html',      icon: '💎', title: '累充 CP 值計算',      desc: '月卡、累充怎麼買最划算，算出每一抽的成本，還能模擬抽卡。', tags: ['手機可用'], color: 'rgba(255,210,63,.22)' },
-      { id: 'live',  href: 'ON1.html',      icon: '📡', title: '網頁版即時評分',      desc: '免安裝，用電腦瀏覽器分享遊戲畫面，邊玩邊看聲骸分數。', tags: ['電腦'], color: 'rgba(255,107,180,.22)' }
+      { id: 'echo',  href: '20260828.html', title: '聲骸分析儀',         desc: '上傳角色資訊卡，整隻角色健檢。', tags: ['手機可用'], img: 'img/ana-home.webp' },
+      { id: 'hud',   href: 'exe.html',      title: '聲骸評分 HUD',       desc: '電腦版懸浮評分。', tags: ['電腦'], img: 'img/hud-score.webp' },
+      { id: 'topup', href: '3.7.html',      title: '累充 CP 值計算',     desc: '月卡、累充怎麼買最划算，算出每一抽的成本，還能模擬抽卡。', tags: ['手機可用'], img: 'img/tool-topup.webp' },
+      { id: 'live',  href: 'ON1.html',      title: '網頁版即時評分',     desc: '免安裝，用電腦瀏覽器分享遊戲畫面，邊玩邊看聲骸分數。', tags: ['電腦', '免安裝'], img: 'img/tool-live.webp' }
     ];
     var byId = {};
     TOOLS.forEach(function (t) { byId[t.id] = t; });
@@ -606,9 +616,7 @@
 
     // 工具卡片
     TOOLS.filter(function (t) { return t.id !== 'echo' && t.id !== 'hud'; }).forEach(function (t) {
-      var pic = t.img
-        ? '<div class="pic"><img src="' + t.img + '" alt="" loading="lazy"></div>'
-        : '<div class="pic art" style="--c:' + t.color + '" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="big">' + t.icon + '</span></div>';
+      var pic = '<div class="pic"><img src="' + t.img + '" alt="' + esc(t.title) + ' 實際畫面" loading="lazy"></div>';
       var tags = (t.tags || []).map(function (g) { return '<span' + (g === '電腦' ? ' class="pc"' : '') + '>' + esc(g) + '</span>'; }).join('');
       $('grid').appendChild(el('a', { class: 'tool', href: t.href, 'data-tool': t.id },
         pic + '<div class="body"><div class="tags">' + tags + '</div><h3>' + esc(t.title) + '</h3><p>' + esc(t.desc) + '</p><span class="go">開啟 →</span></div>'));
@@ -630,7 +638,7 @@
       list.forEach(function (id) {
         var t = byId[id];
         box.appendChild(el('a', { href: t.href, 'data-tool': t.id },
-          '<span class="ico" aria-hidden="true">' + t.icon + '</span>' + esc(t.title)));
+          '<img class="ico" src="' + t.img + '" alt="" loading="lazy">' + esc(t.title)));
       });
     }
     document.addEventListener('click', function (e) {
@@ -675,21 +683,15 @@
     });
 
     // 安裝成 App
-    var installBtn = $('installBtn');
-    var deferred = null;
     var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; installBtn.hidden = false; });
-    window.addEventListener('appinstalled', function () { installBtn.hidden = true; deferred = null; });
-    if (isIOS && !standalone) installBtn.hidden = false;
-    installBtn.addEventListener('click', function () {
-      if (deferred) {
-        deferred.prompt();
-        deferred.userChoice.finally(function () { deferred = null; installBtn.hidden = true; });
-      } else if (isIOS) {
-        openSheet('iosSheet');
-      }
-    });
+    // 下載懸浮程式：在 Cloudflare 版直接下載安裝檔，GitHub Pages 版帶到下載說明
+    (function () {
+      if (/github\.io$/.test(location.hostname) || location.protocol === 'file:') return;
+      fetch('download/latest.json', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (info) { if (info && info.assets && info.assets.windows) $('dlBtn').href = 'download/windows'; })
+        .catch(function () {});
+    })();
 
     // ───────── 回報問題（與聲骸分析儀相同：Discord Webhook + FormData） ─────────
     var rpText = $('rpText'), rpUid = $('rpUid'), rpContact = $('rpContact'), rpFile = $('rpFile');
@@ -776,7 +778,7 @@
       if (text.length < 5) { validate(); rpText.focus(); return; }
       var last = parseInt(lsGet(COOLDOWN_KEY), 10);
       if (last && Date.now() - last < 60000) {
-        setMsg('⏳ 剛剛才送出過，請一分鐘後再試。', 'err');
+        setMsg('剛剛才送出過，請一分鐘後再試。', 'err');
         return;
       }
       if (!navigator.onLine) { setMsg('目前離線，連上網路後再送出。', 'err'); return; }
@@ -812,7 +814,7 @@
       if (shotBlob) fd.append('file', shotBlob, 'screenshot.' + (shotBlob.type === 'image/png' ? 'png' : 'jpg'));
 
       rpSubmit.disabled = true;
-      rpSubmit.textContent = '⏳ 發送中…';
+      rpSubmit.textContent = '發送中…';
       setMsg('');
       fetch(webhookUrl(), { method: 'POST', body: fd })
         .then(function (res) {
@@ -821,11 +823,11 @@
           rpText.value = ''; rpContact.value = '';
           clearShot();
           closeSheet($('reportSheet'));
-          toast('✅ 感謝回報！我們收到了。');
+          toast('感謝回報！我們收到了。');
         })
         .catch(function (err) {
           console.error('回報發送失敗:', err);
-          setMsg('❌ 發送失敗，請稍後再試。', 'err');
+          setMsg('發送失敗，請稍後再試。', 'err');
         })
         .then(function () {
           rpSubmit.textContent = '送出回報';
