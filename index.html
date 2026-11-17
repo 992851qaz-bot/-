@@ -6,8 +6,12 @@
   <script>
     // 舊連結相容：以前首頁直接跳到聲骸分析儀，帶參數或錨點的舊分享連結（例如 ?uid=）繼續轉過去
     (function () {
+      // 首頁自己的區塊（頁籤、內部連結用），帶這些 # 時留在首頁，不轉走
+      var OWN = ['home', 'top', 'routes', 'compare', 'analyzer', 'hud', 'tools', 'report', 'about'];
+      var h = decodeURIComponent(location.hash.slice(1));
+      var foreignHash = h && OWN.indexOf(h) === -1;
       var q = location.search.replace(/^\?/, '').split('&').filter(function (p) { return p && p.indexOf('source=') !== 0; });
-      if (q.length || location.hash.length > 1) {
+      if (q.length || foreignHash) {
         location.replace('20260828.html' + (q.length ? '?' + q.join('&') : '') + location.hash);
       }
     })();
