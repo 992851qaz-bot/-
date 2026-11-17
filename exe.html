@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/flow-nav.css">
+<link rel="stylesheet" href="assets/flow-nav.css?v=20261117d">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -31,7 +31,7 @@
   "name": "GameZH 聲骸評分 HUD",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Windows, macOS",
-  "softwareVersion": "4.0.6",
+  "softwareVersion": "4.0.14",
   "inLanguage": "zh-Hant-TW",
   "description": "鳴潮（Wuthering Waves）PC 聲骸評分懸浮工具：點一下聲骸即顯示評分、止損建議與開滿落點。",
   "downloadUrl": "https://apps.microsoft.com/detail/9N19LCKX2NSW",
@@ -101,6 +101,10 @@ a { color: inherit; text-decoration: none; }
 .btn.gold:hover { background: #f1dfb2; }
 .btn svg { width: 17px; height: 17px; flex: none; }
 .btn[hidden] { display: none; }
+.dl-btn { min-height: 54px; padding: 8px 22px; line-height: 1.25; text-align: left; }
+.dl-btn svg { width: 20px; height: 20px; }
+.dl-txt b { display: block; font-size: 16px; }
+.dl-txt small { display: block; font-size: 11.5px; font-weight: 500; opacity: .72; word-break: break-all; }
 .hd .btn { min-height: 38px; padding: 0 16px; font-size: 14px; margin-left: 0; }
 @media (max-width: 860px) { .nav { display: none; } .hd .btn { margin-left: auto; } }
 
@@ -327,7 +331,7 @@ main, footer { position: relative; z-index: 1; }
       <a href="#start">安裝教學</a>
       <a href="#safe">安全性</a>
     </nav>
-    <a class="btn gold" href="#download">免費下載</a>
+    <a class="btn gold" data-dl href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>立即下載</span></a>
   </div>
 </header>
 
@@ -336,23 +340,20 @@ main, footer { position: relative; z-index: 1; }
   <section class="hero" id="intro">
     <div class="wrap">
       <div>
-        <div class="eyebrow">鳴潮 PC 聲骸評分懸浮工具 · v4.0.6</div>
+        <div class="eyebrow">鳴潮 PC 聲骸評分懸浮工具 · <span data-latest-ver>v4.0.14</span></div>
         <h1>聲骸該不該<br class="br-d">繼續開？<span>點一下就有答案。</span></h1>
         <p class="lead">刷聲骸不用再 Alt + Tab 切視窗算分數。開著遊戲點一下聲骸，<span class="hl">評分、止損建議、開滿會落在哪</span>，直接浮在畫面旁邊。</p>
         <div class="cta">
-          <a class="btn gold" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
+          <a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b>立即下載</b><small><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small></span></a>
+          <a class="btn" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
-            Microsoft Store 免費下載
-          </a>
-          <a class="btn dl-direct" href="download/windows" hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            <span>直接下載安裝檔</span>
+            Microsoft Store
           </a>
           <a class="link" href="#score">先看看能做什麼 →</a>
         </div>
         <div class="meta"><span>免費</span><span>玩家自製</span><span>Windows / Mac</span><span>不改遊戲檔案</span></div>
         <a class="phone-note" href="20260828.html">
-          <span aria-hidden="true">📱</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex:none;margin-top:2px"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
           <span><b>用手機在看？</b>這是電腦用的工具，手機先收藏起來，回電腦再下載。想現在就評分，可以用<u>網頁版聲骸分析儀</u>上傳截圖 →</span>
         </a>
       </div>
@@ -540,14 +541,11 @@ main, footer { position: relative; z-index: 1; }
       <h2>下次開聲骸前，<br>先讓它幫你看一眼</h2>
       <p class="lead">裝好、領授權碼，回遊戲點一下聲骸就能用。</p>
       <div class="cta">
-        <a class="btn gold" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
-          Microsoft Store 免費下載
-        </a>
-        <a class="btn dl-direct" href="download/windows" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          <span>直接下載安裝檔</span>
-        </a>
+        <a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b>立即下載</b><small><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small></span></a>
+        <a class="btn" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
+            Microsoft Store
+          </a>
         <a class="btn" href="https://drive.google.com/drive/folders/17pFcXxshUHvVkvNWgxLp6Lpw0tpbyRNR?usp=sharing" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Google 雲端下載
@@ -596,25 +594,9 @@ main, footer { position: relative; z-index: 1; }
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
 })();
 
-// 直接下載：只有部署在 Cloudflare（有 /download 路由）時才顯示，GitHub Pages 上自動隱藏
-(function () {
-  if (/github\.io$/.test(location.hostname) || location.protocol === 'file:') return;
-  fetch('download/latest.json', { cache: 'no-store' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (info) {
-      var win = info && info.assets && info.assets.windows;
-      if (!win) return;
-      var mb = win.size ? '・' + Math.round(win.size / 1048576) + ' MB' : '';
-      var label = '直接下載安裝檔' + (info.version ? '（' + info.version + mb + '）' : '');
-      document.querySelectorAll('.dl-direct').forEach(function (a) {
-        a.hidden = false;
-        a.querySelector('span').textContent = label;
-      });
-    })
-    .catch(function () {});
-})();
 </script>
-<script src="assets/waves.js" defer></script>
-<script src="assets/flow-nav.js" defer></script>
+<script src="assets/waves.js?v=20261117d" defer></script>
+<script src="assets/flow-nav.js?v=20261117d" defer></script>
+<script src="assets/download.js?v=20261117d" defer></script>
 </body>
 </html>
