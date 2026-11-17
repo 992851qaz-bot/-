@@ -76,9 +76,80 @@ async function handleDownload(url, env, ctx) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === '/api/beta') return handleBeta(request, env, ctx);
     if (url.pathname === '/download' || url.pathname.startsWith('/download/')) {
       return handleDownload(url, env, ctx);
     }
     return env.ASSETS.fetch(request);
   }
 };
+
+// ---------- 手機版測試申請：/api/beta ----------
+// Discord Webhook 放在 Cloudflare 的加密變數 BETA_WEBHOOK_URL（Settings → Variables and Secrets），不寫在程式或網頁裡。
+const BETA_ALLOWED_ORIGINS = ['https://992851qaz-bot.github.io', 'https://www.992851qaz.workers.dev'];
+const BETA_CHANNELS = ['Google Play', 'APK', '雲端下載'];
+const BETA_RATE_SECONDS = 60; // 同一個 IP 一分鐘只能送一次
+
+function betaCors(origin) {
+  const h = { 'Vary': 'Origin' };
+  if (BETA_ALLOWED_ORIGINS.includes(origin)) {
+    h['Access-Control-Allow-Origin'] = origin;
+    h['Access-Control-Allow-Methods'] = 'POST, OPTIONS';
+    h['Access-Control-Allow-Headers'] = 'Content-Type';
+    h['Access-Control-Max-Age'] = '86400';
+  }
+  return h;
+}
+function betaJson(status, body, origin) {
+  return new Response(JSON.stringify(body), { status, headers: Object.assign({ 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }, betaCors(origin)) });
+}
+
+async function handleBeta(request, env, ctx) {
+  const origin = request.headers.get('Origin') || '';
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: betaCors(origin) });
+  if (request.method !== 'POST') return betaJson(405, { error: 'method' }, origin);
+  if (!BETA_ALLOWED_ORIGINS.includes(origin)) return betaJson(403, { error: 'origin' }, origin);
+  if (!(request.headers.get('Content-Type') || '').includes('application/json')) return betaJson(415, { error: 'type' }, origin);
+  const webhook = env && env.BETA_WEBHOOK_URL;
+  if (!webhook || !/^https:\/\/(discord|discordapp)\.com\/api\/webhooks\//.test(webhook)) return betaJson(503, { error: 'not configured' }, origin);
+
+  const raw = await request.text();
+  if (raw.length > 2048) return betaJson(413, { error: 'too large' }, origin);
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { return betaJson(400, { error: 'json' }, origin); }
+
+  // 機器人防護：隱藏欄位有填、或打開不到 1.5 秒就送出 → 假裝成功但不轉送
+  if (data.website || (typeof data.elapsed === 'number' && data.elapsed < 1500)) return betaJson(200, { ok: true }, origin);
+
+  const email = String(data.email || '').trim().slice(0, 254);
+  if (!/^[^\s@<>()"',;:]+@[^\s@<>()"',;:]+\.[a-z]{2,}$/i.test(email)) return betaJson(400, { error: 'email' }, origin);
+  const channel = BETA_CHANNELS.includes(data.channel) ? data.channel : '未指定';
+
+  // 每個 IP 限速
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const rlKey = new Request('https://rate-limit.gamezh/beta/' + encodeURIComponent(ip));
+  const cache = caches.default;
+  if (await cache.match(rlKey)) return betaJson(429, { error: '太頻繁' }, origin);
+  ctx.waitUntil(cache.put(rlKey, new Response('1', { headers: { 'Cache-Control': 'max-age=' + BETA_RATE_SECONDS } })));
+
+  const clean = (s, n) => String(s || '').replace(/[`@]/g, '').slice(0, n) || '—';
+  const payload = {
+    username: 'GAMEZH 測試申請',
+    allowed_mentions: { parse: [] }, // 不讓任何內容 @ 到人
+    embeds: [{
+      title: '📱 手機版測試申請',
+      color: 0x5cc8ff,
+      fields: [
+        { name: 'Email', value: '`' + email.replace(/`/g, '') + '`' },
+        { name: '安裝方式', value: channel, inline: true },
+        { name: '國家', value: clean(request.cf && request.cf.country, 8), inline: true },
+        { name: '來源頁面', value: clean(data.page, 100), inline: true },
+        { name: '裝置', value: clean(data.ua, 200) }
+      ],
+      timestamp: new Date().toISOString()
+    }]
+  };
+  const res = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  if (!res.ok) return betaJson(502, { error: 'upstream' }, origin);
+  return betaJson(200, { ok: true }, origin);
+}

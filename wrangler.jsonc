@@ -10,6 +10,6 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page",
     // 只有 /download 開頭的網址會先經過 Worker，其他都直接回靜態檔案（不算 Worker 請求次數）
-    "run_worker_first": ["/download", "/download/*"]
+    "run_worker_first": ["/download", "/download/*", "/api/*"]
   }
 }
