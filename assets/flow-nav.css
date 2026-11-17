@@ -25,6 +25,8 @@
 .flow-nav .fn-spark:nth-of-type(2) { animation-delay: .7s; width: 2px; height: 2px; }
 .flow-nav .fn-spark:nth-of-type(3) { animation-delay: 1.4s; }
 .flow-nav .fn-spark:nth-of-type(4) { animation-delay: 2s; width: 2px; height: 2px; }
+.flow-nav .fn-glow.fn-flash { animation: fn-flash .38s cubic-bezier(.2,.9,.3,1); }
+@keyframes fn-flash { 0% { opacity: 0; transform: scaleX(.35); filter: brightness(2.2); } 55% { opacity: 1; filter: brightness(1.6); } 100% { opacity: 1; transform: none; filter: none; } }
 @keyframes fn-twinkle { 0%, 100% { opacity: 0; transform: translateY(4px) scale(.6); } 45% { opacity: 1; transform: translateY(-4px) scale(1); } }
 
 /* 桌機：放在上方標題列中間 */

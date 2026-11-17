@@ -1,6 +1,6 @@
 /* GAMEZH 流動頁籤
  * 桌機在上方標題列、手機在底部。線在目前頁籤旁彎成一道流動的光（金色主線＋紅／青色邊），附幾顆閃爍粒子。
- * 捲動到哪個區塊，就自動切到對應頁籤，光會滑過去。
+ * 捲動到哪個區塊，就自動切到對應頁籤，光會直接切過去並閃一下。
  */
 (function () {
   var nav = document.querySelector('.flow-nav');
@@ -64,7 +64,6 @@
     raf = requestAnimationFrame(frame);
     var dt = Math.min((now - (last || now)) / 1000, 0.05); last = now;
     t += dt;
-    pos += (target - pos) * Math.min(1, dt * 7);
     draw();
   }
 
@@ -75,13 +74,20 @@
       if (k === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
     });
     target = center(links[i]);
-    if (pos === null || jump) pos = target;
-    if (reduce) draw();
+    pos = target; // 直接切到新頁籤（不滑動），再用一下閃光帶出來
+    if (!jump && !reduce) {
+      svg.style.transformOrigin = pos + 'px 36px';
+      svg.classList.remove('fn-flash'); void svg.getBoundingClientRect(); svg.classList.add('fn-flash');
+      sparks.forEach(function (sp) { sp.style.animation = 'none'; void sp.offsetWidth; sp.style.animation = ''; });
+    }
+    draw();
   }
 
   // 捲動偵測：最接近畫面上方 40% 的區塊
   var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var lockUntil = 0; // 點頁籤後平滑捲動期間，不讓捲動偵測把頁籤切回去
   function spy() {
+    if (Date.now() < lockUntil) return;
     var best = 0, line = window.innerHeight * 0.4;
     sections.forEach(function (sec, k) {
       if (sec && sec.getBoundingClientRect().top - line <= 0) best = k;
@@ -96,7 +102,7 @@
   window.addEventListener('resize', function () { setActive(active, true); });
   if (mq.addEventListener) mq.addEventListener('change', function () { setActive(active, true); });
 
-  links.forEach(function (a, k) { a.addEventListener('click', function () { setActive(k); }); });
+  links.forEach(function (a, k) { a.addEventListener('click', function () { lockUntil = Date.now() + 1000; setActive(k); }); });
 
   setActive(0, true);
   spy();
