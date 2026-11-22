@@ -313,6 +313,18 @@ main, footer { position: relative; z-index: 1; }
   .rules { padding: 22px 18px; }
 }
 
+/* ---------- video ---------- */
+.video-sec { padding-top: 72px; }
+.yt { position: relative; aspect-ratio: 16 / 9; background: #06080f center / cover no-repeat; border: 1px solid var(--line-2); box-shadow: 0 30px 80px rgba(0, 0, 0, .55); overflow: hidden; cursor: pointer; }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-play { position: absolute; inset: 0; display: grid; place-items: center; width: 100%; border: 0; background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.45)); cursor: pointer; color: #1a1508; }
+.yt-play span { width: 84px; height: 84px; border-radius: 50%; background: var(--gold); display: grid; place-items: center; box-shadow: 0 0 0 10px rgba(227, 205, 154, .18), 0 18px 40px rgba(0,0,0,.6); transition: transform .2s; }
+.yt-play svg { width: 34px; height: 34px; margin-left: 5px; }
+.yt:hover .yt-play span { transform: scale(1.08); }
+.yt-play:focus-visible span { outline: 2px solid #fff; outline-offset: 4px; }
+.yt-label { position: absolute; left: 16px; bottom: 14px; font-size: 13.5px; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.8); pointer-events: none; }
+@media (max-width: 640px) { .yt-play span { width: 64px; height: 64px; } .yt-play svg { width: 26px; height: 26px; } }
+
 /* ---------- responsive ---------- */
 @media (max-width: 980px) {
   .hero .wrap, .split { grid-template-columns: minmax(0, 1fr); gap: 40px; }
@@ -369,6 +381,7 @@ main, footer { position: relative; z-index: 1; }
       <span><b>GAMEZH</b><small>聲骸評分 HUD</small></span>
     </a>
     <nav class="nav" aria-label="頁面導覽">
+      <a href="#video">影片</a>
       <a href="#score">評分</a>
       <a href="#forecast">開滿落點</a>
       <a href="#features">功能</a>
@@ -394,7 +407,7 @@ main, footer { position: relative; z-index: 1; }
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
             Microsoft Store
           </a>
-          <a class="link" href="#score">先看看能做什麼 →</a>
+          <a class="link" href="#video">▶ 先看影片演示 →</a>
         </div>
         <div class="meta"><span>免費</span><span>玩家自製</span><span>Windows / Mac</span><span>不改遊戲檔案</span></div>
         <a class="phone-note" href="20260828.html">
@@ -420,6 +433,22 @@ main, footer { position: relative; z-index: 1; }
       <div><b>0</b><span>修改遊戲檔案</span></div>
     </div>
   </div>
+
+  <!-- VIDEO -->
+  <section class="sec video-sec" id="video">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="num">影片介紹</span>
+        <h2>先看影片，<br>實際用起來長這樣</h2>
+        <p>從點聲骸、看分數到開滿落點圖，實機操作一次看完。</p>
+      </div>
+      <div class="yt" data-yt="TPsOZVi3OOs" style="background-image:url(https://i.ytimg.com/vi/TPsOZVi3OOs/maxresdefault.jpg), url(https://i.ytimg.com/vi/TPsOZVi3OOs/hqdefault.jpg)">
+        <button type="button" class="yt-play" aria-label="播放 GameZH 聲骸評分 HUD 介紹影片"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4l15 8-15 8z"/></svg></span></button>
+        <span class="yt-label">▶ GameZH 聲骸評分 HUD 實機演示</span>
+      </div>
+      <p class="cap">影片無法播放？<a href="https://www.youtube.com/watch?v=TPsOZVi3OOs" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:3px">到 YouTube 觀看 →</a></p>
+    </div>
+  </section>
 
   <!-- 01 SCORE -->
   <section class="sec" id="score">
@@ -741,6 +770,18 @@ main, footer { position: relative; z-index: 1; }
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
 })();
 
+(function () {
+  document.addEventListener('click', function (e) {
+    var box = e.target.closest && e.target.closest('.yt[data-yt]');
+    if (!box || box.querySelector('iframe')) return;
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + box.getAttribute('data-yt') + '?autoplay=1&rel=0&playsinline=1';
+    f.title = 'GameZH 聲骸評分 HUD 介紹影片';
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    f.allowFullscreen = true;
+    box.innerHTML = ''; box.appendChild(f);
+  });
+})();
 </script>
 <script src="assets/waves.js?v=20261117h" defer></script>
 <script src="assets/flow-nav.js?v=20261117h" defer></script>
