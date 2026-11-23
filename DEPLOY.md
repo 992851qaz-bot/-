@@ -80,3 +80,10 @@ Cloudflare 版多了「直接下載安裝檔」：`/download/windows`、`/downlo
 - `worker/index.js`：`/download` 轉址邏輯
 - `.assetsignore`：不上傳到 Cloudflare 的檔案
 - `.github/workflows/cloudflare.yml`：自動部署
+
+## 表單 API（/api/cheer、/api/beta）
+- 線上的 `www` Worker 目前是「單檔版」`worker/cloudflare-paste.js`（網頁轉給 GitHub Pages），改這個檔案後到 Cloudflare → www → Edit code 貼上部署。
+- Discord Webhook 只存在 Cloudflare 的加密變數（Settings → Variables and Secrets），不要寫進程式或網頁：
+  - `CHEER_WEBHOOK_URL`：英文版應援（已設定）
+  - `BETA_WEBHOOK_URL`：手機版測試申請（尚未設定，設定前申請會回「目前無法送出」）
+- 換 Webhook 時只要改這個變數，網站不用動。
