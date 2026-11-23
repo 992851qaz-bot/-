@@ -77,6 +77,7 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === '/api/beta') return handleBeta(request, env, ctx);
+    if (url.pathname === '/api/cheer') return handleCheer(request, env, ctx);
     if (url.pathname === '/download' || url.pathname.startsWith('/download/')) {
       return handleDownload(url, env, ctx);
     }
@@ -145,6 +146,65 @@ async function handleBeta(request, env, ctx) {
         { name: '國家', value: clean(request.cf && request.cf.country, 8), inline: true },
         { name: '來源頁面', value: clean(data.page, 100), inline: true },
         { name: '裝置', value: clean(data.ua, 200) }
+      ],
+      timestamp: new Date().toISOString()
+    }]
+  };
+  const res = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  if (!res.ok) return betaJson(502, { error: 'upstream' }, origin);
+  return betaJson(200, { ok: true }, origin);
+}
+
+// ---------- 英文版應援：/api/cheer ----------
+// Discord Webhook 放在 Cloudflare 的加密變數 CHEER_WEBHOOK_URL，不寫在程式或網頁裡，瀏覽器永遠拿不到。
+// 防護：只收自己網站的 Origin、JSON、大小上限、隱藏欄位＋送出時間擋機器人、同 IP 10 分鐘一次、內容不能 @ 人。
+const CHEER_SOURCES = ['YouTube', 'Discord', 'Reddit', 'X / Twitter', 'Google', 'Friend', 'Bahamut', 'Other'];
+const CHEER_RATE_SECONDS = 600;
+
+async function handleCheer(request, env, ctx) {
+  const origin = request.headers.get('Origin') || '';
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: betaCors(origin) });
+  if (request.method !== 'POST') return betaJson(405, { error: 'method' }, origin);
+  if (!BETA_ALLOWED_ORIGINS.includes(origin)) return betaJson(403, { error: 'origin' }, origin);
+  if (!(request.headers.get('Content-Type') || '').includes('application/json')) return betaJson(415, { error: 'type' }, origin);
+  const webhook = env && env.CHEER_WEBHOOK_URL;
+  if (!webhook || !/^https:\/\/(discord|discordapp)\.com\/api\/webhooks\//.test(webhook)) return betaJson(503, { error: 'not configured' }, origin);
+
+  const raw = await request.text();
+  if (raw.length > 4096) return betaJson(413, { error: 'too large' }, origin);
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { return betaJson(400, { error: 'json' }, origin); }
+  if (!data || typeof data !== 'object') return betaJson(400, { error: 'json' }, origin);
+
+  // 機器人：隱藏欄位有填、或打開不到 3 秒就送出 → 假裝成功但不轉送
+  if (data.website || (typeof data.elapsed === 'number' && data.elapsed < 3000)) return betaJson(200, { ok: true }, origin);
+
+  const reason = String(data.reason || '').trim();
+  if (reason.length < 3) return betaJson(400, { error: 'reason' }, origin);
+  const sources = Array.isArray(data.sources) ? data.sources.filter((s) => CHEER_SOURCES.includes(s)).slice(0, CHEER_SOURCES.length) : [];
+
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const rlKey = new Request('https://rate-limit.gamezh/cheer/' + encodeURIComponent(ip));
+  const cache = caches.default;
+  if (await cache.match(rlKey)) return betaJson(429, { error: 'rate' }, origin);
+  ctx.waitUntil(cache.put(rlKey, new Response('1', { headers: { 'Cache-Control': 'max-age=' + CHEER_RATE_SECONDS } })));
+
+  // 去掉 @、反引號、Markdown 連結語法，避免 @everyone 或偽造連結
+  const clean = (s, n) => String(s || '').replace(/[`@]/g, '').replace(/\]\(/g, '] (').replace(/https?:\/\//gi, (m) => m.replace('//', '/\u200b/')).trim().slice(0, n) || '—';
+  const payload = {
+    username: 'GAMEZH 英文版應援',
+    allowed_mentions: { parse: [] },
+    embeds: [{
+      title: '💛 英文版 HUD 應援',
+      color: 0xe3cd9a,
+      fields: [
+        { name: '想用的原因', value: clean(reason, 1000) },
+        { name: '得知來源', value: sources.length ? sources.join('、') : '—', inline: true },
+        { name: '暱稱', value: clean(data.nickname, 40), inline: true },
+        { name: '聯絡方式', value: clean(data.contact, 100), inline: true },
+        { name: '國家', value: clean(request.cf && request.cf.country, 8), inline: true },
+        { name: '頁面語言', value: data.lang === 'en' ? 'English' : '中文', inline: true },
+        { name: '來源頁面', value: clean(data.page, 60), inline: true }
       ],
       timestamp: new Date().toISOString()
     }]

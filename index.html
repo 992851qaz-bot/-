@@ -10,15 +10,15 @@
       var OWN = ['home', 'top', 'routes', 'compare', 'analyzer', 'hud', 'tools', 'report', 'about'];
       var h = decodeURIComponent(location.hash.slice(1));
       var foreignHash = h && OWN.indexOf(h) === -1;
-      var q = location.search.replace(/^\?/, '').split('&').filter(function (p) { return p && p.indexOf('source=') !== 0; });
+      var q = location.search.replace(/^\?/, '').split('&').filter(function (p) { return p && p.indexOf('source=') !== 0 && p.indexOf('lang=') !== 0; });
       if (q.length || foreignHash) {
         location.replace('20260828.html' + (q.length ? '?' + q.join('&') : '') + location.hash);
       }
     })();
   </script>
 
-  <title>鳴潮工具箱 GAMEZH｜聲骸評分・配裝・累充計算 | Wuthering Waves Tools</title>
-  <meta name="description" content="GAMEZH 鳴潮（Wuthering Waves）玩家工具：網頁版聲骸分析儀上傳角色資訊卡就能做角色健檢、聲骸評分與排行；電腦版聲骸評分 HUD 邊玩邊顯示分數與止損建議。另有累充 CP 值計算。免費。">
+  <title data-en="GAMEZH Wuthering Waves Toolbox | Echo scoring, builds and top-up math">鳴潮工具箱 GAMEZH｜聲骸評分・配裝・累充計算 | Wuthering Waves Tools</title>
+  <meta data-en-content="Free fan-made Wuthering Waves tools: a web Echo Analyzer that checks a whole character from its card, an Echo scoring overlay for PC, and a top-up value calculator." name="description" content="GAMEZH 鳴潮（Wuthering Waves）玩家工具：網頁版聲骸分析儀上傳角色資訊卡就能做角色健檢、聲骸評分與排行；電腦版聲骸評分 HUD 邊玩邊顯示分數與止損建議。另有累充 CP 值計算。免費。">
   <meta name="keywords" content="鳴潮, Wuthering Waves, 聲骸, 聲骸評分, 聲骸分析, 鳴潮配裝, 鳴潮Build, 鳴潮計算器, 鳴潮抽卡, 累充, 鳴潮工具">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://992851qaz-bot.github.io/-/">
@@ -44,6 +44,9 @@
   <meta name="theme-color" content="#0b0e17">
   <meta name="color-scheme" content="dark">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="alternate" hreflang="zh-Hant" href="https://992851qaz-bot.github.io/-/?lang=zh">
+  <link rel="alternate" hreflang="en" href="https://992851qaz-bot.github.io/-/?lang=en">
+  <script src="assets/i18n.js?v=20261123a"></script>
   <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -384,27 +387,28 @@
 </head>
 <body>
   <canvas class="gz-waves" aria-hidden="true"></canvas>
-  <nav class="flow-nav" aria-label="頁面導覽">
-    <a href="#home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg><span class="fn-label">首頁</span></a>
-    <a href="#analyzer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 15l3-3 3 2 4-5"/></svg><span class="fn-label">分析儀</span></a>
-    <a href="#hud"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="fn-label">懸浮分析</span></a>
-    <a href="#tools"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg><span class="fn-label"><span class="fn-full">CP值計算器/其他</span><span class="fn-short">CP值/其他</span></span></a>
-    <a href="#report"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg><span class="fn-label">回報</span></a>
+  <nav data-en-aria-label="Page sections" class="flow-nav" aria-label="頁面導覽">
+    <a href="#home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg><span data-en="Home" class="fn-label">首頁</span></a>
+    <a href="#analyzer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 15l3-3 3 2 4-5"/></svg><span data-en="Analyzer" class="fn-label">分析儀</span></a>
+    <a href="#hud"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span data-en="HUD" class="fn-label">懸浮分析</span></a>
+    <a href="#tools"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg><span class="fn-label"><span data-en="Top-up / More" class="fn-full">CP值計算器/其他</span><span data-en="More" class="fn-short">CP值/其他</span></span></a>
+    <a href="#report"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg><span data-en="Report" class="fn-label">回報</span></a>
   </nav>
   <header class="hd" id="top">
     <div class="wrap">
-      <a class="logo" href="./" aria-label="GAMEZH 鳴潮工具箱首頁">
+      <a data-en-aria-label="GAMEZH Wuthering Waves toolbox home" class="logo" href="./" aria-label="GAMEZH 鳴潮工具箱首頁">
         <img src="icons/logo.png" alt="" width="36" height="36">
-        <span><b>GAMEZH</b><small>鳴潮工具箱</small></span>
+        <span><b>GAMEZH</b><small data-en="WuWa Toolbox">鳴潮工具箱</small></span>
       </a>
-      <nav class="nav" aria-label="首頁導覽">
-        <a href="#routes">兩種用法</a>
-        <a href="#analyzer">聲骸分析儀</a>
-        <a href="#hud">電腦版 HUD</a>
-        <a href="#tools">其他工具</a>
-        <a href="#report">回報問題</a>
+      <nav data-en-aria-label="Home sections" class="nav" aria-label="首頁導覽">
+        <a data-en="Two ways" href="#routes">兩種用法</a>
+        <a data-en="Echo Analyzer" href="#analyzer">聲骸分析儀</a>
+        <a data-en="PC HUD" href="#hud">電腦版 HUD</a>
+        <a data-en="More tools" href="#tools">其他工具</a>
+        <a data-en="Report" href="#report">回報問題</a>
       </nav>
-      <a class="btn gold hd-dl" id="dlBtn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>下載懸浮程式</span></a>
+      <a class="btn gold hd-dl" id="dlBtn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span data-only="zh">下載懸浮程式</span><span data-only="en" data-cheer-label data-cheer-short>Cheer</span></a>
+      <button type="button" class="lang-toggle" data-lang-toggle>EN</button>
     </div>
   </header>
 
@@ -412,71 +416,75 @@
     <section class="hero" id="home">
       <div class="wrap hero-in">
         <img class="hero-logo" src="icons/logo.png" alt="GAMEZH" width="96" height="96">
-        <div class="eyebrow center">鳴潮玩家工具箱 · FAN-MADE</div>
-        <h1>養聲骸，<span>少走冤枉路。</span></h1>
-        <p class="lead">GAMEZH 是玩家自製的鳴潮工具，分成兩種用法：<b>網頁上幫整隻角色做健檢</b>，或是<b>電腦上邊玩邊幫聲骸打分</b>。全部免費。</p>
-        <div class="offline" role="status">目前離線中。首頁可以開，但工具需要網路才能使用。</div>
+        <div data-en="Wuthering Waves toolbox · FAN-MADE" class="eyebrow center">鳴潮玩家工具箱 · FAN-MADE</div>
+        <h1 data-en="Build Echoes&lt;span&gt;without the guesswork.&lt;/span&gt;">養聲骸，<span>少走冤枉路。</span></h1>
+        <p data-en="GAMEZH is a fan-made toolkit for Wuthering Waves with two ways to use it: &lt;b&gt;a full character check-up on the web&lt;/b&gt;, or &lt;b&gt;live Echo scoring on PC while you play&lt;/b&gt;. All free." class="lead">GAMEZH 是玩家自製的鳴潮工具，分成兩種用法：<b>網頁上幫整隻角色做健檢</b>，或是<b>電腦上邊玩邊幫聲骸打分</b>。全部免費。</p>
+        <div data-en="You&#x27;re offline. The home page works, but the tools need a connection." class="offline" role="status">目前離線中。首頁可以開，但工具需要網路才能使用。</div>
       </div>
 
       <div class="wrap routes" id="routes">
         <div class="route">
-          <a class="route-pic" href="20260828.html" data-tool="echo" tabindex="-1"><img src="img/ana-home.webp" width="1250" height="754" alt="鳴潮聲骸分析儀首頁：輸入 UID 或貼上 WuWaBot 圖片網址" fetchpriority="high"></a>
+          <a class="route-pic" href="20260828.html" data-tool="echo" tabindex="-1"><img data-en-alt="Echo Analyzer home: enter a UID or paste a WuWaBot image link" src="img/ana-home.webp" width="1250" height="754" alt="鳴潮聲骸分析儀首頁：輸入 UID 或貼上 WuWaBot 圖片網址" fetchpriority="high"></a>
           <div class="route-body">
-            <div class="route-tag"><span>A</span>網頁版 · 角色健檢</div>
-            <h2>聲骸分析儀</h2>
-            <p class="route-q">「這隻角色練得怎麼樣？還差什麼？」</p>
-            <ul>
+            <div data-en="&lt;span&gt;A&lt;/span&gt;Web · Character check-up" class="route-tag"><span>A</span>網頁版 · 角色健檢</div>
+            <h2 data-en="Echo Analyzer">聲骸分析儀</h2>
+            <p data-en="&quot;How built is this character? What&#x27;s missing?&quot;" class="route-q">「這隻角色練得怎麼樣？還差什麼？」</p>
+            <ul data-en="&lt;li&gt;Upload the official character card, or paste a WuWaBot image link&lt;/li&gt;
+              &lt;li&gt;Full-set Echo scores, crit value, build tips and DPS estimates&lt;/li&gt;
+              &lt;li&gt;Echo leaderboards: see how top players build&lt;/li&gt;">
               <li>上傳官方角色資訊卡，或貼上 WuWaBot 圖片網址</li>
               <li>整套聲骸評分、CV 值、配裝建議與 DPS 試算</li>
               <li>聲骸排行榜，看看大佬都怎麼穿</li>
             </ul>
-            <div class="route-meta"><span>手機 · 電腦 · 平板</span><span>免下載</span></div>
-            <div class="route-actions"><a class="btn gold" href="20260828.html" data-tool="echo">免安裝［網頁版］前往分析 →</a></div>
+            <div data-en="&lt;span&gt;Phone · PC · Tablet&lt;/span&gt;&lt;span&gt;No install · Chinese UI&lt;/span&gt;" class="route-meta"><span>手機 · 電腦 · 平板</span><span>免下載</span></div>
+            <div class="route-actions"><a data-en="Open the web analyzer →" class="btn gold" href="20260828.html" data-tool="echo">免安裝［網頁版］前往分析 →</a></div>
           </div>
         </div>
         <div class="route">
-          <a class="route-pic" href="exe.html" data-tool="hud" tabindex="-1"><img src="img/hud-ingame.webp" width="1124" height="635" alt="鳴潮背包畫面，GameZH HUD 懸浮在聲骸列表旁邊"></a>
+          <a class="route-pic" href="exe.html" data-tool="hud" tabindex="-1"><img data-en-alt="Wuthering Waves inventory with the GameZH HUD floating beside the Echo list" src="img/hud-ingame.webp" width="1124" height="635" alt="鳴潮背包畫面，GameZH HUD 懸浮在聲骸列表旁邊"></a>
           <div class="route-body">
-            <div class="route-tag pc"><span>B</span>電腦版 · 遊戲中即時</div>
-            <h2>聲骸評分 HUD</h2>
-            <p class="route-q">「這顆聲骸要不要繼續開？」</p>
-            <ul>
+            <div data-en="&lt;span&gt;B&lt;/span&gt;PC · Live in game" class="route-tag pc"><span>B</span>電腦版 · 遊戲中即時</div>
+            <h2 data-en="Echo Score HUD">聲骸評分 HUD</h2>
+            <p data-en="&quot;Should I keep leveling this Echo?&quot;" class="route-q">「這顆聲骸要不要繼續開？」</p>
+            <ul data-en="&lt;li&gt;Click an Echo in game; the score floats beside it&lt;/li&gt;
+              &lt;li&gt;Stop-or-continue tips and a max-level forecast before you spend materials&lt;/li&gt;
+              &lt;li&gt;Gear compare, stat gaps, one-click share cards&lt;/li&gt;">
               <li>開著遊戲點一下聲骸，分數直接浮在畫面旁</li>
               <li>止損建議、開滿落點圖，強化前就知道值不值得</li>
               <li>換裝比分、面板缺什麼、一鍵匯出分享圖</li>
             </ul>
-            <div class="route-meta"><span>Windows 電腦</span><span>需下載安裝</span></div>
-            <div class="route-actions"><a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b>立即下載</b><small><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small></span></a><a class="link" href="exe.html" data-tool="hud">看功能介紹 →</a></div>
+            <div data-en="&lt;span&gt;Windows PC&lt;/span&gt;&lt;span&gt;English version in development&lt;/span&gt;" class="route-meta"><span>Windows 電腦</span><span>需下載安裝</span></div>
+            <div class="route-actions"><a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b data-only="zh">立即下載</b><b data-only="en" data-cheer-label>Cheer for English</b><small data-only="zh"><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small><small data-only="en">English version in development</small></span></a><a data-en="See features →" class="link" href="exe.html" data-tool="hud">看功能介紹 →</a></div>
           </div>
         </div>
       </div>
     </section>
 
     <div class="wrap recent-wrap" id="recentWrap" hidden>
-      <h2>最近使用</h2>
+      <h2 data-en="Recently used">最近使用</h2>
       <div class="recent" id="recent"></div>
     </div>
 
     <section class="sec" id="compare">
       <div class="wrap">
         <div class="sec-head">
-          <span class="num">01 / 怎麼選</span>
-          <h2>不知道用哪個？</h2>
-          <p>兩個工具不一樣，也可以一起用：平常刷聲骸開 HUD，練完角色再丟分析儀健檢。</p>
+          <span data-en="01 / Which one?" class="num">01 / 怎麼選</span>
+          <h2 data-en="Not sure which to use?">不知道用哪個？</h2>
+          <p data-en="They do different jobs and work well together: run the HUD while farming, then check the finished character in the analyzer.">兩個工具不一樣，也可以一起用：平常刷聲骸開 HUD，練完角色再丟分析儀健檢。</p>
         </div>
-        <div class="cmp" role="table" aria-label="聲骸分析儀與聲骸評分 HUD 比較">
-          <div class="cmp-row cmp-h" role="row"><span role="columnheader"></span><span role="columnheader">A 聲骸分析儀</span><span role="columnheader">B 聲骸評分 HUD</span></div>
-          <div class="cmp-row" role="row"><span role="rowheader">什麼時候用</span><span role="cell">角色練完，想看整體還差什麼</span><span role="cell">正在刷、正在強化聲骸</span></div>
-          <div class="cmp-row" role="row"><span role="rowheader">怎麼用</span><span role="cell">上傳角色資訊卡截圖或貼圖片網址</span><span role="cell">開著遊戲，點一下聲骸</span></div>
-          <div class="cmp-row" role="row"><span role="rowheader">看的是</span><span role="cell">整隻角色：5 個聲骸＋面板＋排行</span><span role="cell">眼前這一顆：分數＋要不要繼續開</span></div>
-          <div class="cmp-row" role="row"><span role="rowheader">裝置</span><span role="cell">手機、電腦、平板</span><span role="cell">Windows 電腦</span></div>
-          <div class="cmp-row" role="row"><span role="rowheader">安裝</span><span role="cell">不用，打開網頁就好</span><span role="cell">要下載（免費）</span></div>
-          <div class="cmp-row cmp-cta" role="row"><span></span><span><a class="btn gold" href="20260828.html" data-tool="echo">免安裝［網頁版］前往分析</a></span><span><a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b>立即下載</b><small><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small></span></a></span></div>
+        <div data-en-aria-label="Echo Analyzer vs Echo Score HUD" class="cmp" role="table" aria-label="聲骸分析儀與聲骸評分 HUD 比較">
+          <div class="cmp-row cmp-h" role="row"><span role="columnheader"></span><span data-en="A Echo Analyzer" role="columnheader">A 聲骸分析儀</span><span data-en="B Echo Score HUD" role="columnheader">B 聲骸評分 HUD</span></div>
+          <div class="cmp-row" role="row"><span data-en="When" role="rowheader">什麼時候用</span><span data-en="Character built; see what&#x27;s still missing" role="cell">角色練完，想看整體還差什麼</span><span data-en="While farming and leveling Echoes" role="cell">正在刷、正在強化聲骸</span></div>
+          <div class="cmp-row" role="row"><span data-en="How" role="rowheader">怎麼用</span><span data-en="Upload a character card screenshot or paste an image link" role="cell">上傳角色資訊卡截圖或貼圖片網址</span><span data-en="Keep the game open, click an Echo" role="cell">開著遊戲，點一下聲骸</span></div>
+          <div class="cmp-row" role="row"><span data-en="Shows" role="rowheader">看的是</span><span data-en="The whole character: 5 Echoes + stats + rankings" role="cell">整隻角色：5 個聲骸＋面板＋排行</span><span data-en="The Echo in front of you: score + keep or stop" role="cell">眼前這一顆：分數＋要不要繼續開</span></div>
+          <div class="cmp-row" role="row"><span data-en="Devices" role="rowheader">裝置</span><span data-en="Phone, PC, tablet" role="cell">手機、電腦、平板</span><span data-en="Windows PC" role="cell">Windows 電腦</span></div>
+          <div class="cmp-row" role="row"><span data-en="Install" role="rowheader">安裝</span><span data-en="None, just open the page" role="cell">不用，打開網頁就好</span><span data-en="Download (free) · English coming" role="cell">要下載（免費）</span></div>
+          <div class="cmp-row cmp-cta" role="row"><span></span><span data-en="&lt;a class=&#x27;btn gold&#x27; href=&#x27;20260828.html&#x27; data-tool=&#x27;echo&#x27;&gt;Open the web analyzer&lt;/a&gt;"><a class="btn gold" href="20260828.html" data-tool="echo">免安裝［網頁版］前往分析</a></span><span><a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b data-only="zh">立即下載</b><b data-only="en" data-cheer-label>Cheer for English</b><small data-only="zh"><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small><small data-only="en">English version in development</small></span></a></span></div>
         </div>
         <div class="bh-links">
-          <span>想先看更多介紹？</span>
-          <a href="https://forum.gamer.com.tw/C.php?bsn=74934&amp;snA=14044" target="_blank" rel="noopener"><b>A</b> 聲骸分析儀・巴哈介紹文 ↗</a>
-          <a href="https://forum.gamer.com.tw/Co.php?bsn=74934&amp;sn=147850" target="_blank" rel="noopener"><b class="pc">B</b> 懸浮分析 HUD・巴哈介紹文 ↗</a>
+          <span data-en="Want more detail? (Chinese)">想先看更多介紹？</span>
+          <a data-en="&lt;b&gt;A&lt;/b&gt; Echo Analyzer on Bahamut ↗" href="https://forum.gamer.com.tw/C.php?bsn=74934&amp;snA=14044" target="_blank" rel="noopener"><b>A</b> 聲骸分析儀・巴哈介紹文 ↗</a>
+          <a data-en="&lt;b class=&#x27;pc&#x27;&gt;B&lt;/b&gt; HUD on Bahamut ↗" href="https://forum.gamer.com.tw/Co.php?bsn=74934&amp;sn=147850" target="_blank" rel="noopener"><b class="pc">B</b> 懸浮分析 HUD・巴哈介紹文 ↗</a>
         </div>
       </div>
     </section>
@@ -485,26 +493,26 @@
       <div class="wrap split">
         <div>
           <div class="sec-head" style="margin-bottom:24px;">
-            <span class="num">02 / A · 聲骸分析儀</span>
-            <h2>一張角色卡，<br>整隻角色健檢完</h2>
-            <p>從官方 DC 機器人拿角色資訊卡圖片，丟進來幾秒就分析完。手機也能用。</p>
+            <span data-en="02 / A · Echo Analyzer" class="num">02 / A · 聲骸分析儀</span>
+            <h2 data-en="One character card,&lt;br&gt;a full check-up">一張角色卡，<br>整隻角色健檢完</h2>
+            <p data-en="Grab your character card from the official Discord bot, drop it in, and the analysis is done in seconds. Works on phones.">從官方 DC 機器人拿角色資訊卡圖片，丟進來幾秒就分析完。手機也能用。</p>
           </div>
           <ul class="checks">
-            <li><span><b>自動辨識詞條</b>：內建校正，減少截圖品質造成的認錯。</span></li>
-            <li><span><b>CV 暴擊潛能</b>：自動算出暴率×2＋暴傷，知道這套暴擊有多強。</span></li>
-            <li><span><b>聲骸排行榜</b>：看自己在伺服器排第幾，順便抄大佬作業。</span></li>
-            <li><span><b>雲端歷史紀錄</b>：輸入 UID 就能載入過去分析過的資料。</span></li>
+            <li data-en="&lt;b&gt;Auto stat recognition&lt;/b&gt;: built-in correction cuts misreads from blurry screenshots."><span><b>自動辨識詞條</b>：內建校正，減少截圖品質造成的認錯。</span></li>
+            <li data-en="&lt;b&gt;Crit value&lt;/b&gt;: Crit Rate × 2 + Crit DMG, computed for you."><span><b>CV 暴擊潛能</b>：自動算出暴率×2＋暴傷，知道這套暴擊有多強。</span></li>
+            <li data-en="&lt;b&gt;Echo leaderboards&lt;/b&gt;: see where you rank and copy the best builds."><span><b>聲骸排行榜</b>：看自己在伺服器排第幾，順便抄大佬作業。</span></li>
+            <li data-en="&lt;b&gt;Cloud history&lt;/b&gt;: enter your UID to load past analyses."><span><b>雲端歷史紀錄</b>：輸入 UID 就能載入過去分析過的資料。</span></li>
           </ul>
-          <a class="btn gold" href="20260828.html" data-tool="echo">開始分析 →</a>
+          <a data-en="Start analyzing →" class="btn gold" href="20260828.html" data-tool="echo">開始分析 →</a>
         </div>
-        <a href="20260828.html" data-tool="echo" class="frame" aria-label="開啟聲骸分析儀">
-          <img src="img/ana-report.webp" width="1600" height="781" alt="聲骸分析儀的角色分析報告畫面" loading="lazy">
+        <a data-en-aria-label="Open the Echo Analyzer" href="20260828.html" data-tool="echo" class="frame" aria-label="開啟聲骸分析儀">
+          <img data-en-alt="Character analysis report" src="img/ana-report.webp" width="1600" height="781" alt="聲骸分析儀的角色分析報告畫面" loading="lazy">
         </a>
       </div>
       <div class="wrap shots3">
-        <figure class="frame"><img src="img/ana-teams.webp" width="1600" height="691" alt="多角色配裝總覽" loading="lazy"><figcaption>全角色配裝總覽</figcaption></figure>
-        <figure class="frame"><img src="img/ana-scores.webp" width="1400" height="509" alt="五個聲骸的評分卡" loading="lazy"><figcaption>5 個聲骸逐一評分</figcaption></figure>
-        <figure class="frame"><img src="img/ana-ranking.webp" width="1350" height="922" alt="聲骸傷害與屬性排行" loading="lazy"><figcaption>排行與屬性比較</figcaption></figure>
+        <figure class="frame"><img data-en-alt="Team build overview" src="img/ana-teams.webp" width="1600" height="691" alt="多角色配裝總覽" loading="lazy"><figcaption data-en="All-character build overview">全角色配裝總覽</figcaption></figure>
+        <figure class="frame"><img data-en-alt="Score cards for five Echoes" src="img/ana-scores.webp" width="1400" height="509" alt="五個聲骸的評分卡" loading="lazy"><figcaption data-en="Each of 5 Echoes scored">5 個聲骸逐一評分</figcaption></figure>
+        <figure class="frame"><img data-en-alt="Echo damage and stat rankings" src="img/ana-ranking.webp" width="1350" height="922" alt="聲骸傷害與屬性排行" loading="lazy"><figcaption data-en="Rankings and stat comparison">排行與屬性比較</figcaption></figure>
       </div>
     </section>
 
@@ -512,20 +520,20 @@
       <div class="wrap split rev">
         <div>
           <div class="sec-head" style="margin-bottom:24px;">
-            <span class="num">03 / B · 聲骸評分 HUD</span>
-            <h2>還沒開滿，<br>就看得到它開滿會落在哪</h2>
-            <p>電腦版懸浮工具，刷聲骸不用再 Alt + Tab 切視窗算分數。</p>
+            <span data-en="03 / B · Echo Score HUD" class="num">03 / B · 聲骸評分 HUD</span>
+            <h2 data-en="See where it lands&lt;br&gt;before you max it">還沒開滿，<br>就看得到它開滿會落在哪</h2>
+            <p data-en="A PC overlay: no more Alt + Tab to a calculator while farming Echoes.">電腦版懸浮工具，刷聲骸不用再 Alt + Tab 切視窗算分數。</p>
           </div>
           <ul class="checks">
-            <li><span><b>點一下就有分數</b>：評分直接浮在遊戲畫面旁。</span></li>
-            <li><span><b>止損建議</b>：直接告訴你繼續開，還是換胚。</span></li>
-            <li><span><b>開滿落點圖</b>：照官方公開機率算，一張圖看出值不值得。</span></li>
-            <li><span><b>不改遊戲檔案</b>：只看畫面，沒有巨集、不讀記憶體。</span></li>
+            <li data-en="&lt;b&gt;One click, one score&lt;/b&gt;: it floats right beside the game."><span><b>點一下就有分數</b>：評分直接浮在遊戲畫面旁。</span></li>
+            <li data-en="&lt;b&gt;Stop-or-continue tip&lt;/b&gt;: keep leveling or farm a new one."><span><b>止損建議</b>：直接告訴你繼續開，還是換胚。</span></li>
+            <li data-en="&lt;b&gt;Max-level forecast&lt;/b&gt;: built on the official published odds."><span><b>開滿落點圖</b>：照官方公開機率算，一張圖看出值不值得。</span></li>
+            <li data-en="&lt;b&gt;Never touches game files&lt;/b&gt;: screen only, no macros, no memory access."><span><b>不改遊戲檔案</b>：只看畫面，沒有巨集、不讀記憶體。</span></li>
           </ul>
-          <div class="route-actions"><a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b>立即下載</b><small><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small></span></a><a class="link" href="exe.html" data-tool="hud">看完整介紹 →</a></div>
+          <div class="route-actions"><a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b data-only="zh">立即下載</b><b data-only="en" data-cheer-label>Cheer for English</b><small data-only="zh"><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small><small data-only="en">English version in development</small></span></a><a data-en="Full overview →" class="link" href="exe.html" data-tool="hud">看完整介紹 →</a></div>
         </div>
-        <a href="exe.html#forecast" data-tool="hud" class="frame" aria-label="看開滿落點圖介紹">
-          <img src="img/hud-forecast.webp" width="973" height="682" alt="開滿落點圖：繼續開，達到 A 77.9%，開滿期望 79.7" loading="lazy">
+        <a data-en-aria-label="About the max-level forecast" href="exe.html#forecast" data-tool="hud" class="frame" aria-label="看開滿落點圖介紹">
+          <img data-en-alt="Forecast chart: keep going, 77.9% chance of A, expected 79.7 at max" src="img/hud-forecast.webp" width="973" height="682" alt="開滿落點圖：繼續開，達到 A 77.9%，開滿期望 79.7" loading="lazy">
         </a>
       </div>
     </section>
@@ -533,10 +541,10 @@
     <section class="sec" id="tools">
       <div class="wrap">
         <div class="sec-head">
-          <span class="num">04 / CP值計算器／其他</span>
-          <h2>CP 值計算器與其他工具</h2>
+          <span data-en="04 / Top-up calculator / More" class="num">04 / CP值計算器／其他</span>
+          <h2 data-en="Top-up calculator and more tools">CP 值計算器與其他工具</h2>
         </div>
-        <nav class="tools" id="grid" aria-label="其他工具"></nav>
+        <nav data-en-aria-label="More tools" class="tools" id="grid" aria-label="其他工具"></nav>
       </div>
     </section>
 
@@ -544,13 +552,13 @@
       <div class="wrap">
         <div class="report">
           <div>
-            <h2>工具壞掉、數值不對？</h2>
-            <p>直接寫下發生什麼事就好，不用填問卷。附截圖會更快找到問題。</p>
+            <h2 data-en="Something broken or off?">工具壞掉、數值不對？</h2>
+            <p data-en="Just tell us what happened; no survey. A screenshot helps us find it faster.">直接寫下發生什麼事就好，不用填問卷。附截圖會更快找到問題。</p>
           </div>
           <div class="report-go">
-            <label class="sr-only" for="reportGuide">描述你遇到的問題</label>
-            <input class="inp report-guide" id="reportGuide" type="text" readonly placeholder="遇到什麼問題？點這裡直接寫…" aria-haspopup="dialog">
-            <button type="button" class="btn gold" id="openReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v4M12 14h.01"/></svg>回報問題</button>
+            <label data-en="Describe the problem" class="sr-only" for="reportGuide">描述你遇到的問題</label>
+            <input data-en-placeholder="What went wrong? Tap to write…" class="inp report-guide" id="reportGuide" type="text" readonly placeholder="遇到什麼問題？點這裡直接寫…" aria-haspopup="dialog">
+            <button type="button" class="btn gold" id="openReport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v4M12 14h.01"/></svg><span data-en="Report a problem">回報問題</span></button>
           </div>
         </div>
       </div>
@@ -559,12 +567,15 @@
     <section class="sec" id="about">
       <div class="wrap about">
         <div>
-          <div class="eyebrow" style="margin-bottom:16px;">關於 GAMEZH</div>
-          <h2>給鳴潮（Wuthering Waves）玩家的免費工具</h2>
+          <div data-en="About GAMEZH" class="eyebrow" style="margin-bottom:16px;">關於 GAMEZH</div>
+          <h2 data-en="Free tools for Wuthering Waves players">給鳴潮（Wuthering Waves）玩家的免費工具</h2>
         </div>
         <div>
-          <p>GAMEZH 是玩家自製的鳴潮輔助工具，從玩家回饋一條一條改出來，累積超過 7 萬筆聲骸數據。</p>
-          <ul>
+          <p data-en="GAMEZH is a fan-made Wuthering Waves toolkit, improved one player suggestion at a time, with over 70,000 Echo records collected.">GAMEZH 是玩家自製的鳴潮輔助工具，從玩家回饋一條一條改出來，累積超過 7 萬筆聲骸數據。</p>
+          <ul data-en="&lt;li&gt;&lt;b&gt;Echo Analyzer&lt;/b&gt;: upload the official character card for a full check-up: Echo scores, crit value, build tips, DPS estimates and leaderboards. Works on phones.&lt;/li&gt;
+            &lt;li&gt;&lt;b&gt;Echo Score HUD&lt;/b&gt;: a PC overlay; click an Echo for its score, a stop-or-continue tip and max-level forecast.&lt;/li&gt;
+            &lt;li&gt;&lt;b&gt;Top-up value calculator&lt;/b&gt;: plan top-ups and the monthly pass, see the cost per pull and simulate pulls.&lt;/li&gt;
+            &lt;li&gt;&lt;b&gt;Web live scoring&lt;/b&gt;: no install; share your game screen in a PC browser and see Echo scores as you play.&lt;/li&gt;">
             <li><b>聲骸分析儀</b>：上傳官方角色資訊卡就能做角色健檢，聲骸評分、CV 值、配裝建議、DPS 試算與聲骸排行榜，手機也能用。</li>
             <li><b>聲骸評分 HUD</b>：電腦版懸浮工具，點一下聲骸就顯示評分、止損建議和開滿落點。</li>
             <li><b>累充 CP 值計算</b>：規劃累充與月卡，算出每一抽的成本，並模擬抽卡結果。</li>
@@ -577,13 +588,13 @@
 
   <footer>
     <div class="wrap">
-      <p>GAMEZH · 玩家自製的第三方工具，與庫洛遊戲（Kuro Games）無關，亦未獲其贊助或背書。鳴潮 / Wuthering Waves 為其權利人之商標。</p>
+      <p data-en="GAMEZH · A fan-made third-party tool with no affiliation to, sponsorship from or endorsement by Kuro Games. Wuthering Waves is a trademark of its owner. The tools currently use a Chinese interface; English is in progress.">GAMEZH · 玩家自製的第三方工具，與庫洛遊戲（Kuro Games）無關，亦未獲其贊助或背書。鳴潮 / Wuthering Waves 為其權利人之商標。</p>
     </div>
   </footer>
 
-  <a class="dc-float" href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener" aria-label="加入 GAMEZH 的 Discord 群組">
+  <a data-en-aria-label="Join the GAMEZH Discord" class="dc-float" href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener" aria-label="加入 GAMEZH 的 Discord 群組">
     <span class="dc-ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.211.375-.445.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.098.245.197.372.291a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029zM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></span>
-    <span class="dc-txt"><b>GAMEZH</b><small>加入 Discord 群組</small></span>
+    <span class="dc-txt"><b>GAMEZH</b><small data-en="Join our Discord">加入 Discord 群組</small></span>
   </a>
 
   <!-- 回報問題 -->
@@ -591,32 +602,32 @@
     <form class="panel" id="reportForm" role="dialog" aria-modal="true" aria-labelledby="reportTitle" novalidate>
       <div class="grab" aria-hidden="true"></div>
       <div class="panel-head">
-        <h3 id="reportTitle">回報問題</h3>
-        <button type="button" class="x" data-close aria-label="關閉">✕</button>
+        <h3 data-en="Report a problem" id="reportTitle">回報問題</h3>
+        <button data-en-aria-label="Close" type="button" class="x" data-close aria-label="關閉">✕</button>
       </div>
-      <p class="sub">直接寫下發生了什麼事，我們會儘快處理。</p>
+      <p data-en="Tell us what happened and we&#x27;ll look into it soon." class="sub">直接寫下發生了什麼事，我們會儘快處理。</p>
 
-      <label class="f" for="rpText">問題描述</label>
-      <textarea class="inp" id="rpText" maxlength="1000" placeholder="例：在聲骸分析儀按「儲存」後畫面卡住，重新整理也一樣。用的是 iPhone Safari。" required></textarea>
+      <label data-en="What happened" class="f" for="rpText">問題描述</label>
+      <textarea data-en-placeholder="e.g. After pressing &quot;Save&quot; in the Echo Analyzer the page froze, even after refreshing. iPhone Safari." class="inp" id="rpText" maxlength="1000" placeholder="例：在聲骸分析儀按「儲存」後畫面卡住，重新整理也一樣。用的是 iPhone Safari。" required></textarea>
       <div class="count"><span id="rpCount">0</span> / 1000</div>
 
-      <label class="f" for="rpUid">遊戲 UID<em>選填</em></label>
-      <input class="inp" id="rpUid" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="方便我們查你的資料">
+      <label data-en="Game UID&lt;em&gt;optional&lt;/em&gt;" class="f" for="rpUid">遊戲 UID<em>選填</em></label>
+      <input data-en-placeholder="Helps us look up your data" class="inp" id="rpUid" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="方便我們查你的資料">
 
-      <label class="f" for="rpContact">聯絡方式<em>選填，Discord ID 或 Email</em></label>
-      <input class="inp" id="rpContact" autocomplete="off" maxlength="100" placeholder="需要回覆你時使用">
+      <label data-en="Contact&lt;em&gt;optional, Discord ID or email&lt;/em&gt;" class="f" for="rpContact">聯絡方式<em>選填，Discord ID 或 Email</em></label>
+      <input data-en-placeholder="Only used if we need to reply" class="inp" id="rpContact" autocomplete="off" maxlength="100" placeholder="需要回覆你時使用">
 
-      <label class="f">截圖<em>選填</em></label>
+      <label data-en="Screenshot&lt;em&gt;optional&lt;/em&gt;" class="f">截圖<em>選填</em></label>
       <label class="shot" for="rpFile">
         <input type="file" id="rpFile" accept="image/*">
         <span class="ph" id="rpThumb" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
-        <span><span id="rpFileName">點這裡附上截圖</span><small>有圖片我們更快找到問題</small></span>
-        <button type="button" class="btn rm" id="rpRemove" hidden>移除</button>
+        <span><span id="rpFileName" data-en="Tap to attach a screenshot">點這裡附上截圖</span><small data-en="A picture helps us find it faster">有圖片我們更快找到問題</small></span>
+        <button data-en="Remove" type="button" class="btn rm" id="rpRemove" hidden>移除</button>
       </label>
 
-      <div class="note">送出時會一併附上：目前網址、最近使用的工具、螢幕尺寸與瀏覽器版本，用來重現問題。</div>
+      <div data-en="Sent along with your report: current URL, recently used tools, screen size and browser version, so we can reproduce it." class="note">送出時會一併附上：目前網址、最近使用的工具、螢幕尺寸與瀏覽器版本，用來重現問題。</div>
       <p class="msg" id="rpMsg" role="status" aria-live="polite"></p>
-      <button type="submit" class="btn primary submit" id="rpSubmit" disabled>送出回報</button>
+      <button data-en="Send report" type="submit" class="btn primary submit" id="rpSubmit" disabled>送出回報</button>
     </form>
   </div>
 
@@ -626,10 +637,14 @@
   <script>
     // 工具清單：之後新增頁面只要改這裡
     var TOOLS = [
-      { id: 'echo',  href: '20260828.html', title: '聲骸分析儀',         desc: '上傳角色資訊卡，整隻角色健檢。', tags: ['手機可用'], img: 'img/ana-home.webp' },
-      { id: 'hud',   href: 'exe.html',      title: '聲骸評分 HUD',       desc: '電腦版懸浮評分。', tags: ['電腦'], img: 'img/hud-score.webp' },
-      { id: 'topup', href: '3.7.html',      title: '累充 CP 值計算',     desc: '月卡、累充怎麼買最划算，算出每一抽的成本，還能模擬抽卡。', tags: ['手機可用'], img: 'img/tool-topup.webp' },
-      { id: 'live',  href: 'ON1.html',      title: '網頁版即時評分',     desc: '免安裝，用電腦瀏覽器分享遊戲畫面，邊玩邊看聲骸分數。', tags: ['電腦', '免安裝'], img: 'img/tool-live.webp' }
+      { id: 'echo',  href: '20260828.html', title: '聲骸分析儀',         desc: '上傳角色資訊卡，整隻角色健檢。', tags: ['手機可用'], img: 'img/ana-home.webp',
+        en: { title: 'Echo Analyzer', desc: 'Upload a character card for a full check-up.', tags: ['Phone OK'] } },
+      { id: 'hud',   href: 'exe.html',      title: '聲骸評分 HUD',       desc: '電腦版懸浮評分。', tags: ['電腦'], img: 'img/hud-score.webp',
+        en: { title: 'Echo Score HUD', desc: 'PC scoring overlay.', tags: ['PC'] } },
+      { id: 'topup', href: '3.7.html',      title: '累充 CP 值計算',     desc: '月卡、累充怎麼買最划算，算出每一抽的成本，還能模擬抽卡。', tags: ['手機可用'], img: 'img/tool-topup.webp',
+        en: { title: 'Top-up value calculator', desc: 'Find the best-value monthly pass and top-ups, see the cost per pull and simulate pulls. (Chinese UI)', tags: ['Phone OK'] } },
+      { id: 'live',  href: 'ON1.html',      title: '網頁版即時評分',     desc: '免安裝，用電腦瀏覽器分享遊戲畫面，邊玩邊看聲骸分數。', tags: ['電腦', '免安裝'], img: 'img/tool-live.webp',
+        en: { title: 'Web live scoring', desc: 'No install: share your game screen in a PC browser and see Echo scores as you play. (Chinese UI)', tags: ['PC', 'No install'] } }
     ];
     var byId = {};
     TOOLS.forEach(function (t) { byId[t.id] = t; });
@@ -642,6 +657,8 @@
       return n;
     }
     function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function T(zh, en) { return window.GZ_I18N ? window.GZ_I18N.t(zh, en) : zh; }
+    function tf(t, k) { return (window.GZ_I18N && window.GZ_I18N.lang === 'en' && t.en && t.en[k]) || t[k]; }
     function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
     function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
@@ -654,12 +671,17 @@
     }
 
     // 工具卡片
-    TOOLS.filter(function (t) { return t.id !== 'echo' && t.id !== 'hud'; }).forEach(function (t) {
-      var pic = '<div class="pic"><img src="' + t.img + '" alt="' + esc(t.title) + ' 實際畫面" loading="lazy"></div>';
-      var tags = (t.tags || []).map(function (g) { return '<span' + (g === '電腦' ? ' class="pc"' : '') + '>' + esc(g) + '</span>'; }).join('');
-      $('grid').appendChild(el('a', { class: 'tool', href: t.href, 'data-tool': t.id },
-        pic + '<div class="body"><div class="tags">' + tags + '</div><h3>' + esc(t.title) + '</h3><p>' + esc(t.desc) + '</p><span class="go">開啟 →</span></div>'));
-    });
+    function renderTools() {
+      $('grid').innerHTML = '';
+      TOOLS.filter(function (t) { return t.id !== 'echo' && t.id !== 'hud'; }).forEach(function (t) {
+        var pic = '<div class="pic"><img src="' + t.img + '" alt="' + esc(tf(t, 'title')) + T(' 實際畫面', ' screenshot') + '" loading="lazy"></div>';
+        var tags = (tf(t, 'tags') || []).map(function (g) { return '<span' + (g === '電腦' || g === 'PC' ? ' class="pc"' : '') + '>' + esc(g) + '</span>'; }).join('');
+        $('grid').appendChild(el('a', { class: 'tool', href: t.href, 'data-tool': t.id },
+          pic + '<div class="body"><div class="tags">' + tags + '</div><h3>' + esc(tf(t, 'title')) + '</h3><p>' + esc(tf(t, 'desc')) + '</p><span class="go">' + T('開啟 →', 'Open →') + '</span></div>'));
+      });
+    }
+    renderTools();
+    document.addEventListener('gz:lang', function () { renderTools(); renderRecent(); });
 
     // 最近使用（只存在這台裝置）
     var RECENT_KEY = 'gamezh.portal.recent';
@@ -677,7 +699,7 @@
       list.forEach(function (id) {
         var t = byId[id];
         box.appendChild(el('a', { href: t.href, 'data-tool': t.id },
-          '<img class="ico" src="' + t.img + '" alt="" loading="lazy">' + esc(t.title)));
+          '<img class="ico" src="' + t.img + '" alt="" loading="lazy">' + esc(tf(t, 'title'))));
       });
     }
     document.addEventListener('click', function (e) {
@@ -735,7 +757,7 @@
       var n = rpText.value.trim().length;
       $('rpCount').textContent = rpText.value.length;
       rpSubmit.disabled = n < 5;
-      if (n > 0 && n < 5) setMsg('描述再多寫一點（至少 5 個字）', 'err');
+      if (n > 0 && n < 5) setMsg(T('描述再多寫一點（至少 5 個字）', 'Please add a bit more detail (at least 5 characters)'), 'err');
       else if (rpMsg.classList.contains('err')) setMsg('');
     }
     rpText.addEventListener('input', validate);
@@ -767,7 +789,7 @@
       rpFile.value = '';
       $('rpThumb').style.backgroundImage = '';
       $('rpThumb').classList.remove('has');
-      $('rpFileName').textContent = '點這裡附上截圖';
+      $('rpFileName').textContent = T('點這裡附上截圖', 'Tap to attach a screenshot');
       $('rpRemove').hidden = true;
     }
     $('rpRemove').addEventListener('click', function (e) { e.preventDefault(); clearShot(); });
@@ -793,10 +815,10 @@
     rpFile.addEventListener('change', function () {
       var f = rpFile.files && rpFile.files[0];
       if (!f) return;
-      if (!/^image\//.test(f.type)) { setMsg('請選擇圖片檔', 'err'); rpFile.value = ''; return; }
-      $('rpFileName').textContent = '處理中…';
+      if (!/^image\//.test(f.type)) { setMsg(T('請選擇圖片檔', 'Please choose an image file'), 'err'); rpFile.value = ''; return; }
+      $('rpFileName').textContent = T('處理中…', 'Processing…');
       shrinkImage(f).then(function (b) {
-        if (!b) { clearShot(); setMsg('這張圖片無法讀取，請換一張', 'err'); return; }
+        if (!b) { clearShot(); setMsg(T('這張圖片無法讀取，請換一張', 'Couldn\'t read that image; try another'), 'err'); return; }
         shotBlob = b;
         if (shotUrl) URL.revokeObjectURL(shotUrl);
         shotUrl = URL.createObjectURL(b);
@@ -822,10 +844,10 @@
       if (text.length < 5) { validate(); rpText.focus(); return; }
       var last = parseInt(lsGet(COOLDOWN_KEY), 10);
       if (last && Date.now() - last < 60000) {
-        setMsg('剛剛才送出過，請一分鐘後再試。', 'err');
+        setMsg(T('剛剛才送出過，請一分鐘後再試。', 'You just sent one. Please wait a minute.'), 'err');
         return;
       }
-      if (!navigator.onLine) { setMsg('目前離線，連上網路後再送出。', 'err'); return; }
+      if (!navigator.onLine) { setMsg(T('目前離線，連上網路後再送出。', 'You\'re offline. Send it once you\'re connected.'), 'err'); return; }
 
       var recent = getRecent().map(function (id) { return byId[id] ? byId[id].title : id; });
       var uid = rpUid.value.trim();
@@ -858,7 +880,7 @@
       if (shotBlob) fd.append('file', shotBlob, 'screenshot.' + (shotBlob.type === 'image/png' ? 'png' : 'jpg'));
 
       rpSubmit.disabled = true;
-      rpSubmit.textContent = '發送中…';
+      rpSubmit.textContent = T('發送中…', 'Sending…');
       setMsg('');
       fetch(webhookUrl(), { method: 'POST', body: fd })
         .then(function (res) {
@@ -867,14 +889,14 @@
           rpText.value = ''; rpContact.value = '';
           clearShot();
           closeSheet($('reportSheet'));
-          toast('感謝回報！我們收到了。');
+          toast(T('感謝回報！我們收到了。', 'Thanks! We got your report.'));
         })
         .catch(function (err) {
           console.error('回報發送失敗:', err);
-          setMsg('發送失敗，請稍後再試。', 'err');
+          setMsg(T('發送失敗，請稍後再試。', 'Couldn\'t send. Please try again later.'), 'err');
         })
         .then(function () {
-          rpSubmit.textContent = '送出回報';
+          rpSubmit.textContent = T('送出回報', 'Send report');
           validate();
         });
     });
@@ -889,5 +911,6 @@
   <script src="assets/waves.js?v=20261117h" defer></script>
   <script src="assets/flow-nav.js?v=20261117h" defer></script>
   <script src="assets/download.js?v=20261117h" defer></script>
+  <script src="assets/cheer.js?v=20261123a" defer></script>
 </body>
 </html>

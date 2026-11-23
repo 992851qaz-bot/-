@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GameZH 聲骸評分 HUD｜鳴潮聲骸該不該繼續開？點一下就有答案</title>
-<meta name="description" content="鳴潮 PC 聲骸評分懸浮工具。開著遊戲點一下聲骸，評分、止損建議、開滿會落在哪直接浮在畫面旁邊；換裝比分、面板缺什麼、一鍵匯出分享圖。免費、玩家自製、不改遊戲檔案。">
+<title data-en="GameZH Echo Score HUD | Wuthering Waves: should you keep leveling that Echo?">GameZH 聲骸評分 HUD｜鳴潮聲骸該不該繼續開？點一下就有答案</title>
+<meta data-en-content="A Wuthering Waves PC overlay that scores your Echoes. Click an Echo in game and see its score, a stop-or-continue tip and where it will land when maxed, right next to the game window. Free and fan-made; it never touches game files." name="description" content="鳴潮 PC 聲骸評分懸浮工具。開著遊戲點一下聲骸，評分、止損建議、開滿會落在哪直接浮在畫面旁邊；換裝比分、面板缺什麼、一鍵匯出分享圖。免費、玩家自製、不改遊戲檔案。">
 <link rel="canonical" href="https://992851qaz-bot.github.io/-/exe.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GAMEZH 鳴潮工具箱">
@@ -24,6 +24,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/flow-nav.css?v=20261117h">
+<link rel="alternate" hreflang="zh-Hant" href="https://992851qaz-bot.github.io/-/exe.html?lang=zh">
+<link rel="alternate" hreflang="en" href="https://992851qaz-bot.github.io/-/exe.html?lang=en">
+<script src="assets/i18n.js?v=20261123a"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -366,30 +369,31 @@ main, footer { position: relative; z-index: 1; }
 </head>
 <body>
 <canvas class="gz-waves" aria-hidden="true"></canvas>
-<nav class="flow-nav" aria-label="頁面導覽">
-    <a href="#intro"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15 12h.01M18 13h.01"/></svg><span class="fn-label">簡介</span></a>
-    <a href="#score"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg><span class="fn-label">功能</span></a>
-    <a href="#guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/></svg><span class="fn-label">教學</span></a>
-    <a href="#faq"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span class="fn-label">問答</span></a>
-    <a href="#download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="fn-label">下載</span></a>
+<nav data-en-aria-label="Page sections" class="flow-nav" aria-label="頁面導覽">
+    <a href="#intro"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15 12h.01M18 13h.01"/></svg><span data-en="Intro" class="fn-label">簡介</span></a>
+    <a href="#score"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg><span data-en="Features" class="fn-label">功能</span></a>
+    <a href="#guide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/></svg><span data-en="Guide" class="fn-label">教學</span></a>
+    <a href="#faq"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg><span data-en="FAQ" class="fn-label">問答</span></a>
+    <a href="#download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span data-en="Get it" class="fn-label">下載</span></a>
   </nav>
 
 <header class="hd">
   <div class="wrap">
-    <a class="logo" href="./" aria-label="回到 GAMEZH 鳴潮工具箱首頁">
+    <a data-en-aria-label="Back to the GAMEZH Wuthering Waves toolbox home" class="logo" href="./" aria-label="回到 GAMEZH 鳴潮工具箱首頁">
       <img src="icons/logo.png" alt="" width="34" height="34">
-      <span><b>GAMEZH</b><small>聲骸評分 HUD</small></span>
+      <span><b>GAMEZH</b><small data-en="Echo Score HUD">聲骸評分 HUD</small></span>
     </a>
-    <nav class="nav" aria-label="頁面導覽">
-      <a href="#video">影片</a>
-      <a href="#score">評分</a>
-      <a href="#forecast">開滿落點</a>
-      <a href="#features">功能</a>
-      <a href="#guide">使用教學</a>
-      <a href="#faq">常見問題</a>
-      <a href="#safe">安全性</a>
+    <nav data-en-aria-label="Page sections" class="nav" aria-label="頁面導覽">
+      <a data-en="Video" href="#video">影片</a>
+      <a data-en="Scoring" href="#score">評分</a>
+      <a data-en="Max-level forecast" href="#forecast">開滿落點</a>
+      <a data-en="Features" href="#features">功能</a>
+      <a data-en="Guide" href="#guide">使用教學</a>
+      <a data-en="FAQ" href="#faq">常見問題</a>
+      <a data-en="Safety" href="#safe">安全性</a>
     </nav>
-    <a class="btn gold" data-dl href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span>立即下載</span></a>
+    <a class="btn gold" data-dl href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span data-only="zh">立即下載</span><span data-only="en" data-cheer-label data-cheer-short>Cheer</span></a>
+    <button type="button" class="lang-toggle" data-lang-toggle>EN</button>
   </div>
 </header>
 
@@ -398,39 +402,39 @@ main, footer { position: relative; z-index: 1; }
   <section class="hero" id="intro">
     <div class="wrap">
       <div>
-        <div class="eyebrow">鳴潮 PC 聲骸評分懸浮工具 · <span data-latest-ver>v4.0.14</span></div>
-        <h1>聲骸該不該<br class="br-d">繼續開？<span>點一下就有答案。</span></h1>
-        <p class="lead">刷聲骸不用再 Alt + Tab 切視窗算分數。開著遊戲點一下聲骸，<span class="hl">評分、止損建議、開滿會落在哪</span>，直接浮在畫面旁邊。</p>
+        <div data-en="Wuthering Waves PC Echo scoring overlay · English version coming soon" class="eyebrow">鳴潮 PC 聲骸評分懸浮工具 · <span data-latest-ver>v4.0.14</span></div>
+        <h1 data-en="Keep leveling that Echo?&lt;span&gt;One click tells you.&lt;/span&gt;">聲骸該不該<br class="br-d">繼續開？<span>點一下就有答案。</span></h1>
+        <p data-en="No more Alt + Tab to a calculator while farming Echoes. Keep the game open, click an Echo, and its &lt;span class=&#x27;hl&#x27;&gt;score, a stop-or-continue tip and where it lands when maxed&lt;/span&gt; float right beside the game." class="lead">刷聲骸不用再 Alt + Tab 切視窗算分數。開著遊戲點一下聲骸，<span class="hl">評分、止損建議、開滿會落在哪</span>，直接浮在畫面旁邊。</p>
         <div class="cta">
-          <a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b>立即下載</b><small><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small></span></a>
-          <a class="btn" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
+          <a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b data-only="zh">立即下載</b><b data-only="en" data-cheer-label>Cheer for English</b><small data-only="zh"><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small><small data-only="en">English version in development</small></span></a>
+          <a class="btn" data-only="zh" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
             Microsoft Store
           </a>
-          <a class="link" href="#video">▶ 先看影片演示 →</a>
+          <a data-en="▶ Watch the demo →" class="link" href="#video">▶ 先看影片演示 →</a>
         </div>
-        <div class="meta"><span>免費</span><span>玩家自製</span><span>Windows / Mac</span><span>不改遊戲檔案</span></div>
+        <div data-en="&lt;span&gt;Free&lt;/span&gt;&lt;span&gt;Fan-made&lt;/span&gt;&lt;span&gt;Windows / Mac&lt;/span&gt;&lt;span&gt;Never touches game files&lt;/span&gt;" class="meta"><span>免費</span><span>玩家自製</span><span>Windows / Mac</span><span>不改遊戲檔案</span></div>
         <a class="phone-note" href="20260828.html">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex:none;margin-top:2px"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
-          <span><b>用手機在看？</b>這是電腦用的工具，手機先收藏起來，回電腦再下載。想現在就評分，可以用<u>網頁版聲骸分析儀</u>上傳截圖 →</span>
+          <span data-en="&lt;b&gt;On your phone?&lt;/b&gt; This is a PC tool, so bookmark it for later. Want a score right now? Try the &lt;u&gt;web Echo Analyzer&lt;/u&gt; (Chinese UI) with a screenshot →"><b>用手機在看？</b>這是電腦用的工具，手機先收藏起來，回電腦再下載。想現在就評分，可以用<u>網頁版聲骸分析儀</u>上傳截圖 →</span>
         </a>
       </div>
       <div class="hero-visual">
         <figure class="shot" data-full="img/hud-overview.webp">
-          <img width="1124" height="635" src="img/hud-ingame.webp" alt="鳴潮背包畫面，GameZH HUD 懸浮在聲骸列表旁邊" fetchpriority="high">
+          <img data-en-alt="Wuthering Waves inventory with the GameZH HUD floating beside the Echo list" width="1124" height="635" src="img/hud-ingame.webp" alt="鳴潮背包畫面，GameZH HUD 懸浮在聲骸列表旁邊" fetchpriority="high">
         </figure>
-        <img width="586" height="710" class="panel" src="img/hud-panel.webp" alt="HUD 放大：聲骸 96.2 分 S，各副詞條分數與畢業建議" data-full="img/hud-panel.webp">
-        <div class="tag">實際遊戲畫面，HUD 就浮在旁邊</div>
+        <img data-en-alt="HUD close-up: Echo scored 96.2 (S), with each sub-stat score and a verdict" width="586" height="710" class="panel" src="img/hud-panel.webp" alt="HUD 放大：聲骸 96.2 分 S，各副詞條分數與畢業建議" data-full="img/hud-panel.webp">
+        <div data-en="Real in-game screen, HUD floating beside it" class="tag">實際遊戲畫面，HUD 就浮在旁邊</div>
       </div>
     </div>
   </section>
 
   <div class="wrap">
     <div class="stats">
-      <div><b>7 萬筆</b><span>聲骸數據公開</span></div>
-      <div><b>1 年</b><span>持續開發改版</span></div>
-      <div><b>14 款</b><span>分享圖一鍵匯出</span></div>
-      <div><b>0</b><span>修改遊戲檔案</span></div>
+      <div data-en="&lt;b&gt;70K&lt;/b&gt;&lt;span&gt;Echo records published&lt;/span&gt;"><b>7 萬筆</b><span>聲骸數據公開</span></div>
+      <div data-en="&lt;b&gt;1 year&lt;/b&gt;&lt;span&gt;of steady updates&lt;/span&gt;"><b>1 年</b><span>持續開發改版</span></div>
+      <div data-en="&lt;b&gt;14&lt;/b&gt;&lt;span&gt;one-click share card styles&lt;/span&gt;"><b>14 款</b><span>分享圖一鍵匯出</span></div>
+      <div data-en="&lt;b&gt;0&lt;/b&gt;&lt;span&gt;game files modified&lt;/span&gt;"><b>0</b><span>修改遊戲檔案</span></div>
     </div>
   </div>
 
@@ -438,15 +442,15 @@ main, footer { position: relative; z-index: 1; }
   <section class="sec video-sec" id="video">
     <div class="wrap">
       <div class="sec-head">
-        <span class="num">影片介紹</span>
-        <h2>先看影片，<br>實際用起來長這樣</h2>
-        <p>從點聲骸、看分數到開滿落點圖，實機操作一次看完。</p>
+        <span data-en="Video" class="num">影片介紹</span>
+        <h2 data-en="See it in action first">先看影片，<br>實際用起來長這樣</h2>
+        <p data-en="Clicking an Echo, reading the score, the max-level forecast: the real thing, start to finish. (Video in Chinese.)">從點聲骸、看分數到開滿落點圖，實機操作一次看完。</p>
       </div>
-      <div class="yt" data-yt="TPsOZVi3OOs" style="background-image:url(https://i.ytimg.com/vi/TPsOZVi3OOs/maxresdefault.jpg), url(https://i.ytimg.com/vi/TPsOZVi3OOs/hqdefault.jpg)">
-        <button type="button" class="yt-play" aria-label="播放 GameZH 聲骸評分 HUD 介紹影片"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4l15 8-15 8z"/></svg></span></button>
-        <span class="yt-label">▶ GameZH 聲骸評分 HUD 實機演示</span>
+      <div class="yt" data-yt="FVb-5iigbaM" style="background-image:url(https://i.ytimg.com/vi/FVb-5iigbaM/maxresdefault.jpg), url(https://i.ytimg.com/vi/FVb-5iigbaM/hqdefault.jpg)">
+        <button data-en-aria-label="Play the GameZH Echo Score HUD video" type="button" class="yt-play" aria-label="播放 GameZH 聲骸評分 HUD 介紹影片"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4l15 8-15 8z"/></svg></span></button>
+        <span data-en="▶ GameZH Echo Score HUD live demo" class="yt-label">▶ GameZH 聲骸評分 HUD 實機演示</span>
       </div>
-      <p class="cap">影片無法播放？<a href="https://www.youtube.com/watch?v=TPsOZVi3OOs" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:3px">到 YouTube 觀看 →</a></p>
+      <p class="cap"><span data-en="Video won't play?">影片無法播放？</span><a data-en="Watch on YouTube →" href="https://www.youtube.com/watch?v=FVb-5iigbaM" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:3px">到 YouTube 觀看 →</a></p>
     </div>
   </section>
 
@@ -455,29 +459,29 @@ main, footer { position: relative; z-index: 1; }
     <div class="wrap split">
       <div>
         <div class="sec-head">
-          <span class="num">01 / 即時評分</span>
-          <h2>點一隻聲骸，<br>馬上知道值不值得</h2>
-          <p>還沒開滿也能看。HUD 會把現在的分數、還能拿多少、已經虧掉多少，一次攤開給你。</p>
+          <span data-en="01 / Instant score" class="num">01 / 即時評分</span>
+          <h2 data-en="Click an Echo,&lt;br&gt;know if it&#x27;s worth it">點一隻聲骸，<br>馬上知道值不值得</h2>
+          <p data-en="Works before it&#x27;s maxed, too. The HUD lays out the current score, what&#x27;s still on the table and what&#x27;s already lost.">還沒開滿也能看。HUD 會把現在的分數、還能拿多少、已經虧掉多少，一次攤開給你。</p>
         </div>
         <ul class="points">
-          <li><div><b>期望評分</b><span>沒開滿時，直接顯示開滿後的期望分數。</span></div></li>
-          <li><div><b>已得／還可得／已損失</b><span>現在幾分、最多還能拿幾分、已經拿不回來幾分。</span></div></li>
-          <li><div><b>每條副詞條</b><span>檔位高低、貢獻幾分，一眼看完。</span></div></li>
-          <li><div><b>止損建議</b><span>直接告訴你要繼續開，還是該停手換胚。</span></div></li>
+          <li data-en="&lt;div&gt;&lt;b&gt;Expected score&lt;/b&gt;&lt;span&gt;Not maxed yet? You see the expected score at max level.&lt;/span&gt;&lt;/div&gt;"><div><b>期望評分</b><span>沒開滿時，直接顯示開滿後的期望分數。</span></div></li>
+          <li data-en="&lt;div&gt;&lt;b&gt;Earned / Still possible / Lost&lt;/b&gt;&lt;span&gt;Points you have, the most you can still gain, and what&#x27;s gone for good.&lt;/span&gt;&lt;/div&gt;"><div><b>已得／還可得／已損失</b><span>現在幾分、最多還能拿幾分、已經拿不回來幾分。</span></div></li>
+          <li data-en="&lt;div&gt;&lt;b&gt;Every sub-stat&lt;/b&gt;&lt;span&gt;Roll tier and points contributed, at a glance.&lt;/span&gt;&lt;/div&gt;"><div><b>每條副詞條</b><span>檔位高低、貢獻幾分，一眼看完。</span></div></li>
+          <li data-en="&lt;div&gt;&lt;b&gt;Stop-or-continue tip&lt;/b&gt;&lt;span&gt;Tells you straight up: keep leveling, or cut your losses and farm a new one.&lt;/span&gt;&lt;/div&gt;"><div><b>止損建議</b><span>直接告訴你要繼續開，還是該停手換胚。</span></div></li>
         </ul>
-        <div class="tiers" aria-label="評級標準">
-          <div class="t-sss"><b>SSS</b><small>106.3↑<br>完美畢業</small></div>
-          <div class="t-s"><b>S</b><small>87.5↑<br>大畢業</small></div>
-          <div class="t-a"><b>A</b><small>68.8↑<br>小畢業</small></div>
-          <div class="t-b"><b>B</b><small>50↑<br>過渡</small></div>
-          <div class="t-c"><b>C</b><small>50↓<br>換胚</small></div>
+        <div data-en-aria-label="Grade thresholds" class="tiers" aria-label="評級標準">
+          <div class="t-sss"><b>SSS</b><small data-en="106.3+&lt;br&gt;Perfect">106.3↑<br>完美畢業</small></div>
+          <div class="t-s"><b>S</b><small data-en="87.5+&lt;br&gt;Endgame">87.5↑<br>大畢業</small></div>
+          <div class="t-a"><b>A</b><small data-en="68.8+&lt;br&gt;Good">68.8↑<br>小畢業</small></div>
+          <div class="t-b"><b>B</b><small data-en="50+&lt;br&gt;Interim">50↑<br>過渡</small></div>
+          <div class="t-c"><b>C</b><small data-en="Under 50&lt;br&gt;Replace">50↓<br>換胚</small></div>
         </div>
       </div>
       <div>
         <figure class="shot" data-full="img/hud-score.webp">
-          <img width="509" height="698" src="img/hud-score.webp" alt="HUD 評分畫面：期望 67.6 分 B，已得、還可得、已損失與止損建議" loading="lazy">
+          <img data-en-alt="HUD score view: expected 67.6 (B), with earned, possible, lost and a stop tip" width="509" height="698" src="img/hud-score.webp" alt="HUD 評分畫面：期望 67.6 分 B，已得、還可得、已損失與止損建議" loading="lazy">
         </figure>
-        <p class="cap">▲ 開到 +15 的示範聲骸：期望 67.6，建議不要繼續<span class="zoom-hint">（點圖放大）</span></p>
+        <p data-en="▲ Sample Echo at +15: expected 67.6, verdict is stop here&lt;span class=&#x27;zoom-hint&#x27;&gt; (tap to zoom)&lt;/span&gt;" class="cap">▲ 開到 +15 的示範聲骸：期望 67.6，建議不要繼續<span class="zoom-hint">（點圖放大）</span></p>
       </div>
     </div>
   </section>
@@ -488,35 +492,35 @@ main, footer { position: relative; z-index: 1; }
       <div class="split rev">
         <div>
           <div class="sec-head">
-            <span class="num">02 / 開滿落點圖</span>
-            <h2>還沒開滿，<br>就看得到它開滿會落在哪</h2>
-            <p>GameZH 首創的開滿落點圖：每一孔都照官方公開機率計算，一張圖看出這顆胚子值不值得開。</p>
+            <span data-en="02 / Max-level forecast" class="num">02 / 開滿落點圖</span>
+            <h2 data-en="See where it lands&lt;br&gt;before you max it">還沒開滿，<br>就看得到它開滿會落在哪</h2>
+            <p data-en="GameZH&#x27;s max-level forecast: every remaining slot is computed from the official published odds, so one chart tells you whether this Echo is worth leveling.">GameZH 首創的開滿落點圖：每一孔都照官方公開機率計算，一張圖看出這顆胚子值不值得開。</p>
           </div>
           <ul class="points">
-            <li><div><b>結論先講</b><span>繼續開、可開可不開、換胚，附開滿後的等級與機率。</span></div></li>
-            <li><div><b>分數分布</b><span>實線是這顆開滿的分數分布，虛線是隨便開一顆新胚子。</span></div></li>
-            <li><div><b>各等級機率</b><span>色塊越寬越可能，一眼看出拚 S 有多難。</span></div></li>
+            <li data-en="&lt;div&gt;&lt;b&gt;Verdict first&lt;/b&gt;&lt;span&gt;Keep going, your call, or replace it, with the expected grade and odds at max.&lt;/span&gt;&lt;/div&gt;"><div><b>結論先講</b><span>繼續開、可開可不開、換胚，附開滿後的等級與機率。</span></div></li>
+            <li data-en="&lt;div&gt;&lt;b&gt;Score distribution&lt;/b&gt;&lt;span&gt;Solid line: this Echo at max. Dashed line: a random fresh Echo.&lt;/span&gt;&lt;/div&gt;"><div><b>分數分布</b><span>實線是這顆開滿的分數分布，虛線是隨便開一顆新胚子。</span></div></li>
+            <li data-en="&lt;div&gt;&lt;b&gt;Odds per grade&lt;/b&gt;&lt;span&gt;Wider band, likelier outcome. See how hard an S really is.&lt;/span&gt;&lt;/div&gt;"><div><b>各等級機率</b><span>色塊越寬越可能，一眼看出拚 S 有多難。</span></div></li>
           </ul>
         </div>
         <div>
           <figure class="shot" data-full="img/hud-forecast-full.webp">
-            <img width="973" height="682" src="img/hud-forecast.webp" alt="開滿落點圖：繼續開，達到 A 77.9%，開滿期望 79.7" loading="lazy">
+            <img data-en-alt="Forecast chart: keep going, 77.9% chance of A, expected 79.7 at max" width="973" height="682" src="img/hud-forecast.webp" alt="開滿落點圖：繼續開，達到 A 77.9%，開滿期望 79.7" loading="lazy">
           </figure>
-          <p class="cap">▲ 目前 69.7 分，開滿期望 79.7，達到 A 的機率 77.9%</p>
+          <p data-en="▲ Now 69.7, expected 79.7 at max, 77.9% chance to reach A" class="cap">▲ 目前 69.7 分，開滿期望 79.7，達到 A 的機率 77.9%</p>
         </div>
       </div>
       <div class="cases">
         <figure class="case">
           <div class="shot" data-full="img/hud-case-1.webp"><img src="img/hud-case-1.webp" width="580" height="372" alt="雙暴開局的開滿落點圖：繼續開，開滿期望 79.7" loading="lazy"></div>
-          <figcaption><b>雙暴開局</b><span class="c-go">曲線擠在右邊：放心繼續開</span></figcaption>
+          <figcaption data-en="&lt;b&gt;Double crit start&lt;/b&gt;&lt;span class=&#x27;c-go&#x27;&gt;Curve sits to the right: keep going&lt;/span&gt;"><b>雙暴開局</b><span class="c-go">曲線擠在右邊：放心繼續開</span></figcaption>
         </figure>
         <figure class="case">
           <div class="shot" data-full="img/hud-case-2.webp"><img src="img/hud-case-2.webp" width="580" height="372" alt="普通開局的開滿落點圖：繼續開，開滿期望 40.1" loading="lazy"></div>
-          <figcaption><b>普通開局</b><span class="c-mid">曲線偏左、尾巴長：能開，但拚高分機會小</span></figcaption>
+          <figcaption data-en="&lt;b&gt;Average start&lt;/b&gt;&lt;span class=&#x27;c-mid&#x27;&gt;Curve leans left with a long tail: fine, but a high score is unlikely&lt;/span&gt;"><b>普通開局</b><span class="c-mid">曲線偏左、尾巴長：能開，但拚高分機會小</span></figcaption>
         </figure>
         <figure class="case">
           <div class="shot" data-full="img/hud-case-3.webp"><img src="img/hud-case-3.webp" width="580" height="372" alt="三條白詞條的開滿落點圖：建議換胚，開滿期望 19.4" loading="lazy"></div>
-          <figcaption><b>三條白詞條</b><span class="c-stop">曲線貼在左邊：直接換胚</span></figcaption>
+          <figcaption data-en="&lt;b&gt;Three dead sub-stats&lt;/b&gt;&lt;span class=&#x27;c-stop&#x27;&gt;Curve hugs the left: replace it&lt;/span&gt;"><b>三條白詞條</b><span class="c-stop">曲線貼在左邊：直接換胚</span></figcaption>
         </figure>
       </div>
     </div>
@@ -526,45 +530,45 @@ main, footer { position: relative; z-index: 1; }
   <section class="sec" id="features">
     <div class="wrap">
       <div class="sec-head">
-        <span class="num">03 / 更多功能</span>
-        <h2>養聲骸會卡住的地方，<br>都幫你想好了</h2>
-        <p>以下都是實際介面截圖。</p>
+        <span data-en="03 / More features" class="num">03 / 更多功能</span>
+        <h2 data-en="Every Echo-farming headache,&lt;br&gt;already handled">養聲骸會卡住的地方，<br>都幫你想好了</h2>
+        <p data-en="All screenshots below are the real interface.">以下都是實際介面截圖。</p>
       </div>
       <div class="feat">
         <article class="card">
-          <figure class="shot" data-full="img/hud-f-odds.webp"><img width="439" height="457" src="img/hud-f-odds.webp" alt="開孔前的機率試算畫面" loading="lazy"></figure>
-          <div class="body"><h3><i>01</i>開孔前先看機率</h3><p>如果開滿也<span class="hl">贏不過現裝</span>，就先把資源留著。</p></div>
+          <figure class="shot" data-full="img/hud-f-odds.webp"><img data-en-alt="Odds preview before tuning" width="439" height="457" src="img/hud-f-odds.webp" alt="開孔前的機率試算畫面" loading="lazy"></figure>
+          <div data-en="&lt;h3&gt;&lt;i&gt;01&lt;/i&gt;Check odds before tuning&lt;/h3&gt;&lt;p&gt;If even a maxed roll &lt;span class=&#x27;hl&#x27;&gt;can&#x27;t beat what you wear&lt;/span&gt;, save your materials.&lt;/p&gt;" class="body"><h3><i>01</i>開孔前先看機率</h3><p>如果開滿也<span class="hl">贏不過現裝</span>，就先把資源留著。</p></div>
         </article>
         <article class="card">
-          <figure class="shot" data-full="img/hud-f-compare.webp"><img width="436" height="457" src="img/hud-f-compare.webp" alt="換裝比較：待選聲骸評分高 13.4" loading="lazy"></figure>
-          <div class="body"><h3><i>02</i>換裝自動比分</h3><p>打開換裝比較，<span class="hl">馬上知道差幾分</span>，不用自己對數字。</p></div>
+          <figure class="shot" data-full="img/hud-f-compare.webp"><img data-en-alt="Gear compare: candidate Echo scores 13.4 higher" width="436" height="457" src="img/hud-f-compare.webp" alt="換裝比較：待選聲骸評分高 13.4" loading="lazy"></figure>
+          <div data-en="&lt;h3&gt;&lt;i&gt;02&lt;/i&gt;Auto compare on swap&lt;/h3&gt;&lt;p&gt;Open the gear compare and &lt;span class=&#x27;hl&#x27;&gt;see the point gap instantly&lt;/span&gt;, no manual math.&lt;/p&gt;" class="body"><h3><i>02</i>換裝自動比分</h3><p>打開換裝比較，<span class="hl">馬上知道差幾分</span>，不用自己對數字。</p></div>
         </article>
         <article class="card">
-          <figure class="shot" data-full="img/hud-f-panel.webp"><img width="433" height="457" src="img/hud-f-panel.webp" alt="角色面板分析，紅色標出不足的屬性" loading="lazy"></figure>
-          <div class="body"><h3><i>03</i>面板缺什麼一眼看</h3><p>紅色就是不夠。聲骸算得再細，最後還是要回到角色的總面板。</p></div>
+          <figure class="shot" data-full="img/hud-f-panel.webp"><img data-en-alt="Character stat analysis, shortfalls in red" width="433" height="457" src="img/hud-f-panel.webp" alt="角色面板分析，紅色標出不足的屬性" loading="lazy"></figure>
+          <div data-en="&lt;h3&gt;&lt;i&gt;03&lt;/i&gt;See what your stats lack&lt;/h3&gt;&lt;p&gt;Red means short. However fine-tuned your Echoes are, the character sheet is what counts.&lt;/p&gt;" class="body"><h3><i>03</i>面板缺什麼一眼看</h3><p>紅色就是不夠。聲骸算得再細，最後還是要回到角色的總面板。</p></div>
         </article>
         <article class="card">
-          <figure class="shot" data-full="img/hud-f-slots.webp"><img width="439" height="457" src="img/hud-f-slots.webp" alt="五個號位的配裝紀錄" loading="lazy"></figure>
-          <div class="body"><h3><i>04</i>五個號位自動存</h3><p>右下角是「卸下」的聲骸，才會存進配裝，整套練度一次看。</p></div>
+          <figure class="shot" data-full="img/hud-f-slots.webp"><img data-en-alt="Saved loadout for all five slots" width="439" height="457" src="img/hud-f-slots.webp" alt="五個號位的配裝紀錄" loading="lazy"></figure>
+          <div data-en="&lt;h3&gt;&lt;i&gt;04&lt;/i&gt;All five slots saved&lt;/h3&gt;&lt;p&gt;Echoes showing &quot;Unequip&quot; at bottom right get saved to the loadout, so you see the whole set at once.&lt;/p&gt;" class="body"><h3><i>04</i>五個號位自動存</h3><p>右下角是「卸下」的聲骸，才會存進配裝，整套練度一次看。</p></div>
         </article>
         <article class="card">
-          <figure class="shot" data-full="img/hud-f-edit.webp"><img width="436" height="457" src="img/hud-f-edit.webp" alt="手動修正辨識結果的畫面" loading="lazy"></figure>
-          <div class="body"><h3><i>05</i>認錯就按暫停</h3><p>辨識不對就暫停手動改數值，<span class="hl">評分即時更新</span>。</p></div>
+          <figure class="shot" data-full="img/hud-f-edit.webp"><img data-en-alt="Manually correcting a misread value" width="436" height="457" src="img/hud-f-edit.webp" alt="手動修正辨識結果的畫面" loading="lazy"></figure>
+          <div data-en="&lt;h3&gt;&lt;i&gt;05&lt;/i&gt;Misread? Pause and fix&lt;/h3&gt;&lt;p&gt;If recognition is off, pause and edit the numbers; &lt;span class=&#x27;hl&#x27;&gt;the score updates live&lt;/span&gt;.&lt;/p&gt;" class="body"><h3><i>05</i>認錯就按暫停</h3><p>辨識不對就暫停手動改數值，<span class="hl">評分即時更新</span>。</p></div>
         </article>
         <article class="card">
           <div class="body">
-            <h3><i>TIPS</i>常用小技巧</h3>
+            <h3 data-en="&lt;i&gt;TIPS&lt;/i&gt;Handy tricks"><i>TIPS</i>常用小技巧</h3>
             <ul class="tips" style="margin-top:12px;">
-              <li><b>想知道自己手氣</b><span>開孔前後各掃一次，自動幫你統計。</span></li>
-              <li><b>畫面變了沒更新</b><span>更多選單按「重新掃描」。</span></li>
-              <li><b>要錄影或直播</b><span>到設定開「隱形模式」。</span></li>
-              <li><b>遊戲變卡</b><span>把 OCR 優先權改成「省電」。</span></li>
+              <li data-en="&lt;b&gt;Track your luck&lt;/b&gt;&lt;span&gt;Scan before and after tuning; stats are logged for you.&lt;/span&gt;"><b>想知道自己手氣</b><span>開孔前後各掃一次，自動幫你統計。</span></li>
+              <li data-en="&lt;b&gt;Screen changed but no update?&lt;/b&gt;&lt;span&gt;Hit &quot;Rescan&quot; in the More menu.&lt;/span&gt;"><b>畫面變了沒更新</b><span>更多選單按「重新掃描」。</span></li>
+              <li data-en="&lt;b&gt;Recording or streaming?&lt;/b&gt;&lt;span&gt;Turn on &quot;Stealth mode&quot; in Settings.&lt;/span&gt;"><b>要錄影或直播</b><span>到設定開「隱形模式」。</span></li>
+              <li data-en="&lt;b&gt;Game feels laggy?&lt;/b&gt;&lt;span&gt;Set OCR priority to &quot;Power saving&quot;.&lt;/span&gt;"><b>遊戲變卡</b><span>把 OCR 優先權改成「省電」。</span></li>
             </ul>
           </div>
         </article>
         <article class="card wide">
-          <figure class="shot" data-full="img/hud-f-share.webp"><img width="1374" height="301" src="img/hud-f-share.webp" alt="一鍵匯出的角色分享圖範例" loading="lazy"></figure>
-          <div class="body"><h3><i>06</i>一鍵匯出分享圖</h3><p>單角色、全角色共 <span class="hl">14 款</span>分享圖，也能匯出 Excel 自己整理。練完直接丟群組分享。</p></div>
+          <figure class="shot" data-full="img/hud-f-share.webp"><img data-en-alt="Example of an exported character share card" width="1374" height="301" src="img/hud-f-share.webp" alt="一鍵匯出的角色分享圖範例" loading="lazy"></figure>
+          <div data-en="&lt;h3&gt;&lt;i&gt;06&lt;/i&gt;One-click share cards&lt;/h3&gt;&lt;p&gt;&lt;span class=&#x27;hl&#x27;&gt;14&lt;/span&gt; card styles for one or all characters, plus Excel export. Built a character? Drop it in your group chat.&lt;/p&gt;" class="body"><h3><i>06</i>一鍵匯出分享圖</h3><p>單角色、全角色共 <span class="hl">14 款</span>分享圖，也能匯出 Excel 自己整理。練完直接丟群組分享。</p></div>
         </article>
       </div>
     </div>
@@ -574,34 +578,45 @@ main, footer { position: relative; z-index: 1; }
   <section class="sec" id="guide">
     <div class="wrap">
       <div class="sec-head">
-        <span class="num">04 / 使用教學</span>
-        <h2>第一次用？照著做五步就好</h2>
-        <p>從下載到看懂分數，大約五分鐘。</p>
+        <span data-en="04 / Guide" class="num">04 / 使用教學</span>
+        <h2 data-en="First time? Five steps">第一次用？照著做五步就好</h2>
+        <p data-en="From install to reading your first score in about five minutes. (Steps describe the current Chinese version.)">從下載到看懂分數，大約五分鐘。</p>
       </div>
       <ol class="guide">
         <li>
-          <div class="g-txt">
+          <div data-en="&lt;b&gt;Install it&lt;/b&gt;
+            &lt;p&gt;The English build isn&#x27;t out yet; hit &lt;span class=&#x27;hl&#x27;&gt;Cheer for English&lt;/span&gt; so we know you want it. The Chinese version installs from the &lt;span class=&#x27;hl&#x27;&gt;Microsoft Store&lt;/span&gt; (reviewed by Microsoft, auto-updates) or as a direct installer.&lt;/p&gt;
+            &lt;p class=&#x27;g-tip&#x27;&gt;If Windows shows &quot;Windows protected your PC&quot;, click &quot;More info&quot; then &quot;Run anyway&quot;, or use the Microsoft Store version to avoid the prompt.&lt;/p&gt;" class="g-txt">
             <b>下載並安裝</b>
             <p>按「立即下載」，選一個下載方式：推薦 <span class="hl">Microsoft Store</span>，經微軟審核、之後會自動更新；也可以直接下載安裝檔；前兩個連不上再用 Google 雲端。</p>
             <p class="g-tip">如果 Windows 跳出「Windows 已保護您的電腦」，按「其他資訊」→「仍要執行」。不想看到這個提示，可以改用 Microsoft Store 版本。</p>
           </div>
         </li>
         <li>
-          <div class="g-txt">
+          <div data-en="&lt;b&gt;Get a license code on Discord&lt;/b&gt;
+            &lt;p&gt;Join the &lt;a href=&#x27;https://discord.gg/WWewHKwMwa&#x27; target=&#x27;_blank&#x27; rel=&#x27;noopener&#x27;&gt;ZHDC community&lt;/a&gt;, type &lt;code&gt;/授權碼&lt;/code&gt; in any channel, paste the code into the HUD, and every character&#x27;s scoring weights are ready to use.&lt;/p&gt;
+            &lt;p class=&#x27;g-tip&#x27;&gt;Don&#x27;t want to sign in? Choose &quot;Guest mode&quot; and set the weights yourself.&lt;/p&gt;" class="g-txt">
             <b>到 Discord 領授權碼</b>
             <p>加入 <a href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener">ZHDC 社群</a>，在任一頻道輸入 <code>/授權碼</code>，打開 HUD 貼上就登入完成，所有角色的評分權重都能直接用。</p>
             <p class="g-tip">不想登入也可以按「訪客模式」，只是權重要自己設定。</p>
           </div>
         </li>
         <li>
-          <div class="g-txt">
+          <div data-en="&lt;b&gt;Open the game, place the window&lt;/b&gt;
+            &lt;p&gt;Start Wuthering Waves first, then the HUD. Drag the score window to the &lt;span class=&#x27;hl&#x27;&gt;left or center-left&lt;/span&gt; so it doesn&#x27;t cover the Echo card on the right.&lt;/p&gt;" class="g-txt">
             <b>開遊戲，把小視窗擺好</b>
             <p>先開鳴潮，再開 HUD。把評分小視窗拖到畫面<span class="hl">左邊或中間偏左</span>，不要擋到右邊的聲骸卡片。</p>
           </div>
-          <figure class="shot g-img" data-full="img/hud-overview.webp"><img src="img/hud-ingame.webp" width="1124" height="635" alt="HUD 擺在遊戲畫面左側、不擋到聲骸卡片的位置" loading="lazy"></figure>
+          <figure class="shot g-img" data-full="img/hud-overview.webp"><img data-en-alt="HUD placed on the left of the game screen, clear of the Echo card" src="img/hud-ingame.webp" width="1124" height="635" alt="HUD 擺在遊戲畫面左側、不擋到聲骸卡片的位置" loading="lazy"></figure>
         </li>
         <li>
-          <div class="g-txt">
+          <div data-en="&lt;b&gt;Click an Echo, read the score&lt;/b&gt;
+            &lt;p&gt;Click any Echo in your bag or upgrade screen and the HUD shows:&lt;/p&gt;
+            &lt;ul class=&#x27;g-list&#x27;&gt;
+              &lt;li&gt;&lt;b&gt;The big circle&lt;/b&gt;: score and grade (SSS / S / A / B / C). Before max level, it&#x27;s the expected score at max.&lt;/li&gt;
+              &lt;li&gt;&lt;b&gt;Earned / Still possible / Lost&lt;/b&gt;: points you have, the most you can still gain, and what&#x27;s gone for good.&lt;/li&gt;
+              &lt;li&gt;&lt;b&gt;The bottom line&lt;/b&gt;: the stop-or-continue tip.&lt;/li&gt;
+            &lt;/ul&gt;" class="g-txt">
             <b>點一下聲骸，看分數</b>
             <p>在背包或培養畫面點一下聲骸，HUD 會馬上顯示：</p>
             <ul class="g-list">
@@ -610,10 +625,12 @@ main, footer { position: relative; z-index: 1; }
               <li><b>最下面那行</b>：止損建議，直接告訴你繼續開還是換胚。</li>
             </ul>
           </div>
-          <figure class="shot g-img" data-full="img/hud-score.webp"><img src="img/hud-score.webp" width="509" height="698" alt="HUD 評分畫面的各個區塊" loading="lazy"></figure>
+          <figure class="shot g-img" data-full="img/hud-score.webp"><img data-en-alt="Sections of the HUD score view" src="img/hud-score.webp" width="509" height="698" alt="HUD 評分畫面的各個區塊" loading="lazy"></figure>
         </li>
         <li>
-          <div class="g-txt">
+          <div data-en="&lt;b&gt;Pro move: check before tuning or swapping&lt;/b&gt;
+            &lt;p&gt;For an Echo that isn&#x27;t maxed, open the max-level forecast; if the curve sits right, keep going. Swapping gear? Open the compare view to see the gap. Done with a character? Export a share card.&lt;/p&gt;
+            &lt;p class=&#x27;g-tip&#x27;&gt;Before recording or streaming, turn on Stealth mode; if the game lags, set OCR priority to &quot;Power saving&quot;.&lt;/p&gt;" class="g-txt">
             <b>進階：開孔前、換裝前先看一眼</b>
             <p>還沒開滿的聲骸看「開滿落點圖」，曲線在右邊就放心開；要換聲骸時打開「換裝比較」，直接看差幾分；練完一隻角色，用「匯出分享圖」存起來。</p>
             <p class="g-tip">錄影或直播前，到設定開「隱形模式」；遊戲變卡就把 OCR 優先權改成「省電」。</p>
@@ -627,53 +644,53 @@ main, footer { position: relative; z-index: 1; }
   <section class="sec" id="faq">
     <div class="wrap">
       <div class="sec-head">
-        <span class="num">05 / 常見問題</span>
-        <h2>常見問題</h2>
+        <span data-en="05 / FAQ" class="num">05 / 常見問題</span>
+        <h2 data-en="Frequently asked questions">常見問題</h2>
       </div>
       <div class="faq">
         <details open>
-          <summary>用這個會被封號嗎？符合遊戲規範嗎？</summary>
-          <p>GameZH HUD 的運作方式和截圖、錄影、OBS 擷取畫面一樣，只看螢幕上看得到的畫面：不修改遊戲檔案、不讀寫遊戲記憶體、不注入程式、不攔截封包，也沒有自動點擊或巨集，所有操作都是你自己按。它不會替你玩遊戲，也不會改變遊戲裡的任何數值。詳細請看下方的<a href="#safe">安全性說明</a>。</p>
+          <summary data-en="Can this get me banned? Does it follow the game rules?">用這個會被封號嗎？符合遊戲規範嗎？</summary>
+          <p data-en="GameZH HUD works like a screenshot, a screen recorder or OBS capture: it only reads what&#x27;s visible in the screen area you allow. It doesn&#x27;t modify game files, read or write game memory, inject code or intercept network traffic, and there&#x27;s no auto-clicking or macros; you press every button yourself. We&#x27;ve checked it against the official terms and it does none of the prohibited things, but it is still a third-party tool and the official interpretation is final, so please judge for yourself. See &lt;a href=&#x27;#safe&#x27;&gt;Safety&lt;/a&gt; below.">GameZH HUD 的運作方式和截圖、錄影、OBS 擷取畫面一樣，只看螢幕上看得到的畫面：不修改遊戲檔案、不讀寫遊戲記憶體、不注入程式、不攔截封包，也沒有自動點擊或巨集，所有操作都是你自己按。它不會替你玩遊戲，也不會改變遊戲裡的任何數值。詳細請看下方的<a href="#safe">安全性說明</a>。</p>
         </details>
         <details>
-          <summary>要錢嗎？</summary>
-          <p>完全免費。授權碼也是免費到 Discord 領。</p>
+          <summary data-en="Does it cost anything?">要錢嗎？</summary>
+          <p data-en="No, it&#x27;s completely free. License codes are free on Discord too.">完全免費。授權碼也是免費到 Discord 領。</p>
         </details>
         <details>
-          <summary>一定要授權碼嗎？</summary>
-          <p>不一定。沒有授權碼可以用「訪客模式」，只是每個角色的評分權重要自己設定；有授權碼就能直接用社群整理好的權重。</p>
+          <summary data-en="Do I need a license code?">一定要授權碼嗎？</summary>
+          <p data-en="No. Without one you can use Guest mode and set each character&#x27;s weights yourself; with one you get the community&#x27;s ready-made weights.">不一定。沒有授權碼可以用「訪客模式」，只是每個角色的評分權重要自己設定；有授權碼就能直接用社群整理好的權重。</p>
         </details>
         <details>
-          <summary>下載或安裝時被 Windows、防毒軟體擋住？</summary>
-          <p>出現「Windows 已保護您的電腦」時，按「其他資訊」→「仍要執行」。被防毒軟體隔離的話，可以改用 Microsoft Store 版本，或把安裝資料夾加入防毒的例外清單。</p>
+          <summary data-en="Windows or my antivirus blocked the download?">下載或安裝時被 Windows、防毒軟體擋住？</summary>
+          <p data-en="If you see &quot;Windows protected your PC&quot;, click &quot;More info&quot; then &quot;Run anyway&quot;. If your antivirus quarantines it, use the Microsoft Store version or add the install folder to its exceptions.">出現「Windows 已保護您的電腦」時，按「其他資訊」→「仍要執行」。被防毒軟體隔離的話，可以改用 Microsoft Store 版本，或把安裝資料夾加入防毒的例外清單。</p>
         </details>
         <details>
-          <summary>點聲骸沒反應、分數沒出來？</summary>
-          <p>依序試試：① 確認小視窗沒有擋到右邊的聲骸卡片；② 在更多選單按「重新掃描」；③ 關掉 HUD，對程式按右鍵選「以系統管理員身分執行」再開一次。還是不行就到 Discord 回報，附上截圖。</p>
+          <summary data-en="I click an Echo and nothing shows up?">點聲骸沒反應、分數沒出來？</summary>
+          <p data-en="Try in order: 1) make sure the window isn&#x27;t covering the Echo card on the right; 2) hit &quot;Rescan&quot; in the More menu; 3) close the HUD, right-click it and choose &quot;Run as administrator&quot;. Still stuck? Report it on Discord with a screenshot.">依序試試：① 確認小視窗沒有擋到右邊的聲骸卡片；② 在更多選單按「重新掃描」；③ 關掉 HUD，對程式按右鍵選「以系統管理員身分執行」再開一次。還是不行就到 Discord 回報，附上截圖。</p>
         </details>
         <details>
-          <summary>分數或詞條辨識錯了怎麼辦？</summary>
-          <p>按 HUD 上的暫停，手動把數值改正，評分會馬上重算。也歡迎截圖回報，我們會拿來改善辨識。</p>
+          <summary data-en="The score or a stat was misread?">分數或詞條辨識錯了怎麼辦？</summary>
+          <p data-en="Press pause on the HUD and correct the value; the score recalculates instantly. Screenshots of misreads help us improve recognition.">按 HUD 上的暫停，手動把數值改正，評分會馬上重算。也歡迎截圖回報，我們會拿來改善辨識。</p>
         </details>
         <details>
-          <summary>開著 HUD 遊戲會卡嗎？</summary>
-          <p>HUD 會讓遊戲優先使用電腦資源，畫面沒變化時也會自動休息。覺得卡的話，到設定把 OCR 優先權改成「省電」。</p>
+          <summary data-en="Will the HUD slow my game down?">開著 HUD 遊戲會卡嗎？</summary>
+          <p data-en="The HUD gives the game priority and idles when the screen isn&#x27;t changing. If it still feels slow, set OCR priority to &quot;Power saving&quot; in Settings.">HUD 會讓遊戲優先使用電腦資源，畫面沒變化時也會自動休息。覺得卡的話，到設定把 OCR 優先權改成「省電」。</p>
         </details>
         <details>
-          <summary>錄影、直播時 HUD 會被拍進去嗎？</summary>
-          <p>到設定開「隱形模式」，錄影和直播軟體就拍不到 HUD，自己還是看得到。</p>
+          <summary data-en="Will the HUD show up in recordings or streams?">錄影、直播時 HUD 會被拍進去嗎？</summary>
+          <p data-en="Turn on Stealth mode in Settings: capture software can&#x27;t see the HUD, but you still can.">到設定開「隱形模式」，錄影和直播軟體就拍不到 HUD，自己還是看得到。</p>
         </details>
         <details>
-          <summary>手機可以用嗎？</summary>
-          <p>HUD 是電腦程式。手機版正在封閉測試，可以按「立即下載」→ 選手機選項留下 Email 申請；現在就想用的話，<a href="20260828.html">網頁版聲骸分析儀</a>手機也能用，上傳角色資訊卡就能評分。</p>
+          <summary data-en="Does it work on phones?">手機可以用嗎？</summary>
+          <p data-en="The HUD is a PC app. A mobile version is in closed testing. Right now, the &lt;a href=&#x27;20260828.html&#x27;&gt;web Echo Analyzer&lt;/a&gt; (Chinese UI) works on phones: upload a character card to get scores.">HUD 是電腦程式。手機版正在封閉測試，可以按「立即下載」→ 選手機選項留下 Email 申請；現在就想用的話，<a href="20260828.html">網頁版聲骸分析儀</a>手機也能用，上傳角色資訊卡就能評分。</p>
         </details>
         <details>
-          <summary>跟網頁版聲骸分析儀有什麼不一樣？</summary>
-          <p>HUD 是「刷聲骸的當下」用：點一顆看一顆，告訴你要不要繼續開。網頁版分析儀是「角色練完」用：上傳角色資訊卡，整隻角色健檢、看排行。兩個可以搭配著用。</p>
+          <summary data-en="How is this different from the web Echo Analyzer?">跟網頁版聲骸分析儀有什麼不一樣？</summary>
+          <p data-en="The HUD is for while you farm: click one Echo, get a keep-or-replace call. The web analyzer is for after a character is built: upload the character card for a full check-up and rankings. They work well together.">HUD 是「刷聲骸的當下」用：點一顆看一顆，告訴你要不要繼續開。網頁版分析儀是「角色練完」用：上傳角色資訊卡，整隻角色健檢、看排行。兩個可以搭配著用。</p>
         </details>
         <details>
-          <summary>遇到問題要去哪裡回報？</summary>
-          <p>到 <a href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener">Discord 群組</a>，或在<a href="./#report">首頁的回報問題</a>直接寫。附上角色名稱和截圖會比較快找到問題。</p>
+          <summary data-en="Where do I report problems?">遇到問題要去哪裡回報？</summary>
+          <p data-en="On our &lt;a href=&#x27;https://discord.gg/WWewHKwMwa&#x27; target=&#x27;_blank&#x27; rel=&#x27;noopener&#x27;&gt;Discord&lt;/a&gt;, or via &lt;a href=&#x27;./#report&#x27;&gt;Report a problem&lt;/a&gt; on the home page. Including the character name and a screenshot helps a lot.">到 <a href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener">Discord 群組</a>，或在<a href="./#report">首頁的回報問題</a>直接寫。附上角色名稱和截圖會比較快找到問題。</p>
         </details>
       </div>
     </div>
@@ -683,20 +700,20 @@ main, footer { position: relative; z-index: 1; }
   <section class="sec" id="safe">
     <div class="wrap">
       <div class="sec-head">
-        <span class="num">06 / 安全性與遊戲規範</span>
-        <h2>原理很單純：<br>就是幫你看畫面、算分數</h2>
-        <p>就像開 Discord 懸浮窗或 OBS 擷取畫面一樣，透過畫面辨識文字，再把計算結果顯示在視窗上。遊戲照常跑，HUD 不碰遊戲本身的任何東西。</p>
+        <span data-en="06 / Safety and game rules" class="num">06 / 安全性與遊戲規範</span>
+        <h2 data-en="Simple by design:&lt;br&gt;it reads the screen and does the math">原理很單純：<br>就是幫你看畫面、算分數</h2>
+        <p data-en="Like a Discord overlay or OBS capture, it reads text from the screen area you allow and shows the result in its own window. The game runs as usual; the HUD never touches the game itself.">就像開 Discord 懸浮窗或 OBS 擷取畫面一樣，透過畫面辨識文字，再把計算結果顯示在視窗上。遊戲照常跑，HUD 不碰遊戲本身的任何東西。</p>
       </div>
       <div class="safe">
-        <div><b>不改遊戲檔案</b><span>不動任何遊戲安裝檔。</span></div>
-        <div><b>不讀寫記憶體</b><span>只看螢幕上看得到的畫面。</span></div>
-        <div><b>沒有自動點擊</b><span>沒有巨集，所有操作都是你自己按。</span></div>
-        <div><b>有隱形模式</b><span>要錄影、直播時可以開。</span></div>
+        <div data-en="&lt;b&gt;No game file changes&lt;/b&gt;&lt;span&gt;Never touches the game install.&lt;/span&gt;"><b>不改遊戲檔案</b><span>不動任何遊戲安裝檔。</span></div>
+        <div data-en="&lt;b&gt;No memory access&lt;/b&gt;&lt;span&gt;Only sees what&#x27;s on screen.&lt;/span&gt;"><b>不讀寫記憶體</b><span>只看螢幕上看得到的畫面。</span></div>
+        <div data-en="&lt;b&gt;No auto-clicking&lt;/b&gt;&lt;span&gt;No macros; you press every button.&lt;/span&gt;"><b>沒有自動點擊</b><span>沒有巨集，所有操作都是你自己按。</span></div>
+        <div data-en="&lt;b&gt;Stealth mode&lt;/b&gt;&lt;span&gt;Hide it from recordings and streams.&lt;/span&gt;"><b>有隱形模式</b><span>要錄影、直播時可以開。</span></div>
       </div>
       <div class="rules">
-        <h3>設計上遵守遊戲規範</h3>
-        <p>遊戲條款通常禁止的是：修改遊戲檔案或記憶體、注入程式、攔截或竄改封包、外掛與自動化操作（腳本、巨集）。GameZH HUD 從設計上就不做這些事，只做和截圖、錄影一樣的「看畫面」，所有遊戲操作都由玩家自己完成。</p>
-        <p class="fine">GameZH 是玩家自製的第三方工具，與庫洛遊戲無關，遊戲規範的最終解釋權屬於官方。我們會持續注意官方公告，如果規範有變動會第一時間調整工具並通知大家。</p>
+        <h3 data-en="Built to follow the game rules">設計上遵守遊戲規範</h3>
+        <p data-en="Game terms typically prohibit modifying game files or memory, injecting code, intercepting or tampering with network traffic, and cheats or automation (scripts, macros). GameZH HUD is designed to do none of these. It only &quot;looks at the screen&quot; like a screenshot or recording, and every in-game action is yours.">遊戲條款通常禁止的是：修改遊戲檔案或記憶體、注入程式、攔截或竄改封包、外掛與自動化操作（腳本、巨集）。GameZH HUD 從設計上就不做這些事，只做和截圖、錄影一樣的「看畫面」，所有遊戲操作都由玩家自己完成。</p>
+        <p data-en="GameZH is a fan-made third-party tool with no affiliation to Kuro Games, and the official interpretation of the rules is final. We follow official announcements and will adjust the tool and tell everyone right away if the rules change; if the official side explicitly prohibits tools like this, we will stop." class="fine">GameZH 是玩家自製的第三方工具，與庫洛遊戲無關，遊戲規範的最終解釋權屬於官方。我們會持續注意官方公告，如果規範有變動會第一時間調整工具並通知大家。</p>
       </div>
     </div>
   </section>
@@ -704,31 +721,31 @@ main, footer { position: relative; z-index: 1; }
   <!-- DEV NOTE -->
   <section class="sec">
     <div class="wrap quote">
-      <div class="eyebrow" style="margin-bottom:26px;">開發者的話</div>
-      <blockquote>分數只是輔助，不是拿來比較誰比較強。我做這個工具的初心，一直都只是希望大家養聲骸的時候，可以少走一點冤枉路。</blockquote>
-      <p>覺得哪裡算錯、哪裡不好用，直接告訴我是哪個角色、哪個地方，我會認真看。如果它有幫到你，留句話跟我說一聲，就是繼續做下去的動力。<br><a href="https://forum.gamer.com.tw/Co.php?bsn=74934&amp;sn=147850" target="_blank" rel="noopener">看巴哈姆特完整介紹文 →</a></p>
+      <div data-en="A note from the developer" class="eyebrow" style="margin-bottom:26px;">開發者的話</div>
+      <blockquote data-en="A score is a helper, not a way to rank who&#x27;s stronger. All I ever wanted from this tool was to save everyone a few wasted materials while building Echoes.">分數只是輔助，不是拿來比較誰比較強。我做這個工具的初心，一直都只是希望大家養聲骸的時候，可以少走一點冤枉路。</blockquote>
+      <p data-en="If something&#x27;s miscalculated or awkward, tell me which character and where, and I&#x27;ll take a real look. If it helped you, a quick note means a lot and keeps me going.&lt;br&gt;&lt;a href=&#x27;https://forum.gamer.com.tw/Co.php?bsn=74934&amp;amp;sn=147850&#x27; target=&#x27;_blank&#x27; rel=&#x27;noopener&#x27;&gt;Read the full introduction on Bahamut (Chinese) →&lt;/a&gt;">覺得哪裡算錯、哪裡不好用，直接告訴我是哪個角色、哪個地方，我會認真看。如果它有幫到你，留句話跟我說一聲，就是繼續做下去的動力。<br><a href="https://forum.gamer.com.tw/Co.php?bsn=74934&amp;sn=147850" target="_blank" rel="noopener">看巴哈姆特完整介紹文 →</a></p>
     </div>
   </section>
 
   <!-- FINAL CTA -->
   <section class="sec final" id="download">
     <div class="wrap">
-      <div class="eyebrow">免費 · 玩家自製</div>
-      <h2>下次開聲骸前，<br>先讓它幫你看一眼</h2>
-      <p class="lead">裝好、領授權碼，回遊戲點一下聲骸就能用。</p>
+      <div data-en="Free · Fan-made" class="eyebrow">免費 · 玩家自製</div>
+      <h2 data-en="Before you level your next Echo,&lt;br&gt;let it take a look">下次開聲骸前，<br>先讓它幫你看一眼</h2>
+      <p data-en="The English version is in development. Cheer for it and we&#x27;ll prioritize it; join Discord to hear when it launches." class="lead">裝好、領授權碼，回遊戲點一下聲骸就能用。</p>
       <div class="cta">
-        <a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b>立即下載</b><small><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small></span></a>
-        <a class="btn" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
+        <a class="btn gold dl-btn" data-dl data-tool="hud" href="https://github.com/992851qaz-bot/-/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="dl-txt"><b data-only="zh">立即下載</b><b data-only="en" data-cheer-label>Cheer for English</b><small data-only="zh"><span data-dl-name>GameZH HUD 安裝檔</span> · <span data-dl-size>Windows</span></small><small data-only="en">English version in development</small></span></a>
+        <a class="btn" data-only="zh" href="https://apps.microsoft.com/detail/9N19LCKX2NSW" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z"/></svg>
             Microsoft Store
           </a>
-        <a class="btn" href="https://drive.google.com/drive/folders/17pFcXxshUHvVkvNWgxLp6Lpw0tpbyRNR?usp=sharing" target="_blank" rel="noopener">
+        <a class="btn" data-only="zh" href="https://drive.google.com/drive/folders/17pFcXxshUHvVkvNWgxLp6Lpw0tpbyRNR?usp=sharing" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Google 雲端下載
         </a>
         <a class="btn" href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          加入 Discord 領授權碼
+          <span data-en="Join our Discord">加入 Discord 領授權碼</span>
         </a>
       </div>
     </div>
@@ -737,13 +754,13 @@ main, footer { position: relative; z-index: 1; }
 
 <footer>
   <div class="wrap">
-    <p>本工具為玩家自製的第三方輔助工具，與庫洛遊戲不存在關聯，亦未獲得其贊助或背書。透過畫面辨識運作，不讀寫遊戲記憶體、不修改遊戲檔案，也沒有巨集。第三方工具請自行評估風險，遊戲規範的最終解釋權屬於官方。圖中為示範資料。</p>
-    <p><a href="./">GAMEZH 鳴潮工具箱首頁</a> · <a href="20260828.html">網頁版聲骸分析儀</a> · <a href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener">Discord</a></p>
+    <p data-en="This is a fan-made third-party tool with no affiliation to, sponsorship from or endorsement by Kuro Games. It works by screen recognition: no game memory access, no game file changes, no macros. Please assess the risks of third-party tools yourself; the official interpretation of the rules is final. Images show sample data.">本工具為玩家自製的第三方輔助工具，與庫洛遊戲不存在關聯，亦未獲得其贊助或背書。透過畫面辨識運作，不讀寫遊戲記憶體、不修改遊戲檔案，也沒有巨集。第三方工具請自行評估風險，遊戲規範的最終解釋權屬於官方。圖中為示範資料。</p>
+    <p data-en="&lt;a href=&#x27;./&#x27;&gt;GAMEZH toolbox home&lt;/a&gt; · &lt;a href=&#x27;20260828.html&#x27;&gt;Web Echo Analyzer&lt;/a&gt; · &lt;a href=&#x27;https://discord.gg/WWewHKwMwa&#x27; target=&#x27;_blank&#x27; rel=&#x27;noopener&#x27;&gt;Discord&lt;/a&gt;"><a href="./">GAMEZH 鳴潮工具箱首頁</a> · <a href="20260828.html">網頁版聲骸分析儀</a> · <a href="https://discord.gg/WWewHKwMwa" target="_blank" rel="noopener">Discord</a></p>
   </div>
 </footer>
 
-<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="圖片放大">
-  <button type="button" aria-label="關閉">✕</button>
+<div data-en-aria-label="Enlarged image" class="lb" id="lb" role="dialog" aria-modal="true" aria-label="圖片放大">
+  <button data-en-aria-label="Close" type="button" aria-label="關閉">✕</button>
   <img alt="">
 </div>
 
@@ -786,5 +803,6 @@ main, footer { position: relative; z-index: 1; }
 <script src="assets/waves.js?v=20261117h" defer></script>
 <script src="assets/flow-nav.js?v=20261117h" defer></script>
 <script src="assets/download.js?v=20261117h" defer></script>
+<script src="assets/cheer.js?v=20261123a" defer></script>
 </body>
 </html>
